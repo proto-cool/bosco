@@ -27,7 +27,7 @@ from bosco.ledger import Ledger
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--ledger", required=True)
-    ap.add_argument("--weights-dir", default=str(paths.STATE / "weights"))
+    ap.add_argument("--state-dir", default=str(paths.STATE), help="dir holding weights/<digest>.npy snapshots")
     ap.add_argument("--replay-sample", type=int, default=5)
     a = ap.parse_args(argv)
     L = Ledger(a.ledger)
@@ -36,9 +36,7 @@ def main(argv=None) -> int:
 
     rows = L.episodes()
     events = [r for r in rows if r["kind"] == "event"]
-    agent = Agent(L) if events else None
-    if agent is not None:
-        agent.snapshot_dir_override = a.weights_dir
+    agent = Agent(L, state_dir=a.state_dir) if events else None
 
     # 1. replay determinism
     rng = np.random.default_rng(0)

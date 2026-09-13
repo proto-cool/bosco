@@ -9,6 +9,6 @@ mkdir -p "$dst"
 sqlite3 state/ledger.sqlite ".backup '$dst/ledger.sqlite'"
 cp state/kc_mbon_multiplier.npy "$dst/kc_mbon_multiplier.npy"
 uv run bosco --ledger "$dst/ledger.sqlite" integrity
-uv run python scripts/integrity_checks.py --ledger "$dst/ledger.sqlite" --weights-dir state/weights > "$dst/integrity.md"
+uv run python scripts/integrity_checks.py --ledger "$dst/ledger.sqlite" --state-dir state > "$dst/integrity.md"
 if [ -n "${BOSCO_RSYNC_TARGET:-}" ]; then rsync -a state/ "$BOSCO_RSYNC_TARGET"; fi
 git add "$dst" && git commit -q -m "snapshot $day" && git push -q || true

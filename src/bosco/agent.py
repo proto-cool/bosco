@@ -10,6 +10,7 @@ import datetime as dt
 import math
 import zoneinfo
 from dataclasses import dataclass
+from pathlib import Path
 
 import numpy as np
 import yaml
@@ -58,8 +59,9 @@ class Outcome:
 
 
 class Agent:
-    def __init__(self, ledger: Ledger, fly: Fly | None = None) -> None:
+    def __init__(self, ledger: Ledger, fly: Fly | None = None, state_dir=None) -> None:
         self.ledger = ledger
+        self.state_dir = Path(state_dir) if state_dir else paths.STATE
         self.fly = fly or Fly()
         self.enc = Encoder(self.fly.brain)
         self.readout = Readout(self.fly.brain)
@@ -71,7 +73,7 @@ class Agent:
     # ---- weights persistence ------------------------------------------------
     @property
     def weights_path(self):
-        return paths.STATE / "kc_mbon_multiplier.npy"
+        return self.state_dir / "kc_mbon_multiplier.npy"
 
     def _load_weights(self) -> None:
         p = self.weights_path
@@ -92,7 +94,7 @@ class Agent:
 
     @property
     def snapshot_dir(self):
-        return paths.STATE / "weights"
+        return self.state_dir / "weights"
 
     def load_weights_digest(self, digest: str) -> None:
         p = self.snapshot_dir / f"{digest}.npy"

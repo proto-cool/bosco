@@ -44,8 +44,7 @@ def main(argv=None) -> int:
     tmp = tempfile.mkdtemp()
     L = Ledger(f"{tmp}/control.sqlite")
     fly = Fly(Brain.load(a.dunce)) if a.control == "dunce" else Fly()
-    agent = Agent(L, fly)
-    agent.weights_path_override = f"{tmp}/w.npy"
+    agent = Agent(L, fly, state_dir=tmp)
     outcomes = {r["episode_id"]: r for r in src.db.execute("SELECT * FROM outcomes ORDER BY id")}
     # map source ledger episode id -> control episode id
     idmap = {}

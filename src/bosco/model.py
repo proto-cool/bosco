@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import hashlib
 from dataclasses import dataclass
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -112,6 +113,7 @@ class Brain:
         return Net(self.indptr, self.indices, w, params)
 
     def save(self, path=CACHE_FILE) -> None:
+        path = Path(path)
         path.parent.mkdir(parents=True, exist_ok=True)
         np.savez(path, ids=self.ids, indptr=self.indptr, indices=self.indices, count=self.count,
                  sign=self.sign, nt_sign=self.nt_sign)

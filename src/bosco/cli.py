@@ -30,7 +30,7 @@ def _ts(s: str | None) -> float:
 
 def cmd_poke(a) -> int:
     L = Ledger(a.ledger)
-    agent = Agent(L)
+    agent = Agent(L, state_dir=a.state_dir)
     ts = _ts(a.at)
     v = vader_compound(a.text) if a.text else 0.0
     f = Features(a.did, v, bool(a.mention), L.familiarity(a.did))
@@ -51,7 +51,7 @@ def cmd_poke(a) -> int:
 
 def cmd_spontaneous(a) -> int:
     L = Ledger(a.ledger)
-    agent = Agent(L)
+    agent = Agent(L, state_dir=a.state_dir)
     ts = _ts(a.at)
     out = agent.run(None, ts, None, kind="spontaneous")
     d = out.decision
@@ -61,7 +61,7 @@ def cmd_spontaneous(a) -> int:
 
 def cmd_outcome(a) -> int:
     L = Ledger(a.ledger)
-    agent = Agent(L)
+    agent = Agent(L, state_dir=a.state_dir)
     pid = agent.apply_outcome(a.episode, a.valence, a.source, None, f"cli://outcome/{int(time.time())}", _ts(a.at))
     print("pairing episode", pid, "weights", agent.fly.weight_digest())
     return 0
@@ -69,7 +69,7 @@ def cmd_outcome(a) -> int:
 
 def cmd_replay(a) -> int:
     L = Ledger(a.ledger)
-    agent = Agent(L)
+    agent = Agent(L, state_dir=a.state_dir)
     ok, scores = agent.replay(a.episode)
     print("bit-identical:", ok, scores)
     return 0 if ok else 1
@@ -93,6 +93,7 @@ def cmd_integrity(a) -> int:
 def main(argv=None) -> int:
     p = argparse.ArgumentParser(prog="bosco")
     p.add_argument("--ledger", default=None, help="path to ledger sqlite (default state/ledger.sqlite)")
+    p.add_argument("--state-dir", default=None, help="dir for weights + snapshots (default state/)")
     sub = p.add_subparsers(dest="cmd", required=True)
     s = sub.add_parser("poke"); s.add_argument("--did", required=True); s.add_argument("--text", default="")
     s.add_argument("--mention", action="store_true"); s.add_argument("--at"); s.add_argument("--uri"); s.set_defaults(fn=cmd_poke)
