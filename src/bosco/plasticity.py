@@ -121,6 +121,16 @@ class MushroomBody:
         self.t_last = 0.0
         self._push()
 
+    def forget_edges(self, edge_mask: np.ndarray) -> int:
+        """Operator override: reset the plastic state of the given edges to baseline.
+        This is a manual state edit; the caller logs and announces it."""
+        n = int(edge_mask.sum())
+        self.stm[edge_mask] = 1.0
+        self.ltm[edge_mask] = 1.0
+        self.t_pair[edge_mask] = -np.inf
+        self._push()
+        return n
+
     # ---- compartments ---------------------------------------------------------
     def target_edges(self, valence: str) -> np.ndarray:
         """Boolean mask over plastic edges whose postsynaptic MBON lies in a compartment of the valence DANs."""

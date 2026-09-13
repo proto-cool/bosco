@@ -37,6 +37,7 @@ CREATE TABLE IF NOT EXISTS episodes (
   mentioned INTEGER,
   familiarity INTEGER,
   hour REAL,                        -- local hour used for the clock drive
+  drive REAL,                       -- internal drive (dust) for spontaneous episodes
   seed INTEGER NOT NULL,
   weight_digest_before TEXT NOT NULL,
   weight_digest_after TEXT NOT NULL,
@@ -58,6 +59,8 @@ CREATE TABLE IF NOT EXISTS actions (
   kind TEXT NOT NULL,               -- 'reply' | 'like' | 'spontaneous_post' | 'leave'
   our_uri TEXT,                     -- at:// URI of the record we created
   target_uri TEXT,
+  root_uri TEXT,                    -- thread root of the target, for per-thread caps
+  target_did TEXT,                  -- account acted toward, for per-account caps
   dry_run INTEGER NOT NULL DEFAULT 0,
   deleted_ts REAL
 );
@@ -85,6 +88,11 @@ CREATE TABLE IF NOT EXISTS control (
   by_did TEXT NOT NULL,
   evidence_uri TEXT,
   target_uri TEXT
+);
+CREATE TABLE IF NOT EXISTS ignored (
+  did TEXT PRIMARY KEY,
+  ts REAL NOT NULL,
+  by_did TEXT NOT NULL
 );
 CREATE TABLE IF NOT EXISTS cursor (
   key TEXT PRIMARY KEY,
@@ -136,6 +144,7 @@ class EpisodeRow:
     line_key: str | None = None
     line_id: str | None = None
     note: str | None = None
+    drive: float | None = None
 
 
 class Ledger:
@@ -145,13 +154,24 @@ class Ledger:
         self.db = sqlite3.connect(self.path)
         self.db.row_factory = sqlite3.Row
         self.db.executescript(SCHEMA)
+        self._migrate()
+
+    def _migrate(self) -> None:
+        cols = {r["name"] for r in self.db.execute("PRAGMA table_info(actions)")}
+        for col in ("root_uri", "target_did"):
+            if col not in cols:
+                self.db.execute(f"ALTER TABLE actions ADD COLUMN {col} TEXT")
+        ecols = {r["name"] for r in self.db.execute("PRAGMA table_info(episodes)")}
+        if "drive" not in ecols:
+            self.db.execute("ALTER TABLE episodes ADD COLUMN drive REAL")
+        self.db.commit()
 
     # ---- episodes -----------------------------------------------------------
     def add_episode(self, e: EpisodeRow, ts: float | None = None) -> int:
         cur = self.db.execute(
             "INSERT INTO episodes (ts, kind, did, source_uri, vader, mentioned, familiarity, hour, seed, "
             "weight_digest_before, weight_digest_after, scores, mbon, kc_active, behaviour, action, valence, arousal, "
-            "line_key, line_id, note) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+            "line_key, line_id, note, drive) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
             (
                 ts or time.time(),
                 e.kind,
@@ -174,6 +194,7 @@ class Ledger:
                 e.line_key,
                 e.line_id,
                 e.note,
+                e.drive,
             ),
         )
         self.db.commit()
@@ -202,13 +223,39 @@ class Ledger:
         target_uri: str | None,
         dry_run: bool,
         ts: float | None = None,
+        root_uri: str | None = None,
+        target_did: str | None = None,
     ) -> int:
         cur = self.db.execute(
-            "INSERT INTO actions (episode_id, ts, kind, our_uri, target_uri, dry_run) VALUES (?,?,?,?,?,?)",
-            (episode_id, ts or time.time(), kind, our_uri, target_uri, int(dry_run)),
+            "INSERT INTO actions (episode_id, ts, kind, our_uri, target_uri, root_uri, target_did, dry_run) "
+            "VALUES (?,?,?,?,?,?,?,?)",
+            (episode_id, ts or time.time(), kind, our_uri, target_uri, root_uri, target_did, int(dry_run)),
         )
         self.db.commit()
         return int(cur.lastrowid)
+
+    def count_actions(
+        self,
+        since_ts: float,
+        kind: str | None = None,
+        root_uri: str | None = None,
+        target_did: str | None = None,
+        real_only: bool = True,
+    ) -> int:
+        q = "SELECT COUNT(*) FROM actions WHERE ts>=? AND kind!='leave'"
+        args: list = [since_ts]
+        if real_only:
+            q += " AND dry_run=0"
+        if kind:
+            q = q.replace(" AND kind!='leave'", "") + " AND kind=?"
+            args.append(kind)
+        if root_uri:
+            q += " AND root_uri=?"
+            args.append(root_uri)
+        if target_did:
+            q += " AND target_did=?"
+            args.append(target_did)
+        return int(self.db.execute(q, args).fetchone()[0])
 
     def actions_since(self, since_ts: float, real_only: bool = True) -> list[sqlite3.Row]:
         q = (
@@ -289,6 +336,18 @@ class Ledger:
             "INSERT INTO control (ts, kind, by_did, evidence_uri, target_uri) VALUES (?,?,?,?,?)",
             (ts or time.time(), kind, by_did, evidence_uri, target_uri),
         )
+        self.db.commit()
+
+    def ignored(self) -> set[str]:
+        return {r["did"] for r in self.db.execute("SELECT did FROM ignored")}
+
+    def set_ignored(self, did: str, by_did: str, on: bool, ts: float | None = None) -> None:
+        if on:
+            self.db.execute(
+                "INSERT OR REPLACE INTO ignored (did, ts, by_did) VALUES (?,?,?)", (did, ts or time.time(), by_did)
+            )
+        else:
+            self.db.execute("DELETE FROM ignored WHERE did=?", (did,))
         self.db.commit()
 
     def asleep(self) -> bool:

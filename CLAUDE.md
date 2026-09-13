@@ -35,13 +35,16 @@ convenience, "just for testing," or because a result would look better.
   must replay bit-identical from the log.
 - **Store features and URIs, never post text.** Other people's posts do not
   live in our database, and never enter the generator's corpus.
-- **Rate caps are hard.** Max 1 action/hour, 24/day. Self-label as a bot.
+- **Rate caps are hard** but by kind (`config/caps_v1.yaml`): they are loop
+  guards, not a schedule. Timing of posts and replies is the network's;
+  never add a timer. Self-label as a bot.
 - **Bosco lives on the network like anyone else** (decided 2026-09-13). He
   reads his timeline and the discover feed, and may like, follow, unfollow,
   reply in any thread he reads, and post on his own. Everything he reads is a
   stimulus; everything he does is an episode in the ledger.
-- **Operator override** from `@proto.cool` (EXPERIMENT.md §2a): sleep, wake,
-  delete, ignore list. Rails on the account, never hands on the weights.
+- **Operator override** from `@proto.cool` (EXPERIMENT.md §2a) by mention:
+  sleep, wake, delete, ignore, unfollow, reload, restart, status, people,
+  memory, forget. Only `forget` touches state, and it is logged and flagged.
 - **Moderation labels are bitter** (EXPERIMENT.md §2b): labeled posts and
   accounts are never approached and never reward. The vocabulary is closed
   (`corpus/`), so words cannot drift; associations can, and labels plus the
@@ -139,8 +142,11 @@ Do not download the EM volume. `neuprint-python` against
   (provisional synthetic-battery thresholds until then).
 - Action set: `reply`, `like`, `follow`, `leave`, `spontaneous_post`,
   `nothing`. engage → follow (reply if already following); leave → unfollow.
-- Spontaneous episodes (no event, hourly) drive a random subset of body
-  bristles: dust lands, the fly grooms, grooming is a post.
+- Spontaneous episodes (no event, every poll) drive bristle afferents in
+  proportion to an internal drive that accrues between polls and is cleared
+  by grooming; grooming is a post. He is a brain, not a fly: this drive is
+  the input we chose for the neurons that make the grooming outputs fire,
+  not a body simulation.
 
 ## Phrasebook and generator
 

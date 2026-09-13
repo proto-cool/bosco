@@ -25,8 +25,9 @@ from bosco.readout import Decision, Readout
 from bosco.sim import Drive, Fly, Stimulus
 from bosco.textgen import Generator
 
-MAX_ACTIONS_PER_HOUR = 1
-MAX_ACTIONS_PER_DAY = 24
+
+def load_caps(path=paths.CONFIG / "caps_v1.yaml") -> dict:
+    return yaml.safe_load(open(path))
 
 
 class Clock:
@@ -75,6 +76,7 @@ class Agent:
         self.clock = Clock(self.fly.brain)
         self.phrasebook = Phrasebook()
         self.generator = Generator(phrasebook_lines=[ln.text for ln in self.phrasebook.lines])
+        self.caps = load_caps()
         self._load_weights()
 
     # ---- weights persistence ------------------------------------------------
@@ -122,18 +124,111 @@ class Agent:
         return int.from_bytes(hashlib.blake2b(s, digest_size=8).digest(), "little") & 0x7FFFFFFFFFFFFFFF
 
     # ---- rate caps ------------------------------------------------------------
-    def caps_allow(self, ts: float) -> bool:
+    def caps_allow(
+        self, ts: float, kind: str = "reply", root_uri: str | None = None, target_did: str | None = None
+    ) -> tuple[bool, str]:
+        """Rate caps by kind plus loop guards (config/caps_v1.yaml). Returns (allowed, reason)."""
+        L = self.ledger
+        c = self.caps
+        h, d = ts - 3600.0, ts - 86400.0
+        g = c["global"]
+        if L.count_actions(h) >= g["hour"]:
+            return False, "global/hour"
+        if L.count_actions(d) >= g["day"]:
+            return False, "global/day"
+        k = c["per_kind"].get(kind)
+        if k:
+            if L.count_actions(h, kind=kind) >= k["hour"]:
+                return False, f"{kind}/hour"
+            if L.count_actions(d, kind=kind) >= k["day"]:
+                return False, f"{kind}/day"
+        if kind == "reply" and root_uri:
+            if L.count_actions(h, kind="reply", root_uri=root_uri) >= c["per_thread_replies_per_hour"]:
+                return False, "thread/hour"
+        if target_did:
+            if (
+                kind == "reply"
+                and L.count_actions(d, kind="reply", target_did=target_did) >= c["per_account_replies_per_day"]
+            ):
+                return False, "account-replies/day"
+            if L.count_actions(d, target_did=target_did) >= c["per_account_actions_per_day"]:
+                return False, "account-actions/day"
+        return True, "ok"
+
+    # ---- operator tooling -------------------------------------------------------
+    def reload(self) -> str:
+        """Re-read corpus, phrasebook, thresholds, caps.  Returns a summary line."""
+        self.phrasebook = Phrasebook()
+        self.generator = Generator(phrasebook_lines=[ln.text for ln in self.phrasebook.lines])
+        self.readout = Readout(self.fly.brain)
+        self.caps = load_caps()
         return (
-            len(self.ledger.actions_since(ts - 3600.0)) < MAX_ACTIONS_PER_HOUR
-            and len(self.ledger.actions_since(ts - 86400.0)) < MAX_ACTIONS_PER_DAY
+            f"reloaded: corpus {self.generator.digest()[:8]} ({len(self.generator.docs)} docs), "
+            f"phrasebook {len(self.phrasebook.lines)} lines, thresholds "
+            f"{ {k: round(v, 1) for k, v in self.readout.thresholds.items() if v} }"
         )
 
+    def memory_report(self, did: str, ts: float) -> tuple[str, float]:
+        """One-paragraph memory report for an account (used by `bosco memory` and the operator command)."""
+        self.mb.forget(self.hours(ts))
+        f = Features(did, 0.0, True, self.ledger.familiarity(did))
+        stim = self.stimulus(f, self.clock.local_hour(ts), 1)
+        naive = self.mb.naive_twin(stim, 1)
+        res = self.fly.run_episode(stim, 1)
+        d = self.readout.decide(res, self.fly.episode_ms, naive)
+        d0 = self.readout.decide(naive, self.fly.episode_ms, None)
+        kc = res.counts[self.fly.kc] > 0
+        pre = kc[self.fly.kc_pos_of_edge]
+        stm, ltm = self.mb.stm[pre], self.mb.ltm[pre]
+        why = self.ledger.db.execute(
+            "SELECT valence, source, COUNT(*) AS n FROM outcomes WHERE did=? GROUP BY valence, source", (did,)
+        ).fetchall()
+        why_s = ", ".join(f"{r['valence']}:{r['source']} x{r['n']}" for r in why) or "no outcomes"
+        line = (
+            f"learned {d.learned:+.2f} ({d.valence}); familiarity {f.familiarity}; "
+            f"stm on {int((stm < 0.99).sum())} synapses, ltm on {int((ltm < 0.99).sum())}; "
+            f"would {d0.action} naive -> {d.action} now; why: {why_s}"
+        )
+        return line, d.learned
+
+    def forget_account(self, did: str, ts: float) -> int:
+        """Operator override: wipe plastic state on the synapses of this account's odor."""
+        f = Features(did, 0.0, False, 0)
+        stim = self.stimulus(f, self.clock.local_hour(ts), 1)
+        res = self.fly.run_episode(stim, 1)
+        pre = (res.counts[self.fly.kc] > 0)[self.fly.kc_pos_of_edge]
+        n = self.mb.forget_edges(pre)
+        self._save_weights()
+        return n
+
+    # ---- internal drive: dust ---------------------------------------------------
+    def dust_accrue(self, ts: float) -> float:
+        """Sensory debris builds up between polls; grooming clears it (Seeds et al. 2014).
+        Deterministic: the increment is drawn from a seeded uniform over the elapsed time."""
+        import hashlib
+
+        cfg = self.enc.cfg.get("spontaneous", {})
+        rate = float(cfg.get("dust_per_hour", 0.35))
+        jitter = float(cfg.get("dust_jitter", 0.5))
+        dust = float(self.ledger.get_cursor("dust") or 0.0)
+        last = self.ledger.get_cursor("dust_ts")
+        if last is not None:
+            dt_h = max(0.0, (ts - float(last)) / 3600.0)
+            u = int.from_bytes(hashlib.blake2b(f"dust|{int(ts)}".encode(), digest_size=8).digest(), "little") / 2**64
+            dust = min(1.0, dust + rate * dt_h * (1.0 - jitter + 2.0 * jitter * u))
+        self.ledger.set_cursor("dust", repr(dust))
+        self.ledger.set_cursor("dust_ts", repr(ts))
+        return dust
+
+    def dust_clear(self) -> None:
+        self.ledger.set_cursor("dust", repr(0.0))
+
     # ---- episodes -------------------------------------------------------------
-    def stimulus(self, f: Features | None, hour: float, seed: int = 0) -> Stimulus:
+    def stimulus(self, f: Features | None, hour: float, seed: int = 0, drive: float = 1.0) -> Stimulus:
         if f is not None:
             drives = list(self.enc.encode(f).drives)
         else:
-            d = self.enc.spontaneous_drive(seed)
+            d = self.enc.spontaneous_drive(seed, drive)
             drives = [d] if d is not None else []
         drives += self.clock.drives(hour)
         return Stimulus(drives)
@@ -146,6 +241,7 @@ class Agent:
         kind: str = "event",
         seed: int | None = None,
         note: str | None = None,
+        drive: float = 1.0,
     ) -> Outcome:
         """Run one episode from rest, decide, record.  f=None is a spontaneous (no-event) episode."""
         self.mb.forget(self.hours(ts))
@@ -153,7 +249,7 @@ class Agent:
         hour = self.clock.local_hour(ts)
         did = f.did if f else None
         seed = self.seed_for(ts, did, source_uri) if seed is None else seed
-        stim = self.stimulus(f, hour, seed)
+        stim = self.stimulus(f, hour, seed, drive)
         d_before = self.mb.digest()
         naive = self.mb.naive_twin(stim, seed) if f is not None else None
         res = self.fly.run_episode(stim, seed)
@@ -185,6 +281,7 @@ class Agent:
             kind=kind,
             did=did,
             source_uri=source_uri,
+            drive=drive,
             vader=f.vader if f else None,
             mentioned=f.mentioned if f else None,
             familiarity=fam if f else None,
@@ -232,7 +329,7 @@ class Agent:
         if r["did"] is not None:
             labeled = "labeled" in (r["note"] or "")
             f = Features(r["did"], float(r["vader"]), bool(r["mentioned"]), int(r["familiarity"]), labeled)
-        stim = self.stimulus(f, float(r["hour"]), int(r["seed"]))
+        stim = self.stimulus(f, float(r["hour"]), int(r["seed"]), float(r["drive"] if r["drive"] is not None else 1.0))
         naive = self.mb.naive_twin(stim, int(r["seed"])) if f is not None else None
         res = self.fly.run_episode(stim, int(r["seed"]))
         dec = self.readout.decide(res, self.fly.episode_ms, naive)

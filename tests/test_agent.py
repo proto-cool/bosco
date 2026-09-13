@@ -38,7 +38,22 @@ def test_rate_caps(fly):
     L = Ledger(f"{tmp}/l.sqlite")
     ag = Agent(L, fly, state_dir=tmp)
     t0 = 1_800_000_000.0
-    assert ag.caps_allow(t0)
-    L.add_action(1, "like", "at://me/1", "at://x/1", dry_run=False, ts=t0)
-    assert not ag.caps_allow(t0 + 100)
-    assert ag.caps_allow(t0 + 3601)
+    assert ag.caps_allow(t0, "spontaneous_post")[0]
+    L.add_action(1, "spontaneous_post", "at://me/1", None, dry_run=False, ts=t0)
+    assert not ag.caps_allow(t0 + 100, "spontaneous_post")[0]
+    assert ag.caps_allow(t0 + 100, "reply", "at://x/root", "did:plc:a")[0]  # replies have their own budget
+    assert ag.caps_allow(t0 + 3601, "spontaneous_post")[0]
+    n = ag.caps["per_thread_replies_per_hour"]
+    for i in range(n):
+        L.add_action(
+            1,
+            "reply",
+            f"at://me/r{i}",
+            "at://x/1",
+            dry_run=False,
+            ts=t0 + 200 + i,
+            root_uri="at://x/root",
+            target_did="did:plc:a",
+        )
+    assert ag.caps_allow(t0 + 300, "reply", "at://x/root", "did:plc:a") == (False, "thread/hour")
+    assert ag.caps_allow(t0 + 300, "reply", "at://y/root", "did:plc:b")[0]

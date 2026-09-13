@@ -87,7 +87,9 @@ Every number below has a gate report under `docs/`.
    `src/bosco/moderation.py`). The generator's vocabulary is closed.
 11. **Scope**: Bosco reads his timeline and the discover feed; each unseen
    post is a stimulus; he may like, follow, unfollow, reply, and post, within
-   1 action/hour and 24/day.
+   per-kind caps (`config/caps_v1.yaml`).  Own posts follow an internal drive
+   on bristle afferents that accrues between polls and is cleared by grooming;
+   there is no timer.  Operator commands by mention: `src/bosco/control.py`.
 9. **Determinism**: single thread, fixed accumulation order, no FMA or
    fast-math, splitmix64 RNG; episodes start from rest; weights are
    content-addressed snapshots so any ledger row replays bit-identically

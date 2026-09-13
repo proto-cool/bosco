@@ -56,9 +56,13 @@ def cmd_spontaneous(a) -> int:
     L = Ledger(a.ledger)
     agent = Agent(L, state_dir=a.state_dir)
     ts = _ts(a.at)
-    out = agent.run(None, ts, None, kind="spontaneous")
+    dust = agent.dust_accrue(ts) if a.dust is None else a.dust
+    out = agent.run(None, ts, None, kind="spontaneous", drive=dust)
+    if out.decision.behaviour == "groom" and a.dust is None:
+        agent.dust_clear()
     d = out.decision
     sc = {k: round(v, 2) for k, v in d.scores.items()}
+    print(f"dust {dust:.2f}")
     print(
         f"episode {out.episode_id}  scores {sc}  valence {d.valence}  arousal {d.arousal} -> {d.behaviour} {d.action}"
     )
@@ -126,6 +130,7 @@ def main(argv=None) -> int:
     s.set_defaults(fn=cmd_poke)
     s = sub.add_parser("spontaneous")
     s.add_argument("--at")
+    s.add_argument("--dust", type=float, default=None, help="override the accrued dust drive (0-1)")
     s.set_defaults(fn=cmd_spontaneous)
     s = sub.add_parser("outcome")
     s.add_argument("--episode", type=int, required=True)

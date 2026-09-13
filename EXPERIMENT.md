@@ -33,7 +33,16 @@ genuinely the one acting, and that anyone can check.
 - Every episode is deterministic given (seed, stimulus features) and
   replays bit-identical from the log.
 - Other people's post text is never stored.
-- Rate caps: 1 action/hour, 24/day. Bot self-label on the account.
+- Rate caps by kind (`config/caps_v1.yaml`): replies 12/h 100/d, likes
+  12/h 100/d, follows and unfollows 6/h 40/d, own posts 1/h 12/d, all
+  actions 24/h 240/d; at most 6 replies per thread per hour, 20 replies and
+  30 actions toward one account per day. These are loop guards, not a
+  schedule. Bot self-label on the account.
+- When he posts or replies is the network's decision. Replies follow
+  events. Own posts follow an internal drive on bristle afferents that
+  accrues between polls and is cleared by grooming (`config/encoder_v1.yaml`
+  `spontaneous`). There is no timer. The VPS bounds perception, not
+  behaviour: at most `BOSCO_EPISODE_BUDGET` episodes per hour.
 - Bosco reads his timeline and the discover feed and may like, follow,
   unfollow, reply in any thread he reads, and post on his own. The action
   set is `reply, like, follow, leave, spontaneous_post, nothing`.
@@ -44,16 +53,26 @@ These are rails on the *account*, not hands on the *fly*. None of them touch
 weights, the ledger, or the stimulus log, and every use is itself a ledger
 row published with the nightly dump.
 
-- **Kill switch.** A reply from `@proto.cool` (DID verified against the PDS,
-  not the handle) to any Bosco post containing exactly `bosco sleep` pauses
-  all actions; `bosco wake` resumes. While asleep the poller still runs and
-  logs stimuli, so the fly keeps perceiving; it just cannot act.
-- **Delete.** `bosco delete` as a reply from `@proto.cool` to a Bosco post
-  deletes that post. The ledger row for the action stays; a `deleted` row
-  is appended.
-- **Ignore list.** Accounts on a Bluesky list owned by `@proto.cool` named
-  `bosco-ignore` never enter the stimulus stream. Adding an account is not
-  a punishment signal; it is silence.
+Commands are mentions or replies from `@proto.cool` (DID verified against
+the PDS, not the handle); free text around the keyword is fine
+(`src/bosco/control.py`). The result is posted as a reply and logged.
+
+- **sleep / wake.** Pauses and resumes all actions. Asleep, the poller still
+  runs and logs stimuli; the fly keeps perceiving.
+- **delete** (as a reply to a Bosco post). Deletes it; a `deleted` row is
+  appended, the action row stays.
+- **ignore @handle / unignore @handle.** Never enters the stimulus stream
+  again; unfollowed if followed. Also honoured: a Bluesky list named
+  `bosco-ignore` on `@proto.cool`. Not a punishment signal; silence.
+- **unfollow @handle.**
+- **reload.** Re-reads `corpus/`, `phrasebook.yaml`, thresholds and caps
+  from disk ("start learning your corpus again"). **restart** exits the
+  process so the quadlet brings it back on new code.
+- **status / people / memory @handle.** Numbers only; what he has learned
+  about an account and why.
+- **forget @handle.** Resets the plastic state on that account's odor. This
+  is a manual state edit: it is logged as `forget`, it breaks the weight
+  digest chain, and the integrity check reports it. Use it and say so.
 - **Hard stop.** Stopping the container. The dead-man alert fires after 4 h.
 
 Bosco's text comes from a trigram model over a published corpus and from

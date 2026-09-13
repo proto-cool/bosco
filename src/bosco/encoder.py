@@ -77,12 +77,15 @@ class Encoder:
         return Drive(self.jo, float(self.cfg["mechanosensory"]["rate_hz"]), "mention")
 
     # ---- internal drive (no event) ---------------------------------------
-    def spontaneous_drive(self, seed: int) -> Drive | None:
+    def spontaneous_drive(self, seed: int, drive: float = 1.0) -> Drive | None:
+        """drive in [0, 1] scales how many bristles carry debris (k_max * drive)."""
         sp = self.cfg.get("spontaneous")
         if not sp or len(self.bristles) == 0:
             return None
         rng = np.random.default_rng(seed & 0xFFFFFFFF)
-        k = min(int(sp["k"]), len(self.bristles))
+        k = min(int(round(int(sp["k"]) * float(np.clip(drive, 0.0, 1.0)))), len(self.bristles))
+        if k <= 0:
+            return None
         idx = np.sort(rng.choice(self.bristles, size=k, replace=False)).astype(np.int32)
         return Drive(idx, float(sp["rate_hz"]), "bristles")
 

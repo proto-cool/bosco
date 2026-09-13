@@ -3,7 +3,7 @@
 Environment: BOSCO_HANDLE, BOSCO_APP_PASSWORD, BOSCO_OPERATOR (handle, default proto.cool),
 BOSCO_IGNORE_LIST (name of the operator's list, default bosco-ignore), BOSCO_PDS (optional),
 BOSCO_BROWSE (posts read per poll from timeline + discover, default 12),
-BOSCO_SPONTANEOUS_EVERY (seconds between no-event episodes, default 3600).
+BOSCO_EPISODE_BUDGET (episodes per hour the VPS may spend, default 600 ~ 10 CPU-min/h).
 
 Bosco lives on the network like anyone else:
 - notifications (mention / reply / quote)          -> event episode, mentioned=True
@@ -24,13 +24,14 @@ import time
 
 from atproto import Client, models
 
+from bosco import control
 from bosco.agent import Agent, Outcome
 from bosco.encoder import Features, vader_compound
 from bosco.ledger import Ledger
 from bosco.moderation import Moderation
 
 REWARD_DAILY_CAP_PER_ACCOUNT = 2
-CONTROL_WORDS = {"bosco sleep": "sleep", "bosco wake": "wake", "bosco delete": "delete"}
+RESTART_EXIT_CODE = 3  # quadlet Restart=on-failure brings the container back
 DISCOVER_FEED = "at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot"
 
 
@@ -49,10 +50,11 @@ class Bsky:
         self.client = Client(base_url=os.environ.get("BOSCO_PDS") or None)
         self.client.login(os.environ["BOSCO_HANDLE"], os.environ["BOSCO_APP_PASSWORD"])
         self.me = self.client.me.did
+        self.my_handle = self.client.me.handle
         self.operator_did = self.client.resolve_handle(os.environ.get("BOSCO_OPERATOR", "proto.cool")).did
         self.ignore_list_name = os.environ.get("BOSCO_IGNORE_LIST", "bosco-ignore")
         self.browse_budget = int(os.environ.get("BOSCO_BROWSE", "12"))
-        self.spontaneous_every = float(os.environ.get("BOSCO_SPONTANEOUS_EVERY", "3600"))
+        self.episode_budget = int(os.environ.get("BOSCO_EPISODE_BUDGET", "600"))
         self.agent = Agent(ledger)
         self.mod = Moderation()
         self._ignore: set[str] = set()
@@ -62,7 +64,7 @@ class Bsky:
     # ---- operator rails --------------------------------------------------------
     def ignore_set(self) -> set[str]:
         if time.time() - self._ignore_ts < 600:
-            return self._ignore
+            return self._ignore | self.L.ignored()
         dids: set[str] = set()
         try:
             lists = self.client.app.bsky.graph.get_lists(params={"actor": self.operator_did}).lists
@@ -81,26 +83,80 @@ class Bsky:
             print("ignore list fetch failed:", e, file=sys.stderr)
             return self._ignore
         self._ignore, self._ignore_ts = dids, time.time()
-        return dids
+        return dids | self.L.ignored()
 
     def handle_control(self, n) -> bool:
-        """Operator commands arrive as replies from the operator DID to Bosco posts."""
-        if n.author.did != self.operator_did or n.reason != "reply":
+        """Operator commands: mentions or replies from the operator DID (see control.py)."""
+        if n.author.did != self.operator_did or n.reason not in ("reply", "mention", "quote"):
             return False
-        text = (getattr(n.record, "text", "") or "").strip().lower()
-        kind = CONTROL_WORDS.get(text)
-        if not kind:
+        text = getattr(n.record, "text", "") or ""
+        cmd = control.parse(text, self.my_handle)
+        if cmd is None:
             return False
         parent = getattr(getattr(n.record, "reply", None), "parent", None)
         target = parent.uri if parent else None
-        if target and target not in self.L.our_uris():
-            return False
-        self.L.add_control(kind, n.author.did, n.uri, target)
-        if kind == "delete" and target:
-            if not self.dry:
-                self.client.delete_post(target)
-            self.L.mark_deleted(target)
-        print(f"control: {kind} by operator ({'dry' if self.dry else 'live'})")
+        ts = _ts(n.indexed_at)
+        did = self.client.resolve_handle(cmd.handle).did if cmd.handle else None
+        reply = None
+        if cmd.kind == "delete":
+            if not target or target not in self.L.our_uris():
+                reply = "delete: reply to one of my posts"
+            else:
+                if not self.dry:
+                    self.client.delete_post(target)
+                self.L.mark_deleted(target)
+                reply = "deleted"
+        elif cmd.kind in ("sleep", "wake"):
+            reply = "asleep" if cmd.kind == "sleep" else "awake"
+        elif cmd.kind == "status":
+            n_ep = self.L.db.execute("SELECT COUNT(*) FROM episodes").fetchone()[0]
+            mix = dict(
+                self.L.db.execute(
+                    "SELECT action, COUNT(*) FROM episodes WHERE ts>=? GROUP BY action", (ts - 86400,)
+                ).fetchall()
+            )
+            reply = (
+                f"episodes {n_ep}; last 24h {mix}; asleep {self.L.asleep()}; "
+                f"dust {float(self.L.get_cursor('dust') or 0):.2f}; ignored {len(self.L.ignored())}; "
+                f"corpus {self.agent.generator.digest()[:8]}"
+            )
+        elif cmd.kind == "people":
+            rows = []
+            for d in [r[0] for r in self.L.db.execute("SELECT DISTINCT did FROM outcomes WHERE did IS NOT NULL")][:15]:
+                _, v = self.agent.memory_report(d, ts)
+                rows.append((v, d))
+            rows.sort(reverse=True)
+            reply = "; ".join(f"{v:+.2f} {d}" for v, d in rows[:8]) or "nobody yet"
+        elif cmd.kind == "memory" and did:
+            reply, _ = self.agent.memory_report(did, ts)
+        elif cmd.kind == "reload":
+            reply = self.agent.reload()
+        elif cmd.kind == "restart":
+            reply = "restarting"
+        elif cmd.kind in ("ignore", "unignore") and did:
+            self.L.set_ignored(did, n.author.did, cmd.kind == "ignore", ts=ts)
+            if cmd.kind == "ignore":
+                self.unfollow_if_following(did)
+            reply = f"{cmd.kind}d {cmd.handle}"
+        elif cmd.kind == "unfollow" and did:
+            self.unfollow_if_following(did)
+            reply = f"unfollowed {cmd.handle}"
+        elif cmd.kind == "forget" and did:
+            k = self.agent.forget_account(did, ts)
+            reply = f"forgot {cmd.handle}: {k} synapses reset (manual state edit, logged)"
+        self.L.add_control(cmd.kind, n.author.did, n.uri, did or target, ts=ts)
+        print(f"control: {cmd.kind} {cmd.handle or ''} -> {reply} ({'dry' if self.dry else 'live'})")
+        if reply and not self.dry:
+            ref = models.AppBskyFeedPost.ReplyRef(
+                parent=models.ComAtprotoRepoStrongRef.Main(uri=n.uri, cid=n.cid),
+                root=models.ComAtprotoRepoStrongRef.Main(uri=n.uri, cid=n.cid),
+            )
+            root = getattr(getattr(n.record, "reply", None), "root", None)
+            if root:
+                ref.root = models.ComAtprotoRepoStrongRef.Main(uri=root.uri, cid=root.cid)
+            self.client.send_post(reply[:290], reply_to=ref, langs=["en"])
+        if cmd.kind == "restart" and not self.dry:
+            raise SystemExit(RESTART_EXIT_CODE)
         return True
 
     # ---- follows ---------------------------------------------------------------
@@ -160,9 +216,19 @@ class Bsky:
             self.L.add_action(out.episode_id, action, None, target_uri, dry_run=True, ts=ts)
             print("asleep: action suppressed", action)
             return
-        if not self.agent.caps_allow(ts):
-            self.L.add_action(out.episode_id, "leave", None, target_uri, dry_run=True, ts=ts)
-            print("rate cap: action suppressed", action)
+        ok, why = self.agent.caps_allow(ts, action, root_uri or target_uri, did)
+        if not ok:
+            self.L.add_action(
+                out.episode_id,
+                "leave",
+                None,
+                target_uri,
+                dry_run=True,
+                ts=ts,
+                root_uri=root_uri or target_uri,
+                target_did=did,
+            )
+            print(f"rate cap ({why}): action suppressed", action)
             return
         our_uri = None
         if action == "like" and target_uri:
@@ -192,7 +258,16 @@ class Bsky:
             if not self.dry:
                 our_uri = self.client.send_post(out.text, reply_to=reply_to, langs=["en"]).uri
             print(f"{action} ({out.text_source}) {out.text!r} -> {target_uri} ({'dry' if self.dry else our_uri})")
-        self.L.add_action(out.episode_id, action, our_uri, target_uri, dry_run=self.dry, ts=ts)
+        self.L.add_action(
+            out.episode_id,
+            action,
+            our_uri,
+            target_uri,
+            dry_run=self.dry,
+            ts=ts,
+            root_uri=root_uri or target_uri,
+            target_did=did,
+        )
 
     # ---- one post -> one episode -----------------------------------------------
     def perceive_post(
@@ -209,6 +284,12 @@ class Bsky:
         reply = getattr(record, "reply", None)
         root = getattr(reply, "root", None)
         parent = getattr(reply, "parent", None)
+        ours = self.L.our_uris()
+        in_thread = (
+            bool(parent and parent.uri in ours)
+            or bool(root and root.uri in ours)
+            or (bool(root) and self.L.count_actions(0.0, kind="reply", root_uri=root.uri, real_only=False) > 0)
+        )
         # a negative reply to one of Bosco's posts punishes the episode that produced it
         if parent and parent.uri in self.L.our_uris() and v < -0.05:
             ep = self.L.episode_for_uri(parent.uri)
@@ -219,7 +300,7 @@ class Bsky:
         ):
             self.agent.apply_outcome(out.episode_id, "reward", "known_account_inbound", did, uri, ts)
             self.L.bump_reward(did, _day(ts))
-        self.act(out, did, uri, cid, root.uri if root else None, root.cid if root else None, ts)
+        self.act(out, did, uri, cid, root.uri if root else None, root.cid if root else None, ts, in_thread=in_thread)
         return out
 
     # ---- polling ---------------------------------------------------------------
@@ -274,8 +355,9 @@ class Bsky:
         except Exception as e:  # noqa: BLE001
             print("discover failed:", e, file=sys.stderr)
         n_ep = 0
+        spent = self.episodes_last_hour()
         for post, _where in items:
-            if n_ep >= self.browse_budget:
+            if n_ep >= self.browse_budget or spent + n_ep >= self.episode_budget:
                 break
             did = post.author.did
             if did == self.me or did in ignore or self.L.seen_source(post.uri):
@@ -314,16 +396,23 @@ class Bsky:
         return n
 
     def spontaneous(self) -> bool:
-        """One no-event episode per BOSCO_SPONTANEOUS_EVERY seconds: the network may groom (post) or do nothing."""
+        """Every poll: dust accrues; the no-event episode runs with that drive; grooming clears it.
+        Whether he posts is the network's call, not a schedule's."""
         ts = time.time()
-        last = self.L.get_cursor("last_spontaneous_ts")
-        if last and ts - float(last) < self.spontaneous_every:
-            return False
-        self.L.set_cursor("last_spontaneous_ts", repr(ts))
-        out = self.agent.run(None, ts, None, kind="spontaneous")
-        if out.decision.action == "spontaneous_post":
-            self.act(out, None, None, None, None, None, ts)
-        return True
+        dust = self.agent.dust_accrue(ts)
+        out = self.agent.run(None, ts, None, kind="spontaneous", drive=dust)
+        if out.decision.behaviour == "groom":
+            ok, _ = self.agent.caps_allow(ts, "spontaneous_post")
+            if ok:
+                self.agent.dust_clear()
+            if out.decision.action == "spontaneous_post":
+                self.act(out, None, None, None, None, None, ts)
+        return out.decision.behaviour == "groom"
+
+    def episodes_last_hour(self) -> int:
+        return int(
+            self.L.db.execute("SELECT COUNT(*) FROM episodes WHERE ts>=?", (time.time() - 3600.0,)).fetchone()[0]
+        )
 
 
 def run_loop(ledger: Ledger, dry_run: bool, once: bool, interval: int) -> int:

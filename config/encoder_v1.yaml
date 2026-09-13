@@ -45,5 +45,11 @@ spontaneous:
   # which bristles, and hence how strongly the grooming DNs respond, varies
   # with the seed.
   bristle_types: [BM_InOm, BM, BM_Vib]
-  k: 500
+  k: 500              # bristles driven at full dust (k * dust otherwise)
   rate_hz: 10.0
+  # Dust accrues between polls at dust_per_hour * (1 +/- dust_jitter), seeded
+  # from the timestamp; grooming (a spontaneous post, or a groom decision the
+  # caps allowed) clears it.  There is no schedule: he posts when the debris
+  # crosses what his network needs, which varies with where it lands.
+  dust_per_hour: 0.35
+  dust_jitter: 0.5
