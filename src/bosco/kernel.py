@@ -144,16 +144,12 @@ class Net:
         self.lib.lif_get_weights(self._h, out)
         return out
 
-    def set_inputs(
-        self, idx: np.ndarray, rate_hz: np.ndarray, jump_mv: np.ndarray | float | None = None
-    ) -> None:
+    def set_inputs(self, idx: np.ndarray, rate_hz: np.ndarray, jump_mv: np.ndarray | float | None = None) -> None:
         idx = np.ascontiguousarray(idx, dtype=np.int32)
         rate = np.ascontiguousarray(rate_hz, dtype=np.float64)
         if jump_mv is None:
             jump_mv = self.params.input_jump_mv
-        jump = np.ascontiguousarray(
-            np.broadcast_to(np.asarray(jump_mv, dtype=np.float64), idx.shape)
-        )
+        jump = np.ascontiguousarray(np.broadcast_to(np.asarray(jump_mv, dtype=np.float64), idx.shape))
         self.lib.lif_set_inputs(self._h, len(idx), idx, rate, jump)
 
     def clear_inputs(self) -> None:

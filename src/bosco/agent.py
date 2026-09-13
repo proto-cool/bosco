@@ -117,10 +117,7 @@ class Agent:
         import hashlib
 
         s = f"{int(ts)}|{did or ''}|{source_uri or ''}".encode()
-        return (
-            int.from_bytes(hashlib.blake2b(s, digest_size=8).digest(), "little")
-            & 0x7FFFFFFFFFFFFFFF
-        )
+        return int.from_bytes(hashlib.blake2b(s, digest_size=8).digest(), "little") & 0x7FFFFFFFFFFFFFFF
 
     # ---- rate caps ------------------------------------------------------------
     def caps_allow(self, ts: float) -> bool:
@@ -183,9 +180,7 @@ class Agent:
             line_id=line.id if line else None,
             note=note
             if note
-            else (
-                "no_line" if dec.action in ("reply", "spontaneous_post") and line is None else None
-            ),
+            else ("no_line" if dec.action in ("reply", "spontaneous_post") and line is None else None),
         )
         eid = self.ledger.add_episode(row, ts=ts)
         self._save_weights()

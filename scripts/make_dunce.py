@@ -24,9 +24,7 @@ from bosco.kernel import csr_from_edges
 from bosco.model import Brain, load_or_build
 
 
-def maslov_sneppen(
-    pre: np.ndarray, post: np.ndarray, n_swaps: int, seed: int
-) -> tuple[np.ndarray, np.ndarray]:
+def maslov_sneppen(pre: np.ndarray, post: np.ndarray, n_swaps: int, seed: int) -> tuple[np.ndarray, np.ndarray]:
     rng = np.random.default_rng(seed)
     pre = pre.copy()
     post = post.copy()

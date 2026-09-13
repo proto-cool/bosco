@@ -32,9 +32,9 @@ def main(argv=None) -> int:
     for r in ev + sp:
         mix[r["action"]] = mix.get(r["action"], 0) + 1
     silence = mix.get("nothing", 0) / max(1, len(ev) + sp.__len__())
-    blocks = L.db.execute(
-        "SELECT COUNT(*) FROM outcomes WHERE source='block' AND ts>=? AND ts<?", (t0, t1)
-    ).fetchone()[0]
+    blocks = L.db.execute("SELECT COUNT(*) FROM outcomes WHERE source='block' AND ts>=? AND ts<?", (t0, t1)).fetchone()[
+        0
+    ]
     rewards = L.db.execute(
         "SELECT COUNT(*) FROM outcomes WHERE valence='reward' AND ts>=? AND ts<?", (t0, t1)
     ).fetchone()[0]
@@ -42,9 +42,7 @@ def main(argv=None) -> int:
         "SELECT COUNT(*) FROM outcomes WHERE valence='punishment' AND ts>=? AND ts<?", (t0, t1)
     ).fetchone()[0]
     ctrl = dict(
-        L.db.execute(
-            "SELECT kind, COUNT(*) FROM control WHERE ts>=? AND ts<? GROUP BY kind", (t0, t1)
-        ).fetchall()
+        L.db.execute("SELECT kind, COUNT(*) FROM control WHERE ts>=? AND ts<? GROUP BY kind", (t0, t1)).fetchall()
     )
     out = [
         f"# bosco monthly note {y}-{m:02d}\n",
@@ -57,11 +55,7 @@ def main(argv=None) -> int:
     ]
     if a.dunce_ledger:
         D = Ledger(a.dunce_ledger)
-        by_src = {
-            r["source_uri"]: r["action"]
-            for r in D.episodes(since_ts=t0, kind="event")
-            if r["ts"] < t1
-        }
+        by_src = {r["source_uri"]: r["action"] for r in D.episodes(since_ts=t0, kind="event") if r["ts"] < t1}
         paired = [(r["action"], by_src[r["source_uri"]]) for r in ev if r["source_uri"] in by_src]
         agree = sum(1 for x, y_ in paired if x == y_) / max(1, len(paired))
         out.append(f"- dunce action agreement over {len(paired)} shared stimuli: {agree:.3f}")

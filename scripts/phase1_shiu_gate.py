@@ -112,13 +112,7 @@ def main() -> int:
     det = np.array_equal(t1, t2) and np.array_equal(i1, i2)
     print(f"bit-identical replay: {det}")
 
-    ok = (
-        det
-        and our_rate.get(MN9, 0.0) > 5.0
-        and ref_rate.get(MN9, 0.0) > 5.0
-        and logr > 0.8
-        and jacc > 0.6
-    )
+    ok = det and our_rate.get(MN9, 0.0) > 5.0 and ref_rate.get(MN9, 0.0) > 5.0 and logr > 0.8 and jacc > 0.6
     print(f"GATE: {'PASS' if ok else 'FAIL'}")
     (paths.DOCS / "phase1-shiu-gate.md").write_text(
         "# Phase 1 gate: Shiu et al. 2024 sugar -> MN9 on FlyWire v630\n\n"

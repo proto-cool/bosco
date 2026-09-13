@@ -44,9 +44,7 @@ class Bsky:
         self.client = Client(base_url=os.environ.get("BOSCO_PDS") or None)
         self.client.login(os.environ["BOSCO_HANDLE"], os.environ["BOSCO_APP_PASSWORD"])
         self.me = self.client.me.did
-        self.operator_did = self.client.resolve_handle(
-            os.environ.get("BOSCO_OPERATOR", "proto.cool")
-        ).did
+        self.operator_did = self.client.resolve_handle(os.environ.get("BOSCO_OPERATOR", "proto.cool")).did
         self.ignore_list_name = os.environ.get("BOSCO_IGNORE_LIST", "bosco-ignore")
         self.agent = Agent(ledger)
         self._ignore: set[str] = set()
@@ -129,15 +127,11 @@ class Bsky:
             if d.action == "reply" and target_uri:
                 reply_to = models.AppBskyFeedPost.ReplyRef(
                     parent=models.ComAtprotoRepoStrongRef.Main(uri=target_uri, cid=target_cid),
-                    root=models.ComAtprotoRepoStrongRef.Main(
-                        uri=root_uri or target_uri, cid=root_cid or target_cid
-                    ),
+                    root=models.ComAtprotoRepoStrongRef.Main(uri=root_uri or target_uri, cid=root_cid or target_cid),
                 )
             if not self.dry:
                 our_uri = self.client.send_post(out.line.text, reply_to=reply_to, langs=["en"]).uri
-            print(
-                f"{d.action} [{out.line.id}] {out.line.text!r} -> {target_uri} ({'dry' if self.dry else our_uri})"
-            )
+            print(f"{d.action} [{out.line.id}] {out.line.text!r} -> {target_uri} ({'dry' if self.dry else our_uri})")
         elif d.action == "leave":
             print("leave", target_uri)
         self.L.add_action(out.episode_id, d.action, our_uri, target_uri, dry_run=self.dry, ts=ts)
@@ -175,18 +169,12 @@ class Bsky:
                 if n.reason == "reply" and parent and v < -0.05:
                     ep = self.L.episode_for_uri(parent.uri)
                     if ep is not None:
-                        self.agent.apply_outcome(
-                            ep, "punishment", "vader_negative_reply", did, uri, ts
-                        )
+                        self.agent.apply_outcome(ep, "punishment", "vader_negative_reply", did, uri, ts)
                 elif fam >= 1 and self.L.rewards_today(did, day) < REWARD_DAILY_CAP_PER_ACCOUNT:
-                    self.agent.apply_outcome(
-                        out.episode_id, "reward", "known_account_inbound", did, uri, ts
-                    )
+                    self.agent.apply_outcome(out.episode_id, "reward", "known_account_inbound", did, uri, ts)
                     self.L.bump_reward(did, day)
                 root = getattr(getattr(n.record, "reply", None), "root", None)
-                self.act(
-                    out, uri, n.cid, root.uri if root else None, root.cid if root else None, ts
-                )
+                self.act(out, uri, n.cid, root.uri if root else None, root.cid if root else None, ts)
             elif n.reason in ("like", "follow", "repost"):
                 fam = self.L.familiarity(did)
                 if fam >= 1 and self.L.rewards_today(did, day) < REWARD_DAILY_CAP_PER_ACCOUNT:
@@ -195,15 +183,11 @@ class Bsky:
                         (did,),
                     ).fetchone()
                     if last:
-                        self.agent.apply_outcome(
-                            last["id"], "reward", f"known_account_{n.reason}", did, uri, ts
-                        )
+                        self.agent.apply_outcome(last["id"], "reward", f"known_account_{n.reason}", did, uri, ts)
                         self.L.bump_reward(did, day)
                         n_ep += 1
         if r.notifications and not self.dry:
-            self.client.app.bsky.notification.update_seen(
-                {"seen_at": self.client.get_current_time_iso()}
-            )
+            self.client.app.bsky.notification.update_seen({"seen_at": self.client.get_current_time_iso()})
         return n_ep
 
     def check_blocks(self) -> int:
@@ -231,9 +215,7 @@ class Bsky:
                     if self.L.seen_evidence(evidence):
                         continue
                     ep = next(r["id"] for r in rows if r["did"] == x.did)
-                    self.agent.apply_outcome(
-                        ep, "punishment", "block", x.did, evidence, time.time()
-                    )
+                    self.agent.apply_outcome(ep, "punishment", "block", x.did, evidence, time.time())
                     n += 1
         return n
 

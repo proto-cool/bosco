@@ -25,9 +25,7 @@ def main() -> int:
     orn = pop.orns()
     gloms = sorted(orn["glomerulus"].unique())
     apl = b.index_of_present(pop.apl())
-    print(
-        f"model n={b.n} nnz={b.nnz}; KCs in model {len(kc)}; APL {len(apl)}; glomeruli {len(gloms)}"
-    )
+    print(f"model n={b.n} nnz={b.nnz}; KCs in model {len(kc)}; APL {len(apl)}; glomeruli {len(gloms)}")
     rng = np.random.default_rng(0)
     rows = []
     for k in (1, 3, 5, 10):
@@ -45,9 +43,7 @@ def main() -> int:
                 frac = float((c[kc] > 0).mean())
                 apl_rate = float(c[apl].mean()) if len(apl) else float("nan")
                 fracs.append(frac)
-                rows.append(
-                    (k, rate, rep, len(stim), frac, apl_rate, int(c.sum()), time.time() - t0)
-                )
+                rows.append((k, rate, rep, len(stim), frac, apl_rate, int(c.sum()), time.time() - t0))
             print(
                 f"k={k:2d} rate={rate:5.0f}Hz  KC active frac {np.mean(fracs):.3f} (reps {np.round(fracs, 3).tolist()})"
             )
@@ -66,9 +62,7 @@ def main() -> int:
         "|---|---|---|---|---|---|---|---|",
     ]
     for r in rows:
-        lines.append(
-            f"| {r[0]} | {r[1]:.0f} | {r[2]} | {r[3]} | {r[4]:.3f} | {r[5]:.1f} | {r[6]} | {r[7]:.1f} |"
-        )
+        lines.append(f"| {r[0]} | {r[1]:.0f} | {r[2]} | {r[3]} | {r[4]:.3f} | {r[5]:.1f} | {r[6]} | {r[7]:.1f} |")
     (paths.DOCS / "phase2-kc-sparseness.md").write_text("\n".join(lines) + "\n")
     return 0
 

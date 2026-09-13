@@ -16,12 +16,7 @@ from bosco.model import load_or_build
 def main() -> int:
     b = load_or_build()
     nt = data.neurotransmitters().reindex(b.ids)
-    label = (
-        nt["consensus_nt"]
-        .where(nt["consensus_nt"].notna(), nt["predicted_nt"])
-        .fillna("unknown")
-        .str.lower()
-    )
+    label = nt["consensus_nt"].where(nt["consensus_nt"].notna(), nt["predicted_nt"]).fillna("unknown").str.lower()
     mono = np.isin(label.to_numpy(), ["dopamine", "serotonin", "octopamine"])
     print("NT mix in model:", label.value_counts().to_dict())
     e_pre = b.pre_of_edges()

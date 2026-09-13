@@ -62,9 +62,7 @@ def battery(net, p, b, label, sugar, bitter, mn9, orn_i, odors, kc, mbon):
             for j in range(i + 1, len(odors))
         ]
     )
-    out.append(
-        f"odor5: KC {np.mean(fr):.3f} jacc {jac:.2f} MBON {np.mean(mb):5.1f}Hz post {int(np.mean(post)):6d}"
-    )
+    out.append(f"odor5: KC {np.mean(fr):.3f} jacc {jac:.2f} MBON {np.mean(mb):5.1f}Hz post {int(np.mean(post)):6d}")
     print(f"{label:28s} | " + " | ".join(out), flush=True)
 
 
@@ -83,9 +81,7 @@ def main() -> int:
     mn9 = b.index_of_present(pop.bodies_of_types(["MN9"]))
     rng = np.random.default_rng(3)
     odors = [
-        b.index_of_present(
-            orn.loc[orn["glomerulus"].isin(rng.choice(gloms, 5, replace=False)), "bodyId"]
-        )
+        b.index_of_present(orn.loc[orn["glomerulus"].isin(rng.choice(gloms, 5, replace=False)), "bodyId"])
         for _ in range(4)
     ]
 

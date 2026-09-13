@@ -27,9 +27,7 @@ from bosco.ledger import Ledger
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--ledger", required=True)
-    ap.add_argument(
-        "--state-dir", default=str(paths.STATE), help="dir holding weights/<digest>.npy snapshots"
-    )
+    ap.add_argument("--state-dir", default=str(paths.STATE), help="dir holding weights/<digest>.npy snapshots")
     ap.add_argument("--replay-sample", type=int, default=5)
     a = ap.parse_args(argv)
     L = Ledger(a.ledger)
@@ -43,12 +41,7 @@ def main(argv=None) -> int:
     # 1. replay determinism
     rng = np.random.default_rng(0)
     sample = (
-        [
-            events[i]
-            for i in rng.choice(len(events), min(a.replay_sample, len(events)), replace=False)
-        ]
-        if events
-        else []
+        [events[i] for i in rng.choice(len(events), min(a.replay_sample, len(events)), replace=False)] if events else []
     )
     fails = []
     for r in sample:
@@ -61,9 +54,7 @@ def main(argv=None) -> int:
         if not ok:
             fails.append((r["id"], "scores differ"))
     ok1 = not fails
-    out.append(
-        f"- replay determinism ({len(sample)} sampled): {'PASS' if ok1 else 'FAIL ' + str(fails)}"
-    )
+    out.append(f"- replay determinism ({len(sample)} sampled): {'PASS' if ok1 else 'FAIL ' + str(fails)}")
 
     # 2. KC sparseness
     th = json.load(open(paths.CONFIG / "thresholds.json"))

@@ -191,10 +191,7 @@ class Ledger:
         return r["t"]
 
     def seen_source(self, uri: str) -> bool:
-        return (
-            self.db.execute("SELECT 1 FROM episodes WHERE source_uri=? LIMIT 1", (uri,)).fetchone()
-            is not None
-        )
+        return self.db.execute("SELECT 1 FROM episodes WHERE source_uri=? LIMIT 1", (uri,)).fetchone() is not None
 
     # ---- actions ------------------------------------------------------------
     def add_action(
@@ -222,16 +219,11 @@ class Ledger:
         return self.db.execute(q, (since_ts,)).fetchall()
 
     def mark_deleted(self, our_uri: str, ts: float | None = None) -> None:
-        self.db.execute(
-            "UPDATE actions SET deleted_ts=? WHERE our_uri=?", (ts or time.time(), our_uri)
-        )
+        self.db.execute("UPDATE actions SET deleted_ts=? WHERE our_uri=?", (ts or time.time(), our_uri))
         self.db.commit()
 
     def our_uris(self) -> set[str]:
-        return {
-            r["our_uri"]
-            for r in self.db.execute("SELECT our_uri FROM actions WHERE our_uri IS NOT NULL")
-        }
+        return {r["our_uri"] for r in self.db.execute("SELECT our_uri FROM actions WHERE our_uri IS NOT NULL")}
 
     def episode_for_uri(self, our_uri: str) -> int | None:
         r = self.db.execute("SELECT episode_id FROM actions WHERE our_uri=?", (our_uri,)).fetchone()
@@ -256,18 +248,11 @@ class Ledger:
         return int(cur.lastrowid)
 
     def seen_evidence(self, uri: str) -> bool:
-        return (
-            self.db.execute(
-                "SELECT 1 FROM outcomes WHERE evidence_uri=? LIMIT 1", (uri,)
-            ).fetchone()
-            is not None
-        )
+        return self.db.execute("SELECT 1 FROM outcomes WHERE evidence_uri=? LIMIT 1", (uri,)).fetchone() is not None
 
     # ---- interactions -------------------------------------------------------
     def familiarity(self, did: str) -> int:
-        r = self.db.execute(
-            "SELECT COALESCE(SUM(inbound),0) AS n FROM interactions WHERE did=?", (did,)
-        ).fetchone()
+        r = self.db.execute("SELECT COALESCE(SUM(inbound),0) AS n FROM interactions WHERE did=?", (did,)).fetchone()
         return int(r["n"])
 
     def bump_inbound(self, did: str, day: str) -> None:
@@ -279,9 +264,7 @@ class Ledger:
         self.db.commit()
 
     def rewards_today(self, did: str, day: str) -> int:
-        r = self.db.execute(
-            "SELECT rewards FROM interactions WHERE did=? AND day=?", (did, day)
-        ).fetchone()
+        r = self.db.execute("SELECT rewards FROM interactions WHERE did=? AND day=?", (did, day)).fetchone()
         return int(r["rewards"]) if r else 0
 
     def bump_reward(self, did: str, day: str) -> None:

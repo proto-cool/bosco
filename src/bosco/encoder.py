@@ -37,10 +37,7 @@ class Encoder:
         excl = set(self.cfg["odor"]["exclude"])
         self.all_glomeruli = sorted(orn["glomerulus"].unique())
         self.neutral = [g for g in self.all_glomeruli if g not in excl]
-        self.orn_by_glom = {
-            g: brain.index_of_present(orn.loc[orn["glomerulus"] == g, "bodyId"])
-            for g in self.neutral
-        }
+        self.orn_by_glom = {g: brain.index_of_present(orn.loc[orn["glomerulus"] == g, "bodyId"]) for g in self.neutral}
         self.sugar = brain.index_of_present(pop.grns("sugar/water"))
         self.bitter = brain.index_of_present(pop.grns("bitter"))
         jo = pop.johnston_organ()
@@ -50,9 +47,7 @@ class Encoder:
     # ---- account odor ---------------------------------------------------
     def glomeruli_for(self, did: str) -> list[str]:
         k = int(self.cfg["odor"]["k"])
-        seed = int.from_bytes(
-            hashlib.blake2b(did.encode("utf-8"), digest_size=8).digest(), "little"
-        )
+        seed = int.from_bytes(hashlib.blake2b(did.encode("utf-8"), digest_size=8).digest(), "little")
         rng = np.random.default_rng(seed)
         chosen = rng.choice(len(self.neutral), size=k, replace=False)
         return sorted(self.neutral[i] for i in chosen)

@@ -24,9 +24,7 @@ def main() -> int:
     orn = pop.orns()
     rng = np.random.default_rng(0)
     gloms = sorted(orn["glomerulus"].unique())
-    odor = b.index_of_present(
-        orn.loc[orn["glomerulus"].isin(rng.choice(gloms, 5, replace=False)), "bodyId"]
-    )
+    odor = b.index_of_present(orn.loc[orn["glomerulus"].isin(rng.choice(gloms, 5, replace=False)), "bodyId"])
     print(f"sugar GRNs {len(sugar)}, MN9 {len(mn9)}, KCs {len(kc)}, odor ORNs {len(odor)}")
     for w_syn in [float(x) for x in sys.argv[1:]] or [0.275, 0.15, 0.1, 0.07, 0.05, 0.035]:
         p = LifParams(w_syn=w_syn)

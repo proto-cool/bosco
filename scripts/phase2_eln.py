@@ -22,9 +22,7 @@ def main() -> int:
     is_alln = np.array([t.startswith(("lLN", "v2LN", "il3LN", "l2LN", "vLN")) for t in typ])
     eln = np.nonzero(is_alln & (b.nt_sign > 0))[0].astype(np.int32)
     lln1 = np.nonzero(typ == "lLN1_bc")[0].astype(np.int32)
-    print(
-        f"cholinergic AL LNs {len(eln)} (types {sorted(set(typ[eln]))[:12]}...), lLN1_bc {len(lln1)}"
-    )
+    print(f"cholinergic AL LNs {len(eln)} (types {sorted(set(typ[eln]))[:12]}...), lLN1_bc {len(lln1)}")
     kc = b.index_of_present(pop.kenyon_cells())
     b.index_of_present(pop.apl())
     mbon = b.index_of_present(pop.mbons()["bodyId"])
@@ -36,9 +34,7 @@ def main() -> int:
     mn9 = b.index_of_present(pop.bodies_of_types(["MN9"]))
     rng = np.random.default_rng(3)
     odors = [
-        b.index_of_present(
-            orn.loc[orn["glomerulus"].isin(rng.choice(gloms, 5, replace=False)), "bodyId"]
-        )
+        b.index_of_present(orn.loc[orn["glomerulus"].isin(rng.choice(gloms, 5, replace=False)), "bodyId"])
         for _ in range(4)
     ]
     np.arange(b.n, dtype=np.int32)

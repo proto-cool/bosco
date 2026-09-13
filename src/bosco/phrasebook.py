@@ -49,14 +49,11 @@ class Phrasebook:
             h.update(f"{ln.id}|{ln.key}|{ln.text}\n".encode())
         return h.hexdigest()
 
-    def candidates(
-        self, behaviour: str, valence: str, arousal: str, familiarity: str
-    ) -> list[Line]:
+    def candidates(self, behaviour: str, valence: str, arousal: str, familiarity: str) -> list[Line]:
         exact = [
             x
             for x in self.lines
-            if (x.behaviour, x.valence, x.arousal, x.familiarity)
-            == (behaviour, valence, arousal, familiarity)
+            if (x.behaviour, x.valence, x.arousal, x.familiarity) == (behaviour, valence, arousal, familiarity)
         ]
         if exact:
             return exact
@@ -65,13 +62,9 @@ class Phrasebook:
             return bv
         return [x for x in self.lines if x.behaviour == behaviour]
 
-    def pick(
-        self, behaviour: str, valence: str, arousal: str, familiarity: str, seed: int
-    ) -> Line | None:
+    def pick(self, behaviour: str, valence: str, arousal: str, familiarity: str, seed: int) -> Line | None:
         c = sorted(self.candidates(behaviour, valence, arousal, familiarity), key=lambda x: x.id)
         if not c:
             return None
-        h = int.from_bytes(
-            hashlib.blake2b(f"{seed}|{behaviour}".encode(), digest_size=8).digest(), "little"
-        )
+        h = int.from_bytes(hashlib.blake2b(f"{seed}|{behaviour}".encode(), digest_size=8).digest(), "little")
         return c[h % len(c)]

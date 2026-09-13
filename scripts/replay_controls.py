@@ -34,9 +34,7 @@ def main(argv=None) -> int:
     src = Ledger(a.ledger)
     rows = src.episodes()
     events = [r for r in rows if r["kind"] == "event"]
-    print(
-        f"{len(events)} event episodes, {sum(1 for r in rows if r['kind'] == 'pairing')} pairings"
-    )
+    print(f"{len(events)} event episodes, {sum(1 for r in rows if r['kind'] == 'pairing')} pairings")
     if a.control == "random":
         rng = np.random.default_rng(a.seed)
         acts = [ACTIONS[i] for i in rng.integers(0, len(ACTIONS), len(events))]
@@ -68,14 +66,8 @@ def main(argv=None) -> int:
                     o["evidence_uri"],
                     r["ts"],
                 )
-    print(
-        f"{a.control} agreement with logged actions: {np.mean(agreements):.3f} over {len(agreements)}"
-    )
-    print(
-        json.dumps(
-            {"control": a.control, "n": len(agreements), "agreement": float(np.mean(agreements))}
-        )
-    )
+    print(f"{a.control} agreement with logged actions: {np.mean(agreements):.3f} over {len(agreements)}")
+    print(json.dumps({"control": a.control, "n": len(agreements), "agreement": float(np.mean(agreements))}))
     return 0
 
 

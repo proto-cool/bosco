@@ -43,9 +43,7 @@ def cmd_poke(a) -> int:
     )
     print("scores Hz:", {k: round(x, 2) for k, x in d.scores.items()})
     print("ratios  :", {k: round(x, 2) for k, x in d.ratios.items()})
-    print(
-        f"valence {d.valence}  arousal {d.arousal}  ->  behaviour {d.behaviour}  action {d.action}"
-    )
+    print(f"valence {d.valence}  arousal {d.arousal}  ->  behaviour {d.behaviour}  action {d.action}")
     if out.line:
         print(f"line [{out.line.id}]: {out.line.text}")
     elif d.action in ("reply", "spontaneous_post"):
@@ -68,9 +66,7 @@ def cmd_spontaneous(a) -> int:
 def cmd_outcome(a) -> int:
     L = Ledger(a.ledger)
     agent = Agent(L, state_dir=a.state_dir)
-    pid = agent.apply_outcome(
-        a.episode, a.valence, a.source, None, f"cli://outcome/{int(time.time())}", _ts(a.at)
-    )
+    pid = agent.apply_outcome(a.episode, a.valence, a.source, None, f"cli://outcome/{int(time.time())}", _ts(a.at))
     print("pairing episode", pid, "weights", agent.fly.weight_digest())
     return 0
 
@@ -86,11 +82,7 @@ def cmd_replay(a) -> int:
 def cmd_status(a) -> int:
     L = Ledger(a.ledger)
     n = L.db.execute("SELECT COUNT(*) FROM episodes").fetchone()[0]
-    by = dict(
-        L.db.execute(
-            "SELECT action, COUNT(*) FROM episodes WHERE kind='event' GROUP BY action"
-        ).fetchall()
-    )
+    by = dict(L.db.execute("SELECT action, COUNT(*) FROM episodes WHERE kind='event' GROUP BY action").fetchall())
     print(
         json.dumps(
             {
@@ -114,9 +106,7 @@ def cmd_integrity(a) -> int:
 
 def main(argv=None) -> int:
     p = argparse.ArgumentParser(prog="bosco")
-    p.add_argument(
-        "--ledger", default=None, help="path to ledger sqlite (default state/ledger.sqlite)"
-    )
+    p.add_argument("--ledger", default=None, help="path to ledger sqlite (default state/ledger.sqlite)")
     p.add_argument("--state-dir", default=None, help="dir for weights + snapshots (default state/)")
     sub = p.add_subparsers(dest="cmd", required=True)
     s = sub.add_parser("poke")

@@ -26,9 +26,7 @@ def main() -> int:
     mn9 = b.index_of_present(pop.bodies_of_types(["MN9"]))
     rng = np.random.default_rng(3)
     odors = [
-        b.index_of_present(
-            orn.loc[orn["glomerulus"].isin(rng.choice(gloms, 5, replace=False)), "bodyId"]
-        )
+        b.index_of_present(orn.loc[orn["glomerulus"].isin(rng.choice(gloms, 5, replace=False)), "bodyId"])
         for _ in range(4)
     ]
     cnt = b.count.astype(float) * b.sign
@@ -76,11 +74,7 @@ def main() -> int:
             mb.append(c1[mbon].mean() / 0.3)
             act.append(int((c1 > 0).sum()))
         jac = np.mean(
-            [
-                len(sets[i] & sets[j]) / max(1, len(sets[i] | sets[j]))
-                for i in range(4)
-                for j in range(i + 1, 4)
-            ]
+            [len(sets[i] & sets[j]) / max(1, len(sets[i] | sets[j])) for i in range(4) for j in range(i + 1, 4)]
         )
         print(
             f"w {w_syn:.2f} u {u:.2f} tau {tau:4.0f} {scope:10s} | sugar act {int((c_all > 0).sum()):5d} MN9 on {mn9_on:4.0f} all {mn9_all:4.0f} bitter {mn9_bit:3.0f} | "

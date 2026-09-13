@@ -24,9 +24,7 @@ def main() -> int:
     mn9 = b.index_of_present(pop.bodies_of_types(["MN9"]))
     rng = np.random.default_rng(3)
     odors = [
-        b.index_of_present(
-            orn.loc[orn["glomerulus"].isin(rng.choice(gloms, 5, replace=False)), "bodyId"]
-        )
+        b.index_of_present(orn.loc[orn["glomerulus"].isin(rng.choice(gloms, 5, replace=False)), "bodyId"])
         for _ in range(4)
     ]
     cnt = b.count.astype(float) * b.sign

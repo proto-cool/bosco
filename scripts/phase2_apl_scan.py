@@ -26,9 +26,7 @@ def main() -> int:
     for k in (3, 5, 10):
         for rate in (50.0, 100.0):
             g = rng.choice(gloms, k, replace=False)
-            odors.append(
-                (k, rate, b.index_of_present(orn.loc[orn["glomerulus"].isin(g), "bodyId"]))
-            )
+            odors.append((k, rate, b.index_of_present(orn.loc[orn["glomerulus"].isin(g), "bodyId"])))
     p = LifParams(w_syn=w_syn)
     print(f"w_syn={w_syn}; KCs {len(kc)}, APL {len(apl)}, MBONs {len(mbon)}")
     for gain in gains_list:

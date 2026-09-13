@@ -25,9 +25,7 @@ def main() -> int:
     gloms = sorted(orn["glomerulus"].unique())
     rng = np.random.default_rng(11)
     odors = [
-        b.index_of_present(
-            orn.loc[orn["glomerulus"].isin(rng.choice(gloms, 12, replace=False)), "bodyId"]
-        )
+        b.index_of_present(orn.loc[orn["glomerulus"].isin(rng.choice(gloms, 12, replace=False)), "bodyId"])
         for _ in range(4)
     ]
     for gain in [float(x) for x in sys.argv[1:]] or [1, 3, 5, 8, 10, 15]:

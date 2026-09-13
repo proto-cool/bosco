@@ -62,9 +62,7 @@ def load_params(path=paths.CONFIG / "model_v1.yaml") -> tuple[LifParams, dict]:
 
 
 class Fly:
-    def __init__(
-        self, brain: Brain | None = None, config_path=paths.CONFIG / "model_v1.yaml"
-    ) -> None:
+    def __init__(self, brain: Brain | None = None, config_path=paths.CONFIG / "model_v1.yaml") -> None:
         self.brain = brain or load_or_build()
         self.params, self.cfg = load_params(config_path)
         self.episode_ms = float(self.cfg.get("episode_ms", 1000))

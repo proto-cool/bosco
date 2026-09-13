@@ -23,9 +23,7 @@ def main() -> int:
     gloms = sorted(orn["glomerulus"].unique())
     rng = np.random.default_rng(1)
     odors = [
-        b.index_of_present(
-            orn.loc[orn["glomerulus"].isin(rng.choice(gloms, 5, replace=False)), "bodyId"]
-        )
+        b.index_of_present(orn.loc[orn["glomerulus"].isin(rng.choice(gloms, 5, replace=False)), "bodyId"])
         for _ in range(6)
     ]
     p = LifParams(w_syn=w_syn)
@@ -48,11 +46,7 @@ def main() -> int:
             glob.append(int((c1 > 0).sum()))
             post.append(int(c3.sum()))
             mb.append(c1[mbon].mean() * 2)
-        jac = [
-            len(sets[i] & sets[j]) / max(1, len(sets[i] | sets[j]))
-            for i in range(6)
-            for j in range(i + 1, 6)
-        ]
+        jac = [len(sets[i] & sets[j]) / max(1, len(sets[i] | sets[j])) for i in range(6) for j in range(i + 1, 6)]
         print(
             f"gain {gain:4.1f}: KC frac {np.mean(fr):.3f} (min {min(fr):.3f} max {max(fr):.3f}) | "
             f"odor-pair Jaccard mean {np.mean(jac):.2f} | active neurons during stim {int(np.mean(glob))} | "

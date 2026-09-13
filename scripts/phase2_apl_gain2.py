@@ -22,9 +22,7 @@ def main() -> int:
     rng = np.random.default_rng(5)
     odors = {
         (k, r): [
-            b.index_of_present(
-                orn.loc[orn["glomerulus"].isin(rng.choice(gloms, k, replace=False)), "bodyId"]
-            )
+            b.index_of_present(orn.loc[orn["glomerulus"].isin(rng.choice(gloms, k, replace=False)), "bodyId"])
             for _ in range(4)
         ]
         for k in (5, 10)
@@ -52,11 +50,7 @@ def main() -> int:
                 dna.append(int((c1[dn] > 0).sum()))
                 post.append(int(c3.sum()))
             jac = np.mean(
-                [
-                    len(sets[i] & sets[j]) / max(1, len(sets[i] | sets[j]))
-                    for i in range(4)
-                    for j in range(i + 1, 4)
-                ]
+                [len(sets[i] & sets[j]) / max(1, len(sets[i] | sets[j])) for i in range(4) for j in range(i + 1, 4)]
             )
             out.append(
                 f"k{k}@{r:.0f}: KC {np.mean(fr):.3f} J {jac:.2f} MBON {np.mean(mb):5.1f}Hz DN {np.mean(dna):3.0f} post {int(np.mean(post))}"

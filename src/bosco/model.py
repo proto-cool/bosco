@@ -89,9 +89,7 @@ class Brain:
     def base_weights_mv(self, params: LifParams = LifParams()) -> np.ndarray:
         return self.count.astype(np.float64) * self.sign.astype(np.float64) * params.w_syn
 
-    def weights_mv(
-        self, params: LifParams, gains: dict[str, tuple[np.ndarray, np.ndarray, float]]
-    ) -> np.ndarray:
+    def weights_mv(self, params: LifParams, gains: dict[str, tuple[np.ndarray, np.ndarray, float]]) -> np.ndarray:
         """Base weights with per-pathway multiplicative gains.
 
         gains maps a label to (pre_idx, post_idx, factor); every edge from
@@ -155,9 +153,7 @@ def al_excitatory_lns(b: Brain) -> np.ndarray:
     return np.nonzero(is_alln & (b.nt_sign > 0))[0].astype(np.int32)
 
 
-def v1_weights_mv(
-    b: Brain, params: LifParams, apl_kc_gain: float = 1.0, kc_mbon_gain: float = 1.0
-) -> np.ndarray:
+def v1_weights_mv(b: Brain, params: LifParams, apl_kc_gain: float = 1.0, kc_mbon_gain: float = 1.0) -> np.ndarray:
     """The v1 weight vector: base weights, eLN chemical output zeroed, pathway gains.
 
     kc_mbon_gain: KC->MBON synapses are the plastic, learning-relevant pathway.

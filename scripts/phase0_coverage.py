@@ -37,9 +37,7 @@ def main() -> int:
     P(f"- total annotated bodies: {len(a)}")
     P(f"- status counts: {a['status'].value_counts(dropna=False).to_dict()}")
     cb = a[a["superclass"].isin(CB_SUPERCLASSES) & (a["status"] == "Traced")]
-    P(
-        f"- **central-brain model set** (superclass in cb_* + descending + ascending, status Traced): {len(cb)}"
-    )
+    P(f"- **central-brain model set** (superclass in cb_* + descending + ascending, status Traced): {len(cb)}")
     P(f"  - by superclass: {cb['superclass'].value_counts().to_dict()}")
     nt = data.neurotransmitters()
     cb_nt = nt.reindex(cb.index)
@@ -86,9 +84,7 @@ def main() -> int:
         rows.append(
             {
                 "dan_type": t,
-                "top_mbon_targets": ", ".join(
-                    f"{r.mbon_type}({int(r.weight)})" for r in sub.itertuples()
-                ),
+                "top_mbon_targets": ", ".join(f"{r.mbon_type}({int(r.weight)})" for r in sub.itertuples()),
             }
         )
     P(md_table(pd.DataFrame(rows)))
@@ -97,9 +93,7 @@ def main() -> int:
     # KC -> MBON synapse counts
     kc_ids = set(pop.kenyon_cells())
     km = w[w["body_pre"].isin(kc_ids) & w["body_post"].isin(mbon_ids)]
-    P(
-        f"- KC->MBON edges: {len(km)} (synapses {int(km['weight'].sum())}); these are the plastic synapses."
-    )
+    P(f"- KC->MBON edges: {len(km)} (synapses {int(km['weight'].sum())}); these are the plastic synapses.")
     ka = w[w["body_pre"].isin(kc_ids) & w["body_post"].isin(set(pop.apl()))]
     ak = w[w["body_pre"].isin(set(pop.apl())) & w["body_post"].isin(kc_ids)]
     P(f"- KC->APL edges: {len(ka)}; APL->KC edges: {len(ak)} (sparseness control loop present)\n")
@@ -121,9 +115,7 @@ def main() -> int:
     )
     fwmap = pop.grn_modality_map()
     chk = grn.groupby(["type", "flywireType", "modality"]).size().reset_index(name="n")
-    chk = chk.merge(fwmap, left_on="flywireType", right_on="cell_type", how="left").drop(
-        columns=["cell_type"]
-    )
+    chk = chk.merge(fwmap, left_on="flywireType", right_on="cell_type", how="left").drop(columns=["cell_type"])
     chk["agree"] = [
         (mo == "unassigned") or (mo in str(fw))
         for mo, fw in zip(chk["modality"], chk["flywire_sub_class"], strict=True)
@@ -131,9 +123,7 @@ def main() -> int:
     P(md_table(chk))
     P(f"  - all assigned rows agree with FlyWire: {bool(chk['agree'].all())}")
     jo = pop.johnston_organ()
-    P(
-        f"- Johnston's organ (JO-*) mechanosensory: {len(jo)}; by group: {jo['group'].value_counts().to_dict()}\n"
-    )
+    P(f"- Johnston's organ (JO-*) mechanosensory: {len(jo)}; by group: {jo['group'].value_counts().to_dict()}\n")
 
     # --- outputs
     P("## Outputs\n")
@@ -182,9 +172,7 @@ def main() -> int:
     cbset = set(cb.index)
     wcb = w[w["body_pre"].isin(cbset) & w["body_post"].isin(cbset)]
     P(f"- edges within model set: {len(wcb)}; synapses: {int(wcb['weight'].sum())}")
-    P(
-        f"- weight quantiles (model set): {np.quantile(wcb['weight'], [0.5, 0.9, 0.99, 1.0]).tolist()}\n"
-    )
+    P(f"- weight quantiles (model set): {np.quantile(wcb['weight'], [0.5, 0.9, 0.99, 1.0]).tolist()}\n")
 
     P("## Gate\n")
     ok = (
