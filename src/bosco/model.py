@@ -144,17 +144,26 @@ def al_excitatory_lns(b: Brain) -> np.ndarray:
     return np.nonzero(is_alln & (b.nt_sign > 0))[0].astype(np.int32)
 
 
-def v1_weights_mv(b: Brain, params: LifParams, apl_kc_gain: float = 1.0) -> np.ndarray:
-    """The v1 weight vector: base weights, eLN chemical output zeroed, APL->KC gain."""
+def v1_weights_mv(b: Brain, params: LifParams, apl_kc_gain: float = 1.0, kc_mbon_gain: float = 1.0) -> np.ndarray:
+    """The v1 weight vector: base weights, eLN chemical output zeroed, pathway gains.
+
+    kc_mbon_gain: KC->MBON synapses are the plastic, learning-relevant pathway.
+    At connectome weight x w_syn they contribute nothing to MBON odor responses
+    (docs/phase3-plasticity-gate.md); the gain is chosen so that MBON odor
+    responses are KC-driven, by a stated criterion, not by outcomes.
+    """
     from bosco import populations as pop
 
     w = b.base_weights_mv(params)
     e_pre = b.pre_of_edges()
     w[np.isin(e_pre, al_excitatory_lns(b))] = 0.0
+    kc = b.index_of_present(pop.kenyon_cells())
     if apl_kc_gain != 1.0:
-        kc = b.index_of_present(pop.kenyon_cells())
         apl = b.index_of_present(pop.apl())
         w[b.edges_between(apl, kc)] *= apl_kc_gain
+    if kc_mbon_gain != 1.0:
+        mbon = b.index_of_present(pop.mbons()["bodyId"])
+        w[b.edges_between(kc, mbon)] *= kc_mbon_gain
     return w
 
 

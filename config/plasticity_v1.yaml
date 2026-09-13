@@ -1,0 +1,6 @@
+# Mushroom-body plasticity parameters (see src/bosco/plasticity.py).
+eta: 0.5            # depression per pairing for a saturating KC
+c_sat: 5.0          # KC spikes/episode at which depression saturates
+m_min: 0.1          # floor on the KC->MBON multiplier
+tau_forget_h: 4.0   # short-term memory: weights relax to baseline, e-fold 4 h
+dan_rate_hz: 100.0  # DAN drive during a replay pairing
