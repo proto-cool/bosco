@@ -51,10 +51,14 @@ Every number below has a gate report under `docs/`.
    the smallest at which MBON odor responses are ≥ 80% KC-driven
    (`docs/phase3-plasticity-gate.md`).  APL is left at connectome weight.
 6. **Plasticity**: three-factor depression of KC→MBON synapses gated by DAN
-   compartment (`config/mb_compartments.yaml`, Aso et al. 2014), one
-   multiplier per edge, floor 0.1, forgetting e-fold 4 h.  Dopamine is
-   modulatory only: a replay pairing re-presents the stored stimulus and
-   gates the change; DANs are not driven as fast excitation.
+   compartment (`config/mb_compartments.yaml`, Aso et al. 2014), on two
+   timescales (`config/plasticity_v1.yaml`).  Short-term: one pairing,
+   e-fold 4 h.  Long-term: forms only by spaced repetition (a pairing on a
+   synapse still carrying short-term memory from a pairing ≥ 1 h earlier;
+   Tully et al. 1994), e-fold 30 days.  Effective weight = connectome ×
+   short × long.  Dopamine is modulatory only: a replay pairing re-presents
+   the stored stimulus and gates the change; DANs are not driven as fast
+   excitation.
 7. **Encoder**: 12 of 35 valence-neutral glomeruli per account, 120 Hz;
    VADER → sugar/bitter GRNs up to 150 Hz; mention → JO-A/B 100 Hz; clock
    neurons on a 24 h cosine (`docs/circadian.md`).  KC activity 2–5% per
@@ -65,6 +69,16 @@ Every number below has a gate report under `docs/`.
    like → like, leave → unfollow, groom → post.  Thresholds are provisional
    (synthetic battery, 85th percentile) until re-set from the dev-period
    distribution of real activity (`scripts/calibrate_thresholds.py`).
+12. **Learned valence gates the readout.**  MBON output does not reach the
+   descending neurons at any stable gain in the LIF (scans in
+   `scripts/phase3_mbon_out_gain.py`: gains that propagate also smolder and
+   move approach the wrong way).  Instead the readout does what summed MBON
+   output does in the fly (Aso et al. 2014): for each stimulus, a naive twin
+   (same stimulus, same seed, baseline weights) is run; v = fractional drop of
+   reward-compartment MBONs − fractional drop of punishment-compartment MBONs;
+   approach populations are scaled by (1 + 2v), avoid by (1 − 2v), before
+   thresholds.  `bosco memory --did X` prints v, the synapses carrying it,
+   and the outcomes that caused it; `bosco people` ranks every account.
 10. **Text**: `src/bosco/textgen.py`, a word trigram with absolute-discount
    backoff over `corpus/` plus phrasebook lines.  The fly supplies the
    corpus subset (tags), temperature (arousal) and seed.  Not an LLM.
@@ -87,5 +101,6 @@ uv run python scripts/phase0_coverage.py     # needs data/raw/*.feather (see pat
 uv run pytest
 uv run bosco poke --did did:plc:x --text "hello fly" --mention
 uv run bosco spontaneous && uv run bosco say -n 5
+uv run bosco memory --did did:plc:x && uv run bosco people
 BOSCO_HANDLE=... BOSCO_APP_PASSWORD=... uv run bosco run --dry-run
 ```

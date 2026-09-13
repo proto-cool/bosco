@@ -27,7 +27,7 @@ from bosco.ledger import Ledger
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--ledger", required=True)
-    ap.add_argument("--state-dir", default=str(paths.STATE), help="dir holding weights/<digest>.npy snapshots")
+    ap.add_argument("--state-dir", default=str(paths.STATE), help="dir holding weights/<digest>.npz snapshots")
     ap.add_argument("--replay-sample", type=int, default=5)
     a = ap.parse_args(argv)
     L = Ledger(a.ledger)
@@ -94,7 +94,7 @@ def main(argv=None) -> int:
                     agent.load_weights_digest(prev["weight_digest_after"])
                     agent.mb.t_last = prev["ts"] / 3600.0
                     agent.mb.forget(r["ts"] / 3600.0)
-                    if agent.fly.weight_digest() != r["weight_digest_before"]:
+                    if agent.mb.digest() != r["weight_digest_before"]:
                         chain_bad.append(r["id"])
                 except FileNotFoundError:
                     chain_bad.append(r["id"])

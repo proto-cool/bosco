@@ -103,7 +103,8 @@ Any failure is announced from the account and fixed under a new tag.
 - The phrasebook is human-written; its voice is Nick's.
 - The encoder sees who and how toxic, not what.
 - Punishment is sparse; aversion is mostly innate.
-- Short-term memory only; Bosco forgets on a timescale of hours.
+- Short-term memory fades in hours; long-term memory needs spaced
+  repetition and fades in a month. Bosco forgets most things.
 - Dev-period interaction shaped early weights before the tag.
 - One connectome, one individual, one sex.
 

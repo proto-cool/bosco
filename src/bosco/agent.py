@@ -80,35 +80,33 @@ class Agent:
     # ---- weights persistence ------------------------------------------------
     @property
     def weights_path(self):
-        return self.state_dir / "kc_mbon_multiplier.npy"
+        return self.state_dir / "mb_state.npz"
 
     def _load_weights(self) -> None:
         p = self.weights_path
         if p.exists():
-            self.fly.set_multiplier(np.load(p))
-        t = self.ledger.get_cursor("weights_t_hours")
-        self.mb.t_last = float(t) if t else 0.0
+            self.mb.load_state(dict(np.load(p)))
 
     def _save_weights(self) -> None:
         self.weights_path.parent.mkdir(parents=True, exist_ok=True)
-        np.save(self.weights_path, self.fly.multiplier)
-        self.ledger.set_cursor("weights_t_hours", repr(self.mb.t_last))
+        st = self.mb.state()
+        np.savez(self.weights_path, **st)
         # content-addressed snapshot so any logged digest can be reloaded for replay
-        snap = self.snapshot_dir / f"{self.fly.weight_digest()}.npy"
+        snap = self.snapshot_dir / f"{self.mb.digest()}.npz"
         if not snap.exists():
             self.snapshot_dir.mkdir(parents=True, exist_ok=True)
-            np.save(snap, self.fly.multiplier)
+            np.savez(snap, **st)
 
     @property
     def snapshot_dir(self):
         return self.state_dir / "weights"
 
     def load_weights_digest(self, digest: str) -> None:
-        p = self.snapshot_dir / f"{digest}.npy"
+        p = self.snapshot_dir / f"{digest}.npz"
         if not p.exists():
             raise FileNotFoundError(f"no weight snapshot for digest {digest}")
-        self.fly.set_multiplier(np.load(p))
-        if self.fly.weight_digest() != digest:
+        self.mb.load_state(dict(np.load(p)))
+        if self.mb.digest() != digest:
             raise RuntimeError("snapshot digest mismatch")
 
     @staticmethod
@@ -156,9 +154,10 @@ class Agent:
         did = f.did if f else None
         seed = self.seed_for(ts, did, source_uri) if seed is None else seed
         stim = self.stimulus(f, hour, seed)
-        d_before = self.fly.weight_digest()
+        d_before = self.mb.digest()
+        naive = self.mb.naive_twin(stim, seed) if f is not None else None
         res = self.fly.run_episode(stim, seed)
-        dec = self.readout.decide(res, self.fly.episode_ms)
+        dec = self.readout.decide(res, self.fly.episode_ms, naive)
         fam = self.ledger.familiarity(did) if did else 0
         line = None
         line_key = None
@@ -188,9 +187,13 @@ class Agent:
             hour=hour,
             seed=seed,
             weight_digest_before=d_before,
-            weight_digest_after=self.fly.weight_digest(),
+            weight_digest_after=self.mb.digest(),
             scores=dec.scores,
-            mbon=self.fly.mbon_rates(res),
+            mbon={
+                **self.fly.mbon_rates(res),
+                "_learned": dec.learned,
+                **{f"_{k}": v for k, v in (dec.mbon or {}).items()},
+            },
             kc_active=int((res.counts[self.fly.kc] > 0).sum()),
             behaviour=dec.behaviour,
             action=dec.action,
@@ -219,16 +222,17 @@ class Agent:
         r = self.ledger.episode(episode_id)
         if r is None:
             raise KeyError(episode_id)
-        current = self.fly.multiplier.copy()
+        current = {k: v.copy() for k, v in self.mb.state().items()}
         self.load_weights_digest(r["weight_digest_before"])
         f = None
         if r["did"] is not None:
             f = Features(r["did"], float(r["vader"]), bool(r["mentioned"]), int(r["familiarity"]))
         stim = self.stimulus(f, float(r["hour"]), int(r["seed"]))
+        naive = self.mb.naive_twin(stim, int(r["seed"])) if f is not None else None
         res = self.fly.run_episode(stim, int(r["seed"]))
-        dec = self.readout.decide(res, self.fly.episode_ms)
+        dec = self.readout.decide(res, self.fly.episode_ms, naive)
         logged = json.loads(r["scores"])
-        self.fly.set_multiplier(current)
+        self.mb.load_state(current)
         return dec.scores == logged, dec.scores
 
     # ---- outcomes / learning --------------------------------------------------
@@ -249,7 +253,7 @@ class Agent:
         stim = self.stimulus(f, float(r["hour"]))
         self.mb.forget(self.hours(ts))
         self._save_weights()
-        d_before = self.fly.weight_digest()
+        d_before = self.mb.digest()
         seed = self.seed_for(ts, r["did"], evidence_uri)
         self.mb.pair(stim, valence, seed=seed, t_hours=self.hours(ts))
         row = EpisodeRow(
@@ -262,7 +266,7 @@ class Agent:
             hour=float(r["hour"]),
             seed=seed,
             weight_digest_before=d_before,
-            weight_digest_after=self.fly.weight_digest(),
+            weight_digest_after=self.mb.digest(),
             scores={},
             mbon={},
             kc_active=0,

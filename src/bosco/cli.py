@@ -70,7 +70,11 @@ def cmd_spontaneous(a) -> int:
 def cmd_outcome(a) -> int:
     L = Ledger(a.ledger)
     agent = Agent(L, state_dir=a.state_dir)
-    pid = agent.apply_outcome(a.episode, a.valence, a.source, None, f"cli://outcome/{int(time.time())}", _ts(a.at))
+    row = L.episode(a.episode)
+    did = row["did"] if row else None
+    pid = agent.apply_outcome(
+        a.episode, a.valence, a.source, did, f"cli://outcome/{a.episode}/{int(_ts(a.at))}", _ts(a.at)
+    )
     print("pairing episode", pid, "weights", agent.fly.weight_digest())
     return 0
 
@@ -150,6 +154,86 @@ def main(argv=None) -> int:
         return 0
 
     s.set_defaults(fn=_say)
+    s = sub.add_parser("memory", help="what Bosco has learned about an account, and why")
+    s.add_argument("--did", required=True)
+    s.add_argument("--at")
+
+    def _memory(a):
+        import json as _json
+
+        L = Ledger(a.ledger)
+        agent = Agent(L, state_dir=a.state_dir)
+        ts = _ts(a.at)
+        agent.mb.forget(agent.hours(ts))
+        f = Features(a.did, 0.0, True, L.familiarity(a.did))
+        hour = agent.clock.local_hour(ts)
+        stim = agent.stimulus(f, hour, 1)
+        naive = agent.mb.naive_twin(stim, 1)
+        res = agent.fly.run_episode(stim, 1)
+        d = agent.readout.decide(res, agent.fly.episode_ms, naive)
+        d0 = agent.readout.decide(naive, agent.fly.episode_ms, None)
+        print(f"account {a.did}  familiarity {f.familiarity}  odor {agent.enc.glomeruli_for(a.did)}")
+        print(
+            f"learned valence {d.learned:+.2f} ({d.valence});  MBON reward {d.mbon['reward']:.1f} Hz "
+            f"(naive {d.mbon['reward_naive']:.1f}), punishment {d.mbon['punishment']:.1f} Hz (naive {d.mbon['punishment_naive']:.1f})"
+        )
+        kc = res.counts[agent.fly.kc] > 0
+        pre_active = kc[agent.fly.kc_pos_of_edge]
+        stm = agent.mb.stm[pre_active]
+        ltm = agent.mb.ltm[pre_active]
+        print(
+            f"this odor's KC->MBON synapses: {int(pre_active.sum())}; short-term depression on {int((stm < 0.99).sum())} "
+            f"(mean x{stm.mean():.2f}); long-term on {int((ltm < 0.99).sum())} (mean x{ltm.mean():.2f})"
+        )
+        print(
+            f"if mentioned now, neutral text: {d0.action} (naive) -> {d.action} (learned);  "
+            f"approach drive engage {d0.scores['engage']:.1f} -> {d.ratios['engage'] * (agent.readout.thresholds['engage'] or 0):.1f} Hz gated"
+        )
+        rows = L.db.execute(
+            "SELECT valence, source, COUNT(*) AS n, MIN(ts) AS first, MAX(ts) AS last FROM outcomes WHERE did=? "
+            "GROUP BY valence, source ORDER BY valence, source",
+            (a.did,),
+        ).fetchall()
+        print("why:" if rows else "why: no outcomes recorded for this account")
+        for r in rows:
+            print(
+                f"  {r['valence']:10s} {r['source']:26s} x{r['n']}  {dt.datetime.fromtimestamp(r['first'], dt.UTC):%Y-%m-%d} .. "
+                f"{dt.datetime.fromtimestamp(r['last'], dt.UTC):%Y-%m-%d}"
+            )
+        ev = L.db.execute(
+            "SELECT action, COUNT(*) FROM episodes WHERE did=? AND kind='event' GROUP BY action", (a.did,)
+        ).fetchall()
+        print("history of actions toward them:", _json.dumps(dict(ev)))
+        return 0
+
+    s.set_defaults(fn=_memory)
+    s = sub.add_parser("people", help="every account in the ledger, ranked by learned valence")
+    s.add_argument("--at")
+    s.add_argument("--limit", type=int, default=30)
+
+    def _people(a):
+        L = Ledger(a.ledger)
+        agent = Agent(L, state_dir=a.state_dir)
+        ts = _ts(a.at)
+        agent.mb.forget(agent.hours(ts))
+        dids = [r[0] for r in L.db.execute("SELECT DISTINCT did FROM episodes WHERE did IS NOT NULL")]
+        rows = []
+        for did in dids:
+            f = Features(did, 0.0, True, L.familiarity(did))
+            stim = agent.stimulus(f, agent.clock.local_hour(ts), 1)
+            naive = agent.mb.naive_twin(stim, 1)
+            d = agent.readout.decide(agent.fly.run_episode(stim, 1), agent.fly.episode_ms, naive)
+            n_out = dict(
+                L.db.execute("SELECT valence, COUNT(*) FROM outcomes WHERE did=? GROUP BY valence", (did,)).fetchall()
+            )
+            rows.append((d.learned, did, f.familiarity, d.action, n_out.get("reward", 0), n_out.get("punishment", 0)))
+        rows.sort(reverse=True)
+        print(f"{'learned':>8s}  {'did':40s} {'fam':>3s}  {'would':8s} {'rew':>3s} {'pun':>3s}")
+        for v, did, fam, act, rw, pu in rows[: a.limit]:
+            print(f"{v:+8.2f}  {did:40s} {fam:3d}  {act:8s} {rw:3d} {pu:3d}")
+        return 0
+
+    s.set_defaults(fn=_people)
     s = sub.add_parser("status")
     s.set_defaults(fn=cmd_status)
     s = sub.add_parser("integrity")

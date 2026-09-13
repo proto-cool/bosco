@@ -5,7 +5,8 @@
 | 0 Data + annotations | coverage report | PASS | `phase0-coverage.md` |
 | 1 Kernel | Shiu sugar → MN9 reproduces | PASS | `phase1-shiu-gate.md` |
 | 2 Prune + port | ~5% KCs, stable | PASS (2.5–5%, eLN fix) | `phase2-stability.md`, `phase2-wsyn-calibration.md` |
-| 3 Plasticity | learn / forget | PASS | `phase3-plasticity-gate.md` |
+| 3 Plasticity | learn / forget | PASS; two timescales (STM hours, LTM spaced, a month) | `phase3-plasticity-gate.md` |
+| 3b Learning → behaviour | spaced rewards change action | PASS (follow after 3 rewards; ignore after 3 punishments; persists 10 days) | `scripts/phase3_mbon_out_gain.py`, README §12 |
 | 4 Encoder + readout | unit tests | done (22 tests) | `encoder.md`, `config/readout_populations.yaml` |
 | 4b Generator | tests | done; corpus has one seed document | `src/bosco/textgen.py`, `corpus/` |
 | 5 Bluesky loop | dry-run, snapshots, nightly | code done, **not yet run against a live account** | `src/bosco/bsky.py`, `ops/` |
@@ -40,6 +41,9 @@ uv run python scripts/integrity_checks.py --ledger /tmp/dev.sqlite --state-dir /
   1.1 Hz); replies mostly come from `engage` on already-followed accounts.
 - Bitter taste does not reach the escape DNs, so an insult makes Bosco
   approach (follow) rather than leave; aversion arrives only via learning.
+- Accounts generalise: two accounts share ~4 of 12 glomeruli, so learning
+  about one leaks a little onto the other. This is the fly's olfactory
+  code, not a bug.
 - The valence key (reward-vs-punishment MBON balance) is crude and untested
   against behaviour; it only selects phrasebook lines.
 - Some odors leave a small persistent population after input off; episodes

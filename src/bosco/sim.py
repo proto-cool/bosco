@@ -85,6 +85,10 @@ class Fly:
         self.plastic_post = b.indices[self.plastic_edges]
         self.plastic_pre = b.pre_of_edges()[self.plastic_edges]
         self.multiplier = np.ones(len(self.plastic_edges), dtype=np.float64)
+        # position (within self.kc) of the presynaptic KC of every plastic edge
+        kc_pos = np.full(b.n, -1, dtype=np.int64)
+        kc_pos[self.kc] = np.arange(len(self.kc))
+        self.kc_pos_of_edge = kc_pos[self.plastic_pre]
         # cell type of the postsynaptic MBON for every plastic edge
         type_by_idx = np.full(b.n, "", dtype=object)
         type_by_idx[self.mbon] = self.mbon_type

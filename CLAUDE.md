@@ -102,8 +102,14 @@ Do not download the EM volume. `neuprint-python` against
   past action, re-present the stored stimulus encoding and fire the
   appropriate DANs. This is the lab protocol; do not invent delayed credit
   assignment.
-- **Short-term memory only in v1.** Weights decay back toward baseline over
-  hours. No consolidation. Bosco forgets. This is intentional.
+- **Two memory timescales** (decided 2026-09-13). Short-term: one pairing,
+  fades over hours. Long-term: only spaced repetition consolidates (a
+  second pairing while the first is still fresh, ≥ 1 h later), fades over a
+  month. One insult is forgotten by evening; a week of them is not.
+- **Learned valence reaches behaviour through the readout**: the mushroom
+  body's verdict on a stimulus (MBON drop relative to a naive twin) scales
+  approach vs avoid populations before thresholds. `bosco memory --did X`
+  shows what he has learned about an account and why.
 - **Reward DANs**: unprompted inbound interaction from a known account
   (≥1 prior direct interaction in the ledger). Per-account daily cap.
 - **Punishment DANs**: block records (public, real) and VADER-negative

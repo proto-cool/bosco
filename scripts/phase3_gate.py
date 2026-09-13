@@ -51,18 +51,17 @@ def main() -> int:
     lines = ["# Phase 3 gate: learn / forget synthetic odors\n"]
     ok_all = True
     for valence in ("punishment", "reward"):
-        fly.set_multiplier(np.ones_like(fly.multiplier))
-        mb.t_last = 0.0
+        mb.reset()
         types = comp_types(fly, mb, valence)
         A0, B0 = type_rates(fly, A, 1), type_rates(fly, B, 2)
         kcA = fly.run_episode(A, 1).counts[fly.kc]
         f = mb.pair(A, valence, seed=3, t_hours=0.0)
         n_dep = int((f < 1).sum())
         A1, B1 = type_rates(fly, A, 1), type_rates(fly, B, 2)
-        digest1 = fly.weight_digest()
-        mb.forget(t_hours=3 * mb.p.tau_forget_h)
+        digest1 = mb.digest()
+        mb.forget(t_hours=3 * mb.p.stm_tau_h)
         A2 = type_rates(fly, A, 1)
-        mb.forget(t_hours=20 * mb.p.tau_forget_h)
+        mb.forget(t_hours=20 * mb.p.stm_tau_h)
         A3 = type_rates(fly, A, 1)
         ra1, n_a = median_ratio(A0, A1, types)
         rb1, n_b = median_ratio(B0, B1, types)

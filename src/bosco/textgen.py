@@ -4,7 +4,7 @@ backoff) over the published corpus, conditioned on the fly's state.
 Not an LLM: no embeddings, no neural weights, no training on other people's
 posts.  What the fly contributes:
 - which documents are preferred (tags matching behaviour/valence/arousal),
-- the temperature (arousal: low 0.7, mid 1.0, high 1.3),
+- the temperature (arousal: low 0.8, mid 1.0, high 1.15),
 - the seed (episode seed), so the text replays bit-identically.
 
 Output: 1–3 sentences, <= 280 characters, no URLs, no @mentions except
@@ -185,7 +185,7 @@ class Generator:
         if self.empty:
             return None
         m = self.model_for(behaviour, valence, arousal)
-        temp = {"low": 0.7, "mid": 1.0, "high": 1.3}.get(arousal, 1.0)
+        temp = {"low": 0.8, "mid": 1.0, "high": 1.15}.get(arousal, 1.0)
         rng = _Rng(
             int.from_bytes(
                 hashlib.blake2b(f"{seed}|{behaviour}|{valence}|{arousal}".encode(), digest_size=8).digest(), "little"

@@ -24,6 +24,9 @@ def test_agent_episode_logs_and_replays(fly):
     assert L.assert_no_text() == []
     # weight chain: digest_before of o3 differs from digest_after of o2 only through pairing+forgetting
     assert L.episode(o3.episode_id)["weight_digest_before"] != L.episode(o2.episode_id)["weight_digest_after"]
+    # the punished account now reads as learned-negative relative to a naive twin
+    assert o3.decision.learned < 0
+    ag.mb.reset()
 
 
 @needs_data

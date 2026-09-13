@@ -32,3 +32,11 @@ actions:
 # Population score = mean spike rate (Hz) over the population's bodies in the
 # episode.  Winner-take-all over score / threshold; 'nothing' unless the
 # winner's score exceeds its threshold (config/thresholds.json).
+# Learned-valence gating (src/bosco/readout.py): v in [-1, 1] is the mushroom
+# body's verdict on this stimulus relative to a naive twin.  Approach
+# populations (engage, like, reply) are scaled by (1 + kappa v), avoid (leave)
+# by (1 - kappa v), before thresholds.  kappa 2: a fully learned account can
+# triple its approach drive or silence it.  valence_cut sets the phrasebook key.
+gating:
+  kappa: 2.0
+  valence_cut: 0.2

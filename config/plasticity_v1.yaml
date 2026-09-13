@@ -1,6 +1,18 @@
 # Mushroom-body plasticity parameters (see src/bosco/plasticity.py).
-eta: 0.5            # depression per pairing for a saturating KC
-c_sat: 5.0          # KC spikes/episode at which depression saturates
-m_min: 0.1          # floor on the KC->MBON multiplier
-tau_forget_h: 4.0   # short-term memory: weights relax to baseline, e-fold 4 h
-dan_rate_hz: 100.0  # DAN drive during a replay pairing
+# Two timescales, both KC->MBON depression gated by DAN compartment:
+#   short-term (STM): one pairing is enough; relaxes to baseline, e-fold tau_stm_h.
+#   long-term  (LTM): forms only by spaced repetition (a pairing on a synapse that
+#                     already carries STM from a pairing >= spacing_h earlier);
+#                     relaxes to baseline, e-fold tau_ltm_d.  (Tully et al. 1994:
+#                     spaced training -> protein-synthesis-dependent LTM.)
+stm:
+  eta: 0.5            # depression per pairing for a saturating KC
+  c_sat: 5.0          # KC spikes/episode at which depression saturates
+  m_min: 0.1
+  tau_h: 4.0
+ltm:
+  eta: 0.3            # LTM depression per consolidating pairing
+  spacing_h: 1.0      # minimum gap since the previous pairing on that synapse
+  stm_floor: 0.9      # the synapse must still carry STM (m_stm below this)
+  m_min: 0.2
+  tau_d: 30.0
