@@ -95,7 +95,11 @@ def main(argv=None) -> int:
                     agent.mb.t_last = prev["ts"] / 3600.0
                     agent.mb.forget(r["ts"] / 3600.0)
                     if agent.mb.digest() != r["weight_digest_before"]:
-                        chain_bad.append(r["id"])
+                        # a logged operator 'forget' between the two rows explains the break; still reported
+                        forgets = L.db.execute(
+                            "SELECT COUNT(*) FROM control WHERE kind='forget' AND ts>=? AND ts<=?", (prev["ts"], r["ts"])
+                        ).fetchone()[0]
+                        chain_bad.append(f"{r['id']}(forget x{forgets})" if forgets else r["id"])
                 except FileNotFoundError:
                     chain_bad.append(r["id"])
             prev = r
