@@ -1,0 +1,26 @@
+# Bosco v1 network configuration.  Frozen at freeze-v1.
+#
+# LIF parameters are Shiu et al. 2024 (Nature 634:210) verbatim except w_syn,
+# which they calibrate per connectome ("W_syn such that activation of sugar
+# GRNs at 100 Hz resulted in roughly 80% of maximal MN9 firing").  Same
+# criterion applied here on MaleCNS: docs/phase2-wsyn-calibration.md.
+lif:
+  dt_ms: 0.1
+  tau_m: 20.0
+  tau_s: 5.0
+  v0: -52.0
+  v_rst: -52.0
+  v_th: -45.0
+  t_rfc: 2.2
+  t_dly: 1.8
+  w_syn: 0.16
+  f_poi: 250.0
+  std_u: 0.0          # short-term depression off in v1 (see docs/phase2-stability.md)
+  std_tau_rec: 0.0
+wiring:
+  neuron_set: "superclass in cb_* + descending + ascending, status Traced (model.CB_SUPERCLASSES)"
+  min_synapses_per_edge: 1
+  nt_sign: "acetylcholine/dopamine/serotonin/octopamine +1; gaba/glutamate/histamine -1; unclear/unknown +1 (Shiu convention)"
+  al_eln_chemical_output: 0.0   # cholinergic antennal-lobe LNs: fast chemical output removed
+  apl_kc_gain: 1.0              # connectome value; not tuned
+episode_ms: 1000

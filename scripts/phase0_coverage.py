@@ -11,23 +11,7 @@ import numpy as np
 import pandas as pd
 
 from bosco import data, paths, populations as pop
-
-CB_SUPERCLASSES = (
-    "cb_intrinsic",
-    "cb_sensory",
-    "cb_motor",
-    "cb_endocrine",
-    "cb_efferent",
-    "cb_sensory_tbc",
-    "descending_neuron",
-    "descending_neuron_tbc",
-    "ascending_neuron",
-    "sensory_ascending",
-    "sensory_ascending_tbc",
-    "efferent_ascending",
-    "efferent_descending",
-    "sensory_descending",
-)
+from bosco.model import CB_SUPERCLASSES
 
 
 def md_table(df: pd.DataFrame, max_rows: int | None = None) -> str:

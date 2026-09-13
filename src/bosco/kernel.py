@@ -26,6 +26,8 @@ class _Params(C.Structure):
         ("v_th", C.c_double),
         ("t_rfc", C.c_double),
         ("t_dly", C.c_double),
+        ("std_u", C.c_double),
+        ("std_tau_rec", C.c_double),
     ]
 
 
@@ -43,6 +45,9 @@ class LifParams:
     t_dly: float = 1.8
     w_syn: float = 0.275  # mV per synapse; applied in Python when building weights
     f_poi: float = 250.0  # Poisson input jump = w_syn * f_poi mV
+    # Short-term depression (Tsodyks & Markram 1997), off by default (Shiu has none).
+    std_u: float = 0.0
+    std_tau_rec: float = 0.0
 
     @property
     def input_jump_mv(self) -> float:
@@ -75,6 +80,8 @@ def _load() -> C.CDLL:
     lib.lif_run.argtypes = [C.c_void_p, C.c_int64, i32p, i32p, C.c_int64]
     lib.lif_spike_counts.argtypes = [C.c_void_p, i64p]
     lib.lif_get_v.argtypes = [C.c_void_p, f64p]
+    lib.lif_get_x.argtypes = [C.c_void_p, f64p]
+    lib.lif_set_std_u.argtypes = [C.c_void_p, f64p]
     lib.lif_step.restype = C.c_int64
     lib.lif_step.argtypes = [C.c_void_p]
     _lib = lib
@@ -100,7 +107,7 @@ class Net:
         assert len(self.indices) == len(w) == self.indptr[-1]
         p = _Params(
             params.dt_ms, params.tau_m, params.tau_s, params.v0, params.v_rst,
-            params.v_th, params.t_rfc, params.t_dly,
+            params.v_th, params.t_rfc, params.t_dly, params.std_u, params.std_tau_rec,
         )
         self._h = self.lib.lif_create(self.n, self.indptr, self.indices, w, C.byref(p))
         if not self._h:
@@ -155,6 +162,16 @@ class Net:
     def spike_counts(self) -> np.ndarray:
         out = np.empty(self.n, dtype=np.int64)
         self.lib.lif_spike_counts(self._h, out)
+        return out
+
+    def set_std_u(self, u: np.ndarray) -> None:
+        """Per-presynaptic-neuron depression utilisation. Requires params.std_u > 0 to enable STD at all;
+        std_u then acts as the default and this array overrides it per neuron."""
+        self.lib.lif_set_std_u(self._h, np.ascontiguousarray(u, dtype=np.float64))
+
+    def x(self) -> np.ndarray:
+        out = np.empty(self.n, dtype=np.float64)
+        self.lib.lif_get_x(self._h, out)
         return out
 
     def v(self) -> np.ndarray:

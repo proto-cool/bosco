@@ -15,7 +15,8 @@ struct lif_net {
     int32_t rfc_steps;      /* default refractory length in steps */
     int32_t dly_steps;
 
-    double *v, *g;
+    double *v, *g, *x, *u;  /* u: per-presynaptic-neuron STD utilisation */
+    double std_u, e_rec;    /* STD utilisation and per-step recovery factor */
     int32_t *rfc_len;       /* per-neuron refractory length (0 for driven inputs) */
     int32_t *rfc_left;      /* steps of refractoriness remaining */
     uint8_t *spiked;        /* spiked this step */
@@ -64,8 +65,13 @@ lif_net *lif_create(int32_t n, const int64_t *indptr, const int32_t *indices,
     net->rfc_steps = (int32_t)llround(p->t_rfc / p->dt_ms);
     net->dly_steps = (int32_t)llround(p->t_dly / p->dt_ms);
     if (net->dly_steps < 1) net->dly_steps = 1;
+    net->std_u = p->std_u;
+    net->e_rec = (p->std_u > 0.0 && p->std_tau_rec > 0.0) ? exp(-p->dt_ms / p->std_tau_rec) : 1.0;
     net->v = malloc((size_t)n * sizeof(double));
     net->g = malloc((size_t)n * sizeof(double));
+    net->x = malloc((size_t)n * sizeof(double));
+    net->u = malloc((size_t)n * sizeof(double));
+    for (int32_t i = 0; i < n; i++) net->u[i] = p->std_u;
     net->rfc_len = malloc((size_t)n * sizeof(int32_t));
     net->rfc_left = malloc((size_t)n * sizeof(int32_t));
     net->spiked = malloc((size_t)n);
@@ -81,7 +87,7 @@ lif_net *lif_create(int32_t n, const int64_t *indptr, const int32_t *indices,
 void lif_free(lif_net *net) {
     if (!net) return;
     free(net->indptr); free(net->indices); free(net->w);
-    free(net->v); free(net->g); free(net->rfc_len); free(net->rfc_left);
+    free(net->v); free(net->g); free(net->x); free(net->u); free(net->rfc_len); free(net->rfc_left);
     free(net->spiked); free(net->ring); free(net->ring_cnt); free(net->counts);
     free(net->in_idx); free(net->in_p); free(net->in_w);
     free(net);
@@ -92,6 +98,7 @@ void lif_reset(lif_net *net, uint64_t seed) {
     for (int32_t i = 0; i < n; i++) {
         net->v[i] = net->p.v0;
         net->g[i] = 0.0;
+        net->x[i] = 1.0;
         net->rfc_len[i] = net->rfc_steps;
         net->rfc_left[i] = 0;
         net->spiked[i] = 0;
@@ -136,7 +143,10 @@ int64_t lif_run(lif_net *net, int64_t n_steps, int32_t *t_out, int32_t *id_out,
     const int32_t n = net->n;
     const double e_m = net->e_m, e_s = net->e_s, c_g = net->c_g;
     const double v0 = net->p.v0, v_th = net->p.v_th, v_rst = net->p.v_rst;
-    double *v = net->v, *g = net->g;
+    double *v = net->v, *g = net->g, *x = net->x;
+    const double e_rec = net->e_rec;
+    const double *u = net->u;
+    const int std_on = (net->std_u > 0.0);
     int32_t *rfc_left = net->rfc_left;
     const int32_t *rfc_len = net->rfc_len;
     uint8_t *spiked = net->spiked;
@@ -145,6 +155,10 @@ int64_t lif_run(lif_net *net, int64_t n_steps, int32_t *t_out, int32_t *id_out,
 
     for (int64_t s = 0; s < n_steps; s++) {
         const int32_t t = (int32_t)net->step;
+        /* 0. synaptic resource recovery (all neurons, including refractory) */
+        if (std_on) {
+            for (int32_t i = 0; i < n; i++) x[i] = 1.0 - (1.0 - x[i]) * e_rec;
+        }
         /* 1. state update (exact for the linear system), unless refractory */
         for (int32_t i = 0; i < n; i++) {
             if (rfc_left[i] > 0) { rfc_left[i]--; continue; }
@@ -176,7 +190,13 @@ int64_t lif_run(lif_net *net, int64_t n_steps, int32_t *t_out, int32_t *id_out,
             for (int32_t k = 0; k < dcnt; k++) {
                 int32_t pre = dslot[k];
                 int64_t a = net->indptr[pre], b = net->indptr[pre + 1];
-                for (int64_t e = a; e < b; e++) g[net->indices[e]] += net->w[e];
+                if (std_on) {
+                    const double xp = x[pre];
+                    for (int64_t e = a; e < b; e++) g[net->indices[e]] += net->w[e] * xp;
+                    x[pre] = xp - u[pre] * xp;
+                } else {
+                    for (int64_t e = a; e < b; e++) g[net->indices[e]] += net->w[e];
+                }
             }
             net->ring_cnt[dpos] = 0;
         }
@@ -199,6 +219,12 @@ int64_t lif_run(lif_net *net, int64_t n_steps, int32_t *t_out, int32_t *id_out,
 
 void lif_spike_counts(const lif_net *net, int64_t *counts) {
     memcpy(counts, net->counts, (size_t)net->n * sizeof(int64_t));
+}
+void lif_set_std_u(lif_net *net, const double *u) {
+    memcpy(net->u, u, (size_t)net->n * sizeof(double));
+}
+void lif_get_x(const lif_net *net, double *x_out) {
+    memcpy(x_out, net->x, (size_t)net->n * sizeof(double));
 }
 void lif_get_v(const lif_net *net, double *v_out) {
     memcpy(v_out, net->v, (size_t)net->n * sizeof(double));

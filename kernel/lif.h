@@ -25,6 +25,11 @@ typedef struct {
     double v_th;     /* -45 mV */
     double t_rfc;    /* 2.2 ms */
     double t_dly;    /* 1.8 ms */
+    /* Short-term synaptic depression (Tsodyks & Markram 1997), per presynaptic
+     * neuron: each delivered spike transmits w * x and then x -= u * x;
+     * x recovers toward 1 with time constant tau_rec.  u = 0 disables. */
+    double std_u;
+    double std_tau_rec;
 } lif_params;
 
 typedef struct lif_net lif_net;
@@ -59,6 +64,10 @@ int64_t lif_run(lif_net *net, int64_t n_steps, int32_t *t_out, int32_t *id_out,
 
 /* Per-neuron spike counts since last reset (length n). */
 void lif_spike_counts(const lif_net *net, int64_t *counts);
+/* Per-presynaptic-neuron STD utilisation (length n); overrides std_u. */
+void lif_set_std_u(lif_net *net, const double *u);
+/* Copy synaptic resource variables x (length n). */
+void lif_get_x(const lif_net *net, double *x_out);
 /* Copy membrane potentials (length n). */
 void lif_get_v(const lif_net *net, double *v_out);
 int64_t lif_step(const lif_net *net);
