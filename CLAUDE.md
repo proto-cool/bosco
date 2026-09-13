@@ -19,7 +19,9 @@ convenience, "just for testing," or because a result would look better.
 
 - **No LLM anywhere in the runtime loop.** No embeddings, no classifiers, no
   sentiment models. The only text scorer is the VADER lexicon (deterministic,
-  public). If a task seems to need a model, stop and ask.
+  public). The only text generator is an n-gram model over the published
+  `corpus/` (`src/bosco/textgen.py`), seeded by the episode and conditioned
+  on the fly's state. If a task seems to need a model, stop and ask.
 - **Encoder, readout thresholds, phrasebook, and action set are frozen at
   `freeze-v1`.** Before the tag they may change; after it they may not.
   Thresholds are set from dev-period real activity, never from outcomes.
@@ -32,10 +34,14 @@ convenience, "just for testing," or because a result would look better.
   stimulus features, MBON/DN activity, action, and weight digest. Any episode
   must replay bit-identical from the log.
 - **Store features and URIs, never post text.** Other people's posts do not
-  live in our database.
-- **Rate caps are hard.** Max 1 action/hour, 24/day. Only reply to mentions
-  and threads Bosco is already in; never wander into strangers' threads.
-  Self-label as a bot.
+  live in our database, and never enter the generator's corpus.
+- **Rate caps are hard.** Max 1 action/hour, 24/day. Self-label as a bot.
+- **Bosco lives on the network like anyone else** (decided 2026-09-13). He
+  reads his timeline and the discover feed, and may like, follow, unfollow,
+  reply in any thread he reads, and post on his own. Everything he reads is a
+  stimulus; everything he does is an episode in the ledger.
+- **Operator override** from `@proto.cool` (EXPERIMENT.md §2a): sleep, wake,
+  delete, ignore list. Rails on the account, never hands on the weights.
 
 ## Architecture
 
@@ -119,14 +125,26 @@ Do not download the EM volume. `neuprint-python` against
   neurons: engage (walking DNs), reply (courtship-song DNs), like (proboscis
   extension), leave (avoidance DNs), groom (grooming DNs → spontaneous post).
 - Winner-take-all over population activity; silence if nothing crosses
-  threshold. Thresholds from dev-period real activity distribution.
-- Action set: `reply`, `like`, `leave`, `spontaneous_post`, `nothing`.
+  threshold. Thresholds from dev-period real activity distribution
+  (provisional synthetic-battery thresholds until then).
+- Action set: `reply`, `like`, `follow`, `leave`, `spontaneous_post`,
+  `nothing`. engage → follow (reply if already following); leave → unfollow.
+- Spontaneous episodes (no event, hourly) drive a random subset of body
+  bristles: dust lands, the fly grooms, grooming is a post.
 
-## Phrasebook
+## Phrasebook and generator
 
-`phrasebook.yaml`, hand-authored by Nick, ~200 lines keyed by
+`phrasebook.yaml`, hand-authored by Nick, keyed by
 `(behavior, valence, arousal, familiarity)`. Flat declarative fly register.
 Frozen and published at tag. Claude does not write phrasebook lines.
+
+`corpus/*.txt` is the generator's training text (Nick's; the seed paragraph
+was workshopped with Claude). `textgen.py` is a word trigram with
+absolute-discount backoff: the fly picks the corpus subset (tags), the
+temperature (arousal) and the seed; the corpus never contains other
+people's posts. Utterance policy: when a phrasebook line exists for the key
+a seeded coin uses it verbatim half the time, otherwise the generator
+speaks. Corpus and phrasebook digests are frozen artifacts.
 
 ## Controls
 

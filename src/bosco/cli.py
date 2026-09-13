@@ -45,10 +45,10 @@ def cmd_poke(a) -> int:
     print("scores Hz:", {k: round(x, 2) for k, x in d.scores.items()})
     print("ratios  :", {k: round(x, 2) for k, x in d.ratios.items()})
     print(f"valence {d.valence}  arousal {d.arousal}  ->  behaviour {d.behaviour}  action {d.action}")
-    if out.line:
-        print(f"line [{out.line.id}]: {out.line.text}")
+    if out.text:
+        print(f"text ({out.text_source}): {out.text}")
     elif d.action in ("reply", "spontaneous_post"):
-        print("(no phrasebook line for this key; action dropped)")
+        print("(no phrasebook line and empty corpus; action dropped)")
     return 0
 
 
@@ -58,9 +58,12 @@ def cmd_spontaneous(a) -> int:
     ts = _ts(a.at)
     out = agent.run(None, ts, None, kind="spontaneous")
     d = out.decision
+    sc = {k: round(v, 2) for k, v in d.scores.items()}
     print(
-        f"episode {out.episode_id}  scores {{k: round(v, 2) for k, v in d.scores.items()}} -> {d.behaviour} {d.action}"
+        f"episode {out.episode_id}  scores {sc}  valence {d.valence}  arousal {d.arousal} -> {d.behaviour} {d.action}"
     )
+    if out.text:
+        print(f"text ({out.text_source}): {out.text}")
     return 0
 
 
@@ -129,6 +132,24 @@ def main(argv=None) -> int:
     s = sub.add_parser("replay")
     s.add_argument("--episode", type=int, required=True)
     s.set_defaults(fn=cmd_replay)
+    s = sub.add_parser("say")
+    s.add_argument("--behaviour", default="groom")
+    s.add_argument("--valence", default="neutral")
+    s.add_argument("--arousal", default="mid")
+    s.add_argument("--seed", type=int, default=1)
+    s.add_argument("-n", type=int, default=5)
+
+    def _say(a):
+        from bosco.phrasebook import Phrasebook
+        from bosco.textgen import Generator
+
+        g = Generator(phrasebook_lines=[ln.text for ln in Phrasebook().lines])
+        print("corpus digest", g.digest(), "docs", [d.name for d in g.docs])
+        for i in range(a.n):
+            print(f"[{a.seed + i}] {g.generate(a.behaviour, a.valence, a.arousal, a.seed + i)}")
+        return 0
+
+    s.set_defaults(fn=_say)
     s = sub.add_parser("status")
     s.set_defaults(fn=cmd_status)
     s = sub.add_parser("integrity")

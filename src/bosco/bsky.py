@@ -1,15 +1,18 @@
-"""Bluesky side of the loop: poll, encode, act, learn.  Dry-run prints instead of posting.
+"""Bluesky side of the loop: read, encode, act, learn.  Dry-run prints instead of posting.
 
 Environment: BOSCO_HANDLE, BOSCO_APP_PASSWORD, BOSCO_OPERATOR (handle, default proto.cool),
-BOSCO_IGNORE_LIST (name of the operator's list, default bosco-ignore), BOSCO_PDS (optional).
+BOSCO_IGNORE_LIST (name of the operator's list, default bosco-ignore), BOSCO_PDS (optional),
+BOSCO_BROWSE (posts read per poll from timeline + discover, default 12),
+BOSCO_SPONTANEOUS_EVERY (seconds between no-event episodes, default 3600).
 
-Only these inbound events exist for Bosco:
-- mention / reply / quote of Bosco       -> event episode (may act on that post)
-- like / follow / repost by a known account -> reward outcome for the most recent
-                                              episode with that account (per-account daily cap)
+Bosco lives on the network like anyone else:
+- notifications (mention / reply / quote)          -> event episode, mentioned=True
+- timeline + discover feed posts he has not seen   -> event episode, mentioned=False
+- like / follow / repost from a known account      -> reward outcome (per-account daily cap)
 - a reply to a Bosco post that VADER scores negative -> punishment outcome
-- the author of a post Bosco acted on now blocks Bosco -> punishment outcome
-Text is scored with VADER in memory and discarded.
+- an account he acted toward now blocks him        -> punishment outcome
+- no event                                          -> spontaneous episode (may post)
+Text is scored with VADER in memory and discarded.  Every action obeys the rate caps.
 """
 
 from __future__ import annotations
@@ -21,12 +24,13 @@ import time
 
 from atproto import Client, models
 
-from bosco.agent import Agent
+from bosco.agent import Agent, Outcome
 from bosco.encoder import Features, vader_compound
 from bosco.ledger import Ledger
 
 REWARD_DAILY_CAP_PER_ACCOUNT = 2
 CONTROL_WORDS = {"bosco sleep": "sleep", "bosco wake": "wake", "bosco delete": "delete"}
+DISCOVER_FEED = "at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot"
 
 
 def _day(ts: float) -> str:
@@ -46,9 +50,12 @@ class Bsky:
         self.me = self.client.me.did
         self.operator_did = self.client.resolve_handle(os.environ.get("BOSCO_OPERATOR", "proto.cool")).did
         self.ignore_list_name = os.environ.get("BOSCO_IGNORE_LIST", "bosco-ignore")
+        self.browse_budget = int(os.environ.get("BOSCO_BROWSE", "12"))
+        self.spontaneous_every = float(os.environ.get("BOSCO_SPONTANEOUS_EVERY", "3600"))
         self.agent = Agent(ledger)
         self._ignore: set[str] = set()
         self._ignore_ts = 0.0
+        self._follows: dict[str, str] | None = None  # did -> follow record uri
 
     # ---- operator rails --------------------------------------------------------
     def ignore_set(self) -> set[str]:
@@ -94,10 +101,31 @@ class Bsky:
         print(f"control: {kind} by operator ({'dry' if self.dry else 'live'})")
         return True
 
+    # ---- follows ---------------------------------------------------------------
+    def follows(self) -> dict[str, str]:
+        if self._follows is None:
+            out: dict[str, str] = {}
+            cursor = None
+            try:
+                while True:
+                    r = self.client.app.bsky.graph.get_follows(
+                        params={"actor": self.me, "cursor": cursor, "limit": 100}
+                    )
+                    for f in r.follows:
+                        out[f.did] = getattr(f.viewer, "following", None) or ""
+                    cursor = r.cursor
+                    if not cursor:
+                        break
+            except Exception as e:  # noqa: BLE001
+                print("follows fetch failed:", e, file=sys.stderr)
+            self._follows = out
+        return self._follows
+
     # ---- acting ----------------------------------------------------------------
     def act(
         self,
-        out,
+        out: Outcome,
+        did: str | None,
         target_uri: str | None,
         target_cid: str | None,
         root_uri: str | None,
@@ -105,82 +133,101 @@ class Bsky:
         ts: float,
     ) -> None:
         d = out.decision
-        if d.action == "nothing":
+        action = d.action
+        if action == "nothing":
+            return
+        # engage on an account already followed becomes a reply; leave on an unfollowed account is nothing
+        following = self.follows()
+        if action == "follow" and (did is None or did in following):
+            action = "reply" if did is not None and out.text else "nothing"
+        if action == "leave" and (did is None or did not in following):
+            self.L.add_action(out.episode_id, "leave", None, target_uri, dry_run=True, ts=ts)
+            return
+        if action == "nothing":
             return
         if self.L.asleep():
-            self.L.add_action(out.episode_id, d.action, None, target_uri, dry_run=True)
-            print("asleep: action suppressed", d.action)
+            self.L.add_action(out.episode_id, action, None, target_uri, dry_run=True, ts=ts)
+            print("asleep: action suppressed", action)
             return
         if not self.agent.caps_allow(ts):
-            self.L.add_action(out.episode_id, "leave", None, target_uri, dry_run=True)
-            print("rate cap: action suppressed", d.action)
+            self.L.add_action(out.episode_id, "leave", None, target_uri, dry_run=True, ts=ts)
+            print("rate cap: action suppressed", action)
             return
         our_uri = None
-        if d.action == "like" and target_uri:
+        if action == "like" and target_uri:
             if not self.dry:
                 our_uri = self.client.like(target_uri, target_cid).uri
             print(f"like {target_uri} ({'dry' if self.dry else our_uri})")
-        elif d.action in ("reply", "spontaneous_post"):
-            if out.line is None:
+        elif action == "follow" and did:
+            if not self.dry:
+                our_uri = self.client.follow(did).uri
+                self.follows()[did] = our_uri
+            print(f"follow {did} ({'dry' if self.dry else our_uri})")
+        elif action == "leave" and did:
+            uri = following.get(did)
+            if not self.dry and uri:
+                self.client.unfollow(uri)
+            self.follows().pop(did, None)
+            print(f"unfollow {did} ({'dry' if self.dry else 'live'})")
+        elif action in ("reply", "spontaneous_post"):
+            if not out.text:
                 return
             reply_to = None
-            if d.action == "reply" and target_uri:
+            if action == "reply" and target_uri:
                 reply_to = models.AppBskyFeedPost.ReplyRef(
                     parent=models.ComAtprotoRepoStrongRef.Main(uri=target_uri, cid=target_cid),
                     root=models.ComAtprotoRepoStrongRef.Main(uri=root_uri or target_uri, cid=root_cid or target_cid),
                 )
             if not self.dry:
-                our_uri = self.client.send_post(out.line.text, reply_to=reply_to, langs=["en"]).uri
-            print(f"{d.action} [{out.line.id}] {out.line.text!r} -> {target_uri} ({'dry' if self.dry else our_uri})")
-        elif d.action == "leave":
-            print("leave", target_uri)
-        self.L.add_action(out.episode_id, d.action, our_uri, target_uri, dry_run=self.dry, ts=ts)
+                our_uri = self.client.send_post(out.text, reply_to=reply_to, langs=["en"]).uri
+            print(f"{action} ({out.text_source}) {out.text!r} -> {target_uri} ({'dry' if self.dry else our_uri})")
+        self.L.add_action(out.episode_id, action, our_uri, target_uri, dry_run=self.dry, ts=ts)
+
+    # ---- one post -> one episode -----------------------------------------------
+    def perceive_post(self, uri: str, cid: str, did: str, record, ts: float, mentioned: bool) -> Outcome:
+        text = getattr(record, "text", "") or ""
+        v = vader_compound(text)
+        fam = self.L.familiarity(did)
+        out = self.agent.run(Features(did, v, mentioned, fam), ts, uri, kind="event")
+        if mentioned:
+            self.L.bump_inbound(did, _day(ts))
+        reply = getattr(record, "reply", None)
+        root = getattr(reply, "root", None)
+        parent = getattr(reply, "parent", None)
+        # a negative reply to one of Bosco's posts punishes the episode that produced it
+        if parent and parent.uri in self.L.our_uris() and v < -0.05:
+            ep = self.L.episode_for_uri(parent.uri)
+            if ep is not None:
+                self.agent.apply_outcome(ep, "punishment", "vader_negative_reply", did, uri, ts)
+        elif mentioned and fam >= 1 and self.L.rewards_today(did, _day(ts)) < REWARD_DAILY_CAP_PER_ACCOUNT:
+            self.agent.apply_outcome(out.episode_id, "reward", "known_account_inbound", did, uri, ts)
+            self.L.bump_reward(did, _day(ts))
+        self.act(out, did, uri, cid, root.uri if root else None, root.cid if root else None, ts)
+        return out
 
     # ---- polling ---------------------------------------------------------------
-    def poll(self) -> int:
-        """Process new notifications once.  Returns number of episodes run."""
+    def poll_notifications(self) -> int:
         ignore = self.ignore_set()
         r = self.client.app.bsky.notification.list_notifications(params={"limit": 50})
         n_ep = 0
         for n in reversed(r.notifications):
-            uri = n.uri
-            ts = _ts(n.indexed_at)
-            if self.L.seen_source(uri) or self.L.seen_evidence(uri):
-                continue
-            did = n.author.did
-            if did == self.me:
+            uri, ts, did = n.uri, _ts(n.indexed_at), n.author.did
+            if did == self.me or self.L.seen_source(uri) or self.L.seen_evidence(uri):
                 continue
             if self.handle_control(n):
                 continue
             if did in ignore:
                 self.L.add_control("ignored", did, uri, None, ts=ts)
                 continue
-            day = _day(ts)
             if n.reason in ("mention", "reply", "quote"):
-                text = getattr(n.record, "text", "") or ""
-                v = vader_compound(text)
-                fam = self.L.familiarity(did)
-                f = Features(did, v, True, fam)
-                out = self.agent.run(f, ts, uri, kind="event")
+                self.perceive_post(uri, n.cid, did, n.record, ts, mentioned=True)
                 n_ep += 1
-                self.L.bump_inbound(did, day)
-                # a negative reply to one of Bosco's posts punishes the episode that produced it
-                parent = getattr(getattr(n.record, "reply", None), "parent", None)
-                if n.reason == "reply" and parent and v < -0.05:
-                    ep = self.L.episode_for_uri(parent.uri)
-                    if ep is not None:
-                        self.agent.apply_outcome(ep, "punishment", "vader_negative_reply", did, uri, ts)
-                elif fam >= 1 and self.L.rewards_today(did, day) < REWARD_DAILY_CAP_PER_ACCOUNT:
-                    self.agent.apply_outcome(out.episode_id, "reward", "known_account_inbound", did, uri, ts)
-                    self.L.bump_reward(did, day)
-                root = getattr(getattr(n.record, "reply", None), "root", None)
-                self.act(out, uri, n.cid, root.uri if root else None, root.cid if root else None, ts)
             elif n.reason in ("like", "follow", "repost"):
+                day = _day(ts)
                 fam = self.L.familiarity(did)
                 if fam >= 1 and self.L.rewards_today(did, day) < REWARD_DAILY_CAP_PER_ACCOUNT:
                     last = self.L.db.execute(
-                        "SELECT id FROM episodes WHERE did=? AND kind='event' ORDER BY id DESC LIMIT 1",
-                        (did,),
+                        "SELECT id FROM episodes WHERE did=? AND kind='event' ORDER BY id DESC LIMIT 1", (did,)
                     ).fetchone()
                     if last:
                         self.agent.apply_outcome(last["id"], "reward", f"known_account_{n.reason}", did, uri, ts)
@@ -188,6 +235,34 @@ class Bsky:
                         n_ep += 1
         if r.notifications and not self.dry:
             self.client.app.bsky.notification.update_seen({"seen_at": self.client.get_current_time_iso()})
+        return n_ep
+
+    def browse(self) -> int:
+        """Read the timeline and the discover feed like anyone would; each unseen post is a stimulus."""
+        ignore = self.ignore_set()
+        items = []
+        try:
+            items += [(fv.post, "timeline") for fv in self.client.get_timeline(limit=self.browse_budget).feed]
+        except Exception as e:  # noqa: BLE001
+            print("timeline failed:", e, file=sys.stderr)
+        try:
+            items += [
+                (fv.post, "discover")
+                for fv in self.client.app.bsky.feed.get_feed(
+                    params={"feed": DISCOVER_FEED, "limit": self.browse_budget}
+                ).feed
+            ]
+        except Exception as e:  # noqa: BLE001
+            print("discover failed:", e, file=sys.stderr)
+        n_ep = 0
+        for post, _where in items:
+            if n_ep >= self.browse_budget:
+                break
+            did = post.author.did
+            if did == self.me or did in ignore or self.L.seen_source(post.uri):
+                continue
+            self.perceive_post(post.uri, post.cid, did, post.record, time.time(), mentioned=False)
+            n_ep += 1
         return n_ep
 
     def check_blocks(self) -> int:
@@ -209,8 +284,7 @@ class Bsky:
                 print("relationships failed:", e, file=sys.stderr)
                 continue
             for x in rel:
-                blocked_by = getattr(x, "blocked_by", None)
-                if blocked_by:
+                if getattr(x, "blocked_by", None):
                     evidence = f"block://{x.did}"
                     if self.L.seen_evidence(evidence):
                         continue
@@ -219,12 +293,17 @@ class Bsky:
                     n += 1
         return n
 
-    def spontaneous(self) -> None:
-        """One no-event episode per poll: the network may groom (spontaneous post) or do nothing."""
+    def spontaneous(self) -> bool:
+        """One no-event episode per BOSCO_SPONTANEOUS_EVERY seconds: the network may groom (post) or do nothing."""
         ts = time.time()
+        last = self.L.get_cursor("last_spontaneous_ts")
+        if last and ts - float(last) < self.spontaneous_every:
+            return False
+        self.L.set_cursor("last_spontaneous_ts", repr(ts))
         out = self.agent.run(None, ts, None, kind="spontaneous")
         if out.decision.action == "spontaneous_post":
-            self.act(out, None, None, None, None, ts)
+            self.act(out, None, None, None, None, None, ts)
+        return True
 
 
 def run_loop(ledger: Ledger, dry_run: bool, once: bool, interval: int) -> int:
@@ -232,11 +311,14 @@ def run_loop(ledger: Ledger, dry_run: bool, once: bool, interval: int) -> int:
     print(f"bosco {'DRY-RUN' if dry_run else 'LIVE'} as {b.me}; operator {b.operator_did}")
     while True:
         try:
-            n = b.poll()
-            nb = b.check_blocks()
-            b.spontaneous()
+            n = b.poll_notifications()
+            nb = b.browse()
+            nk = b.check_blocks()
+            sp = b.spontaneous()
             ledger.set_cursor("last_poll_ts", repr(time.time()))
-            print(f"{dt.datetime.now(dt.UTC).isoformat()} poll: {n} episodes, {nb} blocks")
+            print(
+                f"{dt.datetime.now(dt.UTC).isoformat()} poll: {n} notifications, {nb} browsed, {nk} blocks, spontaneous {sp}"
+            )
         except Exception as e:  # noqa: BLE001
             print("poll error:", repr(e), file=sys.stderr)
         if once:

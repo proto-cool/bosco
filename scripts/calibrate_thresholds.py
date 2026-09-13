@@ -23,18 +23,50 @@ from bosco import paths
 from bosco.ledger import Ledger
 
 
+def synthetic_ledger(n_events: int, n_spont: int, seed: int) -> Ledger:
+    """Provisional dev-period thresholds: a synthetic stimulus battery (random accounts,
+    VADER levels, mention flags, hours) run through the agent into a temp ledger."""
+    import tempfile
+
+    import numpy as np
+
+    from bosco.agent import Agent
+    from bosco.encoder import Features
+
+    tmp = tempfile.mkdtemp()
+    L = Ledger(f"{tmp}/synthetic.sqlite")
+    ag = Agent(L, state_dir=tmp)
+    rng = np.random.default_rng(seed)
+    t0 = 1_800_000_000.0
+    for i in range(n_events):
+        did = f"did:plc:synthetic{int(rng.integers(0, 40))}"
+        v = float(np.clip(rng.normal(0.0, 0.45), -1, 1)) if rng.random() < 0.7 else 0.0
+        ts = t0 + float(rng.random()) * 86400 * 30
+        ag.run(Features(did, v, bool(rng.random() < 0.4), 0), ts, f"synthetic://{i}", kind="event")
+    for i in range(n_spont):
+        ag.run(None, t0 + float(rng.random()) * 86400 * 30, None, kind="spontaneous")
+    return L
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--ledger", required=True)
+    ap.add_argument("--ledger", help="dev-period ledger (real activity)")
+    ap.add_argument("--synthetic", type=int, default=0, help="instead: run N synthetic event episodes (dev only)")
+    ap.add_argument("--synthetic-spontaneous", type=int, default=60)
     ap.add_argument("--q", type=float, default=0.85)
     ap.add_argument("--min-hz", type=float, default=1.0)
     ap.add_argument("--min-episodes", type=int, default=200)
     ap.add_argument("--write", action="store_true")
     a = ap.parse_args(argv)
-    L = Ledger(a.ledger)
-    rows = L.episodes(kind="event")
+    if a.synthetic:
+        L = synthetic_ledger(a.synthetic, a.synthetic_spontaneous, seed=0)
+        source = f"synthetic-dev (n={a.synthetic}+{a.synthetic_spontaneous})"
+    else:
+        L = Ledger(a.ledger)
+        source = a.ledger
+    rows = L.episodes(kind="event") + L.episodes(kind="spontaneous")
     if len(rows) < a.min_episodes:
-        print(f"only {len(rows)} event episodes; need {a.min_episodes}")
+        print(f"only {len(rows)} episodes; need {a.min_episodes}")
         return 1
     scores = [json.loads(r["scores"]) for r in rows]
     pops = sorted(scores[0])
@@ -45,7 +77,7 @@ def main(argv=None) -> int:
         print(
             f"{p:7s} rate quantiles 50/85/95/99: {np.quantile(v, [0.5, 0.85, 0.95, 0.99]).round(2).tolist()} -> threshold {th[p]:.2f}"
         )
-    kc = np.array([r["kc_active"] for r in rows]) / 4064.0
+    kc = np.array([r["kc_active"] for r in rows if r["kind"] == "event"]) / 4064.0
     lo, hi = np.quantile(kc, [0.025, 0.975])
     kc_range = [float(max(0.0, lo * 0.5)), float(hi * 1.5)]
     print("kc_range", kc_range)
@@ -60,7 +92,7 @@ def main(argv=None) -> int:
             "q": a.q,
             "min_hz": a.min_hz,
             "n_episodes": len(rows),
-            "ledger": a.ledger,
+            "source": source,
         }
         json.dump(cfg, open(paths.CONFIG / "thresholds.json", "w"), indent=1)
         print("wrote config/thresholds.json")

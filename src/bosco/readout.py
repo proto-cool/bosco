@@ -19,7 +19,7 @@ from bosco.model import Brain
 from bosco.sim import EpisodeResult
 
 BEHAVIOURS = ("engage", "reply", "like", "leave", "groom")
-ACTIONS = ("reply", "like", "leave", "spontaneous_post", "nothing")
+ACTIONS = ("reply", "like", "follow", "leave", "spontaneous_post", "nothing")
 
 
 @dataclass(frozen=True)

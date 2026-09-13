@@ -43,6 +43,10 @@ class Encoder:
         jo = pop.johnston_organ()
         groups = set(self.cfg["mechanosensory"]["jo_groups"])
         self.jo = brain.index_of_present(jo.loc[jo["group"].isin(groups), "bodyId"])
+        sp = self.cfg.get("spontaneous", {})
+        self.bristles = (
+            brain.index_of_present(pop.bodies_of_types(sp.get("bristle_types", []))) if sp else np.zeros(0, np.int32)
+        )
 
     # ---- account odor ---------------------------------------------------
     def glomeruli_for(self, did: str) -> list[str]:
@@ -69,6 +73,16 @@ class Encoder:
     # ---- touch -----------------------------------------------------------
     def mention_drive(self) -> Drive:
         return Drive(self.jo, float(self.cfg["mechanosensory"]["rate_hz"]), "mention")
+
+    # ---- internal drive (no event) ---------------------------------------
+    def spontaneous_drive(self, seed: int) -> Drive | None:
+        sp = self.cfg.get("spontaneous")
+        if not sp or len(self.bristles) == 0:
+            return None
+        rng = np.random.default_rng(seed & 0xFFFFFFFF)
+        k = min(int(sp["k"]), len(self.bristles))
+        idx = np.sort(rng.choice(self.bristles, size=k, replace=False)).astype(np.int32)
+        return Drive(idx, float(sp["rate_hz"]), "bristles")
 
     def encode(self, f: Features) -> Stimulus:
         drives = [self.odor_drive(f.did)]

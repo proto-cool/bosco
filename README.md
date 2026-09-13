@@ -58,10 +58,19 @@ Every number below has a gate report under `docs/`.
 7. **Encoder**: 12 of 35 valence-neutral glomeruli per account, 120 Hz;
    VADER → sugar/bitter GRNs up to 150 Hz; mention → JO-A/B 100 Hz; clock
    neurons on a 24 h cosine (`docs/circadian.md`).  KC activity 2–5% per
-   account odor, odor-specific.
+   account odor, odor-specific.  No-event episodes drive 500 random body
+   bristles at 10 Hz (dust → grooming → a post).
 8. **Readout** populations are cell-type lists with citations
-   (`config/readout_populations.yaml`).  Thresholds are null until calibrated
-   from the dev-period distribution of real activity (`scripts/calibrate_thresholds.py`).
+   (`config/readout_populations.yaml`): engage → follow, reply → reply,
+   like → like, leave → unfollow, groom → post.  Thresholds are provisional
+   (synthetic battery, 85th percentile) until re-set from the dev-period
+   distribution of real activity (`scripts/calibrate_thresholds.py`).
+10. **Text**: `src/bosco/textgen.py`, a word trigram with absolute-discount
+   backoff over `corpus/` plus phrasebook lines.  The fly supplies the
+   corpus subset (tags), temperature (arousal) and seed.  Not an LLM.
+11. **Scope**: Bosco reads his timeline and the discover feed; each unseen
+   post is a stimulus; he may like, follow, unfollow, reply, and post, within
+   1 action/hour and 24/day.
 9. **Determinism**: single thread, fixed accumulation order, no FMA or
    fast-math, splitmix64 RNG; episodes start from rest; weights are
    content-addressed snapshots so any ledger row replays bit-identically
@@ -77,5 +86,6 @@ uv sync && make -C kernel
 uv run python scripts/phase0_coverage.py     # needs data/raw/*.feather (see paths.py)
 uv run pytest
 uv run bosco poke --did did:plc:x --text "hello fly" --mention
+uv run bosco spontaneous && uv run bosco say -n 5
 BOSCO_HANDLE=... BOSCO_APP_PASSWORD=... uv run bosco run --dry-run
 ```

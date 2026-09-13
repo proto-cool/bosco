@@ -17,7 +17,10 @@ genuinely the one acting, and that anyone can check.
 ## 2. What "earnest" means here (binding)
 
 - No LLM, embedding, or classifier anywhere in the runtime loop. The only
-  text scorer is the VADER lexicon.
+  text scorer is the VADER lexicon. The only text generator is a word
+  trigram model over the published `corpus/`, seeded by the episode and
+  conditioned on the fly's state; the corpus never contains other people's
+  posts.
 - Encoder, readout thresholds, phrasebook, and action set are frozen at
   `freeze-v1`.
 - After `freeze-v1`, humans influence Bosco only through the network. No
@@ -27,8 +30,10 @@ genuinely the one acting, and that anyone can check.
 - Every episode is deterministic given (seed, stimulus features) and
   replays bit-identical from the log.
 - Other people's post text is never stored.
-- Rate caps: 1 action/hour, 24/day. Mentions and own threads only. Bot
-  self-label on the account.
+- Rate caps: 1 action/hour, 24/day. Bot self-label on the account.
+- Bosco reads his timeline and the discover feed and may like, follow,
+  unfollow, reply in any thread he reads, and post on his own. The action
+  set is `reply, like, follow, leave, spontaneous_post, nothing`.
 
 ## 2a. Operator controls (binding)
 
@@ -48,9 +53,10 @@ row published with the nightly dump.
   a punishment signal; it is silence.
 - **Hard stop.** Stopping the container. The dead-man alert fires after 4 h.
 
-Bosco cannot generate text. Every reply is a phrasebook line. The exposure
-these controls address is *who* he replies to and *what* he likes, not what
-he says.
+Bosco's text comes from a trigram model over a published corpus and from
+phrasebook lines; every word he can emit is in those files. The exposure
+these controls address is who he engages, what he likes, and which corpus
+fragments land next to which post.
 
 ## 3. Frozen artifacts (fill at tag)
 
@@ -61,6 +67,7 @@ he says.
 | Phrasebook | `phrasebook.yaml` | |
 | Encoder spec | `docs/encoder.md` | |
 | Readout thresholds | `config/thresholds.json` | |
+| Corpus | `corpus/` | |
 
 ## 4. Controls (optional; for the curious)
 

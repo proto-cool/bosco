@@ -23,6 +23,7 @@ from bosco.phrasebook import Line, Phrasebook, familiarity_bin
 from bosco.plasticity import MushroomBody
 from bosco.readout import Decision, Readout
 from bosco.sim import Drive, Fly, Stimulus
+from bosco.textgen import Generator
 
 MAX_ACTIONS_PER_HOUR = 1
 MAX_ACTIONS_PER_DAY = 24
@@ -59,6 +60,8 @@ class Outcome:
     decision: Decision
     line: Line | None
     seed: int
+    text: str | None = None  # what would be posted: a phrasebook line or generated text
+    text_source: str | None = None  # 'phrasebook' | 'generated' | None
 
 
 class Agent:
@@ -71,6 +74,7 @@ class Agent:
         self.mb = MushroomBody(self.fly)
         self.clock = Clock(self.fly.brain)
         self.phrasebook = Phrasebook()
+        self.generator = Generator(phrasebook_lines=[ln.text for ln in self.phrasebook.lines])
         self._load_weights()
 
     # ---- weights persistence ------------------------------------------------
@@ -127,8 +131,12 @@ class Agent:
         )
 
     # ---- episodes -------------------------------------------------------------
-    def stimulus(self, f: Features | None, hour: float) -> Stimulus:
-        drives = list(self.enc.encode(f).drives) if f is not None else []
+    def stimulus(self, f: Features | None, hour: float, seed: int = 0) -> Stimulus:
+        if f is not None:
+            drives = list(self.enc.encode(f).drives)
+        else:
+            d = self.enc.spontaneous_drive(seed)
+            drives = [d] if d is not None else []
         drives += self.clock.drives(hour)
         return Stimulus(drives)
 
@@ -147,17 +155,29 @@ class Agent:
         hour = self.clock.local_hour(ts)
         did = f.did if f else None
         seed = self.seed_for(ts, did, source_uri) if seed is None else seed
-        stim = self.stimulus(f, hour)
+        stim = self.stimulus(f, hour, seed)
         d_before = self.fly.weight_digest()
         res = self.fly.run_episode(stim, seed)
         dec = self.readout.decide(res, self.fly.episode_ms)
         fam = self.ledger.familiarity(did) if did else 0
         line = None
         line_key = None
-        if dec.action in ("reply", "spontaneous_post"):
+        text = None
+        text_source = None
+        if dec.action in ("reply", "spontaneous_post", "follow"):
             fb = familiarity_bin(fam)
-            line = self.phrasebook.pick(dec.behaviour, dec.valence, dec.arousal, fb, seed)
             line_key = f"{dec.behaviour}/{dec.valence}/{dec.arousal}/{fb}"
+            line = self.phrasebook.pick(dec.behaviour, dec.valence, dec.arousal, fb, seed)
+            # utterance policy: a seeded coin picks a verbatim phrasebook line half the
+            # time when one exists; otherwise the generator speaks.
+            coin = (seed >> 7) & 1
+            if line is not None and coin == 0:
+                text, text_source = line.text, "phrasebook"
+            else:
+                text = self.generator.generate(dec.behaviour, dec.valence, dec.arousal, seed)
+                text_source = "generated" if text else None
+                if text is None and line is not None:
+                    text, text_source = line.text, "phrasebook"
         row = EpisodeRow(
             kind=kind,
             did=did,
@@ -177,14 +197,18 @@ class Agent:
             valence=dec.valence,
             arousal=dec.arousal,
             line_key=line_key,
-            line_id=line.id if line else None,
+            line_id=(
+                line.id
+                if text_source == "phrasebook" and line
+                else (f"gen:{self.generator.digest()[:8]}" if text_source == "generated" else None)
+            ),
             note=note
             if note
-            else ("no_line" if dec.action in ("reply", "spontaneous_post") and line is None else None),
+            else ("no_text" if dec.action in ("reply", "spontaneous_post") and text is None else None),
         )
         eid = self.ledger.add_episode(row, ts=ts)
         self._save_weights()
-        return Outcome(eid, dec, line, seed)
+        return Outcome(eid, dec, line, seed, text, text_source)
 
     def replay(self, episode_id: int) -> tuple[bool, dict[str, float]]:
         """Re-run a logged episode with its logged features and seed at the logged
@@ -200,7 +224,7 @@ class Agent:
         f = None
         if r["did"] is not None:
             f = Features(r["did"], float(r["vader"]), bool(r["mentioned"]), int(r["familiarity"]))
-        stim = self.stimulus(f, float(r["hour"]))
+        stim = self.stimulus(f, float(r["hour"]), int(r["seed"]))
         res = self.fly.run_episode(stim, int(r["seed"]))
         dec = self.readout.decide(res, self.fly.episode_ms)
         logged = json.loads(r["scores"])

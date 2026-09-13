@@ -38,3 +38,12 @@ mechanosensory:
   # (sound / courtship-song sensitive) at rate_hz.
   jo_groups: [A, B]
   rate_hz: 100.0
+spontaneous:
+  # No-event episodes: "dust lands somewhere".  A seeded random subset of k
+  # body-bristle mechanosensory neurons (types BM_InOm, BM, BM_Vib) is driven
+  # at rate_hz.  Bristle stimulation triggers grooming (Hampel et al. 2015);
+  # which bristles, and hence how strongly the grooming DNs respond, varies
+  # with the seed.
+  bristle_types: [BM_InOm, BM, BM_Vib]
+  k: 500
+  rate_hz: 10.0
