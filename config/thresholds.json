@@ -1,0 +1,8 @@
+{
+  "_note": "Per-population rate thresholds (Hz). null = uncalibrated: readout returns 'nothing' for that population. Set from the dev-period distribution of real activity in phase 6, never from outcomes.",
+  "engage": null,
+  "reply": null,
+  "like": null,
+  "leave": null,
+  "groom": null
+}

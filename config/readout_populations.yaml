@@ -1,0 +1,33 @@
+# Readout populations (frozen at freeze-v1).  Behaviour classes are defined
+# over annotated descending-neuron (and, for proboscis extension, motor
+# neuron) cell types, never single bodies.  Every listed type is present in
+# MaleCNS v1.0 (checked in docs/phase0-coverage.md / scripts).
+#
+# engage  -> walking / turning / forward-approach DNs
+#            DNp09 forward walking & courtship pursuit (Bidaye et al. 2020);
+#            DNa01/DNa02 turning (Rayshubskiy et al. 2020); DNa03/04, DNb01/02/05/06
+#            walking-modulating DNs (Namiki et al. 2018; Braun et al. 2024).
+# reply   -> courtship-song DNs: pIP10 (von Philipsborn et al. 2011),
+#            pMP2 (Ding et al. 2019), aSP22 (Coleman et al. 2024), DNp13 (song/ovipositor circuit, male copy).
+# like    -> proboscis extension: MN9 (rostrum protractor; Gordon & Scott 2009),
+#            MN6, MN11V, MN11D, MN12D (feeding motor neurons; Schwarz et al. 2017).
+# leave   -> escape / retreat: DNp01 (giant fiber), DNp02/04/06/11 looming takeoff
+#            (von Reyn et al. 2017; Ache et al. 2019), DNp03/10, MDN backward walking (Bidaye et al. 2014).
+# groom   -> DNg11 antennal grooming (Hampel et al. 2015 aDN), DNg12_* head grooming,
+#            DNg10, DNg07 (Guo et al. 2022) -> spontaneous_post.
+populations:
+  engage: [DNp09, DNa01, DNa02, DNa03, DNa04, DNb01, DNb02, DNb05, DNb06]
+  reply:  [pIP10, pMP2, aSP22, DNp13]
+  like:   [MN9, MN6, MN11V, MN11D, MN12D]
+  leave:  [DNp01, DNp02, DNp03, DNp04, DNp06, DNp10, DNp11, MDN]
+  groom:  [DNg11, DNg12_a, DNg12_b, DNg12_c, DNg12_d, DNg12_e, DNg12_f, DNg12_g, DNg12_h, DNg10, DNg07]
+# Behaviour -> account action.
+actions:
+  engage: reply            # walks toward it: replies (a line keyed 'engage')
+  reply: reply             # sings: replies (a line keyed 'reply')
+  like: like
+  leave: leave             # leaves the thread: no further action on it this episode
+  groom: spontaneous_post
+# Population score = mean spike rate (Hz) over the population's bodies in the
+# episode.  Winner-take-all over score / threshold; 'nothing' unless the
+# winner's score exceeds its threshold (config/thresholds.json).

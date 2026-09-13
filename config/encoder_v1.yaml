@@ -1,0 +1,40 @@
+# Encoder v1 (frozen at freeze-v1).  See docs/encoder.md.
+odor:
+  # Account DID -> odor.  blake2b(DID) seeds a deterministic choice of
+  # k glomeruli from the valence-neutral list; all ORNs of those glomeruli
+  # are driven at rate_hz for the whole episode.
+  k: 12
+  rate_hz: 120.0
+  # Glomeruli with documented innate valence, excluded from account odors.
+  # (Knaden et al. 2012; Badel et al. 2016; Ebrahim et al. 2015 for DA2;
+  #  Suh et al. 2004 for V/CO2; cVA circuit DA1/DL3/VA1v/VA1d/VL2a/DC3.)
+  exclude:
+    - DA1    # cVA, pheromone
+    - DA2    # geosmin, innately aversive
+    - DC3    # pheromone circuit
+    - DL3    # pheromone circuit
+    - DL4    # aversive (Knaden 2012)
+    - DL5    # aversive (Knaden 2012)
+    - DM1    # attractive food odors (ethyl acetate)
+    - DM2    # attractive (ethyl hexanoate)
+    - DM4    # attractive (methyl acetate)
+    - DM5    # aversive
+    - V      # CO2, innately aversive
+    - VA1d   # pheromone circuit
+    - VA1v   # methyl laurate, pheromone
+    - VL2a   # cVA-responsive PN circuit
+    - VL2p   # aversive (Knaden 2012)
+    - VM1    # ammonia/amines, attractive
+    - VA2    # acetic acid/vinegar, attractive
+    - VM7v   # aversive (Knaden 2012)
+gustatory:
+  # VADER compound c in [-1, 1].  Rate = max_rate_hz * min(1, |c| / c_sat)
+  # for |c| > dead_zone; sugar/water GRNs for c > 0, bitter GRNs for c < 0.
+  dead_zone: 0.05
+  c_sat: 0.6
+  max_rate_hz: 150.0
+mechanosensory:
+  # Being mentioned (or replied to) drives Johnston's-organ groups A and B
+  # (sound / courtship-song sensitive) at rate_hz.
+  jo_groups: [A, B]
+  rate_hz: 100.0
