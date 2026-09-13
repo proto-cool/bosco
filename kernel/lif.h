@@ -30,6 +30,11 @@ typedef struct {
      * x recovers toward 1 with time constant tau_rec.  u = 0 disables. */
     double std_u;
     double std_tau_rec;
+    /* Spike-frequency adaptation as an adaptive threshold: theta_i += sfa_b on
+     * each spike, relaxes to 0 with time constant sfa_tau (ms); the neuron fires
+     * when v > v_th + theta.  sfa_b = 0 disables.  Driven inputs are exempt. */
+    double sfa_b;
+    double sfa_tau;
 } lif_params;
 
 typedef struct lif_net lif_net;
@@ -64,6 +69,13 @@ int64_t lif_run(lif_net *net, int64_t n_steps, int32_t *t_out, int32_t *id_out,
 
 /* Per-neuron spike counts since last reset (length n). */
 void lif_spike_counts(const lif_net *net, int64_t *counts);
+/* Full dynamic state export/import, for snapshots and continuous running.
+ * Layout (doubles): v[n], g[n], x[n], theta[n]; then int32: rfc_left[n],
+ * ring[dly_steps*n], ring_cnt[dly_steps], ring_pos, then uint64 rng, int64 step.
+ * lif_state_size returns the byte count. */
+int64_t lif_state_size(const lif_net *net);
+void lif_get_state(const lif_net *net, void *buf);
+void lif_set_state(lif_net *net, const void *buf);
 /* Per-presynaptic-neuron STD utilisation (length n); overrides std_u. */
 void lif_set_std_u(lif_net *net, const double *u);
 /* Copy synaptic resource variables x (length n). */

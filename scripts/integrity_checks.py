@@ -28,7 +28,6 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--ledger", required=True)
     ap.add_argument("--state-dir", default=str(paths.STATE), help="dir holding weights/<digest>.npz snapshots")
-    ap.add_argument("--replay-sample", type=int, default=5)
     a = ap.parse_args(argv)
     L = Ledger(a.ledger)
     out = ["# Integrity checks\n"]
@@ -38,23 +37,24 @@ def main(argv=None) -> int:
     events = [r for r in rows if r["kind"] == "event"]
     agent = Agent(L, state_dir=a.state_dir) if events else None
 
-    # 1. replay determinism
-    rng = np.random.default_rng(0)
-    sample = (
-        [events[i] for i in rng.choice(len(events), min(a.replay_sample, len(events)), replace=False)] if events else []
-    )
-    fails = []
-    for r in sample:
-        try:
-            ok, _ = agent.replay(r["id"])
-        except Exception as e:  # noqa: BLE001
-            ok = False
-            fails.append((r["id"], repr(e)))
-            continue
-        if not ok:
-            fails.append((r["id"], "scores differ"))
-    ok1 = not fails
-    out.append(f"- replay determinism ({len(sample)} sampled): {'PASS' if ok1 else 'FAIL ' + str(fails)}")
+    # 1. replay determinism: from the latest snapshot, re-run the logged inputs to the present
+    ok1 = True
+    if agent is not None and agent.snapshot_dir.exists():
+        snaps = sorted(agent.snapshot_dir.glob("*.npz"))
+        if snaps:
+            try:
+                ok1, logged, got = agent.replay_span(snaps[-1], agent.live.t_ms)
+                out.append(
+                    f"- replay from snapshot {snaps[-1].name} to {agent.live.t_ms} ms: {'PASS' if ok1 else 'FAIL'} "
+                    f"(logged {logged[:12]}, got {got[:12]})"
+                )
+            except Exception as e:  # noqa: BLE001
+                ok1 = False
+                out.append(f"- replay from snapshot: FAIL ({e!r})")
+        else:
+            out.append("- replay: no snapshot yet (SKIP)")
+    else:
+        out.append("- replay: no events yet (SKIP)")
 
     # 2. KC sparseness
     th = json.load(open(paths.CONFIG / "thresholds.json"))
@@ -97,7 +97,8 @@ def main(argv=None) -> int:
                     if agent.mb.digest() != r["weight_digest_before"]:
                         # a logged operator 'forget' between the two rows explains the break; still reported
                         forgets = L.db.execute(
-                            "SELECT COUNT(*) FROM control WHERE kind='forget' AND ts>=? AND ts<=?", (prev["ts"], r["ts"])
+                            "SELECT COUNT(*) FROM control WHERE kind='forget' AND ts>=? AND ts<=?",
+                            (prev["ts"], r["ts"]),
                         ).fetchone()[0]
                         chain_bad.append(f"{r['id']}(forget x{forgets})" if forgets else r["id"])
                 except FileNotFoundError:

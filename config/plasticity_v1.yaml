@@ -7,7 +7,7 @@
 #                     spaced training -> protein-synthesis-dependent LTM.)
 stm:
   eta: 0.5            # depression per pairing for a saturating KC
-  c_sat: 5.0          # KC spikes/episode at which depression saturates
+  c_sat: 3.0          # KC spikes/s at which depression saturates (3 under adaptation; was 5)
   m_min: 0.1
   tau_h: 4.0
 ltm:

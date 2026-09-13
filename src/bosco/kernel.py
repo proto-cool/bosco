@@ -28,6 +28,8 @@ class _Params(C.Structure):
         ("t_dly", C.c_double),
         ("std_u", C.c_double),
         ("std_tau_rec", C.c_double),
+        ("sfa_b", C.c_double),
+        ("sfa_tau", C.c_double),
     ]
 
 
@@ -48,6 +50,9 @@ class LifParams:
     # Short-term depression (Tsodyks & Markram 1997), off by default (Shiu has none).
     std_u: float = 0.0
     std_tau_rec: float = 0.0
+    # Spike-frequency adaptation (adaptive threshold), off by default (Shiu has none).
+    sfa_b: float = 0.0
+    sfa_tau: float = 0.0
 
     @property
     def input_jump_mv(self) -> float:
@@ -82,6 +87,10 @@ def _load() -> C.CDLL:
     lib.lif_get_v.argtypes = [C.c_void_p, f64p]
     lib.lif_get_x.argtypes = [C.c_void_p, f64p]
     lib.lif_set_std_u.argtypes = [C.c_void_p, f64p]
+    lib.lif_state_size.restype = C.c_int64
+    lib.lif_state_size.argtypes = [C.c_void_p]
+    lib.lif_get_state.argtypes = [C.c_void_p, C.c_void_p]
+    lib.lif_set_state.argtypes = [C.c_void_p, C.c_void_p]
     lib.lif_step.restype = C.c_int64
     lib.lif_step.argtypes = [C.c_void_p]
     _lib = lib
@@ -116,6 +125,8 @@ class Net:
             params.t_dly,
             params.std_u,
             params.std_tau_rec,
+            params.sfa_b,
+            params.sfa_tau,
         )
         self._h = self.lib.lif_create(self.n, self.indptr, self.indices, w, C.byref(p))
         if not self._h:
@@ -171,6 +182,19 @@ class Net:
         out = np.empty(self.n, dtype=np.int64)
         self.lib.lif_spike_counts(self._h, out)
         return out
+
+    def get_state(self) -> bytes:
+        """Full dynamic state (voltages, conductances, adaptation, delay ring, RNG, step)."""
+        size = int(self.lib.lif_state_size(self._h))
+        buf = C.create_string_buffer(size)
+        self.lib.lif_get_state(self._h, buf)
+        return buf.raw
+
+    def set_state(self, state: bytes) -> None:
+        size = int(self.lib.lif_state_size(self._h))
+        if len(state) != size:
+            raise ValueError(f"state size {len(state)} != {size}")
+        self.lib.lif_set_state(self._h, C.c_char_p(state))
 
     def set_std_u(self, u: np.ndarray) -> None:
         """Per-presynaptic-neuron depression utilisation. Requires params.std_u > 0 to enable STD at all;

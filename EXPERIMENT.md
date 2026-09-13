@@ -30,8 +30,12 @@ genuinely the one acting, and that anyone can check.
   manual edits to weights, ledger, or stimulus log. Code bug fixes are
   allowed and tagged; behavior changes are a new tag and a note here.
 - Silence is a legal, common action. No minimum-posting floor.
-- Every episode is deterministic given (seed, stimulus features) and
-  replays bit-identical from the log.
+- Bosco runs continuously; nothing is reset. His full state is
+  snapshotted hourly, and every span replays bit-identically from the
+  snapshot before it plus the logged inputs.
+- Identity is a reflex outside the network: asked who or what he is, or who
+  made him, he answers from `config/identity_v1.yaml`, on the same footing
+  as the bot label.
 - Other people's post text is never stored.
 - Rate caps by kind (`config/caps_v1.yaml`): replies 12/h 100/d, likes
   12/h 100/d, follows and unfollows 6/h 40/d, own posts 1/h 12/d, all
@@ -125,7 +129,7 @@ published with the frozen artifacts.
 
 Any failure is announced from the account and fixed under a new tag.
 
-- Replay determinism fails on any episode.
+- Replay from any snapshot to the next fails to reproduce the logged digest.
 - KC sparseness leaves the range recorded at tag (target ≈ 5%).
 - Any rate-cap violation.
 - Any post text found in the database.

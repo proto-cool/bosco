@@ -30,8 +30,13 @@ def test_labeled_stimulus_is_bitter_and_never_approached(fly):
     assert "bitter" in labels and "sugar" not in labels
     tmp = tempfile.mkdtemp()
     ag = Agent(Ledger(f"{tmp}/l.sqlite"), fly, state_dir=tmp)
-    o = ag.run(Features("did:plc:bad", 0.9, True, 3, labeled=True), 1_800_000_000.0, "at://bad/1", note="labeled:spam")
-    assert o.decision.action not in ("like", "follow", "reply")
-    ok, _ = ag.replay(o.episode_id)
-    assert ok
     ag.mb.reset()
+    o = ag.run(
+        Features("did:plc:bad", 0.9, True, 3, labeled=True),
+        1_800_000_000.0,
+        "at://bad/1",
+        note="labeled:spam",
+        fast=True,
+    )
+    assert o.decision.action not in ("like", "follow", "reply")
+    assert "labeled" in (ag.ledger.episode(o.episode_id)["note"] or "")

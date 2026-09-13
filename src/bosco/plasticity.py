@@ -148,14 +148,40 @@ class MushroomBody:
             self._push()
         self.t_last = t_hours
 
-    # ---- pairing --------------------------------------------------------------
-    def pair(self, stim: Stimulus, valence: str, seed: int, t_hours: float) -> np.ndarray:
-        """Replay pairing: re-present stim, gate depression by the valence DAN compartments.
+    # ---- learned valence (from the weights themselves) ------------------------------
+    def learned_valence(self, kc_counts: np.ndarray) -> tuple[float, dict[str, float]]:
+        """What the mushroom body has learned about the odor whose KCs just fired.
 
-        Returns the per-plastic-edge STM factor applied (1 = unchanged)."""
+        Over plastic edges whose presynaptic KC fired: mean depression (1 - stm*ltm) on
+        reward-compartment edges minus mean depression on punishment-compartment edges
+        (Aso et al. 2014 sign: reward learning depresses avoidance-driving MBONs).
+        Read from the weights, not from MBON rates, because single-realisation rates
+        are chaotic with respect to small weight changes.  Scaled by 2 (a fully trained
+        STM+LTM edge sits near 0.5) and clipped to [-1, 1]."""
+        pre = kc_counts[self.fly.kc_pos_of_edge] > 0
+        m = self.fly.multiplier
+        rew = pre & self.target_edges("reward")
+        pun = pre & self.target_edges("punishment")
+        dr = float((1.0 - m[rew]).mean()) if rew.any() else 0.0
+        dp = float((1.0 - m[pun]).mean()) if pun.any() else 0.0
+        v = float(np.clip(2.0 * (dr - dp), -1.0, 1.0))
+        return v, {"reward_depression": dr, "punishment_depression": dp, "n_active_kc": int(pre.sum())}
+
+    # ---- pairing --------------------------------------------------------------
+    def pair_counts(self, kc_counts_per_s: np.ndarray, valence: str, t_hours: float) -> np.ndarray:
+        """Three-factor rule from KC spike counts (per second of presentation) already observed."""
+        self.forget(t_hours)
+        c = kc_counts_per_s[self.fly.kc_pos_of_edge].astype(np.float64)
+        return self._depress(c, valence, t_hours)
+
+    def pair(self, stim: Stimulus, valence: str, seed: int, t_hours: float) -> np.ndarray:
+        """Replay pairing (offline tooling): re-present stim from rest, then depress."""
         self.forget(t_hours)
         res = self.fly.run_episode(stim, seed)
         c = res.counts[self.fly.plastic_pre].astype(np.float64)
+        return self._depress(c, valence, t_hours)
+
+    def _depress(self, c: np.ndarray, valence: str, t_hours: float) -> np.ndarray:
         strength = np.minimum(1.0, c / self.p.stm_c_sat)
         mask = self.target_edges(valence) & (strength > 0)
         # consolidation: spaced repetition on a synapse that still carries STM

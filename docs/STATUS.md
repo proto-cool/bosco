@@ -16,6 +16,11 @@
 | 6 Calibration + tag | thresholds from dev activity | provisional synthetic thresholds written; re-run on real dev activity before tag | `scripts/calibrate_thresholds.py` |
 | 7 dunce + monthly note | | tools ready | `scripts/make_dunce.py`, `scripts/replay_controls.py`, `scripts/monthly_report.py` |
 
+## Parked
+
+- A Bosco panel page at `bosco.proto.cool` with live stats from the ledger
+  (episodes, actions, people, integrity), in ARC UI v4.2.2. After he flies.
+
 ## What only Nick can do
 
 1. **Corpus and phrasebook.** `corpus/` holds a minimal fly-world corpus in

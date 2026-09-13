@@ -17,6 +17,13 @@ lif:
   f_poi: 250.0
   std_u: 0.0          # short-term depression off in v1 (see docs/phase2-stability.md)
   std_tau_rec: 0.0
+  # Spike-frequency adaptation (adaptive threshold): needed for continuous
+  # running so that activity settles after input instead of smouldering.
+  # b=0.1 mV per spike, tau 1 s: everything is silent 2 s after input; sugar
+  # reflex 25 Hz (was 69), MBON odor response 6 Hz (was 22), KC 3%, odor-pair
+  # Jaccard 0.02.  Scan: scripts/phase2_sfa_scan.py.
+  sfa_b: 0.1
+  sfa_tau: 1000.0
 wiring:
   neuron_set: "superclass in cb_* + descending + ascending, status Traced (model.CB_SUPERCLASSES)"
   min_synapses_per_edge: 1

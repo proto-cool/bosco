@@ -269,6 +269,33 @@ class Bsky:
             target_did=did,
         )
 
+    def identity_reply(self, out: Outcome, qid: str, uri: str, cid: str, record, did: str, ts: float) -> None:
+        ans = self.agent.identity.answer(qid, out.seed)
+        ok, why = self.agent.caps_allow(ts, "reply", uri, did)
+        if not ok or self.L.asleep():
+            print(f"identity ({qid}) suppressed: {'asleep' if self.L.asleep() else why}")
+            return
+        reply = getattr(record, "reply", None)
+        root = getattr(reply, "root", None)
+        ref = models.AppBskyFeedPost.ReplyRef(
+            parent=models.ComAtprotoRepoStrongRef.Main(uri=uri, cid=cid),
+            root=models.ComAtprotoRepoStrongRef.Main(uri=root.uri if root else uri, cid=root.cid if root else cid),
+        )
+        our_uri = None
+        if not self.dry:
+            our_uri = self.client.send_post(ans.text, reply_to=ref, langs=["en"]).uri
+        print(f"identity ({qid}) {ans.text!r} -> {uri} ({'dry' if self.dry else our_uri})")
+        self.L.add_action(
+            out.episode_id,
+            "identity",
+            our_uri,
+            uri,
+            dry_run=self.dry,
+            ts=ts,
+            root_uri=root.uri if root else uri,
+            target_did=did,
+        )
+
     # ---- one post -> one episode -----------------------------------------------
     def perceive_post(
         self, uri: str, cid: str, did: str, record, ts: float, mentioned: bool, labels: set[str] | None = None
@@ -279,6 +306,10 @@ class Bsky:
         labels = labels or set()
         note = ("labeled:" + ",".join(sorted(labels))) if labels else None
         out = self.agent.run(Features(did, v, mentioned, fam, bool(labels)), ts, uri, kind="event", note=note)
+        # identity reflex: who/what/why/creator is answered regardless of the network (EXPERIMENT.md §2)
+        qid = self.agent.identity.match(text) if mentioned and not labels else None
+        if qid is not None:
+            self.identity_reply(out, qid, uri, cid, record, did, ts)
         if mentioned:
             self.L.bump_inbound(did, _day(ts))
         reply = getattr(record, "reply", None)
@@ -395,19 +426,17 @@ class Bsky:
                     n += 1
         return n
 
-    def spontaneous(self) -> bool:
-        """Every poll: dust accrues; the no-event episode runs with that drive; grooming clears it.
-        Whether he posts is the network's call, not a schedule's."""
+    def spontaneous(self) -> int:
+        """Advance the simulation to now, simulating the gap since the last poll.  Grooms that the
+        network produced on the way are own posts (subject to caps)."""
         ts = time.time()
-        dust = self.agent.dust_accrue(ts)
-        out = self.agent.run(None, ts, None, kind="spontaneous", drive=dust)
-        if out.decision.behaviour == "groom":
-            ok, _ = self.agent.caps_allow(ts, "spontaneous_post")
-            if ok:
-                self.agent.dust_clear()
+
+        def on_groom(out: Outcome) -> None:
             if out.decision.action == "spontaneous_post":
-                self.act(out, None, None, None, None, None, ts)
-        return out.decision.behaviour == "groom"
+                self.act(out, None, None, None, None, None, out.ts)
+
+        outs = self.agent.advance_to(ts, on_groom=on_groom)
+        return len(outs)
 
     def episodes_last_hour(self) -> int:
         return int(
@@ -424,10 +453,12 @@ def run_loop(ledger: Ledger, dry_run: bool, once: bool, interval: int) -> int:
             nb = b.browse()
             nk = b.check_blocks()
             sp = b.spontaneous()
+            lag = time.time() - b.agent.wall(b.agent.live.t_ms)
             ledger.set_cursor("last_poll_ts", repr(time.time()))
+            ledger.set_cursor("brain_lag_s", repr(lag))
             print(
                 f"{dt.datetime.now(dt.UTC).isoformat()} poll: {n} notifications, {nb} browsed, "
-                f"{nk} blocks, spontaneous {sp}"
+                f"{nk} blocks, grooms {sp}, brain lag {lag:.0f}s"
             )
         except Exception as e:  # noqa: BLE001
             print("poll error:", repr(e), file=sys.stderr)

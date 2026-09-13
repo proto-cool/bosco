@@ -114,8 +114,10 @@ class Fly:
 
     # ---- helpers -----------------------------------------------------------
     def mbon_rates(self, res: EpisodeResult, ms: float | None = None) -> dict[str, float]:
-        ms = self.episode_ms if ms is None else ms
+        return self.mbon_rates_from_counts(res.counts, self.episode_ms if ms is None else ms)
+
+    def mbon_rates_from_counts(self, counts: np.ndarray, ms: float) -> dict[str, float]:
         out: dict[str, list[float]] = {}
         for t, i in zip(self.mbon_type, self.mbon, strict=True):
-            out.setdefault(t, []).append(res.counts[i] * 1000.0 / ms)
+            out.setdefault(t, []).append(counts[i] * 1000.0 / ms)
         return {t: float(np.mean(v)) for t, v in out.items()}

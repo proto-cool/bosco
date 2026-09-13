@@ -7,6 +7,7 @@ per_kind:
   follow:           {hour: 6,  day: 40}
   leave:            {hour: 6,  day: 40}     # unfollows
   spontaneous_post: {hour: 1,  day: 12}
+  identity:         {hour: 20, day: 100}   # who/what/why/creator answers
 global:             {hour: 24, day: 240}
 # loop guards
 per_thread_replies_per_hour: 6      # replies from Bosco in one thread (by root uri)

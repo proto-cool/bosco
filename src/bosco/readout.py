@@ -34,8 +34,8 @@ class Decision:
     ratios: dict[str, float]  # gated score / threshold (0 if threshold is None)
     valence: str  # "positive" | "negative" | "neutral"
     arousal: str  # "low" | "mid" | "high"
-    learned: float = 0.0  # learned valence in [-1, 1] relative to the naive twin
-    mbon: dict[str, float] | None = None  # reward/punishment compartment rates, learned vs naive
+    learned: float = 0.0  # learned valence in [-1, 1], read from the plastic weights
+    mbon: dict[str, float] | None = None  # depression on reward/punishment-side synapses of the active KCs
 
 
 class Readout:
@@ -76,44 +76,31 @@ class Readout:
         self.dn_all = brain.index_of_present(pop.descending_neurons()["bodyId"])
 
     def scores(self, res: EpisodeResult, episode_ms: float) -> dict[str, float]:
-        return {k: res.rate(v, episode_ms) for k, v in self.pops.items()}
+        return self.scores_from_counts(res.counts, episode_ms)
 
-    def learned_valence(
-        self, res: EpisodeResult, naive: EpisodeResult | None, episode_ms: float
-    ) -> tuple[float, dict[str, float]]:
-        """Learned valence relative to a naive twin (same stimulus, same seed, baseline weights).
-
-        Reward learning depresses reward-compartment MBONs (whose output drives avoidance);
-        punishment learning depresses punishment-compartment MBONs (whose output drives
-        approach) (Aso et al. 2014).  v = fractional drop of reward MBONs - fractional drop of
-        punishment MBONs, in [-1, 1]."""
-        r = res.rate(self.mbon_reward, episode_ms)
-        p = res.rate(self.mbon_punish, episode_ms)
-        if naive is None:
-            return 0.0, {"reward": r, "punishment": p, "reward_naive": r, "punishment_naive": p}
-        r0 = naive.rate(self.mbon_reward, episode_ms)
-        p0 = naive.rate(self.mbon_punish, episode_ms)
-        dr = (r0 - r) / r0 if r0 > 0 else 0.0
-        dp = (p0 - p) / p0 if p0 > 0 else 0.0
-        v = float(np.clip(dr - dp, -1.0, 1.0))
-        return v, {"reward": r, "punishment": p, "reward_naive": r0, "punishment_naive": p0}
+    def scores_from_counts(self, counts: np.ndarray, ms: float) -> dict[str, float]:
+        return {k: (float(counts[v].mean() * 1000.0 / ms) if len(v) else 0.0) for k, v in self.pops.items()}
 
     def decide(
         self,
-        res: EpisodeResult,
-        episode_ms: float,
-        naive: EpisodeResult | None = None,
+        counts,
+        ms: float,
+        learned: float = 0.0,
+        mb_info: dict[str, float] | None = None,
         arousal_cuts: tuple[float, float] = (1.0, 5.0),
         kappa: float | None = None,
         valence_cut: float | None = None,
     ) -> Decision:
+        """Winner-take-all over gated population rates from a window's spike counts.  `learned`
+        is the mushroom body's verdict on this stimulus, read from the weights
+        (MushroomBody.learned_valence).  Approach populations x (1 + kappa v), avoid x (1 - kappa v)."""
+        if isinstance(counts, EpisodeResult):
+            counts = counts.counts
         kappa = self.kappa if kappa is None else kappa
         valence_cut = self.valence_cut if valence_cut is None else valence_cut
-        """Winner-take-all over gated population rates.  The learned valence v gates the
-        readout: approach populations x (1 + kappa v), avoid x (1 - kappa v).  This is where
-        the mushroom body's verdict about *this* stimulus reaches behaviour."""
-        sc = self.scores(res, episode_ms)
-        v, mb = self.learned_valence(res, naive, episode_ms)
+        sc = self.scores_from_counts(np.asarray(counts), ms)
+        v = float(learned)
+        mb = dict(mb_info or {})
         gated = {}
         for k, x in sc.items():
             g = 1.0 + kappa * v if k in APPROACH else (1.0 - kappa * v if k in AVOID else 1.0)
@@ -125,6 +112,6 @@ class Readout:
         else:
             behaviour, action = "nothing", "nothing"
         valence = "positive" if v > valence_cut else "negative" if v < -valence_cut else "neutral"
-        dn_rate = res.rate(self.dn_all, episode_ms)
+        dn_rate = float(np.asarray(counts)[self.dn_all].mean() * 1000.0 / ms)
         arousal = "low" if dn_rate < arousal_cuts[0] else "high" if dn_rate > arousal_cuts[1] else "mid"
         return Decision(behaviour, action, sc, ratios, valence, arousal, v, mb)

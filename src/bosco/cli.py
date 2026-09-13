@@ -35,7 +35,8 @@ def cmd_poke(a) -> int:
     v = vader_compound(a.text) if a.text else 0.0
     f = Features(a.did, v, bool(a.mention), L.familiarity(a.did))
     src = a.uri or f"poke://{a.did}/{int(ts)}"
-    out = agent.run(f, ts, src, kind="event", note="poke")
+    qid = agent.identity.match(a.text) if a.text else None
+    out = agent.run(f, ts, src, kind="event", note="poke", fast=not a.simulate_gaps)
     L.bump_inbound(a.did, dt.datetime.fromtimestamp(ts, dt.UTC).strftime("%Y-%m-%d"))
     d = out.decision
     print(
@@ -49,25 +50,28 @@ def cmd_poke(a) -> int:
         print(f"text ({out.text_source}): {out.text}")
     elif d.action in ("reply", "spontaneous_post"):
         print("(no phrasebook line and empty corpus; action dropped)")
+    if qid:
+        print(f"identity reflex ({qid}): {agent.identity.answer(qid, out.seed).text}")
     return 0
 
 
 def cmd_spontaneous(a) -> int:
+    """Advance the simulation to --at (simulating the gap), reporting any grooms (own posts)."""
     L = Ledger(a.ledger)
     agent = Agent(L, state_dir=a.state_dir)
     ts = _ts(a.at)
-    dust = agent.dust_accrue(ts) if a.dust is None else a.dust
-    out = agent.run(None, ts, None, kind="spontaneous", drive=dust)
-    if out.decision.behaviour == "groom" and a.dust is None:
-        agent.dust_clear()
-    d = out.decision
-    sc = {k: round(v, 2) for k, v in d.scores.items()}
-    print(f"dust {dust:.2f}")
-    print(
-        f"episode {out.episode_id}  scores {sc}  valence {d.valence}  arousal {d.arousal} -> {d.behaviour} {d.action}"
-    )
-    if out.text:
-        print(f"text ({out.text_source}): {out.text}")
+    if a.dust is not None:
+        agent.dust = a.dust
+    t_before = agent.live.t_ms
+    outs = agent.advance_to(ts, fast=False)
+    print(f"advanced {(agent.live.t_ms - t_before) / 1000:.0f} bio s; dust now {agent.dust:.2f}; grooms: {len(outs)}")
+    for o in outs:
+        d = o.decision
+        print(
+            f"  t+{(o.ts - agent.brain_t0):.0f}s valence {d.valence} arousal {d.arousal} groom {d.scores['groom']:.1f}Hz -> {d.action}"
+        )
+        if o.text:
+            print(f"    text ({o.text_source}): {o.text}")
     return 0
 
 
@@ -84,11 +88,25 @@ def cmd_outcome(a) -> int:
 
 
 def cmd_replay(a) -> int:
+    """Replay from a snapshot to the present (or --until bio ms) and compare digests."""
     L = Ledger(a.ledger)
     agent = Agent(L, state_dir=a.state_dir)
-    ok, scores = agent.replay(a.episode)
-    print("bit-identical:", ok, scores)
+    snaps = sorted(agent.snapshot_dir.glob("*.npz")) if agent.snapshot_dir.exists() else []
+    if not snaps:
+        print("no snapshots yet (one is taken every hour of biological time, or with `bosco snapshot`)")
+        return 1
+    snap = snaps[-1] if a.snapshot is None else agent.snapshot_dir / a.snapshot
+    until = a.until if a.until is not None else agent.live.t_ms
+    ok, logged, got = agent.replay_span(snap, until)
+    print(f"replay {snap.name} -> {until} ms: bit-identical {ok} (logged {logged[:12]}, got {got[:12]})")
     return 0 if ok else 1
+
+
+def cmd_snapshot(a) -> int:
+    L = Ledger(a.ledger)
+    agent = Agent(L, state_dir=a.state_dir)
+    print("snapshot", agent.snapshot())
+    return 0
 
 
 def cmd_status(a) -> int:
@@ -120,6 +138,11 @@ def main(argv=None) -> int:
     p = argparse.ArgumentParser(prog="bosco")
     p.add_argument("--ledger", default=None, help="path to ledger sqlite (default state/ledger.sqlite)")
     p.add_argument("--state-dir", default=None, help="dir for weights + snapshots (default state/)")
+    p.add_argument(
+        "--simulate-gaps",
+        action="store_true",
+        help="simulate idle time between commands (1 bio s ~ 0.5 wall s); default jumps (dev)",
+    )
     sub = p.add_subparsers(dest="cmd", required=True)
     s = sub.add_parser("poke")
     s.add_argument("--did", required=True)
@@ -139,8 +162,11 @@ def main(argv=None) -> int:
     s.add_argument("--at")
     s.set_defaults(fn=cmd_outcome)
     s = sub.add_parser("replay")
-    s.add_argument("--episode", type=int, required=True)
+    s.add_argument("--snapshot", default=None, help="snapshot file name (default: latest)")
+    s.add_argument("--until", type=int, default=None, help="bio ms to replay to (default: now)")
     s.set_defaults(fn=cmd_replay)
+    s = sub.add_parser("snapshot")
+    s.set_defaults(fn=cmd_snapshot)
     s = sub.add_parser("say")
     s.add_argument("--behaviour", default="groom")
     s.add_argument("--valence", default="neutral")
@@ -164,51 +190,16 @@ def main(argv=None) -> int:
     s.add_argument("--at")
 
     def _memory(a):
-        import json as _json
-
         L = Ledger(a.ledger)
         agent = Agent(L, state_dir=a.state_dir)
         ts = _ts(a.at)
-        agent.mb.forget(agent.hours(ts))
-        f = Features(a.did, 0.0, True, L.familiarity(a.did))
-        hour = agent.clock.local_hour(ts)
-        stim = agent.stimulus(f, hour, 1)
-        naive = agent.mb.naive_twin(stim, 1)
-        res = agent.fly.run_episode(stim, 1)
-        d = agent.readout.decide(res, agent.fly.episode_ms, naive)
-        d0 = agent.readout.decide(naive, agent.fly.episode_ms, None)
-        print(f"account {a.did}  familiarity {f.familiarity}  odor {agent.enc.glomeruli_for(a.did)}")
-        print(
-            f"learned valence {d.learned:+.2f} ({d.valence});  MBON reward {d.mbon['reward']:.1f} Hz "
-            f"(naive {d.mbon['reward_naive']:.1f}), punishment {d.mbon['punishment']:.1f} Hz (naive {d.mbon['punishment_naive']:.1f})"
-        )
-        kc = res.counts[agent.fly.kc] > 0
-        pre_active = kc[agent.fly.kc_pos_of_edge]
-        stm = agent.mb.stm[pre_active]
-        ltm = agent.mb.ltm[pre_active]
-        print(
-            f"this odor's KC->MBON synapses: {int(pre_active.sum())}; short-term depression on {int((stm < 0.99).sum())} "
-            f"(mean x{stm.mean():.2f}); long-term on {int((ltm < 0.99).sum())} (mean x{ltm.mean():.2f})"
-        )
-        print(
-            f"if mentioned now, neutral text: {d0.action} (naive) -> {d.action} (learned);  "
-            f"approach drive engage {d0.scores['engage']:.1f} -> {d.ratios['engage'] * (agent.readout.thresholds['engage'] or 0):.1f} Hz gated"
-        )
-        rows = L.db.execute(
-            "SELECT valence, source, COUNT(*) AS n, MIN(ts) AS first, MAX(ts) AS last FROM outcomes WHERE did=? "
-            "GROUP BY valence, source ORDER BY valence, source",
-            (a.did,),
-        ).fetchall()
-        print("why:" if rows else "why: no outcomes recorded for this account")
-        for r in rows:
-            print(
-                f"  {r['valence']:10s} {r['source']:26s} x{r['n']}  {dt.datetime.fromtimestamp(r['first'], dt.UTC):%Y-%m-%d} .. "
-                f"{dt.datetime.fromtimestamp(r['last'], dt.UTC):%Y-%m-%d}"
-            )
+        line, v = agent.memory_report(a.did, ts)
+        print(f"account {a.did}  odor {agent.enc.glomeruli_for(a.did)}")
+        print(line)
         ev = L.db.execute(
             "SELECT action, COUNT(*) FROM episodes WHERE did=? AND kind='event' GROUP BY action", (a.did,)
         ).fetchall()
-        print("history of actions toward them:", _json.dumps(dict(ev)))
+        print("history of actions toward them:", dict(ev))
         return 0
 
     s.set_defaults(fn=_memory)
@@ -220,22 +211,18 @@ def main(argv=None) -> int:
         L = Ledger(a.ledger)
         agent = Agent(L, state_dir=a.state_dir)
         ts = _ts(a.at)
-        agent.mb.forget(agent.hours(ts))
         dids = [r[0] for r in L.db.execute("SELECT DISTINCT did FROM episodes WHERE did IS NOT NULL")]
         rows = []
         for did in dids:
-            f = Features(did, 0.0, True, L.familiarity(did))
-            stim = agent.stimulus(f, agent.clock.local_hour(ts), 1)
-            naive = agent.mb.naive_twin(stim, 1)
-            d = agent.readout.decide(agent.fly.run_episode(stim, 1), agent.fly.episode_ms, naive)
+            _, v = agent.memory_report(did, ts)
             n_out = dict(
                 L.db.execute("SELECT valence, COUNT(*) FROM outcomes WHERE did=? GROUP BY valence", (did,)).fetchall()
             )
-            rows.append((d.learned, did, f.familiarity, d.action, n_out.get("reward", 0), n_out.get("punishment", 0)))
+            rows.append((v, did, L.familiarity(did), n_out.get("reward", 0), n_out.get("punishment", 0)))
         rows.sort(reverse=True)
-        print(f"{'learned':>8s}  {'did':40s} {'fam':>3s}  {'would':8s} {'rew':>3s} {'pun':>3s}")
-        for v, did, fam, act, rw, pu in rows[: a.limit]:
-            print(f"{v:+8.2f}  {did:40s} {fam:3d}  {act:8s} {rw:3d} {pu:3d}")
+        print(f"{'learned':>8s}  {'did':40s} {'fam':>3s} {'rew':>3s} {'pun':>3s}")
+        for v, did, fam, rw, pu in rows[: a.limit]:
+            print(f"{v:+8.2f}  {did:40s} {fam:3d} {rw:3d} {pu:3d}")
         return 0
 
     s.set_defaults(fn=_people)

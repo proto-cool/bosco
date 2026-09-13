@@ -38,6 +38,8 @@ CREATE TABLE IF NOT EXISTS episodes (
   familiarity INTEGER,
   hour REAL,                        -- local hour used for the clock drive
   drive REAL,                       -- internal drive (dust) for spontaneous episodes
+  t_ms INTEGER,                     -- biological time of the window start (ms since brain_t0)
+  brain_digest TEXT,                -- digest of kernel + MB state + dust after the window
   seed INTEGER NOT NULL,
   weight_digest_before TEXT NOT NULL,
   weight_digest_after TEXT NOT NULL,
@@ -145,6 +147,8 @@ class EpisodeRow:
     line_id: str | None = None
     note: str | None = None
     drive: float | None = None
+    t_ms: int | None = None
+    brain_digest: str | None = None
 
 
 class Ledger:
@@ -162,8 +166,9 @@ class Ledger:
             if col not in cols:
                 self.db.execute(f"ALTER TABLE actions ADD COLUMN {col} TEXT")
         ecols = {r["name"] for r in self.db.execute("PRAGMA table_info(episodes)")}
-        if "drive" not in ecols:
-            self.db.execute("ALTER TABLE episodes ADD COLUMN drive REAL")
+        for col, typ in (("drive", "REAL"), ("t_ms", "INTEGER"), ("brain_digest", "TEXT")):
+            if col not in ecols:
+                self.db.execute(f"ALTER TABLE episodes ADD COLUMN {col} {typ}")
         self.db.commit()
 
     # ---- episodes -----------------------------------------------------------
@@ -171,7 +176,8 @@ class Ledger:
         cur = self.db.execute(
             "INSERT INTO episodes (ts, kind, did, source_uri, vader, mentioned, familiarity, hour, seed, "
             "weight_digest_before, weight_digest_after, scores, mbon, kc_active, behaviour, action, valence, arousal, "
-            "line_key, line_id, note, drive) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+            "line_key, line_id, note, drive, t_ms, brain_digest) "
+            "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
             (
                 ts or time.time(),
                 e.kind,
@@ -195,6 +201,8 @@ class Ledger:
                 e.line_id,
                 e.note,
                 e.drive,
+                e.t_ms,
+                e.brain_digest,
             ),
         )
         self.db.commit()

@@ -30,9 +30,10 @@ convenience, "just for testing," or because a result would look better.
   fine; hand-nudging state is not.
 - **Silence is a legal action** and must be a common one. Never add a floor
   on posting to make the account look alive.
-- **Log everything, replay anything.** Every episode records its seed,
-  stimulus features, MBON/DN activity, action, and weight digest. Any episode
-  must replay bit-identical from the log.
+- **Log everything, replay anything.** Every window records its features,
+  activity, decision, and the brain digest after it; he is
+  snapshotted hourly. Any span must replay bit-identical from the snapshot
+  before it plus the log.
 - **Store features and URIs, never post text.** Other people's posts do not
   live in our database, and never enter the generator's corpus.
 - **Rate caps are hard** but by kind (`config/caps_v1.yaml`): they are loop
@@ -99,7 +100,10 @@ Do not download the EM volume. `neuprint-python` against
 - **Short-term depression** on sensory synapses (habituation).
 - **Circadian**: drive the annotated clock neurons with a 24 h rhythm. Do
   not add a posting-time gate; let the network produce the schedule.
-- **Time step** 0.1 ms; episodes simulate ~1 s of biological time.
+- **Time step** 0.1 ms. Bosco runs continuously, one biological second
+  per wall second; idle time is simulated, not skipped (`--simulate-gaps`
+  in the CLI; the loop always simulates). Spike-frequency adaptation keeps
+  activity from smouldering. Nothing is reset.
 
 ## Learning (mushroom body)
 
@@ -114,8 +118,10 @@ Do not download the EM volume. `neuprint-python` against
   second pairing while the first is still fresh, ≥ 1 h later), fades over a
   month. One insult is forgotten by evening; a week of them is not.
 - **Learned valence reaches behaviour through the readout**: the mushroom
-  body's verdict on a stimulus (MBON drop relative to a naive twin) scales
-  approach vs avoid populations before thresholds. `bosco memory --did X`
+  body's verdict on a stimulus, read from the depression on the active KCs'
+  synapses, scales approach vs avoid populations before thresholds.
+- **Identity is a reflex**: who/what/why/creator are answered from
+  `config/identity_v1.yaml` regardless of the network. `bosco memory --did X`
   shows what he has learned about an account and why.
 - **Reward DANs**: unprompted inbound interaction from a known account
   (≥1 prior direct interaction in the ledger). Per-account daily cap.

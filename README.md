@@ -73,11 +73,8 @@ Every number below has a gate report under `docs/`.
    descending neurons at any stable gain in the LIF (scans in
    `scripts/phase3_mbon_out_gain.py`: gains that propagate also smolder and
    move approach the wrong way).  Instead the readout does what summed MBON
-   output does in the fly (Aso et al. 2014): for each stimulus, a naive twin
-   (same stimulus, same seed, baseline weights) is run; v = fractional drop of
-   reward-compartment MBONs − fractional drop of punishment-compartment MBONs;
-   approach populations are scaled by (1 + 2v), avoid by (1 − 2v), before
-   thresholds.  `bosco memory --did X` prints v, the synapses carrying it,
+   output does in the fly (Aso et al. 2014): v (decision 16) scales approach
+   populations by (1 + 2v) and avoid by (1 − 2v) before thresholds.  `bosco memory --did X` prints v, the synapses carrying it,
    and the outcomes that caused it; `bosco people` ranks every account.
 10. **Text**: `src/bosco/textgen.py`, a word trigram with absolute-discount
    backoff over `corpus/` plus phrasebook lines.  The fly supplies the
@@ -91,9 +88,27 @@ Every number below has a gate report under `docs/`.
    on bristle afferents that accrues between polls and is cleared by grooming;
    there is no timer.  Operator commands by mention: `src/bosco/control.py`.
 9. **Determinism**: single thread, fixed accumulation order, no FMA or
-   fast-math, splitmix64 RNG; episodes start from rest; weights are
-   content-addressed snapshots so any ledger row replays bit-identically
-   (`bosco replay --episode N`).
+   fast-math, splitmix64 RNG.  His full state (voltages,
+   conductances, adaptation, delay ring, RNG, plastic weights, debris drive)
+   is snapshotted hourly; any span replays bit-identically from the snapshot
+   before it plus the logged inputs (`bosco replay`).
+14. **Bosco runs continuously** (decided 2026-09-13; `src/bosco/brain.py`).
+   No episodes from rest.  One biological second per wall second, about half
+   a core.  Idle time is simulated in one-second slices with only the
+   background drive (clock neurons, bristle debris); events are presented
+   for one second on top; decisions are read from those windows; pairing
+   depresses the synapses of the KCs that actually fired.
+15. **Spike-frequency adaptation** (adaptive threshold, +0.1 mV per spike,
+   1 s decay) so that activity settles after input instead of smouldering
+   for ever in a continuous run.  Cost: sugar reflex 25 Hz instead of 69,
+   MBON odor responses 6 Hz instead of 22; KC code unchanged
+   (`scripts/phase2_sfa_scan.py`).  Denormal floats are flushed in the
+   kernel; without that, long runs slow down a hundredfold.
+16. **Learned valence is read from the weights**, not from MBON rates: a 1%
+   uniform weight change flips a single-realisation MBON rate from 9 to
+   6 Hz (deterministic chaos), so rates are averaged over seeds in the gates
+   and the behavioural signal is the depression on the active KCs' synapses
+   (reward-side minus punishment-side, Aso 2014 sign).
 
 Not in v1: short-term depression (implemented in the kernel, off), the
 topic→odor map, visual input.
@@ -107,5 +122,7 @@ uv run pytest
 uv run bosco poke --did did:plc:x --text "hello fly" --mention
 uv run bosco spontaneous && uv run bosco say -n 5
 uv run bosco memory --did did:plc:x && uv run bosco people
+uv run bosco spontaneous --at 2026-09-14T12:00   # simulates the gap; reports grooms
+uv run bosco replay                              # from the latest snapshot to now
 BOSCO_HANDLE=... BOSCO_APP_PASSWORD=... uv run bosco run --dry-run
 ```

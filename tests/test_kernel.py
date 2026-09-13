@@ -86,3 +86,27 @@ def test_std_depresses():
     _, ib = b.run_ms(500.0)
     assert (ib == 1).sum() < (ia == 1).sum()
     assert b.x()[0] < 1.0
+
+
+def test_state_roundtrip_continues_bit_identically(tiny_net):
+    net = tiny_net
+    net.set_inputs(np.array([0]), np.array([300.0]))
+    net.reset(seed=5)
+    net.run_ms(50.0)
+    snap = net.get_state()
+    a = net.run_ms(100.0)
+    net.set_state(snap)
+    b = net.run_ms(100.0)
+    assert np.array_equal(a[0], b[0]) and np.array_equal(a[1], b[1])
+
+
+def test_adaptation_reduces_sustained_firing():
+    indptr, indices, w = csr_from_edges(2, [0], [1], [40.0])
+    a = Net(indptr, indices, w, LifParams())
+    b = Net(indptr, indices, w, LifParams(sfa_b=0.5, sfa_tau=500.0))
+    for net in (a, b):
+        net.set_inputs(np.array([0]), np.array([300.0]))
+        net.reset(seed=3)
+    _, ia = a.run_ms(1000.0)
+    _, ib = b.run_ms(1000.0)
+    assert 0 < (ib == 1).sum() < (ia == 1).sum()
