@@ -39,7 +39,8 @@ def cmd_poke(a) -> int:
     L.bump_inbound(a.did, dt.datetime.fromtimestamp(ts, dt.UTC).strftime("%Y-%m-%d"))
     d = out.decision
     print(
-        f"episode {out.episode_id}  seed {out.seed}  hour {agent.clock.local_hour(ts):.2f}  vader {v:+.3f}  mention {bool(a.mention)}"
+        f"episode {out.episode_id}  seed {out.seed}  hour {agent.clock.local_hour(ts):.2f}  "
+        f"vader {v:+.3f}  mention {bool(a.mention)}"
     )
     print("scores Hz:", {k: round(x, 2) for k, x in d.scores.items()})
     print("ratios  :", {k: round(x, 2) for k, x in d.ratios.items()})

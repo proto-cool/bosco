@@ -241,7 +241,8 @@ class Ledger:
         ts: float | None = None,
     ) -> int:
         cur = self.db.execute(
-            "INSERT INTO outcomes (ts, episode_id, valence, source, did, evidence_uri, pairing_episode_id) VALUES (?,?,?,?,?,?,?)",
+            "INSERT INTO outcomes (ts, episode_id, valence, source, did, evidence_uri, pairing_episode_id) "
+            "VALUES (?,?,?,?,?,?,?)",
             (ts or time.time(), episode_id, valence, source, did, evidence_uri, pairing_episode_id),
         )
         self.db.commit()
