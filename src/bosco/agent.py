@@ -9,7 +9,7 @@ from __future__ import annotations
 import datetime as dt
 import math
 import zoneinfo
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 
 import numpy as np
@@ -159,6 +159,10 @@ class Agent:
         res = self.fly.run_episode(stim, seed)
         dec = self.readout.decide(res, self.fly.episode_ms, naive)
         fam = self.ledger.familiarity(did) if did else 0
+        if f is not None and f.labeled and dec.action in ("like", "follow", "reply"):
+            # moderation label: approach is refused at the readout, whatever the network says
+            dec = replace(dec, behaviour="nothing", action="nothing")
+            note = (note + "; " if note else "") + "labeled"
         line = None
         line_key = None
         text = None
@@ -226,7 +230,8 @@ class Agent:
         self.load_weights_digest(r["weight_digest_before"])
         f = None
         if r["did"] is not None:
-            f = Features(r["did"], float(r["vader"]), bool(r["mentioned"]), int(r["familiarity"]))
+            labeled = "labeled" in (r["note"] or "")
+            f = Features(r["did"], float(r["vader"]), bool(r["mentioned"]), int(r["familiarity"]), labeled)
         stim = self.stimulus(f, float(r["hour"]), int(r["seed"]))
         naive = self.mb.naive_twin(stim, int(r["seed"])) if f is not None else None
         res = self.fly.run_episode(stim, int(r["seed"]))
@@ -249,7 +254,8 @@ class Agent:
         r = self.ledger.episode(episode_id)
         if r is None or r["did"] is None:
             return None
-        f = Features(r["did"], float(r["vader"]), bool(r["mentioned"]), int(r["familiarity"]))
+        labeled = "labeled" in (r["note"] or "")
+        f = Features(r["did"], float(r["vader"]), bool(r["mentioned"]), int(r["familiarity"]), labeled)
         stim = self.stimulus(f, float(r["hour"]))
         self.mb.forget(self.hours(ts))
         self._save_weights()

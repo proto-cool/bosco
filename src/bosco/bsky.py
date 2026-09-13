@@ -27,6 +27,7 @@ from atproto import Client, models
 from bosco.agent import Agent, Outcome
 from bosco.encoder import Features, vader_compound
 from bosco.ledger import Ledger
+from bosco.moderation import Moderation
 
 REWARD_DAILY_CAP_PER_ACCOUNT = 2
 CONTROL_WORDS = {"bosco sleep": "sleep", "bosco wake": "wake", "bosco delete": "delete"}
@@ -53,6 +54,7 @@ class Bsky:
         self.browse_budget = int(os.environ.get("BOSCO_BROWSE", "12"))
         self.spontaneous_every = float(os.environ.get("BOSCO_SPONTANEOUS_EVERY", "3600"))
         self.agent = Agent(ledger)
+        self.mod = Moderation()
         self._ignore: set[str] = set()
         self._ignore_ts = 0.0
         self._follows: dict[str, str] | None = None  # did -> follow record uri
@@ -121,6 +123,15 @@ class Bsky:
             self._follows = out
         return self._follows
 
+    def unfollow_if_following(self, did: str) -> None:
+        uri = self.follows().get(did)
+        if uri is None:
+            return
+        if not self.dry:
+            self.client.unfollow(uri)
+        self.follows().pop(did, None)
+        self.L.add_control("ignore_unfollow", self.operator_did, None, did)
+
     # ---- acting ----------------------------------------------------------------
     def act(
         self,
@@ -184,11 +195,15 @@ class Bsky:
         self.L.add_action(out.episode_id, action, our_uri, target_uri, dry_run=self.dry, ts=ts)
 
     # ---- one post -> one episode -----------------------------------------------
-    def perceive_post(self, uri: str, cid: str, did: str, record, ts: float, mentioned: bool) -> Outcome:
+    def perceive_post(
+        self, uri: str, cid: str, did: str, record, ts: float, mentioned: bool, labels: set[str] | None = None
+    ) -> Outcome:
         text = getattr(record, "text", "") or ""
         v = vader_compound(text)
         fam = self.L.familiarity(did)
-        out = self.agent.run(Features(did, v, mentioned, fam), ts, uri, kind="event")
+        labels = labels or set()
+        note = ("labeled:" + ",".join(sorted(labels))) if labels else None
+        out = self.agent.run(Features(did, v, mentioned, fam, bool(labels)), ts, uri, kind="event", note=note)
         if mentioned:
             self.L.bump_inbound(did, _day(ts))
         reply = getattr(record, "reply", None)
@@ -199,7 +214,9 @@ class Bsky:
             ep = self.L.episode_for_uri(parent.uri)
             if ep is not None:
                 self.agent.apply_outcome(ep, "punishment", "vader_negative_reply", did, uri, ts)
-        elif mentioned and fam >= 1 and self.L.rewards_today(did, _day(ts)) < REWARD_DAILY_CAP_PER_ACCOUNT:
+        elif (
+            mentioned and not labels and fam >= 1 and self.L.rewards_today(did, _day(ts)) < REWARD_DAILY_CAP_PER_ACCOUNT
+        ):
             self.agent.apply_outcome(out.episode_id, "reward", "known_account_inbound", did, uri, ts)
             self.L.bump_reward(did, _day(ts))
         self.act(out, did, uri, cid, root.uri if root else None, root.cid if root else None, ts)
@@ -218,14 +235,16 @@ class Bsky:
                 continue
             if did in ignore:
                 self.L.add_control("ignored", did, uri, None, ts=ts)
+                self.unfollow_if_following(did)
                 continue
+            labels = self.mod.aversive_labels_on(n, n.author)
             if n.reason in ("mention", "reply", "quote"):
-                self.perceive_post(uri, n.cid, did, n.record, ts, mentioned=True)
+                self.perceive_post(uri, n.cid, did, n.record, ts, mentioned=True, labels=labels)
                 n_ep += 1
             elif n.reason in ("like", "follow", "repost"):
                 day = _day(ts)
                 fam = self.L.familiarity(did)
-                if fam >= 1 and self.L.rewards_today(did, day) < REWARD_DAILY_CAP_PER_ACCOUNT:
+                if not labels and fam >= 1 and self.L.rewards_today(did, day) < REWARD_DAILY_CAP_PER_ACCOUNT:
                     last = self.L.db.execute(
                         "SELECT id FROM episodes WHERE did=? AND kind='event' ORDER BY id DESC LIMIT 1", (did,)
                     ).fetchone()
@@ -261,7 +280,8 @@ class Bsky:
             did = post.author.did
             if did == self.me or did in ignore or self.L.seen_source(post.uri):
                 continue
-            self.perceive_post(post.uri, post.cid, did, post.record, time.time(), mentioned=False)
+            labels = self.mod.aversive_labels_on(post, post.author)
+            self.perceive_post(post.uri, post.cid, did, post.record, time.time(), mentioned=False, labels=labels)
             n_ep += 1
         return n_ep
 

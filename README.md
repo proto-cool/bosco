@@ -82,6 +82,9 @@ Every number below has a gate report under `docs/`.
 10. **Text**: `src/bosco/textgen.py`, a word trigram with absolute-discount
    backoff over `corpus/` plus phrasebook lines.  The fly supplies the
    corpus subset (tags), temperature (arousal) and seed.  Not an LLM.
+13. **Moderation**: labels from the account's subscribed moderation services
+   are innate bitter and block approach (`config/moderation_v1.yaml`,
+   `src/bosco/moderation.py`). The generator's vocabulary is closed.
 11. **Scope**: Bosco reads his timeline and the discover feed; each unseen
    post is a stimulus; he may like, follow, unfollow, reply, and post, within
    1 action/hour and 24/day.

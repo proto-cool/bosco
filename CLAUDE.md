@@ -42,6 +42,10 @@ convenience, "just for testing," or because a result would look better.
   stimulus; everything he does is an episode in the ledger.
 - **Operator override** from `@proto.cool` (EXPERIMENT.md §2a): sleep, wake,
   delete, ignore list. Rails on the account, never hands on the weights.
+- **Moderation labels are bitter** (EXPERIMENT.md §2b): labeled posts and
+  accounts are never approached and never reward. The vocabulary is closed
+  (`corpus/`), so words cannot drift; associations can, and labels plus the
+  ignore list plus `bosco people` are the guard.
 
 ## Architecture
 
@@ -144,8 +148,8 @@ Do not download the EM volume. `neuprint-python` against
 `(behavior, valence, arousal, familiarity)`. Flat declarative fly register.
 Frozen and published at tag. Claude does not write phrasebook lines.
 
-`corpus/*.txt` is the generator's training text (Nick's; the seed paragraph
-was workshopped with Claude). `textgen.py` is a word trigram with
+`corpus/*.txt` is the generator's training text. Register: a fly's world,
+a person's wants, flat declaratives, no jokes (`docs/corpus-audit.md`). `textgen.py` is a word trigram with
 absolute-discount backoff: the fly picks the corpus subset (tags), the
 temperature (arousal) and the seed; the corpus never contains other
 people's posts. Utterance policy: when a phrasebook line exists for the key

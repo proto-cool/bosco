@@ -14,4 +14,8 @@ Rules:
 - Phrasebook lines (`phrasebook.yaml`) are added to the pool automatically.
 
 Provenance: `000-seed.txt` was drafted by Nick and workshopped with Claude
-on 2026-09-13.  Everything else is Nick's unless a file says otherwise.
+on 2026-09-13.  The minimal "human thoughts" set (`010`–`080`) was written
+by Claude at Nick's request on 2026-09-13 as a starting register: short,
+first-person, everyday, no names, no brands, no claims about the world.
+Files are tagged so the fly's state (valence, arousal, behaviour) chooses
+the register.  Replace or extend freely; the digest changes with the files.

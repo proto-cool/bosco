@@ -58,6 +58,26 @@ phrasebook lines; every word he can emit is in those files. The exposure
 these controls address is who he engages, what he likes, and which corpus
 fragments land next to which post.
 
+## 2b. Moderation (binding)
+
+Bosco cannot say a word that is not in `corpus/` or `phrasebook.yaml`, and
+nothing he reads ever enters either. What can go wrong is who he approaches
+and where his words land. Three rails, all inside the rules:
+
+- **Labels are bitter.** A post or account carrying a label from the
+  moderation services the account subscribes to (list in
+  `config/moderation_v1.yaml`) drives the bitter channel at full rate, is
+  never liked, followed, or replied to, and never yields a reward. Leaving
+  is still allowed. Logged as `labeled:<label>`.
+- **The ignore list unfollows.** An account added to `bosco-ignore` is
+  unfollowed at the next poll and never enters the stimulus stream again.
+- **The memory is auditable.** `bosco people` ranks every account by
+  learned valence with the outcomes that produced it. If he is learning to
+  like the wrong people, that is visible before it is behaviour.
+
+Labeler subscriptions on the account are an operator setting and are
+published with the frozen artifacts.
+
 ## 3. Frozen artifacts (fill at tag)
 
 | Artifact | Location | Hash |

@@ -1,0 +1,30 @@
+# Bosco's own moderation (EXPERIMENT.md §2b).  Not a classifier: these are
+# labels applied by the moderation services the account subscribes to
+# (Bluesky's default moderation service plus any labeler @proto.cool adds
+# to the account's preferences).  A post or author carrying any of these
+# labels is *aversive*:
+#   - the stimulus gets the bitter channel at full rate (innate aversion),
+#   - approach actions (like, follow, reply) are refused; leave is allowed,
+#   - the account never yields a reward outcome,
+#   - the event is logged with note 'labeled:<label>'.
+aversive_labels:
+  - "!hide"
+  - "!warn"
+  - intolerant
+  - intolerance
+  - threat
+  - harassment
+  - rude
+  - spam
+  - impersonation
+  - scam
+  - porn
+  - sexual
+  - nudity
+  - graphic-media
+  - gore
+  - self-harm
+# Any label at all from the account's own subscribed labelers counts as
+# aversive when this is true (broadest setting).  When false, only the list
+# above counts.
+any_label_is_aversive: false

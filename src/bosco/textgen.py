@@ -25,6 +25,42 @@ TOKEN_RE = re.compile(r"[A-Za-z0-9'’\-]+|[.,!?;:]")
 END_PUNCT = {".", "!", "?"}
 MAX_CHARS = 280
 MAX_SENT_TOKENS = 22
+MIN_SENT_TOKENS = 3
+# a sentence may not end on one of these (function words, dangling pronouns)
+NO_END = {
+    "the",
+    "a",
+    "an",
+    "and",
+    "or",
+    "of",
+    "to",
+    "in",
+    "on",
+    "at",
+    "is",
+    "are",
+    "am",
+    "has",
+    "have",
+    "i",
+    "my",
+    "your",
+    "it",
+    "what",
+    "who",
+    "where",
+    "can",
+    "do",
+    "does",
+    "not",
+    "with",
+    "from",
+    "for",
+    "so",
+    "then",
+    "but",
+}
 ALLOWED_MENTIONS = {"@proto.cool"}
 
 
@@ -78,7 +114,7 @@ class NGram:
         self.c1: dict[str, int] = defaultdict(int)
         self.surface: dict[str, dict[str, int]] = defaultdict(lambda: defaultdict(int))
         for s in sents:
-            for t in s:
+            for t in s[1:]:  # sentence-initial capitals do not count
                 self.surface[t.lower()][t] += 1
             toks = [BOS, BOS] + [t.lower() for t in s] + [EOS]
             for i in range(2, len(toks)):
@@ -196,8 +232,18 @@ class Generator:
         a, b = BOS, BOS
         n_done = 0
         sent_len = 0
+        used: set[tuple[str, str, str]] = set()  # no trigram twice in one utterance (loop guard)
         for _ in range(120):
             cands = m.candidates(a, b)
+            content = sum(1 for t in out[len(out) - sent_len :] if t not in END_PUNCT and t not in {",", ";", ":"})
+            dangling = bool(out) and out[-1].lower() in NO_END
+            if (content < MIN_SENT_TOKENS or dangling) and sent_len < MAX_SENT_TOKENS:
+                filtered = [c for c in cands if c != EOS and c not in END_PUNCT]
+                if filtered:
+                    cands = filtered
+            fresh = [c for c in cands if (a, b, c) not in used or c == EOS]
+            if fresh:
+                cands = fresh
             ws = [m.p_tri(a, b, w) ** (1.0 / temp) for w in cands]
             tot = sum(ws)
             if tot <= 0:
@@ -224,8 +270,14 @@ class Generator:
             if "http" in w or "://" in w:
                 continue
             out.append(m.surface_form(w))
+            used.add((a, b, w))
             sent_len += 1
             a, b = b, w
+        # drop a trailing dangling fragment left by the token cap
+        while out and out[-1] in END_PUNCT:
+            out.pop()
+        while out and out[-1].lower() in NO_END:
+            out.pop()
         text = detokenize(out).strip()
         if not text:
             return None

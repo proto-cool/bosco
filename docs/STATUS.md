@@ -8,16 +8,18 @@
 | 3 Plasticity | learn / forget | PASS; two timescales (STM hours, LTM spaced, a month) | `phase3-plasticity-gate.md` |
 | 3b Learning → behaviour | spaced rewards change action | PASS (follow after 3 rewards; ignore after 3 punishments; persists 10 days) | `scripts/phase3_mbon_out_gain.py`, README §12 |
 | 4 Encoder + readout | unit tests | done (22 tests) | `encoder.md`, `config/readout_populations.yaml` |
-| 4b Generator | tests | done; corpus has one seed document | `src/bosco/textgen.py`, `corpus/` |
+| 4b Generator | tests | done; minimal fly-world corpus (~1600 words, tagged) | `src/bosco/textgen.py`, `corpus/`, `docs/corpus-audit.md` |
+| 4c Moderation | tests | labels → bitter, no approach, no reward; ignore → unfollow | `config/moderation_v1.yaml`, `src/bosco/moderation.py` |
 | 5 Bluesky loop | dry-run, snapshots, nightly | code done, **not yet run against a live account** | `src/bosco/bsky.py`, `ops/` |
 | 6 Calibration + tag | thresholds from dev activity | provisional synthetic thresholds written; re-run on real dev activity before tag | `scripts/calibrate_thresholds.py` |
 | 7 dunce + monthly note | | tools ready | `scripts/make_dunce.py`, `scripts/replay_controls.py`, `scripts/monthly_report.py` |
 
 ## What only Nick can do
 
-1. **Corpus and phrasebook.** `corpus/000-seed.txt` is the only training
-   text; the generator is word salad until there is more.  Drop plain-text
-   files into `corpus/` (see its README).  `phrasebook.yaml` has zero lines.
+1. **Corpus and phrasebook.** `corpus/` holds a minimal fly-world corpus in
+   the curious register; extend it under the rules in `docs/corpus-audit.md`.
+   `phrasebook.yaml` has zero lines.  Decide whether the generator may ever
+   learn words from the network (it cannot today; see README §10).
 2. **Account.** Create `bosco.proto.cool`, an app password, the bot
    self-label, "in development" in the bio, and a list named `bosco-ignore`
    on `@proto.cool`.  Fill `ops/env.example` → `.env`.

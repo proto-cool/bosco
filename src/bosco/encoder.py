@@ -27,6 +27,8 @@ class Features:
     mentioned: bool
     # informational only (phrasebook key), not fed to the network:
     familiarity: int = 0
+    # moderation label present (config/moderation_v1.yaml): bitter at full rate, no approach
+    labeled: bool = False
 
 
 class Encoder:
@@ -86,7 +88,7 @@ class Encoder:
 
     def encode(self, f: Features) -> Stimulus:
         drives = [self.odor_drive(f.did)]
-        g = self.gustatory_drive(f.vader)
+        g = self.gustatory_drive(-1.0) if f.labeled else self.gustatory_drive(f.vader)
         if g is not None:
             drives.append(g)
         if f.mentioned:
