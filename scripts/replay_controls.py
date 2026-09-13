@@ -34,7 +34,9 @@ def main(argv=None) -> int:
     src = Ledger(a.ledger)
     rows = src.episodes()
     events = [r for r in rows if r["kind"] == "event"]
-    print(f"{len(events)} event episodes, {sum(1 for r in rows if r['kind'] == 'pairing')} pairings")
+    print(
+        f"{len(events)} event episodes, {sum(1 for r in rows if r['kind'] == 'pairing')} pairings"
+    )
     if a.control == "random":
         rng = np.random.default_rng(a.seed)
         acts = [ACTIONS[i] for i in rng.integers(0, len(ACTIONS), len(events))]
@@ -58,9 +60,22 @@ def main(argv=None) -> int:
         elif r["kind"] == "pairing" and a.control != "frozen_mb":
             o = next((o for o in outcomes.values() if o["pairing_episode_id"] == r["id"]), None)
             if o and o["episode_id"] in idmap:
-                agent.apply_outcome(idmap[o["episode_id"]], o["valence"], o["source"], o["did"], o["evidence_uri"], r["ts"])
-    print(f"{a.control} agreement with logged actions: {np.mean(agreements):.3f} over {len(agreements)}")
-    print(json.dumps({"control": a.control, "n": len(agreements), "agreement": float(np.mean(agreements))}))
+                agent.apply_outcome(
+                    idmap[o["episode_id"]],
+                    o["valence"],
+                    o["source"],
+                    o["did"],
+                    o["evidence_uri"],
+                    r["ts"],
+                )
+    print(
+        f"{a.control} agreement with logged actions: {np.mean(agreements):.3f} over {len(agreements)}"
+    )
+    print(
+        json.dumps(
+            {"control": a.control, "n": len(agreements), "agreement": float(np.mean(agreements))}
+        )
+    )
     return 0
 
 

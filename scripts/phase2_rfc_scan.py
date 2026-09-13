@@ -6,7 +6,7 @@ import sys
 
 import numpy as np
 
-from bosco import data, populations as pop
+from bosco import populations as pop
 from bosco.kernel import LifParams, Net
 from bosco.model import load_or_build
 from scripts.phase2_loops import battery
@@ -23,12 +23,29 @@ def main() -> int:
     bitter = b.index_of_present(pop.grns("bitter"))
     mn9 = b.index_of_present(pop.bodies_of_types(["MN9"]))
     rng = np.random.default_rng(3)
-    odors = [b.index_of_present(orn.loc[orn["glomerulus"].isin(rng.choice(gloms, 5, replace=False)), "bodyId"]) for _ in range(4)]
+    odors = [
+        b.index_of_present(
+            orn.loc[orn["glomerulus"].isin(rng.choice(gloms, 5, replace=False)), "bodyId"]
+        )
+        for _ in range(4)
+    ]
     cnt = b.count.astype(float) * b.sign
     for spec in sys.argv[1:]:
         w_syn, rfc = (float(x) for x in spec.split(","))
         p = LifParams(w_syn=w_syn, t_rfc=rfc)
-        battery(Net(b.indptr, b.indices, cnt * w_syn, p), p, b, f"w{w_syn:.2f} rfc{rfc:.0f}ms", sugar, bitter, mn9, orn_i, odors, kc, mbon)
+        battery(
+            Net(b.indptr, b.indices, cnt * w_syn, p),
+            p,
+            b,
+            f"w{w_syn:.2f} rfc{rfc:.0f}ms",
+            sugar,
+            bitter,
+            mn9,
+            orn_i,
+            odors,
+            kc,
+            mbon,
+        )
     return 0
 
 

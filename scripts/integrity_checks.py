@@ -27,7 +27,9 @@ from bosco.ledger import Ledger
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--ledger", required=True)
-    ap.add_argument("--state-dir", default=str(paths.STATE), help="dir holding weights/<digest>.npy snapshots")
+    ap.add_argument(
+        "--state-dir", default=str(paths.STATE), help="dir holding weights/<digest>.npy snapshots"
+    )
     ap.add_argument("--replay-sample", type=int, default=5)
     a = ap.parse_args(argv)
     L = Ledger(a.ledger)
@@ -40,7 +42,14 @@ def main(argv=None) -> int:
 
     # 1. replay determinism
     rng = np.random.default_rng(0)
-    sample = [events[i] for i in rng.choice(len(events), min(a.replay_sample, len(events)), replace=False)] if events else []
+    sample = (
+        [
+            events[i]
+            for i in rng.choice(len(events), min(a.replay_sample, len(events)), replace=False)
+        ]
+        if events
+        else []
+    )
     fails = []
     for r in sample:
         try:
@@ -52,7 +61,9 @@ def main(argv=None) -> int:
         if not ok:
             fails.append((r["id"], "scores differ"))
     ok1 = not fails
-    out.append(f"- replay determinism ({len(sample)} sampled): {'PASS' if ok1 else 'FAIL ' + str(fails)}")
+    out.append(
+        f"- replay determinism ({len(sample)} sampled): {'PASS' if ok1 else 'FAIL ' + str(fails)}"
+    )
 
     # 2. KC sparseness
     th = json.load(open(paths.CONFIG / "thresholds.json"))
@@ -61,8 +72,10 @@ def main(argv=None) -> int:
     frac = np.array([r["kc_active"] / n_kc for r in events]) if events else np.array([])
     bad = int(((frac < lo) | (frac > hi)).sum()) if len(frac) else 0
     ok2 = bad == 0
-    out.append(f"- KC sparseness in [{lo}, {hi}] for all {len(frac)} event episodes: {'PASS' if ok2 else f'FAIL ({bad} outside)'}"
-               + (f"; median {np.median(frac):.3f}" if len(frac) else ""))
+    out.append(
+        f"- KC sparseness in [{lo}, {hi}] for all {len(frac)} event episodes: {'PASS' if ok2 else f'FAIL ({bad} outside)'}"
+        + (f"; median {np.median(frac):.3f}" if len(frac) else "")
+    )
 
     # 3. rate caps
     acts = [r for r in L.actions_since(0.0, real_only=True)]
@@ -70,7 +83,9 @@ def main(argv=None) -> int:
     viol_h = sum(1 for i in range(1, len(ts)) if ts[i] - ts[i - 1] < 3600.0)
     viol_d = sum(1 for i in range(24, len(ts)) if ts[i] - ts[i - 24] < 86400.0)
     ok3 = viol_h == 0 and viol_d == 0
-    out.append(f"- rate caps over {len(ts)} real actions: {'PASS' if ok3 else f'FAIL (hourly {viol_h}, daily {viol_d})'}")
+    out.append(
+        f"- rate caps over {len(ts)} real actions: {'PASS' if ok3 else f'FAIL (hourly {viol_h}, daily {viol_d})'}"
+    )
 
     # 4. no text
     bad_text = L.assert_no_text()
@@ -94,7 +109,9 @@ def main(argv=None) -> int:
                     chain_bad.append(r["id"])
             prev = r
     ok5 = not chain_bad
-    out.append(f"- weight digest chain ({len(rows)} rows): {'PASS' if ok5 else 'FAIL at episodes ' + str(chain_bad[:10])}")
+    out.append(
+        f"- weight digest chain ({len(rows)} rows): {'PASS' if ok5 else 'FAIL at episodes ' + str(chain_bad[:10])}"
+    )
 
     ok_all = ok1 and ok2 and ok3 and ok4 and ok5
     out.append(f"\n**ALL: {'PASS' if ok_all else 'FAIL'}**")

@@ -11,7 +11,8 @@ import time
 
 import numpy as np
 
-from bosco import paths, populations as pop
+from bosco import paths
+from bosco import populations as pop
 from bosco.kernel import LifParams
 from bosco.model import load_or_build
 
@@ -24,7 +25,9 @@ def main() -> int:
     orn = pop.orns()
     gloms = sorted(orn["glomerulus"].unique())
     apl = b.index_of_present(pop.apl())
-    print(f"model n={b.n} nnz={b.nnz}; KCs in model {len(kc)}; APL {len(apl)}; glomeruli {len(gloms)}")
+    print(
+        f"model n={b.n} nnz={b.nnz}; KCs in model {len(kc)}; APL {len(apl)}; glomeruli {len(gloms)}"
+    )
     rng = np.random.default_rng(0)
     rows = []
     for k in (1, 3, 5, 10):
@@ -42,22 +45,30 @@ def main() -> int:
                 frac = float((c[kc] > 0).mean())
                 apl_rate = float(c[apl].mean()) if len(apl) else float("nan")
                 fracs.append(frac)
-                rows.append((k, rate, rep, len(stim), frac, apl_rate, int(c.sum()), time.time() - t0))
-            print(f"k={k:2d} rate={rate:5.0f}Hz  KC active frac {np.mean(fracs):.3f} (reps {np.round(fracs, 3).tolist()})")
+                rows.append(
+                    (k, rate, rep, len(stim), frac, apl_rate, int(c.sum()), time.time() - t0)
+                )
+            print(
+                f"k={k:2d} rate={rate:5.0f}Hz  KC active frac {np.mean(fracs):.3f} (reps {np.round(fracs, 3).tolist()})"
+            )
     # baseline: no input
     net.clear_inputs()
     net.reset(seed=7)
     net.run_ms(1000.0)
     c = net.spike_counts()
     print(f"no input: total spikes {int(c.sum())}, KC active frac {(c[kc] > 0).mean():.4f}")
-    lines = ["# Phase 2: KC sparseness (pruned MaleCNS, central brain)\n",
-             f"- model n={b.n}, nnz={b.nnz}, digest {b.digest()}",
-             f"- KCs {len(kc)}, APL {len(apl)}, ORN glomeruli {len(gloms)}",
-             f"- no-input baseline: {int(c.sum())} spikes/s network-wide, KC active frac {(c[kc] > 0).mean():.4f}\n",
-             "| k gloms | ORN rate Hz | rep | ORNs driven | KC active frac | APL Hz | total spikes | wall s |",
-             "|---|---|---|---|---|---|---|---|"]
+    lines = [
+        "# Phase 2: KC sparseness (pruned MaleCNS, central brain)\n",
+        f"- model n={b.n}, nnz={b.nnz}, digest {b.digest()}",
+        f"- KCs {len(kc)}, APL {len(apl)}, ORN glomeruli {len(gloms)}",
+        f"- no-input baseline: {int(c.sum())} spikes/s network-wide, KC active frac {(c[kc] > 0).mean():.4f}\n",
+        "| k gloms | ORN rate Hz | rep | ORNs driven | KC active frac | APL Hz | total spikes | wall s |",
+        "|---|---|---|---|---|---|---|---|",
+    ]
     for r in rows:
-        lines.append(f"| {r[0]} | {r[1]:.0f} | {r[2]} | {r[3]} | {r[4]:.3f} | {r[5]:.1f} | {r[6]} | {r[7]:.1f} |")
+        lines.append(
+            f"| {r[0]} | {r[1]:.0f} | {r[2]} | {r[3]} | {r[4]:.3f} | {r[5]:.1f} | {r[6]} | {r[7]:.1f} |"
+        )
     (paths.DOCS / "phase2-kc-sparseness.md").write_text("\n".join(lines) + "\n")
     return 0
 

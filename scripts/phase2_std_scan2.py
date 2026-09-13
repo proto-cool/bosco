@@ -7,7 +7,8 @@ import sys
 
 import numpy as np
 
-from bosco import data, populations as pop
+from bosco import data
+from bosco import populations as pop
 from bosco.kernel import LifParams, Net
 from bosco.model import load_or_build
 
@@ -24,7 +25,12 @@ def main() -> int:
     bitter = b.index_of_present(pop.grns("bitter"))
     mn9 = b.index_of_present(pop.bodies_of_types(["MN9"]))
     rng = np.random.default_rng(3)
-    odors = [b.index_of_present(orn.loc[orn["glomerulus"].isin(rng.choice(gloms, 5, replace=False)), "bodyId"]) for _ in range(4)]
+    odors = [
+        b.index_of_present(
+            orn.loc[orn["glomerulus"].isin(rng.choice(gloms, 5, replace=False)), "bodyId"]
+        )
+        for _ in range(4)
+    ]
     cnt = b.count.astype(float) * b.sign
     print(f"n={b.n}; sensory presyn {sensory.sum()}; sugar {len(sugar)} bitter {len(bitter)}")
     for spec in sys.argv[1:]:
@@ -64,11 +70,23 @@ def main() -> int:
             net.run_ms(200.0)
             c3 = net.spike_counts() - c2
             s = set(np.nonzero(c1[kc] > 0)[0])
-            sets.append(s); fr.append(len(s) / len(kc)); post.append(int(c3.sum())); mb.append(c1[mbon].mean() / 0.3)
+            sets.append(s)
+            fr.append(len(s) / len(kc))
+            post.append(int(c3.sum()))
+            mb.append(c1[mbon].mean() / 0.3)
             act.append(int((c1 > 0).sum()))
-        jac = np.mean([len(sets[i] & sets[j]) / max(1, len(sets[i] | sets[j])) for i in range(4) for j in range(i + 1, 4)])
-        print(f"w {w_syn:.2f} u {u:.2f} tau {tau:4.0f} {scope:10s} | sugar act {int((c_all > 0).sum()):5d} MN9 on {mn9_on:4.0f} all {mn9_all:4.0f} bitter {mn9_bit:3.0f} | "
-              f"odor act {int(np.mean(act)):5d} KC {np.mean(fr):.3f} jacc {jac:.2f} MBON {np.mean(mb):5.1f} post {int(np.mean(post)):6d}", flush=True)
+        jac = np.mean(
+            [
+                len(sets[i] & sets[j]) / max(1, len(sets[i] | sets[j]))
+                for i in range(4)
+                for j in range(i + 1, 4)
+            ]
+        )
+        print(
+            f"w {w_syn:.2f} u {u:.2f} tau {tau:4.0f} {scope:10s} | sugar act {int((c_all > 0).sum()):5d} MN9 on {mn9_on:4.0f} all {mn9_all:4.0f} bitter {mn9_bit:3.0f} | "
+            f"odor act {int(np.mean(act)):5d} KC {np.mean(fr):.3f} jacc {jac:.2f} MBON {np.mean(mb):5.1f} post {int(np.mean(post)):6d}",
+            flush=True,
+        )
     return 0
 
 

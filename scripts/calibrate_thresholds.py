@@ -42,7 +42,9 @@ def main(argv=None) -> int:
     for p in pops:
         v = np.array([s[p] for s in scores])
         th[p] = float(max(a.min_hz, np.quantile(v, a.q)))
-        print(f"{p:7s} rate quantiles 50/85/95/99: {np.quantile(v, [0.5, 0.85, 0.95, 0.99]).round(2).tolist()} -> threshold {th[p]:.2f}")
+        print(
+            f"{p:7s} rate quantiles 50/85/95/99: {np.quantile(v, [0.5, 0.85, 0.95, 0.99]).round(2).tolist()} -> threshold {th[p]:.2f}"
+        )
     kc = np.array([r["kc_active"] for r in rows]) / 4064.0
     lo, hi = np.quantile(kc, [0.025, 0.975])
     kc_range = [float(max(0.0, lo * 0.5)), float(hi * 1.5)]
@@ -54,7 +56,12 @@ def main(argv=None) -> int:
         cfg = json.load(open(paths.CONFIG / "thresholds.json"))
         cfg.update(th)
         cfg["kc_range"] = kc_range
-        cfg["_calibration"] = {"q": a.q, "min_hz": a.min_hz, "n_episodes": len(rows), "ledger": a.ledger}
+        cfg["_calibration"] = {
+            "q": a.q,
+            "min_hz": a.min_hz,
+            "n_episodes": len(rows),
+            "ledger": a.ledger,
+        }
         json.dump(cfg, open(paths.CONFIG / "thresholds.json", "w"), indent=1)
         print("wrote config/thresholds.json")
     return 0

@@ -10,7 +10,8 @@ import sys
 import numpy as np
 import pandas as pd
 
-from bosco import data, paths, populations as pop
+from bosco import data, paths
+from bosco import populations as pop
 from bosco.model import CB_SUPERCLASSES
 
 
@@ -36,27 +37,37 @@ def main() -> int:
     P(f"- total annotated bodies: {len(a)}")
     P(f"- status counts: {a['status'].value_counts(dropna=False).to_dict()}")
     cb = a[a["superclass"].isin(CB_SUPERCLASSES) & (a["status"] == "Traced")]
-    P(f"- **central-brain model set** (superclass in cb_* + descending + ascending, status Traced): {len(cb)}")
+    P(
+        f"- **central-brain model set** (superclass in cb_* + descending + ascending, status Traced): {len(cb)}"
+    )
     P(f"  - by superclass: {cb['superclass'].value_counts().to_dict()}")
     nt = data.neurotransmitters()
     cb_nt = nt.reindex(cb.index)
     has_cons = cb_nt["consensus_nt"].notna().sum()
     has_pred = cb_nt["predicted_nt"].notna().sum()
-    P(f"- NT coverage in model set: consensus_nt {has_cons}/{len(cb)}, predicted_nt {has_pred}/{len(cb)}, "
-      f"neither {(len(cb) - cb_nt['predicted_nt'].notna().sum())} (default excitatory)")
+    P(
+        f"- NT coverage in model set: consensus_nt {has_cons}/{len(cb)}, predicted_nt {has_pred}/{len(cb)}, "
+        f"neither {(len(cb) - cb_nt['predicted_nt'].notna().sum())} (default excitatory)"
+    )
     P(f"  - consensus_nt mix: {cb_nt['consensus_nt'].value_counts(dropna=False).to_dict()}\n")
 
     # --- MB
     P("## Mushroom body\n")
     lobes = pop.kc_by_lobe()
-    P(f"- Kenyon cells (class Kenyon_Cell): {len(pop.kenyon_cells())}; by lobe: "
-      f"{ {k: len(v) for k, v in lobes.items()} }")
+    P(
+        f"- Kenyon cells (class Kenyon_Cell): {len(pop.kenyon_cells())}; by lobe: "
+        f"{ {k: len(v) for k, v in lobes.items()} }"
+    )
     kc_types = a.loc[pop.kenyon_cells(), "type"].value_counts().to_dict()
     P(f"  - KC types: {kc_types}")
     m = pop.mbons()
-    P(f"- MBONs: {len(m)} bodies, {m['type'].nunique()} types; per type: {m['type'].value_counts().sort_index().to_dict()}")
+    P(
+        f"- MBONs: {len(m)} bodies, {m['type'].nunique()} types; per type: {m['type'].value_counts().sort_index().to_dict()}"
+    )
     d = pop.dans()
-    P(f"- DANs (class DAN): {len(d)} bodies, {d['type'].nunique()} types; per type: {d['type'].value_counts().sort_index().to_dict()}")
+    P(
+        f"- DANs (class DAN): {len(d)} bodies, {d['type'].nunique()} types; per type: {d['type'].value_counts().sort_index().to_dict()}"
+    )
     P(f"- APL: {len(pop.apl())}; DPM: {len(pop.dpm())}\n")
 
     # DAN -> MBON direct targets, as a data-driven check of compartment identity
@@ -72,14 +83,23 @@ def main() -> int:
     rows = []
     for t, sub in g.groupby("dan_type"):
         sub = sub.sort_values("weight", ascending=False).head(4)
-        rows.append({"dan_type": t, "top_mbon_targets": ", ".join(f"{r.mbon_type}({int(r.weight)})" for r in sub.itertuples())})
+        rows.append(
+            {
+                "dan_type": t,
+                "top_mbon_targets": ", ".join(
+                    f"{r.mbon_type}({int(r.weight)})" for r in sub.itertuples()
+                ),
+            }
+        )
     P(md_table(pd.DataFrame(rows)))
     P("")
 
     # KC -> MBON synapse counts
     kc_ids = set(pop.kenyon_cells())
     km = w[w["body_pre"].isin(kc_ids) & w["body_post"].isin(mbon_ids)]
-    P(f"- KC->MBON edges: {len(km)} (synapses {int(km['weight'].sum())}); these are the plastic synapses.")
+    P(
+        f"- KC->MBON edges: {len(km)} (synapses {int(km['weight'].sum())}); these are the plastic synapses."
+    )
     ka = w[w["body_pre"].isin(kc_ids) & w["body_post"].isin(set(pop.apl()))]
     ak = w[w["body_pre"].isin(set(pop.apl())) & w["body_post"].isin(kc_ids)]
     P(f"- KC->APL edges: {len(ka)}; APL->KC edges: {len(ak)} (sparseness control loop present)\n")
@@ -87,29 +107,67 @@ def main() -> int:
     # --- sensory
     P("## Sensory inputs\n")
     o = pop.orns()
-    P(f"- ORNs: {len(o)} bodies over {o['glomerulus'].nunique()} glomeruli; sides {o['somaSide'].value_counts(dropna=False).to_dict()}")
+    P(
+        f"- ORNs: {len(o)} bodies over {o['glomerulus'].nunique()} glomeruli; sides {o['somaSide'].value_counts(dropna=False).to_dict()}"
+    )
     P(f"  - per glomerulus: {o['glomerulus'].value_counts().sort_index().to_dict()}")
     grn = pop.labellar_grns()
-    P(f"- Labellar GRNs (class gustatory, cb_sensory, type LB*): {len(grn)}; by modality: {grn['modality'].value_counts().to_dict()}")
-    P("  - Modality is **not** in MaleCNS annotations. It is mapped through `flywireType` to the FlyWire "
-      "(Schlegel et al. 2024) `cell_sub_class`. Verification table:")
+    P(
+        f"- Labellar GRNs (class gustatory, cb_sensory, type LB*): {len(grn)}; by modality: {grn['modality'].value_counts().to_dict()}"
+    )
+    P(
+        "  - Modality is **not** in MaleCNS annotations. It is mapped through `flywireType` to the FlyWire "
+        "(Schlegel et al. 2024) `cell_sub_class`. Verification table:"
+    )
     fwmap = pop.grn_modality_map()
     chk = grn.groupby(["type", "flywireType", "modality"]).size().reset_index(name="n")
-    chk = chk.merge(fwmap, left_on="flywireType", right_on="cell_type", how="left").drop(columns=["cell_type"])
+    chk = chk.merge(fwmap, left_on="flywireType", right_on="cell_type", how="left").drop(
+        columns=["cell_type"]
+    )
     chk["agree"] = [
-        (mo == "unassigned") or (mo in str(fw)) for mo, fw in zip(chk["modality"], chk["flywire_sub_class"], strict=True)
+        (mo == "unassigned") or (mo in str(fw))
+        for mo, fw in zip(chk["modality"], chk["flywire_sub_class"], strict=True)
     ]
     P(md_table(chk))
     P(f"  - all assigned rows agree with FlyWire: {bool(chk['agree'].all())}")
     jo = pop.johnston_organ()
-    P(f"- Johnston's organ (JO-*) mechanosensory: {len(jo)}; by group: {jo['group'].value_counts().to_dict()}\n")
+    P(
+        f"- Johnston's organ (JO-*) mechanosensory: {len(jo)}; by group: {jo['group'].value_counts().to_dict()}\n"
+    )
 
     # --- outputs
     P("## Outputs\n")
     dn = pop.descending_neurons()
-    P(f"- Descending neurons: {len(dn)} bodies, {dn['type'].nunique()} types; subclass (target neuropil): {dn['subclass'].value_counts(dropna=False).to_dict()}")
-    cands = ["DNp09", "DNa01", "DNa02", "DNa03", "DNa04", "DNb01", "DNb02", "MDN", "DNp01", "DNp02", "DNp04", "DNp06", "DNp11",
-             "pIP10", "aSP22", "DNg11", "DNg12_a", "DNg12_b", "DNg07", "DNg10", "DNp13", "DNp07", "DNp32", "DNg13", "DNg14"]
+    P(
+        f"- Descending neurons: {len(dn)} bodies, {dn['type'].nunique()} types; subclass (target neuropil): {dn['subclass'].value_counts(dropna=False).to_dict()}"
+    )
+    cands = [
+        "DNp09",
+        "DNa01",
+        "DNa02",
+        "DNa03",
+        "DNa04",
+        "DNb01",
+        "DNb02",
+        "MDN",
+        "DNp01",
+        "DNp02",
+        "DNp04",
+        "DNp06",
+        "DNp11",
+        "pIP10",
+        "aSP22",
+        "DNg11",
+        "DNg12_a",
+        "DNg12_b",
+        "DNg07",
+        "DNg10",
+        "DNp13",
+        "DNp07",
+        "DNp32",
+        "DNg13",
+        "DNg14",
+    ]
     present = a[a["type"].isin(cands)]["type"].value_counts().to_dict()
     P(f"  - candidate readout DN types present: {present}")
     P(f"  - missing from candidates: {[c for c in cands if c not in present]}")
@@ -124,7 +182,9 @@ def main() -> int:
     cbset = set(cb.index)
     wcb = w[w["body_pre"].isin(cbset) & w["body_post"].isin(cbset)]
     P(f"- edges within model set: {len(wcb)}; synapses: {int(wcb['weight'].sum())}")
-    P(f"- weight quantiles (model set): {np.quantile(wcb['weight'], [0.5, 0.9, 0.99, 1.0]).tolist()}\n")
+    P(
+        f"- weight quantiles (model set): {np.quantile(wcb['weight'], [0.5, 0.9, 0.99, 1.0]).tolist()}\n"
+    )
 
     P("## Gate\n")
     ok = (
@@ -138,8 +198,10 @@ def main() -> int:
         and len(pop.grns("bitter")) > 20
         and len(ck) > 30
     )
-    P(f"**Annotation coverage gate: {'PASS' if ok else 'FAIL'}.** MB, ORN, DN and clock populations are typed "
-      "natively in v1.0. GRN modality required the FlyWire cross-reference (documented above).")
+    P(
+        f"**Annotation coverage gate: {'PASS' if ok else 'FAIL'}.** MB, ORN, DN and clock populations are typed "
+        "natively in v1.0. GRN modality required the FlyWire cross-reference (documented above)."
+    )
     paths.DOCS.mkdir(exist_ok=True)
     (paths.DOCS / "phase0-coverage.md").write_text("\n".join(out) + "\n")
     print("\n".join(out))

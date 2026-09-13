@@ -1,6 +1,6 @@
 """Battery over stabiliser combinations.  Spec: w,rfc,u,tau,scope,kk,apl,igain
-  w: w_syn mV; rfc: refractory ms; u,tau: STD; scope: none|all|exc|exc_nosens;
-  kk: KC->KC gain; apl: APL->KC gain; igain: gain on all inhibitory synapses."""
+w: w_syn mV; rfc: refractory ms; u,tau: STD; scope: none|all|exc|exc_nosens;
+kk: KC->KC gain; apl: APL->KC gain; igain: gain on all inhibitory synapses."""
 
 from __future__ import annotations
 
@@ -8,7 +8,8 @@ import sys
 
 import numpy as np
 
-from bosco import data, populations as pop
+from bosco import data
+from bosco import populations as pop
 from bosco.kernel import LifParams, Net
 from bosco.model import load_or_build
 from scripts.phase2_loops import battery
@@ -28,7 +29,12 @@ def main() -> int:
     bitter = b.index_of_present(pop.grns("bitter"))
     mn9 = b.index_of_present(pop.bodies_of_types(["MN9"]))
     rng = np.random.default_rng(3)
-    odors = [b.index_of_present(orn.loc[orn["glomerulus"].isin(rng.choice(gloms, 5, replace=False)), "bodyId"]) for _ in range(4)]
+    odors = [
+        b.index_of_present(
+            orn.loc[orn["glomerulus"].isin(rng.choice(gloms, 5, replace=False)), "bodyId"]
+        )
+        for _ in range(4)
+    ]
     cnt = b.count.astype(float) * b.sign
     kk = b.edges_between(kc, kc)
     ak = b.edges_between(apl, kc)

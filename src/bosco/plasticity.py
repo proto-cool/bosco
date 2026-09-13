@@ -45,7 +45,9 @@ def load_plasticity_params(path=paths.CONFIG / "plasticity_v1.yaml") -> Plastici
     return PlasticityParams(**yaml.safe_load(open(path)))
 
 
-def load_compartments(path=paths.CONFIG / "mb_compartments.yaml") -> tuple[dict[str, set[str]], dict[str, list[str]]]:
+def load_compartments(
+    path=paths.CONFIG / "mb_compartments.yaml",
+) -> tuple[dict[str, set[str]], dict[str, list[str]]]:
     cfg = yaml.safe_load(open(path))
     dan_to_mbons: dict[str, set[str]] = {}
     for _name, c in cfg["compartments"].items():

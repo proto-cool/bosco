@@ -12,7 +12,8 @@ import sys
 
 import numpy as np
 
-from bosco import paths, populations as pop
+from bosco import paths
+from bosco import populations as pop
 from bosco.plasticity import MushroomBody
 from bosco.sim import Drive, Fly, Stimulus
 
@@ -31,7 +32,9 @@ def comp_types(fly: Fly, mb: MushroomBody, valence: str) -> set[str]:
     return set(fly.plastic_post_type[mb.target_edges(valence)])
 
 
-def median_ratio(before: dict[str, float], after: dict[str, float], types: set[str], min_hz: float = 2.0) -> tuple[float, int]:
+def median_ratio(
+    before: dict[str, float], after: dict[str, float], types: set[str], min_hz: float = 2.0
+) -> tuple[float, int]:
     """Median of after/before over types in `types` that responded (before >= min_hz)."""
     r = [after[t] / before[t] for t in types if before.get(t, 0.0) >= min_hz]
     return (float(np.median(r)) if r else float("nan")), len(r)
@@ -70,10 +73,15 @@ def main() -> int:
         forgot = ra3 > 0.9
         ok = learned and specific and forgot
         ok_all &= ok
-        tab = ["| MBON type | A before | A after | A +3tau | A +20tau | B before | B after |", "|---|---|---|---|---|---|---|"]
+        tab = [
+            "| MBON type | A before | A after | A +3tau | A +20tau | B before | B after |",
+            "|---|---|---|---|---|---|---|",
+        ]
         for t in sorted(types):
             if max(A0[t], A1[t]) >= 0.5:
-                tab.append(f"| {t} | {A0[t]:.1f} | {A1[t]:.1f} | {A2[t]:.1f} | {A3[t]:.1f} | {B0[t]:.1f} | {B1[t]:.1f} |")
+                tab.append(
+                    f"| {t} | {A0[t]:.1f} | {A1[t]:.1f} | {A2[t]:.1f} | {A3[t]:.1f} | {B0[t]:.1f} | {B1[t]:.1f} |"
+                )
         lines += [
             f"## {valence}\n",
             f"- KCs active for A: {int((kcA > 0).sum())} / {len(fly.kc)} ({(kcA > 0).mean():.3f})",

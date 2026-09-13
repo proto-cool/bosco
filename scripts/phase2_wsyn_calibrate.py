@@ -8,7 +8,8 @@ import sys
 
 import numpy as np
 
-from bosco import paths, populations as pop
+from bosco import paths
+from bosco import populations as pop
 from bosco.kernel import LifParams, Net
 from bosco.model import load_or_build, v1_weights_mv
 
@@ -41,15 +42,24 @@ def main() -> int:
             net.reset(seed=1)
             net.run_ms(500.0)
             net.clear_inputs()
-            net.run_ms(300.0); c2 = net.spike_counts().copy(); net.run_ms(200.0); c3 = net.spike_counts() - c2
+            net.run_ms(300.0)
+            c2 = net.spike_counts().copy()
+            net.run_ms(200.0)
+            c3 = net.spike_counts() - c2
             stab.append(int(c3.sum()))
         rows.append((w_syn, rates[50.0], rates[100.0], rates[200.0], stab[0], stab[1]))
-        print(f"w_syn {w_syn:.3f}: MN9 @50Hz {rates[50.0]:5.1f}  @100Hz {rates[100.0]:5.1f}  @200Hz {rates[200.0]:5.1f} | post-stim spikes orn25 {stab[0]} orn400 {stab[1]}", flush=True)
+        print(
+            f"w_syn {w_syn:.3f}: MN9 @50Hz {rates[50.0]:5.1f}  @100Hz {rates[100.0]:5.1f}  @200Hz {rates[200.0]:5.1f} | post-stim spikes orn25 {stab[0]} orn400 {stab[1]}",
+            flush=True,
+        )
     mx = max(r[3] for r in rows)
-    lines = ["# w_syn calibration (Shiu criterion) on v1 wiring\n",
-             "Criterion: sugar GRNs at 100 Hz -> ~80% of maximal MN9 rate (Shiu et al. 2024, Methods).",
-             f"Maximal MN9 rate observed (200 Hz drive, any w_syn): {mx:.1f} Hz; 80% = {0.8 * mx:.1f} Hz.\n",
-             "| w_syn mV | MN9 @50 Hz | MN9 @100 Hz | MN9 @200 Hz | post-stim spikes (25 ORN) | (400 ORN) |", "|---|---|---|---|---|---|"]
+    lines = [
+        "# w_syn calibration (Shiu criterion) on v1 wiring\n",
+        "Criterion: sugar GRNs at 100 Hz -> ~80% of maximal MN9 rate (Shiu et al. 2024, Methods).",
+        f"Maximal MN9 rate observed (200 Hz drive, any w_syn): {mx:.1f} Hz; 80% = {0.8 * mx:.1f} Hz.\n",
+        "| w_syn mV | MN9 @50 Hz | MN9 @100 Hz | MN9 @200 Hz | post-stim spikes (25 ORN) | (400 ORN) |",
+        "|---|---|---|---|---|---|",
+    ]
     for r in rows:
         lines.append(f"| {r[0]:.3f} | {r[1]:.1f} | {r[2]:.1f} | {r[3]:.1f} | {r[4]} | {r[5]} |")
     (paths.DOCS / "phase2-wsyn-calibration.md").write_text("\n".join(lines) + "\n")

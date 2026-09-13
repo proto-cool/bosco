@@ -14,7 +14,8 @@ from dataclasses import dataclass, field
 import numpy as np
 import yaml
 
-from bosco import paths, populations as pop
+from bosco import paths
+from bosco import populations as pop
 from bosco.kernel import LifParams, Net
 from bosco.model import Brain, load_or_build, v1_weights_mv
 
@@ -61,12 +62,16 @@ def load_params(path=paths.CONFIG / "model_v1.yaml") -> tuple[LifParams, dict]:
 
 
 class Fly:
-    def __init__(self, brain: Brain | None = None, config_path=paths.CONFIG / "model_v1.yaml") -> None:
+    def __init__(
+        self, brain: Brain | None = None, config_path=paths.CONFIG / "model_v1.yaml"
+    ) -> None:
         self.brain = brain or load_or_build()
         self.params, self.cfg = load_params(config_path)
         self.episode_ms = float(self.cfg.get("episode_ms", 1000))
         wiring = self.cfg["wiring"]
-        self.base_w = v1_weights_mv(self.brain, self.params, wiring.get("apl_kc_gain", 1.0), wiring.get("kc_mbon_gain", 1.0))
+        self.base_w = v1_weights_mv(
+            self.brain, self.params, wiring.get("apl_kc_gain", 1.0), wiring.get("kc_mbon_gain", 1.0)
+        )
         self.net = Net(self.brain.indptr, self.brain.indices, self.base_w, self.params)
         b = self.brain
         self.kc = b.index_of_present(pop.kenyon_cells())

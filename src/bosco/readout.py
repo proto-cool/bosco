@@ -13,7 +13,8 @@ from dataclasses import dataclass
 import numpy as np
 import yaml
 
-from bosco import paths, populations as pop
+from bosco import paths
+from bosco import populations as pop
 from bosco.model import Brain
 from bosco.sim import EpisodeResult
 
@@ -58,15 +59,29 @@ class Readout:
         mb = pop.mbons()
         by_type = mb.groupby("type")["bodyId"].apply(list).to_dict()
         self.mbon_reward = brain.index_of_present(
-            [b for d in comp["valence"]["reward"] for t in dan_to_mbons.get(d, ()) for b in by_type.get(t, [])])
+            [
+                b
+                for d in comp["valence"]["reward"]
+                for t in dan_to_mbons.get(d, ())
+                for b in by_type.get(t, [])
+            ]
+        )
         self.mbon_punish = brain.index_of_present(
-            [b for d in comp["valence"]["punishment"] for t in dan_to_mbons.get(d, ()) for b in by_type.get(t, [])])
+            [
+                b
+                for d in comp["valence"]["punishment"]
+                for t in dan_to_mbons.get(d, ())
+                for b in by_type.get(t, [])
+            ]
+        )
         self.dn_all = brain.index_of_present(pop.descending_neurons()["bodyId"])
 
     def scores(self, res: EpisodeResult, episode_ms: float) -> dict[str, float]:
         return {k: res.rate(v, episode_ms) for k, v in self.pops.items()}
 
-    def decide(self, res: EpisodeResult, episode_ms: float, arousal_cuts: tuple[float, float] = (1.0, 5.0)) -> Decision:
+    def decide(
+        self, res: EpisodeResult, episode_ms: float, arousal_cuts: tuple[float, float] = (1.0, 5.0)
+    ) -> Decision:
         sc = self.scores(res, episode_ms)
         ratios = {k: (sc[k] / t if t else 0.0) for k, t in self.thresholds.items()}
         winner = max(ratios, key=lambda k: (ratios[k], k))
@@ -81,5 +96,7 @@ class Readout:
         d = (r - p) / max(r + p, 1e-9)
         valence = "positive" if d > 0.2 else "negative" if d < -0.2 else "neutral"
         dn_rate = res.rate(self.dn_all, episode_ms)
-        arousal = "low" if dn_rate < arousal_cuts[0] else "high" if dn_rate > arousal_cuts[1] else "mid"
+        arousal = (
+            "low" if dn_rate < arousal_cuts[0] else "high" if dn_rate > arousal_cuts[1] else "mid"
+        )
         return Decision(behaviour, action, sc, ratios, valence, arousal)

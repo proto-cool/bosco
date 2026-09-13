@@ -17,11 +17,26 @@ from bosco import paths
 from bosco.kernel import LifParams, Net, csr_from_edges
 
 SUGAR = [
-    720575940624963786, 720575940630233916, 720575940637568838, 720575940638202345,
-    720575940617000768, 720575940630797113, 720575940632889389, 720575940621754367,
-    720575940621502051, 720575940640649691, 720575940639332736, 720575940616885538,
-    720575940639198653, 720575940620900446, 720575940617937543, 720575940632425919,
-    720575940633143833, 720575940612670570, 720575940628853239, 720575940629176663,
+    720575940624963786,
+    720575940630233916,
+    720575940637568838,
+    720575940638202345,
+    720575940617000768,
+    720575940630797113,
+    720575940632889389,
+    720575940621754367,
+    720575940621502051,
+    720575940640649691,
+    720575940639332736,
+    720575940616885538,
+    720575940639198653,
+    720575940620900446,
+    720575940617937543,
+    720575940632425919,
+    720575940633143833,
+    720575940612670570,
+    720575940628853239,
+    720575940629176663,
     720575940611875570,
 ]
 MN9 = 720575940660219265
@@ -49,15 +64,17 @@ def main() -> int:
     net = Net(indptr, indices, wmv, p)
     id2i = {int(f): i for i, f in enumerate(ids)}
     sugar_i = np.array([id2i[f] for f in SUGAR], dtype=np.int32)
-    mn9_i = id2i[MN9]
+    id2i[MN9]
 
     # reference
     ref = pd.read_parquet(paths.SHIU / "results/example/sugarR.parquet")
     n_run, t_run = 30, 1.0
     ref_counts = ref.groupby("flywire_id").size()
     ref_rate = (ref_counts / (n_run * t_run)).rename("ref")
-    print(f"reference: {len(ref)} spikes, {len(ref_rate)} active neurons, "
-          f"MN9 {ref_rate.get(MN9, 0.0):.1f} Hz, sugar mean {ref_rate.reindex(SUGAR).mean():.1f} Hz")
+    print(
+        f"reference: {len(ref)} spikes, {len(ref_rate)} active neurons, "
+        f"MN9 {ref_rate.get(MN9, 0.0):.1f} Hz, sugar mean {ref_rate.reindex(SUGAR).mean():.1f} Hz"
+    )
 
     # ours
     rate_hz = 200.0  # notebook: "By default, the neurons are excited at 200 Hz"
@@ -71,9 +88,11 @@ def main() -> int:
     dt = time.time() - t0
     our_rate = pd.Series(counts / (n_run * t_run), index=ids).rename("ours")
     our_rate = our_rate[our_rate > 0]
-    print(f"ours: {int(counts.sum())} spikes, {len(our_rate)} active neurons, "
-          f"MN9 {our_rate.get(MN9, 0.0):.1f} Hz, sugar mean {our_rate.reindex(SUGAR).mean():.1f} Hz, "
-          f"{dt:.1f}s wall for {n_run} trials")
+    print(
+        f"ours: {int(counts.sum())} spikes, {len(our_rate)} active neurons, "
+        f"MN9 {our_rate.get(MN9, 0.0):.1f} Hz, sugar mean {our_rate.reindex(SUGAR).mean():.1f} Hz, "
+        f"{dt:.1f}s wall for {n_run} trials"
+    )
 
     both = pd.concat([ref_rate, our_rate], axis=1).fillna(0.0)
     active_ref = set(ref_rate[ref_rate >= 1].index)
@@ -93,7 +112,13 @@ def main() -> int:
     det = np.array_equal(t1, t2) and np.array_equal(i1, i2)
     print(f"bit-identical replay: {det}")
 
-    ok = det and our_rate.get(MN9, 0.0) > 5.0 and ref_rate.get(MN9, 0.0) > 5.0 and logr > 0.8 and jacc > 0.6
+    ok = (
+        det
+        and our_rate.get(MN9, 0.0) > 5.0
+        and ref_rate.get(MN9, 0.0) > 5.0
+        and logr > 0.8
+        and jacc > 0.6
+    )
     print(f"GATE: {'PASS' if ok else 'FAIL'}")
     (paths.DOCS / "phase1-shiu-gate.md").write_text(
         "# Phase 1 gate: Shiu et al. 2024 sugar -> MN9 on FlyWire v630\n\n"

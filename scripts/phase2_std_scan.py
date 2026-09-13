@@ -22,9 +22,16 @@ def main() -> int:
     sugar = b.index_of_present(pop.grns("sugar/water"))
     mn9 = b.index_of_present(pop.bodies_of_types(["MN9"]))
     rng = np.random.default_rng(3)
-    odors = [b.index_of_present(orn.loc[orn["glomerulus"].isin(rng.choice(gloms, 5, replace=False)), "bodyId"]) for _ in range(4)]
+    odors = [
+        b.index_of_present(
+            orn.loc[orn["glomerulus"].isin(rng.choice(gloms, 5, replace=False)), "bodyId"]
+        )
+        for _ in range(4)
+    ]
     cnt = b.count.astype(float) * b.sign
-    grid = [(float(a), float(c), float(d), e) for a, c, d, e in (x.split(",") for x in sys.argv[1:])]
+    grid = [
+        (float(a), float(c), float(d), e) for a, c, d, e in (x.split(",") for x in sys.argv[1:])
+    ]
     for w_syn, u, tau, scope in grid:
         p = LifParams(w_syn=w_syn, std_u=u, std_tau_rec=tau)
         net = Net(b.indptr, b.indices, cnt * w_syn, p)
@@ -48,11 +55,23 @@ def main() -> int:
             net.run_ms(200.0)
             c3 = net.spike_counts() - c2
             s = set(np.nonzero(c1[kc] > 0)[0])
-            sets.append(s); fr.append(len(s) / len(kc)); post.append(int(c3.sum())); mb.append(c1[mbon].mean() * 2)
+            sets.append(s)
+            fr.append(len(s) / len(kc))
+            post.append(int(c3.sum()))
+            mb.append(c1[mbon].mean() * 2)
             act.append(int((c1 > 0).sum()))
-        jac = np.mean([len(sets[i] & sets[j]) / max(1, len(sets[i] | sets[j])) for i in range(4) for j in range(i + 1, 4)])
-        print(f"w {w_syn:.2f} u {u:.2f} tau {tau:4.0f} {scope:3s} | sugar act {int((cs > 0).sum()):5d} MN9 {cs[mn9].mean():4.0f}Hz | "
-              f"odor act {int(np.mean(act)):5d} KC {np.mean(fr):.3f} jacc {jac:.2f} MBON {np.mean(mb):5.1f}Hz post {int(np.mean(post)):6d}", flush=True)
+        jac = np.mean(
+            [
+                len(sets[i] & sets[j]) / max(1, len(sets[i] | sets[j]))
+                for i in range(4)
+                for j in range(i + 1, 4)
+            ]
+        )
+        print(
+            f"w {w_syn:.2f} u {u:.2f} tau {tau:4.0f} {scope:3s} | sugar act {int((cs > 0).sum()):5d} MN9 {cs[mn9].mean():4.0f}Hz | "
+            f"odor act {int(np.mean(act)):5d} KC {np.mean(fr):.3f} jacc {jac:.2f} MBON {np.mean(mb):5.1f}Hz post {int(np.mean(post)):6d}",
+            flush=True,
+        )
     return 0
 
 

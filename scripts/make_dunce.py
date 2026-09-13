@@ -1,5 +1,9 @@
-"""dunce: degree-preserving shuffle of the wiring (same in/out synapse totals
-per neuron, same edge count, same NT signs), same plasticity and readout.
+"""dunce: degree-preserving shuffle of the wiring, same plasticity and readout.
+
+Preserved exactly: every neuron's out-edge count and out-synapse total,
+every neuron's in-edge count, the total edge count, and all NT signs.
+Synapse counts travel with the presynaptic endpoint, so in-synapse totals
+are only preserved in distribution.
 
 Shuffle: Maslov-Sneppen edge swaps over the (pre, post, count) edge list,
 seeded; swaps that would create self-loops or duplicate edges are rejected.
@@ -20,7 +24,9 @@ from bosco.kernel import csr_from_edges
 from bosco.model import Brain, load_or_build
 
 
-def maslov_sneppen(pre: np.ndarray, post: np.ndarray, n_swaps: int, seed: int) -> tuple[np.ndarray, np.ndarray]:
+def maslov_sneppen(
+    pre: np.ndarray, post: np.ndarray, n_swaps: int, seed: int
+) -> tuple[np.ndarray, np.ndarray]:
     rng = np.random.default_rng(seed)
     pre = pre.copy()
     post = post.copy()
@@ -39,8 +45,10 @@ def maslov_sneppen(pre: np.ndarray, post: np.ndarray, n_swaps: int, seed: int) -
             continue
         if (a, d) in existing or (c, b) in existing:
             continue
-        existing.discard((a, b)); existing.discard((c, d))
-        existing.add((a, d)); existing.add((c, b))
+        existing.discard((a, b))
+        existing.discard((c, d))
+        existing.add((a, d))
+        existing.add((c, b))
         post[i], post[j] = d, b
         done += 1
     print(f"swaps done {done} / requested {n_swaps} (tries {tries})")
@@ -63,9 +71,17 @@ def main(argv=None) -> int:
     sign = b.nt_sign[e_pre]
     d = Brain(b.ids, indptr, indices, cnt.astype(np.int32), sign, b.nt_sign)
     # degree preservation check
-    out_b = np.bincount(pre, weights=b.count, minlength=b.n); out_d = np.bincount(e_pre, weights=d.count, minlength=b.n)
-    in_b = np.bincount(post, weights=b.count, minlength=b.n); in_d = np.bincount(indices, weights=d.count, minlength=b.n)
-    print("out-synapses preserved:", np.array_equal(out_b, out_d), "in-synapses preserved:", np.array_equal(in_b, in_d))
+    out_b = np.bincount(pre, weights=b.count, minlength=b.n)
+    out_d = np.bincount(e_pre, weights=d.count, minlength=b.n)
+    in_b = np.bincount(post, minlength=b.n)
+    in_d = np.bincount(indices, minlength=b.n)
+    print(
+        "out-synapses preserved:",
+        np.array_equal(out_b, out_d),
+        "in-edge degrees preserved:",
+        np.array_equal(in_b, in_d),
+    )
+    assert np.array_equal(out_b, out_d) and np.array_equal(in_b, in_d)
     d.save(a.out)
     print("wrote", a.out, "digest", d.digest())
     return 0

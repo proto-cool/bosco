@@ -96,7 +96,18 @@ CREATE INDEX IF NOT EXISTS ix_actions_ts ON actions(ts);
 """
 
 TEXT_COLUMNS = {
-    "episodes": ["did", "source_uri", "behaviour", "action", "valence", "arousal", "line_key", "line_id", "note", "kind"],
+    "episodes": [
+        "did",
+        "source_uri",
+        "behaviour",
+        "action",
+        "valence",
+        "arousal",
+        "line_key",
+        "line_id",
+        "note",
+        "kind",
+    ],
     "actions": ["kind", "our_uri", "target_uri"],
     "outcomes": ["valence", "source", "did", "evidence_uri"],
     "control": ["kind", "by_did", "evidence_uri", "target_uri"],
@@ -141,11 +152,29 @@ class Ledger:
             "INSERT INTO episodes (ts, kind, did, source_uri, vader, mentioned, familiarity, hour, seed, "
             "weight_digest_before, weight_digest_after, scores, mbon, kc_active, behaviour, action, valence, arousal, "
             "line_key, line_id, note) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-            (ts or time.time(), e.kind, e.did, e.source_uri, e.vader,
-             None if e.mentioned is None else int(e.mentioned), e.familiarity, e.hour, e.seed,
-             e.weight_digest_before, e.weight_digest_after, json.dumps(e.scores, sort_keys=True),
-             json.dumps(e.mbon, sort_keys=True), e.kc_active, e.behaviour, e.action, e.valence, e.arousal,
-             e.line_key, e.line_id, e.note),
+            (
+                ts or time.time(),
+                e.kind,
+                e.did,
+                e.source_uri,
+                e.vader,
+                None if e.mentioned is None else int(e.mentioned),
+                e.familiarity,
+                e.hour,
+                e.seed,
+                e.weight_digest_before,
+                e.weight_digest_after,
+                json.dumps(e.scores, sort_keys=True),
+                json.dumps(e.mbon, sort_keys=True),
+                e.kc_active,
+                e.behaviour,
+                e.action,
+                e.valence,
+                e.arousal,
+                e.line_key,
+                e.line_id,
+                e.note,
+            ),
         )
         self.db.commit()
         return int(cur.lastrowid)
@@ -162,74 +191,126 @@ class Ledger:
         return r["t"]
 
     def seen_source(self, uri: str) -> bool:
-        return self.db.execute("SELECT 1 FROM episodes WHERE source_uri=? LIMIT 1", (uri,)).fetchone() is not None
+        return (
+            self.db.execute("SELECT 1 FROM episodes WHERE source_uri=? LIMIT 1", (uri,)).fetchone()
+            is not None
+        )
 
     # ---- actions ------------------------------------------------------------
-    def add_action(self, episode_id: int, kind: str, our_uri: str | None, target_uri: str | None,
-                   dry_run: bool, ts: float | None = None) -> int:
+    def add_action(
+        self,
+        episode_id: int,
+        kind: str,
+        our_uri: str | None,
+        target_uri: str | None,
+        dry_run: bool,
+        ts: float | None = None,
+    ) -> int:
         cur = self.db.execute(
             "INSERT INTO actions (episode_id, ts, kind, our_uri, target_uri, dry_run) VALUES (?,?,?,?,?,?)",
-            (episode_id, ts or time.time(), kind, our_uri, target_uri, int(dry_run)))
+            (episode_id, ts or time.time(), kind, our_uri, target_uri, int(dry_run)),
+        )
         self.db.commit()
         return int(cur.lastrowid)
 
     def actions_since(self, since_ts: float, real_only: bool = True) -> list[sqlite3.Row]:
-        q = "SELECT * FROM actions WHERE ts>=? AND kind!='leave'" + (" AND dry_run=0" if real_only else "") + " ORDER BY ts"
+        q = (
+            "SELECT * FROM actions WHERE ts>=? AND kind!='leave'"
+            + (" AND dry_run=0" if real_only else "")
+            + " ORDER BY ts"
+        )
         return self.db.execute(q, (since_ts,)).fetchall()
 
     def mark_deleted(self, our_uri: str, ts: float | None = None) -> None:
-        self.db.execute("UPDATE actions SET deleted_ts=? WHERE our_uri=?", (ts or time.time(), our_uri))
+        self.db.execute(
+            "UPDATE actions SET deleted_ts=? WHERE our_uri=?", (ts or time.time(), our_uri)
+        )
         self.db.commit()
 
     def our_uris(self) -> set[str]:
-        return {r["our_uri"] for r in self.db.execute("SELECT our_uri FROM actions WHERE our_uri IS NOT NULL")}
+        return {
+            r["our_uri"]
+            for r in self.db.execute("SELECT our_uri FROM actions WHERE our_uri IS NOT NULL")
+        }
 
     def episode_for_uri(self, our_uri: str) -> int | None:
         r = self.db.execute("SELECT episode_id FROM actions WHERE our_uri=?", (our_uri,)).fetchone()
         return r["episode_id"] if r else None
 
     # ---- outcomes -----------------------------------------------------------
-    def add_outcome(self, episode_id: int | None, valence: str, source: str, did: str | None,
-                    evidence_uri: str | None, pairing_episode_id: int | None, ts: float | None = None) -> int:
+    def add_outcome(
+        self,
+        episode_id: int | None,
+        valence: str,
+        source: str,
+        did: str | None,
+        evidence_uri: str | None,
+        pairing_episode_id: int | None,
+        ts: float | None = None,
+    ) -> int:
         cur = self.db.execute(
             "INSERT INTO outcomes (ts, episode_id, valence, source, did, evidence_uri, pairing_episode_id) VALUES (?,?,?,?,?,?,?)",
-            (ts or time.time(), episode_id, valence, source, did, evidence_uri, pairing_episode_id))
+            (ts or time.time(), episode_id, valence, source, did, evidence_uri, pairing_episode_id),
+        )
         self.db.commit()
         return int(cur.lastrowid)
 
     def seen_evidence(self, uri: str) -> bool:
-        return self.db.execute("SELECT 1 FROM outcomes WHERE evidence_uri=? LIMIT 1", (uri,)).fetchone() is not None
+        return (
+            self.db.execute(
+                "SELECT 1 FROM outcomes WHERE evidence_uri=? LIMIT 1", (uri,)
+            ).fetchone()
+            is not None
+        )
 
     # ---- interactions -------------------------------------------------------
     def familiarity(self, did: str) -> int:
-        r = self.db.execute("SELECT COALESCE(SUM(inbound),0) AS n FROM interactions WHERE did=?", (did,)).fetchone()
+        r = self.db.execute(
+            "SELECT COALESCE(SUM(inbound),0) AS n FROM interactions WHERE did=?", (did,)
+        ).fetchone()
         return int(r["n"])
 
     def bump_inbound(self, did: str, day: str) -> None:
         self.db.execute(
             "INSERT INTO interactions (did, day, inbound) VALUES (?,?,1) "
-            "ON CONFLICT(did, day) DO UPDATE SET inbound=inbound+1", (did, day))
+            "ON CONFLICT(did, day) DO UPDATE SET inbound=inbound+1",
+            (did, day),
+        )
         self.db.commit()
 
     def rewards_today(self, did: str, day: str) -> int:
-        r = self.db.execute("SELECT rewards FROM interactions WHERE did=? AND day=?", (did, day)).fetchone()
+        r = self.db.execute(
+            "SELECT rewards FROM interactions WHERE did=? AND day=?", (did, day)
+        ).fetchone()
         return int(r["rewards"]) if r else 0
 
     def bump_reward(self, did: str, day: str) -> None:
         self.db.execute(
             "INSERT INTO interactions (did, day, rewards) VALUES (?,?,1) "
-            "ON CONFLICT(did, day) DO UPDATE SET rewards=rewards+1", (did, day))
+            "ON CONFLICT(did, day) DO UPDATE SET rewards=rewards+1",
+            (did, day),
+        )
         self.db.commit()
 
     # ---- control ------------------------------------------------------------
-    def add_control(self, kind: str, by_did: str, evidence_uri: str | None, target_uri: str | None,
-                    ts: float | None = None) -> None:
-        self.db.execute("INSERT INTO control (ts, kind, by_did, evidence_uri, target_uri) VALUES (?,?,?,?,?)",
-                        (ts or time.time(), kind, by_did, evidence_uri, target_uri))
+    def add_control(
+        self,
+        kind: str,
+        by_did: str,
+        evidence_uri: str | None,
+        target_uri: str | None,
+        ts: float | None = None,
+    ) -> None:
+        self.db.execute(
+            "INSERT INTO control (ts, kind, by_did, evidence_uri, target_uri) VALUES (?,?,?,?,?)",
+            (ts or time.time(), kind, by_did, evidence_uri, target_uri),
+        )
         self.db.commit()
 
     def asleep(self) -> bool:
-        r = self.db.execute("SELECT kind FROM control WHERE kind IN ('sleep','wake') ORDER BY id DESC LIMIT 1").fetchone()
+        r = self.db.execute(
+            "SELECT kind FROM control WHERE kind IN ('sleep','wake') ORDER BY id DESC LIMIT 1"
+        ).fetchone()
         return bool(r and r["kind"] == "sleep")
 
     # ---- cursor -------------------------------------------------------------
@@ -238,8 +319,10 @@ class Ledger:
         return r["value"] if r else None
 
     def set_cursor(self, key: str, value: str) -> None:
-        self.db.execute("INSERT INTO cursor (key, value) VALUES (?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value",
-                        (key, value))
+        self.db.execute(
+            "INSERT INTO cursor (key, value) VALUES (?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value",
+            (key, value),
+        )
         self.db.commit()
 
     # ---- integrity ----------------------------------------------------------

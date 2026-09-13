@@ -15,7 +15,8 @@ from pathlib import Path
 import numpy as np
 import yaml
 
-from bosco import paths, populations as pop
+from bosco import paths
+from bosco import populations as pop
 from bosco.encoder import Encoder, Features
 from bosco.ledger import EpisodeRow, Ledger
 from bosco.phrasebook import Line, Phrasebook, familiarity_bin
@@ -31,8 +32,10 @@ class Clock:
     def __init__(self, brain, config_path=paths.CONFIG / "circadian_v1.yaml") -> None:
         self.cfg = yaml.safe_load(open(config_path))
         self.tz = zoneinfo.ZoneInfo(self.cfg["tz"])
-        self.groups = {name: (brain.index_of_present(pop.bodies_of_types(g["types"])), float(g["peak_hour"]))
-                       for name, g in self.cfg["groups"].items()}
+        self.groups = {
+            name: (brain.index_of_present(pop.bodies_of_types(g["types"])), float(g["peak_hour"]))
+            for name, g in self.cfg["groups"].items()
+        }
 
     def local_hour(self, ts: float) -> float:
         d = dt.datetime.fromtimestamp(ts, tz=self.tz)
@@ -114,12 +117,17 @@ class Agent:
         import hashlib
 
         s = f"{int(ts)}|{did or ''}|{source_uri or ''}".encode()
-        return int.from_bytes(hashlib.blake2b(s, digest_size=8).digest(), "little") & 0x7FFFFFFFFFFFFFFF
+        return (
+            int.from_bytes(hashlib.blake2b(s, digest_size=8).digest(), "little")
+            & 0x7FFFFFFFFFFFFFFF
+        )
 
     # ---- rate caps ------------------------------------------------------------
     def caps_allow(self, ts: float) -> bool:
-        return (len(self.ledger.actions_since(ts - 3600.0)) < MAX_ACTIONS_PER_HOUR
-                and len(self.ledger.actions_since(ts - 86400.0)) < MAX_ACTIONS_PER_DAY)
+        return (
+            len(self.ledger.actions_since(ts - 3600.0)) < MAX_ACTIONS_PER_HOUR
+            and len(self.ledger.actions_since(ts - 86400.0)) < MAX_ACTIONS_PER_DAY
+        )
 
     # ---- episodes -------------------------------------------------------------
     def stimulus(self, f: Features | None, hour: float) -> Stimulus:
@@ -127,8 +135,15 @@ class Agent:
         drives += self.clock.drives(hour)
         return Stimulus(drives)
 
-    def run(self, f: Features | None, ts: float, source_uri: str | None, kind: str = "event", seed: int | None = None,
-            note: str | None = None) -> Outcome:
+    def run(
+        self,
+        f: Features | None,
+        ts: float,
+        source_uri: str | None,
+        kind: str = "event",
+        seed: int | None = None,
+        note: str | None = None,
+    ) -> Outcome:
         """Run one episode from rest, decide, record.  f=None is a spontaneous (no-event) episode."""
         self.mb.forget(self.hours(ts))
         self._save_weights()
@@ -147,13 +162,30 @@ class Agent:
             line = self.phrasebook.pick(dec.behaviour, dec.valence, dec.arousal, fb, seed)
             line_key = f"{dec.behaviour}/{dec.valence}/{dec.arousal}/{fb}"
         row = EpisodeRow(
-            kind=kind, did=did, source_uri=source_uri,
-            vader=f.vader if f else None, mentioned=f.mentioned if f else None, familiarity=fam if f else None,
-            hour=hour, seed=seed, weight_digest_before=d_before, weight_digest_after=self.fly.weight_digest(),
-            scores=dec.scores, mbon=self.fly.mbon_rates(res), kc_active=int((res.counts[self.fly.kc] > 0).sum()),
-            behaviour=dec.behaviour, action=dec.action, valence=dec.valence, arousal=dec.arousal,
-            line_key=line_key, line_id=line.id if line else None,
-            note=note if note else ("no_line" if dec.action in ("reply", "spontaneous_post") and line is None else None),
+            kind=kind,
+            did=did,
+            source_uri=source_uri,
+            vader=f.vader if f else None,
+            mentioned=f.mentioned if f else None,
+            familiarity=fam if f else None,
+            hour=hour,
+            seed=seed,
+            weight_digest_before=d_before,
+            weight_digest_after=self.fly.weight_digest(),
+            scores=dec.scores,
+            mbon=self.fly.mbon_rates(res),
+            kc_active=int((res.counts[self.fly.kc] > 0).sum()),
+            behaviour=dec.behaviour,
+            action=dec.action,
+            valence=dec.valence,
+            arousal=dec.arousal,
+            line_key=line_key,
+            line_id=line.id if line else None,
+            note=note
+            if note
+            else (
+                "no_line" if dec.action in ("reply", "spontaneous_post") and line is None else None
+            ),
         )
         eid = self.ledger.add_episode(row, ts=ts)
         self._save_weights()
@@ -181,8 +213,15 @@ class Agent:
         return dec.scores == logged, dec.scores
 
     # ---- outcomes / learning --------------------------------------------------
-    def apply_outcome(self, episode_id: int, valence: str, source: str, did: str | None, evidence_uri: str | None,
-                      ts: float) -> int | None:
+    def apply_outcome(
+        self,
+        episode_id: int,
+        valence: str,
+        source: str,
+        did: str | None,
+        evidence_uri: str | None,
+        ts: float,
+    ) -> int | None:
         """Replay pairing for a past episode.  Returns the pairing episode id, or None if not applicable."""
         r = self.ledger.episode(episode_id)
         if r is None or r["did"] is None:
@@ -195,10 +234,24 @@ class Agent:
         seed = self.seed_for(ts, r["did"], evidence_uri)
         self.mb.pair(stim, valence, seed=seed, t_hours=self.hours(ts))
         row = EpisodeRow(
-            kind="pairing", did=r["did"], source_uri=r["source_uri"], vader=f.vader, mentioned=f.mentioned,
-            familiarity=f.familiarity, hour=float(r["hour"]), seed=seed, weight_digest_before=d_before,
-            weight_digest_after=self.fly.weight_digest(), scores={}, mbon={}, kc_active=0,
-            behaviour="pairing", action="nothing", valence=valence, arousal="none", note=f"outcome:{source}",
+            kind="pairing",
+            did=r["did"],
+            source_uri=r["source_uri"],
+            vader=f.vader,
+            mentioned=f.mentioned,
+            familiarity=f.familiarity,
+            hour=float(r["hour"]),
+            seed=seed,
+            weight_digest_before=d_before,
+            weight_digest_after=self.fly.weight_digest(),
+            scores={},
+            mbon={},
+            kc_active=0,
+            behaviour="pairing",
+            action="nothing",
+            valence=valence,
+            arousal="none",
+            note=f"outcome:{source}",
         )
         pid = self.ledger.add_episode(row, ts=ts)
         self.ledger.add_outcome(episode_id, valence, source, did, evidence_uri, pid, ts=ts)
