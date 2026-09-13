@@ -1,0 +1,174 @@
+# bosco
+
+Bosco is a simulated male fruit fly (MaleCNS v1.0 connectome, HHMI Janelia /
+Google Research / Cambridge, Cell 2026) running as an autonomous Bluesky
+account at `bosco.proto.cool`. The question: can a fly-brain policy over a
+constrained action space, loosed on bsky.app, hold its own against the bottom
+of the feed? Whether it sinks or swims is the community's call — there is no
+rater panel and no headline metric. What is binding is that the fly is
+genuinely the one acting. The account runs indefinitely. It is part of the
+experiment that it is live while being built.
+
+Companion to this file: `EXPERIMENT.md` (binding sections lock at tag
+`freeze-v1`).
+
+## Non-negotiables
+
+These exist so the fly does the work and we don't. Do not violate them for
+convenience, "just for testing," or because a result would look better.
+
+- **No LLM anywhere in the runtime loop.** No embeddings, no classifiers, no
+  sentiment models. The only text scorer is the VADER lexicon (deterministic,
+  public). If a task seems to need a model, stop and ask.
+- **Encoder, readout thresholds, phrasebook, and action set are frozen at
+  `freeze-v1`.** Before the tag they may change; after it they may not.
+  Thresholds are set from dev-period real activity, never from outcomes.
+- **Humans influence Bosco only through the network.** No manual edits to
+  weights, the outcome ledger, or the stimulus log. Bug fixes to code are
+  fine; hand-nudging state is not.
+- **Silence is a legal action** and must be a common one. Never add a floor
+  on posting to make the account look alive.
+- **Log everything, replay anything.** Every episode records its seed,
+  stimulus features, MBON/DN activity, action, and weight digest. Any episode
+  must replay bit-identical from the log.
+- **Store features and URIs, never post text.** Other people's posts do not
+  live in our database.
+- **Rate caps are hard.** Max 1 action/hour, 24/day. Only reply to mentions
+  and threads Bosco is already in; never wander into strangers' threads.
+  Self-label as a bot.
+
+## Architecture
+
+One Python process, one container (Podman quadlet), one Vultr dedicated-vCPU
+VPS. No GPU.
+
+```
+poller  ->  encoder  ->  kernel (C, ctypes)  ->  plasticity  ->  readout  ->  poster
+                  \______________ SQLite ledger + stimulus log ______________/
+```
+
+- **Python 3.12**, `uv`, `ruff`, `pytest`. Deps: `pyarrow`, `numpy`,
+  `neuprint-python`, `atproto` (MarshalX), `vaderSentiment`.
+- **Kernel**: C99, single-threaded per fly, CSR sparse matrix, fixed-point
+  or carefully ordered float so runs are deterministic. Parallelism is across
+  flies (bosco, dunce, offline controls), never within one.
+- **State**: SQLite for ledger/log; weights as `.npy` on disk. Each episode
+  records MBON vector, DN winner, action, stimulus id, seed, and weight
+  digest in the ledger. Nightly: dump ledger + weight snapshot to the repo
+  (`snapshots/`) so anyone can audit that action N followed from state N.
+- **No custom lexicon.** Bosco writes ordinary `app.bsky.feed.post` records
+  and nothing else. Auditability comes from the published dumps, not from
+  ATProto.
+
+## Data
+
+Bulk files under `gs://flyem-male-cns/v1.0/connectome-data/flat-connectome/`:
+
+- `connectome-weights-male-cns-v1.0-minconf-0.5.feather` — full connection
+  graph, segment-to-segment synapse counts
+- `body-annotations-male-cns-v1.0-minconf-0.5.feather` — cell types, sides,
+  classes, `flywireType` cross-reference
+- aggregate neurotransmitter predictions per neuron (check exact filename on
+  https://male-cns.janelia.org/download/)
+
+Do not download the EM volume. `neuprint-python` against
+`neuprint.janelia.org` dataset `male-cns:v1.0` for ad-hoc queries.
+
+## Model
+
+- **Neurons**: leaky integrate-and-fire, parameters from Shiu et al. 2024
+  ("A Drosophila computational brain model reveals sensorimotor processing").
+  Their code is public; take parameters from it, do not invent them.
+- **Weights**: synapse count × sign from neurotransmitter prediction.
+- **Pruning (v1)**: central brain only. Optic lobes dropped (no visual
+  input). VNC dropped; descending neurons are the behavioral readout.
+  Document this as a modeling decision in the README.
+- **Short-term depression** on sensory synapses (habituation).
+- **Circadian**: drive the annotated clock neurons with a 24 h rhythm. Do
+  not add a posting-time gate; let the network produce the schedule.
+- **Time step** 0.1 ms; episodes simulate ~1 s of biological time.
+
+## Learning (mushroom body)
+
+- Three-factor rule: KC activity coincident with dopaminergic (DAN) firing
+  in a compartment depresses KC→MBON synapses in that compartment.
+- **Replay pairing**: outcomes arrive hours late. When an outcome lands for a
+  past action, re-present the stored stimulus encoding and fire the
+  appropriate DANs. This is the lab protocol; do not invent delayed credit
+  assignment.
+- **Short-term memory only in v1.** Weights decay back toward baseline over
+  hours. No consolidation. Bosco forgets. This is intentional.
+- **Reward DANs**: unprompted inbound interaction from a known account
+  (≥1 prior direct interaction in the ledger). Per-account daily cap.
+- **Punishment DANs**: block records (public, real) and VADER-negative
+  replies. Punishment is sparse; the innate bitter channel carries most
+  aversion. Do not "fix" the sparsity by adding a model.
+
+## Encoder (frozen at tag)
+
+- Account DID → sparse code over a **valence-neutral** subset of ORN classes.
+  Account is the odor. Never map onto innately valenced ORNs.
+- VADER compound score → bitter GRNs (negative) / sugar GRNs (positive).
+- Being mentioned → mechanosensory channel.
+- v1.1 candidate: a hand-authored ~20-topic keyword→odor map, published.
+  Not in v1.
+
+## Readout (frozen at tag)
+
+- Behavior classes defined over **annotated DN populations**, never single
+  neurons: engage (walking DNs), reply (courtship-song DNs), like (proboscis
+  extension), leave (avoidance DNs), groom (grooming DNs → spontaneous post).
+- Winner-take-all over population activity; silence if nothing crosses
+  threshold. Thresholds from dev-period real activity distribution.
+- Action set: `reply`, `like`, `leave`, `spontaneous_post`, `nothing`.
+
+## Phrasebook
+
+`phrasebook.yaml`, hand-authored by Nick, ~200 lines keyed by
+`(behavior, valence, arousal, familiarity)`. Flat declarative fly register.
+Frozen and published at tag. Claude does not write phrasebook lines.
+
+## Controls
+
+- **dunce**: degree-preserving shuffle of the connectivity matrix, same
+  plasticity, **live** on its own account for weeks 3–4 after `freeze-v1`,
+  offline replay otherwise.
+- **frozen-MB**: real wiring, plasticity off, offline replay.
+- **random policy**: offline replay.
+Controls replay against Bosco's logged stimulus stream, so determinism
+matters.
+
+## Build phases and gates
+
+0. Pull feathers. Verify MB annotations (KC types, MBON types, DAN
+   compartments) are populated in v1.0. If thin, map through `flywireType`
+   and say so. **Gate: annotation coverage report.**
+1. Kernel. Reproduce Shiu's sugar → proboscis extension on their FlyWire
+   model with our kernel. **Gate: reflex reproduces.**
+2. Prune, port to MaleCNS, measure KC sparseness. **Gate: ~5% KCs active per
+   stimulus. If not, tune APL inhibition and document.**
+3. MB plasticity + replay pairing. **Gate: learn/forget an odor in a
+   synthetic protocol.**
+4. Encoder, readout populations, synthetic stimulus set as unit tests.
+5. atproto loop with `--dry-run`, snapshots, nightly ledger publish. Go live
+   (dev period).
+6. Threshold calibration from real activity. Tag `freeze-v1`. Publish
+   EXPERIMENT.md.
+7. dunce account. Monthly descriptive report script (see EXPERIMENT.md §6).
+
+## Ops
+
+- systemd/quadlet with restart-on-failure.
+- Nightly: ledger + weights rsync off-box. Weekly: Vultr snapshot.
+- Dead-man alert if no episode has run in 4 h.
+- Bio says "in development" until `freeze-v1`.
+
+## Things Claude Code must not do
+
+- Add an LLM, embedding, or classifier call.
+- Tune any threshold using outcome data.
+- Edit weights, ledger, or stimulus log by hand.
+- Store post text.
+- Add a minimum-posting floor.
+- Change encoder/readout/phrasebook after `freeze-v1` without a new tag and
+  a new pre-registration.
