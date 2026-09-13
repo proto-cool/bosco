@@ -13,6 +13,9 @@ dependencies = [
     "pyyaml>=6",
 ]
 
+[project.scripts]
+bosco = "bosco.cli:main"
+
 [dependency-groups]
 dev = ["pytest>=8", "ruff>=0.6"]
 

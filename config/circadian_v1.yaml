@@ -1,0 +1,10 @@
+# Clock-neuron drive: a 24 h rhythm on the annotated clock cells.  Morning
+# cells peak at ZT0, evening cells at ZT12 (Grima et al. 2004; Stoleru et al.
+# 2004).  rate = amplitude_hz * max(0, cos(2*pi*(hour - peak_hour)/24)).
+# Hours are local wall-clock hours (tz below).  Not a posting-time gate.
+tz: America/New_York
+amplitude_hz: 8.0
+groups:
+  morning: {types: [s-LNv, DN1a, 5thsLNv_LNd6], peak_hour: 7.0}
+  evening: {types: [LNd_b, LNd_c, DN1pA, DN1pB, LPN_a, LPN_b], peak_hour: 19.0}
+  lnv_large: {types: [l-LNv], peak_hour: 7.0}
