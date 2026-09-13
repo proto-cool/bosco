@@ -45,11 +45,13 @@ spontaneous:
   # which bristles, and hence how strongly the grooming DNs respond, varies
   # with the seed.
   bristle_types: [BM_InOm, BM, BM_Vib]
-  k: 500              # bristles driven at full dust (k * dust otherwise)
+  k: 836              # bristles driven at full debris (k * debris otherwise)
   rate_hz: 10.0
-  # Dust accrues between polls at dust_per_hour * (1 +/- dust_jitter), seeded
-  # from the timestamp; grooming (a spontaneous post, or a groom decision the
-  # caps allowed) clears it.  There is no schedule: he posts when the debris
-  # crosses what his network needs, which varies with where it lands.
-  dust_per_hour: 0.35
-  dust_jitter: 0.5
+  # Debris arrives as discrete landings: in each second, with probability
+  # landings_per_hour / 3600 (seeded by the second), a particle lands and the
+  # debris level jumps by a seeded amount in landing_size.  A landing is an
+  # onset; grooming neurons answer onsets and adapt to held input, so he
+  # grooms (posts) when a landing is enough for his network, and the level
+  # resets when he grooms.  There is no schedule.
+  landings_per_hour: 1.5
+  landing_size: [0.35, 0.7]

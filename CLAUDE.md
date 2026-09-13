@@ -148,11 +148,11 @@ Do not download the EM volume. `neuprint-python` against
   (provisional synthetic-battery thresholds until then).
 - Action set: `reply`, `like`, `follow`, `leave`, `spontaneous_post`,
   `nothing`. engage → follow (reply if already following); leave → unfollow.
-- Spontaneous episodes (no event, every poll) drive bristle afferents in
-  proportion to an internal drive that accrues between polls and is cleared
-  by grooming; grooming is a post. He is a brain, not a fly: this drive is
-  the input we chose for the neurons that make the grooming outputs fire,
-  not a body simulation.
+- Own posts are grooming. Debris lands on his bristle neurons as discrete
+  seeded events; a landing is an onset; his grooming neurons answer onsets
+  and adapt to held input; if the answer crosses threshold he grooms, which
+  is a post. This is the input we chose for the neurons that make the
+  grooming outputs fire, not a body simulation.
 
 ## Phrasebook and generator
 

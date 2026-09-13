@@ -38,13 +38,26 @@ def synthetic_ledger(n_events: int, n_spont: int, seed: int) -> Ledger:
     ag = Agent(L, state_dir=tmp)
     rng = np.random.default_rng(seed)
     t0 = 1_800_000_000.0
+    times = np.sort(rng.random(n_events)) * 86400 * 30
     for i in range(n_events):
         did = f"did:plc:synthetic{int(rng.integers(0, 40))}"
         v = float(np.clip(rng.normal(0.0, 0.45), -1, 1)) if rng.random() < 0.7 else 0.0
-        ts = t0 + float(rng.random()) * 86400 * 30
-        ag.run(Features(did, v, bool(rng.random() < 0.4), 0), ts, f"synthetic://{i}", kind="event")
+        ag.run(
+            Features(did, v, bool(rng.random() < 0.4), 0),
+            t0 + float(times[i]),
+            f"synthetic://{i}",
+            kind="event",
+            fast=True,
+        )
+    # spontaneous: the window right after a landing (grooming answers onsets, not held input)
+    lo, hi = ag.enc.cfg["spontaneous"]["landing_size"]
+    t = t0 + 86400 * 30
     for _ in range(n_spont):
-        ag.run(None, t0 + float(rng.random()) * 86400 * 30, None, kind="spontaneous")
+        t += 600.0
+        ag.dust = float(rng.random() * 0.4)  # residual debris from earlier
+        ag.advance_to(t, fast=True)  # settles with the residual
+        ag.dust = min(1.0, ag.dust + lo + (hi - lo) * float(rng.random()))  # a particle lands
+        ag.run(None, t, None, kind="spontaneous", fast=True)
     return L
 
 

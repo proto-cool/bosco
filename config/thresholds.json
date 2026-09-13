@@ -1,18 +1,18 @@
 {
  "_note": "Per-population rate thresholds (Hz). Provisional values come from a synthetic stimulus battery (scripts/calibrate_thresholds.py --synthetic); at freeze-v1 they are re-set from the dev-period distribution of real activity, never from outcomes.",
- "engage": 12.7075,
+ "engage": 7.307499999999998,
  "reply": 1.0,
- "like": 1.3269230769230833,
- "leave": 10.277777777777779,
- "groom": 24.409868421052632,
+ "like": 1.0,
+ "leave": 5.516666666666664,
+ "groom": 10.548684210526304,
  "kc_range": [
-  0.004552165354330708,
-  0.13587290846456695
+  0.004183070866141733,
+  0.12182886318897637
  ],
  "_calibration": {
   "q": 0.85,
   "min_hz": 1.0,
-  "n_episodes": 300,
-  "source": "synthetic-dev (n=240+60); replace with real dev-period activity before freeze-v1"
+  "n_episodes": 320,
+  "source": "synthetic-dev (n=240+80)"
  }
 }

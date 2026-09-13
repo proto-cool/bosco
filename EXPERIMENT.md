@@ -43,10 +43,11 @@ genuinely the one acting, and that anyone can check.
   30 actions toward one account per day. These are loop guards, not a
   schedule. Bot self-label on the account.
 - When he posts or replies is the network's decision. Replies follow
-  events. Own posts follow an internal drive on bristle afferents that
-  accrues between polls and is cleared by grooming (`config/encoder_v1.yaml`
-  `spontaneous`). There is no timer. The VPS bounds perception, not
-  behaviour: at most `BOSCO_EPISODE_BUDGET` episodes per hour.
+  events. Own posts follow grooming: debris lands on his bristles as
+  discrete seeded events, each landing is an onset, and he grooms when his
+  network answers it (`config/encoder_v1.yaml` `spontaneous`). There is no
+  timer. The VPS bounds perception, not behaviour: at most
+  `BOSCO_EPISODE_BUDGET` windows per hour.
 - Bosco reads his timeline and the discover feed and may like, follow,
   unfollow, reply in any thread he reads, and post on his own. The action
   set is `reply, like, follow, leave, spontaneous_post, nothing`.

@@ -37,6 +37,7 @@ from bosco.sim import Drive, Fly
 from bosco.textgen import Generator
 
 PRESENT_MS = 1000.0
+SETTLE_MS = 3000
 SNAPSHOT_EVERY_MS = 3600 * 1000
 
 
@@ -164,12 +165,18 @@ class Agent:
             d["bristles"] = b
         return d
 
-    def _dust_step(self, slice_index: int, ms: float) -> None:
+    def _dust_step(self, slice_index: int, ms: float) -> bool:
+        """Discrete landings (see config/encoder_v1.yaml `spontaneous`).  Returns True if one landed."""
         cfg = self.enc.cfg.get("spontaneous", {})
-        rate = float(cfg.get("dust_per_hour", 0.35))
-        jitter = float(cfg.get("dust_jitter", 0.5))
-        u = int.from_bytes(hashlib.blake2b(f"dust|{slice_index}".encode(), digest_size=8).digest(), "little") / 2**64
-        self.dust = min(1.0, self.dust + rate * (ms / 3.6e6) * (1.0 - jitter + 2.0 * jitter * u))
+        per_hour = float(cfg.get("landings_per_hour", 1.5))
+        lo, hi = cfg.get("landing_size", [0.35, 0.7])
+        h = hashlib.blake2b(f"landing|{slice_index}".encode(), digest_size=16).digest()
+        u1 = int.from_bytes(h[:8], "little") / 2**64
+        u2 = int.from_bytes(h[8:], "little") / 2**64
+        if u1 < per_hour * (ms / 3.6e6):
+            self.dust = min(1.0, self.dust + lo + (hi - lo) * u2)
+            return True
+        return False
 
     def advance_to(self, ts: float, fast: bool = False, on_groom=None) -> list[Outcome]:
         """Simulate idle time up to ts in one-second slices.  Each slice is read out; a groom
@@ -178,9 +185,18 @@ class Agent:
         target = self.bio_ms(ts)
         outs: list[Outcome] = []
         if fast and target > self.live.t_ms:
-            self.ledger.add_control("jump", "cli", None, f"{self.live.t_ms}->{target}", ts=ts)
+            # development shortcut: skip the gap but simulate its last SETTLE_MS so the
+            # network arrives at the event settled, as it would have in real time
+            settle = min(SETTLE_MS, target - self.live.t_ms)
+            self.ledger.add_control("jump", "cli", None, f"{self.live.t_ms}->{target - settle}", ts=ts)
+            self.live.t_ms = target - settle
+            target_settled = target
+            while self.live.t_ms + SLICE_MS <= target_settled:
+                self._dust_step(self.live.t_ms // 1000, SLICE_MS)
+                self.live.set_base(self._base_drives(self.live.t_ms))
+                self.live.idle(SLICE_MS)
             self.mb.forget(self.hours(ts))
-            self.live.t_ms = target
+            self.save_state()
             return outs
         while self.live.t_ms + SLICE_MS <= target:
             slice_index = self.live.t_ms // 1000

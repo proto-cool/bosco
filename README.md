@@ -62,8 +62,8 @@ Every number below has a gate report under `docs/`.
 7. **Encoder**: 12 of 35 valence-neutral glomeruli per account, 120 Hz;
    VADER → sugar/bitter GRNs up to 150 Hz; mention → JO-A/B 100 Hz; clock
    neurons on a 24 h cosine (`docs/circadian.md`).  KC activity 2–5% per
-   account odor, odor-specific.  No-event episodes drive 500 random body
-   bristles at 10 Hz (dust → grooming → a post).
+   account odor, odor-specific.  Background: clock neurons and bristle
+   debris (landings; see 11).
 8. **Readout** populations are cell-type lists with citations
    (`config/readout_populations.yaml`): engage → follow, reply → reply,
    like → like, leave → unfollow, groom → post.  Thresholds are provisional
@@ -84,9 +84,12 @@ Every number below has a gate report under `docs/`.
    `src/bosco/moderation.py`). The generator's vocabulary is closed.
 11. **Scope**: Bosco reads his timeline and the discover feed; each unseen
    post is a stimulus; he may like, follow, unfollow, reply, and post, within
-   per-kind caps (`config/caps_v1.yaml`).  Own posts follow an internal drive
-   on bristle afferents that accrues between polls and is cleared by grooming;
-   there is no timer.  Operator commands by mention: `src/bosco/control.py`.
+   per-kind caps (`config/caps_v1.yaml`).  Own posts come from grooming:
+   debris lands on his bristles as discrete, seeded events (about 1.5 an
+   hour); a landing is an onset, his grooming neurons answer onsets and
+   adapt to held input, and if the answer crosses threshold he grooms, which
+   is a post, and the debris resets.  There is no timer.  Operator commands
+   by mention: `src/bosco/control.py`.
 9. **Determinism**: single thread, fixed accumulation order, no FMA or
    fast-math, splitmix64 RNG.  His full state (voltages,
    conductances, adaptation, delay ring, RNG, plastic weights, debris drive)
