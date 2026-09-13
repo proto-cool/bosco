@@ -1,0 +1,206 @@
+#include "lif.h"
+#include <math.h>
+#include <stdlib.h>
+#include <string.h>
+
+struct lif_net {
+    int32_t n;
+    int64_t nnz;
+    int64_t *indptr;
+    int32_t *indices;
+    double *w;
+
+    lif_params p;
+    double e_m, e_s, c_g;   /* exact-integration coefficients */
+    int32_t rfc_steps;      /* default refractory length in steps */
+    int32_t dly_steps;
+
+    double *v, *g;
+    int32_t *rfc_len;       /* per-neuron refractory length (0 for driven inputs) */
+    int32_t *rfc_left;      /* steps of refractoriness remaining */
+    uint8_t *spiked;        /* spiked this step */
+
+    /* delay ring: dly_steps slots, each holds up to n ids */
+    int32_t *ring;
+    int32_t *ring_cnt;
+    int32_t ring_pos;
+
+    int32_t n_in;
+    int32_t *in_idx;
+    double *in_p, *in_w;
+
+    uint64_t rng;
+    int64_t step;
+    int64_t *counts;
+};
+
+/* splitmix64 */
+static inline uint64_t next_u64(uint64_t *s) {
+    uint64_t z = (*s += 0x9E3779B97F4A7C15ULL);
+    z = (z ^ (z >> 30)) * 0xBF58476D1CE4E5B9ULL;
+    z = (z ^ (z >> 27)) * 0x94D049BB133111EBULL;
+    return z ^ (z >> 31);
+}
+static inline double next_unit(uint64_t *s) {
+    return (double)(next_u64(s) >> 11) * (1.0 / 9007199254740992.0);
+}
+
+lif_net *lif_create(int32_t n, const int64_t *indptr, const int32_t *indices,
+                    const double *w, const lif_params *p) {
+    lif_net *net = calloc(1, sizeof *net);
+    if (!net) return NULL;
+    net->n = n;
+    net->nnz = indptr[n];
+    net->indptr = malloc((size_t)(n + 1) * sizeof(int64_t));
+    net->indices = malloc((size_t)net->nnz * sizeof(int32_t));
+    net->w = malloc((size_t)net->nnz * sizeof(double));
+    memcpy(net->indptr, indptr, (size_t)(n + 1) * sizeof(int64_t));
+    memcpy(net->indices, indices, (size_t)net->nnz * sizeof(int32_t));
+    memcpy(net->w, w, (size_t)net->nnz * sizeof(double));
+    net->p = *p;
+    net->e_m = exp(-p->dt_ms / p->tau_m);
+    net->e_s = exp(-p->dt_ms / p->tau_s);
+    net->c_g = (p->tau_s / (p->tau_m - p->tau_s)) * (net->e_m - net->e_s);
+    net->rfc_steps = (int32_t)llround(p->t_rfc / p->dt_ms);
+    net->dly_steps = (int32_t)llround(p->t_dly / p->dt_ms);
+    if (net->dly_steps < 1) net->dly_steps = 1;
+    net->v = malloc((size_t)n * sizeof(double));
+    net->g = malloc((size_t)n * sizeof(double));
+    net->rfc_len = malloc((size_t)n * sizeof(int32_t));
+    net->rfc_left = malloc((size_t)n * sizeof(int32_t));
+    net->spiked = malloc((size_t)n);
+    net->ring = malloc((size_t)net->dly_steps * (size_t)n * sizeof(int32_t));
+    net->ring_cnt = malloc((size_t)net->dly_steps * sizeof(int32_t));
+    net->counts = malloc((size_t)n * sizeof(int64_t));
+    net->n_in = 0;
+    net->in_idx = NULL; net->in_p = NULL; net->in_w = NULL;
+    lif_reset(net, 0);
+    return net;
+}
+
+void lif_free(lif_net *net) {
+    if (!net) return;
+    free(net->indptr); free(net->indices); free(net->w);
+    free(net->v); free(net->g); free(net->rfc_len); free(net->rfc_left);
+    free(net->spiked); free(net->ring); free(net->ring_cnt); free(net->counts);
+    free(net->in_idx); free(net->in_p); free(net->in_w);
+    free(net);
+}
+
+void lif_reset(lif_net *net, uint64_t seed) {
+    int32_t n = net->n;
+    for (int32_t i = 0; i < n; i++) {
+        net->v[i] = net->p.v0;
+        net->g[i] = 0.0;
+        net->rfc_len[i] = net->rfc_steps;
+        net->rfc_left[i] = 0;
+        net->spiked[i] = 0;
+        net->counts[i] = 0;
+    }
+    for (int32_t k = 0; k < net->n_in; k++) net->rfc_len[net->in_idx[k]] = 0;
+    memset(net->ring_cnt, 0, (size_t)net->dly_steps * sizeof(int32_t));
+    net->ring_pos = 0;
+    net->rng = seed ^ 0xD1B54A32D192ED03ULL;
+    /* warm the generator so seed 0 is not the raw state */
+    for (int i = 0; i < 4; i++) (void)next_u64(&net->rng);
+    net->step = 0;
+}
+
+void lif_set_weights(lif_net *net, const int64_t *edge_idx, const double *w, int64_t m) {
+    for (int64_t k = 0; k < m; k++) net->w[edge_idx[k]] = w[k];
+}
+void lif_get_weights(const lif_net *net, double *w_out) {
+    memcpy(w_out, net->w, (size_t)net->nnz * sizeof(double));
+}
+int64_t lif_nnz(const lif_net *net) { return net->nnz; }
+
+void lif_set_inputs(lif_net *net, int32_t m, const int32_t *idx,
+                    const double *rate_hz, const double *weight_mv) {
+    /* restore refractory period of previously driven neurons */
+    for (int32_t k = 0; k < net->n_in; k++) net->rfc_len[net->in_idx[k]] = net->rfc_steps;
+    free(net->in_idx); free(net->in_p); free(net->in_w);
+    net->n_in = m;
+    net->in_idx = malloc((size_t)m * sizeof(int32_t));
+    net->in_p = malloc((size_t)m * sizeof(double));
+    net->in_w = malloc((size_t)m * sizeof(double));
+    for (int32_t k = 0; k < m; k++) {
+        net->in_idx[k] = idx[k];
+        net->in_p[k] = rate_hz[k] * net->p.dt_ms * 1e-3;
+        net->in_w[k] = weight_mv[k];
+        net->rfc_len[idx[k]] = 0;
+    }
+}
+
+int64_t lif_run(lif_net *net, int64_t n_steps, int32_t *t_out, int32_t *id_out,
+                int64_t max_spikes) {
+    const int32_t n = net->n;
+    const double e_m = net->e_m, e_s = net->e_s, c_g = net->c_g;
+    const double v0 = net->p.v0, v_th = net->p.v_th, v_rst = net->p.v_rst;
+    double *v = net->v, *g = net->g;
+    int32_t *rfc_left = net->rfc_left;
+    const int32_t *rfc_len = net->rfc_len;
+    uint8_t *spiked = net->spiked;
+    const int32_t D = net->dly_steps;
+    int64_t total = 0;
+
+    for (int64_t s = 0; s < n_steps; s++) {
+        const int32_t t = (int32_t)net->step;
+        /* 1. state update (exact for the linear system), unless refractory */
+        for (int32_t i = 0; i < n; i++) {
+            if (rfc_left[i] > 0) { rfc_left[i]--; continue; }
+            double gi = g[i];
+            v[i] = v0 + (v[i] - v0) * e_m + gi * c_g;
+            g[i] = gi * e_s;
+        }
+        /* 2. threshold (refractory neurons were skipped above and cannot spike:
+              their v is frozen at v_rst) */
+        int32_t *slot = net->ring + (size_t)net->ring_pos * (size_t)n;
+        int32_t cnt = 0;
+        for (int32_t i = 0; i < n; i++) {
+            if (rfc_left[i] == 0 && v[i] > v_th) {
+                spiked[i] = 1;
+                slot[cnt++] = i;
+                net->counts[i]++;
+                if (total < max_spikes) { t_out[total] = t; id_out[total] = i; }
+                total++;
+            } else {
+                spiked[i] = 0;
+            }
+        }
+        net->ring_cnt[net->ring_pos] = cnt;
+        /* 3a. deliver spikes emitted D steps ago */
+        {
+            int32_t dpos = (net->ring_pos + 1) % D;   /* the oldest slot */
+            int32_t dcnt = net->ring_cnt[dpos];
+            const int32_t *dslot = net->ring + (size_t)dpos * (size_t)n;
+            for (int32_t k = 0; k < dcnt; k++) {
+                int32_t pre = dslot[k];
+                int64_t a = net->indptr[pre], b = net->indptr[pre + 1];
+                for (int64_t e = a; e < b; e++) g[net->indices[e]] += net->w[e];
+            }
+            net->ring_cnt[dpos] = 0;
+        }
+        /* 3b. Poisson inputs (Bernoulli per step), fixed order */
+        for (int32_t k = 0; k < net->n_in; k++) {
+            if (next_unit(&net->rng) < net->in_p[k]) v[net->in_idx[k]] += net->in_w[k];
+        }
+        /* 4. reset */
+        for (int32_t k = 0; k < cnt; k++) {
+            int32_t i = slot[k];
+            v[i] = v_rst;
+            g[i] = 0.0;
+            rfc_left[i] = rfc_len[i];
+        }
+        net->ring_pos = (net->ring_pos + 1) % D;
+        net->step++;
+    }
+    return total;
+}
+
+void lif_spike_counts(const lif_net *net, int64_t *counts) {
+    memcpy(counts, net->counts, (size_t)net->n * sizeof(int64_t));
+}
+void lif_get_v(const lif_net *net, double *v_out) {
+    memcpy(v_out, net->v, (size_t)net->n * sizeof(double));
+}
+int64_t lif_step(const lif_net *net) { return net->step; }
