@@ -1,0 +1,39 @@
+# Bosco's phrasebook.  Hand-authored by Nick.  Frozen and published at freeze-v1.
+#
+# Every line Bosco can ever post is in this file.  Lines are selected by the
+# key (behaviour, valence, arousal, familiarity) and a deterministic draw
+# from the episode seed.  If no line exists for a key, the fallback order
+# is: same behaviour+valence any arousal/familiarity; same behaviour any
+# key; otherwise the action is dropped and logged as 'no_line'.
+#
+# Keys
+#   behaviour:   engage | reply | groom          (like/leave post nothing)
+#   valence:     positive | negative | neutral   (MBON reward-vs-punishment balance)
+#   arousal:     low | mid | high                (descending-neuron activity)
+#   familiarity: new | known | familiar          (0 | 1-4 | 5+ prior direct interactions)
+#
+# Format: each entry has an id (stable, used in the ledger), the key, and the text.
+# Text must be <= 300 graphemes. No links, no mentions except @proto.cool.
+#
+# Claude does not write lines.  Placeholders below are structure only and
+# are skipped by the loader (text: null).
+version: 0
+lines:
+  - id: engage-neutral-mid-new-001
+    behaviour: engage
+    valence: neutral
+    arousal: mid
+    familiarity: new
+    text: null
+  - id: reply-positive-high-known-001
+    behaviour: reply
+    valence: positive
+    arousal: high
+    familiarity: known
+    text: null
+  - id: groom-neutral-low-new-001
+    behaviour: groom
+    valence: neutral
+    arousal: low
+    familiarity: new
+    text: null
