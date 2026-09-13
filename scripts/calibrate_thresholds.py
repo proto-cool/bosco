@@ -43,7 +43,7 @@ def synthetic_ledger(n_events: int, n_spont: int, seed: int) -> Ledger:
         v = float(np.clip(rng.normal(0.0, 0.45), -1, 1)) if rng.random() < 0.7 else 0.0
         ts = t0 + float(rng.random()) * 86400 * 30
         ag.run(Features(did, v, bool(rng.random() < 0.4), 0), ts, f"synthetic://{i}", kind="event")
-    for i in range(n_spont):
+    for _ in range(n_spont):
         ag.run(None, t0 + float(rng.random()) * 86400 * 30, None, kind="spontaneous")
     return L
 

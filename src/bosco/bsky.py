@@ -317,7 +317,8 @@ def run_loop(ledger: Ledger, dry_run: bool, once: bool, interval: int) -> int:
             sp = b.spontaneous()
             ledger.set_cursor("last_poll_ts", repr(time.time()))
             print(
-                f"{dt.datetime.now(dt.UTC).isoformat()} poll: {n} notifications, {nb} browsed, {nk} blocks, spontaneous {sp}"
+                f"{dt.datetime.now(dt.UTC).isoformat()} poll: {n} notifications, {nb} browsed, "
+                f"{nk} blocks, spontaneous {sp}"
             )
         except Exception as e:  # noqa: BLE001
             print("poll error:", repr(e), file=sys.stderr)
