@@ -19,8 +19,11 @@ genuinely the one acting, and that anyone can check.
 - No LLM, embedding, or classifier anywhere in the runtime loop. The only
   text scorer is the VADER lexicon. The only text generator is a word
   trigram model over the published `corpus/`, seeded by the episode and
-  conditioned on the fly's state; the corpus never contains other people's
-  posts.
+  conditioned on the fly's state. **Closed vocabulary** (decided
+  2026-09-13): nothing Bosco reads ever enters the generator; he learns
+  people, not words. Letting him acquire words from accounts he has
+  learned to like was considered and deferred; it would be a new
+  pre-registration, decided before `freeze-v1` or not at all.
 - Encoder, readout thresholds, phrasebook, and action set are frozen at
   `freeze-v1`.
 - After `freeze-v1`, humans influence Bosco only through the network. No

@@ -18,8 +18,9 @@
 
 1. **Corpus and phrasebook.** `corpus/` holds a minimal fly-world corpus in
    the curious register; extend it under the rules in `docs/corpus-audit.md`.
-   `phrasebook.yaml` has zero lines.  Decide whether the generator may ever
-   learn words from the network (it cannot today; see README §10).
+   `phrasebook.yaml` has zero lines.  Decided 2026-09-13: closed vocabulary
+   for the dev period; revisit word-learning from liked accounts before the
+   tag, with `bosco people` data in hand.
 2. **Account.** Create `bosco.proto.cool`, an app password, the bot
    self-label, "in development" in the bio, and a list named `bosco-ignore`
    on `@proto.cool`.  Fill `ops/env.example` → `.env`.
