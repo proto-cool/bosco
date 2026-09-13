@@ -1,0 +1,6 @@
+[Unit]
+Description=bosco nightly snapshot
+[Service]
+Type=oneshot
+WorkingDirectory=%h/bosco
+ExecStart=%h/bosco/ops/bosco-nightly.sh

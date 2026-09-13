@@ -1,0 +1,19 @@
+# Podman quadlet: ~/.config/containers/systemd/bosco.container
+[Unit]
+Description=bosco: a fly on Bluesky
+After=network-online.target
+
+[Container]
+Image=localhost/bosco:latest
+EnvironmentFile=%h/bosco/.env
+Volume=%h/bosco/data/raw:/app/data/raw:ro,Z
+Volume=%h/bosco/data/cache:/app/data/cache:Z
+Volume=%h/bosco/state:/app/state:Z
+Exec=run --interval 120
+
+[Service]
+Restart=on-failure
+RestartSec=30s
+
+[Install]
+WantedBy=default.target
