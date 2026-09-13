@@ -24,6 +24,7 @@ class Identity:
 class IdentityReflex:
     def __init__(self, path=paths.CONFIG / "identity_v1.yaml") -> None:
         cfg = yaml.safe_load(open(path))
+        self.intro: list[str] = list(cfg.get("intro", []))
         self.questions = [
             (q["id"], [re.compile(p, re.I) for p in q["patterns"]], list(q["answers"])) for q in cfg["questions"]
         ]
@@ -40,8 +41,16 @@ class IdentityReflex:
         h = int.from_bytes(hashlib.blake2b(f"{seed}|{qid}".encode(), digest_size=8).digest(), "little")
         return Identity(qid, answers[h % len(answers)])
 
+    def intro_text(self, seed: int) -> str | None:
+        if not self.intro:
+            return None
+        h = int.from_bytes(hashlib.blake2b(f"{seed}|intro".encode(), digest_size=8).digest(), "little")
+        return self.intro[h % len(self.intro)]
+
     def digest(self) -> str:
         h = hashlib.blake2b(digest_size=16)
+        for t in self.intro:
+            h.update(t.encode())
         for qid, pats, answers in self.questions:
             h.update(qid.encode())
             for p in pats:

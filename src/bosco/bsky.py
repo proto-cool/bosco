@@ -296,6 +296,23 @@ class Bsky:
             target_did=did,
         )
 
+    # ---- the first post ---------------------------------------------------------
+    def introduce_if_needed(self) -> bool:
+        """Once, before anything else: the introduction (config/identity_v1.yaml `intro`)."""
+        done = self.L.db.execute("SELECT 1 FROM actions WHERE kind='intro' AND dry_run=0 LIMIT 1").fetchone()
+        if done or self.L.asleep():
+            return False
+        seed = int(self.agent.brain_t0 or time.time())
+        text = self.agent.identity.intro_text(seed)
+        if not text:
+            return False
+        our_uri = None
+        if not self.dry:
+            our_uri = self.client.send_post(text, langs=["en"]).uri
+        print(f"intro {text!r} ({'dry' if self.dry else our_uri})")
+        self.L.add_action(0, "intro", our_uri, None, dry_run=self.dry, ts=time.time())
+        return True
+
     # ---- one post -> one episode -----------------------------------------------
     def perceive_post(
         self, uri: str, cid: str, did: str, record, ts: float, mentioned: bool, labels: set[str] | None = None
@@ -447,6 +464,8 @@ class Bsky:
 def run_loop(ledger: Ledger, dry_run: bool, once: bool, interval: int) -> int:
     b = Bsky(ledger, dry_run)
     print(f"bosco {'DRY-RUN' if dry_run else 'LIVE'} as {b.me}; operator {b.operator_did}")
+    b.agent.bio_ms(time.time())  # start his clock now if it has not started
+    b.introduce_if_needed()
     while True:
         try:
             n = b.poll_notifications()

@@ -21,6 +21,10 @@
 - A Bosco panel page at `bosco.proto.cool` with live stats from the ledger
   (episodes, actions, people, integrity), in ARC UI v4.2.2. After he flies.
 
+## Deploy
+
+`docs/DEPLOY.md`. His first post is the introduction in `config/identity_v1.yaml`.
+
 ## What only Nick can do
 
 1. **Corpus and phrasebook.** `corpus/` holds a minimal fly-world corpus in
