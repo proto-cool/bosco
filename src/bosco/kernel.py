@@ -78,6 +78,8 @@ def _load() -> C.CDLL:
     lib.lif_reset.argtypes = [C.c_void_p, C.c_uint64]
     lib.lif_set_weights.argtypes = [C.c_void_p, i64p, f64p, C.c_int64]
     lib.lif_get_weights.argtypes = [C.c_void_p, f64p]
+    lib.lif_blk.restype = C.c_int32
+    lib.lif_blk.argtypes = []
     lib.lif_nnz.restype = C.c_int64
     lib.lif_nnz.argtypes = [C.c_void_p]
     lib.lif_set_inputs.argtypes = [C.c_void_p, C.c_int32, i32p, f64p, f64p]
@@ -111,6 +113,8 @@ class Net:
         self.lib = _load()
         self.params = params
         self.n = int(len(indptr) - 1)
+        self.blk = int(self.lib.lif_blk())
+        self.nblk = (self.n + self.blk - 1) // self.blk
         self.indptr = np.ascontiguousarray(indptr, dtype=np.int64)
         self.indices = np.ascontiguousarray(indices, dtype=np.int32)
         w = np.ascontiguousarray(w_mv, dtype=np.float64)
@@ -193,10 +197,12 @@ class Net:
 
     def set_state(self, state: bytes) -> None:
         size = int(self.lib.lif_state_size(self._h))
-        nblk = (self.n + 63) // 64
-        if len(state) == size - nblk:
-            # state saved before activity blocks existed: arm every block; they disarm at rest
-            state = bytes(state) + b"\x01" * nblk
+        nblk = self.nblk
+        base = size - nblk
+        if len(state) != size and len(state) >= base:
+            # state saved before activity blocks existed, or with another block size: keep the
+            # neurons, arm every block; blocks disarm on their own once at rest
+            state = bytes(state[:base]) + b"\x01" * nblk
         if len(state) != size:
             raise ValueError(f"state size {len(state)} != {size}")
         self.lib.lif_set_state(self._h, C.c_char_p(state))

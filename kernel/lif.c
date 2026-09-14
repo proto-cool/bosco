@@ -3,9 +3,15 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define REST_EPS 1e-9   /* mV; below this a state variable is flushed to zero */
-#define BLK 64          /* neurons per activity block */
-#define THETA_EPS 1e-4  /* mV; adaptive-threshold offset below this is flushed to zero */
+#ifndef REST_EPS
+#define REST_EPS 1e-4   /* mV; below this a state variable is flushed to zero (spike threshold is 7 mV above rest) */
+#endif
+#ifndef BLK
+#define BLK 8           /* neurons per activity block; small, so one spike wakes few neurons */
+#endif
+#ifndef THETA_EPS
+#define THETA_EPS 1e-2  /* mV; adaptive-threshold offset below this is flushed to zero */
+#endif
 
 struct lif_net {
     int32_t n;
@@ -267,6 +273,8 @@ int64_t lif_run(lif_net *net, int64_t n_steps, int32_t *t_out, int32_t *id_out,
 void lif_spike_counts(const lif_net *net, int64_t *counts) {
     memcpy(counts, net->counts, (size_t)net->n * sizeof(int64_t));
 }
+int32_t lif_blk(void) { return BLK; }
+
 int64_t lif_state_size(const lif_net *net) {
     int64_t n = net->n, D = net->dly_steps;
     return 4 * n * (int64_t)sizeof(double) + (n + D * n + D + 1) * (int64_t)sizeof(int32_t)

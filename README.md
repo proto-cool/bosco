@@ -168,6 +168,16 @@ Every number below has a gate report under `docs/`.
    its soma and lights the ones that fire. Read-only: nothing on the page can
    reach him. Post text is fetched from the public API by URI, never stored.
 
+24. **Activity blocks are eight neurons and the flush is 1e-4 mV** (kernel, decided
+   2026-09-14). A block of neurons is skipped while all of them are at rest;
+   with 64-neuron blocks and a 1e-9 mV flush, 34 spikes a second kept 82% of
+   the brain "awake" and an idle second cost 0.42 wall s on a laptop. Eight-neuron
+   blocks, rest flushed below 1e-4 mV and the adaptive threshold below 1e-2 mV
+   (the spike threshold sits 7 mV above rest) bring that to 0.20 wall s with
+   the readout bit-identical in the tests we ran; a 1e-3 mV flush changed
+   which spikes fired and was rejected. The loop lives between polls instead of
+   sleeping, checks notifications every 20 s and browses on the interval.
+
 Not in v1: visual input.
 
 ## Running

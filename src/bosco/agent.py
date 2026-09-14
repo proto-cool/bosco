@@ -192,7 +192,7 @@ class Agent:
     def active_fraction(self) -> float:
         """Share of the kernel's 64-neuron blocks that are awake (cost of a simulated second scales with it)."""
         st = self.live.net.get_state()
-        nblk = (self.live.net.n + 63) // 64
+        nblk = self.live.net.nblk
         return sum(st[-nblk:]) / nblk
 
     def snapshot(self) -> Path:

@@ -74,6 +74,8 @@ void lif_spike_counts(const lif_net *net, int64_t *counts);
  * ring[dly_steps*n], ring_cnt[dly_steps], ring_pos, then uint64 rng, int64 step.
  * lif_state_size returns the byte count. */
 int64_t lif_state_size(const lif_net *net);
+/* neurons per activity block (compile-time constant) */
+int32_t lif_blk(void);
 void lif_get_state(const lif_net *net, void *buf);
 void lif_set_state(lif_net *net, const void *buf);
 /* Apply the passive recovery of ms of elapsed time without simulating it:
