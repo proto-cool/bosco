@@ -2,7 +2,7 @@
 
 Environment: BOSCO_HANDLE, BOSCO_APP_PASSWORD, BOSCO_OPERATOR (handle, default proto.cool),
 BOSCO_IGNORE_LIST (name of the operator's list, default bosco-ignore), BOSCO_PDS (optional),
-BOSCO_BROWSE (posts read per poll from timeline + discover, default 12),
+BOSCO_BROWSE (posts read per poll across his feeds, default 12),
 BOSCO_LANGS (the languages he reads, comma-separated, default en: sent as Accept-Language so the
 discover feed is served in them, and a post whose record declares only other languages is not
 perceived at all; nothing of it reaches his senses),
@@ -10,7 +10,8 @@ BOSCO_EPISODE_BUDGET (episodes per hour the VPS may spend, default 600 ~ 10 CPU-
 
 Bosco lives on the network like anyone else:
 - notifications (mention / reply / quote)          -> event episode, mentioned=True
-- timeline + discover feed posts he has not seen   -> event episode, mentioned=False
+- posts he has not seen from the feeds he goes to  -> event episode, mentioned=False
+  (config/feeds_v1.yaml; his browsing follows his own approaches, each feed keeping a floor)
 - like / follow / repost from a known account      -> reward outcome (per-account daily cap)
 - a reply to a Bosco post that VADER scores negative -> punishment outcome
 - an account he acted toward now blocks him        -> punishment outcome
@@ -32,13 +33,13 @@ from atproto import Client, client_utils, models
 from bosco import control
 from bosco.agent import Agent, Outcome
 from bosco.encoder import Features, vader_compound
+from bosco.feeds import Feeds
 from bosco.ledger import Ledger
 from bosco.moderation import Moderation
 
 REWARD_DAILY_CAP_PER_ACCOUNT = 2
 KIND_REPLY_VADER = 0.3  # a reply this warm to one of his posts rewards, whoever wrote it
 RESTART_EXIT_CODE = 3  # quadlet Restart=on-failure brings the container back
-DISCOVER_FEED = "at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot"
 
 
 def _day(ts: float) -> str:
@@ -65,6 +66,9 @@ class Bsky:
         # his content-language setting, the same header the app sends from a user's preferences
         self.client.request.add_additional_header("Accept-Language", ", ".join(self.langs))
         self.skipped_lang = 0
+        self.feeds = Feeds()
+        self.read_by_feed: dict[str, int] = {}
+        self.polls = 0
         self.interval = 120.0
         self.agent = Agent(ledger)
         self.mod = Moderation()
@@ -484,7 +488,15 @@ class Bsky:
 
     # ---- one post -> one episode -----------------------------------------------
     def perceive_post(
-        self, uri: str, cid: str, did: str, record, ts: float, mentioned: bool, labels: set[str] | None = None
+        self,
+        uri: str,
+        cid: str,
+        did: str,
+        record,
+        ts: float,
+        mentioned: bool,
+        labels: set[str] | None = None,
+        feed: str | None = None,
     ) -> Outcome:
         text = getattr(record, "text", "") or ""
         v = vader_compound(text)
@@ -500,7 +512,7 @@ class Bsky:
         root = getattr(reply, "root", None)
         parent = getattr(reply, "parent", None)
         out = self.agent.run(
-            Features(did, v, mentioned, fam, bool(labels), topics, question, words),
+            Features(did, v, mentioned, fam, bool(labels), topics, question, words, feed=feed),
             ts,
             uri,
             kind="event",
@@ -510,7 +522,7 @@ class Bsky:
         d = out.decision
         top = max(d.ratios, key=d.ratios.get) if d.ratios else "-"
         print(
-            f"episode {out.episode_id} {'mention' if mentioned else 'browse'} {did} fam={fam} vader={v:+.2f} "
+            f"episode {out.episode_id} {'mention' if mentioned else feed or 'browse'} {did} fam={fam} vader={v:+.2f} "
             f"topics={list(topics)} learned={d.learned:+.2f} top={top} {d.ratios.get(top, 0.0):.2f}x "
             f"-> {d.behaviour}/{d.action}"
         )
@@ -623,32 +635,49 @@ class Bsky:
         return any(str(lg).lower().split("-")[0] in self.langs for lg in langs)
 
     def browse(self) -> int:
-        """Read the timeline and the discover feed like anyone would; each unseen post is a stimulus."""
+        """Read like anyone would, from the places he goes (config/feeds_v1.yaml); each unseen post
+        is a stimulus that smells of the place it was read in.  The budget is split across feeds by
+        where his own readout has been approaching lately, each feed keeping a floor."""
         ignore = self.ignore_set()
         self.skipped_lang = 0
-        items = []
-        try:
-            items += [(fv.post, "timeline") for fv in self.client.get_timeline(limit=self.browse_budget).feed]
-        except Exception as e:  # noqa: BLE001
-            print("timeline failed:", e, file=sys.stderr)
-        try:
-            items += [
-                (fv.post, "discover")
-                for fv in self.client.app.bsky.feed.get_feed(
-                    params={"feed": DISCOVER_FEED, "limit": self.browse_budget}
-                ).feed
-            ]
-        except Exception as e:  # noqa: BLE001
-            print("discover failed:", e, file=sys.stderr)
-        n_ep = 0
+        self.read_by_feed = {}
+        self.polls += 1
         spent = self.episodes_last_hour()
         # each perceived post costs ~(1 s present + up to 4 s catch-up) of simulation; keep browsing
         # to a third of the poll interval at the measured speed of this box
         per_post_wall = 2.0 * max(0.05, self.agent.slice_wall_s)
         affordable = max(1, int((self.interval * 0.3) / per_post_wall))
-        for post, _where in items:
-            if n_ep >= min(self.browse_budget, affordable) or spent + n_ep >= self.episode_budget:
+        budget = min(self.browse_budget, affordable)
+        approaches = self.L.approaches_by_feed(time.time() - self.feeds.window_h * 3600.0)
+        quota = self.feeds.allocate(budget, approaches, offset=self.polls)
+        fetched: dict[str, list] = {}
+        for feed in self.feeds.feeds:
+            n = quota.get(feed.name, 0)
+            if n <= 0:
+                continue
+            limit = min(50, 2 * n + 2)  # some will have been seen already
+            try:
+                if feed.uri == "timeline":
+                    fetched[feed.name] = [fv.post for fv in self.client.get_timeline(limit=limit).feed]
+                else:
+                    fetched[feed.name] = [
+                        fv.post
+                        for fv in self.client.app.bsky.feed.get_feed(params={"feed": feed.uri, "limit": limit}).feed
+                    ]
+            except Exception as e:  # noqa: BLE001
+                print(f"{feed.name} feed failed:", e, file=sys.stderr)
+        # round-robin across feeds so the budget does not starve the last place on the list
+        items = []
+        for i in range(max((len(v) for v in fetched.values()), default=0)):
+            for name, posts in fetched.items():
+                if i < len(posts):
+                    items.append((posts[i], name))
+        n_ep = 0
+        for post, where in items:
+            if n_ep >= budget or spent + n_ep >= self.episode_budget:
                 break
+            if self.read_by_feed.get(where, 0) >= quota.get(where, 0):
+                continue
             did = post.author.did
             if did == self.me or did in ignore or self.L.seen_source(post.uri):
                 continue
@@ -656,7 +685,10 @@ class Bsky:
                 self.skipped_lang += 1
                 continue
             labels = self.mod.aversive_labels_on(post, post.author)
-            self.perceive_post(post.uri, post.cid, did, post.record, time.time(), mentioned=False, labels=labels)
+            self.perceive_post(
+                post.uri, post.cid, did, post.record, time.time(), mentioned=False, labels=labels, feed=where
+            )
+            self.read_by_feed[where] = self.read_by_feed.get(where, 0) + 1
             n_ep += 1
         return n_ep
 
@@ -773,13 +805,14 @@ def run_loop(ledger: Ledger, dry_run: bool, once: bool, interval: int) -> int:
                 ledger.set_cursor("last_poll_ts", repr(time.time()))
                 if panel is not None:
                     try:
-                        panel.status(time.time(), {"poll": {"browsed": nb, "lag_s": lag}})
+                        panel.status(time.time(), {"poll": {"browsed": nb, "lag_s": lag, "feeds": b.read_by_feed}})
                     except Exception as e:  # noqa: BLE001
                         print("panel status failed:", repr(e), file=sys.stderr)
                 ledger.set_cursor("brain_lag_s", repr(lag))
                 print(
-                    f"{dt.datetime.now(dt.UTC).isoformat()} poll: {nb} browsed, {b.skipped_lang} not in his "
-                    f"languages, {nk} blocks, lag {lag:.0f}s, "
+                    f"{dt.datetime.now(dt.UTC).isoformat()} poll: {nb} browsed "
+                    f"({', '.join(f'{k} {v}' for k, v in b.read_by_feed.items()) or 'nothing new'}), "
+                    f"{b.skipped_lang} not in his languages, {nk} blocks, lag {lag:.0f}s, "
                     f"{b.agent.slice_wall_s:.2f} wall s per bio s, {b.agent.active_fraction():.0%} of the brain awake"
                 )
             except Exception as e:  # noqa: BLE001

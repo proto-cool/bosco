@@ -627,6 +627,7 @@ class Agent:
             appetite=self.appetite,
             words=",".join(f.words) if f and f.words else None,
             context=",".join(f.context) if f and f.context else None,
+            feed=f.feed if f else None,
         )
         eid = self.ledger.add_episode(row, ts=ts)
         return Outcome(eid, dec, line, seed, text, text_source, ts, bool(f.mentioned) if f else False)
@@ -693,6 +694,7 @@ class Agent:
             question,
             words,
             context,
+            r["feed"],
         )
         self.live.set_base(self._base_drives(self.live.t_ms))
         d_before = self.mb.digest()
@@ -806,6 +808,7 @@ class Agent:
                     "question" in note,
                     tuple(r["words"].split(",")) if r["words"] else (),
                     tuple(r["context"].split(",")) if r["context"] else (),
+                    r["feed"],
                 )
             self.advance_to(ts)
             self.live.set_base(self._base_drives(self.live.t_ms))

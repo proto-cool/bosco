@@ -212,9 +212,14 @@ async function pollStatus() {
     $('today-sentence').textContent = 'nothing read yet today.';
   }
   const topics = Object.entries(st.topics_today || {}).sort((x, y) => y[1] - x[1]).slice(0, 6);
-  $('topics-sentence').textContent = topics.length
-    ? `smelled most: ${topics.map(([k, v]) => `${k} ×${v}`).join(', ')}.`
+  const fd = (st.feeds && st.feeds.feeds) || [];
+  const haunts = fd.filter((f) => f.reads > 0).sort((x, y) => y.share - x.share);
+  const smelled = topics.length ? `smelled most: ${topics.map(([k, v]) => `${k} ×${v}`).join(', ')}.` : '';
+  const where = haunts.length
+    ? ` he has been reading ${haunts.slice(0, 4).map((f) => f.name).join(', ')}${haunts.length > 4 ? ' and elsewhere' : ''}; ` +
+      `he goes back most to ${haunts[0].name}.`
     : '';
+  $('topics-sentence').textContent = (smelled + where).trim();
 
   // memory: one figure, one sentence, a short list
   const people = st.people || [];

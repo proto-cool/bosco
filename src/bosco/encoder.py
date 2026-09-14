@@ -14,6 +14,7 @@ import yaml
 
 from bosco import paths
 from bosco import populations as pop
+from bosco.feeds import Feeds
 from bosco.model import Brain
 from bosco.sim import Drive, Stimulus
 
@@ -37,6 +38,8 @@ class Features:
     words: tuple[str, ...] = ()
     # words still in the air from earlier posts in this thread, smelled again at a lower rate
     context: tuple[str, ...] = ()
+    # where he read it (config/feeds_v1.yaml): a place has a smell.  None for a mention.
+    feed: str | None = None
 
 
 class Encoder:
@@ -63,6 +66,7 @@ class Encoder:
         self.pc1 = brain.index_of_present(pop.pc1()) if self.cfg.get("courtship") else np.zeros(0, np.int32)
         self.words_cfg = yaml.safe_load(open(paths.CONFIG / "words_v1.yaml"))
         self.vocab = self._load_vocab()
+        self.feeds = Feeds()
 
     # ---- words as smells --------------------------------------------------
     def _load_vocab(self) -> frozenset[str]:
@@ -144,6 +148,15 @@ class Encoder:
         idx = np.concatenate([self.orn_by_glom[self.neutral[i]] for i in chosen]).astype(np.int32)
         return Drive(np.sort(idx), self.topics.rate_hz, f"topic:{topic}")
 
+    # ---- place ------------------------------------------------------------
+    def feed_drive(self, feed: str) -> Drive:
+        """A feed is a place: k neutral glomeruli chosen by its name, on top of the account odor."""
+        seed = int.from_bytes(hashlib.blake2b(f"feed|{feed}".encode(), digest_size=8).digest(), "little")
+        rng = np.random.default_rng(seed)
+        chosen = rng.choice(len(self.neutral), size=self.feeds.k, replace=False)
+        idx = np.concatenate([self.orn_by_glom[self.neutral[i]] for i in chosen]).astype(np.int32)
+        return Drive(np.sort(idx), self.feeds.rate_hz, f"feed:{feed}")
+
     # ---- taste -----------------------------------------------------------
     def gustatory_drive(self, vader: float) -> Drive | None:
         g = self.cfg["gustatory"]
@@ -193,6 +206,8 @@ class Encoder:
         """The stimulus for an event.  `appetite` is his state, not a feature of the event: it
         sets how hard being addressed excites the courtship command."""
         drives = [self.odor_drive(f.did)]
+        if f.feed:
+            drives.append(self.feed_drive(f.feed))
         drives += [self.topic_drive(t) for t in f.topics]
         drives += [self.word_drive(w) for w in f.words]
         scale = float(self.words_cfg.get("context_rate_scale", 0.5))

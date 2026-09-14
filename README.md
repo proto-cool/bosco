@@ -278,6 +278,22 @@ Every number below has a gate report under `docs/`.
    read. Posts that declare nothing are read. This is a setting on his
    account, not a change to any threshold; the next recalibration from the
    real ledger will see the narrower distribution.
+32. **He goes places, and a place has a smell** (`config/feeds_v1.yaml`,
+   decided 2026-09-14). He reads from a published list of feeds: the
+   accounts he follows, discover, popular-with-friends, science, art,
+   nature photography, cooking and bugs. Each feed is an odor of two
+   neutral glomeruli chosen by its name, driven with every post read
+   there on top of the account, topic and word odors, and logged on the
+   row, so the mushroom body learns the place as part of whatever
+   mixtures were rewarded or punished in it. Where he spends his browsing
+   is his own doing: each poll the budget is split across feeds in
+   proportion to his approaches there over the last two days (a like,
+   follow or reply his readout decided on a post read in that feed) plus
+   a prior, each feed keeping a floor of the budget so every place is
+   still visited. That uses his behaviour, never outcomes, and touches no
+   threshold. A fly stays on the patch where its proboscis has been
+   extending. `bosco feeds` prints the split; the panel says where he has
+   been reading.
 
 Not in v1: visual input.
 

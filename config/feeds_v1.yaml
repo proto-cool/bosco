@@ -1,0 +1,29 @@
+# Where he reads (decided 2026-09-14; the feed odor is part of the encoder and freezes at
+# freeze-v1).  Each feed is a place, and a place has a smell: k neutral glomeruli chosen by
+# the feed's name, driven at rate_hz with every post read from it, on top of the account,
+# topic and word odors.  The mushroom body learns the place as part of whatever mixtures
+# were rewarded or punished there.
+#
+# He spends his browsing where his own readout has been approaching: each poll the browse
+# budget is split across feeds in proportion to (approaches in the last window_h hours +
+# prior), each feed keeping at least `floor` of the budget so every place is still visited.
+# Approach means his like, follow or reply on a post read there; it is his behaviour, not
+# any outcome, and no threshold is involved.  A fly stays on the patch where its proboscis
+# has been extending.
+#
+# The list is published here; his saved feeds in the app are not read.  "timeline" is the
+# accounts he follows.
+k: 2
+rate_hz: 60.0
+floor: 0.05
+prior: 1.0
+window_h: 48
+feeds:
+  - {name: following, uri: timeline}
+  - {name: discover, uri: "at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot"}
+  - {name: friends, uri: "at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/with-friends"}
+  - {name: science, uri: "at://did:plc:jfhpnnst6flqway4eaeqzj2a/app.bsky.feed.generator/for-science"}
+  - {name: art, uri: "at://did:plc:y7crv2yh74s7qhmtx3mvbgv5/app.bsky.feed.generator/art-new"}
+  - {name: nature, uri: "at://did:plc:cngpbn4gngkf7oenuzysanng/app.bsky.feed.generator/aaaeu3w7ci7aw"}
+  - {name: cooking, uri: "at://did:plc:geoqe3qls5mwezckxxsewys2/app.bsky.feed.generator/aaai43yetqshu"}
+  - {name: bugs, uri: "at://did:plc:nzmnuu7z3a3pod4lambkzj6y/app.bsky.feed.generator/aaapw5ibjzd6w"}

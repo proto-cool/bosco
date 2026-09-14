@@ -158,6 +158,7 @@ class EpisodeRow:
     appetite: float | None = None
     words: str | None = None
     context: str | None = None
+    feed: str | None = None
 
 
 class Ledger:
@@ -183,6 +184,7 @@ class Ledger:
             ("appetite", "REAL"),
             ("words", "TEXT"),
             ("context", "TEXT"),
+            ("feed", "TEXT"),
         ):
             if col not in ecols:
                 self.db.execute(f"ALTER TABLE episodes ADD COLUMN {col} {typ}")
@@ -193,8 +195,8 @@ class Ledger:
         cur = self.db.execute(
             "INSERT INTO episodes (ts, kind, did, source_uri, vader, mentioned, familiarity, hour, seed, "
             "weight_digest_before, weight_digest_after, scores, mbon, kc_active, behaviour, action, valence, arousal, "
-            "line_key, line_id, note, drive, t_ms, brain_digest, topics, appetite, words, context) "
-            "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+            "line_key, line_id, note, drive, t_ms, brain_digest, topics, appetite, words, context, feed) "
+            "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
             (
                 ts or time.time(),
                 e.kind,
@@ -224,10 +226,34 @@ class Ledger:
                 e.appetite,
                 e.words,
                 e.context,
+                e.feed,
             ),
         )
         self.db.commit()
         return int(cur.lastrowid)
+
+    def reads_by_feed(self, since: float) -> dict[str, int]:
+        """Posts he read from each feed since `since`."""
+        return {
+            r[0]: int(r[1])
+            for r in self.db.execute(
+                "SELECT feed, COUNT(*) FROM episodes WHERE kind='event' AND mentioned=0 AND feed IS NOT NULL "
+                "AND ts>=? GROUP BY feed",
+                (since,),
+            )
+        }
+
+    def approaches_by_feed(self, since: float) -> dict[str, int]:
+        """His approaches (like, follow, reply decided) on posts read from each feed since `since`:
+        his behaviour there, which is what decides where he reads next.  Never outcomes."""
+        return {
+            r[0]: int(r[1])
+            for r in self.db.execute(
+                "SELECT feed, COUNT(*) FROM episodes WHERE kind='event' AND mentioned=0 AND feed IS NOT NULL "
+                "AND ts>=? AND action IN ('like','follow','reply') GROUP BY feed",
+                (since,),
+            )
+        }
 
     def episode(self, episode_id: int) -> sqlite3.Row | None:
         return self.db.execute("SELECT * FROM episodes WHERE id=?", (episode_id,)).fetchone()

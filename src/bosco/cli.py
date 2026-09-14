@@ -327,6 +327,26 @@ def main(argv=None) -> int:
         return 0
 
     s.set_defaults(fn=_words)
+    s = sub.add_parser("feeds", help="where he reads, and how his browsing is split by his own approaches")
+
+    def _feeds(a):
+        import time as _time
+
+        from bosco.feeds import Feeds
+
+        L = Ledger(a.ledger)
+        fs = Feeds()
+        since = _time.time() - fs.window_h * 3600.0
+        reads, appr = L.reads_by_feed(since), L.approaches_by_feed(since)
+        shares = fs.shares(appr)
+        print(f"last {fs.window_h:.0f} h; floor {fs.floor:.0%} each, the rest by approaches + {fs.prior:g}")
+        for f in fs.feeds:
+            print(
+                f"  {f.name:<10} read {reads.get(f.name, 0):>4}  approached {appr.get(f.name, 0):>3}  share {shares[f.name]:5.1%}"
+            )
+        return 0
+
+    s.set_defaults(fn=_feeds)
     s = sub.add_parser("status")
     s.set_defaults(fn=cmd_status)
     s = sub.add_parser("integrity")

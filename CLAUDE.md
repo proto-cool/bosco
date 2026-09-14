@@ -152,6 +152,10 @@ Do not download the EM volume. `neuprint-python` against
   thread's last posts linger for a few minutes. Never the sentence. What
   is "in the air" when he speaks is read from his antennae (habituation
   depth over the logged words), not from a list.
+- Feeds → places (`config/feeds_v1.yaml`): a published list of feeds, each
+  an odor of two neutral glomeruli driven with every post read there. His
+  browse budget is split across them by his own recent approaches (like,
+  follow, reply decided), with a floor per feed; never by outcomes.
 - Languages (`BOSCO_LANGS`, default en): his content-language setting, sent
   as Accept-Language like any user's, and a post declaring only other
   languages is not perceived. His vocabulary is English; nothing else of

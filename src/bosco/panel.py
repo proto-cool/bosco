@@ -93,6 +93,27 @@ class Panel:
         """The words in the air around him right now (from the threads he is in)."""
         return {"air": list(self.agent.air(int(self.agent.live.t_ms)))}
 
+    def _feeds(self, ts: float) -> dict:
+        """Where he reads: each feed's reads and approaches over the window, and the share of his
+        browsing it gets next (config/feeds_v1.yaml)."""
+        fs = self.agent.enc.feeds
+        since = ts - fs.window_h * 3600.0
+        reads = self.L.reads_by_feed(since)
+        appr = self.L.approaches_by_feed(since)
+        shares = fs.shares(appr)
+        return {
+            "window_h": fs.window_h,
+            "feeds": [
+                {
+                    "name": f.name,
+                    "reads": reads.get(f.name, 0),
+                    "approaches": appr.get(f.name, 0),
+                    "share": shares[f.name],
+                }
+                for f in fs.feeds
+            ],
+        }
+
     # ---- per poll -----------------------------------------------------------------
     def status(self, ts: float, extra: dict | None = None) -> dict:
         L, ag = self.L, self.agent
@@ -225,6 +246,7 @@ class Panel:
             "posts": posts,
             "voice": dict(sorted(ag.voice.items(), key=lambda kv: -abs(kv[1] - 1.0))[:12]),
             "words": self._words(),
+            "feeds": self._feeds(ts),
             "corpus_digest": ag.generator.digest(),
             "last_poll_ts": L.get_cursor("last_poll_ts"),
         }

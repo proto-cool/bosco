@@ -63,6 +63,7 @@ def main(argv=None) -> int:
                 "question" in note,
                 tuple(r["words"].split(",")) if r["words"] else (),
                 tuple(r["context"].split(",")) if r["context"] else (),
+                r["feed"],
             )
             out = agent.run(f, r["ts"], r["source_uri"], kind="event", fast=True)
             idmap[r["id"]] = out.episode_id
