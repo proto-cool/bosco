@@ -8,7 +8,9 @@ Rules:
 - Plain UTF-8 text.  One document per file.  Paragraphs separated by blank lines.
 - Optional tags on the first line: `#tags: behaviour=groom valence=positive arousal=low`.
   Tagged documents are preferred when the fly's state matches; untagged
-  documents are always in the pool.
+  documents are always in the pool.  `topic=code` (a name from
+  `config/topics_v1.yaml`) joins only when the post he answers smelled of
+  that topic.  See `docs/CORPUS-PLAN.md`.
 - **Never** other people's Bluesky posts, quotes of them, or anything scraped
   from the network.  The corpus is authored.
 - Phrasebook lines (`phrasebook.yaml`) are added to the pool automatically.

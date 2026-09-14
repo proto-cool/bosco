@@ -174,6 +174,7 @@ def main(argv=None) -> int:
     s.add_argument("--arousal", default="mid")
     s.add_argument("--seed", type=int, default=1)
     s.add_argument("-n", type=int, default=5)
+    s.add_argument("--topic", action="append", default=[], help="topic(s) smelled, e.g. --topic code")
 
     def _say(a):
         from bosco.phrasebook import Phrasebook
@@ -182,7 +183,7 @@ def main(argv=None) -> int:
         g = Generator(phrasebook_lines=[ln.text for ln in Phrasebook().lines])
         print("corpus digest", g.digest(), "docs", [d.name for d in g.docs])
         for i in range(a.n):
-            print(f"[{a.seed + i}] {g.generate(a.behaviour, a.valence, a.arousal, a.seed + i)}")
+            print(f"[{a.seed + i}] {g.generate(a.behaviour, a.valence, a.arousal, a.seed + i, topics=tuple(a.topic))}")
         return 0
 
     s.set_defaults(fn=_say)

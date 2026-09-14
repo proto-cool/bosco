@@ -46,3 +46,15 @@ def test_tags_prefer_matching_docs():
 def test_detokenize_is_lowercase():
     assert detokenize(["I", "am", "Small", ".", "i", "sit", "."]) == "i am small. i sit."
     assert len(sentences("One. Two! Three? four")) == 4
+
+
+def test_topic_tagged_documents_join_only_when_smelled():
+    d = Path(tempfile.mkdtemp())
+    (d / "base.txt").write_text("Sun on the wall. I sit. Warm.")
+    (d / "code.txt").write_text("#tags: topic=code\nCode is many small words. Rust is a word. I do not know rust.")
+    g = Generator(corpus_dir=d)
+    assert "code.txt" not in g.matching_docs("reply", "neutral", "mid")
+    assert "code.txt" in g.matching_docs("reply", "neutral", "mid", topics=("code",))
+    plain = " ".join((g.generate("reply", "neutral", "mid", s) or "") for s in range(15))
+    coded = " ".join((g.generate("reply", "neutral", "mid", s, topics=("code",)) or "") for s in range(15))
+    assert "rust" not in plain and "rust" in coded

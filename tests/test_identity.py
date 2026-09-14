@@ -17,3 +17,14 @@ def test_intro_exists_and_fits():
     r = IdentityReflex()
     t = r.intro_text(1)
     assert t and len(t) <= 300 and "@proto.cool" in t and t == r.intro_text(1)
+
+
+def test_memory_question_and_answers():
+    r = IdentityReflex()
+    assert r.is_memory_question("@bosco.proto.cool what do you think of me?")
+    assert r.is_memory_question("do you like me")
+    assert not r.is_memory_question("do you like rust")
+    assert "not know" in r.memory_answer(0.0, 0)
+    assert "sweet" in r.memory_answer(0.6, 3) and "3" in r.memory_answer(0.6, 3)
+    assert "bitter" in r.memory_answer(-0.5, 2)
+    assert r.memory_answer(0.05, 4).startswith("i know your smell")

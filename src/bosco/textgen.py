@@ -203,34 +203,60 @@ class Generator:
                 h.update((" ".join(s) + "\n").encode())
         return h.hexdigest()
 
-    def matching_docs(self, behaviour: str, valence: str, arousal: str) -> list[str]:
+    @staticmethod
+    def _doc_matches(d: Document, want: dict[str, str], topics: tuple[str, ...]) -> bool:
+        """Untagged documents always match.  Tagged ones must agree on every register key they carry;
+        a `topic=` tag matches only when that topic was smelled in the post."""
+        if not d.tags:
+            return True
+        for k, v in d.tags.items():
+            if k == "topic":
+                if v not in topics:
+                    return False
+            elif k in want and want[k] != v:
+                return False
+        return True
+
+    def matching_docs(self, behaviour: str, valence: str, arousal: str, topics: tuple[str, ...] = ()) -> list[str]:
         """Names of tagged documents that matched this register (the ones what-to-say learning touches)."""
         want = {"behaviour": behaviour, "valence": valence, "arousal": arousal}
-        return [d.name for d in self.docs if d.tags and all(d.tags.get(k, v) == v for k, v in want.items())]
+        return [d.name for d in self.docs if d.tags and self._doc_matches(d, want, topics)]
 
     def set_doc_weights(self, w: dict[str, float]) -> None:
         self.doc_weight = dict(w)
         self._models.clear()
 
-    def model_for(self, behaviour: str, valence: str, arousal: str) -> NGram:
-        key = (behaviour, valence, arousal)
+    def model_for(self, behaviour: str, valence: str, arousal: str, topics: tuple[str, ...] = ()) -> NGram:
+        key = (behaviour, valence, arousal, tuple(sorted(topics)))
         if key in self._models:
             return self._models[key]
         want = {"behaviour": behaviour, "valence": valence, "arousal": arousal}
         pool: list[list[str]] = []
         for d in self.docs:
-            if not d.tags or all(d.tags.get(k, v) == v for k, v in want.items()):
-                base = 3 if d.tags else 1  # matching tagged docs count triple
+            if self._doc_matches(d, want, topics):
+                base = 1
+                if d.tags:
+                    base = 3  # matching tagged docs count triple
+                    if "topic" in d.tags:
+                        base = 5  # a document about what was just smelled counts most
                 weight = max(0, int(round(base * self.doc_weight.get(d.name, 1.0))))
                 pool.extend(d.sentences * weight)
         m = NGram(pool)
         self._models[key] = m
         return m
 
-    def generate(self, behaviour: str, valence: str, arousal: str, seed: int, max_sentences: int = 3) -> str | None:
+    def generate(
+        self,
+        behaviour: str,
+        valence: str,
+        arousal: str,
+        seed: int,
+        max_sentences: int = 3,
+        topics: tuple[str, ...] = (),
+    ) -> str | None:
         if self.empty:
             return None
-        m = self.model_for(behaviour, valence, arousal)
+        m = self.model_for(behaviour, valence, arousal, topics)
         temp = {"low": 0.8, "mid": 1.0, "high": 1.15}.get(arousal, 1.0)
         rng = _Rng(
             int.from_bytes(

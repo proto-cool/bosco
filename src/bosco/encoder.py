@@ -31,6 +31,8 @@ class Features:
     labeled: bool = False
     # topics found by the published keyword map (config/topics_v1.yaml); each is a small odor mixture
     topics: tuple[str, ...] = ()
+    # the post asks something ('?'): a stronger touch (JO drive x question_gain); approach becomes a reply
+    question: bool = False
 
 
 class Encoder:
@@ -86,8 +88,11 @@ class Encoder:
         return Drive(self.sugar if c > 0 else self.bitter, rate, "sugar" if c > 0 else "bitter")
 
     # ---- touch -----------------------------------------------------------
-    def mention_drive(self) -> Drive:
-        return Drive(self.jo, float(self.cfg["mechanosensory"]["rate_hz"]), "mention")
+    def mention_drive(self, question: bool = False) -> Drive:
+        rate = float(self.cfg["mechanosensory"]["rate_hz"])
+        if question:
+            rate *= float(self.cfg["mechanosensory"].get("question_gain", 1.5))
+        return Drive(self.jo, rate, "mention?" if question else "mention")
 
     # ---- internal drive (no event) ---------------------------------------
     def spontaneous_drive(self, seed: int, drive: float = 1.0) -> Drive | None:
@@ -109,7 +114,7 @@ class Encoder:
         if g is not None:
             drives.append(g)
         if f.mentioned:
-            drives.append(self.mention_drive())
+            drives.append(self.mention_drive(f.question))
         return Stimulus(drives)
 
 

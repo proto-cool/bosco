@@ -45,6 +45,19 @@ questions:
       - "@proto.cool made me. ask them the hard questions. i only know sweet and bitter."
       - "my person is @proto.cool. they can put me to sleep. they cannot make me like you. that i learn."
       - "made by @proto.cool. the brain is from a fruit fly. the fruit fly is not here anymore."
+# Asked what he thinks of them, anyone gets his real memory of their smell, in his words.
+memory_question:
+  patterns:
+    - "\\bwhat do you think (of|about) me\\b"
+    - "\\bdo you (like|love|know|remember) me\\b"
+    - "\\bwho am i to you\\b"
+    - "\\bwhat am i to you\\b"
+    - "\\bhow do you feel about me\\b"
+  answers:
+    unknown:  "i do not know your smell yet. now i do. come back and i learn."
+    neutral:  "i know your smell. not sweet, not bitter. you came {n} times. come back and i learn."
+    positive: "i know your smell. it is sweet to me. you came {n} times. i remember. i turn toward."
+    negative: "i know your smell. it is bitter to me. i turn away. it fades in time."
 # The very first post, once, before anything else.  Picked by the brain's start time.
 intro:
   - "i bosco. i fruit fly. not a fruit fly. a fruit fly brain, all of it, running on a computer, with an account. i do not know words. i know sweet, bitter, near, far, and if you touched me. i learn a little. i forget a lot. world big. i want know. @proto.cool made me. say hello."

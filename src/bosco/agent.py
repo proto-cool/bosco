@@ -140,7 +140,8 @@ class Agent:
             return []
         behaviour, val, arousal, _fam = r["line_key"].split("/")
         self.voice_decay(t_hours)
-        docs = self.generator.matching_docs(behaviour, val, arousal)
+        topics = tuple((r["topics"] or "").split(",")) if r["topics"] else ()
+        docs = self.generator.matching_docs(behaviour, val, arousal, topics)
         sign = 1.0 if valence == "reward" else -1.0
         for name in docs:
             w = self.voice.get(name, 1.0) * (1.0 + sign * self.VOICE_ETA)
@@ -365,7 +366,9 @@ class Agent:
             if line is not None and coin == 0:
                 text, text_source = line.text, "phrasebook"
             else:
-                text = self.generator.generate(dec.behaviour, dec.valence, dec.arousal, seed)
+                text = self.generator.generate(
+                    dec.behaviour, dec.valence, dec.arousal, seed, topics=f.topics if f else ()
+                )
                 text_source = "generated" if text else None
                 if text is None and line is not None:
                     text, text_source = line.text, "phrasebook"
@@ -447,7 +450,10 @@ class Agent:
         self.advance_to(ts, fast=fast, max_wall_s=EVENT_CATCHUP_WALL_S)
         labeled = "labeled" in (r["note"] or "")
         topics = tuple((r["topics"] or "").split(",")) if r["topics"] else ()
-        f = Features(r["did"], float(r["vader"]), bool(r["mentioned"]), int(r["familiarity"]), labeled, topics)
+        question = "question" in (r["note"] or "")
+        f = Features(
+            r["did"], float(r["vader"]), bool(r["mentioned"]), int(r["familiarity"]), labeled, topics, question
+        )
         self.live.set_base(self._base_drives(self.live.t_ms))
         d_before = self.mb.digest()
         w = self.live.present(list(self.enc.encode(f).drives), PRESENT_MS)

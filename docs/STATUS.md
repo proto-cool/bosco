@@ -15,6 +15,7 @@
 | 4g What-to-say learning | tests | per-document preferences from outcomes, decaying | `Agent.voice_update`, `state/voice.json` |
 | 4h Habituation | tests | STD on sensory afferents; same smell fades, recovers in minutes | `config/model_v1.yaml` |
 | 4i Outcomes | | likes/reposts/follows from anyone, kind replies, known-account returns, blocks | `src/bosco/bsky.py` |
+| 4j Questions, memory told back, topic corpus | tests | `?` is a stronger touch and a reply; "what do you think of me"; `topic=` corpus files | `docs/CORPUS-PLAN.md` |
 | 4c Moderation | tests | labels → bitter, no approach, no reward; ignore → unfollow | `config/moderation_v1.yaml`, `src/bosco/moderation.py` |
 | 5 Bluesky loop | dry-run, snapshots, nightly | code done, **not yet run against a live account** | `src/bosco/bsky.py`, `ops/` |
 | 6 Calibration + tag | thresholds from dev activity | provisional synthetic thresholds written; re-run on real dev activity before tag | `scripts/calibrate_thresholds.py` |

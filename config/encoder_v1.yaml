@@ -38,6 +38,7 @@ mechanosensory:
   # (sound / courtship-song sensitive) at rate_hz.
   jo_groups: [A, B]
   rate_hz: 100.0
+  question_gain: 1.5   # a post that asks something ('?') is a stronger touch
 spontaneous:
   # No-event episodes: "dust lands somewhere".  A seeded random subset of k
   # body-bristle mechanosensory neurons (types BM_InOm, BM, BM_Vib) is driven

@@ -300,8 +300,12 @@ class Bsky:
             target_did=did,
         )
 
-    def identity_reply(self, out: Outcome, qid: str, uri: str, cid: str, record, did: str, ts: float) -> None:
-        ans = self.agent.identity.answer(qid, out.seed)
+    def identity_reply(
+        self, out: Outcome, qid: str, uri: str, cid: str, record, did: str, ts: float, text_override: str | None = None
+    ) -> None:
+        ans = (
+            self.agent.identity.answer(qid, out.seed) if text_override is None else SimpleNamespace(text=text_override)
+        )
         ok, why = self.agent.caps_allow(ts, "reply", uri, did)
         if not ok or self.L.asleep():
             print(f"identity ({qid}) suppressed: {'asleep' if self.L.asleep() else why}")
@@ -400,11 +404,30 @@ class Bsky:
         labels = labels or set()
         note = ("labeled:" + ",".join(sorted(labels))) if labels else None
         topics = self.agent.enc.topics.match(text)
-        out = self.agent.run(Features(did, v, mentioned, fam, bool(labels), topics), ts, uri, kind="event", note=note)
+        question = mentioned and "?" in text
+        if question:
+            note = (note + "; " if note else "") + "question"
+        out = self.agent.run(
+            Features(did, v, mentioned, fam, bool(labels), topics, question), ts, uri, kind="event", note=note
+        )
         # identity reflex: who/what/why/creator is answered regardless of the network (EXPERIMENT.md §2)
         qid = self.agent.identity.match(text) if mentioned and not labels else None
         if qid is not None:
             self.identity_reply(out, qid, uri, cid, record, did, ts)
+        elif mentioned and not labels and self.agent.identity.is_memory_question(text):
+            # what he thinks of them: his real memory of their smell, told back
+            self.identity_reply(
+                out,
+                "memory",
+                uri,
+                cid,
+                record,
+                did,
+                ts,
+                text_override=self.agent.identity.memory_answer(
+                    out.decision.learned, fam, self.agent.readout.valence_cut
+                ),
+            )
         if mentioned:
             self.L.bump_inbound(did, _day(ts))
         reply = getattr(record, "reply", None)
@@ -434,7 +457,16 @@ class Bsky:
         elif mentioned and not labels and fam >= 1 and self.L.rewards_today(did, day) < REWARD_DAILY_CAP_PER_ACCOUNT:
             self.agent.apply_outcome(out.episode_id, "reward", "known_account_inbound", did, uri, ts)
             self.L.bump_reward(did, day)
-        self.act(out, did, uri, cid, root.uri if root else None, root.cid if root else None, ts, in_thread=in_thread)
+        self.act(
+            out,
+            did,
+            uri,
+            cid,
+            root.uri if root else None,
+            root.cid if root else None,
+            ts,
+            in_thread=in_thread or question,
+        )
         return out
 
     # ---- polling ---------------------------------------------------------------

@@ -78,7 +78,13 @@ Every number below has a gate report under `docs/`.
    and the outcomes that caused it; `bosco people` ranks every account.
 10. **Text**: `src/bosco/textgen.py`, a word trigram with absolute-discount
    backoff over `corpus/` plus phrasebook lines.  The fly supplies the
-   corpus subset (tags), temperature (arousal) and seed.  Not an LLM.
+   corpus subset (register tags, and `topic=` tags for what the post
+   smelled of), temperature (arousal) and seed.  Not an LLM.
+21. **Questions and being asked about oneself.**  A post with a `?` is a
+   stronger touch (JO drive x1.5) and approach on it is a reply.  "what do
+   you think of me" from anyone is answered with his real memory of their
+   smell (`config/identity_v1.yaml` `memory_question`): unknown, neutral,
+   sweet, or bitter, with how many times they came.
 13. **Moderation**: labels from the account's subscribed moderation services
    are innate bitter and block approach (`config/moderation_v1.yaml`,
    `src/bosco/moderation.py`). The generator's vocabulary is closed.

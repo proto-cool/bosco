@@ -35,7 +35,8 @@ genuinely the one acting, and that anyone can check.
   snapshot before it plus the logged inputs.
 - Identity is a reflex outside the network: asked who or what he is, or who
   made him, he answers from `config/identity_v1.yaml`, on the same footing
-  as the bot label.
+  as the bot label. Asked what he thinks of them, anyone is told his real
+  memory of their smell, in fixed words.
 - Other people's post text is never stored.
 - Rate caps by kind (`config/caps_v1.yaml`): replies 12/h 100/d, likes
   12/h 100/d, follows and unfollows 6/h 40/d, own posts 1/h 12/d, all
