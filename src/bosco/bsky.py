@@ -335,6 +335,11 @@ class Bsky:
             return False
         if intros & texts:
             return False
+        recent = self.L.db.execute(
+            "SELECT 1 FROM actions WHERE kind='intro' AND dry_run=0 AND ts > ? LIMIT 1", (time.time() - 600.0,)
+        ).fetchone()
+        if recent:
+            return False  # posted minutes ago; the feed just has not caught up
         if self.L.asleep():
             return False
         # mark any ledger intro rows as gone (deleted in the app)
@@ -546,15 +551,20 @@ def run_loop(ledger: Ledger, dry_run: bool, once: bool, interval: int) -> int:
 
     stop = {"now": False}
 
+    b = Bsky(ledger, dry_run)
+
     def _term(signum, frame):  # noqa: ARG001
         stop["now"] = True
-        print("stop requested; finishing this poll and saving state")
+        b.agent.stop_requested = True
+        print("stop requested; saving state")
 
     signal.signal(signal.SIGTERM, _term)
     signal.signal(signal.SIGINT, _term)
-    b = Bsky(ledger, dry_run)
     print(f"bosco {'DRY-RUN' if dry_run else 'LIVE'} as {b.me}; operator {b.operator_did}")
     b.agent.bio_ms(time.time())  # start his clock now if it has not started
+    skipped = b.agent.skip_downtime(time.time())
+    if skipped:
+        print(f"downtime skipped: {skipped:.0f} s not lived")
     b.introduce_if_needed()
     polls = 0
     while True:
@@ -565,6 +575,9 @@ def run_loop(ledger: Ledger, dry_run: bool, once: bool, interval: int) -> int:
             n = b.poll_notifications()
             nb = b.browse()
             nk = b.check_blocks()
+            if b.agent.lag_s(time.time()) > 600:
+                print(f"falling behind by {b.agent.lag_s(time.time()):.0f} s; skipping")
+                b.agent.skip_downtime(time.time())
             sp = b.spontaneous()
             lag = time.time() - b.agent.wall(b.agent.live.t_ms)
             ledger.set_cursor("last_poll_ts", repr(time.time()))

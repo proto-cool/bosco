@@ -97,6 +97,7 @@ class Agent:
         self.identity = IdentityReflex()
         self.live = Simulation(self.fly, seed=0)
         self.dust = 0.0
+        self.stop_requested = False
         self._load_state()
         self._load_voice()
 
@@ -226,6 +227,25 @@ class Agent:
             return True
         return False
 
+    def lag_s(self, ts: float) -> float:
+        """How far the simulation is behind wall time."""
+        return ts - self.wall(self.live.t_ms) if self.brain_t0 is not None else 0.0
+
+    def skip_downtime(self, ts: float, max_lag_s: float = 600.0) -> float:
+        """Time he was not running is not lived: if the simulation is more than max_lag_s behind,
+        jump to now (with passive recovery), logged as 'downtime'.  Returns the seconds skipped."""
+        lag = self.lag_s(ts)
+        if lag <= max_lag_s:
+            return 0.0
+        target = self.bio_ms(ts) - SETTLE_MS
+        skipped = (target - self.live.t_ms) / 1000.0
+        self.ledger.add_control("downtime", "system", None, f"{self.live.t_ms}->{target}", ts=ts)
+        self.live.net.recover(float(target - self.live.t_ms))
+        self.live.t_ms = target
+        self.mb.forget(self.hours(ts))
+        self.save_state()
+        return skipped
+
     def advance_to(self, ts: float, fast: bool = False, on_groom=None) -> list[Outcome]:
         """Simulate idle time up to ts in one-second slices.  Each slice is read out; a groom
         is logged as a spontaneous episode and returned.  fast=True jumps without simulating
@@ -247,7 +267,7 @@ class Agent:
             self.mb.forget(self.hours(ts))
             self.save_state()
             return outs
-        while self.live.t_ms + SLICE_MS <= target:
+        while self.live.t_ms + SLICE_MS <= target and not self.stop_requested:
             slice_index = self.live.t_ms // 1000
             self._dust_step(slice_index, SLICE_MS)
             self.live.set_base(self._base_drives(self.live.t_ms))

@@ -10,6 +10,7 @@ Volume=%h/bosco/data/raw:/app/data/raw:ro,Z
 Volume=%h/bosco/data/cache:/app/data/cache:Z
 Volume=%h/bosco/state:/app/state:Z
 Exec=run --interval 120
+StopTimeout=30
 
 [Service]
 Restart=on-failure
