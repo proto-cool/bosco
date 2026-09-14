@@ -1,0 +1,21 @@
+# Innate smells (decided 2026-09-14; frozen at freeze-v1).  A fly is born liking the smell of
+# ripe and rotting fruit, vinegar and fermentation, and born avoiding geosmin, and those
+# preferences are particular glomeruli with their own wiring to the lateral horn.  The few
+# words of his vocabulary that literally are those things are driven on those glomeruli
+# instead of the neutral ones a hash would pick; the same rate as any word.  Everything else
+# about a word is unchanged: it is still smelled with the account, the place and the topics,
+# and the mushroom body still learns the mixture.  This is the fly's biology, published here,
+# not our opinion of the words; only words that name an odor a fly actually meets are listed.
+#
+# Glomeruli (encoder_v1.yaml excludes the same ones from neutral odors, with sources):
+#   DM1  Or42b  ethyl acetate, vinegar: attraction (Semmelhack & Wang 2009; Knaden et al. 2012)
+#   DM4  Or59b  methyl acetate, fruit esters: attraction (Knaden et al. 2012)
+#   DM2  Or22a  ethyl hexanoate, fruit esters: attraction (Knaden et al. 2012)
+#   VA2  Or92a  2,3-butanedione, fermentation: attraction (Knaden et al. 2012)
+#   VM1  Ir92a  ammonia and amines, decay: attraction (Min et al. 2013)
+#   DA2  Or56a  geosmin, soil and mould: aversion (Stensmyr et al. 2012)
+smells:
+  fruit:        {glomeruli: [DM1, DM2, DM4], words: [fruit, ripe, banana, bananas, apple, peach, pear, grape, grapes, berries, orange, peel, jam]}
+  fermentation: {glomeruli: [DM1, VA2],      words: [vinegar, sour, wine, beer, bread]}
+  decay:        {glomeruli: [DM1, VM1],      words: [rot]}
+  geosmin:      {glomeruli: [DA2],           words: [dirt]}

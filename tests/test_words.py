@@ -19,7 +19,8 @@ def test_words_are_his_vocabulary_and_deterministic_odors(fly):
     assert w == ("banana", "table", "soft")  # his words only, once each, in order
     a, b = enc.word_drive("banana"), enc.word_drive("banana")
     assert a.rate_hz == b.rate_hz and np.array_equal(a.idx, b.idx)
-    assert not np.array_equal(enc.word_drive("apple").idx, a.idx)
+    assert not np.array_equal(enc.word_drive("table").idx, a.idx)
+    assert np.array_equal(enc.word_drive("apple").idx, a.idx)  # fruit is fruit: one innate smell (innate_v1.yaml)
     labels = [
         d.label
         for d in enc.encode(
@@ -69,14 +70,14 @@ def test_the_air_is_read_from_his_antennae(fly):
     ag.live.net.reset(0)
     ag.live.net.recover(1e7)  # nothing on his antennae
     ag.live.t_ms = 0
-    ag.remember_thread("at://root/1", 0, ("banana", "table", "grape"))
+    ag.remember_thread("at://root/1", 0, ("table", "glass", "window"))
     assert ag.air(0) == {}  # logged, but never smelled
-    ag.live.present([ag.enc.word_drive("banana")], 500.0)
+    ag.live.present([ag.enc.word_drive("table")], 500.0)
     ag.live.net.recover(120_000.0)  # two minutes pass (e-fold three)
-    ag.live.present([ag.enc.word_drive("grape")], 500.0)
+    ag.live.present([ag.enc.word_drive("window")], 500.0)
     air = ag.air(int(ag.live.t_ms))
-    assert list(air) == ["grape", "banana"] and air["grape"] > air["banana"] > 0.0
-    assert "table" not in air
+    assert list(air) == ["window", "table"] and air["window"] > air["table"] > 0.0
+    assert "glass" not in air
     ag.live.net.recover(3.6e6)  # an hour: nothing left on the antennae
     assert ag.air(int(ag.live.t_ms)) == {}
 
@@ -157,3 +158,26 @@ def test_word_memory_is_read_with_the_account_and_leaves_him_unchanged(fly):
     assert with_nick.get("banana", 0.0) >= with_nick.get("spider", 0.0)
     again = ag.word_valence_in_context("did:plc:nick", ("banana",))
     assert again["banana"] == with_nick["banana"]  # deterministic, and cached
+
+
+@needs_data
+def test_innate_smells_take_their_own_glomeruli(fly):
+    """A word that names a smell a fly is born to answer is driven on those glomeruli; other words
+    stay on neutral ones; nothing else about a word changes."""
+    from bosco.agent import Agent
+    from bosco.ledger import Ledger
+
+    tmp = tempfile.mkdtemp()
+    ag = Agent(Ledger(f"{tmp}/l.sqlite"), fly, state_dir=tmp)
+    enc = ag.enc
+    assert enc.innate["banana"][0] == "fruit" and enc.innate["vinegar"][0] == "fermentation"
+    gl, rate = enc.word_glomeruli("banana")
+    assert len(gl) == 3 and rate > 0
+    dm1 = set(enc.orn_by_glom["DM1"].tolist())
+    assert dm1 and dm1 <= set(enc.word_drive("banana").idx.tolist())
+    assert set(enc.orn_by_glom["DA2"].tolist()) <= set(enc.word_drive("dirt").idx.tolist())
+    neutral = set(np.concatenate([enc.orn_by_glom[g] for g in enc.neutral]).tolist())
+    assert set(enc.word_drive("table").idx.tolist()) <= neutral  # an ordinary word: neutral glomeruli
+    assert not dm1 & set(enc.word_drive("table").idx.tolist())
+    assert enc.word_drive("banana").label == "word:banana"
+    assert np.array_equal(enc.word_drive("banana").idx, enc.word_drive("banana").idx)

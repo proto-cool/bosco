@@ -153,7 +153,9 @@ Do not download the EM volume. `neuprint-python` against
 - VADER compound score → bitter GRNs (negative) / sugar GRNs (positive).
 - Being mentioned → mechanosensory channel.
 - Words → odors (`config/words_v1.yaml`): his own vocabulary's content
-  words in a post, up to six, each three neutral glomeruli by hash; a
+  words in a post, up to six, each three neutral glomeruli by hash, except
+  the words that name a smell a fly is born to answer, which take their
+  real glomeruli (`config/innate_v1.yaml`: fruit, vinegar, rot, dirt); a
   thread's last posts linger for a few minutes. Never the sentence. What
   is "in the air" when he speaks is read from his antennae (habituation
   depth over the logged words), not from a list.

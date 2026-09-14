@@ -338,6 +338,44 @@ Every number below has a gate report under `docs/`.
    window's verdict is on the whole mixture and generalised to strangers
    who shared a place or a topic, and the rule above makes it unnecessary.
 
+36. **Innate smells** (`config/innate_v1.yaml`, decided 2026-09-14). A
+   fly is born liking ripe and rotting fruit, vinegar and fermentation, and
+   born avoiding geosmin, and each of those is a particular glomerulus with
+   its own wiring to the lateral horn (the encoder already excluded them
+   from neutral odors, with sources). The words of his vocabulary that
+   literally name those smells (fruit, banana, apple, vinegar, wine, rot,
+   dirt, twenty-two in all) are now driven on their real glomeruli instead
+   of the neutral ones a hash would pick. Everything else about a word is
+   unchanged: it is smelled with the account, the place and the topics, and
+   the mushroom body learns the mixture. This is the fly's biology,
+   published, not our opinion of the words; only words that name an odor a
+   fly actually meets are listed, and taste words (sweet, sugar, honey) are
+   not, since taste is the tone channel. One consequence is that all fruit
+   words are one smell: banana and grape are the same glomeruli, as they
+   are to a fly. Measured on the model (ten presentations each, raw rates,
+   gate off, a different account each time): a post carrying a fermentation
+   word drove the walking population to 6.7 ± 0.6 Hz against 3.7 ± 0.9 for
+   a neutral word, so the innate approach wiring does carry through to the
+   descending neurons; fruit and geosmin words did not differ from neutral
+   within error, and the proboscis stayed at zero for all of them. The
+   innate map is kept for what it is, the fly's own glomeruli, whatever the
+   readout makes of each.
+37. **The learned verdict stays a gate; the wiring carries a whisper**
+   (measured 2026-09-14). We asked whether a learned smell could extend the
+   proboscis through the connectome alone, as a trained odor does in a fly
+   after odor–sugar conditioning, so the readout gate could go. From a
+   rested brain, one mixture (account, place, topic, two words) was rewarded
+   five times, two hours apart, by the real outcome path; its learned
+   verdict reached +0.74. Read raw, with the gate off, the walking
+   population went from 2.0 to about 2.3 Hz and the proboscis population
+   from 0 to 0: the depressed KC→MBON synapses change MBON output, but at
+   these rates the path onward to the descending neurons moves them by a
+   tenth, and a proboscis with no sugar in front of it stays in. So the
+   verdict keeps reaching behaviour through the readout gate
+   (`config/readout_populations.yaml` `kappa`), as documented in decision
+   12, and the gate's size is what stands in for the pathway the model
+   cannot carry. Recorded here so nobody has to wonder whether we tried.
+
 Not in v1: visual input.
 
 ## Running

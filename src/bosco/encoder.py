@@ -50,7 +50,9 @@ class Encoder:
         excl = set(self.cfg["odor"]["exclude"])
         self.all_glomeruli = sorted(orn["glomerulus"].unique())
         self.neutral = [g for g in self.all_glomeruli if g not in excl]
-        self.orn_by_glom = {g: brain.index_of_present(orn.loc[orn["glomerulus"] == g, "bodyId"]) for g in self.neutral}
+        self.orn_by_glom = {
+            g: brain.index_of_present(orn.loc[orn["glomerulus"] == g, "bodyId"]) for g in self.all_glomeruli
+        }
         self.sugar = brain.index_of_present(pop.grns("sugar/water"))
         self.bitter = brain.index_of_present(pop.grns("bitter"))
         jo = pop.johnston_organ()
@@ -67,6 +69,12 @@ class Encoder:
         self.words_cfg = yaml.safe_load(open(paths.CONFIG / "words_v1.yaml"))
         self.vocab = self._load_vocab()
         self.feeds = Feeds()
+        # innate smells (config/innate_v1.yaml): word -> the glomeruli a fly is born to answer
+        innate = yaml.safe_load(open(paths.CONFIG / "innate_v1.yaml"))
+        self.innate: dict[str, tuple[str, list[str]]] = {}
+        for name, sm in innate.get("smells", {}).items():
+            for w in sm["words"]:
+                self.innate[str(w)] = (str(name), [str(g) for g in sm["glomeruli"]])
 
     # ---- words as smells --------------------------------------------------
     def _load_vocab(self) -> frozenset[str]:
@@ -112,13 +120,17 @@ class Encoder:
         return tuple(out)
 
     def word_glomeruli(self, word: str) -> tuple[list[np.ndarray], float]:
-        """A word's k neutral glomeruli (the olfactory neurons of each) and its rate, by hash."""
+        """A word's glomeruli (the olfactory neurons of each) and its rate.  A word that names a
+        smell a fly is born to answer (config/innate_v1.yaml) is those glomeruli; any other word
+        is k neutral glomeruli chosen by its hash.  The rate is by hash either way."""
         c = self.words_cfg
         seed = int.from_bytes(hashlib.blake2b(f"word|{word}".encode(), digest_size=8).digest(), "little")
         rng = np.random.default_rng(seed)
         chosen = rng.choice(len(self.neutral), size=int(c["k"]), replace=False)
         lo, hi = c["rate_hz"]
         rate = float(lo + (hi - lo) * rng.random())
+        if word in self.innate:
+            return [self.orn_by_glom[g] for g in self.innate[word][1] if g in self.orn_by_glom], rate
         return [self.orn_by_glom[self.neutral[i]] for i in chosen], rate
 
     def word_drive(self, word: str, scale: float = 1.0) -> Drive:
