@@ -22,7 +22,9 @@ import os
 import sys
 import time
 
-from atproto import Client, models
+import re
+
+from atproto import Client, client_utils, models
 
 from bosco import control
 from bosco.agent import Agent, Outcome
@@ -57,9 +59,30 @@ class Bsky:
         self.episode_budget = int(os.environ.get("BOSCO_EPISODE_BUDGET", "600"))
         self.agent = Agent(ledger)
         self.mod = Moderation()
+        self._did_cache: dict[str, str] = {}
         self._ignore: set[str] = set()
         self._ignore_ts = 0.0
         self._follows: dict[str, str] | None = None  # did -> follow record uri
+
+    # ---- rich text --------------------------------------------------------------
+    _HANDLE_RE = re.compile(r"@([a-z0-9][a-z0-9.-]*\.[a-z]{2,})", re.I)
+
+    def rich(self, text: str) -> client_utils.TextBuilder:
+        """Text with @handles turned into real mention facets (resolved to DIDs)."""
+        tb = client_utils.TextBuilder()
+        pos = 0
+        for m in self._HANDLE_RE.finditer(text):
+            tb.text(text[pos : m.start()])
+            handle = m.group(1)
+            try:
+                did = self._did_cache.get(handle) or self.client.resolve_handle(handle).did
+                self._did_cache[handle] = did
+                tb.mention(m.group(0), did)
+            except Exception:  # noqa: BLE001
+                tb.text(m.group(0))
+            pos = m.end()
+        tb.text(text[pos:])
+        return tb
 
     # ---- operator rails --------------------------------------------------------
     def ignore_set(self) -> set[str]:
@@ -154,7 +177,7 @@ class Bsky:
             root = getattr(getattr(n.record, "reply", None), "root", None)
             if root:
                 ref.root = models.ComAtprotoRepoStrongRef.Main(uri=root.uri, cid=root.cid)
-            self.client.send_post(reply[:290], reply_to=ref, langs=["en"])
+            self.client.send_post(self.rich(reply[:290]), reply_to=ref, langs=["en"])
         if cmd.kind == "restart" and not self.dry:
             raise SystemExit(RESTART_EXIT_CODE)
         return True
@@ -257,7 +280,7 @@ class Bsky:
                     root=models.ComAtprotoRepoStrongRef.Main(uri=root_uri or target_uri, cid=root_cid or target_cid),
                 )
             if not self.dry:
-                our_uri = self.client.send_post(out.text, reply_to=reply_to, langs=["en"]).uri
+                our_uri = self.client.send_post(self.rich(out.text), reply_to=reply_to, langs=["en"]).uri
             print(f"{action} ({out.text_source}) {out.text!r} -> {target_uri} ({'dry' if self.dry else our_uri})")
         self.L.add_action(
             out.episode_id,
@@ -284,7 +307,7 @@ class Bsky:
         )
         our_uri = None
         if not self.dry:
-            our_uri = self.client.send_post(ans.text, reply_to=ref, langs=["en"]).uri
+            our_uri = self.client.send_post(self.rich(ans.text), reply_to=ref, langs=["en"]).uri
         print(f"identity ({qid}) {ans.text!r} -> {uri} ({'dry' if self.dry else our_uri})")
         self.L.add_action(
             out.episode_id,
@@ -300,7 +323,9 @@ class Bsky:
     # ---- the first post ---------------------------------------------------------
     def introduce_if_needed(self) -> bool:
         """Once, before anything else: the introduction (config/identity_v1.yaml `intro`)."""
-        done = self.L.db.execute("SELECT 1 FROM actions WHERE kind='intro' AND dry_run=0 LIMIT 1").fetchone()
+        done = self.L.db.execute(
+            "SELECT 1 FROM actions WHERE kind='intro' AND dry_run=0 AND deleted_ts IS NULL LIMIT 1"
+        ).fetchone()
         if done or self.L.asleep():
             return False
         seed = int(self.agent.brain_t0 or time.time())
@@ -309,7 +334,7 @@ class Bsky:
             return False
         our_uri = None
         if not self.dry:
-            our_uri = self.client.send_post(text, langs=["en"]).uri
+            our_uri = self.client.send_post(self.rich(text), langs=["en"]).uri
         print(f"intro {text!r} ({'dry' if self.dry else our_uri})")
         self.L.add_action(0, "intro", our_uri, None, dry_run=self.dry, ts=time.time())
         return True
