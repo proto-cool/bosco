@@ -401,6 +401,21 @@ Every number below has a gate report under `docs/`.
    is what he has learned about that smell, and the mixture verdicts stay
    where they belong, in the windows.
 
+40. **Whoever speaks to him is answered; appetite sets how much he says**
+   (decided 2026-09-14). Nick's rule: if you talk to a bot, you want a
+   response, and he should be chatty with people who want to interact.
+   Silence stays legal for everything he merely reads, but a mention, reply
+   or quote that does not make his song neurons cross is answered anyway,
+   once per post, under the caps, with the words the window produced: same
+   valence, same arousal, primed on their words, phrasebook coin and all.
+   The episode row keeps the network's decision ("nothing"); the action row
+   is kind `answer`, and the panel's record shows "answer" for such a
+   window, so nobody reading the ledger mistakes manners for his choice.
+   What appetite decides now is length, not whether: one sentence when
+   sated, up to three when hungry for company, one more for a smell he has
+   learned to like and one fewer for one he avoids (`Agent.verbosity`).
+   Nobody who did not speak to him is ever addressed.
+
 Not in v1: visual input.
 
 ## Running

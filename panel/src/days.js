@@ -76,7 +76,7 @@ async function show(date) {
   $('day-sub').textContent =
     `${rep.day_of_life ? `day ${rep.day_of_life} of his life · ` : ''}${rep.final ? 'the whole day' : 'so far'} · his time is ${tz.toLowerCase()}`;
   $('silence').textContent = c.silence == null ? '–' : pct(c.silence);
-  const replies = (a.reply || 0) + (a.identity || 0);
+  const replies = (a.reply || 0) + (a.answer || 0) + (a.identity || 0);
   if (c.episodes) {
     const acts = [
       [replies, 'reply', 'replies'],

@@ -148,7 +148,7 @@ async function renderStatus(st) {
   // today: one figure, one sentence
   const t = st.today, a = t.actions || {};
   $('silence').textContent = t.silence == null ? '–' : pct(t.silence);
-  const replies = (a.reply || 0) + (a.identity || 0);
+  const replies = (a.reply || 0) + (a.answer || 0) + (a.identity || 0);
   if (t.episodes) {
     const acts = [
       [replies, 'reply', 'replies'],

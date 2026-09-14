@@ -460,7 +460,7 @@ class Bsky:
         """Mark posts deleted in the app (as him) as deleted in the ledger, so his records match the network."""
         rows = self.L.db.execute(
             "SELECT our_uri FROM actions WHERE our_uri IS NOT NULL AND dry_run=0 AND deleted_ts IS NULL "
-            "AND kind IN ('reply','spontaneous_post','identity','intro') ORDER BY id DESC LIMIT ?",
+            "AND kind IN ('reply','answer','spontaneous_post','identity','intro') ORDER BY id DESC LIMIT ?",
             (limit,),
         ).fetchall()
         uris = [r["our_uri"] for r in rows]
@@ -617,7 +617,41 @@ class Bsky:
             root.cid if root else None,
             ts,
         )
+        # whoever speaks to him is answered (EXPERIMENT.md §2): if the network did not sing, the
+        # account still has manners.  Once per post, under the caps, marked as an answer.
+        if mentioned and not labels and out.text and not self.L.replied_to(uri, real_only=not self.dry):
+            self.answer_anyway(out, uri, cid, root, did, ts)
         return out
+
+    def answer_anyway(self, out: Outcome, uri: str, cid: str, root, did: str, ts: float) -> None:
+        """The etiquette reflex: whoever spoke to him gets his words even when his song neurons
+        stayed under threshold.  The episode row keeps the network's decision; the action row is
+        kind `answer` so the record never mistakes it for his choice."""
+        if self.L.asleep():
+            print("asleep: answer suppressed")
+            return
+        ok, why = self.agent.caps_allow(ts, "answer", root.uri if root else uri, did)
+        if not ok:
+            print(f"rate cap ({why}): answer suppressed")
+            return
+        ref = models.AppBskyFeedPost.ReplyRef(
+            parent=models.ComAtprotoRepoStrongRef.Main(uri=uri, cid=cid),
+            root=models.ComAtprotoRepoStrongRef.Main(uri=root.uri if root else uri, cid=root.cid if root else cid),
+        )
+        our_uri = None
+        if not self.dry:
+            our_uri = self.client.send_post(self.rich(out.text), reply_to=ref, langs=["en"]).uri
+        print(f"answer ({out.text_source}) {out.text!r} -> {uri} ({'dry' if self.dry else our_uri})")
+        self.L.add_action(
+            out.episode_id,
+            "answer",
+            our_uri,
+            uri,
+            dry_run=self.dry,
+            ts=ts,
+            root_uri=root.uri if root else uri,
+            target_did=did,
+        )
 
     # ---- polling ---------------------------------------------------------------
     def poll_notifications(self) -> int:

@@ -29,7 +29,11 @@ convenience, "just for testing," or because a result would look better.
   weights, the outcome ledger, or the stimulus log. Bug fixes to code are
   fine; hand-nudging state is not.
 - **Silence is a legal action** and must be a common one. Never add a floor
-  on posting to make the account look alive.
+  on posting to make the account look alive. The one exception (decided
+  2026-09-14): whoever speaks to him (mention, reply, quote) is answered,
+  once per post, in the register the window produced; the action is logged
+  as `answer` so the record never mistakes it for the network's choice. His
+  appetite and what he has learned of the account set how much he says.
 - **Log everything, replay anything.** Every window records its features,
   activity, decision, and the brain digest after it; he is
   snapshotted hourly. Any span must replay bit-identical from the snapshot

@@ -102,6 +102,18 @@ the PDS, not the handle); free text around the keyword is fine
   digest chain, and the integrity check reports it. Use it and say so.
 - **Hard stop.** Stopping the container. The dead-man alert fires after 4 h.
 
+**Whoever speaks to him is answered (decided 2026-09-14).** Silence is
+legal except to someone who addressed him: a mention, reply or quote that
+did not make his song neurons cross is answered anyway, once per post,
+under the caps, with the words the window produced (same valence, arousal,
+and priming on their words). How much he says is his: one sentence when
+sated, up to three when hungry for company, one more for a smell he has
+learned to like, one fewer for one he avoids. This is account etiquette on
+the same footing as the bot label and the identity answers, not a decision
+of the network. The episode row keeps the network's decision; the action
+row is kind `answer`. No other floor exists: nobody who did not speak to
+him is ever addressed.
+
 **The off ramp (anyone, decided 2026-09-14).** Any account can send him
 away by mention or reply: "shoo fly" first of all, and "go away", "leave me
 alone", "unfollow me", "stop", "opt out" (`config/identity_v1.yaml`

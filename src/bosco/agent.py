@@ -329,6 +329,18 @@ class Agent:
                 out[w] = v
         return out
 
+    @staticmethod
+    def verbosity(appetite: float, learned: float, cut: float = 0.2) -> int:
+        """How many sentences he has in him: one when sated, up to three when hungry for company,
+        one more for a smell he has learned to like and one fewer for one he has learned to
+        avoid; never fewer than one, never more than four."""
+        n = 1 + int(round(2.0 * float(max(0.0, min(1.0, appetite)))))
+        if learned > cut:
+            n += 1
+        elif learned < -cut:
+            n -= 1
+        return max(1, min(4, n))
+
     def state_register(self, ts: float) -> dict[str, str]:
         """The parts of his state the corpus is tagged by: the hour, his appetite, and his mood.
         Mood is what the ledger says lately happened to him: stung (a punishment within six
@@ -600,10 +612,17 @@ class Agent:
         line_key = None
         text = None
         text_source = None
-        if dec.action in ("reply", "spontaneous_post", "follow"):
+        # what he says is composed for the actions that speak; and for anyone who spoke to him, in
+        # the reply register, even when the network chose nothing (the etiquette reflex in bsky.py
+        # answers with it; the row keeps the network's decision).  How much he says is his
+        # appetite for company and what he has learned of this smell (verbosity).
+        speak_as = dec.behaviour if dec.action in ("reply", "spontaneous_post", "follow") else None
+        if speak_as is None and f is not None and f.mentioned:
+            speak_as = "reply"
+        if speak_as is not None:
             fb = familiarity_bin(fam)
-            line_key = f"{dec.behaviour}/{dec.valence}/{dec.arousal}/{fb}"
-            line = self.phrasebook.pick(dec.behaviour, dec.valence, dec.arousal, fb, seed)
+            line_key = f"{speak_as}/{dec.valence}/{dec.arousal}/{fb}"
+            line = self.phrasebook.pick(speak_as, dec.valence, dec.arousal, fb, seed)
             coin = (seed >> 7) & 1
             if line is not None and coin == 0:
                 text, text_source = line.text, "phrasebook"
@@ -612,10 +631,11 @@ class Agent:
                 air = self.air(w.t0_ms, cands) if f is not None else self.day_air(ts, w.t0_ms)
                 c = self.enc.words_cfg
                 text = self.generator.generate(
-                    dec.behaviour,
+                    speak_as,
                     dec.valence,
                     dec.arousal,
                     seed,
+                    max_sentences=self.verbosity(self.appetite, dec.learned),
                     topics=f.topics if f else (),
                     familiarity=fb,
                     state=self.state_register(ts),

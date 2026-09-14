@@ -161,3 +161,19 @@ def test_opt_out_ignores_unfollows_and_answers_once():
     assert "did:plc:x" not in L.ignored()
     L.set_ignored("did:plc:y", "did:plc:operator", True)
     assert L.ignored_by("did:plc:y") == "did:plc:operator"
+
+
+def test_a_question_is_always_answered_once():
+    tmp = tempfile.mkdtemp()
+    L = Ledger(f"{tmp}/l.sqlite")
+    b = _bsky(L)
+    out = _out(L, "nothing", 0.0, True)
+    out.text, out.text_source = "banana is here. i go on it", "generated"
+    root = SimpleNamespace(uri="at://x/root", cid="rc")
+    b.answer_anyway(out, "at://x/1", "cid", root, "did:plc:x", 1.0)
+    assert _kinds(L)[-1] == ("answer", 1)
+    assert L.replied_to("at://x/1", real_only=False)  # once: the reflex will not fire again on this post
+    L.add_control("sleep", "did:plc:op", None, None)
+    n = len(_kinds(L))
+    b.answer_anyway(out, "at://x/2", "cid", root, "did:plc:x", 2.0)
+    assert len(_kinds(L)) == n  # asleep: nothing goes out

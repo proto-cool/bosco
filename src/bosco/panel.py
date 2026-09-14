@@ -197,6 +197,14 @@ class Panel:
                 (t0, t1),
             )
         }
+        answered = {
+            r[0]
+            for r in db.execute(
+                "SELECT DISTINCT episode_id FROM actions WHERE ts>=? AND ts<? AND dry_run=0 AND deleted_ts IS NULL "
+                "AND kind='answer'",
+                (t0, t1),
+            )
+        }
         hours = [{"episodes": 0, "acted": 0, "appetite": [], "landings": 0} for _ in range(24)]
         topics: dict[str, int] = {}
         words: dict[str, int] = {}
@@ -240,7 +248,7 @@ class Panel:
                         "did": r["did"],
                         "feed": r["feed"],
                         "topics": (r["topics"] or "").split(",") if r["topics"] else [],
-                        "action": r["action"],
+                        "action": "answer" if r["action"] == "nothing" and r["id"] in answered else r["action"],
                         "acted": r["id"] in acted_ids,
                     }
                 )
@@ -269,7 +277,8 @@ class Panel:
             {"uri": r["our_uri"], "ts": r["ts"], "kind": r["kind"]}
             for r in db.execute(
                 "SELECT our_uri, ts, kind FROM actions WHERE ts>=? AND ts<? AND our_uri IS NOT NULL AND dry_run=0 "
-                "AND deleted_ts IS NULL AND kind IN ('reply','spontaneous_post','identity','intro') ORDER BY id",
+                "AND deleted_ts IS NULL AND kind IN ('reply','answer','spontaneous_post','identity','intro') "
+                "ORDER BY id",
                 (t0, t1),
             )
         ]
@@ -397,6 +406,12 @@ class Panel:
                 "SELECT DISTINCT episode_id FROM actions WHERE dry_run=0 AND deleted_ts IS NULL AND kind != 'leave'"
             )
         }
+        answered = {
+            row[0]
+            for row in db.execute(
+                "SELECT DISTINCT episode_id FROM actions WHERE dry_run=0 AND deleted_ts IS NULL AND kind='answer'"
+            )
+        }
         recent = [
             {
                 "id": r["id"],
@@ -407,7 +422,7 @@ class Panel:
                 "did": r["did"],
                 "topics": (r["topics"] or "").split(",") if r["topics"] else [],
                 "behaviour": r["behaviour"],
-                "action": r["action"],
+                "action": "answer" if r["action"] == "nothing" and r["id"] in answered else r["action"],
                 "valence": r["valence"],
                 "arousal": r["arousal"],
                 "kc_active": r["kc_active"],
@@ -421,7 +436,7 @@ class Panel:
             {"uri": r["our_uri"], "ts": r["ts"], "kind": r["kind"]}
             for r in db.execute(
                 "SELECT our_uri, ts, kind FROM actions WHERE our_uri IS NOT NULL AND dry_run=0 AND deleted_ts IS NULL "
-                "AND kind IN ('reply','spontaneous_post','identity','intro') ORDER BY id DESC LIMIT 12"
+                "AND kind IN ('reply','answer','spontaneous_post','identity','intro') ORDER BY id DESC LIMIT 12"
             ).fetchall()
         ]
         # people: everyone he has a memory of or who has come to him

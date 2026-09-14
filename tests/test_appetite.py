@@ -162,3 +162,38 @@ def test_song_answers_speech(fly):
     assert browsed.action == "like" and addressed.action == "reply" and addressed.also == ("like",)
     counts[ro.pops["reply"]] = 0
     assert ro.decide(counts, 1000.0, addressed=True).action == "like"  # no song, winner-take-all as before
+
+
+@needs_data
+def test_a_question_has_words_even_when_the_network_says_nothing(fly):
+    """A direct question composes his words in the reply register whatever the readout chose."""
+    import tempfile
+
+    from bosco.agent import Agent
+    from bosco.encoder import Features
+    from bosco.ledger import Ledger
+
+    tmp = tempfile.mkdtemp()
+    ag = Agent(Ledger(f"{tmp}/l.sqlite"), fly, state_dir=tmp)
+    ag.mb.reset()
+    ag.live.net.reset(0)
+    ag.live.t_ms = 0
+    o = ag.run(
+        Features("did:plc:q", 0.0, True, 0, False, (), True, ("banana",)), 1_800_000_000.0, "at://q/1", fast=True
+    )
+    assert o.text and o.text_source in ("generated", "phrasebook")
+    o2 = ag.run(
+        Features("did:plc:q", 0.0, False, 0, False, (), False, ("banana",)), 1_800_000_060.0, "at://q/2", fast=True
+    )
+    assert (
+        o2.decision.action in ("reply", "follow", "spontaneous_post") or o2.text is None
+    )  # browsing: words only when he acts
+
+
+def test_verbosity_is_appetite_and_the_smell():
+    from bosco.agent import Agent
+
+    v = Agent.verbosity
+    assert v(0.0, 0.0) == 1 and v(0.5, 0.0) == 2 and v(1.0, 0.0) == 3
+    assert v(1.0, 0.5) == 4 and v(0.0, 0.5) == 2  # a sweet smell: one more
+    assert v(0.0, -0.5) == 1 and v(1.0, -0.5) == 2  # a bitter one: one fewer, never none

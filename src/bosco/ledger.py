@@ -354,7 +354,7 @@ class Ledger:
 
     def replied_to(self, target_uri: str, real_only: bool = True) -> bool:
         """Has he already answered this post (by the network or by reflex)?  Once is the rule."""
-        q = "SELECT 1 FROM actions WHERE target_uri=? AND kind IN ('reply','identity') AND deleted_ts IS NULL"
+        q = "SELECT 1 FROM actions WHERE target_uri=? AND kind IN ('reply','answer','identity') AND deleted_ts IS NULL"
         if real_only:
             q += " AND dry_run=0"
         return self.db.execute(q + " LIMIT 1", (target_uri,)).fetchone() is not None
