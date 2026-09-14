@@ -440,7 +440,7 @@ a:hover {
 }
 .win {
   display: grid;
-  grid-template-columns: 3rem 4rem 1fr 7rem;
+  grid-template-columns: 3rem 4rem 1fr max-content;
   gap: var(--space-sm);
   align-items: baseline;
   font-family: var(--font-mono);
@@ -458,6 +458,7 @@ a:hover {
 }
 .win .what {
   text-align: right;
+  white-space: nowrap;
 }
 
 /* about */
@@ -508,7 +509,7 @@ a:hover {
     gap: var(--space-sm) var(--space-lg);
   }
   .win {
-    grid-template-columns: 3rem 1fr 7rem;
+    grid-template-columns: 3rem 1fr max-content;
   }
   .win .smell {
     display: none;
