@@ -1,27 +1,29 @@
 // Soma-position renderer.  Every neuron is a point at its soma in the volume; the cloud is
 // rotated in three dimensions (a slow orbit, or a resting angle, or wherever it was dragged),
-// projected orthographically, and painted per frame: a dim depth-shaded base layer of all
-// neurons, then the cells with residual intensity on top, additively.  Nothing here is a
-// graph: no edges, no layout.
+// projected orthographically, and painted: a dim depth-shaded base layer of all neurons, cached
+// on an offscreen canvas until the angle or the size changes, then the cells with residual
+// intensity on top, additively, every frame.  Nothing here is a graph: no edges, no layout.
 
-const HEADER = 36; // see src/bosco/panel.py HEADER
+const HEADER = 44; // see src/bosco/panel.py HEADER (version 2)
 
 export function parseActivity(buf) {
   const dv = new DataView(buf);
   if (dv.getUint8(0) !== 0x42 || dv.getUint8(1) !== 0x4f) throw new Error('not an activity file');
+  if (dv.getUint8(4) !== 2) throw new Error(`activity file version ${dv.getUint8(4)}`);
   const tMs = Number(dv.getBigUint64(8, true));
-  const dust = dv.getFloat32(16, true);
-  const learned = dv.getFloat32(20, true);
-  const kcActive = dv.getUint32(24, true);
-  const nPops = dv.getUint32(28, true);
-  const n = dv.getUint32(32, true);
+  const wallTs = dv.getFloat64(16, true);
+  const dust = dv.getFloat32(24, true);
+  const learned = dv.getFloat32(28, true);
+  const kcActive = dv.getUint32(32, true);
+  const nPops = dv.getUint32(36, true);
+  const n = dv.getUint32(40, true);
   let o = HEADER;
   const pops = new Float32Array(buf.slice(o, o + 4 * nPops));
   o += 4 * nPops;
   const idx = new Uint16Array(buf.slice(o, o + 2 * n));
   o += 2 * n;
   const cnt = new Uint8Array(buf.slice(o, o + n));
-  return { tMs, dust, learned, kcActive, pops, idx, cnt };
+  return { tMs, wallTs, dust, learned, kcActive, pops, idx, cnt };
 }
 
 export function parseAtlas(buf, meta) {
@@ -80,7 +82,10 @@ export class BrainView {
     this.hold = false; // a still: lit cells do not decay
     this.reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
     this.dpr = 1;
+    this.base = document.createElement('canvas'); // the cached base layer
+    this.baseKey = ''; // angle and size the base was painted for
     this.lastT = performance.now();
+    this.running = true;
     this.ro = new ResizeObserver(() => this.resize());
     this.ro.observe(canvas);
     this.resize();
@@ -125,10 +130,15 @@ export class BrainView {
     this.dpr = dpr;
     this.w = Math.max(1, Math.round(r.width * dpr));
     this.h = Math.max(1, Math.round(r.height * dpr));
-    this.canvas.width = this.w;
-    this.canvas.height = this.h;
-    this.img = this.ctx.createImageData(this.w, this.h);
+    if (this.canvas.width !== this.w || this.canvas.height !== this.h) {
+      this.canvas.width = this.w;
+      this.canvas.height = this.h;
+      this.base.width = this.w;
+      this.base.height = this.h;
+      this.img = this.ctx.createImageData(this.w, this.h);
+    }
     this.fit = 0.92 * Math.min(this.w, this.h); // pixels per unit of the brain's largest extent
+    this.baseKey = '';
   }
 
   // rotate and project every soma for the current angles
@@ -150,7 +160,7 @@ export class BrainView {
     }
   }
 
-  // the dim base layer: one small block per neuron, shaded by depth, into an image buffer
+  // the dim base layer: one small block per neuron, shaded by depth, into the offscreen canvas
   paintBase() {
     const d = this.img.data;
     d.fill(0);
@@ -178,7 +188,7 @@ export class BrainView {
         }
       }
     }
-    this.ctx.putImageData(this.img, 0, 0);
+    this.base.getContext('2d').putImageData(this.img, 0, 0);
   }
 
   // a new second of activity arrived
@@ -191,6 +201,7 @@ export class BrainView {
   }
 
   tick(now) {
+    if (!this.running) return;
     const dt = Math.min(0.1, (now - this.lastT) / 1000);
     this.lastT = now;
     if (this.target) {
@@ -209,9 +220,17 @@ export class BrainView {
       this.yaw += this.orbitRate * dt;
       this.pitch += (0 - this.pitch) * 0.01; // settle level as it turns
     }
-    this.project();
-    this.paintBase();
+    // the base layer is repainted only when he has turned or the canvas changed size
+    const key = `${this.yaw.toFixed(4)}|${this.pitch.toFixed(4)}|${this.w}x${this.h}`;
+    if (key !== this.baseKey) {
+      this.project();
+      this.paintBase();
+      this.baseKey = key;
+    }
     const c = this.ctx;
+    c.globalCompositeOperation = 'source-over';
+    c.clearRect(0, 0, this.w, this.h);
+    c.drawImage(this.base, 0, 0);
     const decay = this.reduced ? 0.7 : 0.9;
     const r = Math.max(1.2, 1.8 * (this.w / this.dpr / 900)) * this.dpr;
     c.globalCompositeOperation = 'lighter';

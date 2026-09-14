@@ -262,7 +262,11 @@ def main(argv=None) -> int:
                 fast=True,
             )
         st = panel.status(ts)
-        print(f"wrote {a.out}/status.json ({len(st['people'])} people, {len(st['recent'])} recent) and activity.bin")
+        days = panel.write_days(ts, backfill=True)
+        print(
+            f"wrote {a.out}/status.json ({len(st['people'])} people, {len(st['recent'])} recent), activity.bin "
+            f"and days {days}"
+        )
         return 0
 
     s.set_defaults(fn=_panel)

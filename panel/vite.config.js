@@ -8,7 +8,7 @@ export default defineConfig({
     outDir: 'dist',
     emptyOutDir: true,
     target: 'es2022',
-    rollupOptions: { input: { main: 'index.html', og: 'og.html' } },
+    rollupOptions: { input: { main: 'index.html', days: 'days.html', how: 'how.html', og: 'og.html' } },
   },
   server: {
     proxy: {

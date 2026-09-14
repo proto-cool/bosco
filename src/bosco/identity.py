@@ -31,6 +31,27 @@ class IdentityReflex:
         self.questions = [
             (q["id"], [re.compile(p, re.I) for p in q["patterns"]], list(q["answers"])) for q in cfg["questions"]
         ]
+        # the off ramp: anyone can send him away, and call him back
+        self.opt = {
+            k: (
+                [re.compile(p, re.I) for p in cfg.get(k, {}).get("patterns", [])],
+                list(cfg.get(k, {}).get("answers", [])),
+            )
+            for k in ("opt_out", "opt_in")
+        }
+
+    def is_opt_out(self, text: str) -> bool:
+        t = " ".join(text.split())
+        return any(p.search(t) for p in self.opt["opt_out"][0])
+
+    def is_opt_in(self, text: str) -> bool:
+        t = " ".join(text.split())
+        return any(p.search(t) for p in self.opt["opt_in"][0])
+
+    def opt_answer(self, kind: str, seed: int) -> str:
+        answers = self.opt[kind][1]
+        h = int.from_bytes(hashlib.blake2b(f"{seed}|{kind}".encode(), digest_size=8).digest(), "little")
+        return answers[h % len(answers)]
 
     def match(self, text: str) -> str | None:
         t = " ".join(text.split())

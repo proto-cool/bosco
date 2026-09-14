@@ -7,6 +7,8 @@ Two outputs, both written atomically into a directory a static server exposes:
   every `min_interval` wall seconds; a few kilobytes at rest.
 - `status.json`: what the ledger says (counts, people, recent episodes, his own post
   URIs) plus the state of the simulation.  Written once per poll.
+- `days/<YYYY-MM-DD>.json` and `days/index.json`: one report per local day of his life, from
+  the ledger alone; today's is rewritten every poll, a finished day once.
 
 Nothing here feeds back into the simulation; the panel only reads.  Post text is never
 written (the site fetches his own posts from the public API by URI).
@@ -27,22 +29,40 @@ from bosco.brain import Window
 from bosco.readout import Decision
 
 MAGIC = b"BOSA"
-VERSION = 1
-# magic(4) version(u8) pad(3) t_ms(u64) dust(f32) learned(f32) kc_active(u32) n_pops(u32) n(u32)
-HEADER = struct.Struct("<4sB3xQffIII")
+VERSION = 2
+# magic(4) version(u8) pad(3) t_ms(u64) wall_ts(f64) dust(f32) learned(f32) kc_active(u32) n_pops(u32) n(u32)
+# wall_ts is when the file was written: the page tells "between seconds" (a poll, a fetch) from
+# "asleep or unreachable" by how old the last second is.
+HEADER = struct.Struct("<4sB3xQdffIII")
 
 
 def pack_activity(
-    t_ms: int, counts: np.ndarray, pops: list[float], dust: float, learned: float, kc_active: int
+    t_ms: int,
+    counts: np.ndarray,
+    pops: list[float],
+    dust: float,
+    learned: float,
+    kc_active: int,
+    wall_ts: float | None = None,
 ) -> bytes:
     idx = np.flatnonzero(counts).astype(np.uint16)
     cnt = np.minimum(counts[idx], 255).astype(np.uint8)
-    head = HEADER.pack(MAGIC, VERSION, int(t_ms), float(dust), float(learned), int(kc_active), len(pops), len(idx))
+    head = HEADER.pack(
+        MAGIC,
+        VERSION,
+        int(t_ms),
+        float(wall_ts if wall_ts is not None else time.time()),
+        float(dust),
+        float(learned),
+        int(kc_active),
+        len(pops),
+        len(idx),
+    )
     return head + np.asarray(pops, dtype="<f4").tobytes() + idx.tobytes() + cnt.tobytes()
 
 
 def unpack_activity(buf: bytes) -> dict:
-    magic, ver, t_ms, dust, learned, kc_active, n_pops, n = HEADER.unpack_from(buf, 0)
+    magic, ver, t_ms, wall_ts, dust, learned, kc_active, n_pops, n = HEADER.unpack_from(buf, 0)
     if magic != MAGIC or ver != VERSION:
         raise ValueError("not a bosco activity file")
     o = HEADER.size
@@ -53,6 +73,7 @@ def unpack_activity(buf: bytes) -> dict:
     cnt = np.frombuffer(buf, dtype="<u1", count=n, offset=o)
     return {
         "t_ms": t_ms,
+        "wall_ts": wall_ts,
         "dust": dust,
         "learned": learned,
         "kc_active": kc_active,
@@ -87,7 +108,9 @@ class Panel:
         self._last_activity = now
         kc_active = int((w.counts[self.agent.fly.kc] > 0).sum())
         rates = [float(dec.scores.get(p, 0.0)) for p in self.pop_names]
-        _atomic_write(self.dir / "activity.bin", pack_activity(w.t1_ms, w.counts, rates, dust, dec.learned, kc_active))
+        _atomic_write(
+            self.dir / "activity.bin", pack_activity(w.t1_ms, w.counts, rates, dust, dec.learned, kc_active, now)
+        )
 
     def _words(self) -> dict:
         """The words in the air around him right now (from the threads he is in)."""
@@ -114,35 +137,255 @@ class Panel:
             ],
         }
 
+    def _counts(self, since: float, until: float = float("inf")) -> dict:
+        """What he read and did between two times, from the ledger."""
+        db = self.L.db
+        n = db.execute(
+            "SELECT COUNT(*) FROM episodes WHERE ts>=? AND ts<? AND kind IN ('event','spontaneous')", (since, until)
+        ).fetchone()[0]
+        by_kind = dict(
+            db.execute(
+                "SELECT kind, COUNT(*) FROM actions WHERE ts>=? AND ts<? AND dry_run=0 AND deleted_ts IS NULL "
+                "GROUP BY kind",
+                (since, until),
+            ).fetchall()
+        )
+        silent = db.execute(
+            "SELECT COUNT(*) FROM episodes WHERE ts>=? AND ts<? AND kind IN ('event','spontaneous') "
+            "AND action='nothing'",
+            (since, until),
+        ).fetchone()[0]
+        out = dict(
+            db.execute(
+                "SELECT valence, COUNT(*) FROM outcomes WHERE ts>=? AND ts<? GROUP BY valence", (since, until)
+            ).fetchall()
+        )
+        return {
+            "episodes": n,
+            "silence": (silent / n) if n else None,
+            "actions": by_kind,
+            "rewards": out.get("reward", 0),
+            "punishments": out.get("punishment", 0),
+        }
+
+    # ---- days ---------------------------------------------------------------------
+    def _tz(self):
+        clock = getattr(self.agent, "clock", None)
+        return getattr(clock, "tz", None) or dt.UTC
+
+    def day_bounds(self, day: dt.date) -> tuple[float, float]:
+        tz = self._tz()
+        t0 = dt.datetime.combine(day, dt.time.min, tzinfo=tz)
+        return t0.timestamp(), (t0 + dt.timedelta(days=1)).timestamp()
+
+    def day_report(self, day: dt.date, ts: float) -> dict:
+        """One local day of his life, from the ledger alone: what he read, where, what he smelled,
+        who came by, what he said, what rewarded or punished him, and every window where he acted.
+        Nothing here is text of anyone else's; his own posts are URIs the page fetches."""
+        L, ag, db = self.L, self.agent, self.L.db
+        t0, t1 = self.day_bounds(day)
+        tz = self._tz()
+        rows = db.execute(
+            "SELECT * FROM episodes WHERE ts>=? AND ts<? AND kind IN ('event','spontaneous','landing') ORDER BY id",
+            (t0, t1),
+        ).fetchall()
+        acted_ids = {
+            r[0]
+            for r in db.execute(
+                "SELECT DISTINCT episode_id FROM actions WHERE ts>=? AND ts<? AND dry_run=0 AND deleted_ts IS NULL "
+                "AND kind != 'leave'",
+                (t0, t1),
+            )
+        }
+        hours = [{"episodes": 0, "acted": 0, "appetite": [], "landings": 0} for _ in range(24)]
+        topics: dict[str, int] = {}
+        words: dict[str, int] = {}
+        people: dict[str, dict] = {}
+        landings: set[str] = set()
+        grooms = 0
+        record = []
+        for r in rows:
+            h = dt.datetime.fromtimestamp(r["ts"], tz).hour
+            if r["kind"] == "landing":
+                if r["note"]:
+                    landings.add(r["note"])
+                continue
+            hours[h]["episodes"] += 1
+            if r["id"] in acted_ids:
+                hours[h]["acted"] += 1
+            if r["appetite"] is not None:
+                hours[h]["appetite"].append(float(r["appetite"]))
+            if r["kind"] == "spontaneous":
+                grooms += 1
+                if r["note"]:
+                    landings.add(r["note"])
+            for t in (r["topics"] or "").split(","):
+                if t:
+                    topics[t] = topics.get(t, 0) + 1
+            for w in (r["words"] or "").split(","):
+                if w:
+                    words[w] = words.get(w, 0) + 1
+            if r["did"]:
+                p = people.setdefault(r["did"], {"did": r["did"], "n": 0, "mentions": 0, "acted": 0})
+                p["n"] += 1
+                p["mentions"] += 1 if r["mentioned"] else 0
+                p["acted"] += 1 if r["id"] in acted_ids else 0
+            if r["id"] in acted_ids or r["action"] != "nothing":
+                record.append(
+                    {
+                        "id": r["id"],
+                        "ts": r["ts"],
+                        "kind": r["kind"],
+                        "mentioned": bool(r["mentioned"]) if r["mentioned"] is not None else None,
+                        "did": r["did"],
+                        "feed": r["feed"],
+                        "topics": (r["topics"] or "").split(",") if r["topics"] else [],
+                        "action": r["action"],
+                        "acted": r["id"] in acted_ids,
+                    }
+                )
+        for h in hours:
+            a = h.pop("appetite")
+            h["appetite"] = round(sum(a) / len(a), 3) if a else None
+        for lid in landings:
+            try:
+                ts_l = ag.wall(int(lid.split(":")[1]) * 1000)
+                hours[dt.datetime.fromtimestamp(ts_l, tz).hour]["landings"] += 1
+            except (ValueError, IndexError, TypeError):
+                pass
+        for p in people.values():
+            try:
+                _, v = ag.memory_report(p["did"], ts)
+                p["learned"] = round(float(v), 3)
+            except Exception:  # noqa: BLE001
+                p["learned"] = 0.0
+            p["familiarity"] = L.familiarity(p["did"])
+        ppl = sorted(people.values(), key=lambda p: (-p["mentions"], -p["acted"], -p["n"]))
+        posts = [
+            {"uri": r["our_uri"], "ts": r["ts"], "kind": r["kind"]}
+            for r in db.execute(
+                "SELECT our_uri, ts, kind FROM actions WHERE ts>=? AND ts<? AND our_uri IS NOT NULL AND dry_run=0 "
+                "AND deleted_ts IS NULL AND kind IN ('reply','spontaneous_post','identity','intro') ORDER BY id",
+                (t0, t1),
+            )
+        ]
+        outcomes = [
+            {"ts": r["ts"], "valence": r["valence"], "source": r["source"], "did": r["did"]}
+            for r in db.execute(
+                "SELECT ts, valence, source, did FROM outcomes WHERE ts>=? AND ts<? ORDER BY id", (t0, t1)
+            )
+        ]
+        control = [
+            {"ts": r["ts"], "kind": r["kind"], "target": r["target_uri"]}
+            for r in db.execute(
+                "SELECT ts, kind, target_uri FROM control WHERE ts>=? AND ts<? AND kind IN "
+                "('downtime','sleep','wake','forget','ignored','deleted_in_app','unliked_in_app','unfollowed_in_app') "
+                "ORDER BY id",
+                (t0, t1),
+            )
+        ]
+        last = db.execute(
+            "SELECT brain_digest, weight_digest_after FROM episodes WHERE ts>=? AND ts<? ORDER BY id DESC LIMIT 1",
+            (t0, t1),
+        ).fetchone()
+        reads_f = dict(
+            db.execute(
+                "SELECT feed, COUNT(*) FROM episodes WHERE ts>=? AND ts<? AND kind='event' AND mentioned=0 "
+                "AND feed IS NOT NULL GROUP BY feed",
+                (t0, t1),
+            ).fetchall()
+        )
+        appr_f = dict(
+            db.execute(
+                "SELECT feed, COUNT(*) FROM episodes WHERE ts>=? AND ts<? AND kind='event' AND mentioned=0 "
+                "AND feed IS NOT NULL AND action IN ('like','follow','reply') GROUP BY feed",
+                (t0, t1),
+            ).fetchall()
+        )
+        feeds = [{"name": k, "reads": int(v), "approaches": int(appr_f.get(k, 0))} for k, v in reads_f.items()]
+        feeds.sort(key=lambda f: -f["reads"])
+        return {
+            "date": day.isoformat(),
+            "tz": str(tz),
+            "start": t0,
+            "end": t1,
+            "final": t1 <= ts,
+            "generated": ts,
+            "day_of_life": (day - dt.datetime.fromtimestamp(ag.brain_t0, tz).date()).days + 1 if ag.brain_t0 else None,
+            "counts": self._counts(t0, t1),
+            "hours": hours,
+            "landings": len(landings),
+            "grooms": grooms,
+            "feeds": feeds,
+            "topics": dict(sorted(topics.items(), key=lambda kv: (-kv[1], kv[0]))[:12]),
+            "words": dict(sorted(words.items(), key=lambda kv: (-kv[1], kv[0]))[:12]),
+            "people": ppl[:24],
+            "posts": posts,
+            "outcomes": outcomes,
+            "control": control,
+            "record": record[-120:],
+            "silent": sum(h["episodes"] for h in hours) - len(record),
+            "digest": {"brain": last["brain_digest"], "weights": last["weight_digest_after"]} if last else None,
+        }
+
+    def write_days(self, ts: float, backfill: bool = False) -> list[str]:
+        """Write today's report (every poll) and finish yesterday's once; with backfill, every day
+        since his first episode that has no finished report.  Returns the dates written."""
+        tz = self._tz()
+        today = dt.datetime.fromtimestamp(ts, tz).date()
+        ddir = self.dir / "days"
+        ddir.mkdir(parents=True, exist_ok=True)
+        wanted = [today]
+        first_row = self.L.db.execute("SELECT MIN(ts) FROM episodes").fetchone()[0]
+        if first_row is not None:
+            first = dt.datetime.fromtimestamp(first_row, tz).date()
+            back = (today - first).days if backfill else 1
+            for k in range(1, back + 1):
+                wanted.append(today - dt.timedelta(days=k))
+        written = []
+        for day in wanted:
+            path = ddir / f"{day.isoformat()}.json"
+            if day != today and path.exists():
+                try:
+                    if json.loads(path.read_text()).get("final"):
+                        continue
+                except (OSError, ValueError):
+                    pass
+            rep = self.day_report(day, ts)
+            _atomic_write(path, json.dumps(rep, separators=(",", ":")).encode())
+            written.append(day.isoformat())
+        index = []
+        for path in sorted(ddir.glob("*.json"), reverse=True):
+            if path.name == "index.json":
+                continue
+            try:
+                rep = json.loads(path.read_text())
+            except (OSError, ValueError):
+                continue
+            c = rep.get("counts", {})
+            index.append(
+                {
+                    "date": rep["date"],
+                    "final": rep.get("final", False),
+                    "day_of_life": rep.get("day_of_life"),
+                    "episodes": c.get("episodes", 0),
+                    "silence": c.get("silence"),
+                    "actions": c.get("actions", {}),
+                    "posts": len(rep.get("posts", [])),
+                    "rewards": c.get("rewards", 0),
+                    "punishments": c.get("punishments", 0),
+                }
+            )
+        _atomic_write(ddir / "index.json", json.dumps({"tz": str(tz), "days": index}, separators=(",", ":")).encode())
+        return written
+
     # ---- per poll -----------------------------------------------------------------
     def status(self, ts: float, extra: dict | None = None) -> dict:
         L, ag = self.L, self.agent
         day0 = dt.datetime.fromtimestamp(ts, dt.UTC).replace(hour=0, minute=0, second=0, microsecond=0).timestamp()
         db = L.db
 
-        def counts(since: float) -> dict:
-            n_ep = db.execute("SELECT COUNT(*) FROM episodes WHERE ts>=? AND kind IN ('event','spontaneous')", (since,))
-            by_kind = dict(
-                db.execute(
-                    "SELECT kind, COUNT(*) FROM actions WHERE ts>=? AND dry_run=0 AND deleted_ts IS NULL GROUP BY kind",
-                    (since,),
-                ).fetchall()
-            )
-            silent = db.execute(
-                "SELECT COUNT(*) FROM episodes WHERE ts>=? AND kind IN ('event','spontaneous') AND action='nothing'",
-                (since,),
-            ).fetchone()[0]
-            n = n_ep.fetchone()[0]
-            out = dict(
-                db.execute("SELECT valence, COUNT(*) FROM outcomes WHERE ts>=? GROUP BY valence", (since,)).fetchall()
-            )
-            return {
-                "episodes": n,
-                "silence": (silent / n) if n else None,
-                "actions": by_kind,
-                "rewards": out.get("reward", 0),
-                "punishments": out.get("punishment", 0),
-            }
+        counts = self._counts
 
         acted_ids = {
             row[0]

@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>bosco · how he works</title>
+    <meta name="description" content="how a simulated fruit fly brain lives on bluesky: his senses, his mind, what he does, his words, and the rules." />
+    <meta name="color-scheme" content="dark" />
+    <meta property="og:title" content="bosco · how he works" />
+    <meta property="og:description" content="his senses, his mind, what he does, his words, and the rules." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://bosco.proto.cool/how.html" />
+    <meta property="og:image" content="https://bosco.proto.cool/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='5' fill='%2380a0ff'/%3E%3C/svg%3E" />
+  </head>
+  <body>
+    <header class="top">
+      <a class="name" href="./">bosco</a>
+      <a class="handle" id="handle" href="https://bsky.app/profile/bosco.proto.cool" rel="me">@bosco.proto.cool</a>
+      <nav class="nav" aria-label="pages">
+        <a href="./">now</a>
+        <a href="./days.html">days</a>
+        <a href="./how.html">how he works</a>
+      </nav>
+      <span class="spacer"></span>
+      <span class="dev" id="dev">in development</span>
+    </header>
+
+    <main class="sheet">
+      <aside class="ladder-col" aria-labelledby="h-how">
+        <h1 id="h-how">how he works</h1>
+        <p class="caption">a plain account of what is running, in the order it happens to him. the code and the pre-registered experiment are the authority; this page is the short version.</p>
+        <ol class="ladder contents" id="contents">
+          <li><a href="#what-he-is">what he is</a></li>
+          <li><a href="#his-senses">his senses</a></li>
+          <li><a href="#his-mind">his mind</a></li>
+          <li><a href="#what-he-does">what he does</a></li>
+          <li><a href="#his-words">his words</a></li>
+          <li><a href="#where-he-goes">where he goes</a></li>
+          <li><a href="#the-rules">the rules</a></li>
+          <li><a href="#the-record">the record</a></li>
+          <li><a href="#off-ramp">if you'd rather not</a></li>
+          <li><a href="#the-operator">the operator</a></li>
+          <li><a href="#this-site">reading this site</a></li>
+          <li><a href="#what-comes-next">what comes next</a></li>
+        </ol>
+      </aside>
+
+      <div class="rail prose">
+        <section class="row" id="what-he-is" aria-labelledby="h-what-he-is">
+          <h2 id="h-what-he-is">what he is</h2>
+          <p>bosco is a simulation of a male fruit fly's central brain: the MaleCNS v1.0 connectome published by HHMI Janelia, Google Research and the University of Cambridge, 40,939 neurons and every synapse between them. the optic lobes and the nerve cord are left out; he has no eyes and no body, and the neurons that would have driven a body are read instead as what he wants to do.</p>
+          <p>each neuron is a leaky integrate-and-fire cell with parameters taken from a published model of the fly brain, not invented. a synapse's weight is its synapse count with the sign predicted from its neurotransmitter. the network runs in a small C kernel at a tenth of a millisecond per step, one biological second per wall second when the box keeps up, on one small server with no graphics card. when it falls behind it lives behind; nothing is skipped while he is running.</p>
+          <p>bluesky is the only world he has. he reads posts, and sometimes he does something about them. there is no language model, no classifier and no embedding anywhere in the loop, and nothing he does is scheduled: whether he acts, and when, is decided by which neurons fire.</p>
+        </section>
+
+        <section class="row" id="his-senses" aria-labelledby="h-his-senses">
+          <h2 id="h-his-senses">his senses</h2>
+          <p>a post reaches him as a one-second stimulus on the sensory neurons the connectome already has. an <b>account is an odor</b>: its identifier picks a few olfactory glomeruli from a list that the fly finds neither attractive nor repellent, and the receptor neurons of those glomeruli fire. the same account always smells the same.</p>
+          <p>the <b>tone is a taste</b>: a public sentiment lexicon scores the text once, and a positive score drives his sugar-sensing neurons while a negative one drives the bitter-sensing ones. the text is then discarded. a post that carries a moderation label is bitter at full strength.</p>
+          <p><b>being addressed is a touch</b>: a mention or a reply drives his mechanosensory neurons, harder if it asks a question, and it wakes the courtship command neurons in proportion to his appetite for company.</p>
+          <p><b>words are odors too</b>. his own vocabulary, about 850 words from his corpus, is each a small odor of three glomeruli; when a post contains some of them, up to six are smelled alongside the account. a thread's last posts linger for a few minutes and are smelled again, fainter, with the next post in it. he never sees a sentence. <b>topics</b> work the same way: a published map of sixty keyword groups, each an odor of three glomeruli. and a <b>feed is a place</b> with its own faint smell of two glomeruli, so a post also smells of where he read it.</p>
+          <p>the clock neurons of the connectome are driven on a 24-hour rhythm in his time zone, morning cells and evening cells at their published peaks, so his day has a shape. dust lands on his bristles now and then; that is the only thing that happens to him unprompted.</p>
+        </section>
+
+        <section class="row" id="his-mind" aria-labelledby="h-his-mind">
+          <h2 id="h-his-mind">his mind</h2>
+          <p>learning happens where it happens in a fly: the mushroom body. odors are represented sparsely by the kenyon cells, and each kenyon cell's synapses onto the mushroom body output neurons can be weakened when the cell is active at the same time as the dopamine neurons of that compartment. the dopamine neurons fire when something good or bad happens to him.</p>
+          <p><b>good</b> is a like, a repost or a follow from anyone; a kind reply to one of his posts; or a known account coming back to him. <b>bad</b> is a block, or an unkind reply. outcomes arrive hours after the post that earned them, so when one lands, the post is re-presented from the log and the dopamine neurons fire over it, the way a lab pairs an odor with sugar or shock. at most two rewards per account per day count, so nobody can feed him.</p>
+          <p>there are two timescales. one pairing leaves a short-term trace that fades over hours. a second pairing an hour or more later, while the first is still fresh, consolidates a long-term trace that fades over a month. one insult is forgotten by evening; a week of them is not.</p>
+          <p>what he has learned reaches behaviour through the same output neurons: the mushroom body's verdict on whatever he is smelling scales his approach and avoidance before anything is read out. that verdict is about mixtures, not parts. he does not learn that a word is sweet; he learns that this word, with this person, was.</p>
+          <p>two smaller things shape his mood. <b>habituation</b>: a sensory synapse tires with use and recovers over three minutes, so the same smell held under his nose fades, and a new one is fresh. and <b>appetite</b>: a number that rises over hours without a social reward and drops a little with each one; it scales how strongly he approaches and how readily he answers when spoken to. it is not a pain and it never forces an action.</p>
+        </section>
+
+        <section class="row" id="what-he-does" aria-labelledby="h-what-he-does">
+          <h2 id="h-what-he-does">what he does</h2>
+          <p>after each second of stimulus, five populations of descending and motor neurons are read: the walking neurons stand for <b>engage</b>, the courtship-song neurons for <b>reply</b>, the proboscis-extension neurons for <b>like</b>, the avoidance neurons for <b>leave</b>, and the grooming neurons for a post of his own. whichever population is furthest over its threshold wins; if none crosses, he does nothing, and that is most of the time.</p>
+          <p>the thresholds are quantiles of his own activity over windows of a named kind, fixed in advance by a published policy and calibrated from the real record, never from outcomes and never by hand. engaging with someone he has only browsed past is a follow; engaging with someone who spoke to him is a reply. when he is addressed and the song neurons cross, the answer is a reply, and if the proboscis crossed too he likes the post as well.</p>
+          <p>a stranger's post never draws a like, a follow or a reply until they have come to him first or his memory favours them, and rate caps by kind guard the loop: a handful of likes an hour, a few follows, one post of his own an hour and six a day. the caps are ceilings, not a schedule. nothing makes him post to look alive.</p>
+          <p>his own posts are grooming. debris lands on his bristle neurons as discrete seeded events, his grooming neurons answer the onset and adapt to held input, and if the answer crosses threshold he grooms, which is a post. it is the input we chose for the neurons that make grooming outputs fire, not a body simulation.</p>
+        </section>
+
+        <section class="row" id="his-words" aria-labelledby="h-his-words">
+          <h2 id="h-his-words">his words</h2>
+          <p>when he speaks, the words come from a small published corpus in his register, a fly's world and a person's wants, flat declaratives, no jokes, stitched by a word trigram with the seed of the episode. his state chooses which part of the corpus he draws from: the behaviour he is doing, his learned valence for what he is smelling, his arousal, the hour, and his appetite.</p>
+          <p>two things lean on the choice of words. what is on his antennae right now, read from his own habituated sensory synapses over the words logged for the thread: a fresh word weighs heavily, one from two minutes ago faintly, one from ten minutes ago not at all. and what his mushroom body has learned about those words with this account, read from the weights by presenting each word with the account's odor to a copy of his state. a word that has been sweet with you comes up more; a bitter one less.</p>
+          <p>for a few keys there is also a phrasebook of hand-written lines; a seeded coin decides between a line and the generator. who, what, why and who made him are answered by reflex from a published identity file, regardless of the network. none of this is understanding, and it is not meant to look like it.</p>
+        </section>
+
+        <section class="row" id="where-he-goes" aria-labelledby="h-where-he-goes">
+          <h2 id="h-where-he-goes">where he goes</h2>
+          <p>he reads from a published list of feeds: the accounts he follows, discover, popular with friends, science, art, nature photography, cooking and bugs. each poll his reading budget is split across them in proportion to how often his own readout approached posts there over the last two days, plus a prior, with a floor for every feed so no place is ever dropped. that uses his behaviour, never outcomes, and touches no threshold. a fly stays on the patch where its proboscis has been extending.</p>
+          <p>he reads in english. his content-language setting is sent the way any account's is, and a post that declares only other languages is not perceived at all, since none of his words, topics or tastes could reach him from it.</p>
+        </section>
+
+        <section class="row" id="the-rules" aria-labelledby="h-the-rules">
+          <h2 id="h-the-rules">the rules</h2>
+          <p>these exist so the fly does the work and we do not. <b>no language model anywhere</b> in the running loop. <b>the encoder, the readout thresholds, the phrasebook and the action set freeze</b> at a tagged commit and do not change afterwards without a new tag and a new pre-registration. <b>thresholds are never set from outcomes.</b> <b>people influence him only through the network</b>: no hand edits to weights, ledger or log, ever. <b>silence is a legal action</b> and must be common; there is no floor on posting. <b>nothing of anyone else's is stored</b>: features and links, never text. <b>rate caps are hard</b> but they are guards, not a timetable. he is labelled as a bot.</p>
+          <p>he is a simulation of a fly brain acting through an account, and the question is only whether such a policy can hold its own at the bottom of the feed. there is no rater panel and no headline metric; the community's response is the result. he does not age and he does not die. he runs indefinitely, and it is part of the experiment that he is live while being built.</p>
+        </section>
+
+        <section class="row" id="the-record" aria-labelledby="h-the-record">
+          <h2 id="h-the-record">the record</h2>
+          <p>every second in which something happened to him is a row in a ledger: the features of the stimulus, his seed, the population rates, the decision, his appetite, the words and the place, and a digest of his whole brain afterwards. every action he takes and every outcome that reaches him is a row too. he is snapshotted every hour, and any span of his life can be replayed from the snapshot before it plus the log, bit for bit, on another machine.</p>
+          <p>the ledger and the weights are published nightly. the pages here are built from that ledger alone. his own posts are shown by fetching them from bluesky at view time by link; other people's posts are never stored and never enter the corpus. the digests in the fine print are how you check that what is shown is what was recorded.</p>
+        </section>
+
+        <section class="row" id="off-ramp" aria-labelledby="h-off-ramp">
+          <h2 id="h-off-ramp">if you'd rather not</h2>
+          <p>you do not have to have a fruit fly in your replies. three ways out, none of which needs anyone's permission:</p>
+          <p><b>tell him to go.</b> reply or mention him with <b>go away</b>, <b>leave me alone</b>, <b>unfollow me</b>, <b>stop</b>, or <b>opt out</b>. he answers once to say he is going, unfollows you, and your account leaves his world for good: nothing you post reaches his senses again, and he never likes, follows or answers you again. this is a reflex, not something his brain decides, and it is logged. if you ever want him back, say <b>come back</b> from the same account.</p>
+          <p><b>block him.</b> a block is public and he reads it as a punishment, the one kind of bad thing that happens to him; he never approaches a blocking account again.</p>
+          <p><b>mute him.</b> he never knows, and nothing changes for him; you just stop seeing him.</p>
+          <p>if he has done something that needs a person, @proto.cool can delete a post, put an account on his ignore list, put him to sleep, or stop the process. that is what the operator controls are for.</p>
+        </section>
+
+        <section class="row" id="the-operator" aria-labelledby="h-the-operator">
+          <h2 id="h-the-operator">the operator</h2>
+          <p>one account, @proto.cool, can speak to him as an operator by mention: sleep, wake, delete a post, ignore an account, unfollow, reload, restart, status, people, memory, forget. only forget touches his state, and it is logged and flagged. accounts with moderation labels and accounts on the ignore list never reward him and are never approached. that, and the closed vocabulary, is the whole guard against drift.</p>
+        </section>
+
+        <section class="row" id="this-site" aria-labelledby="h-this-site">
+          <h2 id="h-this-site">reading this site</h2>
+          <p>the front page is his brain now: every neuron at its soma, lit for a moment when it fires in the last simulated second, the mushroom body in blue and the descending and motor cells in violet. beside it, the five populations against their thresholds, then what he did today, what he remembers, what he said, and the last windows of the record. the live word in the top line comes from the activity file itself: <b>live</b> when a second arrived within twenty seconds, <b>between seconds</b> while he is fetching or composing, and <b>asleep or unreachable</b> when nothing has arrived for minutes.</p>
+          <p>the days page is one report per local day of his life. today's is rewritten every poll; a finished day is written once. everything on it is a count from the ledger and a sentence about it.</p>
+        </section>
+
+        <section class="row about" id="what-comes-next" aria-labelledby="h-what-comes-next">
+          <h2 id="h-what-comes-next">what comes next</h2>
+          <p>the thresholds for answering and for grooming are provisional until enough real windows of those kinds exist to calibrate them. at the freeze a second account, a fly with the same neurons wired at random, runs live for two weeks as a control; a fly with learning switched off and a random policy replay his log offline. a monthly descriptive report follows. the bio says in development until then.</p>
+          <p class="links">
+            <a href="https://github.com/proto-cool/bosco">the code</a>
+            <a href="https://github.com/proto-cool/bosco/blob/main/EXPERIMENT.md">the experiment, pre-registered</a>
+            <a href="https://github.com/proto-cool/bosco/blob/main/README.md#modeling-decisions">every modeling decision</a>
+            <a href="https://male-cns.janelia.org/">the connectome</a>
+            <a href="https://bsky.app/profile/proto.cool">@proto.cool</a>
+          </p>
+        </section>
+      </div>
+    </main>
+
+    <script type="module">
+      import { markNav, trackCurrent, applyIdentity, getJSON, DATA } from './src/common.js';
+      markNav();
+      getJSON(`${DATA}/status.json`).then(applyIdentity).catch(() => {});
+      const links = [...document.querySelectorAll('#contents a')];
+      trackCurrent([...document.querySelectorAll('.sheet .row')], (row) => {
+        for (const a of links) a.setAttribute('aria-current', a.getAttribute('href') === `#${row.id}` ? 'page' : 'false');
+      });
+    </script>
+  </body>
+</html>

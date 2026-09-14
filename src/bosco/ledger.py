@@ -403,6 +403,11 @@ class Ledger:
     def ignored(self) -> set[str]:
         return {r["did"] for r in self.db.execute("SELECT did FROM ignored")}
 
+    def ignored_by(self, did: str) -> str | None:
+        """Who put this account on the ignore list: the operator, or the account itself (opt-out)."""
+        r = self.db.execute("SELECT by_did FROM ignored WHERE did=?", (did,)).fetchone()
+        return r["by_did"] if r else None
+
     def set_ignored(self, did: str, by_did: str, on: bool, ts: float | None = None) -> None:
         if on:
             self.db.execute(

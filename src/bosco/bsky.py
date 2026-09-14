@@ -221,6 +221,39 @@ class Bsky:
             self._follows = out
         return self._follows
 
+    def opt_out(self, out: Outcome, did: str, uri: str, cid: str, record, ts: float) -> None:
+        """Anyone can send him away: never in his stimulus stream again, unfollowed, told once.
+        Logged as `opt_out` by their own DID; a reflex, not a decision of the network."""
+        self.L.set_ignored(did, did, True, ts=ts)
+        self.L.add_control("opt_out", did, uri, None, ts=ts)
+        self.unfollow_if_following(did)
+        print(f"opt-out: {did} asked him to go; ignored and unfollowed")
+        self.identity_reply(
+            out, "opt_out", uri, cid, record, did, ts, text_override=self.agent.identity.opt_answer("opt_out", out.seed)
+        )
+
+    def opt_in(self, n, did: str, uri: str, ts: float) -> None:
+        """The same account calling him back lifts its own opt-out.  Nothing else does."""
+        self.L.set_ignored(did, did, False, ts=ts)
+        self.L.add_control("opt_in", did, uri, None, ts=ts)
+        print(f"opt-in: {did} called him back; no longer ignored")
+        seed = Agent.seed_for(ts, did, uri)
+        text = self.agent.identity.opt_answer("opt_in", seed)
+        if self.dry or self.L.asleep():
+            print(f"opt-in reply {text!r} -> {uri} (dry)")
+            return
+        record = n.record
+        reply = getattr(record, "reply", None)
+        root = getattr(reply, "root", None)
+        ref = models.AppBskyFeedPost.ReplyRef(
+            parent=models.ComAtprotoRepoStrongRef.Main(uri=uri, cid=n.cid),
+            root=models.ComAtprotoRepoStrongRef.Main(uri=root.uri if root else uri, cid=root.cid if root else n.cid),
+        )
+        our_uri = self.client.send_post(self.rich(text), reply_to=ref, langs=["en"]).uri
+        self.L.add_action(
+            None, "identity", our_uri, uri, dry_run=False, ts=ts, root_uri=root.uri if root else uri, target_did=did
+        )
+
     def unfollow_if_following(self, did: str) -> None:
         uri = self.follows().get(did)
         if uri is None:
@@ -526,6 +559,10 @@ class Bsky:
             f"topics={list(topics)} learned={d.learned:+.2f} top={top} {d.ratios.get(top, 0.0):.2f}x "
             f"-> {d.behaviour}/{d.action}"
         )
+        # the off ramp: told to go, he goes (EXPERIMENT.md §2a).  Answered once, then never again.
+        if mentioned and not labels and self.agent.identity.is_opt_out(text):
+            self.opt_out(out, did, uri, cid, record, ts)
+            return out
         # identity reflex: who/what/why/creator is answered regardless of the network (EXPERIMENT.md §2)
         qid = self.agent.identity.match(text) if mentioned and not labels else None
         if qid is not None:
@@ -595,6 +632,10 @@ class Bsky:
             if self.handle_control(n):
                 continue
             if did in ignore:
+                text = getattr(getattr(n, "record", None), "text", "") or ""
+                if self.L.ignored_by(did) == did and self.agent.identity.is_opt_in(text):
+                    self.opt_in(n, did, uri, ts)
+                    continue
                 self.L.add_control("ignored", did, uri, None, ts=ts)
                 self.unfollow_if_following(did)
                 continue
@@ -767,6 +808,10 @@ def run_loop(ledger: Ledger, dry_run: bool, once: bool, interval: int) -> int:
         }
         b.agent.on_window = panel.on_window
         print(f"panel: writing {os.environ['BOSCO_PANEL_DIR']}")
+        try:
+            print(f"panel: days written {panel.write_days(time.time(), backfill=True)}")
+        except Exception as e:  # noqa: BLE001
+            print("panel days failed:", repr(e), file=sys.stderr)
     b.agent.bio_ms(time.time())  # start his clock now if it has not started
     skipped = b.agent.skip_downtime(time.time())
     if skipped:
@@ -806,6 +851,7 @@ def run_loop(ledger: Ledger, dry_run: bool, once: bool, interval: int) -> int:
                 if panel is not None:
                     try:
                         panel.status(time.time(), {"poll": {"browsed": nb, "lag_s": lag, "feeds": b.read_by_feed}})
+                        panel.write_days(time.time())
                     except Exception as e:  # noqa: BLE001
                         print("panel status failed:", repr(e), file=sys.stderr)
                 ledger.set_cursor("brain_lag_s", repr(lag))

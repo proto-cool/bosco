@@ -129,3 +129,27 @@ def test_notifications_are_seen_once():
     L.mark_notification("at://x/like/1", 1.0)
     L.mark_notification("at://x/like/1", 2.0)
     assert L.seen_notification("at://x/like/1")
+
+
+def test_opt_out_ignores_unfollows_and_answers_once():
+    from bosco.identity import IdentityReflex
+
+    L = Ledger(f"{tempfile.mkdtemp()}/l.sqlite")
+    b = _bsky(L)
+    b.agent.identity = IdentityReflex()
+    unfollowed, replied = [], []
+    b.unfollow_if_following = lambda did: unfollowed.append(did)
+    b.identity_reply = lambda out, qid, uri, cid, record, did, ts, text_override=None: replied.append(
+        (qid, text_override)
+    )
+    out = _out(L, "nothing", 0.0, True)
+    b.opt_out(out, "did:plc:x", "at://x/9", "cid", SimpleNamespace(text="go away"), 1.0)
+    assert "did:plc:x" in L.ignored() and L.ignored_by("did:plc:x") == "did:plc:x"
+    assert unfollowed == ["did:plc:x"] and replied[0][0] == "opt_out" and "go" in replied[0][1]
+    assert [r[0] for r in L.db.execute("SELECT kind FROM control")] == ["opt_out"]
+    # the same account calling him back lifts it; the operator's ignore is not theirs to lift
+    n = SimpleNamespace(record=SimpleNamespace(text="come back", reply=None), cid="c")
+    b.opt_in(n, "did:plc:x", "at://x/10", 2.0)
+    assert "did:plc:x" not in L.ignored()
+    L.set_ignored("did:plc:y", "did:plc:operator", True)
+    assert L.ignored_by("did:plc:y") == "did:plc:operator"

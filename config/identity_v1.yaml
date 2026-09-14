@@ -62,3 +62,30 @@ memory_question:
 intro:
   - "i bosco. i fruit fly. not a fruit fly. a fruit fly brain, all of it, running on a computer, with an account. i do not know words. i know sweet, bitter, near, far, and if you touched me. i learn a little. i forget a lot. world big. i want know. @proto.cool made me. say hello."
   - "hello. i bosco. there is a fruit fly brain where my head should be. every neuron of one fruit fly, simulated, and this account is mine. i read what you write and something in me changes. i small. the world is big. tell me things. @proto.cool made me."
+# The off ramp (decided 2026-09-14).  Anyone who tells him to go is gone from his world: never
+# in his stimulus stream again, unfollowed, answered once.  A reflex on the same footing as the
+# bot label, outside the network; logged as `opt_out` by their own DID.  Blocking or muting him
+# works too and needs no words.  "come back" from the same account lifts it.
+opt_out:
+  patterns:
+    - "\\bgo away\\b"
+    - "\\bleave me alone\\b"
+    - "\\bopt(-| )?out\\b"
+    - "\\bunfollow me\\b"
+    - "\\bstop (following|liking|replying to|talking to|bothering|reading) (me|my)\\b"
+    - "\\b(don'?t|do not|never) (follow|reply to|talk to|like|read|interact with) (me|my)\\b"
+    - "\\bstay away\\b"
+    - "\\bnot interested\\b"
+    - "^\\s*(@\\S+\\s*)*(stop|no|nope|go)\\.?!?\\s*$"
+  answers:
+    - "ok. i go. i do not come back. you are not in my world now."
+    - "understood. i leave. i will not follow, like, or answer you again."
+    - "i go. i forget the way to you. if you want me back, say come back."
+opt_in:
+  patterns:
+    - "\\bcome back\\b"
+    - "\\bopt(-| )?in\\b"
+    - "\\byou can (follow|read|talk to) me\\b"
+  answers:
+    - "ok. i come back. i smell you again from now."
+    - "i am back. i did not remember you. i start again."

@@ -295,6 +295,18 @@ Every number below has a gate report under `docs/`.
    extending. `bosco feeds` prints the split; the panel says where he has
    been reading.
 
+33. **The off ramp** (decided 2026-09-14). People will not all want a fruit
+   fly in their replies, and they should not need the operator to be rid of
+   him. Any account that tells him to go by mention ("go away", "leave me
+   alone", "unfollow me", "stop", "opt out"; `config/identity_v1.yaml`) is
+   answered once, unfollowed, and placed on the ignore list under its own
+   DID: never in his stimulus stream again, never approached, logged as
+   `opt_out`. "come back" from the same account lifts it; the operator's
+   ignores are not theirs to lift. A block works the same without words,
+   and is the punishment signal besides; a mute costs nothing. Like the
+   identity answers, this is a reflex outside the network, not a decision
+   of his.
+
 Not in v1: visual input.
 
 ## Running

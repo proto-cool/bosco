@@ -300,6 +300,53 @@ lifts to primary. Columns: age, smell (dust / mention / browse), who, what
 One muted sentence in the fly's voice ("nobody yet. he has not met anyone he
 remembers."; "nothing yet."). Never a placeholder box or skeleton.
 
+### Top line navigation
+Three words in the label context at annotation size after the handle: `now`,
+`days`, `how he works`. The current page's word is lifted to `--text-primary`
+(`aria-current="page"`); the rest are muted and lift to secondary on hover. On
+phones the handle and "in development" leave the line so the words fit.
+
+### Live indicator, three states
+The activity file carries the wall time it was written. Within 20 s the dot
+is the accent with `--glow-status` and the word is `live`; up to four minutes
+the dot is `--text-secondary` without a glow and the word is `between
+seconds · Ns` (he is fetching or composing; no second has been simulated);
+past that the dot is ghost and the word says when the last second was. Three
+missed fetches in a row read `asleep or unreachable`.
+
+### Sheet (days, how he works)
+A second composition for pages without the specimen: a sticky ladder column
+(`minmax(14rem, 4fr)`) and the same rail (`8fr`). The ladder is a list of
+mono annotation rows under hairlines (dates with day-of-life and silence, or
+section names in the label context); the current one is lifted. On the days
+page the ladder is the day picker; on the how page it follows the current row
+with the same IntersectionObserver rule as the rail. Below 64rem the ladder
+sits above the rail, static.
+
+### Day heading
+The rail's first row on a day report carries the date in the display context
+(`--heading-size`, lowercase, "monday, september 14") inside the label-context
+`h2`, with a mono sub-line beneath (day of life, whole day or so far, his
+time zone). The one place a display word appears besides the wordmark.
+
+### Hour strip
+Twenty-four bars on a hairline baseline, `max-width: 44ch`, 56px tall,
+`--border-bright` for everything he read and `--accent-primary` for what he
+acted on, a 3px `--text-secondary` dot beneath an hour where dust landed.
+Four mono axis words beneath (midnight, 6 am, noon, 6 pm). One strip per day,
+nothing else charted.
+
+### People row (revised)
+`1fr 7rem 3.2rem max-content`: handle, valence mark, the value in mono
+secondary (`+0.21`, `−0.05`, `0`), the count. The mark's track is `--space-md`
+tall with a `--text-secondary` centre tick; the segment is 3px, full at
+±0.5 since his verdicts live well inside ±1. Phones narrow the track to 5rem.
+
+### Prose row
+The how page's rows are several paragraphs at the sentence measure (44ch) in
+`--text-secondary`, lifted to primary while current; `<b>` inside is the
+lifted term. Captions carry `<b>` in secondary for a defined word (withheld).
+
 ### Social card (og.html → og.png)
 The same world as a still: 1200×630, the specimen at 700px wide under the
 same lobe, the wordmark at `2.4 × --heading-size`, one line at `1.45 ×

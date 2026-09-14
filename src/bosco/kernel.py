@@ -6,14 +6,17 @@ The kernel is single-threaded and deterministic.  Build with `make -C kernel`.
 from __future__ import annotations
 
 import ctypes as C
+import os
 import subprocess
 from dataclasses import dataclass
+from pathlib import Path
 
 import numpy as np
 
 from bosco import paths
 
-_LIB_PATH = paths.KERNEL_DIR / "liblif.so"
+# BOSCO_LIF_SO points at another build of the kernel (an experiment with other compile-time epsilons)
+_LIB_PATH = Path(os.environ["BOSCO_LIF_SO"]) if os.environ.get("BOSCO_LIF_SO") else paths.KERNEL_DIR / "liblif.so"
 
 
 class _Params(C.Structure):
