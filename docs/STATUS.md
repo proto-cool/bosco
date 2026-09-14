@@ -56,8 +56,9 @@ uv run python scripts/integrity_checks.py --ledger /tmp/dev.sqlite --state-dir /
 
 - Thresholds are provisional (synthetic battery); ~46% of synthetic episodes
   cross some threshold, so the rate caps, not the thresholds, bound activity.
-- The song-DN population (`reply`) is almost silent in the model (99th pct
-  1.1 Hz); replies mostly come from `engage` on already-followed accounts.
+- The song-DN population (`reply`) has no sensory input in the model; since
+  2026-09-14 being addressed drives pC1 in proportion to appetite (README 26),
+  and engage maps to reply when he was addressed.
 - Bitter taste does not reach the escape DNs, so an insult makes Bosco
   approach (follow) rather than leave; aversion arrives only via learning.
 - Accounts generalise: two accounts share ~4 of 12 glomeruli, so learning

@@ -178,6 +178,47 @@ Every number below has a gate report under `docs/`.
    which spikes fired and was rejected. The loop lives between polls instead of
    sleeping, checks notifications every 20 s and browses on the interval.
 
+25. **Grooming is an onset** (`config/encoder_v1.yaml` `spontaneous`, decided
+   2026-09-14). Day-one data: 25 grooms in 23 h, every landing crossing a
+   10.5 Hz threshold, because dust never settled and the driven bristle
+   subset was redrawn every second, so held debris was a new onset each
+   second. Now one seeded permutation per landing picks the bristles (the
+   subset shrinks as the debris settles, never adds an onset), dust settles
+   passively with tau 600 s, landings come 0.5/h, and the 15 s after each
+   landing are logged as `landing` windows so the groom threshold is set
+   from real responses (peak per landing). No timer anywhere.
+26. **Answering has a circuit: pC1** (`config/encoder_v1.yaml` `courtship`).
+   The `reply` population is the courtship-song descending neurons, and in
+   day-one data they sat at 0.0 Hz in every mention: nothing sensory reaches
+   them (JO-B synapses onto the giant fibre). Being addressed now also
+   excites the male courtship command neurons pC1/P1 (types `pC1*`, 156
+   bodies; von Philipsborn 2011, Kohatsu 2011, Hoopfer 2015, Zhang 2016)
+   at 12 Hz × appetite (× 1.5 for a question), the input we chose for the
+   neurons that make the reply outputs fire, as bristle debris is for
+   grooming. JO drops to 50 Hz (100 Hz made every mention a startle) and the
+   question gain moves to the courtship drive. Walking toward whoever spoke
+   to him is a reply; toward someone he only browsed past, a follow. Not a
+   guarantee: threshold from the real distribution, learned valence still
+   gates it, caps and the stranger rail still apply.
+27. **Appetite for contact** (`config/appetite_v1.yaml`): a scalar in
+   [0, 1] on the agent, rising toward 1 with e-fold 6 h without a social
+   reward and taking a 30% bite on each reward; punishment leaves it
+   alone. It scales the approach populations ×(1 + 0.5 (a − 0.5)), centred
+   so it can neither force nor silence, and sets the courtship drive. It is
+   state (saved, snapshotted, in the digest, logged on every window,
+   replayed), ticks on his own clock, and is not a pain signal. It does
+   nothing to the idle brain, which is the clock drive plus the minutes
+   after a landing. A basal ORN drive for the panel's sake was measured
+   (+43% idle CPU for spikes that reach no readout) and rejected.
+28. **Thresholds follow a pre-registered policy** (`config/thresholds_policy.yaml`):
+   engage, like and leave at the 85th percentile over event windows;
+   reply at the 40th over windows in which he was addressed; groom at the
+   70th over per-landing peaks. `scripts/calibrate_thresholds.py --policy`
+   applies it; `ops/fetch_ledger.sh` copies the live ledger (features and
+   URIs only) for it. Likes and follows removed in the app as him are
+   reconciled on each sweep (`unliked_in_app`, `unfollowed_in_app`); the
+   learning they earned stays, because the reward was for the window.
+
 Not in v1: visual input.
 
 ## Running

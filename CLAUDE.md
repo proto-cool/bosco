@@ -98,6 +98,9 @@ Do not download the EM volume. `neuprint-python` against
   input). VNC dropped; descending neurons are the behavioral readout.
   Document this as a modeling decision in the README.
 - **Short-term depression** on sensory synapses only (habituation; on).
+- **Thresholds** follow `config/thresholds_policy.yaml` (pre-registered
+  quantiles per population over named window sets); calibrate with
+  `scripts/calibrate_thresholds.py --policy`, never by hand.
 - **Circadian**: drive the annotated clock neurons with a 24 h rhythm. Do
   not add a posting-time gate; let the network produce the schedule.
 - **Time step** 0.1 ms. Bosco runs continuously, one biological second
@@ -132,6 +135,11 @@ Do not download the EM volume. `neuprint-python` against
   channel carries most aversion. Do not "fix" the sparsity by adding a model.
 - **Habituation**: short-term depression on sensory afferents only; the
   same smell every few minutes fades, a new one is fresh.
+- **Appetite** (`config/appetite_v1.yaml`): a scalar that rises with hours
+  since his last reward and falls on reward; it scales approach in the
+  readout and the courtship (pC1) drive of a mention. Not a pain signal,
+  not a floor, never set from outcomes. Being addressed maps engage to
+  reply; browsing maps it to follow.
 
 ## Encoder (frozen at tag)
 

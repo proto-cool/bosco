@@ -295,3 +295,17 @@ https://bosco.proto.cool. The first certificate takes a few seconds.
 ```
 cd /root/bosco && git pull && podman build -t bosco-panel -f ops/Containerfile.panel . && systemctl restart bosco-panel
 ```
+
+## F. Calibrating thresholds from his real activity
+
+Thresholds follow `config/thresholds_policy.yaml`. Copy the live ledger off
+the box (features and URIs only; no text) and run the script:
+
+```
+ops/fetch_ledger.sh                      # from your laptop; needs ssh to the box
+uv run python scripts/calibrate_thresholds.py --ledger snapshots/dev-<date>/ledger.sqlite --allow-partial --write
+```
+
+`--allow-partial` keeps the current value for any population whose window
+set is still too small (the policy's `min_rows`); the script prints which.
+Commit `config/thresholds.json`, push, rebuild the bosco container, restart.

@@ -39,16 +39,24 @@ genuinely the one acting, and that anyone can check.
   memory of their smell, in fixed words.
 - Other people's post text is never stored.
 - Rate caps by kind (`config/caps_v1.yaml`): replies 12/h 100/d, likes
-  12/h 100/d, follows and unfollows 6/h 40/d, own posts 1/h 12/d, all
+  12/h 100/d, follows and unfollows 3/h 15/d, own posts 1/h 6/d, all
   actions 24/h 240/d; at most 6 replies per thread per hour, 20 replies and
   30 actions toward one account per day. These are loop guards, not a
   schedule. Bot self-label on the account.
 - When he posts or replies is the network's decision. Replies follow
   events. Own posts follow grooming: debris lands on his bristles as
-  discrete seeded events, each landing is an onset, and he grooms when his
-  network answers it (`config/encoder_v1.yaml` `spontaneous`). There is no
-  timer. The VPS bounds perception, not behaviour: at most
-  `BOSCO_EPISODE_BUDGET` windows per hour.
+  discrete seeded events (about one every two hours), each landing is one
+  onset touching one seeded set of bristles, the debris settles over
+  minutes, and he grooms when his network answers the landing
+  (`config/encoder_v1.yaml` `spontaneous`). There is no timer. The VPS
+  bounds perception, not behaviour: at most `BOSCO_EPISODE_BUDGET` windows
+  per hour.
+- Being addressed excites his courtship command neurons (pC1) in proportion
+  to his appetite for contact (`config/appetite_v1.yaml`): a scalar that
+  rises over hours without a social reward and falls with each reward. It
+  is state, logged on every window and replayed; it scales approach before
+  threshold, centred so it never forces a reply and never silences one, and
+  it adds no floor. Walking toward whoever spoke to him is a reply.
 - Bosco reads his timeline and the discover feed and may like, follow,
   unfollow, reply in any thread he reads, and post on his own. The action
   set is `reply, like, follow, leave, spontaneous_post, nothing`. Toward
@@ -119,6 +127,8 @@ published with the frozen artifacts.
 | Phrasebook | `phrasebook.yaml` | |
 | Encoder spec | `docs/encoder.md` | |
 | Readout thresholds | `config/thresholds.json` | |
+| Threshold policy | `config/thresholds_policy.yaml` | |
+| Appetite | `config/appetite_v1.yaml` | |
 | Corpus | `corpus/` | |
 
 ## 4. Controls (optional; for the curious)
@@ -158,6 +168,9 @@ Any failure is announced from the account and fixed under a new tag.
 - Short-term memory fades in hours; long-term memory needs spaced
   repetition and fades in a month. Bosco forgets most things.
 - Dev-period interaction shaped early weights before the tag.
+- Reply activity during the dev period is shaped by appetite, hence
+  indirectly by rewards; the threshold rule is still a quantile of activity
+  fixed in advance, never of outcomes.
 - One connectome, one individual, one sex.
 
 ## 8. Timeline

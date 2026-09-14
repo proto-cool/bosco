@@ -6,7 +6,7 @@ per_kind:
   like:             {hour: 6,  day: 40}
   follow:           {hour: 3,  day: 15}
   leave:            {hour: 3,  day: 15}     # unfollows
-  spontaneous_post: {hour: 1,  day: 12}
+  spontaneous_post: {hour: 1,  day: 6}
   identity:         {hour: 20, day: 100}   # who/what/why/creator answers
 global:             {hour: 24, day: 240}
 # loop guards
