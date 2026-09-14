@@ -3,6 +3,9 @@
 Environment: BOSCO_HANDLE, BOSCO_APP_PASSWORD, BOSCO_OPERATOR (handle, default proto.cool),
 BOSCO_IGNORE_LIST (name of the operator's list, default bosco-ignore), BOSCO_PDS (optional),
 BOSCO_BROWSE (posts read per poll from timeline + discover, default 12),
+BOSCO_LANGS (the languages he reads, comma-separated, default en: sent as Accept-Language so the
+discover feed is served in them, and a post whose record declares only other languages is not
+perceived at all; nothing of it reaches his senses),
 BOSCO_EPISODE_BUDGET (episodes per hour the VPS may spend, default 600 ~ 10 CPU-min/h).
 
 Bosco lives on the network like anyone else:
@@ -58,6 +61,10 @@ class Bsky:
         self.ignore_list_name = os.environ.get("BOSCO_IGNORE_LIST", "bosco-ignore")
         self.browse_budget = int(os.environ.get("BOSCO_BROWSE", "12"))
         self.episode_budget = int(os.environ.get("BOSCO_EPISODE_BUDGET", "600"))
+        self.langs = tuple(x.strip().lower() for x in os.environ.get("BOSCO_LANGS", "en").split(",") if x.strip())
+        # his content-language setting, the same header the app sends from a user's preferences
+        self.client.request.add_additional_header("Accept-Language", ", ".join(self.langs))
+        self.skipped_lang = 0
         self.interval = 120.0
         self.agent = Agent(ledger)
         self.mod = Moderation()
@@ -606,9 +613,19 @@ class Bsky:
             self.client.app.bsky.notification.update_seen({"seen_at": self.client.get_current_time_iso()})
         return n_ep
 
+    def reads(self, record) -> bool:
+        """A post declaring only languages he does not read is not perceived: his vocabulary is
+        English, so none of its words, topics or taste would reach him, and a bare account odor
+        is not a reason to read.  Posts that declare nothing are read."""
+        langs = getattr(record, "langs", None) or []
+        if not langs or not self.langs:
+            return True
+        return any(str(lg).lower().split("-")[0] in self.langs for lg in langs)
+
     def browse(self) -> int:
         """Read the timeline and the discover feed like anyone would; each unseen post is a stimulus."""
         ignore = self.ignore_set()
+        self.skipped_lang = 0
         items = []
         try:
             items += [(fv.post, "timeline") for fv in self.client.get_timeline(limit=self.browse_budget).feed]
@@ -634,6 +651,9 @@ class Bsky:
                 break
             did = post.author.did
             if did == self.me or did in ignore or self.L.seen_source(post.uri):
+                continue
+            if not self.reads(post.record):
+                self.skipped_lang += 1
                 continue
             labels = self.mod.aversive_labels_on(post, post.author)
             self.perceive_post(post.uri, post.cid, did, post.record, time.time(), mentioned=False, labels=labels)
@@ -758,7 +778,8 @@ def run_loop(ledger: Ledger, dry_run: bool, once: bool, interval: int) -> int:
                         print("panel status failed:", repr(e), file=sys.stderr)
                 ledger.set_cursor("brain_lag_s", repr(lag))
                 print(
-                    f"{dt.datetime.now(dt.UTC).isoformat()} poll: {nb} browsed, {nk} blocks, lag {lag:.0f}s, "
+                    f"{dt.datetime.now(dt.UTC).isoformat()} poll: {nb} browsed, {b.skipped_lang} not in his "
+                    f"languages, {nk} blocks, lag {lag:.0f}s, "
                     f"{b.agent.slice_wall_s:.2f} wall s per bio s, {b.agent.active_fraction():.0%} of the brain awake"
                 )
             except Exception as e:  # noqa: BLE001

@@ -43,16 +43,42 @@ def test_thread_smell_lingers_then_fades(fly):
     tmp = tempfile.mkdtemp()
     ag = Agent(Ledger(f"{tmp}/l.sqlite"), fly, state_dir=tmp)
     tau_ms = int(ag.enc.words_cfg["thread_tau_s"] * 1000)
+    fresh_ms = int(ag.enc.words_cfg["context_fresh_s"] * 1000)
     ag.remember_thread("at://root/1", 1000, ("banana", "table"))
     ag.remember_thread("at://root/1", 2000, ("grape",))
-    assert ag.thread_context("at://root/1", 3000) == ("banana", "table", "grape")
+    assert ag.thread_context("at://root/1", 3000) == ()  # just smelled: those afferents are still depressed
+    assert ag.thread_context("at://root/1", 2000 + fresh_ms) == ("banana", "table", "grape")
     assert ag.thread_context("at://root/2", 3000) == ()
     assert ag.thread_context("at://root/1", 2000 + tau_ms + 1) == ()  # gone from the air
-    assert "grape" in ag.air(3000) and ag.air(2000 + tau_ms + 1) == ()
+    assert ag.recent_words(3000) == ("banana", "table", "grape") and ag.recent_words(2000 + tau_ms + 1) == ()
     st = ag._pack()
     ag2 = Agent(Ledger(f"{tmp}/l2.sqlite"), fly, state_dir=tmp)
     ag2._unpack(st)
     assert ag2.threads == ag.threads
+
+
+@needs_data
+def test_the_air_is_read_from_his_antennae(fly):
+    """What is in the air is habituation depth over the logged words: a word he never smelled is
+    absent, an old one is faint, a fresh one is heavy; the bookkeeping only supplies candidates."""
+    from bosco.agent import Agent
+    from bosco.ledger import Ledger
+
+    tmp = tempfile.mkdtemp()
+    ag = Agent(Ledger(f"{tmp}/l.sqlite"), fly, state_dir=tmp)
+    ag.live.net.reset(0)
+    ag.live.net.recover(1e7)  # nothing on his antennae
+    ag.live.t_ms = 0
+    ag.remember_thread("at://root/1", 0, ("banana", "table", "grape"))
+    assert ag.air(0) == {}  # logged, but never smelled
+    ag.live.present([ag.enc.word_drive("banana")], 500.0)
+    ag.live.net.recover(120_000.0)  # two minutes pass (e-fold three)
+    ag.live.present([ag.enc.word_drive("grape")], 500.0)
+    air = ag.air(int(ag.live.t_ms))
+    assert list(air) == ["grape", "banana"] and air["grape"] > air["banana"] > 0.0
+    assert "table" not in air
+    ag.live.net.recover(3.6e6)  # an hour: nothing left on the antennae
+    assert ag.air(int(ag.live.t_ms)) == {}
 
 
 @needs_data
@@ -67,6 +93,7 @@ def test_words_and_context_are_logged_and_replayed(fly):
     ag.mb.reset()
     ag.live.net.reset(0)
     ag.live.t_ms = 0
+    ag.enc.words_cfg["context_fresh_s"] = 0.0  # the second post follows in seconds; re-present anyway
     ag.run(
         Features("did:plc:a", 0.5, True, 0, False, (), True, ("banana",)), T0, "at://a/1", fast=True, thread="at://a/1"
     )
@@ -92,9 +119,10 @@ def test_generator_leans_on_word_memory_and_the_air(tmp_path):
         for s in range(n)
     ]
     aired = [g.generate("groom", "neutral", "mid", s, air=("apple",), gamma=3.0) for s in range(n)]
+    faint = [g.generate("groom", "neutral", "mid", s, air={"apple": 0.05}, gamma=3.0) for s in range(n)]
     cnt = lambda outs, w: sum(o.count(w) for o in outs if o)  # noqa: E731
     assert cnt(sweet, "grape") > cnt(base, "grape") and cnt(sweet, "banana") < cnt(base, "banana")
-    assert cnt(aired, "apple") > cnt(base, "apple")
+    assert cnt(aired, "apple") > cnt(faint, "apple") >= cnt(base, "apple")
 
 
 def test_state_tags_select_documents(tmp_path):

@@ -148,8 +148,14 @@ Do not download the EM volume. `neuprint-python` against
 - VADER compound score → bitter GRNs (negative) / sugar GRNs (positive).
 - Being mentioned → mechanosensory channel.
 - Words → odors (`config/words_v1.yaml`): his own vocabulary's content
-  words in a post, up to eight, each two neutral glomeruli by hash; a
-  thread's last posts linger for 15 min. Never the sentence.
+  words in a post, up to six, each three neutral glomeruli by hash; a
+  thread's last posts linger for a few minutes. Never the sentence. What
+  is "in the air" when he speaks is read from his antennae (habituation
+  depth over the logged words), not from a list.
+- Languages (`BOSCO_LANGS`, default en): his content-language setting, sent
+  as Accept-Language like any user's, and a post declaring only other
+  languages is not perceived. His vocabulary is English; nothing else of
+  such a post could reach him.
 - Topics: a hand-authored 60-topic keyword→odor map, published
   (`config/topics_v1.yaml`); up to three topics per post, each three
   neutral glomeruli on top of the account odor (decided 2026-09-14).

@@ -107,16 +107,21 @@ class Encoder:
                     break
         return tuple(out)
 
-    def word_drive(self, word: str, scale: float = 1.0) -> Drive:
-        """A word is k neutral glomeruli and a rate, both chosen by its hash."""
+    def word_glomeruli(self, word: str) -> tuple[list[np.ndarray], float]:
+        """A word's k neutral glomeruli (the olfactory neurons of each) and its rate, by hash."""
         c = self.words_cfg
         seed = int.from_bytes(hashlib.blake2b(f"word|{word}".encode(), digest_size=8).digest(), "little")
         rng = np.random.default_rng(seed)
         chosen = rng.choice(len(self.neutral), size=int(c["k"]), replace=False)
         lo, hi = c["rate_hz"]
-        rate = float(lo + (hi - lo) * rng.random()) * scale
-        idx = np.concatenate([self.orn_by_glom[self.neutral[i]] for i in chosen]).astype(np.int32)
-        return Drive(np.sort(idx), round(rate, 6), f"word:{word}")
+        rate = float(lo + (hi - lo) * rng.random())
+        return [self.orn_by_glom[self.neutral[i]] for i in chosen], rate
+
+    def word_drive(self, word: str, scale: float = 1.0) -> Drive:
+        """A word is k neutral glomeruli and a rate, both chosen by its hash."""
+        gloms, rate = self.word_glomeruli(word)
+        idx = np.concatenate(gloms).astype(np.int32)
+        return Drive(np.sort(idx), round(rate * scale, 6), f"word:{word}")
 
     # ---- account odor ---------------------------------------------------
     def glomeruli_for(self, did: str) -> list[str]:

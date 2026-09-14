@@ -249,6 +249,35 @@ Every number below has a gate report under `docs/`.
    as thought was removed. What he says is stitched from fragments by a
    trigram. None of this is understanding, and it is not meant to look
    like it.
+30. **The air is read from his antennae** (decided 2026-09-14). A fly
+   cannot hold a smell that is gone: at these rates a held odor habituates
+   to a few percent within a minute, and he has no working-memory circuit
+   for one, so none is invented. What he does have is habituation itself:
+   every sensory afferent keeps a resource that drops with each spike and
+   recovers over three minutes (`config/model_v1.yaml` `std_tau_rec`), so
+   the mean depression over a word's olfactory neurons is a physical
+   record of how recently, and how hard, he smelled it. When he chooses
+   words, "in the air" is that depth read from the kernel over the words
+   the log says were in his recent threads (`Agent.antennae`); a fresh
+   word is heavy, one from two minutes ago faint, one from ten minutes
+   ago gone. Candidates come from the log because words share glomeruli:
+   a mixture of six depresses enough of them that a fifth of the
+   vocabulary would read as present. The thread's lingering re-presentation
+   (a plume does linger) is kept but cut to four minutes, and words smelled
+   in the last minute are not re-presented since their afferents are still
+   depressed. Remembering a conversation past that is the mushroom body's
+   job, and needs a pairing: a like on his reply, a kind reply.
+31. **He reads in his languages** (`BOSCO_LANGS`, default `en`). His
+   vocabulary is English; a post in another language carries none of his
+   words, hits no topic and tastes of nothing, so all that reached him was
+   a stranger's odor, and in the dev period a quarter of what he browsed
+   was that (146 of 629 posts with no topic and no taste, drawing 28 likes
+   and 34 leaves). He now sets his content language the way any user does
+   (an `Accept-Language` header, which the discover feed honours) and does
+   not perceive a post whose record declares only languages he does not
+   read. Posts that declare nothing are read. This is a setting on his
+   account, not a change to any threshold; the next recalibration from the
+   real ledger will see the narrower distribution.
 
 Not in v1: visual input.
 

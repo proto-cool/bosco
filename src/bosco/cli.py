@@ -323,7 +323,7 @@ def main(argv=None) -> int:
         wv = agent.word_valence_in_context(a.did, tuple(words))
         print("words:", list(words))
         print("with this account:", {w: round(v, 2) for w, v in wv.items()} or "nothing learned yet")
-        print("in the air:", list(agent.air(int(agent.live.t_ms))))
+        print("on his antennae:", agent.air(int(agent.live.t_ms)) or "nothing")
         return 0
 
     s.set_defaults(fn=_words)

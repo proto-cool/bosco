@@ -283,18 +283,18 @@ class Generator:
         familiarity: str | None = None,
         state: dict[str, str] | None = None,
         word_valence: dict[str, float] | None = None,
-        air: tuple[str, ...] = (),
+        air: dict[str, float] | tuple[str, ...] = (),
         beta: float = 1.0,
         gamma: float = 0.5,
     ) -> str | None:
         """`word_valence` is what his mushroom body has learned about each word (from the weights);
-        a sweet word is chosen more, a bitter one less.  `air` is the words around him right now
-        (the post he answers, the thread, the last things he smelled); they come up a little more."""
+        a sweet word is chosen more, a bitter one less.  `air` is what is on his antennae right
+        now, each word by how much (0..1; a bare tuple counts as 1 each); they come up more."""
         if self.empty:
             return None
         m = self.model_for(behaviour, valence, arousal, topics, familiarity, state)
         wv = word_valence or {}
-        in_air = set(air)
+        in_air = dict(air) if isinstance(air, dict) else dict.fromkeys(air, 1.0)
         temp = {"low": 0.8, "mid": 1.0, "high": 1.15}.get(arousal, 1.0)
         rng = _Rng(
             int.from_bytes(
@@ -321,7 +321,7 @@ class Generator:
             ws = [
                 m.p_tri(a, b, w) ** (1.0 / temp)
                 * max(0.1, 1.0 + beta * wv.get(w, 0.0))
-                * (1.0 + gamma if w in in_air else 1.0)
+                * (1.0 + gamma * in_air.get(w, 0.0))
                 for w in cands
             ]
             tot = sum(ws)

@@ -8,16 +8,22 @@
 # per word, what came with it; that memory is read back from the weights (word valence)
 # and leans on the generator's choice of words.  A thread lingers: the words of the last
 # posts in a thread he is in stay in the air for thread_tau_s and are smelled again, at a
-# lower rate, with the next post in that thread.
+# lower rate, with the next post in that thread (not words smelled within context_fresh_s:
+# those afferents are still depressed).  What is "in the air" when he speaks is read from
+# his antennae, not from this list: habituation (config/model_v1.yaml, e-fold std_tau_rec)
+# leaves every recently smelled word's afferents depressed in proportion to how recently
+# and how hard, and that depth, over the words logged for the thread, is the echo.
 k: 3
 rate_hz: [90.0, 130.0]
 max_words: 6
 context_rate_scale: 0.5     # lingering words are driven at this fraction of their rate
-thread_tau_s: 900.0         # a thread's smell lasts this long after its last post
+thread_tau_s: 240.0         # a thread's smell lasts this long after its last post (about what his antennae hold)
 thread_keep: 3              # the last posts of a thread that linger
+context_fresh_s: 60.0       # words smelled this recently are not re-presented; their afferents are still depressed
+air_floor: 0.05             # a word whose afferents are depressed less than this is not in the air
 min_len: 3
 valence_beta: 1.0           # generator: p(word) x (1 + beta * learned valence of the word)
-echo_gamma: 0.5             # generator: p(word) x (1 + gamma) for words in the air right now
+echo_gamma: 0.5             # generator: p(word) x (1 + gamma * depression) for words in the air right now
 stopwords:
   [the, and, but, for, nor, yet, are, was, were, been, being, have, has, had, having, does,
    did, doing, will, would, shall, should, can, could, may, might, must, not, this, that,

@@ -238,16 +238,18 @@ class Agent:
             return ()
         c = self.enc.words_cfg
         tau_ms = float(c["thread_tau_s"]) * 1000.0
+        fresh_ms = float(c.get("context_fresh_s", 0.0)) * 1000.0
         out: list[str] = []
         for t_prev, words in self.threads.get(thread, [])[-int(c["thread_keep"]) :]:
-            if t_ms - t_prev <= tau_ms:
+            if fresh_ms <= t_ms - t_prev <= tau_ms:
                 for w in words:
                     if w not in out:
                         out.append(w)
         return tuple(out[: int(c["max_words"])])
 
-    def air(self, t_ms: int) -> tuple[str, ...]:
-        """Every word still in the air around him, from any thread: what his own posts smell of."""
+    def recent_words(self, t_ms: int) -> tuple[str, ...]:
+        """Words logged on the last posts of every thread he is in that are within thread_tau_s:
+        the candidates for what is in the air.  Which of them he still smells is his antennae's."""
         c = self.enc.words_cfg
         tau_ms = float(c["thread_tau_s"]) * 1000.0
         out: list[str] = []
@@ -257,7 +259,37 @@ class Agent:
                     for w in words:
                         if w not in out:
                             out.append(w)
-        return tuple(out[: 2 * int(c["max_words"])])
+        return tuple(out)
+
+    def antennae(self, words: tuple[str, ...]) -> dict[str, float]:
+        """How much of each word is still on his antennae, read from the kernel: habituation
+        depresses a sensory afferent with every spike and lets it recover over minutes
+        (config/model_v1.yaml std_tau_rec), so the depression of a word's olfactory neurons says
+        how recently, and how hard, he smelled it: the least-depressed of the word's glomeruli
+        (all of them must have been smelled; one shared with another word is not the word).  A
+        word never smelled reads 0.  Only the given candidates are read (words share glomeruli,
+        so the vocabulary cannot be read back from depression alone); the candidates are what
+        the log says was there."""
+        if not words:
+            return {}
+        x = self.live.net.x()
+        floor = float(self.enc.words_cfg.get("air_floor", 0.0))
+        out: dict[str, float] = {}
+        for w in words:
+            gloms, _ = self.enc.word_glomeruli(w)
+            d = min(float(np.mean(1.0 - x[g])) for g in gloms)
+            if d >= floor:
+                out[w] = round(d, 6)
+        return dict(sorted(out.items(), key=lambda kv: (-kv[1], kv[0])))
+
+    def air(self, t_ms: int, candidates: tuple[str, ...] | None = None) -> dict[str, float]:
+        """What is in the air around him right now: each recently logged word (this thread's, or
+        every thread's) by how much of it is still on his antennae; fresh words heavy, faded
+        ones light, gone ones absent.  Read from him, not from the bookkeeping."""
+        cands = candidates if candidates is not None else self.recent_words(t_ms)
+        c = self.enc.words_cfg
+        got = self.antennae(cands)
+        return dict(list(got.items())[: 2 * int(c["max_words"])])
 
     # ---- what he has learned about a word, with this person -------------------------
     PROBE_MS = 500.0
@@ -538,7 +570,8 @@ class Agent:
             if line is not None and coin == 0:
                 text, text_source = line.text, "phrasebook"
             else:
-                air = tuple(f.words) + tuple(w for w in f.context if w not in f.words) if f else self.air(w.t0_ms)
+                cands = tuple(f.words) + tuple(x for x in f.context if x not in f.words) if f else None
+                air = self.air(w.t0_ms, cands)
                 c = self.enc.words_cfg
                 text = self.generator.generate(
                     dec.behaviour,
@@ -548,7 +581,7 @@ class Agent:
                     topics=f.topics if f else (),
                     familiarity=fb,
                     state=self.state_register(ts),
-                    word_valence=self.word_valence_in_context(did, air) if f is not None else {},
+                    word_valence=self.word_valence_in_context(did, tuple(air)) if f is not None else {},
                     air=air,
                     beta=float(c.get("valence_beta", 1.0)),
                     gamma=float(c.get("echo_gamma", 0.5)),

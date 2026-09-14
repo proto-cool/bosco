@@ -48,6 +48,18 @@ def _kinds(L: Ledger) -> list[tuple[str, int]]:
     return [(r[0], r[1]) for r in L.db.execute("SELECT kind, dry_run FROM actions ORDER BY id")]
 
 
+def test_posts_in_languages_he_does_not_read_are_not_perceived():
+    b = _bsky(Ledger(f"{tempfile.mkdtemp()}/l.sqlite"))
+    b.langs = ("en",)
+    assert b.reads(SimpleNamespace(langs=["en"]))
+    assert b.reads(SimpleNamespace(langs=["en-GB", "pt"]))
+    assert b.reads(SimpleNamespace(langs=None)) and b.reads(SimpleNamespace(langs=[]))  # undeclared: read
+    assert not b.reads(SimpleNamespace(langs=["pt"]))
+    assert not b.reads(SimpleNamespace(langs=["ja", "ko"]))
+    b.langs = ()
+    assert b.reads(SimpleNamespace(langs=["ja"]))  # no languages set: everything is read
+
+
 def test_stranger_like_withheld_until_known_or_liked():
     tmp = tempfile.mkdtemp()
     L = Ledger(f"{tmp}/l.sqlite")
