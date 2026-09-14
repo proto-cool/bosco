@@ -139,10 +139,10 @@ class Agent:
         r = self.ledger.episode(episode_id)
         if r is None or not (r["line_id"] or "").startswith("gen:") or not r["line_key"]:
             return []
-        behaviour, val, arousal, _fam = r["line_key"].split("/")
+        behaviour, val, arousal, fam = r["line_key"].split("/")
         self.voice_decay(t_hours)
         topics = tuple((r["topics"] or "").split(",")) if r["topics"] else ()
-        docs = self.generator.matching_docs(behaviour, val, arousal, topics)
+        docs = self.generator.matching_docs(behaviour, val, arousal, topics, fam)
         sign = 1.0 if valence == "reward" else -1.0
         for name in docs:
             w = self.voice.get(name, 1.0) * (1.0 + sign * self.VOICE_ETA)
@@ -368,7 +368,7 @@ class Agent:
                 text, text_source = line.text, "phrasebook"
             else:
                 text = self.generator.generate(
-                    dec.behaviour, dec.valence, dec.arousal, seed, topics=f.topics if f else ()
+                    dec.behaviour, dec.valence, dec.arousal, seed, topics=f.topics if f else (), familiarity=fb
                 )
                 text_source = "generated" if text else None
                 if text is None and line is not None:

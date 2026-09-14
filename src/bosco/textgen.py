@@ -217,20 +217,41 @@ class Generator:
                 return False
         return True
 
-    def matching_docs(self, behaviour: str, valence: str, arousal: str, topics: tuple[str, ...] = ()) -> list[str]:
-        """Names of tagged documents that matched this register (the ones what-to-say learning touches)."""
+    @staticmethod
+    def _want(behaviour: str, valence: str, arousal: str, familiarity: str | None) -> dict[str, str]:
         want = {"behaviour": behaviour, "valence": valence, "arousal": arousal}
+        if familiarity:
+            want["familiarity"] = familiarity  # new | known | familiar (phrasebook bins)
+        return want
+
+    def matching_docs(
+        self,
+        behaviour: str,
+        valence: str,
+        arousal: str,
+        topics: tuple[str, ...] = (),
+        familiarity: str | None = None,
+    ) -> list[str]:
+        """Names of tagged documents that matched this register (the ones what-to-say learning touches)."""
+        want = self._want(behaviour, valence, arousal, familiarity)
         return [d.name for d in self.docs if d.tags and self._doc_matches(d, want, topics)]
 
     def set_doc_weights(self, w: dict[str, float]) -> None:
         self.doc_weight = dict(w)
         self._models.clear()
 
-    def model_for(self, behaviour: str, valence: str, arousal: str, topics: tuple[str, ...] = ()) -> NGram:
-        key = (behaviour, valence, arousal, tuple(sorted(topics)))
+    def model_for(
+        self,
+        behaviour: str,
+        valence: str,
+        arousal: str,
+        topics: tuple[str, ...] = (),
+        familiarity: str | None = None,
+    ) -> NGram:
+        key = (behaviour, valence, arousal, tuple(sorted(topics)), familiarity)
         if key in self._models:
             return self._models[key]
-        want = {"behaviour": behaviour, "valence": valence, "arousal": arousal}
+        want = self._want(behaviour, valence, arousal, familiarity)
         pool: list[list[str]] = []
         for d in self.docs:
             if self._doc_matches(d, want, topics):
@@ -253,10 +274,11 @@ class Generator:
         seed: int,
         max_sentences: int = 3,
         topics: tuple[str, ...] = (),
+        familiarity: str | None = None,
     ) -> str | None:
         if self.empty:
             return None
-        m = self.model_for(behaviour, valence, arousal, topics)
+        m = self.model_for(behaviour, valence, arousal, topics, familiarity)
         temp = {"low": 0.8, "mid": 1.0, "high": 1.15}.get(arousal, 1.0)
         rng = _Rng(
             int.from_bytes(

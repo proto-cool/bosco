@@ -71,3 +71,23 @@ Also worth having, untagged or by register:
 `uv run bosco say --behaviour reply --valence neutral --arousal mid -n 5`
 samples the base pool. For a topic, the `say` command gains `--topic`:
 `uv run bosco say --topic code -n 5`.
+
+## v2 (written 2026-09-14)
+
+Everything in the table above is on disk (`100`–`119`), plus:
+
+- `090-questions.txt` (`behaviour=reply`), `091-night.txt` (`arousal=low`).
+- `092-new.txt`, `093-known.txt`, `094-familiar.txt`: the familiarity
+  register.  `familiarity=` is a new tag; the generator gets the bin from
+  the ledger's interaction count for the account he is answering
+  (`bosco say --familiarity known`).
+- `095-learning.txt` (`behaviour=groom`): what it is like to be the thing
+  that changes.  His own posts draw on it.
+- `120`–`129`: sweet and bitter variants of food, love, bluesky, code and
+  ai, tagged `topic=… valence=…`, so what he says about a topic bends with
+  what he has learned about the person.
+- `020-positive.txt` and `030-negative.txt` extended.
+
+Corpus is ~7,400 words.  Brand names in the topic map (consoles, streaming
+services) do not appear in the corpus; he echoes the generic word.  Still
+Nick's to write: the phrasebook, and anything with a name in it.

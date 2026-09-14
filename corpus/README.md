@@ -21,3 +21,8 @@ by Claude at Nick's request on 2026-09-13 as a starting register: short,
 first-person, everyday, no names, no brands, no claims about the world.
 Files are tagged so the fly's state (valence, arousal, behaviour) chooses
 the register.  Replace or extend freely; the digest changes with the files.
+
+v2 (2026-09-14): topic files `100`–`119`, questions, night, the
+familiarity registers, `095-learning`, and the sweet/bitter topic variants
+`120`–`129` were written by Claude against `docs/CORPUS-PLAN.md` and
+`docs/corpus-audit.md` at Nick's request.

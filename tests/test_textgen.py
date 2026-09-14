@@ -58,3 +58,18 @@ def test_topic_tagged_documents_join_only_when_smelled():
     plain = " ".join((g.generate("reply", "neutral", "mid", s) or "") for s in range(15))
     coded = " ".join((g.generate("reply", "neutral", "mid", s, topics=("code",)) or "") for s in range(15))
     assert "rust" not in plain and "rust" in coded
+
+
+def test_familiarity_register_selects_documents(tmp_path):
+    from bosco.textgen import Generator
+
+    (tmp_path / "a.txt").write_text("#tags: familiarity=new\ni do not know you. who are you.\n")
+    (tmp_path / "b.txt").write_text("#tags: familiarity=known\nyou came back. i know your smell.\n")
+    (tmp_path / "c.txt").write_text("the wall is warm. i sit on the wall.\n")
+    g = Generator(tmp_path)
+    assert g.matching_docs("reply", "neutral", "mid", (), "new") == ["a.txt"]
+    assert g.matching_docs("reply", "neutral", "mid", (), "known") == ["b.txt"]
+    assert set(g.matching_docs("reply", "neutral", "mid")) == {"a.txt", "b.txt"}  # unconstrained: both
+    pool_new = g.model_for("reply", "neutral", "mid", (), "new")
+    pool_known = g.model_for("reply", "neutral", "mid", (), "known")
+    assert pool_new is not pool_known

@@ -145,8 +145,22 @@ Every number below has a gate report under `docs/`.
    and the behavioural signal is the depression on the active KCs' synapses
    (reward-side minus punishment-side, Aso 2014 sign).
 
-Not in v1: short-term depression (implemented in the kernel, off), the
-topic→odor map, visual input.
+21. **Familiarity is a register** (`src/bosco/textgen.py`, decided 2026-09-14):
+   corpus documents may carry `familiarity=new|known|familiar` (the
+   phrasebook's bins over prior interactions with the account) and join the
+   pool only when the account he is answering falls in that bin.  What he
+   says to a stranger and to someone who keeps coming back differ by the
+   ledger, not by a rule in the generator.  Corpus v2 (`corpus/090`–`129`)
+   adds the twenty topic files, questions, night, the three familiarity
+   registers, a file about his own learning, and sweet/bitter variants of
+   the first-week topics.
+22. **Stranger rail** (`src/bosco/bsky.py` `act`): toward an account he only
+   browsed past (not mentioned by it), a like, follow or reply goes out only
+   if that account has interacted with him before or his learned valence for
+   its smell is above the cut.  The second condition is his memory; the first
+   is a spam rail for a new account, logged as a withheld `leave`.
+
+Not in v1: visual input.
 
 ## Running
 
