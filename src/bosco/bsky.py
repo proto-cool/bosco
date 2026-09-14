@@ -244,6 +244,25 @@ class Bsky:
             return
         if action == "nothing":
             return
+        # Someone he only wandered past on the feed: act outward only if they have come to him
+        # before, or his memory already favours the smell (learned valence above the cut).
+        # The first half is a spam rail for a new account; the second is his own verdict.
+        if did is not None and not out.mentioned and action in ("like", "follow", "reply"):
+            known = self.L.familiarity(did) >= 1
+            liked = d.learned > self.agent.readout.valence_cut
+            if not known and not liked:
+                self.L.add_action(
+                    out.episode_id,
+                    "leave",
+                    None,
+                    target_uri,
+                    dry_run=True,
+                    ts=ts,
+                    root_uri=root_uri or target_uri,
+                    target_did=did,
+                )
+                print(f"stranger ({did}, learned {d.learned:+.2f}): {action} withheld")
+                return
         if self.L.asleep():
             self.L.add_action(out.episode_id, action, None, target_uri, dry_run=True, ts=ts)
             print("asleep: action suppressed", action)
