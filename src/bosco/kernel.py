@@ -87,6 +87,7 @@ def _load() -> C.CDLL:
     lib.lif_get_v.argtypes = [C.c_void_p, f64p]
     lib.lif_get_x.argtypes = [C.c_void_p, f64p]
     lib.lif_set_std_u.argtypes = [C.c_void_p, f64p]
+    lib.lif_recover.argtypes = [C.c_void_p, C.c_double]
     lib.lif_state_size.restype = C.c_int64
     lib.lif_state_size.argtypes = [C.c_void_p]
     lib.lif_get_state.argtypes = [C.c_void_p, C.c_void_p]
@@ -195,6 +196,10 @@ class Net:
         if len(state) != size:
             raise ValueError(f"state size {len(state)} != {size}")
         self.lib.lif_set_state(self._h, C.c_char_p(state))
+
+    def recover(self, ms: float) -> None:
+        """Passive recovery for skipped time (dev fast mode): STD resources and adaptation relax."""
+        self.lib.lif_recover(self._h, float(ms))
 
     def set_std_u(self, u: np.ndarray) -> None:
         """Per-presynaptic-neuron depression utilisation. Requires params.std_u > 0 to enable STD at all;

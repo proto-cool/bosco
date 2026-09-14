@@ -121,6 +121,18 @@ Every number below has a gate report under `docs/`.
    how often each document's sentences enter the trigram pool.  Counts
    only; the vocabulary never changes.  Stored in `state/voice.json` and
    logged as `voice` control rows.
+19. **Habituation** (`config/model_v1.yaml` `std_u`, `std_tau_rec`): short-term
+   depression on sensory afferents only, 0.4% of resources per spike,
+   recovery e-fold 3 min.  The same smell every two minutes settles near
+   70%; a different account is fresh; twenty quiet minutes restore it.
+   Central synapses are not depressed (docs/phase2-stability.md).  Costs
+   the sugar reflex a little more: MN9 15 Hz at 100 Hz drive.
+20. **Outcomes** (`src/bosco/bsky.py`): likes, reposts and follows from anyone
+   reward the last window with that account (2 per account per day) and
+   make the account known; a reply or quote to one of his posts punishes if
+   VADER < −0.05, rewards if VADER > 0.3 from anyone or if the account is
+   known; a block from someone he acted toward punishes.  Labeled accounts
+   never reward.
 16. **Learned valence is read from the weights**, not from MBON rates: a 1%
    uniform weight change flips a single-realisation MBON rate from 9 to
    6 Hz (deterministic chaos), so rates are averaged over seeds in the gates

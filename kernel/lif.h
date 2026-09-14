@@ -76,6 +76,9 @@ void lif_spike_counts(const lif_net *net, int64_t *counts);
 int64_t lif_state_size(const lif_net *net);
 void lif_get_state(const lif_net *net, void *buf);
 void lif_set_state(lif_net *net, const void *buf);
+/* Apply the passive recovery of ms of elapsed time without simulating it:
+ * synaptic resources relax toward 1, adaptive thresholds toward 0. */
+void lif_recover(lif_net *net, double ms);
 /* Per-presynaptic-neuron STD utilisation (length n); overrides std_u. */
 void lif_set_std_u(lif_net *net, const double *u);
 /* Copy synaptic resource variables x (length n). */

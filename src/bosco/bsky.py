@@ -32,6 +32,7 @@ from bosco.ledger import Ledger
 from bosco.moderation import Moderation
 
 REWARD_DAILY_CAP_PER_ACCOUNT = 2
+KIND_REPLY_VADER = 0.3  # a reply this warm to one of his posts rewards, whoever wrote it
 RESTART_EXIT_CODE = 3  # quadlet Restart=on-failure brings the container back
 DISCOVER_FEED = "at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot"
 
@@ -322,23 +323,25 @@ class Bsky:
     # ---- the first post ---------------------------------------------------------
     def introduce_if_needed(self) -> bool:
         """Once, before anything else: the introduction (config/identity_v1.yaml `intro`).
-        If the last one was deleted (through him or in the app), he introduces himself again."""
-        row = self.L.db.execute(
-            "SELECT our_uri FROM actions WHERE kind='intro' AND dry_run=0 AND deleted_ts IS NULL "
-            "ORDER BY id DESC LIMIT 1"
-        ).fetchone()
-        if row and row["our_uri"]:
-            try:
-                still = self.client.get_posts([row["our_uri"]]).posts
-            except Exception as e:  # noqa: BLE001
-                print("could not check the intro post:", e, file=sys.stderr)
-                return False
-            if still:
-                return False
-            self.L.mark_deleted(row["our_uri"])
-            print("intro post is gone; introducing again")
+        The truth is his profile, not the ledger: if any of the introduction texts is still
+        among his posts, he stays quiet; if none is (deleted through him or in the app), he
+        introduces himself again."""
+        intros = set(self.agent.identity.intro)
+        try:
+            feed = self.client.get_author_feed(self.me, limit=100, filter="posts_no_replies").feed
+            texts = {getattr(fv.post.record, "text", "") for fv in feed if fv.post.author.did == self.me}
+        except Exception as e:  # noqa: BLE001
+            print("could not read my own feed; not introducing:", e, file=sys.stderr)
+            return False
+        if intros & texts:
+            return False
         if self.L.asleep():
             return False
+        # mark any ledger intro rows as gone (deleted in the app)
+        for row in self.L.db.execute(
+            "SELECT our_uri FROM actions WHERE kind='intro' AND our_uri IS NOT NULL AND deleted_ts IS NULL"
+        ):
+            self.L.mark_deleted(row["our_uri"])
         seed = int(self.agent.brain_t0 or time.time())
         text = self.agent.identity.intro_text(seed)
         if not text:
@@ -399,16 +402,24 @@ class Bsky:
             or bool(root and root.uri in ours)
             or (bool(root) and self.L.count_actions(0.0, kind="reply", root_uri=root.uri, real_only=False) > 0)
         )
-        # a negative reply to one of Bosco's posts punishes the episode that produced it
-        if parent and parent.uri in self.L.our_uris() and v < -0.05:
-            ep = self.L.episode_for_uri(parent.uri)
+        # outcomes for the window that produced the post this one answers
+        ours = self.L.our_uris()
+        answered = parent.uri if parent and parent.uri in ours else (root.uri if root and root.uri in ours else None)
+        day = _day(ts)
+        if answered and not labels:
+            ep = self.L.episode_for_uri(answered)
             if ep is not None:
-                self.agent.apply_outcome(ep, "punishment", "vader_negative_reply", did, uri, ts)
-        elif (
-            mentioned and not labels and fam >= 1 and self.L.rewards_today(did, _day(ts)) < REWARD_DAILY_CAP_PER_ACCOUNT
-        ):
+                if v < -0.05:
+                    self.agent.apply_outcome(ep, "punishment", "vader_negative_reply", did, uri, ts)
+                elif (v > KIND_REPLY_VADER or fam >= 1) and (
+                    self.L.rewards_today(did, day) < REWARD_DAILY_CAP_PER_ACCOUNT
+                ):
+                    src = "kind_reply" if v > KIND_REPLY_VADER else "known_account_reply"
+                    self.agent.apply_outcome(ep, "reward", src, did, uri, ts)
+                    self.L.bump_reward(did, day)
+        elif mentioned and not labels and fam >= 1 and self.L.rewards_today(did, day) < REWARD_DAILY_CAP_PER_ACCOUNT:
             self.agent.apply_outcome(out.episode_id, "reward", "known_account_inbound", did, uri, ts)
-            self.L.bump_reward(did, _day(ts))
+            self.L.bump_reward(did, day)
         self.act(out, did, uri, cid, root.uri if root else None, root.cid if root else None, ts, in_thread=in_thread)
         return out
 
@@ -433,12 +444,20 @@ class Bsky:
                 n_ep += 1
             elif n.reason in ("like", "follow", "repost"):
                 day = _day(ts)
-                fam = self.L.familiarity(did)
-                if not labels and fam >= 1 and self.L.rewards_today(did, day) < REWARD_DAILY_CAP_PER_ACCOUNT:
+                self.L.bump_inbound(did, day)  # liking, following or reposting him is an interaction
+                if not labels and self.L.rewards_today(did, day) < REWARD_DAILY_CAP_PER_ACCOUNT:
                     last = self.L.db.execute(
                         "SELECT id FROM episodes WHERE did=? AND kind='event' ORDER BY id DESC LIMIT 1", (did,)
                     ).fetchone()
-                    if last:
+                    if last is None and n.reason in ("like", "repost"):
+                        # a stranger liked one of his posts: reward the window that produced it
+                        subject = getattr(n, "reason_subject", None)
+                        ep = self.L.episode_for_uri(subject) if subject else None
+                        if ep is not None:
+                            self.agent.apply_outcome(ep, "reward", f"{n.reason}_on_post", did, uri, ts)
+                            self.L.bump_reward(did, day)
+                            n_ep += 1
+                    elif last is not None:
                         self.agent.apply_outcome(last["id"], "reward", f"known_account_{n.reason}", did, uri, ts)
                         self.L.bump_reward(did, day)
                         n_ep += 1

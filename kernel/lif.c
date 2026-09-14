@@ -274,6 +274,15 @@ void lif_set_state(lif_net *net, const void *buf) {
     memcpy(&net->rng, p, sizeof(uint64_t)); p += sizeof(uint64_t);
     memcpy(&net->step, p, sizeof(int64_t));
 }
+void lif_recover(lif_net *net, double ms) {
+    const double fr = (net->std_u > 0.0 && net->p.std_tau_rec > 0.0) ? exp(-ms / net->p.std_tau_rec) : 0.0;
+    const double fs = (net->sfa_b > 0.0 && net->p.sfa_tau > 0.0) ? exp(-ms / net->p.sfa_tau) : 0.0;
+    for (int32_t i = 0; i < net->n; i++) {
+        net->x[i] = 1.0 - (1.0 - net->x[i]) * fr;
+        net->theta[i] *= fs;
+        if (net->theta[i] < 1e-30) net->theta[i] = 0.0;
+    }
+}
 void lif_set_std_u(lif_net *net, const double *u) {
     memcpy(net->u, u, (size_t)net->n * sizeof(double));
 }

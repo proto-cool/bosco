@@ -237,6 +237,7 @@ class Agent:
             # network arrives at the event settled, as it would have in real time
             settle = min(SETTLE_MS, target - self.live.t_ms)
             self.ledger.add_control("jump", "cli", None, f"{self.live.t_ms}->{target - settle}", ts=ts)
+            self.live.net.recover(float(target - settle - self.live.t_ms))  # skipped time still heals
             self.live.t_ms = target - settle
             target_settled = target
             while self.live.t_ms + SLICE_MS <= target_settled:

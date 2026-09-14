@@ -72,6 +72,11 @@ class Fly:
         )
         self.net = Net(self.brain.indptr, self.brain.indices, self.base_w, self.params)
         b = self.brain
+        if self.params.std_u > 0 and wiring.get("habituation_scope", "sensory") == "sensory":
+            from bosco.data import annotations
+
+            sc = annotations().reindex(b.ids)["superclass"].fillna("").str.contains("sensory").to_numpy()
+            self.net.set_std_u(np.where(sc, self.params.std_u, 0.0))
         self.kc = b.index_of_present(pop.kenyon_cells())
         mb = pop.mbons()
         self.mbon = b.index_of_present(mb["bodyId"])

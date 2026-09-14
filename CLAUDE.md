@@ -97,7 +97,7 @@ Do not download the EM volume. `neuprint-python` against
 - **Pruning (v1)**: central brain only. Optic lobes dropped (no visual
   input). VNC dropped; descending neurons are the behavioral readout.
   Document this as a modeling decision in the README.
-- **Short-term depression** on sensory synapses (habituation).
+- **Short-term depression** on sensory synapses only (habituation; on).
 - **Circadian**: drive the annotated clock neurons with a 24 h rhythm. Do
   not add a posting-time gate; let the network produce the schedule.
 - **Time step** 0.1 ms. Bosco runs continuously, one biological second
@@ -123,11 +123,15 @@ Do not download the EM volume. `neuprint-python` against
 - **Identity is a reflex**: who/what/why/creator are answered from
   `config/identity_v1.yaml` regardless of the network. `bosco memory --did X`
   shows what he has learned about an account and why.
-- **Reward DANs**: unprompted inbound interaction from a known account
-  (≥1 prior direct interaction in the ledger). Per-account daily cap.
+- **Reward DANs**: likes, reposts, follows from anyone; kind replies
+  (VADER > 0.3) to his posts from anyone; any reply or return visit from a
+  known account (≥1 prior interaction). Two per account per day. Labeled
+  accounts never reward.
 - **Punishment DANs**: block records (public, real) and VADER-negative
-  replies. Punishment is sparse; the innate bitter channel carries most
-  aversion. Do not "fix" the sparsity by adding a model.
+  replies or quotes to his posts. Punishment is sparse; the innate bitter
+  channel carries most aversion. Do not "fix" the sparsity by adding a model.
+- **Habituation**: short-term depression on sensory afferents only; the
+  same smell every few minutes fades, a new one is fresh.
 
 ## Encoder (frozen at tag)
 

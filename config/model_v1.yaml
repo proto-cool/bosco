@@ -15,8 +15,14 @@ lif:
   t_dly: 1.8
   w_syn: 0.16
   f_poi: 250.0
-  std_u: 0.0          # short-term depression off in v1 (see docs/phase2-stability.md)
-  std_tau_rec: 0.0
+  # Short-term depression = habituation, on sensory afferents only (superclass
+  # *sensory*: ORNs, GRNs, Johnston's organ, bristles).  Each spike uses u of
+  # the synapse's resources; recovery e-fold std_tau_rec ms.  The same smell
+  # arriving again within minutes registers less; a new one is fresh.
+  # Central synapses are not depressed (global STD killed the reflex; see
+  # docs/phase2-stability.md).  Fly.__init__ applies the per-neuron mask.
+  std_u: 0.004
+  std_tau_rec: 180000.0
   # Spike-frequency adaptation (adaptive threshold): needed for continuous
   # running so that activity settles after input instead of smouldering.
   # b=0.1 mV per spike, tau 1 s: everything is silent 2 s after input; sugar
@@ -29,6 +35,7 @@ wiring:
   min_synapses_per_edge: 1
   nt_sign: "acetylcholine/dopamine/serotonin/octopamine +1; gaba/glutamate/histamine -1; unclear/unknown +1 (Shiu convention)"
   al_eln_chemical_output: 0.0   # cholinergic antennal-lobe LNs: fast chemical output removed
+  habituation_scope: sensory     # STD applies to presynaptic neurons whose superclass contains 'sensory'
   apl_kc_gain: 1.0              # connectome value; not tuned
   kc_mbon_gain: 5.0             # smallest gain at which MBON odor responses are >=80% KC-driven
                                 # (docs/phase3-plasticity-gate.md); the plastic pathway
