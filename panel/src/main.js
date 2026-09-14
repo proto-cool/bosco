@@ -1,5 +1,4 @@
 import '@arclux/arc-ui/base.css';
-import '@arclux/arc-ui/connection-status';
 import '@arclux/arc-ui/badge';
 import '@arclux/arc-ui/tabs';
 import '@arclux/arc-ui/tab';
@@ -113,8 +112,7 @@ async function initBrain() {
     });
     legend.append(b);
   });
-  $('view').addEventListener('arc-change', (e) => brain.setView(Number(e.detail?.selected ?? e.detail?.index ?? 0)));
-  $('view').addEventListener('change', (e) => brain.setView(Number(e.target.selected ?? 0)));
+  $('view').addEventListener('arc-change', (e) => brain.setView(Number(e.detail?.value ?? 0)));
   buildReadout();
 }
 
@@ -162,7 +160,7 @@ async function pollActivity() {
 }
 
 function setLive(on) {
-  $('conn').online = on;
+  $('live').classList.toggle('is-live', on);
   $('live-text').textContent = on ? 'live' : 'asleep or unreachable';
 }
 

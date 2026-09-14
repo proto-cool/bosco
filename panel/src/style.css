@@ -71,6 +71,17 @@ a:hover {
   align-items: center;
   gap: var(--space-md);
 }
+.live-dot {
+  width: var(--space-sm);
+  height: var(--space-sm);
+  border-radius: var(--radius-full);
+  background: var(--text-ghost);
+  --_status-rgb: var(--color-success-rgb);
+}
+.live.is-live .live-dot {
+  background: var(--color-success);
+  box-shadow: var(--glow-status);
+}
 .live {
   display: inline-flex;
   align-items: center;
