@@ -575,16 +575,16 @@ def run_loop(ledger: Ledger, dry_run: bool, once: bool, interval: int) -> int:
             n = b.poll_notifications()
             nb = b.browse()
             nk = b.check_blocks()
-            if b.agent.lag_s(time.time()) > 600:
-                print(f"falling behind by {b.agent.lag_s(time.time()):.0f} s; skipping")
+            if b.agent.lag_s(time.time()) > 3600:
+                print(f"an hour behind wall time; skipping ahead ({b.agent.lag_s(time.time()):.0f} s)")
                 b.agent.skip_downtime(time.time())
-            sp = b.spontaneous()
+            sp = b.spontaneous(budget_s=max(10.0, interval * 0.6))
             lag = time.time() - b.agent.wall(b.agent.live.t_ms)
             ledger.set_cursor("last_poll_ts", repr(time.time()))
             ledger.set_cursor("brain_lag_s", repr(lag))
             print(
                 f"{dt.datetime.now(dt.UTC).isoformat()} poll: {n} notifications, {nb} browsed, "
-                f"{nk} blocks, grooms {sp}, brain lag {lag:.0f}s"
+                f"{nk} blocks, grooms {sp}, lag {lag:.0f}s, {b.agent.slice_wall_s:.2f} wall s per bio s"
             )
         except Exception as e:  # noqa: BLE001
             print("poll error:", repr(e), file=sys.stderr)
