@@ -22,6 +22,7 @@ import os
 import re
 import sys
 import time
+from types import SimpleNamespace
 
 from atproto import Client, client_utils, models
 
