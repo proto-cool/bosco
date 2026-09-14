@@ -295,8 +295,10 @@ a:hover {
   inset: 0 auto 0 0;
   border-radius: var(--radius-full);
   background: var(--accent-primary);
-  width: 0%;
-  transition: width var(--duration-fast) var(--ease-out);
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--duration-fast) var(--ease-out);
 }
 .ro.over .fill {
   box-shadow: var(--glow-primary);

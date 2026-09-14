@@ -151,7 +151,7 @@ async function pollActivity() {
         if (!row) return;
         const rate = act.pops[k], th = thresholds[p];
         const ratio = th ? rate / th : 0;
-        row.querySelector('.fill').style.width = `${Math.min(1, ratio / 1.6) * 100}%`;
+        row.querySelector('.fill').style.transform = `scaleX(${Math.min(1, ratio / 1.6)})`;
         row.querySelector('.v').textContent = `${rate.toFixed(1)} Hz`;
         row.classList.toggle('over', th != null && rate > th);
       });
