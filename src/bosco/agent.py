@@ -618,7 +618,9 @@ class Agent:
         w = self.live.present(drives, PRESENT_MS)
         self._tick(self.sim_hours())
         v, info = self.mb.learned_valence(w.counts[self.fly.kc])
-        dec = self.readout.decide(w.counts, w.ms, learned=v, mb_info=info, appetite=self.appetite)
+        dec = self.readout.decide(
+            w.counts, w.ms, learned=v, mb_info=info, appetite=self.appetite, addressed=bool(f and f.mentioned)
+        )
         if self.on_window is not None:
             self.on_window(w, dec, self.dust)
         out = self._log(f, w, dec, ts, source_uri, kind, note, self.dust)

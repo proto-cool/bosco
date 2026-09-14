@@ -101,6 +101,10 @@ CREATE TABLE IF NOT EXISTS cursor (
   key TEXT PRIMARY KEY,
   value TEXT
 );
+CREATE TABLE IF NOT EXISTS seen_notifications (
+  uri TEXT PRIMARY KEY,
+  ts REAL NOT NULL
+);
 CREATE INDEX IF NOT EXISTS ix_episodes_ts ON episodes(ts);
 CREATE INDEX IF NOT EXISTS ix_episodes_did ON episodes(did);
 CREATE INDEX IF NOT EXISTS ix_actions_ts ON actions(ts);
@@ -319,6 +323,13 @@ class Ledger:
         )
         self.db.commit()
         return int(cur.lastrowid)
+
+    def seen_notification(self, uri: str) -> bool:
+        return self.db.execute("SELECT 1 FROM seen_notifications WHERE uri=?", (uri,)).fetchone() is not None
+
+    def mark_notification(self, uri: str, ts: float | None = None) -> None:
+        self.db.execute("INSERT OR IGNORE INTO seen_notifications (uri, ts) VALUES (?,?)", (uri, ts or time.time()))
+        self.db.commit()
 
     def seen_evidence(self, uri: str) -> bool:
         return self.db.execute("SELECT 1 FROM outcomes WHERE evidence_uri=? LIMIT 1", (uri,)).fetchone() is not None

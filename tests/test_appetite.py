@@ -147,3 +147,18 @@ def test_landing_windows_are_logged_and_groom_records_the_dust(fly):
     if grooms:  # a groom answers the landing: the window closes with it
         assert rows.index(grooms[0]) == len(rows) - 1 or rows[-1]["kind"] == "spontaneous"
     assert sum(1 for r in rows if r["kind"] == "landing") <= ag.enc.cfg["spontaneous"]["window_s"]
+
+
+@needs_data
+def test_song_answers_speech(fly):
+    from bosco.readout import Readout
+
+    ro = Readout(fly.brain)
+    counts = np.zeros(fly.brain.n, dtype=np.int64)
+    counts[ro.pops["like"]] = 20  # sugar: proboscis population far over its floor
+    counts[ro.pops["reply"]] = int(ro.thresholds["reply"] * 1.5) + 1  # the song, over its line
+    browsed = ro.decide(counts, 1000.0)
+    addressed = ro.decide(counts, 1000.0, addressed=True)
+    assert browsed.action == "like" and addressed.action == "reply" and addressed.also == ("like",)
+    counts[ro.pops["reply"]] = 0
+    assert ro.decide(counts, 1000.0, addressed=True).action == "like"  # no song, winner-take-all as before

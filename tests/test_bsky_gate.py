@@ -108,3 +108,12 @@ def test_sweep_marks_likes_and_follows_removed_in_app():
         "unliked_in_app",
         "unfollowed_in_app",
     ]
+
+
+def test_notifications_are_seen_once():
+    tmp = tempfile.mkdtemp()
+    L = Ledger(f"{tmp}/l.sqlite")
+    assert not L.seen_notification("at://x/like/1")
+    L.mark_notification("at://x/like/1", 1.0)
+    L.mark_notification("at://x/like/1", 2.0)
+    assert L.seen_notification("at://x/like/1")

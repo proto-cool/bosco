@@ -37,6 +37,7 @@ class Decision:
     learned: float = 0.0  # learned valence in [-1, 1], read from the plastic weights
     mbon: dict[str, float] | None = None  # depression on reward/punishment-side synapses of the active KCs
     appetite: float = 0.5  # his appetite for contact at the window (config/appetite_v1.yaml)
+    also: tuple[str, ...] = ()  # compatible actions taken alongside: a like with a reply, when both crossed
 
 
 class Readout:
@@ -94,6 +95,7 @@ class Readout:
         kappa: float | None = None,
         valence_cut: float | None = None,
         appetite: float = 0.5,
+        addressed: bool = False,
     ) -> Decision:
         """Winner-take-all over gated population rates from a window's spike counts.  `learned`
         is the mushroom body's verdict on this stimulus, read from the weights
@@ -118,6 +120,13 @@ class Readout:
             gated[k] = x * max(0.0, g)
         ratios = {k: (gated[k] / t if t else 0.0) for k, t in self.thresholds.items()}
         winner = max(ratios, key=lambda k: (ratios[k], k))
+        also: tuple[str, ...] = ()
+        if addressed and ratios.get("reply", 0.0) > 1.0:
+            # song answers speech: when he is addressed and the song population crosses its
+            # threshold, that is the action; a proboscis extension at the same time is a like too
+            if winner == "like":
+                also = ("like",)
+            winner = "reply"
         if ratios[winner] > 1.0:
             behaviour, action = winner, self.action_of[winner]
         else:
@@ -125,4 +134,4 @@ class Readout:
         valence = "positive" if v > valence_cut else "negative" if v < -valence_cut else "neutral"
         dn_rate = float(np.asarray(counts)[self.dn_all].mean() * 1000.0 / ms)
         arousal = "low" if dn_rate < arousal_cuts[0] else "high" if dn_rate > arousal_cuts[1] else "mid"
-        return Decision(behaviour, action, sc, ratios, valence, arousal, v, mb, a)
+        return Decision(behaviour, action, sc, ratios, valence, arousal, v, mb, a, also)

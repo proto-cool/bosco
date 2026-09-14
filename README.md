@@ -197,7 +197,11 @@ Every number below has a gate report under `docs/`.
    neurons that make the reply outputs fire, as bristle debris is for
    grooming. JO drops to 50 Hz (100 Hz made every mention a startle) and the
    question gain moves to the courtship drive. Walking toward whoever spoke
-   to him is a reply; toward someone he only browsed past, a follow. Not a
+   to him is a reply; toward someone he only browsed past, a follow. Song
+   answers speech: when he is addressed and the song population crosses its
+   threshold that is the action, and if the proboscis population crossed
+   too he likes the post as well (a fly can extend its proboscis and sing).
+   Otherwise a kind question's sugar won as a like every time. Not a
    guarantee: threshold from the real distribution, learned valence still
    gates it, caps and the stranger rail still apply.
 27. **Appetite for contact** (`config/appetite_v1.yaml`): a scalar in

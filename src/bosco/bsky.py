@@ -301,6 +301,19 @@ class Bsky:
         elif action in ("reply", "spontaneous_post"):
             if not out.text:
                 return
+            if "like" in d.also and target_uri and self.agent.caps_allow(ts, "like", root_uri or target_uri, did)[0]:
+                like_uri = None if self.dry else self.client.like(target_uri, target_cid).uri
+                self.L.add_action(
+                    out.episode_id,
+                    "like",
+                    like_uri,
+                    target_uri,
+                    dry_run=self.dry,
+                    ts=ts,
+                    root_uri=root_uri or target_uri,
+                    target_did=did,
+                )
+                print(f"like {target_uri} ({'dry' if self.dry else like_uri}) alongside the reply")
             reply_to = None
             if action == "reply" and target_uri:
                 reply_to = models.AppBskyFeedPost.ReplyRef(
@@ -557,8 +570,9 @@ class Bsky:
         n_ep = 0
         for n in reversed(r.notifications):
             uri, ts, did = n.uri, _ts(n.indexed_at), n.author.did
-            if did == self.me or self.L.seen_source(uri) or self.L.seen_evidence(uri):
+            if did == self.me or self.L.seen_notification(uri) or self.L.seen_source(uri) or self.L.seen_evidence(uri):
                 continue
+            self.L.mark_notification(uri, ts)  # once, whatever comes of it
             if self.handle_control(n):
                 continue
             if did in ignore:
