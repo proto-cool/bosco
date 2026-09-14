@@ -6,6 +6,7 @@ After=network-online.target
 [Container]
 Image=localhost/bosco:latest
 EnvironmentFile=%h/bosco/.env
+Environment=BOSCO_PANEL_DIR=/app/state/panel
 Volume=%h/bosco/data/raw:/app/data/raw:ro,Z
 Volume=%h/bosco/data/cache:/app/data/cache:Z
 Volume=%h/bosco/state:/app/state:Z

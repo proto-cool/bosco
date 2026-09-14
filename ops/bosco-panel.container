@@ -1,0 +1,21 @@
+[Unit]
+Description=bosco panel: bosco.proto.cool
+After=network-online.target
+Wants=network-online.target
+
+[Container]
+Image=localhost/bosco-panel:latest
+ContainerName=bosco-panel
+PublishPort=80:80
+PublishPort=443:443
+PublishPort=443:443/udp
+Volume=%h/bosco/state/panel:/srv/data:ro,Z
+Volume=bosco-caddy-data:/data
+Volume=bosco-caddy-config:/config
+Environment=PANEL_HOST=bosco.proto.cool
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target default.target

@@ -635,6 +635,18 @@ def run_loop(ledger: Ledger, dry_run: bool, once: bool, interval: int) -> int:
     signal.signal(signal.SIGTERM, _term)
     signal.signal(signal.SIGINT, _term)
     print(f"bosco {'DRY-RUN' if dry_run else 'LIVE'} as {b.me}; operator {b.operator_did}")
+    panel = None
+    if os.environ.get("BOSCO_PANEL_DIR"):
+        from bosco.panel import Panel
+
+        panel = Panel(b.agent, ledger, os.environ["BOSCO_PANEL_DIR"])
+        panel.identity = {
+            "did": b.me,
+            "handle": b.my_handle,
+            "operator": os.environ.get("BOSCO_OPERATOR", "proto.cool"),
+        }
+        b.agent.on_window = panel.on_window
+        print(f"panel: writing {os.environ['BOSCO_PANEL_DIR']}")
     b.agent.bio_ms(time.time())  # start his clock now if it has not started
     skipped = b.agent.skip_downtime(time.time())
     if skipped:
@@ -655,6 +667,11 @@ def run_loop(ledger: Ledger, dry_run: bool, once: bool, interval: int) -> int:
             sp = b.spontaneous(budget_s=max(10.0, interval * 0.6))
             lag = time.time() - b.agent.wall(b.agent.live.t_ms)
             ledger.set_cursor("last_poll_ts", repr(time.time()))
+            if panel is not None:
+                try:
+                    panel.status(time.time(), {"poll": {"notifications": n, "browsed": nb, "grooms": sp, "lag_s": lag}})
+                except Exception as e:  # noqa: BLE001
+                    print("panel status failed:", repr(e), file=sys.stderr)
             ledger.set_cursor("brain_lag_s", repr(lag))
             print(
                 f"{dt.datetime.now(dt.UTC).isoformat()} poll: {n} notifications, {nb} browsed, "

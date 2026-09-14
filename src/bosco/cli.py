@@ -231,6 +231,25 @@ def main(argv=None) -> int:
         return 0
 
     s.set_defaults(fn=_people)
+    s = sub.add_parser("panel", help="write status.json (and one activity.bin) for the public panel")
+    s.add_argument("--out", required=True)
+    s.add_argument("--at")
+
+    def _panel(a):
+        from bosco.panel import Panel
+
+        L = Ledger(a.ledger)
+        agent = Agent(L, state_dir=a.state_dir)
+        panel = Panel(agent, L, a.out, min_interval=0.0)
+        agent.on_window = panel.on_window
+        ts = _ts(a.at)
+        agent.advance_to(ts, fast=True, max_slices=1)  # catch up without simulating
+        agent.advance_to(agent.wall(agent.live.t_ms) + 1.0, fast=False, max_slices=1)  # one simulated second
+        st = panel.status(ts)
+        print(f"wrote {a.out}/status.json ({len(st['people'])} people, {len(st['recent'])} recent) and activity.bin")
+        return 0
+
+    s.set_defaults(fn=_panel)
     s = sub.add_parser("status")
     s.set_defaults(fn=cmd_status)
     s = sub.add_parser("integrity")

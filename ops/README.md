@@ -7,3 +7,4 @@
 - `env.example` — copy to `~/bosco/.env`.
 
 Weekly Vultr snapshot is configured in the Vultr console, not here.
+- `Containerfile.panel`, `Caddyfile`, `bosco-panel.container` — the public panel (`panel/`), built with Node, served by Caddy; reads `state/panel/`.

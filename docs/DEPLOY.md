@@ -245,3 +245,53 @@ cd /root/bosco && uv sync && make -C kernel
 - `could not read Username for github` on the box → the repo is public; use the https URL exactly as in B3.
 - He posts nothing for hours → normal. `journalctl -fu bosco` shows `grooms 0`; a landing that his network answers is what makes a post.
 - CPU at 50 to 100 percent of one core, always → normal; that is the simulation keeping up with wall time.
+
+## E. The panel at bosco.proto.cool
+
+The public page: his brain lit neuron by neuron, what his body wants to do,
+today's counts, memory, people by smell, his posts. Static files built with
+Node, served by Caddy with automatic HTTPS. The bosco process writes
+`state/panel/activity.bin` (once a second) and `state/panel/status.json`
+(once a poll); the site reads them under `/data/`.
+
+### E1. DNS and ports
+
+`bosco.proto.cool` must point at the VPS (it already does if you ssh by that
+name). Open 80 and 443:
+
+```
+firewall-cmd --permanent --add-service=http --add-service=https
+firewall-cmd --permanent --add-port=443/udp
+firewall-cmd --reload
+```
+
+### E2. Build and start
+
+```
+cd /root/bosco && git pull
+mkdir -p /root/bosco/state/panel
+podman build -t bosco-panel -f ops/Containerfile.panel .
+cp ops/bosco-panel.container /etc/containers/systemd/
+systemctl daemon-reload
+systemctl start bosco-panel
+systemctl status bosco-panel --no-pager
+```
+
+The bosco container needs the new `Environment=BOSCO_PANEL_DIR` line too, so
+after the pull:
+
+```
+cp ops/bosco.container /etc/containers/systemd/
+systemctl daemon-reload
+podman build -t bosco -f ops/Containerfile .
+systemctl restart bosco
+```
+
+The journal shows `panel: writing /app/state/panel` at startup. Open
+https://bosco.proto.cool. The first certificate takes a few seconds.
+
+### E3. Updating the site
+
+```
+cd /root/bosco && git pull && podman build -t bosco-panel -f ops/Containerfile.panel . && systemctl restart bosco-panel
+```

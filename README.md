@@ -162,6 +162,12 @@ Every number below has a gate report under `docs/`.
    its smell is above the cut.  The second condition is his memory; the first
    is a spam rail for a new account, logged as a withheld `leave`.
 
+23. **The panel** (`panel/`, `src/bosco/panel.py`): the process writes a sparse
+   list of the neurons that spiked in the last simulated second and a status
+   JSON from the ledger; a static page (ARC UI, Vite) draws every neuron at
+   its soma and lights the ones that fire. Read-only: nothing on the page can
+   reach him. Post text is fetched from the public API by URI, never stored.
+
 Not in v1: visual input.
 
 ## Running

@@ -23,7 +23,7 @@
 
 ## Parked
 
-- A Bosco panel page at `bosco.proto.cool` with live stats from the ledger
+- ~~A Bosco panel page at `bosco.proto.cool`~~ built 2026-09-14 (`panel/`, DEPLOY.md §E)
   (episodes, actions, people, integrity), in ARC UI v4.2.2. After he flies.
 
 ## Deploy

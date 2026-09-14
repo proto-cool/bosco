@@ -1,0 +1,23 @@
+{
+  "name": "bosco-panel",
+  "private": true,
+  "version": "0.1.0",
+  "description": "bosco.proto.cool: a public window on a fruit fly brain living on Bluesky",
+  "type": "module",
+  "engines": {
+    "node": ">=24.0.0",
+    "pnpm": ">=10.0.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@arclux/arc-ui": "4.2.2",
+    "lit": "^3.3.0"
+  },
+  "devDependencies": {
+    "vite": "^7.1.0"
+  }
+}

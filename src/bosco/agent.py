@@ -99,6 +99,7 @@ class Agent:
         self.identity = IdentityReflex()
         self.live = Simulation(self.fly, seed=0)
         self.dust = 0.0
+        self.on_window = None  # optional observer (Window, Decision, dust) -> None; the panel. Never feeds back.
         self.stop_requested = False
         self.slice_wall_s = 0.5  # running estimate of wall seconds per simulated second
         self._load_state()
@@ -297,6 +298,8 @@ class Agent:
             self.mb.forget(self.hours(self.wall(self.live.t_ms)))
             v, _ = self.mb.learned_valence(w.counts[self.fly.kc])
             dec = self.readout.decide(w.counts, w.ms, learned=v)
+            if self.on_window is not None:
+                self.on_window(w, dec, self.dust)
             if dec.behaviour == "groom":
                 self.dust = 0.0
                 out = self._log(None, w, dec, self.wall(w.t0_ms), None, "spontaneous", None, self.dust)
@@ -429,6 +432,8 @@ class Agent:
         self.mb.forget(self.hours(ts))
         v, info = self.mb.learned_valence(w.counts[self.fly.kc])
         dec = self.readout.decide(w.counts, w.ms, learned=v, mb_info=info)
+        if self.on_window is not None:
+            self.on_window(w, dec, self.dust)
         out = self._log(f, w, dec, ts, source_uri, kind, note, self.dust)
         self.save_state()
         return out

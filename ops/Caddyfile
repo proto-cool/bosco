@@ -1,0 +1,16 @@
+# bosco.proto.cool: the static panel plus the files the bosco process writes.
+{$PANEL_HOST:bosco.proto.cool} {
+	encode zstd gzip
+	handle_path /data/* {
+		root * /srv/data
+		header Cache-Control "no-store"
+		header Access-Control-Allow-Origin "*"
+		file_server
+	}
+	handle {
+		root * /srv/site
+		header /assets/* Cache-Control "public, max-age=31536000, immutable"
+		header /atlas.* Cache-Control "public, max-age=86400"
+		file_server
+	}
+}

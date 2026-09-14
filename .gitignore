@@ -12,3 +12,5 @@ build/
 state/
 *.env
 .env
+panel/node_modules/
+panel/dist/
