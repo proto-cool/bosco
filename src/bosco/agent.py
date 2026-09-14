@@ -81,6 +81,7 @@ class Outcome:
     text: str | None = None
     text_source: str | None = None
     ts: float = 0.0
+    mentioned: bool = False  # the post addressed him (mention / reply / quote)
 
 
 class Agent:
