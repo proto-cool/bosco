@@ -2,7 +2,7 @@
 # Download the three MaleCNS v1.0 feathers (~1.1 GB) and the FlyWire annotation table into data/raw/.
 set -euo pipefail
 cd "$(dirname "$0")/.."
-mkdir -p data/raw/flywire
+mkdir -p data/raw/flywire data/cache state
 B=https://storage.googleapis.com/flyem-male-cns/v1.0/connectome-data/flat-connectome
 for f in body-annotations-male-cns-v1.0-minconf-0.5.feather body-neurotransmitters-male-cns-v1.0.feather connectome-weights-male-cns-v1.0-minconf-0.5.feather; do
   [ -s "data/raw/$f" ] || curl -fL --progress-bar -o "data/raw/$f.part" "$B/$f" && mv -f "data/raw/$f.part" "data/raw/$f" 2>/dev/null || true

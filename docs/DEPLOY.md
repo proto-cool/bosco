@@ -17,7 +17,7 @@ One box, one container, one account. In this order.
 
 ```
 git clone <repo> ~/bosco && cd ~/bosco
-ops/fetch_data.sh                      # ~1.1 GB
+ops/fetch_data.sh                      # ~1.1 GB; also creates data/cache and state
 cp ops/env.example .env && $EDITOR .env  # handle, app password, operator
 podman build -t bosco -f ops/Containerfile .
 ```
