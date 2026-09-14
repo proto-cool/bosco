@@ -39,6 +39,7 @@ from bosco.textgen import Generator
 
 PRESENT_MS = 1000.0
 SETTLE_MS = 3000
+EVENT_CATCHUP_WALL_S = 4.0  # an event never waits for the simulation to reach its timestamp
 SNAPSHOT_EVERY_MS = 3600 * 1000
 
 
@@ -416,8 +417,8 @@ class Agent:
         note: str | None = None,
         fast: bool = False,
     ) -> Outcome:
-        """Advance to ts, present the event for one second, decide, record."""
-        self.advance_to(ts, fast=fast)
+        """Present the event for one second at his current time (after a bounded catch-up), decide, record."""
+        self.advance_to(ts, fast=fast, max_wall_s=EVENT_CATCHUP_WALL_S)
         self.live.set_base(self._base_drives(self.live.t_ms))
         drives = list(self.enc.encode(f).drives) if f is not None else []
         w = self.live.present(drives, PRESENT_MS)
@@ -443,7 +444,7 @@ class Agent:
         r = self.ledger.episode(episode_id)
         if r is None or r["did"] is None:
             return None
-        self.advance_to(ts, fast=fast)
+        self.advance_to(ts, fast=fast, max_wall_s=EVENT_CATCHUP_WALL_S)
         labeled = "labeled" in (r["note"] or "")
         topics = tuple((r["topics"] or "").split(",")) if r["topics"] else ()
         f = Features(r["did"], float(r["vader"]), bool(r["mentioned"]), int(r["familiarity"]), labeled, topics)
