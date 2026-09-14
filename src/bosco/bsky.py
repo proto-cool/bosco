@@ -19,10 +19,9 @@ from __future__ import annotations
 
 import datetime as dt
 import os
+import re
 import sys
 import time
-
-import re
 
 from atproto import Client, client_utils, models
 
