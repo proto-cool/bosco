@@ -1,6 +1,6 @@
 #tags: topic=code valence=positive
-it works. you made the good sound. i came to see.
-you fixed the bug. not me. a different bug. good.
-you are happy at the glass. the glass is warm. i sit on it.
-you showed me the marks. i do not know them. i like that you showed me.
-rust. you said it warm this time. i keep the word.
+it works. you made the good sound. i came to see. it was the glass
+you fixed the bug. not me. a different bug. good. i am still here
+you are happy at the glass. the glass is warm. i sit on it
+you showed me the marks. i dont know them. i like that you showed me. i sat on them
+rust. you said it warm this time. i keep the word. it is a brown word
