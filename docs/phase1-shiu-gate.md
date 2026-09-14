@@ -5,7 +5,7 @@
 - reference active neurons 448; ours 451
 - active-set Jaccard 0.945; rate Pearson r 0.967; log-rate r 0.962
 - bit-identical replay: True
-- wall time 40.6s for 30 trials of 1 s (single thread)
+- wall time 49.6s for 30 trials of 1 s (single thread)
 
 Top reference neurons (Hz):
 

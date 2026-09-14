@@ -541,16 +541,17 @@ class Bsky:
                     n += 1
         return n
 
-    def spontaneous(self) -> int:
-        """Advance the simulation to now, simulating the gap since the last poll.  Grooms that the
-        network produced on the way are own posts (subject to caps)."""
+    def spontaneous(self, budget_s: float = 60.0) -> int:
+        """Advance the simulation toward now for at most budget_s of wall time.  Grooms that the
+        network produced on the way are own posts (subject to caps).  On a box slower than
+        real time he simply lives behind wall time; nothing stalls."""
         ts = time.time()
 
         def on_groom(out: Outcome) -> None:
             if out.decision.action == "spontaneous_post":
                 self.act(out, None, None, None, None, None, out.ts)
 
-        outs = self.agent.advance_to(ts, on_groom=on_groom)
+        outs = self.agent.advance_to(ts, on_groom=on_groom, max_wall_s=budget_s)
         return len(outs)
 
     def episodes_last_hour(self) -> int:
