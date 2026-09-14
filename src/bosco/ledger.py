@@ -324,6 +324,34 @@ class Ledger:
         self.db.execute("UPDATE actions SET deleted_ts=? WHERE our_uri=?", (ts or time.time(), our_uri))
         self.db.commit()
 
+    def recent_valence(self, since: float) -> tuple[int, int, int]:
+        """How the last hours smelled: (positive, negative, neutral) counts over events he read."""
+        rows = dict(
+            self.db.execute(
+                "SELECT valence, COUNT(*) FROM episodes WHERE ts>=? AND kind='event' GROUP BY valence", (since,)
+            ).fetchall()
+        )
+        return int(rows.get("positive", 0)), int(rows.get("negative", 0)), int(rows.get("neutral", 0))
+
+    def recent_words(self, since: float, limit: int = 12) -> dict[str, int]:
+        """The words of his vocabulary he met in what he read since `since`, by count."""
+        out: dict[str, int] = {}
+        for (ws,) in self.db.execute(
+            "SELECT words FROM episodes WHERE ts>=? AND kind='event' AND words IS NOT NULL", (since,)
+        ):
+            for w in ws.split(","):
+                if w:
+                    out[w] = out.get(w, 0) + 1
+        return dict(sorted(out.items(), key=lambda kv: (-kv[1], kv[0]))[:limit])
+
+    def last_outcome_ts(self, valence: str) -> float | None:
+        r = self.db.execute("SELECT MAX(ts) FROM outcomes WHERE valence=?", (valence,)).fetchone()
+        return float(r[0]) if r and r[0] is not None else None
+
+    def last_inbound_ts(self) -> float | None:
+        r = self.db.execute("SELECT MAX(ts) FROM episodes WHERE mentioned=1").fetchone()
+        return float(r[0]) if r and r[0] is not None else None
+
     def replied_to(self, target_uri: str, real_only: bool = True) -> bool:
         """Has he already answered this post (by the network or by reflex)?  Once is the rule."""
         q = "SELECT 1 FROM actions WHERE target_uri=? AND kind IN ('reply','identity') AND deleted_ts IS NULL"

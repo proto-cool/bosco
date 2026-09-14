@@ -23,7 +23,9 @@ context_fresh_s: 60.0       # words smelled this recently are not re-presented; 
 air_floor: 0.05             # a word whose afferents are depressed less than this is not in the air
 min_len: 3
 valence_beta: 1.0           # generator: p(word) x (1 + beta * learned valence of the word)
-echo_gamma: 0.5             # generator: p(word) x (1 + gamma * depression) for words in the air right now
+echo_gamma: 2.0             # generator: p(word) x (1 + gamma * depression) for words in the air right now
+day_echo: 0.25              # his own posts: the words of his last hours count as this much air
+day_hours: 6.0              # how far back "his day" reaches for mood, verdict and smells
 stopwords:
   [the, and, but, for, nor, yet, are, was, were, been, being, have, has, had, having, does,
    did, doing, will, would, shall, should, can, could, may, might, must, not, this, that,

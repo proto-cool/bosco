@@ -200,7 +200,11 @@ absolute-discount backoff: the fly picks the corpus subset (tags), the
 temperature (arousal) and the seed; the corpus never contains other
 people's posts. Utterance policy: when a phrasebook line exists for the key
 a seeded coin uses it verbatim half the time, otherwise the generator
-speaks. Corpus and phrasebook digests are frozen artifacts.
+speaks. When he answers someone the utterance opens on one of their words
+(the freshest on his antennae); when he grooms, the register is his day:
+the balance of his own verdicts on what he read, a `mood=` tag from the
+ledger, and the day's words as faint air. Corpus and phrasebook digests are
+frozen artifacts.
 
 ## Controls
 

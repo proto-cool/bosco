@@ -429,7 +429,12 @@ class Panel:
             )
         ]
         people = []
+        fresh = 0  # an account's odor signature is probed once and kept; a few new ones per poll
         for did in dids:
+            if did not in ag._signatures:
+                if fresh >= 8:
+                    continue
+                fresh += 1
             try:
                 _, v = ag.memory_report(did, ts)
             except Exception:  # noqa: BLE001

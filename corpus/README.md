@@ -34,3 +34,10 @@ State tags (2026-09-14): `time=night|morning|day|evening` and
 `appetite=hungry|sated` select files by his clock and his appetite for
 contact, so an own post is about the hour and the itch he is answering,
 not a thought. `095-learning.txt` was removed for reading as one.
+
+v4 (2026-09-14): `mood=warm|stung|alone` (`170`–`172`), written by Claude
+in the register of `011-banana.txt` at Nick's request: what the ledger says
+lately happened to him chooses the file. A reward within two hours is warm,
+a punishment within six is stung, a day without anyone coming to him is
+alone. Fifteen lines each; no verdicts, no lessons, things that happened
+and where he is now.

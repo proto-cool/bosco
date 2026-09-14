@@ -73,3 +73,20 @@ def test_familiarity_register_selects_documents(tmp_path):
     pool_new = g.model_for("reply", "neutral", "mid", (), "new")
     pool_known = g.model_for("reply", "neutral", "mid", (), "known")
     assert pool_new is not pool_known
+
+
+def test_priming_opens_on_a_word_in_the_air(tmp_path):
+    from bosco.textgen import Generator
+
+    (tmp_path / "a.txt").write_text(
+        "i go to the banana. the banana is soft. i sit on the apple. the apple is cold.\n" * 4
+    )
+    g = Generator(tmp_path)
+    plain = [g.generate("reply", "neutral", "mid", s) for s in range(30)]
+    primed = [g.generate("reply", "neutral", "mid", s, air={"apple": 1.0}, prime=True) for s in range(30)]
+    assert all(t and t.lower().startswith("apple") for t in primed)  # every answer opens on their word
+    assert any(t and not t.lower().startswith("apple") for t in plain)
+    assert primed[3] == g.generate("reply", "neutral", "mid", 3, air={"apple": 1.0}, prime=True)  # seeded
+    mixed = [g.generate("reply", "neutral", "mid", s, air={"apple": 0.9, "banana": 0.1}, prime=True) for s in range(60)]
+    n_apple = sum(t.lower().startswith("apple") for t in mixed)
+    assert 60 > n_apple > 30  # fresher words open more often, faint ones still can

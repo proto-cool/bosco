@@ -108,6 +108,7 @@ class Agent:
         self._appetite_loaded = False
         self.threads: dict[str, list[list]] = {}  # thread root -> [[t_ms, [words...]], ...]: what lingers in the air
         self._probe_cache: dict[tuple[str, str, str], float] = {}  # (did, word, weights digest) -> valence
+        self._load_signatures()
         self.on_window = None  # optional observer (Window, Decision, dust) -> None; the panel. Never feeds back.
         self.stop_requested = False
         self.slice_wall_s = 0.5  # running estimate of wall seconds per simulated second
@@ -329,11 +330,45 @@ class Agent:
         return out
 
     def state_register(self, ts: float) -> dict[str, str]:
-        """The parts of his state the corpus is tagged by: the hour and his appetite."""
+        """The parts of his state the corpus is tagged by: the hour, his appetite, and his mood.
+        Mood is what the ledger says lately happened to him: stung (a punishment within six
+        hours), warm (a reward within two), alone (nobody has come to him for a day), or nothing."""
         h = self.clock.local_hour(ts)
         t = "night" if h < 5 or h >= 22 else "morning" if h < 11 else "day" if h < 17 else "evening"
         a = "hungry" if self.appetite > 0.7 else "sated" if self.appetite < 0.3 else ""
-        return {"time": t, "appetite": a}
+        return {"time": t, "appetite": a, "mood": self.mood(ts)}
+
+    def mood(self, ts: float) -> str:
+        L = self.ledger
+        p, r, i = L.last_outcome_ts("punishment"), L.last_outcome_ts("reward"), L.last_inbound_ts()
+        if p is not None and ts - p < 6 * 3600:
+            return "stung"
+        if r is not None and ts - r < 2 * 3600:
+            return "warm"
+        lived = (ts - self.brain_t0) if self.brain_t0 else 0.0
+        if lived > 24 * 3600 and (i is None or ts - i > 24 * 3600):
+            return "alone"
+        return ""
+
+    def day_valence(self, ts: float) -> str:
+        """How his last hours smelled, as the register's valence: what he read, by his own verdicts."""
+        hours = float(self.enc.words_cfg.get("day_hours", 6.0))
+        pos, neg, neu = self.ledger.recent_valence(ts - hours * 3600.0)
+        n = pos + neg + neu
+        if n == 0:
+            return "neutral"
+        bal = (pos - neg) / n
+        return "positive" if bal > 0.15 else "negative" if bal < -0.15 else "neutral"
+
+    def day_air(self, ts: float, t_ms: int) -> dict[str, float]:
+        """What his own posts smell of: whatever is on his antennae now, and, fainter, the words of
+        his last hours from the ledger (day_echo), so a post of his is made of the day he had."""
+        c = self.enc.words_cfg
+        air = dict(self.air(t_ms))
+        faint = float(c.get("day_echo", 0.25))
+        for w in self.ledger.recent_words(ts - float(c.get("day_hours", 6.0)) * 3600.0):
+            air.setdefault(w, faint)
+        return air
 
     def remember_thread(self, thread: str | None, t_ms: int, words: tuple[str, ...]) -> None:
         if not thread or not words:
@@ -498,6 +533,8 @@ class Agent:
                 dust_before = self.dust
                 self.dust = 0.0  # grooming clears the debris; the row records what he answered to
                 self.landing_until = slice_index  # the landing is answered; its window closes
+                # what he says while grooming carries how his day smelled, not the verdict on dust
+                dec = replace(dec, valence=self.day_valence(self.wall(w.t0_ms)))
                 out = self._log(None, w, dec, self.wall(w.t0_ms), None, "spontaneous", note, dust_before)
                 outs.append(out)
                 if on_groom is not None:
@@ -572,7 +609,7 @@ class Agent:
                 text, text_source = line.text, "phrasebook"
             else:
                 cands = tuple(f.words) + tuple(x for x in f.context if x not in f.words) if f else None
-                air = self.air(w.t0_ms, cands)
+                air = self.air(w.t0_ms, cands) if f is not None else self.day_air(ts, w.t0_ms)
                 c = self.enc.words_cfg
                 text = self.generator.generate(
                     dec.behaviour,
@@ -586,6 +623,7 @@ class Agent:
                     air=air,
                     beta=float(c.get("valence_beta", 1.0)),
                     gamma=float(c.get("echo_gamma", 0.5)),
+                    prime=bool(f is not None and f.mentioned),
                 )
                 text_source = "generated" if text else None
                 if text is None and line is not None:
@@ -729,23 +767,54 @@ class Agent:
             f"{ {k: round(v, 1) for k, v in self.readout.thresholds.items() if v} }"
         )
 
-    def memory_report(self, did: str, ts: float | None = None) -> tuple[str, float]:
-        """What the mushroom body holds about an account, read from the weights (no simulation)."""
-        f = Features(did, 0.0, False, self.ledger.familiarity(did))
-        odor = self.enc.odor_drive(did)
-        # KCs of this odor: those that fired for it in the most recent event episode, else estimate by presentation
-        kc_hits = np.zeros(len(self.fly.kc), dtype=np.int64)
-        r = self.ledger.db.execute(
-            "SELECT id FROM episodes WHERE did=? AND kind='event' ORDER BY id DESC LIMIT 1", (did,)
-        ).fetchone()
-        if r is None:
-            w = self.live.present([odor], PRESENT_MS)  # touches the simulation; logged as a probe
-            self.ledger.add_control("probe", "cli", None, did)
-            kc_hits = w.counts[self.fly.kc]
-        else:
-            # re-derive from the current weights: edges of KCs active for this odor are those the pairing touched
+    SIGNATURE_MS = 500.0
+
+    def account_signature(self, did: str) -> np.ndarray | None:
+        """The Kenyon cells that fire for this account's odor alone: presented by itself to a copy of
+        his state (snapshot, present, restore; nothing about him changes), then kept, on disk too,
+        since the code depends on the odor and the static wiring, not on what he has learned.
+        This is the smell of the account, as distinct from the mixture it last arrived in."""
+        if did in self._signatures:
+            return self._signatures[did]
+        saved = self.live.snapshot()
+        try:
+            self.live.set_base(self._base_drives(self.live.t_ms) if self.brain_t0 is not None else {})
+            w = self.live.present([self.enc.odor_drive(did)], self.SIGNATURE_MS)
+        finally:
+            self.live.restore(saved)
+        sig = w.counts[self.fly.kc].astype(np.int64)
+        self._signatures[did] = sig
+        self._save_signatures()
+        return sig
+
+    def _save_signatures(self) -> None:
+        try:
+            data = {d: np.flatnonzero(s).tolist() for d, s in self._signatures.items()}
+            (self.state_dir / "account_kcs.json").write_text(json.dumps(data, separators=(",", ":")))
+        except OSError:
             pass
-        v, info = self.mb.learned_valence(kc_hits) if kc_hits.any() else self._valence_from_pairings(did)
+
+    def _load_signatures(self) -> None:
+        self._signatures: dict[str, np.ndarray] = {}
+        p = self.state_dir / "account_kcs.json"
+        if p.exists():
+            try:
+                for d, idx in json.loads(p.read_text()).items():
+                    sig = np.zeros(len(self.fly.kc), dtype=np.int64)
+                    sig[np.asarray(idx, dtype=np.int64)] = 1
+                    self._signatures[d] = sig
+            except (OSError, ValueError):
+                self._signatures = {}
+
+    def memory_report(self, did: str, ts: float | None = None) -> tuple[str, float]:
+        """What the mushroom body holds about an account: the verdict on the cells its odor lights
+        by itself, read from the weights.  Until 2026-09-14 this read the cells of the mixture the
+        account last arrived in, which are mostly the place and the topics, so everyone came out
+        the same; it is the account's own smell now."""
+        f = Features(did, 0.0, False, self.ledger.familiarity(did))
+        kc_hits = self.account_signature(did)
+        empty = {"reward_depression": 0.0, "punishment_depression": 0.0, "n_active_kc": 0}
+        v, info = self.mb.learned_valence(kc_hits) if kc_hits is not None and kc_hits.any() else (0.0, empty)
         why = self.ledger.db.execute(
             "SELECT valence, source, COUNT(*) AS n FROM outcomes WHERE did=? GROUP BY valence, source", (did,)
         ).fetchall()
@@ -757,14 +826,6 @@ class Agent:
             f"punishment-side {info['punishment_depression']:.2f} over {info['n_active_kc']} KCs; why: {why_s}"
         )
         return line, v
-
-    def _valence_from_pairings(self, did: str) -> tuple[float, dict[str, float]]:
-        """Weights-only estimate: use the KC set touched by this account's last pairing (t_pair marks)."""
-        touched = self.mb.t_pair > -np.inf
-        pre_kc = np.zeros(len(self.fly.kc), dtype=np.int64)
-        if touched.any():
-            pre_kc[self.fly.kc_pos_of_edge[touched]] = 1
-        return self.mb.learned_valence(pre_kc)
 
     def forget_account(self, did: str, ts: float) -> int:
         w = self.live.present([self.enc.odor_drive(did)], PRESENT_MS)

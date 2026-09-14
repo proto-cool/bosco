@@ -376,6 +376,31 @@ Every number below has a gate report under `docs/`.
    12, and the gate's size is what stands in for the pathway the model
    cannot carry. Recorded here so nobody has to wonder whether we tried.
 
+38. **An answer opens on their word; his own posts carry his day**
+   (decided 2026-09-14). Two things changed about what he says, neither of
+   them a model. When he answers someone, the generator now opens the
+   utterance on one of the words on his antennae, drawn by freshness, from
+   a context of his own corpus that ends in that word, and walks on from
+   there; and the echo on words in the air is four times louder
+   (`echo_gamma` 2.0). So a reply about bananas begins at banana, in his
+   sentences. When he grooms, the register is chosen by his day: the
+   valence of the post is the balance of his own verdicts on what he read
+   in the last six hours, not the verdict on dust; a `mood=` tag from the
+   ledger (stung within six hours of a punishment, warm within two of a
+   reward, alone after a day without anyone coming to him) selects three
+   new corpus files written in his register (`170`–`172`); and the words
+   he met in those hours are a faint air on his own posts (`day_echo`), so
+   a post of his is made of the day he had. None of it is understanding.
+   It is a fly answering on the word you used, in the mood his day left him.
+39. **An account's memory is its own smell** (fixed 2026-09-14). The panel
+   showed the same learned valence for everyone because the readout used
+   the Kenyon cells of the mixture an account last arrived in, which are
+   mostly the place and the topics. Each account's odor is now presented by
+   itself to a copy of his state once, the cells it lights are kept (on
+   disk too), and the verdict is read on those. What you see beside a name
+   is what he has learned about that smell, and the mixture verdicts stay
+   where they belong, in the windows.
+
 Not in v1: visual input.
 
 ## Running

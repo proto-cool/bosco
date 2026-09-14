@@ -117,6 +117,10 @@ class NGram:
                 self.c1[toks[i]] += 1
         self.n1 = sum(self.c1.values())
         self.vocab = sorted(self.c1)
+        # contexts that end in a word, for opening an utterance on it: w -> [(a, w), ...]
+        self.pred: dict[str, list[tuple[str, str]]] = defaultdict(list)
+        for a, b in self.c3:
+            self.pred[b].append((a, b))
 
     def surface_form(self, w: str) -> str:
         """Most frequent casing of w in the corpus, preferring capitalised forms only when they dominate
@@ -286,10 +290,14 @@ class Generator:
         air: dict[str, float] | tuple[str, ...] = (),
         beta: float = 1.0,
         gamma: float = 0.5,
+        prime: bool = False,
     ) -> str | None:
         """`word_valence` is what his mushroom body has learned about each word (from the weights);
         a sweet word is chosen more, a bitter one less.  `air` is what is on his antennae right
-        now, each word by how much (0..1; a bare tuple counts as 1 each); they come up more."""
+        now, each word by how much (0..1; a bare tuple counts as 1 each); they come up more.
+        With `prime` (he is answering someone) the utterance opens on one of the words in the
+        air, drawn by how fresh it is, and walks his own sentences from there: an answer is about
+        the word they used, in his words."""
         if self.empty:
             return None
         m = self.model_for(behaviour, valence, arousal, topics, familiarity, state)
@@ -306,6 +314,23 @@ class Generator:
         a, b = BOS, BOS
         n_done = 0
         sent_len = 0
+        if prime and in_air:
+            # open on one of their words: a context of his that ends in it, chosen by freshness
+            options = [(w, d) for w, d in in_air.items() if m.pred.get(w)]
+            tot = sum(d for _, d in options)
+            if options and tot > 0:
+                u = rng.unit() * tot
+                acc = 0.0
+                w0 = options[-1][0]
+                for w, d in options:
+                    acc += d
+                    if u <= acc:
+                        w0 = w
+                        break
+                ctxs = sorted(m.pred[w0])
+                a, b = ctxs[int(rng.unit() * len(ctxs)) % len(ctxs)]
+                out.append(m.surface_form(w0))
+                sent_len = 1
         used: set[tuple[str, str, str]] = set()  # no trigram twice in one utterance (loop guard)
         for _ in range(120):
             cands = m.candidates(a, b)

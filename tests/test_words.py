@@ -181,3 +181,65 @@ def test_innate_smells_take_their_own_glomeruli(fly):
     assert not dm1 & set(enc.word_drive("table").idx.tolist())
     assert enc.word_drive("banana").label == "word:banana"
     assert np.array_equal(enc.word_drive("banana").idx, enc.word_drive("banana").idx)
+
+
+@needs_data
+def test_mood_and_day_come_from_the_ledger(fly):
+    """His mood is what lately happened to him, his own posts' valence is his day's verdicts, and
+    the day's words are a faint air on them."""
+    from bosco.agent import Agent
+    from bosco.encoder import Features
+    from bosco.ledger import Ledger
+
+    tmp = tempfile.mkdtemp()
+    L = Ledger(f"{tmp}/l.sqlite")
+    ag = Agent(L, fly, state_dir=tmp)
+    ag.mb.reset()
+    ag.live.net.reset(0)
+    ag.live.t_ms = 0
+    assert ag.mood(T0) == ""  # young and untouched: no mood tag
+    o = ag.run(Features("did:plc:a", 0.6, True, 0, False, (), False, ("banana", "table")), T0, "at://a/1", fast=True)
+    L.add_outcome(o.episode_id, "reward", "like", "did:plc:a", "at://x/1", None, ts=T0 + 60)
+    assert ag.mood(T0 + 120) == "warm" and ag.mood(T0 + 3 * 3600) == ""
+    L.add_outcome(o.episode_id, "punishment", "block", "did:plc:b", None, None, ts=T0 + 200)
+    assert ag.mood(T0 + 300) == "stung" and ag.mood(T0 + 7 * 3600) == ""
+    ag.brain_t0 = T0 - 3 * 86400
+    assert (
+        ag.mood(T0 + 2 * 86400) == "alone" and ag.mood(T0 + 7 * 3600) == ""
+    )  # stung has worn off, someone came within the day
+    assert ag.state_register(T0 + 300)["mood"] == "stung"
+    words = L.recent_words(T0 - 1)
+    assert words == {"banana": 1, "table": 1}
+    air = ag.day_air(T0 + 300, int(ag.live.t_ms))
+    assert set(air) >= {"banana", "table"} and 0 < air["table"] < 1
+    assert ag.day_valence(T0 + 300) in ("positive", "neutral", "negative")
+
+
+@needs_data
+def test_account_memory_is_its_own_smell(fly):
+    """Two accounts that arrived in the same place with the same words have different signatures,
+    and a reward paired with one raises that one's verdict, not the other's."""
+    from bosco.agent import Agent
+    from bosco.encoder import Features
+    from bosco.ledger import Ledger
+
+    tmp = tempfile.mkdtemp()
+    L = Ledger(f"{tmp}/l.sqlite")
+    ag = Agent(L, fly, state_dir=tmp)
+    ag.mb.reset()
+    ag.live.net.reset(0)
+    ag.live.t_ms = 0
+    sa, sb = ag.account_signature("did:plc:a"), ag.account_signature("did:plc:b")
+    assert sa.any() and sb.any() and not np.array_equal(sa > 0, sb > 0)
+    assert np.array_equal(ag.account_signature("did:plc:a"), sa)  # kept
+    fa = Features("did:plc:a", 0.5, True, 0, False, ("fruit",), False, ("banana",), feed="science")
+    fb = Features("did:plc:b", 0.5, True, 0, False, ("fruit",), False, ("banana",), feed="science")
+    ag.run(fb, T0, "at://b/1", fast=True)
+    o = ag.run(fa, T0 + 60, "at://a/1", fast=True)
+    for k in range(3):
+        ag.apply_outcome(o.episode_id, "reward", "like", "did:plc:a", f"at://x/{k}", T0 + 120 + k * 7200, fast=True)
+    _, va = ag.memory_report("did:plc:a", T0 + 8 * 3600)
+    _, vb = ag.memory_report("did:plc:b", T0 + 8 * 3600)
+    assert va > vb  # the reward was with a; b only shares the place and the word
+    ag2 = Agent(Ledger(f"{tmp}/l2.sqlite"), fly, state_dir=tmp)
+    assert "did:plc:a" in ag2._signatures  # signatures survive a restart
