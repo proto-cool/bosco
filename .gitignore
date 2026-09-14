@@ -14,3 +14,4 @@ state/
 .env
 panel/node_modules/
 panel/dist/
+.claude/worktrees/
