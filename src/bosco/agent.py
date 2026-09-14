@@ -409,7 +409,7 @@ class Agent:
             topics=",".join(f.topics) if f and f.topics else None,
         )
         eid = self.ledger.add_episode(row, ts=ts)
-        return Outcome(eid, dec, line, seed, text, text_source, ts)
+        return Outcome(eid, dec, line, seed, text, text_source, ts, bool(f.mentioned) if f else False)
 
     def run(
         self,

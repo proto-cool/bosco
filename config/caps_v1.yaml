@@ -3,9 +3,9 @@
 # limits and loop guards, not resource limits.
 per_kind:
   reply:            {hour: 12, day: 100}
-  like:             {hour: 12, day: 100}
-  follow:           {hour: 6,  day: 40}
-  leave:            {hour: 6,  day: 40}     # unfollows
+  like:             {hour: 6,  day: 40}
+  follow:           {hour: 3,  day: 15}
+  leave:            {hour: 3,  day: 15}     # unfollows
   spontaneous_post: {hour: 1,  day: 12}
   identity:         {hour: 20, day: 100}   # who/what/why/creator answers
 global:             {hour: 24, day: 240}

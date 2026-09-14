@@ -51,7 +51,11 @@ genuinely the one acting, and that anyone can check.
   `BOSCO_EPISODE_BUDGET` windows per hour.
 - Bosco reads his timeline and the discover feed and may like, follow,
   unfollow, reply in any thread he reads, and post on his own. The action
-  set is `reply, like, follow, leave, spontaneous_post, nothing`.
+  set is `reply, like, follow, leave, spontaneous_post, nothing`. Toward
+  accounts that never interacted with him and that his memory does not
+  favour, browsing yields only leave or nothing: outward actions go to
+  people who came to him (this is also what keeps him from looking like
+  spam).
 
 ## 2a. Operator controls (binding)
 
