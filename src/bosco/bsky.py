@@ -198,6 +198,7 @@ class Bsky:
         root_uri: str | None,
         root_cid: str | None,
         ts: float,
+        in_thread: bool = False,
     ) -> None:
         d = out.decision
         action = d.action
@@ -205,7 +206,7 @@ class Bsky:
             return
         # engage on an account already followed becomes a reply; leave on an unfollowed account is nothing
         following = self.follows()
-        if action == "follow" and (did is None or did in following):
+        if action == "follow" and (did is None or did in following or in_thread):
             action = "reply" if did is not None and out.text else "nothing"
         if action == "leave" and (did is None or did not in following):
             self.L.add_action(out.episode_id, "leave", None, target_uri, dry_run=True, ts=ts)

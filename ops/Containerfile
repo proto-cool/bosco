@@ -8,5 +8,5 @@ COPY . .
 RUN uv sync --frozen --no-dev && make -C kernel
 # data/raw (feathers) and state/ are volumes; data/cache is built on first run
 ENV BOSCO_LEDGER=/app/state/ledger.sqlite
-ENTRYPOINT ["uv", "run", "bosco"]
+ENTRYPOINT ["/app/.venv/bin/bosco"]
 CMD ["run"]
