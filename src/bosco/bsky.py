@@ -160,6 +160,8 @@ class Bsky:
             reply = self.agent.reload()
         elif cmd.kind == "restart":
             reply = "restarting"
+        elif cmd.kind == "introduce":
+            reply = "introduced" if self.introduce_if_needed(force=True) else "an introduction is already up"
         elif cmd.kind in ("ignore", "unignore") and did:
             self.L.set_ignored(did, n.author.did, cmd.kind == "ignore", ts=ts)
             if cmd.kind == "ignore":
@@ -325,11 +327,13 @@ class Bsky:
         )
 
     # ---- the first post ---------------------------------------------------------
-    def introduce_if_needed(self) -> bool:
-        """Once, before anything else: the introduction (config/identity_v1.yaml `intro`).
-        The truth is his profile, not the ledger: if any of the introduction texts is still
-        among his posts, he stays quiet; if none is (deleted through him or in the app), he
-        introduces himself again."""
+    def introduce_if_needed(self, force: bool = False) -> bool:
+        """Once, ever: the introduction (config/identity_v1.yaml `intro`).  If it is deleted it
+        stays deleted; only the operator's `introduce` command asks for another.  Never posts
+        while an introduction text is already among his posts."""
+        ever = self.L.db.execute("SELECT 1 FROM actions WHERE kind='intro' AND dry_run=0 LIMIT 1").fetchone()
+        if ever and not force:
+            return False
         intros = set(self.agent.identity.intro)
         try:
             feed = self.client.get_author_feed(self.me, limit=100, filter="posts_no_replies").feed

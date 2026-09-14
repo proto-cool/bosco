@@ -5,6 +5,7 @@
     @bosco memory @handle
     @bosco ignore @handle | unignore @handle | unfollow @handle
     @bosco forget @handle              (manual state edit; logged and announced)
+    @bosco introduce                   (post a fresh introduction; otherwise it happens once, ever)
 
 Free text around the keyword is fine: "hey @bosco start learning your corpus
 again" reloads.  Output is posted as a reply to the command and logged as a
@@ -29,6 +30,7 @@ COMMANDS = {
     "unignore": r"\bunignore\b",
     "unfollow": r"\bunfollow\b",
     "forget": r"\bforget\b",
+    "introduce": r"\bintroduce\b|\bintro\b",
 }
 ORDER = [
     "unignore",
