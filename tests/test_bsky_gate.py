@@ -60,14 +60,14 @@ def test_posts_in_languages_he_does_not_read_are_not_perceived():
     assert b.reads(SimpleNamespace(langs=["ja"]))  # no languages set: everything is read
 
 
-def test_stranger_like_withheld_until_known_or_liked():
+def test_stranger_like_withheld_until_known():
     tmp = tempfile.mkdtemp()
     L = Ledger(f"{tmp}/l.sqlite")
     b = _bsky(L)
     b.act(_out(L, "like", 0.0, False), "did:plc:x", "at://x/1", "cid", None, None, 1.0)
     assert _kinds(L) == [("leave", 1)]  # withheld, logged as a leave
     b.act(_out(L, "like", 0.5, False), "did:plc:x", "at://x/1", "cid", None, None, 2.0)
-    assert _kinds(L)[-1][0] == "like"  # his memory favours the smell: through
+    assert _kinds(L)[-1] == ("leave", 1)  # a sweet window is not a verdict on a stranger: still withheld
     L.bump_inbound("did:plc:x", "2026-09-14")
     b.act(_out(L, "like", 0.0, False), "did:plc:x", "at://x/1", "cid", None, None, 3.0)
     assert _kinds(L)[-1][0] == "like"  # they came to him once: through

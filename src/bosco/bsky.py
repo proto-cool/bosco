@@ -289,13 +289,13 @@ class Bsky:
             return
         if action == "nothing":
             return
-        # Someone he only wandered past on the feed: act outward only if they have come to him
-        # before, or his memory already favours the smell (learned valence above the cut).
-        # The first half is a spam rail for a new account; the second is his own verdict.
+        # Someone he only wandered past on the feed gets nothing outward until they have come to
+        # him.  The learned verdict on the window is not a verdict on them: it is the whole
+        # mixture (the place, the topics, the words) and generalises to strangers who merely
+        # share a smell, which is how he came to follow people who had never heard of him
+        # (2026-09-14).  His memory of an account can only exist once they interacted anyway.
         if did is not None and not out.mentioned and action in ("like", "follow", "reply"):
-            known = self.L.familiarity(did) >= 1
-            liked = d.learned > self.agent.readout.valence_cut
-            if not known and not liked:
+            if self.L.familiarity(did) < 1:
                 self.L.add_action(
                     out.episode_id,
                     "leave",
