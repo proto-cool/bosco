@@ -110,10 +110,14 @@ class Bsky:
 
     def handle_control(self, n) -> bool:
         """Operator commands: mentions or replies from the operator DID (see control.py)."""
-        if n.author.did != self.operator_did or n.reason not in ("reply", "mention", "quote"):
+        if n.author.did != self.operator_did:
             return False
-        text = getattr(n.record, "text", "") or ""
-        cmd = control.parse(text, self.my_handle)
+        text = getattr(n.record, "text", None)
+        if text is None and isinstance(n.record, dict):
+            text = n.record.get("text")
+        text = text or ""
+        cmd = control.parse(text, self.my_handle) if n.reason in ("reply", "mention", "quote") else None
+        print(f"operator: reason={n.reason} text={text!r} -> {cmd.kind if cmd else 'not a command'}")
         if cmd is None:
             return False
         parent = getattr(getattr(n.record, "reply", None), "parent", None)
