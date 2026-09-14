@@ -70,6 +70,7 @@ opt_out:
   patterns:
     - "\\bshoo,? ?fly\\b"
     - "\\bshoo\\b"
+    - "\\b(fuck|piss|bugger|sod) off\\b"
     - "\\bgo away\\b"
     - "\\bleave me alone\\b"
     - "\\bopt(-| )?out\\b"
