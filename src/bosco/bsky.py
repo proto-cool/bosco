@@ -324,7 +324,8 @@ class Bsky:
         """Once, before anything else: the introduction (config/identity_v1.yaml `intro`).
         If the last one was deleted (through him or in the app), he introduces himself again."""
         row = self.L.db.execute(
-            "SELECT our_uri FROM actions WHERE kind='intro' AND dry_run=0 AND deleted_ts IS NULL ORDER BY id DESC LIMIT 1"
+            "SELECT our_uri FROM actions WHERE kind='intro' AND dry_run=0 AND deleted_ts IS NULL "
+            "ORDER BY id DESC LIMIT 1"
         ).fetchone()
         if row and row["our_uri"]:
             try:
