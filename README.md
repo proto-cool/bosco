@@ -76,7 +76,7 @@ Every number below has a gate report under `docs/`.
    output does in the fly (Aso et al. 2014): v (decision 16) scales approach
    populations by (1 + 2v) and avoid by (1 − 2v) before thresholds.  `bosco memory --did X` prints v, the synapses carrying it,
    and the outcomes that caused it; `bosco people` ranks every account.
-10. **Text**: `src/bosco/textgen.py`, a word trigram with absolute-discount
+10. **Text**: `src/bosco/textgen.py`, a word n-gram (four words of context, backing off to three, two, one) with absolute-discount
    backoff over `corpus/` plus phrasebook lines.  The fly supplies the
    corpus subset (register tags, and `topic=` tags for what the post
    smelled of), temperature (arousal) and seed.  Not an LLM.
@@ -415,6 +415,25 @@ Every number below has a gate report under `docs/`.
    sated, up to three when hungry for company, one more for a smell he has
    learned to like and one fewer for one he avoids (`Agent.verbosity`).
    Nobody who did not speak to him is ever addressed.
+
+41. **Four words of context, a line is a sentence, and he may end on one
+   word** (decided 2026-09-14, after reading him). Three things made his
+   sentences run together. The corpus was split into sentences only at
+   periods, and most of his lines carry none, so the model learned to run
+   one line into the next ("i drank some of it rain on the leaf"). A
+   three-word minimum before a sentence could end forced continuations past
+   the natural end of "banana" or "warm". And a trigram over 1,300 short
+   lines splices any two that share two words. Now a line end is a sentence
+   end; a one-word sentence is legal; the model keeps four words of context
+   and backs off to three, two, one only when the corpus never saw the
+   longer context; the continuations offered are only what the corpus saw
+   follow that context; and ending a sentence where a corpus sentence ended
+   is weighted 2.5 to 1 against splicing on. The effect is that he speaks
+   in his own sentences, spliced where three words coincide, which on this
+   corpus is rare. The corpus is lowercase throughout now, including the
+   original short register (`010`–`080`), by Nick's instruction, and the
+   second corpus pass broke its grammar toward the reference files without
+   lengthening a single line.
 
 Not in v1: visual input.
 

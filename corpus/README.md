@@ -6,6 +6,8 @@ of the frozen-artifact table.
 
 Rules:
 - Plain UTF-8 text.  One document per file.  Paragraphs separated by blank lines.
+  Every line is one utterance and the generator treats a line end as a sentence
+  end, so a line needs no final period.  Lowercase throughout, including `i`.
 - Optional tags on the first line: `#tags: behaviour=groom valence=positive arousal=low`.
   Tagged documents are preferred when the fly's state matches; untagged
   documents are always in the pool.  `topic=code` (a name from
@@ -34,6 +36,11 @@ State tags (2026-09-14): `time=night|morning|day|evening` and
 `appetite=hungry|sated` select files by his clock and his appetite for
 contact, so an own post is about the hour and the itch he is answering,
 not a thought. `095-learning.txt` was removed for reading as one.
+
+v5 (2026-09-14): a second pass broke the grammar toward `011`/`012` ("he go",
+"big one press", "i want know") without lengthening any line, after a first
+pass that had padded short lines was reverted; then everything was lowercased
+by script at Nick's instruction, including the original `010`–`080` register.
 
 v4 (2026-09-14): `mood=warm|stung|alone` (`170`–`172`), written by Claude
 in the register of `011-banana.txt` at Nick's request: what the ledger says

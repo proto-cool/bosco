@@ -25,7 +25,8 @@ TOKEN_RE = re.compile(r"[A-Za-z0-9'’\-]+|[.,!?;:]")
 END_PUNCT = {".", "!", "?"}
 MAX_CHARS = 280
 MAX_SENT_TOKENS = 22
-MIN_SENT_TOKENS = 3
+EOS_BIAS = 2.5  # weight on ending a sentence where a corpus sentence ended, against splicing on
+MIN_SENT_TOKENS = 1  # a one-word sentence is his register ("banana", "rude", "warm")
 # a sentence may not end on one of these (function words, dangling pronouns)
 NO_END = {
     "the",
@@ -69,14 +70,19 @@ def tokenize(text: str) -> list[str]:
 
 
 def sentences(text: str) -> list[list[str]]:
-    out, cur = [], []
-    for tok in tokenize(text):
-        cur.append(tok)
-        if tok in END_PUNCT:
+    """Sentences end at a period, question mark or exclamation, and at the end of a line: a corpus
+    line is one utterance whether or not it carries a final period (most of his do not), so the
+    model never learns to run one line into the next."""
+    out: list[list[str]] = []
+    for line in text.splitlines():
+        cur: list[str] = []
+        for tok in tokenize(line):
+            cur.append(tok)
+            if tok in END_PUNCT:
+                out.append(cur)
+                cur = []
+        if cur:
             out.append(cur)
-            cur = []
-    if cur:
-        out.append(cur)
     return out
 
 
@@ -103,6 +109,7 @@ class NGram:
 
     def __init__(self, sents: list[list[str]], d: float = 0.5) -> None:
         self.d = d
+        self.c4: dict[tuple[str, str, str], dict[str, int]] = defaultdict(lambda: defaultdict(int))
         self.c3: dict[tuple[str, str], dict[str, int]] = defaultdict(lambda: defaultdict(int))
         self.c2: dict[str, dict[str, int]] = defaultdict(lambda: defaultdict(int))
         self.c1: dict[str, int] = defaultdict(int)
@@ -110,8 +117,9 @@ class NGram:
         for s in sents:
             for t in s[1:]:  # sentence-initial capitals do not count
                 self.surface[t.lower()][t] += 1
-            toks = [BOS, BOS] + [t.lower() for t in s] + [EOS]
-            for i in range(2, len(toks)):
+            toks = [BOS, BOS, BOS] + [t.lower() for t in s] + [EOS]
+            for i in range(3, len(toks)):
+                self.c4[(toks[i - 3], toks[i - 2], toks[i - 1])][toks[i]] += 1
                 self.c3[(toks[i - 2], toks[i - 1])][toks[i]] += 1
                 self.c2[toks[i - 1]][toks[i]] += 1
                 self.c1[toks[i]] += 1
@@ -150,9 +158,24 @@ class NGram:
         lam = self.d * len(row) / tot
         return max(row.get(w, 0) - self.d, 0) / tot + lam * self.p_bi(b, w)
 
-    def candidates(self, a: str, b: str) -> list[str]:
-        c = set(self.c3.get((a, b), {})) | set(self.c2.get(b, {}))
-        if len(c) < 3:
+    def p4(self, z: str, a: str, b: str, w: str) -> float:
+        row = self.c4.get((z, a, b))
+        if not row:
+            return self.p_tri(a, b, w)
+        tot = sum(row.values())
+        lam = self.d * len(row) / tot
+        return max(row.get(w, 0) - self.d, 0) / tot + lam * self.p_tri(a, b, w)
+
+    def candidates(self, z: str, a: str, b: str) -> list[str]:
+        """Continuations of a context: the words that followed the last three in the corpus; only
+        when the corpus never saw those three does the model back off to the last two, then the
+        last one, then anything.  So what he says is his own sentences, spliced only where two
+        of them share three words in a row, not words strung by chance."""
+        row = self.c4.get((z, a, b)) or self.c3.get((a, b))
+        if row:
+            return sorted(row)
+        c = set(self.c2.get(b, {}))
+        if len(c) < 2:
             c |= set(self.vocab)
         return sorted(c)
 
@@ -311,7 +334,7 @@ class Generator:
         )
         n_sent = 1 + int(rng.unit() * max_sentences)
         out: list[str] = []
-        a, b = BOS, BOS
+        z, a, b = BOS, BOS, BOS
         n_done = 0
         sent_len = 0
         if prime and in_air:
@@ -329,24 +352,26 @@ class Generator:
                         break
                 ctxs = sorted(m.pred[w0])
                 a, b = ctxs[int(rng.unit() * len(ctxs)) % len(ctxs)]
+                z = BOS
                 out.append(m.surface_form(w0))
                 sent_len = 1
-        used: set[tuple[str, str, str]] = set()  # no trigram twice in one utterance (loop guard)
+        used: set[tuple[str, str, str, str]] = set()  # no four-gram twice in one utterance (loop guard)
         for _ in range(120):
-            cands = m.candidates(a, b)
+            cands = m.candidates(z, a, b)
             content = sum(1 for t in out[len(out) - sent_len :] if t not in END_PUNCT and t not in {",", ";", ":"})
             dangling = bool(out) and out[-1].lower() in NO_END
             if (content < MIN_SENT_TOKENS or dangling) and sent_len < MAX_SENT_TOKENS:
                 filtered = [c for c in cands if c != EOS and c not in END_PUNCT]
                 if filtered:
                     cands = filtered
-            fresh = [c for c in cands if (a, b, c) not in used or c == EOS]
+            fresh = [c for c in cands if (z, a, b, c) not in used or c == EOS]
             if fresh:
                 cands = fresh
             ws = [
-                m.p_tri(a, b, w) ** (1.0 / temp)
+                m.p4(z, a, b, w) ** (1.0 / temp)
                 * max(0.1, 1.0 + beta * wv.get(w, 0.0))
                 * (1.0 + gamma * in_air.get(w, 0.0))
+                * (EOS_BIAS if w == EOS else 1.0)  # he ends where his sentences end more often than he splices
                 for w in cands
             ]
             tot = sum(ws)
@@ -367,16 +392,16 @@ class Generator:
                 sent_len = 0
                 if n_done >= n_sent or len(detokenize(out)) > MAX_CHARS * 0.7:
                     break
-                a, b = BOS, BOS
+                z, a, b = BOS, BOS, BOS
                 continue
             if w.startswith("@") and w not in ALLOWED_MENTIONS:
                 continue
             if "http" in w or "://" in w:
                 continue
             out.append(w)
-            used.add((a, b, w))
+            used.add((z, a, b, w))
             sent_len += 1
-            a, b = b, w
+            z, a, b = a, b, w
         # drop a trailing dangling fragment left by the token cap
         while out and out[-1] in END_PUNCT:
             out.pop()

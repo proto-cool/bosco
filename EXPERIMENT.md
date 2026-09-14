@@ -18,7 +18,7 @@ genuinely the one acting, and that anyone can check.
 
 - No LLM, embedding, or classifier anywhere in the runtime loop. The only
   text scorer is the VADER lexicon. The only text generator is a word
-  trigram model over the published `corpus/`, seeded by the episode and
+  n-gram model (four words of context) over the published `corpus/`, seeded by the episode and
   conditioned on the fly's state. **Closed vocabulary** (decided
   2026-09-13): nothing Bosco reads ever enters the generator; he learns
   people, not words. Letting him acquire words from accounts he has
@@ -125,7 +125,7 @@ operator ignore is not theirs to lift. A block does the same without words
 and is also the punishment signal; a mute needs nothing from him. This is a
 reflex on the same footing as the identity answers, outside the network.
 
-Bosco's text comes from a trigram model over a published corpus and from
+Bosco's text comes from an n-gram model (four words of context) over a published corpus and from
 phrasebook lines; every word he can emit is in those files. The exposure
 these controls address is who he engages, what he likes, and which corpus
 fragments land next to which post.

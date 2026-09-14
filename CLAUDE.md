@@ -199,7 +199,7 @@ Do not download the EM volume. `neuprint-python` against
 Frozen and published at tag. Claude does not write phrasebook lines.
 
 `corpus/*.txt` is the generator's training text. Register: a fly's world,
-a person's wants, flat declaratives, no jokes (`docs/corpus-audit.md`). `textgen.py` is a word trigram with
+a person's wants, flat declaratives, no jokes (`docs/corpus-audit.md`). `textgen.py` is a word n-gram (four words of context, backing off) with
 absolute-discount backoff: the fly picks the corpus subset (tags), the
 temperature (arousal) and the seed; the corpus never contains other
 people's posts. Utterance policy: when a phrasebook line exists for the key
