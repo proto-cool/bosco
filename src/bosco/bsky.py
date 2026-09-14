@@ -430,6 +430,13 @@ class Bsky:
         out = self.agent.run(
             Features(did, v, mentioned, fam, bool(labels), topics, question), ts, uri, kind="event", note=note
         )
+        d = out.decision
+        top = max(d.ratios, key=d.ratios.get) if d.ratios else "-"
+        print(
+            f"episode {out.episode_id} {'mention' if mentioned else 'browse'} {did} fam={fam} vader={v:+.2f} "
+            f"topics={list(topics)} learned={d.learned:+.2f} top={top} {d.ratios.get(top, 0.0):.2f}x "
+            f"-> {d.behaviour}/{d.action}"
+        )
         # identity reflex: who/what/why/creator is answered regardless of the network (EXPERIMENT.md §2)
         qid = self.agent.identity.match(text) if mentioned and not labels else None
         if qid is not None:
