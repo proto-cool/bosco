@@ -199,6 +199,8 @@ class Panel:
                 "lag_s": ag.lag_s(ts),
                 "wall_per_bio": ag.slice_wall_s,
                 "dust": ag.dust,
+                "appetite": ag.appetite,
+                "landing_id": ag.landing_id,
                 "asleep": L.asleep(),
                 "digest": mb.digest(),
                 "stm_depressed": int((mb.stm < 0.99).sum()),

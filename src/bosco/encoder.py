@@ -56,6 +56,7 @@ class Encoder:
         self.bristles = (
             brain.index_of_present(pop.bodies_of_types(sp.get("bristle_types", []))) if sp else np.zeros(0, np.int32)
         )
+        self.pc1 = brain.index_of_present(pop.pc1()) if self.cfg.get("courtship") else np.zeros(0, np.int32)
 
     # ---- account odor ---------------------------------------------------
     def glomeruli_for(self, did: str) -> list[str]:
@@ -94,20 +95,38 @@ class Encoder:
             rate *= float(self.cfg["mechanosensory"].get("question_gain", 1.5))
         return Drive(self.jo, rate, "mention?" if question else "mention")
 
+    # ---- being addressed: the courtship command ----------------------------
+    def courtship_drive(self, appetite: float, question: bool = False) -> Drive | None:
+        """pC1 driven at rate_hz x appetite (x question_gain for a question).  No appetite, no drive."""
+        c = self.cfg.get("courtship")
+        if not c or len(self.pc1) == 0:
+            return None
+        rate = float(c["rate_hz"]) * float(np.clip(appetite, 0.0, 1.0))
+        if question:
+            rate *= float(c.get("question_gain", 1.0))
+        if rate <= 0.0:
+            return None
+        return Drive(self.pc1, round(rate, 6), "courtship?" if question else "courtship")
+
     # ---- internal drive (no event) ---------------------------------------
-    def spontaneous_drive(self, seed: int, drive: float = 1.0) -> Drive | None:
-        """drive in [0, 1] scales how many bristles carry debris (k_max * drive)."""
+    def spontaneous_drive(self, landing_id: int, drive: float = 1.0) -> Drive | None:
+        """Debris on his bristles.  One seeded permutation per landing; the first k_max * drive
+        bristles of it carry debris, so as the debris settles the subset shrinks and never adds
+        an onset.  drive in [0, 1]."""
         sp = self.cfg.get("spontaneous")
         if not sp or len(self.bristles) == 0:
             return None
-        rng = np.random.default_rng(seed & 0xFFFFFFFF)
         k = min(int(round(int(sp["k"]) * float(np.clip(drive, 0.0, 1.0)))), len(self.bristles))
         if k <= 0:
             return None
-        idx = np.sort(rng.choice(self.bristles, size=k, replace=False)).astype(np.int32)
+        rng = np.random.default_rng(int(landing_id) & 0xFFFFFFFF)
+        perm = rng.permutation(self.bristles)
+        idx = np.sort(perm[:k]).astype(np.int32)
         return Drive(idx, float(sp["rate_hz"]), "bristles")
 
-    def encode(self, f: Features) -> Stimulus:
+    def encode(self, f: Features, appetite: float = 0.0) -> Stimulus:
+        """The stimulus for an event.  `appetite` is his state, not a feature of the event: it
+        sets how hard being addressed excites the courtship command."""
         drives = [self.odor_drive(f.did)]
         drives += [self.topic_drive(t) for t in f.topics]
         g = self.gustatory_drive(-1.0) if f.labeled else self.gustatory_drive(f.vader)
@@ -115,6 +134,9 @@ class Encoder:
             drives.append(g)
         if f.mentioned:
             drives.append(self.mention_drive(f.question))
+            c = self.courtship_drive(appetite, f.question)
+            if c is not None:
+                drives.append(c)
         return Stimulus(drives)
 
 

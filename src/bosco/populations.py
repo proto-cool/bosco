@@ -142,6 +142,13 @@ def descending_neurons() -> pd.DataFrame:
     return d[["bodyId", "type", "somaSide", "subclass"]].sort_values(["type", "somaSide"])
 
 
+def pc1() -> list[int]:
+    """pC1 (P1) neurons: the male courtship command hub (types beginning with pC1).  Their
+    excitability tracks internal state; the song descending neurons sit downstream."""
+    a = annotations()
+    return sorted(a.index[a["type"].fillna("").str.startswith("pC1")])
+
+
 def bodies_of_types(types: list[str]) -> list[int]:
     a = annotations()
     return sorted(a.index[a["type"].isin(types)])

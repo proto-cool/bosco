@@ -100,6 +100,12 @@ class Agent:
         self.identity = IdentityReflex()
         self.live = Simulation(self.fly, seed=0)
         self.dust = 0.0
+        self.landing_id = 0  # the last landing (its second); seeds which bristles carry the debris
+        self.landing_until = 0  # seconds after a landing are logged as `landing` windows
+        self.appetite_cfg = yaml.safe_load(open(paths.CONFIG / "appetite_v1.yaml"))
+        self.appetite = 0.5  # appetite for contact in [0, 1]; config/appetite_v1.yaml
+        self.appetite_t = 0.0  # hours (simulation time) it was last stepped
+        self._appetite_loaded = False
         self.on_window = None  # optional observer (Window, Decision, dust) -> None; the panel. Never feeds back.
         self.stop_requested = False
         self.slice_wall_s = 0.5  # running estimate of wall seconds per simulated second
@@ -166,18 +172,59 @@ class Agent:
         st = {f"mb_{k}": v for k, v in self.mb.state().items()}
         st.update(self.live.snapshot())
         st["dust"] = np.array([self.dust])
+        st["landing"] = np.array([self.landing_id, self.landing_until], dtype=np.int64)
+        st["appetite"] = np.array([self.appetite, self.appetite_t])
         return st
 
     def _unpack(self, st: dict) -> None:
         self.mb.load_state({k[3:]: st[k] for k in st if k.startswith("mb_")})
         self.live.restore({"kernel": st["kernel"], "t_ms": st["t_ms"]})
         self.dust = float(np.asarray(st["dust"]).ravel()[0])
+        if "landing" in st:
+            self.landing_id, self.landing_until = (int(x) for x in np.asarray(st["landing"]).ravel()[:2])
+        if "appetite" in st:
+            self.appetite, self.appetite_t = (float(x) for x in np.asarray(st["appetite"]).ravel()[:2])
+            self._appetite_loaded = True
 
     def _load_state(self) -> None:
         if self.state_path.exists():
             self._unpack(dict(np.load(self.state_path)))
         t0 = self.ledger.get_cursor("brain_t0")
         self.brain_t0 = float(t0) if t0 else None
+        if not self._appetite_loaded and self.brain_t0 is not None:
+            self._init_appetite()
+
+    # ---- appetite for contact ----------------------------------------------------
+    def sim_hours(self) -> float:
+        """His own clock, in hours: the simulation's time, not the wall's."""
+        return self.hours(self.wall(self.live.t_ms))
+
+    def _init_appetite(self) -> None:
+        """State saved before appetite existed: start from 0.5 and let the hours since his last
+        reward in the ledger raise it, as they would have.  Logged, so the ledger says so."""
+        now_h = self.sim_hours()
+        last = self.ledger.db.execute("SELECT MAX(ts) FROM outcomes WHERE valence='reward'").fetchone()[0]
+        self.appetite, self.appetite_t = 0.5, now_h
+        if last is not None:
+            dt = max(0.0, now_h - self.hours(float(last)))
+            self.appetite = 1.0 - 0.5 * math.exp(-dt / float(self.appetite_cfg["tau_h"]))
+        self._appetite_loaded = True
+        self.ledger.add_control("appetite_init", "system", None, repr(self.appetite))
+
+    def appetite_step(self, t_hours: float) -> None:
+        dt = t_hours - self.appetite_t
+        if dt > 0:
+            self.appetite = 1.0 - (1.0 - self.appetite) * math.exp(-dt / float(self.appetite_cfg["tau_h"]))
+            self.appetite_t = t_hours
+
+    def appetite_bite(self) -> None:
+        """A social reward sates him a little; never all the way."""
+        self.appetite *= 1.0 - float(self.appetite_cfg["bite"])
+
+    def _tick(self, t_hours: float) -> None:
+        """Everything that runs on his clock between windows: forgetting and appetite."""
+        self.mb.forget(t_hours)
+        self.appetite_step(t_hours)
 
     SAVE_MIN_S = 30.0  # the live loop calls save_state every few seconds; write at most this often
 
@@ -208,6 +255,7 @@ class Agent:
         h.update(self.live.net.get_state())
         h.update(self.mb.digest().encode())
         h.update(repr(self.dust).encode())
+        h.update(repr((self.landing_id, self.appetite, self.appetite_t)).encode())
         return h.hexdigest()
 
     # ---- time -------------------------------------------------------------------
@@ -227,14 +275,21 @@ class Agent:
     def _base_drives(self, t_ms: int) -> dict[str, Drive]:
         hour = self.clock.local_hour(self.wall(t_ms))
         d = {x.label: x for x in self.clock.drives(hour)}
-        b = self.enc.spontaneous_drive(t_ms // 1000, self.dust)
+        b = self.enc.spontaneous_drive(self.landing_id, self.dust)
         if b is not None:
             d["bristles"] = b
         return d
 
     def _dust_step(self, slice_index: int, ms: float) -> bool:
-        """Discrete landings (see config/encoder_v1.yaml `spontaneous`).  Returns True if one landed."""
+        """Debris settles (e-fold tau_s), then discrete landings (config/encoder_v1.yaml
+        `spontaneous`, seeded by the second).  A landing is an onset: it picks the bristles it
+        touches and opens a `landing` window.  Returns True if one landed."""
         cfg = self.enc.cfg.get("spontaneous", {})
+        tau = float(cfg.get("tau_s", 0.0) or 0.0)
+        if tau > 0 and self.dust > 0:
+            self.dust *= math.exp(-(ms / 1000.0) / tau)
+            if self.dust < 0.5 / float(cfg.get("k", 836)):
+                self.dust = 0.0
         per_hour = float(cfg.get("landings_per_hour", 1.5))
         lo, hi = cfg.get("landing_size", [0.35, 0.7])
         h = hashlib.blake2b(f"landing|{slice_index}".encode(), digest_size=16).digest()
@@ -242,6 +297,8 @@ class Agent:
         u2 = int.from_bytes(h[8:], "little") / 2**64
         if u1 < per_hour * (ms / 3.6e6):
             self.dust = min(1.0, self.dust + lo + (hi - lo) * u2)
+            self.landing_id = int(slice_index)
+            self.landing_until = int(slice_index) + int(cfg.get("window_s", 0))
             return True
         return False
 
@@ -260,7 +317,7 @@ class Agent:
         self.ledger.add_control("downtime", "system", None, f"{self.live.t_ms}->{target}", ts=ts)
         self.live.net.recover(float(target - self.live.t_ms))
         self.live.t_ms = target
-        self.mb.forget(self.hours(ts))
+        self._tick(self.sim_hours())
         self.save_state()
         return skipped
 
@@ -294,7 +351,7 @@ class Agent:
                 self._dust_step(self.live.t_ms // 1000, SLICE_MS)
                 self.live.set_base(self._base_drives(self.live.t_ms))
                 self.live.idle(SLICE_MS)
-            self.mb.forget(self.hours(ts))
+            self._tick(self.sim_hours())
             self.save_state()
             return outs
         while self.live.t_ms + SLICE_MS <= target and not self.stop_requested:
@@ -308,17 +365,24 @@ class Agent:
             self._dust_step(slice_index, SLICE_MS)
             self.live.set_base(self._base_drives(self.live.t_ms))
             w = self.live.idle(SLICE_MS)
-            self.mb.forget(self.hours(self.wall(self.live.t_ms)))
+            self._tick(self.sim_hours())
             v, _ = self.mb.learned_valence(w.counts[self.fly.kc])
-            dec = self.readout.decide(w.counts, w.ms, learned=v)
+            dec = self.readout.decide(w.counts, w.ms, learned=v, appetite=self.appetite)
             if self.on_window is not None:
                 self.on_window(w, dec, self.dust)
+            in_window = slice_index < self.landing_until
+            note = f"landing:{self.landing_id}" if in_window else None
             if dec.behaviour == "groom":
-                self.dust = 0.0
-                out = self._log(None, w, dec, self.wall(w.t0_ms), None, "spontaneous", None, self.dust)
+                dust_before = self.dust
+                self.dust = 0.0  # grooming clears the debris; the row records what he answered to
+                self.landing_until = slice_index  # the landing is answered; its window closes
+                out = self._log(None, w, dec, self.wall(w.t0_ms), None, "spontaneous", note, dust_before)
                 outs.append(out)
                 if on_groom is not None:
                     on_groom(out)
+            elif in_window:
+                # the seconds after a landing, logged so the grooming threshold can be set from real responses
+                self._log(None, w, dec, self.wall(w.t0_ms), None, "landing", note, self.dust)
             if self.live.t_ms % SNAPSHOT_EVERY_MS == 0:
                 self.snapshot()
             self.slice_wall_s = 0.9 * self.slice_wall_s + 0.1 * (_time.time() - w_start)
@@ -371,6 +435,8 @@ class Agent:
         if f is not None and f.labeled and dec.action in ("like", "follow", "reply"):
             dec = replace(dec, behaviour="nothing", action="nothing")
             note = (note + "; " if note else "") + "labeled"
+        if f is not None and f.question and "question" not in (note or ""):
+            note = (note + "; " if note else "") + "question"  # replay rebuilds the features from the note
         line = None
         line_key = None
         text = None
@@ -424,6 +490,7 @@ class Agent:
             t_ms=w.t0_ms,
             brain_digest=self.digest(),
             topics=",".join(f.topics) if f and f.topics else None,
+            appetite=self.appetite,
         )
         eid = self.ledger.add_episode(row, ts=ts)
         return Outcome(eid, dec, line, seed, text, text_source, ts, bool(f.mentioned) if f else False)
@@ -440,11 +507,11 @@ class Agent:
         """Present the event for one second at his current time (after a bounded catch-up), decide, record."""
         self.advance_to(ts, fast=fast, max_wall_s=EVENT_CATCHUP_WALL_S)
         self.live.set_base(self._base_drives(self.live.t_ms))
-        drives = list(self.enc.encode(f).drives) if f is not None else []
+        drives = list(self.enc.encode(f, self.appetite).drives) if f is not None else []
         w = self.live.present(drives, PRESENT_MS)
-        self.mb.forget(self.hours(ts))
+        self._tick(self.sim_hours())
         v, info = self.mb.learned_valence(w.counts[self.fly.kc])
-        dec = self.readout.decide(w.counts, w.ms, learned=v, mb_info=info)
+        dec = self.readout.decide(w.counts, w.ms, learned=v, mb_info=info, appetite=self.appetite)
         if self.on_window is not None:
             self.on_window(w, dec, self.dust)
         out = self._log(f, w, dec, ts, source_uri, kind, note, self.dust)
@@ -475,8 +542,11 @@ class Agent:
         )
         self.live.set_base(self._base_drives(self.live.t_ms))
         d_before = self.mb.digest()
-        w = self.live.present(list(self.enc.encode(f).drives), PRESENT_MS)
-        self.mb.pair_counts(w.counts[self.fly.kc] * (1000.0 / w.ms), valence, self.hours(ts))
+        self._tick(self.sim_hours())
+        w = self.live.present(list(self.enc.encode(f, self.appetite).drives), PRESENT_MS)
+        self.mb.pair_counts(w.counts[self.fly.kc] * (1000.0 / w.ms), valence, self.sim_hours())
+        if valence == "reward":
+            self.appetite_bite()
         v, info = self.mb.learned_valence(w.counts[self.fly.kc])
         dec = Decision(
             "pairing", "nothing", self.readout.scores_from_counts(w.counts, w.ms), {}, valence, "none", v, info
@@ -564,25 +634,34 @@ class Agent:
         logged = None
         for r in rows:
             ts = self.wall(int(r["t_ms"]))
-            if r["kind"] == "spontaneous":
+            if r["kind"] in ("spontaneous", "landing"):
                 self.advance_to(ts + SLICE_MS / 1000.0)
                 logged = r["brain_digest"]
                 continue
             f = None
             if r["did"] is not None:
+                note = r["note"] or ""
+                topics = tuple(r["topics"].split(",")) if r["topics"] else ()
                 f = Features(
                     r["did"],
                     float(r["vader"]),
                     bool(r["mentioned"]),
                     int(r["familiarity"]),
-                    "labeled" in (r["note"] or ""),
+                    "labeled" in note,
+                    topics,
+                    "question" in note,
                 )
             self.advance_to(ts)
             self.live.set_base(self._base_drives(self.live.t_ms))
-            w = self.live.present(list(self.enc.encode(f).drives) if f else [], PRESENT_MS)
-            self.mb.forget(self.hours(ts))
             if r["kind"] == "pairing":
-                self.mb.pair_counts(w.counts[self.fly.kc] * (1000.0 / w.ms), r["valence"], self.hours(ts))
+                self._tick(self.sim_hours())
+                w = self.live.present(list(self.enc.encode(f, self.appetite).drives) if f else [], PRESENT_MS)
+                self.mb.pair_counts(w.counts[self.fly.kc] * (1000.0 / w.ms), r["valence"], self.sim_hours())
+                if r["valence"] == "reward":
+                    self.appetite_bite()
+            else:
+                w = self.live.present(list(self.enc.encode(f, self.appetite).drives) if f else [], PRESENT_MS)
+                self._tick(self.sim_hours())
             logged = r["brain_digest"]
         got = self.digest()
         self._unpack(saved)

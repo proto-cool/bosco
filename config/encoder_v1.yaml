@@ -35,10 +35,21 @@ gustatory:
   max_rate_hz: 150.0
 mechanosensory:
   # Being mentioned (or replied to) drives Johnston's-organ groups A and B
-  # (sound / courtship-song sensitive) at rate_hz.
+  # (sound / courtship-song sensitive) at rate_hz.  JO-B synapses onto the giant
+  # fibre, so this is a touch that startles; 100 Hz made every mention a flinch.
   jo_groups: [A, B]
-  rate_hz: 100.0
-  question_gain: 1.5   # a post that asks something ('?') is a stronger touch
+  rate_hz: 50.0
+  question_gain: 1.0   # the question's weight moved to the courtship drive below
+courtship:
+  # Being addressed also excites the male courtship command neurons (pC1 / P1:
+  # von Philipsborn 2011, Kohatsu 2011, Hoopfer 2015, Zhang 2016), whose
+  # excitability tracks internal state.  The song descending neurons downstream
+  # are the `reply` population; this is the input we chose for them, the way
+  # bristle debris is the input for grooming.  rate = rate_hz * appetite
+  # (config/appetite_v1.yaml) * question_gain if the post asks something.
+  type_prefix: pC1
+  rate_hz: 12.0
+  question_gain: 1.5
 spontaneous:
   # No-event episodes: "dust lands somewhere".  A seeded random subset of k
   # body-bristle mechanosensory neurons (types BM_InOm, BM, BM_Vib) is driven
@@ -54,5 +65,12 @@ spontaneous:
   # onset; grooming neurons answer onsets and adapt to held input, so he
   # grooms (posts) when a landing is enough for his network, and the level
   # resets when he grooms.  There is no schedule.
-  landings_per_hour: 1.5
+  landings_per_hour: 0.5
   landing_size: [0.35, 0.7]
+  # Debris settles off his bristles passively (e-fold tau_s seconds), like habituation
+  # and unlike a timer: a landing itches for minutes, not hours.  The bristles a landing
+  # touches are one seeded subset per landing (nested as the debris settles), so a landing
+  # is one onset, not a new one every second.  The window_s seconds after a landing are
+  # logged as `landing` windows so the grooming threshold can be set from real responses.
+  tau_s: 600.0
+  window_s: 15

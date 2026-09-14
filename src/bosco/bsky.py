@@ -237,7 +237,8 @@ class Bsky:
             return
         # engage on an account already followed becomes a reply; leave on an unfollowed account is nothing
         following = self.follows()
-        if action == "follow" and (did is None or did in following or in_thread):
+        # walking toward whoever spoke to him is answering; toward someone he only browsed past, following
+        if action == "follow" and (did is None or did in following or in_thread or out.mentioned):
             action = "reply" if did is not None and out.text else "nothing"
         if action == "leave" and (did is None or did not in following):
             self.L.add_action(out.episode_id, "leave", None, target_uri, dry_run=True, ts=ts)
@@ -412,7 +413,54 @@ class Bsky:
             self.L.add_control("deleted_in_app", self.me, None, u)
         if gone:
             print(f"sweep: {len(gone)} of my posts were deleted in the app; ledger updated")
-        return len(gone)
+        return len(gone) + self.sweep_removed_likes_and_follows()
+
+    def live_like_uris(self) -> set[str] | None:
+        """Every like record in his repo, or None if the listing failed."""
+        out: set[str] = set()
+        cursor = None
+        try:
+            while True:
+                r = self.client.com.atproto.repo.list_records(
+                    params={"repo": self.me, "collection": "app.bsky.feed.like", "limit": 100, "cursor": cursor}
+                )
+                out.update(rec.uri for rec in r.records)
+                cursor = getattr(r, "cursor", None)
+                if not cursor or not r.records:
+                    return out
+        except Exception as e:  # noqa: BLE001
+            print("like listing failed:", e, file=sys.stderr)
+            return None
+
+    def sweep_removed_likes_and_follows(self) -> int:
+        """Likes and follows removed in the app (as him) are marked deleted, so caps and the panel
+        stop counting them.  Learning is untouched: any reward was for the window, not the record."""
+        n = 0
+        likes = self.live_like_uris()
+        if likes is not None:
+            rows = self.L.db.execute(
+                "SELECT our_uri FROM actions WHERE kind='like' AND our_uri IS NOT NULL AND dry_run=0 "
+                "AND deleted_ts IS NULL"
+            ).fetchall()
+            for r in rows:
+                if r["our_uri"] not in likes:
+                    self.L.mark_deleted(r["our_uri"])
+                    self.L.add_control("unliked_in_app", self.me, None, r["our_uri"])
+                    n += 1
+        self._follows = None  # refresh
+        following = set(self.follows().values())
+        rows = self.L.db.execute(
+            "SELECT our_uri FROM actions WHERE kind='follow' AND our_uri IS NOT NULL AND dry_run=0 "
+            "AND deleted_ts IS NULL"
+        ).fetchall()
+        for r in rows:
+            if r["our_uri"] not in following:
+                self.L.mark_deleted(r["our_uri"])
+                self.L.add_control("unfollowed_in_app", self.me, None, r["our_uri"])
+                n += 1
+        if n:
+            print(f"sweep: {n} likes/follows were removed in the app; ledger updated")
+        return n
 
     # ---- one post -> one episode -----------------------------------------------
     def perceive_post(

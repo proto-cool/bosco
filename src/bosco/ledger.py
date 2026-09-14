@@ -151,6 +151,7 @@ class EpisodeRow:
     t_ms: int | None = None
     brain_digest: str | None = None
     topics: str | None = None
+    appetite: float | None = None
 
 
 class Ledger:
@@ -168,7 +169,13 @@ class Ledger:
             if col not in cols:
                 self.db.execute(f"ALTER TABLE actions ADD COLUMN {col} TEXT")
         ecols = {r["name"] for r in self.db.execute("PRAGMA table_info(episodes)")}
-        for col, typ in (("drive", "REAL"), ("t_ms", "INTEGER"), ("brain_digest", "TEXT"), ("topics", "TEXT")):
+        for col, typ in (
+            ("drive", "REAL"),
+            ("t_ms", "INTEGER"),
+            ("brain_digest", "TEXT"),
+            ("topics", "TEXT"),
+            ("appetite", "REAL"),
+        ):
             if col not in ecols:
                 self.db.execute(f"ALTER TABLE episodes ADD COLUMN {col} {typ}")
         self.db.commit()
@@ -178,8 +185,8 @@ class Ledger:
         cur = self.db.execute(
             "INSERT INTO episodes (ts, kind, did, source_uri, vader, mentioned, familiarity, hour, seed, "
             "weight_digest_before, weight_digest_after, scores, mbon, kc_active, behaviour, action, valence, arousal, "
-            "line_key, line_id, note, drive, t_ms, brain_digest, topics) "
-            "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+            "line_key, line_id, note, drive, t_ms, brain_digest, topics, appetite) "
+            "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
             (
                 ts or time.time(),
                 e.kind,
@@ -206,6 +213,7 @@ class Ledger:
                 e.t_ms,
                 e.brain_digest,
                 e.topics,
+                e.appetite,
             ),
         )
         self.db.commit()

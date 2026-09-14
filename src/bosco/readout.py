@@ -36,6 +36,7 @@ class Decision:
     arousal: str  # "low" | "mid" | "high"
     learned: float = 0.0  # learned valence in [-1, 1], read from the plastic weights
     mbon: dict[str, float] | None = None  # depression on reward/punishment-side synapses of the active KCs
+    appetite: float = 0.5  # his appetite for contact at the window (config/appetite_v1.yaml)
 
 
 class Readout:
@@ -51,6 +52,8 @@ class Readout:
         g = cfg.get("gating", {})
         self.kappa = float(g.get("kappa", 1.0))
         self.valence_cut = float(g.get("valence_cut", 0.2))
+        ap = yaml.safe_load(open(paths.CONFIG / "appetite_v1.yaml"))
+        self.kappa_a = float(ap.get("readout_kappa", 0.0))
         self.pops: dict[str, np.ndarray] = {}
         for name, types in cfg["populations"].items():
             idx = brain.index_of_present(pop.bodies_of_types(types))
@@ -90,10 +93,12 @@ class Readout:
         arousal_cuts: tuple[float, float] = (1.0, 5.0),
         kappa: float | None = None,
         valence_cut: float | None = None,
+        appetite: float = 0.5,
     ) -> Decision:
         """Winner-take-all over gated population rates from a window's spike counts.  `learned`
         is the mushroom body's verdict on this stimulus, read from the weights
-        (MushroomBody.learned_valence).  Approach populations x (1 + kappa v), avoid x (1 - kappa v)."""
+        (MushroomBody.learned_valence).  Approach populations x (1 + kappa v) x (1 + kappa_a (a - 0.5)),
+        avoid x (1 - kappa v); `a` is his appetite for contact, centred so it never forces or silences."""
         if isinstance(counts, EpisodeResult):
             counts = counts.counts
         kappa = self.kappa if kappa is None else kappa
@@ -101,9 +106,15 @@ class Readout:
         sc = self.scores_from_counts(np.asarray(counts), ms)
         v = float(learned)
         mb = dict(mb_info or {})
+        a = float(np.clip(appetite, 0.0, 1.0))
         gated = {}
         for k, x in sc.items():
-            g = 1.0 + kappa * v if k in APPROACH else (1.0 - kappa * v if k in AVOID else 1.0)
+            if k in APPROACH:
+                g = (1.0 + kappa * v) * (1.0 + self.kappa_a * (a - 0.5))
+            elif k in AVOID:
+                g = 1.0 - kappa * v
+            else:
+                g = 1.0
             gated[k] = x * max(0.0, g)
         ratios = {k: (gated[k] / t if t else 0.0) for k, t in self.thresholds.items()}
         winner = max(ratios, key=lambda k: (ratios[k], k))
@@ -114,4 +125,4 @@ class Readout:
         valence = "positive" if v > valence_cut else "negative" if v < -valence_cut else "neutral"
         dn_rate = float(np.asarray(counts)[self.dn_all].mean() * 1000.0 / ms)
         arousal = "low" if dn_rate < arousal_cuts[0] else "high" if dn_rate > arousal_cuts[1] else "mid"
-        return Decision(behaviour, action, sc, ratios, valence, arousal, v, mb)
+        return Decision(behaviour, action, sc, ratios, valence, arousal, v, mb, a)

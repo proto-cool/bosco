@@ -1,0 +1,11 @@
+# Appetite for contact (decided 2026-09-14).  One scalar in [0, 1] on the agent, beside
+# the debris on his bristles.  It rises toward 1 over hours without a social reward and
+# takes a bite on each reward; punishment leaves it alone.  It scales the approach
+# populations (engage, like, reply) before threshold, centred at 0.5 so it can neither
+# force an action nor silence one, and it sets how hard being addressed excites his
+# courtship command neurons (config/encoder_v1.yaml `courtship`).  It is state: saved,
+# snapshotted, in the brain digest, logged on every window, replayed.  It is not a pain
+# signal and it never adds a floor on posting.  Never set from outcomes by hand.
+tau_h: 6.0          # e-fold time of the rise toward 1, hours
+bite: 0.3           # each reward: appetite <- appetite * (1 - bite)
+readout_kappa: 0.5  # approach populations x (1 + readout_kappa * (appetite - 0.5))
