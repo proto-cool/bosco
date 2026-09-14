@@ -522,11 +522,14 @@ class Agent:
         return n
 
     # ---- replay -----------------------------------------------------------------
-    def replay_span(self, snapshot_path: Path, until_ms: int) -> tuple[bool, str, str]:
+    def replay_span(self, snapshot_path: Path, until_ms: int, max_ms: int | None = None) -> tuple[bool, str, str]:
         """Restore a snapshot, re-run the logged episodes between it and until_ms with idle slices
-        in between, and compare the brain digest with the logged one at the last episode."""
+        in between, and compare the brain digest with the logged one at the last episode.
+        max_ms bounds the span (a slow box cannot replay an hour in an hour)."""
         saved = self._pack()
         self._unpack(dict(np.load(snapshot_path)))
+        if max_ms is not None:
+            until_ms = min(until_ms, self.live.t_ms + max_ms)
         rows = [
             r
             for r in self.ledger.db.execute(

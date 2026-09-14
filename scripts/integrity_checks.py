@@ -28,6 +28,9 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--ledger", required=True)
     ap.add_argument("--state-dir", default=str(paths.STATE), help="dir holding weights/<digest>.npz snapshots")
+    ap.add_argument(
+        "--replay-ms", type=int, default=600_000, help="bound on the replayed span (bio ms); 10 min default"
+    )
     a = ap.parse_args(argv)
     L = Ledger(a.ledger)
     out = ["# Integrity checks\n"]
@@ -43,7 +46,7 @@ def main(argv=None) -> int:
         snaps = sorted(agent.snapshot_dir.glob("*.npz"))
         if snaps:
             try:
-                ok1, logged, got = agent.replay_span(snaps[-1], agent.live.t_ms)
+                ok1, logged, got = agent.replay_span(snaps[-1], agent.live.t_ms, max_ms=a.replay_ms)
                 out.append(
                     f"- replay from snapshot {snaps[-1].name} to {agent.live.t_ms} ms: {'PASS' if ok1 else 'FAIL'} "
                     f"(logged {logged[:12]}, got {got[:12]})"

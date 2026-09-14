@@ -57,6 +57,7 @@ class Bsky:
         self.ignore_list_name = os.environ.get("BOSCO_IGNORE_LIST", "bosco-ignore")
         self.browse_budget = int(os.environ.get("BOSCO_BROWSE", "12"))
         self.episode_budget = int(os.environ.get("BOSCO_EPISODE_BUDGET", "600"))
+        self.interval = 120.0
         self.agent = Agent(ledger)
         self.mod = Moderation()
         self._did_cache: dict[str, str] = {}
@@ -497,8 +498,12 @@ class Bsky:
             print("discover failed:", e, file=sys.stderr)
         n_ep = 0
         spent = self.episodes_last_hour()
+        # each perceived post costs ~(1 s present + up to 4 s catch-up) of simulation; keep browsing
+        # to a third of the poll interval at the measured speed of this box
+        per_post_wall = 2.0 * max(0.05, self.agent.slice_wall_s)
+        affordable = max(1, int((self.interval * 0.3) / per_post_wall))
         for post, _where in items:
-            if n_ep >= self.browse_budget or spent + n_ep >= self.episode_budget:
+            if n_ep >= min(self.browse_budget, affordable) or spent + n_ep >= self.episode_budget:
                 break
             did = post.author.did
             if did == self.me or did in ignore or self.L.seen_source(post.uri):
@@ -560,6 +565,7 @@ def run_loop(ledger: Ledger, dry_run: bool, once: bool, interval: int) -> int:
     stop = {"now": False}
 
     b = Bsky(ledger, dry_run)
+    b.interval = float(interval)
 
     def _term(signum, frame):  # noqa: ARG001
         stop["now"] = True
