@@ -1,61 +1,247 @@
-# Deploying Bosco
+# Deploying Bosco, every step
 
-One box, one container, one account. In this order.
+Written to be followed top to bottom. Each block is something you type or
+click. Nothing is assumed. You are `root` on the box and the repo lives at
+`/root/bosco`; if you use another user, replace `/root` with that home.
 
-## 1. The account (you)
+---
 
-1. Create `bosco.proto.cool` (custom handle on your domain: DNS TXT `_atproto.bosco` → `did=...`).
-2. Bio, in his register, saying he is an automated fruit fly brain, in development,
-   and that questions go to `@proto.cool`. Avatar of your choosing.
-3. Settings → App passwords → create one for the box.
-4. Moderation: subscribe the account to the labelers you want him to respect
-   (the default Bluesky moderation service is enough to start). Labels from
-   these are what `config/moderation_v1.yaml` reads.
-5. On `@proto.cool`: create a list named `bosco-ignore` (can be empty).
+## Part A. The Bluesky account
 
-## 2. The box
+### A1. Create the account
+
+1. Open https://bsky.app and sign out of `@proto.cool` if you are signed in (or use a private window).
+2. Click **Create account**. Use an email you control. For the handle, pick anything for now
+   (for example `bosco-temp.bsky.social`); you will change it to `bosco.proto.cool` in A2.
+3. Finish sign-up. Stay signed in as the new account.
+
+### A2. Give him the handle `bosco.proto.cool`
+
+1. In the Bluesky app as Bosco: **Settings → Account → Handle → I have my own domain**.
+2. Type `bosco.proto.cool`. The app shows a DNS record like:
+   ```
+   Type:  TXT
+   Name:  _atproto.bosco
+   Value: did=did:plc:xxxxxxxxxxxxxxxxxxxxxxxx
+   ```
+3. Go to wherever `proto.cool`'s DNS is managed. Add exactly that TXT record.
+   Name is `_atproto.bosco` (some panels want `_atproto.bosco.proto.cool.`). Value is the full `did=...` string.
+4. Wait a few minutes, then click **Verify DNS record** in the app. When it goes green, click **Update to bosco.proto.cool**.
+5. Write down the DID (`did:plc:...`). You will see it in **Settings → Account** later too.
+
+### A3. Profile
+
+1. **Settings → Edit profile** (or the pencil on his profile page).
+2. Display name: `bosco`.
+3. Bio, all lowercase, something like:
+   ```
+   i fruit fly. one male fly brain, every neuron, running on a computer. this account is mine. in development. questions to @proto.cool. automated.
+   ```
+   The words **automated** and **in development** must be in there.
+4. Avatar and banner: your call.
+
+### A4. App password (this is how the box logs in as him)
+
+1. As Bosco: **Settings → Privacy and security → App passwords → Add App Password**.
+2. Name it `vps`.
+3. **Leave "Allow access to your direct messages" unchecked.**
+4. Click **Create**. Copy the password (`xxxx-xxxx-xxxx-xxxx`). It is shown once. Paste it somewhere safe for Part C.
+
+### A5. Moderation he will respect
+
+1. As Bosco: **Settings → Moderation**.
+2. Make sure **Bluesky Moderation Service** is subscribed (it is by default).
+3. Optionally subscribe to any other labeler you trust. Anything they label, he treats as bitter and never approaches.
+
+### A6. The ignore list (on YOUR account)
+
+1. Sign in as `@proto.cool`.
+2. **Lists → New list** (in the app: profile → Lists → **+**). Type: **User list**. Name: exactly `bosco-ignore`. Description: anything.
+3. Save. It can stay empty. Adding someone to it later makes Bosco unfollow them and never perceive them again.
+
+---
+
+## Part B. The box
+
+### B1. Create it
+
+1. Vultr → **Deploy new server → Cloud Compute → Dedicated CPU**.
+2. Plan: 2 vCPU, 4 GB RAM (the 1 vCPU, 2 GB one also works; it is the floor).
+3. OS: Debian 12 or Ubuntu 24.04. Region: anywhere.
+4. Hostname `bosco`. Deploy. Note the IP.
+
+### B2. Log in and install the basics
 
 ```
-git clone <repo> ~/bosco && cd ~/bosco
-ops/fetch_data.sh                      # ~1.1 GB; also creates data/cache and state
-cp ops/env.example .env && $EDITOR .env  # handle, app password, operator
+ssh root@<the ip>
+apt-get update && apt-get install -y podman git curl
+podman --version
+```
+
+### B3. Get the code
+
+```
+cd /root
+git clone https://github.com/proto-cool/bosco.git
+cd /root/bosco
+```
+
+### B4. Get the data (about 1.1 GB, a few minutes)
+
+```
+ops/fetch_data.sh
+```
+
+When it finishes, `ls data/raw` shows three `.feather` files, and `data/cache` and `state` exist.
+
+### B5. Secrets
+
+```
+cp ops/env.example .env
+nano .env
+```
+
+Set these lines (leave the rest as they are):
+
+```
+BOSCO_HANDLE=bosco.proto.cool
+BOSCO_APP_PASSWORD=xxxx-xxxx-xxxx-xxxx      # from A4
+BOSCO_OPERATOR=proto.cool                   # your handle, verified by DID at runtime
+BOSCO_IGNORE_LIST=bosco-ignore              # the list from A6
+```
+
+Save with Ctrl+O, Enter, then Ctrl+X.
+
+### B6. Build the container image (2 to 4 minutes the first time)
+
+```
 podman build -t bosco -f ops/Containerfile .
 ```
 
-First run builds `data/cache/mcns_cb_v1.npz` (15 s). Then:
+Success ends with `COMMIT bosco` and an image id. If it fails, copy the last 20 lines and send them to me.
+
+---
+
+## Part C. Dry run (nothing is posted)
+
+### C1. First run
 
 ```
-podman run --rm --env-file .env -v ./data/raw:/app/data/raw:ro,Z -v ./data/cache:/app/data/cache:Z \
-  -v ./state:/app/state:Z localhost/bosco run --dry-run --once
+cd /root/bosco
+podman run --rm --env-file .env \
+  -v ./data/raw:/app/data/raw:ro,Z \
+  -v ./data/cache:/app/data/cache:Z \
+  -v ./state:/app/state:Z \
+  localhost/bosco run --dry-run --once
 ```
 
-You should see his introduction printed (not posted), the notifications and
-feeds read, and a poll line. Run it a few more times with `--dry-run` while
-you mention him from your account; `bosco memory --did <your did>` shows
-what he made of it.
-
-## 3. Live
+The first run builds his network cache (`data/cache/mcns_cb_v1.npz`, about 15 seconds). You should then see:
 
 ```
-mkdir -p ~/.config/containers/systemd && cp ops/bosco.container ~/.config/containers/systemd/
-systemctl --user daemon-reload && systemctl --user start bosco && journalctl --user -fu bosco
+bosco DRY-RUN as did:plc:...; operator did:plc:...
+intro 'i bosco. i fruit fly. ...' (dry)
+2026-.. poll: 0 notifications, N browsed, 0 blocks, grooms 0, brain lag 0s
 ```
 
-His first post is the introduction (`config/identity_v1.yaml` `intro`).
-Pin it from the app. From then on he reads, learns, and acts on his own.
+`intro ... (dry)` is his first post, printed instead of posted.
 
-Timers: copy `ops/bosco-nightly.{service,timer}` and a 30-minute timer for
-`ops/bosco-deadman.sh` into the same systemd directory and enable them.
+### C2. Mention him and look at what he made of it
 
-## 4. Watching
+1. From `@proto.cool`, post: `hello @bosco.proto.cool you handsome fly`.
+2. Run the C1 command again. You should see a line for your post and what he did (`like`, `follow`, `nothing`...).
+3. Ask him what he thinks of you (replace the DID with yours, from your own **Settings → Account**):
+   ```
+   podman run --rm --env-file .env -v ./data/raw:/app/data/raw:ro,Z -v ./data/cache:/app/data/cache:Z -v ./state:/app/state:Z \
+     localhost/bosco memory --did did:plc:YOURDID
+   ```
 
-- `@bosco.proto.cool status` from your account, or `bosco status` on the box.
-- `bosco people`, `bosco memory --did`, `bosco replay`.
-- `snapshots/<date>/integrity.md` every night.
-- `@bosco.proto.cool sleep` if anything looks wrong. He keeps perceiving; he stops acting.
+### C3. Wipe the dry-run state before going live (so the intro posts for real)
 
-## 5. Before `freeze-v1`
+```
+rm -rf /root/bosco/state && mkdir /root/bosco/state
+```
 
-- ≥ 200 real event windows in the ledger, then `scripts/calibrate_thresholds.py --ledger state/ledger.sqlite --write`.
-- Corpus and phrasebook final. Decide on word-learning (EXPERIMENT.md §2).
-- Fill the artifact table in EXPERIMENT.md, tag, publish.
+---
+
+## Part D. Live
+
+### D1. Install the service (rootful quadlet)
+
+```
+mkdir -p /etc/containers/systemd
+cp /root/bosco/ops/bosco.container /etc/containers/systemd/bosco.container
+sed -i 's|%h/bosco|/root/bosco|g' /etc/containers/systemd/bosco.container
+systemctl daemon-reload
+systemctl start bosco
+journalctl -fu bosco
+```
+
+Within a minute the log shows `bosco LIVE as ...` and then `intro '...' (at://...)`. **That is his first post, live.** Ctrl+C leaves the log; he keeps running.
+
+### D2. Pin and announce
+
+1. Open his profile in the app. On the introduction post: **⋯ → Pin to profile**.
+2. From `@proto.cool`, quote-post the introduction with skeet 1, then reply to your own post with skeets 2 and 3.
+   Avoid the command words (status, report, people, sleep, stop, wake, delete, forget, ignore, unfollow, reload, restart) in the quote; your mention of him is parsed for commands.
+
+### D3. Nightly snapshot and dead-man timers
+
+```
+cp /root/bosco/ops/bosco-nightly.service /root/bosco/ops/bosco-nightly.timer /etc/systemd/system/
+sed -i 's|%h/bosco|/root/bosco|g' /etc/systemd/system/bosco-nightly.service
+cat > /etc/systemd/system/bosco-deadman.service <<'EOT'
+[Unit]
+Description=bosco dead-man check
+[Service]
+Type=oneshot
+ExecStart=/root/bosco/ops/bosco-deadman.sh
+EOT
+cat > /etc/systemd/system/bosco-deadman.timer <<'EOT'
+[Unit]
+Description=bosco dead-man check every 30 min
+[Timer]
+OnCalendar=*:0/30
+Persistent=true
+[Install]
+WantedBy=timers.target
+EOT
+apt-get install -y sqlite3
+systemctl daemon-reload
+systemctl enable --now bosco-nightly.timer bosco-deadman.timer
+systemctl list-timers | grep bosco
+```
+
+The nightly job needs `uv` on the host for the integrity report; install it once:
+```
+curl -LsSf https://astral.sh/uv/install.sh | sh && ln -sf /root/.local/bin/uv /usr/local/bin/uv
+cd /root/bosco && uv sync && make -C kernel
+```
+
+---
+
+## Part E. Living with him
+
+- **From your account**, mention him with a word: `@bosco.proto.cool status`, `people`, `memory @someone`,
+  `sleep` (stops acting, keeps perceiving), `wake`, `reload` (re-read corpus), `restart`.
+  Reply `delete` under one of his posts to remove it. `ignore @someone`, `unfollow @someone`.
+- **On the box**: `journalctl -fu bosco` for the log; `systemctl restart bosco` after a `git pull` and rebuild.
+- **After changing code**: `cd /root/bosco && git pull && podman build -t bosco -f ops/Containerfile . && systemctl restart bosco`.
+- **Nightly**: `snapshots/<date>/integrity.md` says whether every check passed.
+
+## Part F. Before the tag (`freeze-v1`)
+
+1. Wait for at least 200 real event windows (`bosco status` shows the count).
+2. Recalibrate thresholds from real activity, never outcomes:
+   ```
+   cd /root/bosco && uv run python scripts/calibrate_thresholds.py --ledger state/ledger.sqlite --write
+   ```
+3. Corpus and phrasebook final. Decide on word-learning (EXPERIMENT.md §2).
+4. Fill the artifact table in EXPERIMENT.md, `git tag freeze-v1`, push.
+
+## Troubleshooting
+
+- `stdint.h: No such file` during build → old image; `git pull` and rebuild.
+- `lstat data/cache: no such file` → `mkdir -p data/cache state`.
+- `could not read Username for github` on the box → the repo is public; use the https URL exactly as in B3.
+- He posts nothing for hours → normal. `journalctl -fu bosco` shows `grooms 0`; a landing that his network answers is what makes a post.
+- CPU at 50 to 100 percent of one core, always → normal; that is the simulation keeping up with wall time.
