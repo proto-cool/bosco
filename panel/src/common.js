@@ -79,7 +79,7 @@ export async function getBytes(url, timeoutMs = 5000) {
 const profiles = new Map();
 export async function profile(did) {
   if (profiles.has(did)) return profiles.get(did);
-  const p = getJSON(`${PUBLIC_API}/app.bsky.actor.getProfile?actor=${encodeURIComponent(did)}`).catch(() => null);
+  const p = getJSON(`${PUBLIC_API}/app.bsky.actor.getProfile?actor=${encodeURIComponent(did)}`, 20000).catch(() => null);
   profiles.set(did, p);
   return p;
 }
@@ -88,7 +88,7 @@ export async function posts(uris) {
   const out = [];
   for (let i = 0; i < uris.length; i += 25) {
     const q = uris.slice(i, i + 25).map((u) => `uris=${encodeURIComponent(u)}`).join('&');
-    const r = await getJSON(`${PUBLIC_API}/app.bsky.feed.getPosts?${q}`).catch(() => ({ posts: [] }));
+    const r = await getJSON(`${PUBLIC_API}/app.bsky.feed.getPosts?${q}`, 20000).catch(() => ({ posts: [] }));
     out.push(...(r.posts || []));
   }
   return out;

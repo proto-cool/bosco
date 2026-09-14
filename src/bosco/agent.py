@@ -798,7 +798,11 @@ class Agent:
             return self._signatures[did]
         saved = self.live.snapshot()
         try:
-            self.live.set_base(self._base_drives(self.live.t_ms) if self.brain_t0 is not None else {})
+            # from rest, not from wherever he is: right after a post his network still carries
+            # that post, and a probe on top of it would be the mixture again (the +0.83 strangers
+            # of 2026-09-14).  Reset touches dynamics only; the learned weights stay.
+            self.live.net.reset(0)
+            self.live.set_base({})
             w = self.live.present([self.enc.odor_drive(did)], self.SIGNATURE_MS)
         finally:
             self.live.restore(saved)
@@ -807,9 +811,14 @@ class Agent:
         self._save_signatures()
         return sig
 
+    SIGNATURE_VERSION = 2  # 1 probed on the live state; 2 probes from rest
+
     def _save_signatures(self) -> None:
         try:
-            data = {d: np.flatnonzero(s).tolist() for d, s in self._signatures.items()}
+            data = {
+                "v": self.SIGNATURE_VERSION,
+                "kcs": {d: np.flatnonzero(s).tolist() for d, s in self._signatures.items()},
+            }
             (self.state_dir / "account_kcs.json").write_text(json.dumps(data, separators=(",", ":")))
         except OSError:
             pass
@@ -819,11 +828,13 @@ class Agent:
         p = self.state_dir / "account_kcs.json"
         if p.exists():
             try:
-                for d, idx in json.loads(p.read_text()).items():
-                    sig = np.zeros(len(self.fly.kc), dtype=np.int64)
-                    sig[np.asarray(idx, dtype=np.int64)] = 1
-                    self._signatures[d] = sig
-            except (OSError, ValueError):
+                data = json.loads(p.read_text())
+                if isinstance(data, dict) and data.get("v") == self.SIGNATURE_VERSION:
+                    for d, idx in data["kcs"].items():
+                        sig = np.zeros(len(self.fly.kc), dtype=np.int64)
+                        sig[np.asarray(idx, dtype=np.int64)] = 1
+                        self._signatures[d] = sig
+            except (OSError, ValueError, KeyError, TypeError):
                 self._signatures = {}
 
     def memory_report(self, did: str, ts: float | None = None) -> tuple[str, float]:
