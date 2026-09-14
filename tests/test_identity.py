@@ -37,6 +37,8 @@ def test_opt_out_and_opt_in_patterns():
         "@bosco.proto.cool shoo, fly",
         "Shoo!",
         "shoofly",
+        "fuck off",
+        "@bosco.proto.cool piss off",
         "@bosco.proto.cool go away",
         "leave me alone",
         "please opt out",
