@@ -350,6 +350,28 @@ class Bsky:
         self.L.add_action(0, "intro", our_uri, None, dry_run=self.dry, ts=time.time())
         return True
 
+    def sweep_deleted(self, limit: int = 25) -> int:
+        """Mark posts deleted in the app (as him) as deleted in the ledger, so his records match the network."""
+        rows = self.L.db.execute(
+            "SELECT our_uri FROM actions WHERE our_uri IS NOT NULL AND dry_run=0 AND deleted_ts IS NULL "
+            "AND kind IN ('reply','spontaneous_post','identity','intro') ORDER BY id DESC LIMIT ?", (limit,)
+        ).fetchall()
+        uris = [r["our_uri"] for r in rows]
+        if not uris:
+            return 0
+        try:
+            found = {p.uri for p in self.client.get_posts(uris).posts}
+        except Exception as e:  # noqa: BLE001
+            print("sweep failed:", e, file=sys.stderr)
+            return 0
+        gone = [u for u in uris if u not in found]
+        for u in gone:
+            self.L.mark_deleted(u)
+            self.L.add_control("deleted_in_app", self.me, None, u)
+        if gone:
+            print(f"sweep: {len(gone)} of my posts were deleted in the app; ledger updated")
+        return len(gone)
+
     # ---- one post -> one episode -----------------------------------------------
     def perceive_post(
         self, uri: str, cid: str, did: str, record, ts: float, mentioned: bool, labels: set[str] | None = None
@@ -513,8 +535,12 @@ def run_loop(ledger: Ledger, dry_run: bool, once: bool, interval: int) -> int:
     print(f"bosco {'DRY-RUN' if dry_run else 'LIVE'} as {b.me}; operator {b.operator_did}")
     b.agent.bio_ms(time.time())  # start his clock now if it has not started
     b.introduce_if_needed()
+    polls = 0
     while True:
         try:
+            polls += 1
+            if polls % 5 == 1:
+                b.sweep_deleted()
             n = b.poll_notifications()
             nb = b.browse()
             nk = b.check_blocks()
