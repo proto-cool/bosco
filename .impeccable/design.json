@@ -1,0 +1,149 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-13T00:00:00Z",
+  "title": "Design System: bosco.proto.cool",
+  "extensions": {
+    "colorMeta": {
+      "ground": { "role": "neutral", "displayName": "Ground", "canonical": "rgb(3, 3, 7)", "tonalRamp": ["oklch(15% 0.01 280)", "oklch(25% 0.01 280)", "oklch(35% 0.01 280)", "oklch(45% 0.01 280)", "oklch(55% 0.01 280)", "oklch(65% 0.01 280)", "oklch(80% 0.01 280)", "oklch(95% 0.01 280)"] },
+      "divider": { "role": "neutral", "displayName": "Hairline", "canonical": "rgb(24, 24, 30)", "tonalRamp": ["oklch(15% 0.01 280)", "oklch(25% 0.01 280)", "oklch(35% 0.01 280)", "oklch(45% 0.01 280)", "oklch(55% 0.01 280)", "oklch(65% 0.01 280)", "oklch(80% 0.01 280)", "oklch(95% 0.01 280)"] },
+      "border-default": { "role": "neutral", "displayName": "Border Default", "canonical": "rgb(34, 34, 41)", "tonalRamp": ["oklch(15% 0.01 280)", "oklch(25% 0.01 280)", "oklch(35% 0.01 280)", "oklch(45% 0.01 280)", "oklch(55% 0.01 280)", "oklch(65% 0.01 280)", "oklch(80% 0.01 280)", "oklch(95% 0.01 280)"] },
+      "border-bright": { "role": "neutral", "displayName": "Border Bright", "canonical": "rgb(51, 51, 64)", "tonalRamp": ["oklch(15% 0.015 280)", "oklch(25% 0.015 280)", "oklch(35% 0.015 280)", "oklch(45% 0.015 280)", "oklch(55% 0.015 280)", "oklch(65% 0.015 280)", "oklch(80% 0.015 280)", "oklch(95% 0.015 280)"] },
+      "text-primary": { "role": "neutral", "displayName": "Text Primary", "canonical": "rgb(232, 232, 236)", "tonalRamp": ["oklch(15% 0.005 280)", "oklch(25% 0.005 280)", "oklch(35% 0.005 280)", "oklch(45% 0.005 280)", "oklch(55% 0.005 280)", "oklch(65% 0.005 280)", "oklch(80% 0.005 280)", "oklch(95% 0.005 280)"] },
+      "text-secondary": { "role": "neutral", "displayName": "Text Secondary (the resting brain)", "canonical": "rgb(150, 152, 162)", "tonalRamp": ["oklch(15% 0.01 275)", "oklch(25% 0.01 275)", "oklch(35% 0.01 275)", "oklch(45% 0.01 275)", "oklch(55% 0.01 275)", "oklch(65% 0.01 275)", "oklch(80% 0.01 275)", "oklch(95% 0.01 275)"] },
+      "text-muted": { "role": "neutral", "displayName": "Text Muted", "canonical": "rgb(142, 142, 155)", "tonalRamp": ["oklch(15% 0.012 285)", "oklch(25% 0.012 285)", "oklch(35% 0.012 285)", "oklch(45% 0.012 285)", "oklch(55% 0.012 285)", "oklch(65% 0.012 285)", "oklch(80% 0.012 285)", "oklch(95% 0.012 285)"] },
+      "text-ghost": { "role": "neutral", "displayName": "Text Ghost (asleep dot)", "canonical": "rgb(133, 133, 154)", "tonalRamp": ["oklch(15% 0.02 285)", "oklch(25% 0.02 285)", "oklch(35% 0.02 285)", "oklch(45% 0.02 285)", "oklch(55% 0.02 285)", "oklch(65% 0.02 285)", "oklch(80% 0.02 285)", "oklch(95% 0.02 285)"] },
+      "mushroom-blue": { "role": "primary", "displayName": "Mushroom Blue", "canonical": "rgb(77, 126, 247)", "tonalRamp": ["oklch(15% 0.08 265)", "oklch(25% 0.12 265)", "oklch(35% 0.16 265)", "oklch(45% 0.19 265)", "oklch(60% 0.19 265)", "oklch(70% 0.15 265)", "oklch(82% 0.09 265)", "oklch(95% 0.03 265)"] },
+      "descending-violet": { "role": "secondary", "displayName": "Descending Violet", "canonical": "rgb(149, 103, 255)", "tonalRamp": ["oklch(15% 0.08 295)", "oklch(25% 0.12 295)", "oklch(35% 0.16 295)", "oklch(45% 0.19 295)", "oklch(62% 0.19 295)", "oklch(72% 0.15 295)", "oklch(84% 0.09 295)", "oklch(95% 0.03 295)"] }
+    },
+    "typographyMeta": {
+      "wordmark": { "displayName": "Wordmark", "purpose": "\"bosco\" in the top line only; ARC heading context on the display role." },
+      "numeral": { "displayName": "Numeral", "purpose": "The large figure beside a label: neurons firing, kenyon cells active, silence, people he can smell. One per row." },
+      "body": { "displayName": "Body", "purpose": "Sentences on the rail and his post text, 44ch measure." },
+      "label": { "displayName": "Label", "purpose": "Rail headings and the three projection words; ARC label context kept lowercase." },
+      "label-inline": { "displayName": "Label-inline", "purpose": "The term beside a numeral; the behaviour name on a readout line." },
+      "annotation": { "displayName": "Annotation", "purpose": "--annot-size = calc(var(--text-sm) - 2px): captions, data rows, the top line, record lines, fine print. The smallest size on the page." }
+    },
+    "shadows": [
+      { "name": "glow-status", "value": "0 0 12px rgba(77, 126, 247, 0.15)", "purpose": "The live dot when he is reachable. ARC --glow-status with --_status-rgb set to the primary accent." },
+      { "name": "glow-xs", "value": "0 0 6px rgba(77, 126, 247, 0.3)", "purpose": "A readout fill that crossed threshold (box-shadow) and the pressed projection word (text-shadow). Never at rest." },
+      { "name": "lobe", "value": "radial-gradient(ellipse at 50% 45%, rgba(77, 126, 247, 0.22) 0%, rgba(77, 126, 247, 0) 68%)", "purpose": "The one lobe of light, on .glass behind the brain. Written on the box, not via --lobe-ambient, because that token resolves its inputs at :root." }
+    ],
+    "motion": [
+      { "name": "ease-out", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "The only easing: heading lift, readout lift, fill scale." },
+      { "name": "duration-fast", "value": "120ms", "purpose": "Readout line lift and fill scale on each second's activity." },
+      { "name": "duration-base", "value": "200ms", "purpose": "Rail heading lifting to primary as its row becomes current." },
+      { "name": "spike-decay", "value": "×0.9 per frame (×0.7 under prefers-reduced-motion)", "purpose": "Lit neurons on the canvas fade; a spike adds 0.35 + 0.12 × count, capped at 1.5. Reduced motion also removes the CSS transitions." },
+      { "name": "poll", "value": "activity 1s, status 20s", "purpose": "The cadence of the only changes on the page; nothing tweens between polls." }
+    ],
+    "breakpoints": [
+      { "name": "narrow", "value": "64rem", "purpose": "At or below: one column, specimen static, canvas 4:3, handle hidden, record drops the smell column." }
+    ]
+  },
+  "components": [
+    {
+      "name": "Top line",
+      "kind": "nav",
+      "refersTo": "top-line",
+      "description": "Sticky 48px strip: wordmark, handle, spacer, live indicator, 'in development'. One hairline beneath.",
+      "html": "<header class=\"ds-top\"><a class=\"ds-name\" href=\"#\">bosco</a><a class=\"ds-handle\" href=\"#\">@bosco.proto.cool</a><span class=\"ds-spacer\"></span><span class=\"ds-live ds-is-live\"><span class=\"ds-live-dot\"></span>live</span><span class=\"ds-dev\">in development</span></header>",
+      "css": ".ds-top { display: flex; align-items: center; gap: var(--space-md, 16px); height: 48px; padding: 0 var(--space-lg, 24px); background: var(--bg-deep, rgb(3,3,7)); border-bottom: 1px solid var(--divider, rgb(24,24,30)); color: var(--text-muted, rgb(142,142,155)); } .ds-name { font-family: var(--font-display, 'Host Grotesk', system-ui, sans-serif); font-size: var(--heading-size, clamp(22px, 2.5vw, 26px)); font-weight: 500; line-height: 1.2; color: var(--text-primary, rgb(232,232,236)); text-decoration: none; } .ds-handle, .ds-dev, .ds-live { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--annot-size, 14px); color: var(--text-muted, rgb(142,142,155)); text-decoration: none; } .ds-handle:hover { color: var(--text-primary, rgb(232,232,236)); } .ds-handle:focus-visible, .ds-name:focus-visible { outline: 2px solid var(--accent-primary, rgb(77,126,247)); outline-offset: 2px; border-radius: 2px; } .ds-spacer { flex: 1; } .ds-live { display: inline-flex; align-items: center; gap: var(--space-xs, 4px); } .ds-live-dot { width: 8px; height: 8px; border-radius: 9999px; background: var(--text-ghost, rgb(133,133,154)); } .ds-is-live { color: var(--text-secondary, rgb(150,152,162)); } .ds-is-live .ds-live-dot { background: var(--accent-primary, rgb(77,126,247)); box-shadow: 0 0 12px rgba(77,126,247,0.15); }"
+    },
+    {
+      "name": "Rail row",
+      "kind": "card",
+      "refersTo": "rail-row",
+      "description": "A section of the rail: label heading, one figure, one sentence, one caption, one hairline. The current row's heading is lifted to primary.",
+      "html": "<section class=\"ds-row ds-is-current\"><h2 class=\"ds-h\">today</h2><p class=\"ds-figure\"><span class=\"ds-numeral\">63%</span><span class=\"ds-figure-label\">silence</span></p><p class=\"ds-sentence\">he read <b>8 posts</b> and said nothing to <b>5</b> of them. he did nothing else. <b>1 reward</b> and <b>0 punishments</b>.</p><p class=\"ds-caption\">under the line is silence, which is most of the time.</p></section>",
+      "css": ".ds-row { display: flex; flex-direction: column; gap: var(--space-md, 16px); padding: var(--space-lg, 24px) 0 var(--space-xl, 40px); border-bottom: 1px solid var(--divider, rgb(24,24,30)); background: var(--bg-deep, rgb(3,3,7)); color: var(--text-primary, rgb(232,232,236)); font-family: var(--font-body, 'Host Grotesk', system-ui, sans-serif); font-size: 17px; font-weight: 500; line-height: 1.7; } .ds-h { margin: 0; font-family: var(--font-label, 'Tomorrow', system-ui, sans-serif); font-size: 16px; font-weight: 600; letter-spacing: 2px; line-height: 1.4; color: var(--text-muted, rgb(142,142,155)); transition: color 200ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-is-current .ds-h { color: var(--text-primary, rgb(232,232,236)); } .ds-figure { margin: 0; display: flex; align-items: baseline; gap: var(--space-sm, 8px); } .ds-numeral { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: clamp(24px, 3vw, 36px); font-weight: 200; line-height: 1; font-variant-numeric: tabular-nums; } .ds-figure-label { font-family: var(--font-label, 'Tomorrow', system-ui, sans-serif); font-size: 12px; font-weight: 600; letter-spacing: 0.75px; color: var(--text-muted, rgb(142,142,155)); } .ds-sentence { margin: 0; max-width: 44ch; } .ds-sentence b { font-weight: 500; font-variant-numeric: tabular-nums; color: var(--text-primary, rgb(232,232,236)); } .ds-caption { margin: 0; max-width: 60ch; font-size: var(--annot-size, 14px); color: var(--text-muted, rgb(142,142,155)); }"
+    },
+    {
+      "name": "Readout line",
+      "kind": "custom",
+      "refersTo": "readout-line",
+      "description": "One behaviour population against its threshold: name, hairline track with tick, 2px fill, rate. Over threshold the line lifts and the fill glows; 'leave' fills in the secondary accent.",
+      "html": "<div class=\"ds-readout\"><div class=\"ds-ro ds-over\"><span class=\"ds-k\">reply</span><div class=\"ds-track\"><i class=\"ds-fill\" style=\"transform: scaleX(0.8)\"></i><i class=\"ds-tick\"></i></div><span class=\"ds-v\">12.4 Hz</span></div><div class=\"ds-ro\"><span class=\"ds-k\">leave</span><div class=\"ds-track\"><i class=\"ds-fill ds-avoid\" style=\"transform: scaleX(0.3)\"></i><i class=\"ds-tick\"></i></div><span class=\"ds-v\">3.1 Hz</span></div><div class=\"ds-ro\"><span class=\"ds-k\">groom</span><div class=\"ds-track\"><i class=\"ds-fill\" style=\"transform: scaleX(0)\"></i><i class=\"ds-tick\"></i></div><span class=\"ds-v\">0.0 Hz</span></div></div>",
+      "css": ".ds-readout { display: grid; gap: var(--space-sm, 8px); background: var(--bg-deep, rgb(3,3,7)); padding: var(--space-md, 16px); } .ds-ro { display: grid; grid-template-columns: 4.5rem 1fr 4.5rem; align-items: center; gap: var(--space-sm, 8px); color: var(--text-muted, rgb(142,142,155)); transition: color 120ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-ro.ds-over { color: var(--text-primary, rgb(232,232,236)); } .ds-k { font-family: var(--font-label, 'Tomorrow', system-ui, sans-serif); font-size: var(--annot-size, 14px); font-weight: 600; letter-spacing: 0.75px; } .ds-v { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--annot-size, 14px); text-align: right; font-variant-numeric: tabular-nums; } .ds-track { position: relative; height: 16px; } .ds-track::before { content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: var(--divider, rgb(24,24,30)); } .ds-fill { position: absolute; left: 0; top: calc(50% - 1px); height: 2px; width: 100%; background: var(--accent-primary, rgb(77,126,247)); transform-origin: left center; transition: transform 120ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-fill.ds-avoid { background: var(--accent-secondary, rgb(149,103,255)); } .ds-over .ds-fill { box-shadow: 0 0 6px rgba(77,126,247,0.3); } .ds-tick { position: absolute; left: 62.5%; top: calc(50% - 4px); height: 8px; width: 1px; background: var(--text-secondary, rgb(150,152,162)); }"
+    },
+    {
+      "name": "Projection words",
+      "kind": "button",
+      "refersTo": "projection-word",
+      "description": "The only buttons on the page: three label-context words (front · top · side) stripped to text. Pressed is the accent with a text glow.",
+      "html": "<div class=\"ds-views\" role=\"group\"><button class=\"ds-view\" aria-pressed=\"true\">front</button><button class=\"ds-view\" aria-pressed=\"false\">top</button><button class=\"ds-view\" aria-pressed=\"false\">side</button></div>",
+      "css": ".ds-views { display: flex; gap: var(--space-md, 16px); background: var(--bg-deep, rgb(3,3,7)); padding: var(--space-md, 16px); } .ds-view { appearance: none; background: none; border: 0; padding: 0; min-height: 24px; cursor: pointer; font-family: var(--font-label, 'Tomorrow', system-ui, sans-serif); font-size: 16px; font-weight: 600; letter-spacing: 2px; color: var(--text-muted, rgb(142,142,155)); } .ds-view:hover { color: var(--text-secondary, rgb(150,152,162)); } .ds-view[aria-pressed='true'] { color: var(--accent-primary, rgb(77,126,247)); text-shadow: 0 0 6px rgba(77,126,247,0.3); } .ds-view:focus-visible { outline: 2px solid var(--accent-primary, rgb(77,126,247)); outline-offset: 2px; border-radius: 2px; }"
+    },
+    {
+      "name": "People row",
+      "kind": "custom",
+      "refersTo": "record-line",
+      "description": "An account he can smell: handle, learned-valence mark from a centre line (blue right, violet left), familiarity count.",
+      "html": "<ol class=\"ds-people\"><li class=\"ds-person\"><a class=\"ds-who\" href=\"#\">@proto.cool</a><span class=\"ds-valence\"><i class=\"ds-pos\" style=\"left:50%;width:30%\"></i></span><span class=\"ds-fam\">×5</span></li><li class=\"ds-person\"><a class=\"ds-who\" href=\"#\">@someone.bsky.social</a><span class=\"ds-valence\"><i class=\"ds-neg\" style=\"left:35%;width:15%\"></i></span><span class=\"ds-fam\">×1</span></li></ol>",
+      "css": ".ds-people { list-style: none; margin: 0; padding: var(--space-md, 16px); display: grid; gap: var(--space-xs, 4px); background: var(--bg-deep, rgb(3,3,7)); } .ds-person { display: grid; grid-template-columns: 1fr 5rem 2.5rem; align-items: center; gap: var(--space-sm, 8px); min-height: 24px; } .ds-who { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--annot-size, 14px); color: var(--text-secondary, rgb(150,152,162)); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-decoration: none; } .ds-who:hover { color: var(--text-primary, rgb(232,232,236)); } .ds-who:focus-visible { outline: 2px solid var(--accent-primary, rgb(77,126,247)); outline-offset: 2px; border-radius: 2px; } .ds-valence { position: relative; height: 8px; } .ds-valence::before { content: ''; position: absolute; inset: 50% 0 auto 0; height: 1px; background: var(--divider, rgb(24,24,30)); } .ds-valence::after { content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--border-default, rgb(34,34,41)); } .ds-valence i { position: absolute; top: calc(50% - 1px); height: 2px; background: var(--accent-primary, rgb(77,126,247)); } .ds-valence i.ds-neg { background: var(--accent-secondary, rgb(149,103,255)); } .ds-fam { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--annot-size, 14px); color: var(--text-muted, rgb(142,142,155)); text-align: right; font-variant-numeric: tabular-nums; }"
+    },
+    {
+      "name": "Record line",
+      "kind": "custom",
+      "refersTo": "record-line",
+      "description": "One window in the record: age, smell, who, what. Muted mono; a window where he acted lifts to primary.",
+      "html": "<ol class=\"ds-windows\"><li class=\"ds-win ds-acted\"><span>6m</span><span>mention</span><span class=\"ds-wwho\">@proto.cool</span><span class=\"ds-what\">reply</span></li><li class=\"ds-win\"><span>9m</span><span>browse</span><span class=\"ds-wwho\">@someone.bsky.social</span><span class=\"ds-what\">silence</span></li><li class=\"ds-win\"><span>12m</span><span>dust</span><span class=\"ds-wwho\">a landing</span><span class=\"ds-what\">like · withheld</span></li></ol>",
+      "css": ".ds-windows { list-style: none; margin: 0; padding: var(--space-md, 16px); display: grid; gap: var(--space-xs, 4px); background: var(--bg-deep, rgb(3,3,7)); } .ds-win { display: grid; grid-template-columns: 3rem 4rem 1fr max-content; gap: var(--space-sm, 8px); align-items: baseline; min-height: 24px; font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--annot-size, 14px); color: var(--text-muted, rgb(142,142,155)); } .ds-win.ds-acted { color: var(--text-primary, rgb(232,232,236)); } .ds-wwho { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .ds-what { text-align: right; white-space: nowrap; }"
+    },
+    {
+      "name": "Post",
+      "kind": "custom",
+      "refersTo": "rail-row",
+      "description": "One of his posts as a block link: body text at 44ch, then a mono annotation line that lifts on hover.",
+      "html": "<a class=\"ds-post\" href=\"#\"><p class=\"ds-post-t\">the banana is warm. i am on it. this is most of what i wanted.</p><span class=\"ds-post-m\">spontaneous post · 2h ago · 3 likes</span></a>",
+      "css": ".ds-post { display: block; max-width: 44ch; padding: var(--space-md, 16px); text-decoration: none; background: var(--bg-deep, rgb(3,3,7)); color: var(--text-primary, rgb(232,232,236)); font-family: var(--font-body, 'Host Grotesk', system-ui, sans-serif); font-size: 17px; font-weight: 500; line-height: 1.7; } .ds-post-t { margin: 0; } .ds-post-m { display: block; margin-top: var(--space-xs, 4px); font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--annot-size, 14px); color: var(--text-muted, rgb(142,142,155)); } .ds-post:hover .ds-post-m { color: var(--text-secondary, rgb(150,152,162)); } .ds-post:focus-visible { outline: 2px solid var(--accent-primary, rgb(77,126,247)); outline-offset: 2px; border-radius: 2px; }"
+    },
+    {
+      "name": "Link",
+      "kind": "custom",
+      "refersTo": "rail-row",
+      "description": "Body links: primary text underlined in border-bright at 0.2em offset; the underline lifts to the accent on hover.",
+      "html": "<p class=\"ds-links\"><a class=\"ds-a\" href=\"#\">the code</a><a class=\"ds-a\" href=\"#\">the experiment</a><a class=\"ds-a\" href=\"#\">@proto.cool</a></p>",
+      "css": ".ds-links { display: flex; flex-wrap: wrap; gap: var(--space-md, 16px); margin: 0; padding: var(--space-md, 16px); background: var(--bg-deep, rgb(3,3,7)); font-family: var(--font-body, 'Host Grotesk', system-ui, sans-serif); font-size: 17px; font-weight: 500; line-height: 1.7; } .ds-a { color: var(--text-primary, rgb(232,232,236)); text-decoration: underline; text-decoration-color: var(--border-bright, rgb(51,51,64)); text-underline-offset: 0.2em; } .ds-a:hover { text-decoration-color: var(--accent-primary, rgb(77,126,247)); } .ds-a:focus-visible { outline: 2px solid var(--accent-primary, rgb(77,126,247)); outline-offset: 2px; border-radius: 2px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Specimen and the Label",
+    "overview": "The page is one specimen under glass and a label column beside it. It is built entirely from ARC UI 4.2.2 tokens (base stylesheet imported from the pinned package; no ARC components), so the world is ARC's dark ground, its two accents, and its type contexts. This file records how bosco uses that world, not ARC's rulebook; ARC's own rules (two-colour contract, tokens not literals, state by tint/glow/accent text, hierarchy by lifting to primary) live in the ARC repo and are inherited here unchanged.\n\nThe brain owns the left two thirds of the screen for the whole scroll and never leaves; everything else is a single rail of rows separated by hairlines. There are no cards, no boxes, no tiles of unequal size, no stat wall. With the content removed the page is a dark field, one lit cloud of dots on the left, and a ladder of hairlines on the right. Every figure is one number and one sentence; text is lowercase, in the fly's voice; the brain is the only thing that moves.",
+    "keyCharacteristics": [
+      "One sticky specimen (left, 8/12) and one scrolling rail (right, minmax(20rem, 4fr)), nothing else.",
+      "No surfaces: rows are separated by one hairline (--divider), never boxed.",
+      "Three brain colours: mushroom body in the primary accent, descending and motor in the secondary, the rest in --text-secondary.",
+      "One lobe of light on the page, behind the brain; none elsewhere.",
+      "A fourth text size below ARC's --text-sm: the annotation tier, calc(var(--text-sm) - 2px), worn by captions, data rows, and the top line.",
+      "Motion is decay of spikes and a threshold glow; nothing else animates."
+    ],
+    "rules": [
+      { "name": "The Three Colours Rule", "body": "The brain is painted in exactly three colours, resolved from tokens at runtime (rgbOf('--accent-primary'), --accent-secondary, --text-secondary): mushroom body, descending/motor, the rest. No fourth group, no per-neuron hue, no legend swatches; the groups are named in one caption sentence.", "section": "colors" },
+      { "name": "The Lift Rule", "body": "Hierarchy on the rail is made by lifting muted text to --text-primary (the current heading, the over-threshold line, the acted window), never by stepping down the grey ramp or adding a colour.", "section": "colors" },
+      { "name": "The One Lobe Rule", "body": "Light exists once, as a radial gradient of the primary accent behind the brain. It is written directly on .glass rather than through ARC's --lobe-ambient, because a custom property resolves its var() inputs where it is declared (:root), not on the box that uses it; the ARC lobe token would resolve to the neutral default. No other element carries a lobe, tint, or gradient.", "section": "colors" },
+      { "name": "The Annotation Tier Rule", "body": "Data rows, captions and the top line wear one size, --annot-size, derived from --text-sm minus 2px so it moves with ARC's scale. Nothing on the page is smaller; nothing between it and --text-sm is invented.", "section": "typography" },
+      { "name": "The Figure-and-Label Rule", "body": "A number is a numeral beside a label-inline term, both on the same baseline with --space-sm between. A number never stands alone, and a row never shows more than one.", "section": "typography" },
+      { "name": "The Hairlines-Not-Boxes Rule", "body": "Structure is a 1px --divider line: under the top line, between rows, as the readout track, as the valence baseline. Nothing is boxed, tinted, bordered on four sides, or lifted.", "section": "elevation" },
+      { "name": "The Glow-Is-State Rule", "body": "A glow appears only when something crosses a threshold (live, over-threshold, pressed). It is never decorative and never at rest.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do paint the brain from tokens at runtime (rgbOf), so a theme change recolours the specimen without touching brain.js.",
+      "Do keep every row to one figure, one sentence, and one caption; put the counts inside the sentence as <b>.",
+      "Do separate rows with one --divider hairline and nothing else.",
+      "Do put captions, data rows, and the top line on --annot-size, and derive it from --text-sm rather than writing a pixel size.",
+      "Do lift to --text-primary for the current heading, an over-threshold line, or a window where he acted; that is the whole state vocabulary for text.",
+      "Do write the lobe on the box that needs it, as rgba(var(--accent-primary-rgb), 0.22) fading to 0 at 68%, and nowhere else.",
+      "Do show absence honestly: a muted sentence, the live dot going ghost, \"asleep or unreachable\", lag in minutes.",
+      "Do drop stickiness and lock the canvas to 4:3 below 64rem."
+    ],
+    "donts": [
+      "Don't add a card, panel, tile, box, tint, or four-sided border anywhere on the rail; the specimen is the only figure and the hairlines are the only structure.",
+      "Don't add a fourth brain colour, a legend, or per-neuron hues; three colours named in one caption sentence.",
+      "Don't use --accent-secondary for anything but aversion and the motor side (descending neurons, leave, negative valence).",
+      "Don't animate anything but spike decay on the canvas and the threshold-crossing glow and lift; no scroll effects, no counters, no fades between polls.",
+      "Don't add a glow at rest; glow is a crossed threshold.",
+      "Don't put a stat wall, a grid of numbers, or a second numeral in a row.",
+      "Don't capitalise; the page speaks in the fly's lowercase register, including headings and the wordmark.",
+      "Don't use ARC's --lobe-ambient on a box expecting it to take the accent; it resolves at :root."
+    ]
+  }
+}
