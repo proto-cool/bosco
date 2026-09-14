@@ -96,3 +96,12 @@ Nick's to write: the phrasebook, and anything with a name in it.
 the register Nick chose on 2026-09-14; see the audit's "What works".  The
 topic files are more solemn than these and could take a pass in the same
 voice.
+
+## v3: sixty topics (2026-09-14)
+
+`config/topics_v1.yaml` v1.2 adds forty topics (travel … internet) and
+`corpus/130`–`169` gives each one a file in the banana register: events
+only, he reports what happened, the line ends when the event ends, no
+definitions ("you say X. it is…") and no verdicts ("i recommend").  Those
+two were the tells in the first draft of these files.  `165-fruit.txt` is
+the one that matters most to him.

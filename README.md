@@ -119,7 +119,9 @@ Every number below has a gate report under `docs/`.
    logged.  Each topic is three neutral glomeruli chosen by its name,
    driven at 100 Hz on top of the account odor, so a post is a mixture of
    who and what, and the same mushroom body that learns people learns
-   subjects.  Not a classifier.
+   subjects.  Not a classifier.  Sixty topics since 2026-09-14 (v1.2); the
+   list is frozen with the encoder, so he cannot acquire a new subject, only
+   a new opinion of one.
 18. **Learning what to say** (`Agent.voice_update`).  When a generated reply
    or post gets an outcome, the corpus documents that matched its register
    get their preference nudged by 25% up (reward) or down (punishment),

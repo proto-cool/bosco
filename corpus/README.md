@@ -26,3 +26,6 @@ v2 (2026-09-14): topic files `100`–`119`, questions, night, the
 familiarity registers, `095-learning`, and the sweet/bitter topic variants
 `120`–`129` were written by Claude against `docs/CORPUS-PLAN.md` and
 `docs/corpus-audit.md` at Nick's request.
+
+v3 (2026-09-14): `130`–`169`, one file per new topic, written by Claude in
+the register of `011-banana.txt`.

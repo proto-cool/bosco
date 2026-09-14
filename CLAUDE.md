@@ -139,7 +139,7 @@ Do not download the EM volume. `neuprint-python` against
   Account is the odor. Never map onto innately valenced ORNs.
 - VADER compound score → bitter GRNs (negative) / sugar GRNs (positive).
 - Being mentioned → mechanosensory channel.
-- Topics: a hand-authored 20-topic keyword→odor map, published
+- Topics: a hand-authored 60-topic keyword→odor map, published
   (`config/topics_v1.yaml`); up to three topics per post, each three
   neutral glomeruli on top of the account odor (decided 2026-09-14).
 
