@@ -1,0 +1,29 @@
+# Topics as smells (v1.1).  A hand-authored keyword map, published.  Each topic
+# is a mixture of k glomeruli drawn (seeded by the topic name) from the same
+# valence-neutral set accounts use, driven at rate_hz on top of the account
+# odor.  Keywords are matched as whole words, case-insensitive, on the post
+# text, which is then discarded; only the topic names are logged.
+k: 3
+rate_hz: 100.0
+max_topics_per_post: 3
+topics:
+  code:      [code, coding, programming, compiler, rust, python, javascript, typescript, golang, "c\\+\\+", kernel, linux, git, github, bug, refactor, api, sdk]
+  ai:        [ai, llm, llms, gpt, claude, openai, anthropic, "machine learning", neural, model, agents, chatbot]
+  science:   [science, physics, biology, chemistry, neuroscience, neuron, neurons, brain, connectome, fly, flies, drosophila, research, paper, lab]
+  space:     [space, nasa, rocket, orbit, moon, mars, telescope, astronomy, galaxy, launch]
+  music:     [music, song, album, band, guitar, synth, vinyl, playlist, concert, gig]
+  games:     [game, games, gaming, playstation, xbox, nintendo, steam, rpg, speedrun, minecraft, zelda]
+  film:      [movie, movies, film, cinema, netflix, trailer, episode, season, anime, show]
+  books:     [book, books, novel, reading, author, poem, poetry, library]
+  art:       [art, drawing, painting, illustration, sketch, design, photography, photo]
+  food:      [food, cooking, recipe, dinner, lunch, breakfast, coffee, tea, bread, pizza, ramen]
+  animals:   [cat, cats, dog, dogs, kitten, puppy, bird, birds, bug, bugs, insect, pet, pets]
+  weather:   [weather, rain, snow, sun, sunny, storm, wind, cold, heat, heatwave, cloudy]
+  nature:    [garden, plant, plants, tree, trees, forest, hike, hiking, mountain, river, ocean, beach]
+  sport:     [football, soccer, basketball, baseball, hockey, tennis, cycling, running, marathon, f1, nba, nfl]
+  politics:  [election, president, senate, congress, parliament, vote, voting, government, policy, minister]
+  money:     [money, price, prices, market, stocks, crypto, bitcoin, rent, salary, tax, taxes]
+  work:      [work, job, jobs, meeting, boss, office, deadline, hiring, layoffs, interview]
+  health:    [sleep, tired, sick, doctor, hospital, gym, workout, therapy, anxiety, depression]
+  love:      [love, crush, dating, girlfriend, boyfriend, wife, husband, partner, breakup, wedding]
+  bluesky:   [bluesky, bsky, skeet, skeets, atproto, feed, timeline, followers, mutuals, repost]

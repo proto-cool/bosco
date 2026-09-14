@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import datetime as dt
 import hashlib
+import json
 import math
 import zoneinfo
 from dataclasses import dataclass, replace
@@ -97,6 +98,53 @@ class Agent:
         self.live = Simulation(self.fly, seed=0)
         self.dust = 0.0
         self._load_state()
+        self._load_voice()
+
+    # ---- what-to-say learning ---------------------------------------------------
+    VOICE_ETA = 0.25  # per outcome
+    VOICE_TAU_D = 14.0  # decay of preferences toward 1, days
+    VOICE_MIN, VOICE_MAX = 0.2, 4.0
+
+    @property
+    def voice_path(self):
+        return self.state_dir / "voice.json"
+
+    def _load_voice(self) -> None:
+        self.voice: dict[str, float] = {}
+        self.voice_t = 0.0
+        if self.voice_path.exists():
+            d = json.loads(self.voice_path.read_text())
+            self.voice = {k: float(v) for k, v in d.get("weights", {}).items()}
+            self.voice_t = float(d.get("t_hours", 0.0))
+        self.generator.set_doc_weights(self.voice)
+
+    def _save_voice(self) -> None:
+        self.state_dir.mkdir(parents=True, exist_ok=True)
+        self.voice_path.write_text(json.dumps({"weights": self.voice, "t_hours": self.voice_t}, sort_keys=True))
+
+    def voice_decay(self, t_hours: float) -> None:
+        dt = t_hours - self.voice_t
+        if dt > 0 and self.voice:
+            f = math.exp(-dt / (24.0 * self.VOICE_TAU_D))
+            self.voice = {k: 1.0 + (v - 1.0) * f for k, v in self.voice.items()}
+        self.voice_t = max(self.voice_t, t_hours)
+
+    def voice_update(self, episode_id: int, valence: str, t_hours: float) -> list[str]:
+        """A reply/post from episode_id got an outcome: nudge the preference of the corpus documents
+        that matched its register.  Returns the documents touched."""
+        r = self.ledger.episode(episode_id)
+        if r is None or not (r["line_id"] or "").startswith("gen:") or not r["line_key"]:
+            return []
+        behaviour, val, arousal, _fam = r["line_key"].split("/")
+        self.voice_decay(t_hours)
+        docs = self.generator.matching_docs(behaviour, val, arousal)
+        sign = 1.0 if valence == "reward" else -1.0
+        for name in docs:
+            w = self.voice.get(name, 1.0) * (1.0 + sign * self.VOICE_ETA)
+            self.voice[name] = min(self.VOICE_MAX, max(self.VOICE_MIN, w))
+        self.generator.set_doc_weights(self.voice)
+        self._save_voice()
+        return docs
 
     # ---- persistence ----------------------------------------------------------
     @property
@@ -313,6 +361,7 @@ class Agent:
             drive=drive,
             t_ms=w.t0_ms,
             brain_digest=self.digest(),
+            topics=",".join(f.topics) if f and f.topics else None,
         )
         eid = self.ledger.add_episode(row, ts=ts)
         return Outcome(eid, dec, line, seed, text, text_source, ts)
@@ -355,7 +404,8 @@ class Agent:
             return None
         self.advance_to(ts, fast=fast)
         labeled = "labeled" in (r["note"] or "")
-        f = Features(r["did"], float(r["vader"]), bool(r["mentioned"]), int(r["familiarity"]), labeled)
+        topics = tuple((r["topics"] or "").split(",")) if r["topics"] else ()
+        f = Features(r["did"], float(r["vader"]), bool(r["mentioned"]), int(r["familiarity"]), labeled, topics)
         self.live.set_base(self._base_drives(self.live.t_ms))
         d_before = self.mb.digest()
         w = self.live.present(list(self.enc.encode(f).drives), PRESENT_MS)
@@ -366,6 +416,9 @@ class Agent:
         )
         out = self._log(f, w, dec, ts, r["source_uri"], "pairing", f"outcome:{source}", self.dust, d_before=d_before)
         self.ledger.add_outcome(episode_id, valence, source, did, evidence_uri, out.episode_id, ts=ts)
+        touched = self.voice_update(episode_id, valence, self.hours(ts))
+        if touched:
+            self.ledger.add_control("voice", "outcome", evidence_uri, f"{valence}:{','.join(touched)}", ts=ts)
         self.save_state()
         return out.episode_id
 
@@ -373,6 +426,7 @@ class Agent:
     def reload(self) -> str:
         self.phrasebook = Phrasebook()
         self.generator = Generator(phrasebook_lines=[ln.text for ln in self.phrasebook.lines])
+        self.generator.set_doc_weights(self.voice)
         self.readout = Readout(self.fly.brain)
         self.caps = load_caps()
         return (

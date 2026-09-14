@@ -107,6 +107,20 @@ Every number below has a gate report under `docs/`.
    MBON odor responses 6 Hz instead of 22; KC code unchanged
    (`scripts/phase2_sfa_scan.py`).  Denormal floats are flushed in the
    kernel; without that, long runs slow down a hundredfold.
+17. **Topics as smells** (`config/topics_v1.yaml`, `src/bosco/topics.py`).
+   A hand-written keyword list, published: whole-word matches on the post
+   text name up to three topics, the text is discarded, the names are
+   logged.  Each topic is three neutral glomeruli chosen by its name,
+   driven at 100 Hz on top of the account odor, so a post is a mixture of
+   who and what, and the same mushroom body that learns people learns
+   subjects.  Not a classifier.
+18. **Learning what to say** (`Agent.voice_update`).  When a generated reply
+   or post gets an outcome, the corpus documents that matched its register
+   get their preference nudged by 25% up (reward) or down (punishment),
+   bounded 0.2 to 4, decaying toward 1 over two weeks.  Preferences scale
+   how often each document's sentences enter the trigram pool.  Counts
+   only; the vocabulary never changes.  Stored in `state/voice.json` and
+   logged as `voice` control rows.
 16. **Learned valence is read from the weights**, not from MBON rates: a 1%
    uniform weight change flips a single-realisation MBON rate from 9 to
    6 Hz (deterministic chaos), so rates are averaged over seeds in the gates

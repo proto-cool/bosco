@@ -169,7 +169,13 @@ class _Rng:
 
 
 class Generator:
+    """Trigram over the corpus.  `doc_weight` is the learned preference per document
+    (what-to-say learning): a rewarded reply raises the weight of the documents that
+    matched its register, a punished one lowers it; weights decay toward 1 over weeks.
+    Counts only; the vocabulary never changes."""
+
     def __init__(self, corpus_dir: Path = paths.ROOT / "corpus", phrasebook_lines: list[str] | None = None) -> None:
+        self.doc_weight: dict[str, float] = {}
         self.docs: list[Document] = []
         for p in sorted(corpus_dir.glob("*.txt")):
             text = p.read_text(encoding="utf-8")
@@ -197,6 +203,15 @@ class Generator:
                 h.update((" ".join(s) + "\n").encode())
         return h.hexdigest()
 
+    def matching_docs(self, behaviour: str, valence: str, arousal: str) -> list[str]:
+        """Names of tagged documents that matched this register (the ones what-to-say learning touches)."""
+        want = {"behaviour": behaviour, "valence": valence, "arousal": arousal}
+        return [d.name for d in self.docs if d.tags and all(d.tags.get(k, v) == v for k, v in want.items())]
+
+    def set_doc_weights(self, w: dict[str, float]) -> None:
+        self.doc_weight = dict(w)
+        self._models.clear()
+
     def model_for(self, behaviour: str, valence: str, arousal: str) -> NGram:
         key = (behaviour, valence, arousal)
         if key in self._models:
@@ -205,7 +220,8 @@ class Generator:
         pool: list[list[str]] = []
         for d in self.docs:
             if not d.tags or all(d.tags.get(k, v) == v for k, v in want.items()):
-                weight = 3 if d.tags else 1  # matching tagged docs count triple
+                base = 3 if d.tags else 1  # matching tagged docs count triple
+                weight = max(0, int(round(base * self.doc_weight.get(d.name, 1.0))))
                 pool.extend(d.sentences * weight)
         m = NGram(pool)
         self._models[key] = m

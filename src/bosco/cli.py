@@ -33,7 +33,8 @@ def cmd_poke(a) -> int:
     agent = Agent(L, state_dir=a.state_dir)
     ts = _ts(a.at)
     v = vader_compound(a.text) if a.text else 0.0
-    f = Features(a.did, v, bool(a.mention), L.familiarity(a.did))
+    topics = agent.enc.topics.match(a.text) if a.text else ()
+    f = Features(a.did, v, bool(a.mention), L.familiarity(a.did), False, topics)
     src = a.uri or f"poke://{a.did}/{int(ts)}"
     qid = agent.identity.match(a.text) if a.text else None
     out = agent.run(f, ts, src, kind="event", note="poke", fast=not a.simulate_gaps)
@@ -41,7 +42,7 @@ def cmd_poke(a) -> int:
     d = out.decision
     print(
         f"episode {out.episode_id}  seed {out.seed}  hour {agent.clock.local_hour(ts):.2f}  "
-        f"vader {v:+.3f}  mention {bool(a.mention)}"
+        f"vader {v:+.3f}  mention {bool(a.mention)}  topics {list(topics)}"
     )
     print("scores Hz:", {k: round(x, 2) for k, x in d.scores.items()})
     print("ratios  :", {k: round(x, 2) for k, x in d.ratios.items()})

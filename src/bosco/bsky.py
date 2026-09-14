@@ -354,7 +354,8 @@ class Bsky:
         """Mark posts deleted in the app (as him) as deleted in the ledger, so his records match the network."""
         rows = self.L.db.execute(
             "SELECT our_uri FROM actions WHERE our_uri IS NOT NULL AND dry_run=0 AND deleted_ts IS NULL "
-            "AND kind IN ('reply','spontaneous_post','identity','intro') ORDER BY id DESC LIMIT ?", (limit,)
+            "AND kind IN ('reply','spontaneous_post','identity','intro') ORDER BY id DESC LIMIT ?",
+            (limit,),
         ).fetchall()
         uris = [r["our_uri"] for r in rows]
         if not uris:
@@ -381,7 +382,8 @@ class Bsky:
         fam = self.L.familiarity(did)
         labels = labels or set()
         note = ("labeled:" + ",".join(sorted(labels))) if labels else None
-        out = self.agent.run(Features(did, v, mentioned, fam, bool(labels)), ts, uri, kind="event", note=note)
+        topics = self.agent.enc.topics.match(text)
+        out = self.agent.run(Features(did, v, mentioned, fam, bool(labels), topics), ts, uri, kind="event", note=note)
         # identity reflex: who/what/why/creator is answered regardless of the network (EXPERIMENT.md §2)
         qid = self.agent.identity.match(text) if mentioned and not labels else None
         if qid is not None:

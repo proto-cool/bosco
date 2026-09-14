@@ -39,6 +39,7 @@ CREATE TABLE IF NOT EXISTS episodes (
   hour REAL,                        -- local hour used for the clock drive
   drive REAL,                       -- internal drive (dust) for spontaneous episodes
   t_ms INTEGER,                     -- biological time of the window start (ms since brain_t0)
+  topics TEXT,                      -- comma-separated topic names from the keyword map
   brain_digest TEXT,                -- digest of kernel + MB state + dust after the window
   seed INTEGER NOT NULL,
   weight_digest_before TEXT NOT NULL,
@@ -149,6 +150,7 @@ class EpisodeRow:
     drive: float | None = None
     t_ms: int | None = None
     brain_digest: str | None = None
+    topics: str | None = None
 
 
 class Ledger:
@@ -166,7 +168,7 @@ class Ledger:
             if col not in cols:
                 self.db.execute(f"ALTER TABLE actions ADD COLUMN {col} TEXT")
         ecols = {r["name"] for r in self.db.execute("PRAGMA table_info(episodes)")}
-        for col, typ in (("drive", "REAL"), ("t_ms", "INTEGER"), ("brain_digest", "TEXT")):
+        for col, typ in (("drive", "REAL"), ("t_ms", "INTEGER"), ("brain_digest", "TEXT"), ("topics", "TEXT")):
             if col not in ecols:
                 self.db.execute(f"ALTER TABLE episodes ADD COLUMN {col} {typ}")
         self.db.commit()
@@ -176,8 +178,8 @@ class Ledger:
         cur = self.db.execute(
             "INSERT INTO episodes (ts, kind, did, source_uri, vader, mentioned, familiarity, hour, seed, "
             "weight_digest_before, weight_digest_after, scores, mbon, kc_active, behaviour, action, valence, arousal, "
-            "line_key, line_id, note, drive, t_ms, brain_digest) "
-            "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+            "line_key, line_id, note, drive, t_ms, brain_digest, topics) "
+            "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
             (
                 ts or time.time(),
                 e.kind,
@@ -203,6 +205,7 @@ class Ledger:
                 e.drive,
                 e.t_ms,
                 e.brain_digest,
+                e.topics,
             ),
         )
         self.db.commit()

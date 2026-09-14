@@ -103,3 +103,51 @@ def test_kc_activity_in_live_window(fly):
         o = ag.run(Features(f"did:plc:{k}", 0.0, False, 0), T0 + 10 * k, f"at://{k}/1", fast=True)
         fr.append(ag.ledger.episode(o.episode_id)["kc_active"] / len(fly.kc))
     assert 0.005 <= float(np.mean(fr)) <= 0.15, fr
+
+
+@needs_data
+def test_voice_learning_nudges_matching_documents(fly):
+    from bosco.agent import Agent
+    from bosco.encoder import Features
+    from bosco.ledger import EpisodeRow, Ledger
+
+    tmp = tempfile.mkdtemp()
+    ag = Agent(Ledger(f"{tmp}/l.sqlite"), fly, state_dir=tmp)
+    ag.mb.reset()
+    ag.live.net.reset(0)
+    ag.live.t_ms = 0
+    # a logged generated reply in the positive register
+    eid = ag.ledger.add_episode(
+        EpisodeRow(
+            "event",
+            "did:plc:v",
+            "at://v/1",
+            0.5,
+            True,
+            1,
+            12.0,
+            7,
+            "x",
+            "x",
+            {},
+            {},
+            10,
+            "engage",
+            "reply",
+            "positive",
+            "mid",
+            line_key="engage/positive/mid/known",
+            line_id="gen:deadbeef",
+        ),
+        ts=T0,
+    )
+    docs = ag.generator.matching_docs("engage", "positive", "mid")
+    assert docs
+    touched = ag.voice_update(eid, "reward", T0 / 3600.0)
+    assert set(touched) == set(docs) and all(ag.voice[d] > 1.0 for d in docs)
+    ag.voice_update(eid, "punishment", T0 / 3600.0 + 1)
+    ag.voice_update(eid, "punishment", T0 / 3600.0 + 2)
+    assert all(ag.voice[d] < 1.0 for d in docs)
+    ag.voice_decay(T0 / 3600.0 + 24 * 365)
+    assert all(abs(ag.voice[d] - 1.0) < 1e-6 for d in docs)
+    assert Features("did:plc:v", 0.0, False).topics == ()

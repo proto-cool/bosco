@@ -29,6 +29,8 @@ class Features:
     familiarity: int = 0
     # moderation label present (config/moderation_v1.yaml): bitter at full rate, no approach
     labeled: bool = False
+    # topics found by the published keyword map (config/topics_v1.yaml); each is a small odor mixture
+    topics: tuple[str, ...] = ()
 
 
 class Encoder:
@@ -45,6 +47,9 @@ class Encoder:
         jo = pop.johnston_organ()
         groups = set(self.cfg["mechanosensory"]["jo_groups"])
         self.jo = brain.index_of_present(jo.loc[jo["group"].isin(groups), "bodyId"])
+        from bosco.topics import TopicMap
+
+        self.topics = TopicMap()
         sp = self.cfg.get("spontaneous", {})
         self.bristles = (
             brain.index_of_present(pop.bodies_of_types(sp.get("bristle_types", []))) if sp else np.zeros(0, np.int32)
@@ -62,6 +67,14 @@ class Encoder:
         gl = self.glomeruli_for(did)
         idx = np.concatenate([self.orn_by_glom[g] for g in gl]).astype(np.int32)
         return Drive(np.sort(idx), float(self.cfg["odor"]["rate_hz"]), f"odor:{did}")
+
+    def topic_drive(self, topic: str) -> Drive:
+        """A topic is k neutral glomeruli chosen by the topic name, driven on top of the account odor."""
+        seed = int.from_bytes(hashlib.blake2b(f"topic|{topic}".encode(), digest_size=8).digest(), "little")
+        rng = np.random.default_rng(seed)
+        chosen = rng.choice(len(self.neutral), size=self.topics.k, replace=False)
+        idx = np.concatenate([self.orn_by_glom[self.neutral[i]] for i in chosen]).astype(np.int32)
+        return Drive(np.sort(idx), self.topics.rate_hz, f"topic:{topic}")
 
     # ---- taste -----------------------------------------------------------
     def gustatory_drive(self, vader: float) -> Drive | None:
@@ -91,6 +104,7 @@ class Encoder:
 
     def encode(self, f: Features) -> Stimulus:
         drives = [self.odor_drive(f.did)]
+        drives += [self.topic_drive(t) for t in f.topics]
         g = self.gustatory_drive(-1.0) if f.labeled else self.gustatory_drive(f.vader)
         if g is not None:
             drives.append(g)
