@@ -67,14 +67,15 @@ click. Nothing is assumed. You are `root` on the box and the repo lives at
 
 1. Vultr → **Deploy new server → Cloud Compute → Dedicated CPU**.
 2. Plan: 2 vCPU, 4 GB RAM (the 1 vCPU, 2 GB one also works; it is the floor).
-3. OS: Debian 12 or Ubuntu 24.04. Region: anywhere.
+3. OS: Rocky Linux 9 (or Debian 12 / Ubuntu 24.04). Region: anywhere.
 4. Hostname `bosco`. Deploy. Note the IP.
 
 ### B2. Log in and install the basics
 
 ```
 ssh root@<the ip>
-apt-get update && apt-get install -y podman git curl
+dnf install -y podman git curl sqlite        # Rocky / Fedora
+# apt-get update && apt-get install -y podman git curl sqlite3   # Debian / Ubuntu
 podman --version
 ```
 
@@ -205,7 +206,6 @@ Persistent=true
 [Install]
 WantedBy=timers.target
 EOT
-apt-get install -y sqlite3
 systemctl daemon-reload
 systemctl enable --now bosco-nightly.timer bosco-deadman.timer
 systemctl list-timers | grep bosco
