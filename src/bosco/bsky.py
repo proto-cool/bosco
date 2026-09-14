@@ -273,41 +273,48 @@ class Bsky:
         root_uri: str | None,
         root_cid: str | None,
         ts: float,
-        in_thread: bool = False,
     ) -> None:
         d = out.decision
         action = d.action
         if action == "nothing":
             return
-        # engage on an account already followed becomes a reply; leave on an unfollowed account is nothing
         following = self.follows()
-        # walking toward whoever spoke to him is answering; toward someone he only browsed past, following
-        if action == "follow" and (did is None or did in following or in_thread or out.mentioned):
-            action = "reply" if did is not None and out.text else "nothing"
+        addressed = out.mentioned
+
+        def withheld(why: str) -> None:
+            self.L.add_action(
+                out.episode_id,
+                "leave",
+                None,
+                target_uri,
+                dry_run=True,
+                ts=ts,
+                root_uri=root_uri or target_uri,
+                target_did=did,
+            )
+            print(f"{why}: {action} withheld")
+
+        # The outward policy (decided 2026-09-14).  Browsing, he may follow or like whoever his readout
+        # picks, under the caps; he replies only to someone who replied to him or tagged him, and
+        # once per post of theirs; his own posts are grooming.  Nothing else goes out.  Walking
+        # toward whoever spoke to him is answering; toward someone he browsed past, following;
+        # toward someone he already follows, nothing.
+        if action == "follow":
+            if addressed:
+                action = "reply" if did is not None and out.text else "nothing"
+            elif did is None or did in following:
+                action = "nothing"
+        if action == "reply" and not addressed:
+            withheld("not addressed")
+            return
+        if action == "reply" and target_uri and self.L.replied_to(target_uri, real_only=not self.dry):
+            withheld("already answered")
+            return
         if action == "leave" and (did is None or did not in following):
             self.L.add_action(out.episode_id, "leave", None, target_uri, dry_run=True, ts=ts)
             return
         if action == "nothing":
             return
-        # Someone he only wandered past on the feed gets nothing outward until they have come to
-        # him.  The learned verdict on the window is not a verdict on them: it is the whole
-        # mixture (the place, the topics, the words) and generalises to strangers who merely
-        # share a smell, which is how he came to follow people who had never heard of him
-        # (2026-09-14).  His memory of an account can only exist once they interacted anyway.
-        if did is not None and not out.mentioned and action in ("like", "follow", "reply"):
-            if self.L.familiarity(did) < 1:
-                self.L.add_action(
-                    out.episode_id,
-                    "leave",
-                    None,
-                    target_uri,
-                    dry_run=True,
-                    ts=ts,
-                    root_uri=root_uri or target_uri,
-                    target_did=did,
-                )
-                print(f"stranger ({did}, learned {d.learned:+.2f}): {action} withheld")
-                return
         if self.L.asleep():
             self.L.add_action(out.episode_id, action, None, target_uri, dry_run=True, ts=ts)
             print("asleep: action suppressed", action)
@@ -583,12 +590,6 @@ class Bsky:
             )
         if mentioned:
             self.L.bump_inbound(did, _day(ts))
-        ours = self.L.our_uris()
-        in_thread = (
-            bool(parent and parent.uri in ours)
-            or bool(root and root.uri in ours)
-            or (bool(root) and self.L.count_actions(0.0, kind="reply", root_uri=root.uri, real_only=False) > 0)
-        )
         # outcomes for the window that produced the post this one answers
         ours = self.L.our_uris()
         answered = parent.uri if parent and parent.uri in ours else (root.uri if root and root.uri in ours else None)
@@ -615,7 +616,6 @@ class Bsky:
             root.uri if root else None,
             root.cid if root else None,
             ts,
-            in_thread=in_thread or question,
         )
         return out
 

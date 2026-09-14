@@ -40,8 +40,10 @@ convenience, "just for testing," or because a result would look better.
   guards, not a schedule. Timing of posts and replies is the network's;
   never add a timer. Self-label as a bot.
 - **Bosco lives on the network like anyone else** (decided 2026-09-13). He
-  reads his timeline and the discover feed, and may like, follow, unfollow,
-  reply in any thread he reads, and post on his own. Everything he reads is a
+  reads his feeds, and may like, follow, unfollow, and post on his own.
+  **He replies only to someone who replied to him or tagged him, once per
+  post of theirs; never to a post he merely browsed** (decided 2026-09-14:
+  no spam). Everything he reads is a
   stimulus; everything he does is an episode in the ledger.
 - **Operator override** from `@proto.cool` (EXPERIMENT.md §2a) by mention:
   sleep, wake, delete, ignore, unfollow, reload, restart, status, people,
@@ -176,7 +178,8 @@ Do not download the EM volume. `neuprint-python` against
   threshold. Thresholds from dev-period real activity distribution
   (provisional synthetic-battery thresholds until then).
 - Action set: `reply`, `like`, `follow`, `leave`, `spontaneous_post`,
-  `nothing`. engage → follow (reply if already following); leave → unfollow.
+  `nothing`. engage → follow while browsing (nothing if already followed),
+  reply when addressed; leave → unfollow. A reply is only ever an answer.
 - Own posts are grooming. Debris lands on his bristle neurons as discrete
   seeded events; a landing is an onset; his grooming neurons answer onsets
   and adapt to held input; if the answer crosses threshold he grooms, which

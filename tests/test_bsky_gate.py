@@ -60,25 +60,33 @@ def test_posts_in_languages_he_does_not_read_are_not_perceived():
     assert b.reads(SimpleNamespace(langs=["ja"]))  # no languages set: everything is read
 
 
-def test_stranger_like_withheld_until_known():
+def test_browsing_may_like_and_follow_but_never_reply():
     tmp = tempfile.mkdtemp()
     L = Ledger(f"{tmp}/l.sqlite")
     b = _bsky(L)
     b.act(_out(L, "like", 0.0, False), "did:plc:x", "at://x/1", "cid", None, None, 1.0)
-    assert _kinds(L) == [("leave", 1)]  # withheld, logged as a leave
-    b.act(_out(L, "like", 0.5, False), "did:plc:x", "at://x/1", "cid", None, None, 2.0)
-    assert _kinds(L)[-1] == ("leave", 1)  # a sweet window is not a verdict on a stranger: still withheld
-    L.bump_inbound("did:plc:x", "2026-09-14")
-    b.act(_out(L, "like", 0.0, False), "did:plc:x", "at://x/1", "cid", None, None, 3.0)
-    assert _kinds(L)[-1][0] == "like"  # they came to him once: through
+    assert _kinds(L)[-1][0] == "like"  # a like on someone he browsed past: his call, under the caps
+    b.act(_out(L, "follow", 0.0, False), "did:plc:y", "at://y/1", "cid", None, None, 2.0)
+    assert _kinds(L)[-1][0] == "follow"  # a follow too
+    b._follows = {"did:plc:y": "at://me/follow/1"}
+    n = len(_kinds(L))
+    b.act(_out(L, "follow", 0.0, False), "did:plc:y", "at://y/2", "cid", None, None, 3.0)
+    assert len(_kinds(L)) == n  # already followed: engage while browsing is nothing, never a reply
+    b.act(_out(L, "reply", 0.9, False), "did:plc:z", "at://z/1", "cid", None, None, 4.0)
+    assert _kinds(L)[-1] == ("leave", 1)  # the song crossed on a post that was not to him: withheld
 
 
-def test_mention_bypasses_stranger_rail():
+def test_addressed_gets_one_reply_and_only_one():
     tmp = tempfile.mkdtemp()
     L = Ledger(f"{tmp}/l.sqlite")
     b = _bsky(L)
-    b.act(_out(L, "reply", 0.0, True), "did:plc:x", "at://x/1", "cid", None, None, 1.0)
-    assert _kinds(L) == [("reply", 1)]
+    b.act(_out(L, "follow", 0.0, True), "did:plc:x", "at://x/1", "cid", None, None, 1.0)
+    assert _kinds(L) == [("reply", 1)]  # walking toward whoever spoke to him is answering
+    b.act(_out(L, "reply", 0.0, True), "did:plc:x", "at://x/1", "cid", None, None, 2.0)
+    assert _kinds(L)[-1] == ("leave", 1)  # the same post again: already answered
+    b.act(_out(L, "reply", 0.0, True), "did:plc:x", "at://x/2", "cid", None, None, 3.0)
+    assert _kinds(L)[-1] == ("reply", 1)  # a new post of theirs: answered once
+    assert L.replied_to("at://x/2", real_only=False) and not L.replied_to("at://x/3", real_only=False)
 
 
 def test_sweep_marks_likes_and_follows_removed_in_app():

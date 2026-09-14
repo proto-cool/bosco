@@ -65,7 +65,9 @@ genuinely the one acting, and that anyone can check.
   threshold, centred so it never forces a reply and never silences one, and
   it adds no floor. Walking toward whoever spoke to him is a reply.
 - Bosco reads his timeline and the discover feed and may like, follow,
-  unfollow, reply in any thread he reads, and post on his own. The action
+  unfollow, and post on his own; he replies only to someone who replied to
+  him or tagged him, once per post of theirs, never to a post he merely
+  browsed (2026-09-14). The action
   set is `reply, like, follow, leave, spontaneous_post, nothing`. Toward
   accounts that never interacted with him and that his memory does not
   favour, browsing yields only leave or nothing: outward actions go to

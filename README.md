@@ -324,17 +324,19 @@ Every number below has a gate report under `docs/`.
    whole-brain sweep had been a fixed cost on every second; what remains in
    the evening is real synaptic traffic. Same dynamics, cheaper seconds.
 
-35. **The stranger rail is about them, not the window** (decided
-   2026-09-14, after he followed six people who had never heard of him).
-   The rail used to let an approach through to a stranger when the window's
-   learned verdict was sweet. That verdict is the mushroom body's on the
-   whole mixture (the place, the topics, the words, the account), and it
-   generalises to anyone who shares a smell; a sweet afternoon in the bug
-   feed made every bug poster look like a friend. Now nothing outward goes
-   to an account that has never come to him, full stop. His memory of an
-   account cannot exist before they interact anyway, since every pairing
-   needs something from them. Browsing still decides follows and likes for
-   people he knows, and mentions bypass the rail as before.
+35. **The outward policy** (decided 2026-09-14, after a leaky rail had
+   him following people who had never heard of him). Browsing, he may
+   follow or like whoever his readout picks, under the caps; that is his
+   curiosity and it is allowed to be random. He replies only to someone who
+   replied to him or tagged him, and at most once per post of theirs,
+   whether the answer came from the network or a reflex. Engaging with an
+   account he already follows while browsing is nothing. A post he merely
+   browsed never gets a reply, whatever the song neurons did; the decision
+   stays in the record as withheld. His own posts are grooming. Nothing
+   else goes out. The earlier "stranger rail" (no like or follow until they
+   had come to him, or the window's learned verdict was sweet) is gone: the
+   window's verdict is on the whole mixture and generalised to strangers
+   who shared a place or a topic, and the rule above makes it unnecessary.
 
 Not in v1: visual input.
 

@@ -324,6 +324,13 @@ class Ledger:
         self.db.execute("UPDATE actions SET deleted_ts=? WHERE our_uri=?", (ts or time.time(), our_uri))
         self.db.commit()
 
+    def replied_to(self, target_uri: str, real_only: bool = True) -> bool:
+        """Has he already answered this post (by the network or by reflex)?  Once is the rule."""
+        q = "SELECT 1 FROM actions WHERE target_uri=? AND kind IN ('reply','identity') AND deleted_ts IS NULL"
+        if real_only:
+            q += " AND dry_run=0"
+        return self.db.execute(q + " LIMIT 1", (target_uri,)).fetchone() is not None
+
     def our_uris(self) -> set[str]:
         return {r["our_uri"] for r in self.db.execute("SELECT our_uri FROM actions WHERE our_uri IS NOT NULL")}
 
