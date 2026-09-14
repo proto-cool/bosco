@@ -51,8 +51,18 @@ def main(argv=None) -> int:
     agreements = []
     for r in rows:
         if r["kind"] == "event":
-            f = Features(r["did"], float(r["vader"]), bool(r["mentioned"]), int(r["familiarity"]))
-            out = agent.run(f, r["ts"], r["source_uri"], kind="event", seed=int(r["seed"]))
+            note = r["note"] or ""
+            topics = tuple(r["topics"].split(",")) if r["topics"] else ()
+            f = Features(
+                r["did"],
+                float(r["vader"]),
+                bool(r["mentioned"]),
+                int(r["familiarity"]),
+                "labeled" in note,
+                topics,
+                "question" in note,
+            )
+            out = agent.run(f, r["ts"], r["source_uri"], kind="event", fast=True)
             idmap[r["id"]] = out.episode_id
             agreements.append(out.decision.action == r["action"])
         elif r["kind"] == "pairing" and a.control != "frozen_mb":

@@ -1,34 +1,36 @@
-"""Phase 6: set readout thresholds from the dev-period distribution of real
-activity.  Uses population rates from event episodes in the ledger and
-NOTHING about outcomes or actions.
+"""Phase 6: set readout thresholds from the dev-period distribution of real activity.
 
-Rule (stated in advance, frozen with the config): for each population, the
-threshold is the q-th quantile of its rate over dev-period event episodes
-(default q = 0.85), floored at min_hz.  Silence must remain common: with
-q = 0.85 per population, at most ~15% of episodes cross any single
-threshold; the winner-take-all then acts on fewer.  Also records the KC
-sparseness range observed (2.5th–97.5th percentile, widened by 50%) for the
-integrity check.
+Rule (config/thresholds_policy.yaml, pre-registered): each population's threshold is the
+q-th quantile of its rate over a named set of windows (event / mentioned / landing_peak),
+floored at min_hz.  Nothing about outcomes or actions is read.  Silence stays common by
+construction.  Also records the KC sparseness range for the integrity check.
+
+  --ledger PATH        real ledger (a copy of the VPS's)
+  --synthetic N        instead: N synthetic event windows + --synthetic-landings landings (dev only)
+  --allow-partial      keep the current threshold where a population's window set is too small
+  --write              update config/thresholds.json
 """
 
 from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 
 import numpy as np
+import yaml
 
 from bosco import paths
 from bosco.ledger import Ledger
 
+LANDING_NOTE = re.compile(r"landing:(\d+)")
 
-def synthetic_ledger(n_events: int, n_spont: int, seed: int) -> Ledger:
-    """Provisional dev-period thresholds: a synthetic stimulus battery (random accounts,
-    VADER levels, mention flags, hours) run through the agent into a temp ledger."""
+
+def synthetic_ledger(n_events: int, n_landings: int, seed: int) -> Ledger:
+    """A synthetic stimulus battery (random accounts, tones, mentions, questions, topics, appetite)
+    run through the agent into a temp ledger, plus real landing windows."""
     import tempfile
-
-    import numpy as np
 
     from bosco.agent import Agent
     from bosco.encoder import Features
@@ -38,74 +40,120 @@ def synthetic_ledger(n_events: int, n_spont: int, seed: int) -> Ledger:
     ag = Agent(L, state_dir=tmp)
     rng = np.random.default_rng(seed)
     t0 = 1_800_000_000.0
+    ag.bio_ms(t0)
+    topics = list(ag.enc.topics.patterns)
     times = np.sort(rng.random(n_events)) * 86400 * 30
     for i in range(n_events):
         did = f"did:plc:synthetic{int(rng.integers(0, 40))}"
         v = float(np.clip(rng.normal(0.0, 0.45), -1, 1)) if rng.random() < 0.7 else 0.0
+        mentioned = bool(rng.random() < 0.4)
+        question = mentioned and bool(rng.random() < 0.33)
+        tp = tuple(rng.choice(topics, size=int(rng.integers(0, 3)), replace=False).tolist())
+        ag.appetite = float(rng.random())  # appetite spans its range over the battery
         ag.run(
-            Features(did, v, bool(rng.random() < 0.4), 0),
+            Features(did, v, mentioned, 0, False, tp, question),
             t0 + float(times[i]),
             f"synthetic://{i}",
             kind="event",
             fast=True,
         )
-    # spontaneous: the window right after a landing (grooming answers onsets, not held input)
+    # landings: the window after each, lived through, so groom is calibrated on real responses
     lo, hi = ag.enc.cfg["spontaneous"]["landing_size"]
+    window = int(ag.enc.cfg["spontaneous"]["window_s"])
     t = t0 + 86400 * 30
-    for _ in range(n_spont):
+    for _ in range(n_landings):
         t += 600.0
-        ag.dust = float(rng.random() * 0.4)  # residual debris from earlier
-        ag.advance_to(t, fast=True)  # settles with the residual
-        ag.dust = min(1.0, ag.dust + lo + (hi - lo) * float(rng.random()))  # a particle lands
-        ag.run(None, t, None, kind="spontaneous", fast=True)
+        ag.advance_to(t, fast=True)  # settle (jump)
+        s = ag.live.t_ms // 1000
+        ag.dust = min(1.0, ag.dust + lo + (hi - lo) * float(rng.random()))
+        ag.landing_id, ag.landing_until = int(s), int(s) + window
+        ag.advance_to(t + window + 1, fast=False, max_slices=window + 1)
     return L
+
+
+def rows_for(L: Ledger, selector: str) -> list[dict]:
+    """Windows named by the policy, as {pop: rate} dicts."""
+    if selector == "event":
+        rows = L.db.execute("SELECT scores FROM episodes WHERE kind='event'").fetchall()
+        return [json.loads(r["scores"]) for r in rows]
+    if selector == "mentioned":
+        rows = L.db.execute("SELECT scores FROM episodes WHERE kind='event' AND mentioned=1").fetchall()
+        return [json.loads(r["scores"]) for r in rows]
+    if selector == "landing_peak":
+        rows = L.db.execute(
+            "SELECT note, scores FROM episodes WHERE kind IN ('landing','spontaneous') AND note LIKE 'landing:%'"
+        ).fetchall()
+        peaks: dict[str, dict] = {}
+        for r in rows:
+            m = LANDING_NOTE.search(r["note"] or "")
+            if not m:
+                continue
+            sc = json.loads(r["scores"])
+            cur = peaks.get(m.group(1))
+            if cur is None or sc.get("groom", 0.0) > cur.get("groom", 0.0):
+                peaks[m.group(1)] = sc
+        return list(peaks.values())
+    raise ValueError(f"unknown selector {selector}")
 
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--ledger", help="dev-period ledger (real activity)")
-    ap.add_argument("--synthetic", type=int, default=0, help="instead: run N synthetic event episodes (dev only)")
-    ap.add_argument("--synthetic-spontaneous", type=int, default=60)
-    ap.add_argument("--q", type=float, default=0.85)
-    ap.add_argument("--min-hz", type=float, default=1.0)
-    ap.add_argument("--min-episodes", type=int, default=200)
+    ap.add_argument("--synthetic", type=int, default=0, help="instead: run N synthetic event windows (dev only)")
+    ap.add_argument("--synthetic-landings", type=int, default=40)
+    ap.add_argument("--policy", default=str(paths.CONFIG / "thresholds_policy.yaml"))
+    ap.add_argument("--allow-partial", action="store_true")
     ap.add_argument("--write", action="store_true")
     a = ap.parse_args(argv)
+    policy = yaml.safe_load(open(a.policy))
     if a.synthetic:
-        L = synthetic_ledger(a.synthetic, a.synthetic_spontaneous, seed=0)
-        source = f"synthetic-dev (n={a.synthetic}+{a.synthetic_spontaneous})"
+        L = synthetic_ledger(a.synthetic, a.synthetic_landings, seed=0)
+        source = f"synthetic-dev (n={a.synthetic}+{a.synthetic_landings} landings)"
     else:
         L = Ledger(a.ledger)
         source = a.ledger
-    rows = L.episodes(kind="event") + L.episodes(kind="spontaneous")
-    if len(rows) < a.min_episodes:
-        print(f"only {len(rows)} episodes; need {a.min_episodes}")
-        return 1
-    scores = [json.loads(r["scores"]) for r in rows]
-    pops = sorted(scores[0])
-    th = {}
-    for p in pops:
-        v = np.array([s[p] for s in scores])
-        th[p] = float(max(a.min_hz, np.quantile(v, a.q)))
+    cfg = json.load(open(paths.CONFIG / "thresholds.json"))
+    th: dict[str, float] = {}
+    skipped: list[str] = []
+    cache: dict[str, list[dict]] = {}
+    for p, rule in policy["populations"].items():
+        sel = rule["over"]
+        rows = cache.setdefault(sel, rows_for(L, sel))
+        need = int(policy["min_rows"].get(sel, 0))
+        v = np.array([s.get(p, 0.0) for s in rows]) if rows else np.zeros(0)
+        if len(v) < need:
+            msg = f"{p:7s} over {sel}: only {len(v)} windows; need {need}"
+            if not a.allow_partial:
+                print(msg)
+                return 1
+            print(msg + "; keeping", cfg.get(p))
+            skipped.append(p)
+            continue
+        th[p] = float(max(policy["min_hz"], np.quantile(v, float(rule["q"]))))
         print(
-            f"{p:7s} rate quantiles 50/85/95/99: {np.quantile(v, [0.5, 0.85, 0.95, 0.99]).round(2).tolist()} -> threshold {th[p]:.2f}"
+            f"{p:7s} over {sel:12s} n={len(v):4d} quantiles 50/85/95/99: "
+            f"{np.quantile(v, [0.5, 0.85, 0.95, 0.99]).round(2).tolist()} -> q{rule['q']} threshold {th[p]:.2f}"
         )
-    kc = np.array([r["kc_active"] for r in rows if r["kind"] == "event"]) / 4064.0
-    lo, hi = np.quantile(kc, [0.025, 0.975])
-    kc_range = [float(max(0.0, lo * 0.5)), float(hi * 1.5)]
-    print("kc_range", kc_range)
-    # how often would anything cross?
-    crossing = np.mean([any(s[p] > th[p] for p in pops) for s in scores])
-    print(f"fraction of dev episodes with any population above threshold: {crossing:.3f}")
+    ev = L.db.execute("SELECT kc_active FROM episodes WHERE kind='event'").fetchall()
+    if ev:
+        kc = np.array([r["kc_active"] for r in ev]) / 4064.0
+        lo, hi = np.quantile(kc, [0.025, 0.975])
+        kc_range = [float(max(0.0, lo * 0.5)), float(hi * 1.5)]
+        print("kc_range", kc_range)
+    else:
+        kc_range = cfg.get("kc_range")
     if a.write:
-        cfg = json.load(open(paths.CONFIG / "thresholds.json"))
         cfg.update(th)
-        cfg["kc_range"] = kc_range
+        if kc_range:
+            cfg["kc_range"] = kc_range
+        prev = cfg.get("_calibration", {})
         cfg["_calibration"] = {
-            "q": a.q,
-            "min_hz": a.min_hz,
-            "n_episodes": len(rows),
-            "source": source,
+            "policy": a.policy.replace(str(paths.ROOT) + "/", ""),
+            "source": {
+                **({k: v for k, v in prev.get("source", {}).items()} if isinstance(prev.get("source"), dict) else {}),
+                **{p: source for p in th},
+            },
+            "kept": skipped,
         }
         json.dump(cfg, open(paths.CONFIG / "thresholds.json", "w"), indent=1)
         print("wrote config/thresholds.json")

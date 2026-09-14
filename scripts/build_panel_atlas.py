@@ -42,10 +42,30 @@ def main() -> int:
             p = p[~np.isnan(p[:, 0])]
             if len(p):
                 pos[i] = p.mean(axis=0)
+    # the map is the brain: bounds come from the intrinsic cells' somas.  A soma outside them
+    # (ascending neurons in the nerve cord, sensory cells in the periphery) is placed like a
+    # missing one, at the mean of its targets, and flagged so the page can draw it dimmer.
+    intrinsic = (ann["superclass"].fillna("") == "cb_intrinsic").to_numpy() & has
+    lo, hi = np.nanpercentile(pos[intrinsic], 0.5, axis=0), np.nanpercentile(pos[intrinsic], 99.5, axis=0)
+    pad = 0.03 * (hi - lo)
+    lo, hi = lo - pad, hi + pad
+    outside = has & ((pos < lo) | (pos > hi)).any(axis=1)
+    has = has & ~outside
+    pos[outside] = np.nan
+    for _ in range(2):
+        missing = np.flatnonzero(np.isnan(pos[:, 0]))
+        for i in missing:
+            post = b.indices[b.indptr[i] : b.indptr[i + 1]]
+            p = pos[post]
+            p = p[~np.isnan(p[:, 0])]
+            if len(p):
+                pos[i] = p.mean(axis=0)
     still = np.isnan(pos[:, 0])
     pos[still] = np.nanmean(pos, axis=0)
-    lo, hi = np.nanmin(pos, axis=0), np.nanmax(pos, axis=0)
-    q = ((pos - lo) / (hi - lo) * 65535).round().clip(0, 65535).astype("<u2")
+    # one scale for all three axes, so the brain keeps its proportions in every view
+    scale = float((hi - lo).max())
+    centre = (lo + hi) / 2
+    q = ((pos - centre) / scale * 65535 + 32767.5).round().clip(0, 65535).astype("<u2")
     sc_names = list(CB_SUPERCLASSES)
     sc = ann["superclass"].fillna("").map({s: i for i, s in enumerate(sc_names)}).fillna(len(sc_names)).astype(np.uint8)
     flags = np.zeros(n, dtype=np.uint8)
@@ -80,7 +100,11 @@ def main() -> int:
             "dn": int(len(fly.dn)),
         },
         "soma_coverage": float(has.mean()),
+        "outside_brain": int(outside.sum()),
         "bounds_voxels": {"lo": lo.tolist(), "hi": hi.tolist()},
+        "scale_voxels": scale,
+        "extent": ((hi - lo) / scale).tolist(),
+        "coords": "u16 = (voxel - centre) / scale * 65535 + 32767.5; isotropic; y down, z posterior",
         "synapses": int(b.indptr[-1]),
         "source": "MaleCNS v1.0 body annotations, somaLocation; central brain subset",
     }

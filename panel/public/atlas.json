@@ -62,19 +62,27 @@
   "dan": 340,
   "dn": 1314
  },
- "soma_coverage": 0.8623073353037446,
+ "soma_coverage": 0.8154327169691492,
+ "outside_brain": 1919,
  "bounds_voxels": {
   "lo": [
-   19986.0,
-   4758.0,
-   10154.0
+   19846.3456,
+   4599.2273000000005,
+   10834.1282
   ],
   "hi": [
-   76284.0,
-   68904.0,
-   134088.0
+   76224.01439999999,
+   48966.6827,
+   39908.9318
   ]
  },
+ "scale_voxels": 56377.668799999985,
+ "extent": [
+  1.0,
+  0.7869686055553969,
+  0.5157148959660426
+ ],
+ "coords": "u16 = (voxel - centre) / scale * 65535 + 32767.5; isotropic; y down, z posterior",
  "synapses": 8485676,
  "source": "MaleCNS v1.0 body annotations, somaLocation; central brain subset"
 }

@@ -1,0 +1,15 @@
+# Threshold calibration policy (pre-registered; frozen at freeze-v1).
+# scripts/calibrate_thresholds.py sets each population's threshold to a quantile of its
+# rate over a named set of real windows.  Never outcomes, never hand-set.
+#   event         every event window (a post he read)
+#   mentioned     event windows in which he was addressed (mention, reply, quote)
+#   landing_peak  the peak groom rate in the window after each landing (landing + spontaneous rows
+#                 sharing one `landing:<id>` note): one number per landing
+min_hz: 1.0
+populations:
+  engage: {q: 0.85, over: event}
+  like:   {q: 0.85, over: event}
+  leave:  {q: 0.85, over: event}
+  reply:  {q: 0.40, over: mentioned}      # song-DN rate when he is addressed; ~6 in 10 mentions may answer before gating
+  groom:  {q: 0.70, over: landing_peak}   # ~3 landings in 10 are enough to groom
+min_rows: {event: 200, mentioned: 60, landing_peak: 30}

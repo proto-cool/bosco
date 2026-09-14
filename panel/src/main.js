@@ -101,8 +101,8 @@ async function initBrain() {
   brain = new BrainView($('brain'), atlas, colours());
   $('atlas-caption').textContent =
     `${fmt(meta.n)} neurons of the central brain at their somas; ${Math.round(meta.soma_coverage * 100)}% have one in the ` +
-    `volume, the rest sit at the mean of their targets. the mushroom body in blue, descending and motor cells in ` +
-    `violet, the rest in grey. no synapses are drawn.`;
+    `brain, the rest sit at the mean of their targets. the mushroom body in blue, descending and motor cells in ` +
+    `violet, the rest in grey. no synapses are drawn. drag to turn him.`;
   for (const btn of document.querySelectorAll('.views button')) {
     btn.addEventListener('click', () => {
       for (const o of document.querySelectorAll('.views button')) o.setAttribute('aria-pressed', String(o === btn));
@@ -214,12 +214,14 @@ async function pollStatus() {
   // memory: one figure, one sentence, a short list
   const people = st.people || [];
   $('people-count').textContent = fmt(people.length);
+  const hunger =
+    br.appetite == null ? '' : br.appetite > 0.7 ? ' he is hungry for company.' : br.appetite < 0.3 ? ' he has had his fill of company for now.' : ' he could take some company.';
   sentence(
     $('memory-sentence'),
     br.stm_depressed || br.ltm_depressed
       ? [b(fmt(br.stm_depressed)), ' short-term and ', b(fmt(br.ltm_depressed)), ' long-term traces across ',
-        b(fmt(br.plastic_synapses)), ' plastic synapses. dust on his bristles ', b(pct(br.dust)), '.']
-      : ['no traces yet across ', b(fmt(br.plastic_synapses)), ' plastic synapses. dust on his bristles ', b(pct(br.dust)), '.'],
+        b(fmt(br.plastic_synapses)), ' plastic synapses. dust on his bristles ', b(pct(br.dust)), '.', hunger]
+      : ['no traces yet across ', b(fmt(br.plastic_synapses)), ' plastic synapses. dust on his bristles ', b(pct(br.dust)), '.', hunger],
   );
   const list = $('people');
   list.replaceChildren(
