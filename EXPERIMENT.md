@@ -101,8 +101,9 @@ the PDS, not the handle); free text around the keyword is fine
 - **Hard stop.** Stopping the container. The dead-man alert fires after 4 h.
 
 **The off ramp (anyone, decided 2026-09-14).** Any account can send him
-away by mention or reply: "go away", "leave me alone", "unfollow me",
-"stop", "opt out" (`config/identity_v1.yaml` `opt_out`). He answers once,
+away by mention or reply: "shoo fly" first of all, and "go away", "leave me
+alone", "unfollow me", "stop", "opt out" (`config/identity_v1.yaml`
+`opt_out`). He answers once,
 unfollows them, and they join the ignore list under their own DID: never in
 the stimulus stream again, never approached. Logged as `opt_out`. The same
 account saying "come back" lifts it (`opt_in`); nothing else does, and an

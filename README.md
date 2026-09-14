@@ -297,8 +297,9 @@ Every number below has a gate report under `docs/`.
 
 33. **The off ramp** (decided 2026-09-14). People will not all want a fruit
    fly in their replies, and they should not need the operator to be rid of
-   him. Any account that tells him to go by mention ("go away", "leave me
-   alone", "unfollow me", "stop", "opt out"; `config/identity_v1.yaml`) is
+   him. Any account that tells him to go by mention ("shoo fly" above all;
+   also "go away", "leave me alone", "unfollow me", "stop", "opt out";
+   `config/identity_v1.yaml`) is
    answered once, unfollowed, and placed on the ignore list under its own
    DID: never in his stimulus stream again, never approached, logged as
    `opt_out`. "come back" from the same account lifts it; the operator's
@@ -306,6 +307,22 @@ Every number below has a gate report under `docs/`.
    and is the punishment signal besides; a mute costs nothing. Like the
    identity answers, this is a reflex outside the network, not a decision
    of his.
+
+34. **Habituation recovers lazily** (kernel, decided 2026-09-14). A
+   synapse's resource `x` is only read when its neuron spikes, so the
+   kernel no longer relaxes every neuron's `x` every step; it records the
+   step each `x` was last current and applies the whole recovery in one
+   multiplication when the neuron next fires, when it is read back, or
+   when time is skipped. The power `e^k` is computed by squaring in plain
+   double arithmetic, not by libm, so a replay on another machine is still
+   bit-identical. The saved state carries the per-neuron step; a state saved
+   before this loads with every `x` marked current. Measured on the laptop
+   from a rested network under the clock drive alone: a dead-quiet second
+   (early afternoon, no clock cells driven) fell from 0.08 to 0.04 wall
+   seconds, a morning second from 0.13 to 0.09, and an evening second (the
+   evening cells at 6 Hz wake a quarter of the brain) from 0.35 to 0.28. The
+   whole-brain sweep had been a fixed cost on every second; what remains in
+   the evening is real synaptic traffic. Same dynamics, cheaper seconds.
 
 Not in v1: visual input.
 

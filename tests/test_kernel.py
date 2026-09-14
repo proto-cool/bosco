@@ -110,3 +110,34 @@ def test_adaptation_reduces_sustained_firing():
     _, ia = a.run_ms(1000.0)
     _, ib = b.run_ms(1000.0)
     assert 0 < (ib == 1).sum() < (ia == 1).sum()
+
+
+def test_lazy_recovery_matches_eager_and_loads_older_states():
+    """Synaptic resources recover lazily (applied when the neuron next spikes, one multiplication)
+    and read back current; a state saved without the bookkeeping loads with every x current."""
+    import numpy as np
+
+    from bosco.kernel import LifParams, Net, csr_from_edges
+
+    indptr, indices, w = csr_from_edges(3, [0, 1], [1, 2], [20.0, 20.0])
+    net = Net(indptr, indices, w, LifParams(std_u=0.5, std_tau_rec=50.0))
+    net.set_inputs(np.array([0]), np.array([400.0]))
+    net.reset(seed=3)
+    net.run_ms(20.0)
+    x1 = net.x()[0]
+    assert x1 < 1.0
+    net.set_inputs(np.array([], dtype=np.int64), np.array([]))
+    net.run_ms(200.0)  # four recovery time constants with no spikes: x reads back near 1 without any touch
+    x2 = net.x()[0]
+    assert x2 > x1 and abs(x2 - (1.0 - (1.0 - x1) * np.exp(-200.0 / 50.0))) < 1e-9
+    # a state blob saved before lazy recovery existed carried x current: materialise (recover over
+    # no time touches every x), then drop the trailing bookkeeping
+    net.recover(0.0)
+    full = net.get_state()
+    older = full[: len(full) - 8 * net.n]
+    net2 = Net(indptr, indices, w, LifParams(std_u=0.5, std_tau_rec=50.0))
+    net2.set_state(older)
+    assert abs(net2.x()[0] - net.x()[0]) < 1e-12  # x was current as saved; nothing is recovered twice
+    net.run_ms(5.0)
+    net2.run_ms(5.0)
+    assert net.get_state() == net2.get_state()

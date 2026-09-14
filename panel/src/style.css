@@ -12,6 +12,10 @@ html {
   color-scheme: dark;
   scrollbar-color: var(--border-default) var(--bg-deep);
 }
+/* anchors land under the sticky top line, not behind it */
+.row[id] {
+  scroll-margin-top: calc(var(--top-h) + var(--space-md));
+}
 body {
   margin: 0;
   background: var(--bg-deep);

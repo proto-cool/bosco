@@ -46,8 +46,8 @@ convenience, "just for testing," or because a result would look better.
 - **Operator override** from `@proto.cool` (EXPERIMENT.md §2a) by mention:
   sleep, wake, delete, ignore, unfollow, reload, restart, status, people,
   memory, forget. Only `forget` touches state, and it is logged and flagged.
-- **Anyone can send him away** (EXPERIMENT.md §2a): "go away", "stop",
-  "opt out" and the like by mention are a reflex: answered once, unfollowed,
+- **Anyone can send him away** (EXPERIMENT.md §2a): "shoo fly" (or "go
+  away", "stop", "opt out") by mention is a reflex: answered once, unfollowed,
   ignored for good under their own DID; "come back" from them lifts it.
 - **Moderation labels are bitter** (EXPERIMENT.md §2b): labeled posts and
   accounts are never approached and never reward. The vocabulary is closed

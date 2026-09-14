@@ -91,6 +91,7 @@ def _load() -> C.CDLL:
     lib.lif_spike_counts.argtypes = [C.c_void_p, i64p]
     lib.lif_get_v.argtypes = [C.c_void_p, f64p]
     lib.lif_get_x.argtypes = [C.c_void_p, f64p]
+    lib.lif_x_current.argtypes = [C.c_void_p]
     lib.lif_set_std_u.argtypes = [C.c_void_p, f64p]
     lib.lif_recover.argtypes = [C.c_void_p, C.c_double]
     lib.lif_state_size.restype = C.c_int64
@@ -201,14 +202,20 @@ class Net:
     def set_state(self, state: bytes) -> None:
         size = int(self.lib.lif_state_size(self._h))
         nblk = self.nblk
-        base = size - nblk
-        if len(state) != size and len(state) >= base:
-            # state saved before activity blocks existed, or with another block size: keep the
-            # neurons, arm every block; blocks disarm on their own once at rest
-            state = bytes(state[:base]) + b"\x01" * nblk
+        xs = 8 * self.n  # the lazy-recovery bookkeeping, last in the blob
+        base = size - xs - nblk
+        older = len(state) != size
+        if older and len(state) >= base:
+            # a state saved before activity blocks existed, or with another block size: keep the
+            # neurons, arm every block (they disarm on their own once at rest); a state saved
+            # before lazy recovery carried x current, so mark every x as of the saved step
+            blk = bytes(state[base : base + nblk]) if len(state) == base + nblk else b"\x01" * nblk
+            state = bytes(state[:base]) + blk + b"\x00" * xs
         if len(state) != size:
             raise ValueError(f"state size {len(state)} != {size}")
         self.lib.lif_set_state(self._h, C.c_char_p(state))
+        if older:
+            self.lib.lif_x_current(self._h)
 
     def recover(self, ms: float) -> None:
         """Passive recovery for skipped time (dev fast mode): STD resources and adaptation relax."""

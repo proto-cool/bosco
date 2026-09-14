@@ -83,6 +83,8 @@ void lif_set_state(lif_net *net, const void *buf);
 void lif_recover(lif_net *net, double ms);
 /* Per-presynaptic-neuron STD utilisation (length n); overrides std_u. */
 void lif_set_std_u(lif_net *net, const double *u);
+/* After loading a state saved before lazy STD recovery: every x is current as of now. */
+void lif_x_current(lif_net *net);
 /* Copy synaptic resource variables x (length n). */
 void lif_get_x(const lif_net *net, double *x_out);
 /* Copy membrane potentials (length n). */

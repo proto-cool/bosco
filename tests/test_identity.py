@@ -33,6 +33,10 @@ def test_memory_question_and_answers():
 def test_opt_out_and_opt_in_patterns():
     r = IdentityReflex()
     for t in (
+        "shoo fly",
+        "@bosco.proto.cool shoo, fly",
+        "Shoo!",
+        "shoofly",
         "@bosco.proto.cool go away",
         "leave me alone",
         "please opt out",

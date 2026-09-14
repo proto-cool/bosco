@@ -361,7 +361,8 @@ class Agent:
         """Share of the kernel's 64-neuron blocks that are awake (cost of a simulated second scales with it)."""
         st = self.live.net.get_state()
         nblk = self.live.net.nblk
-        return sum(st[-nblk:]) / nblk
+        tail = 8 * self.live.net.n  # the lazy-recovery steps sit after the block flags
+        return sum(st[-(nblk + tail) : -tail]) / nblk
 
     def snapshot(self) -> Path:
         self.snapshot_dir.mkdir(parents=True, exist_ok=True)

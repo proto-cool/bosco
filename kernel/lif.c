@@ -26,6 +26,7 @@ struct lif_net {
     int32_t dly_steps;
 
     double *v, *g, *x, *u;  /* u: per-presynaptic-neuron STD utilisation */
+    int64_t *x_step;        /* step at which x[i] was last brought up to date (lazy recovery) */
     double *theta;          /* adaptive threshold offset */
     double sfa_b, e_sfa;
     double std_u, e_rec;    /* STD utilisation and per-step recovery factor */
@@ -48,6 +49,28 @@ struct lif_net {
     int64_t step;
     int64_t *counts;
 };
+
+/* b^k for integer k >= 0 by squaring: plain multiplications, so the result is the same on
+ * every machine (libm's pow need not be). */
+static inline double powi(double b, int64_t k) {
+    double r = 1.0;
+    while (k > 0) {
+        if (k & 1) r *= b;
+        b *= b;
+        k >>= 1;
+    }
+    return r;
+}
+/* Synaptic resources recover toward 1 lazily: a neuron's x is only needed when it spikes, so
+ * the recovery since it was last touched is applied then, in one multiplication, instead of
+ * touching every neuron every step. */
+static inline void x_touch(lif_net *net, int32_t i, int64_t t) {
+    int64_t k = t - net->x_step[i];
+    if (k > 0) {
+        net->x[i] = 1.0 - (1.0 - net->x[i]) * powi(net->e_rec, k);
+        net->x_step[i] = t;
+    }
+}
 
 /* splitmix64 */
 static inline uint64_t next_u64(uint64_t *s) {
@@ -84,6 +107,7 @@ lif_net *lif_create(int32_t n, const int64_t *indptr, const int32_t *indices,
     net->v = malloc((size_t)n * sizeof(double));
     net->g = malloc((size_t)n * sizeof(double));
     net->x = malloc((size_t)n * sizeof(double));
+    net->x_step = malloc((size_t)n * sizeof(int64_t));
     net->theta = malloc((size_t)n * sizeof(double));
     net->sfa_b = p->sfa_b;
     net->e_sfa = (p->sfa_b > 0.0 && p->sfa_tau > 0.0) ? exp(-p->dt_ms / p->sfa_tau) : 1.0;
@@ -106,7 +130,7 @@ lif_net *lif_create(int32_t n, const int64_t *indptr, const int32_t *indices,
 void lif_free(lif_net *net) {
     if (!net) return;
     free(net->indptr); free(net->indices); free(net->w);
-    free(net->v); free(net->g); free(net->x); free(net->theta); free(net->u); free(net->rfc_len); free(net->rfc_left);
+    free(net->v); free(net->g); free(net->x); free(net->x_step); free(net->theta); free(net->u); free(net->rfc_len); free(net->rfc_left);
     free(net->spiked); free(net->blk); free(net->ring); free(net->ring_cnt); free(net->counts);
     free(net->in_idx); free(net->in_p); free(net->in_w);
     free(net);
@@ -118,6 +142,7 @@ void lif_reset(lif_net *net, uint64_t seed) {
         net->v[i] = net->p.v0;
         net->g[i] = 0.0;
         net->x[i] = 1.0;
+        net->x_step[i] = 0;
         net->theta[i] = 0.0;
         net->rfc_len[i] = net->rfc_steps;
         net->rfc_left[i] = 0;
@@ -165,7 +190,6 @@ int64_t lif_run(lif_net *net, int64_t n_steps, int32_t *t_out, int32_t *id_out,
     const double e_m = net->e_m, e_s = net->e_s, c_g = net->c_g;
     const double v0 = net->p.v0, v_th = net->p.v_th, v_rst = net->p.v_rst;
     double *v = net->v, *g = net->g, *x = net->x, *theta = net->theta;
-    const double e_rec = net->e_rec;
     const double sfa_b = net->sfa_b, e_sfa = net->e_sfa;
     const int sfa_on = (sfa_b > 0.0);
     const double *u = net->u;
@@ -180,10 +204,7 @@ int64_t lif_run(lif_net *net, int64_t n_steps, int32_t *t_out, int32_t *id_out,
 
     for (int64_t s = 0; s < n_steps; s++) {
         const int32_t t = (int32_t)net->step;
-        /* 0. synaptic resource recovery (all neurons, including refractory) */
-        if (std_on) {
-            for (int32_t i = 0; i < n; i++) x[i] = 1.0 - (1.0 - x[i]) * e_rec;
-        }
+        /* 0. synaptic resource recovery is lazy: see x_touch (applied at delivery) */
         /* 1. state update (exact for the linear system) unless refractory; threshold
               relaxation.  Work is done per block of BLK neurons, and a block is skipped
               while every neuron in it is at rest (|v-v0|, |g|, theta all flushed to exactly
@@ -242,6 +263,7 @@ int64_t lif_run(lif_net *net, int64_t n_steps, int32_t *t_out, int32_t *id_out,
                 int32_t pre = dslot[k];
                 int64_t a = net->indptr[pre], b = net->indptr[pre + 1];
                 if (std_on) {
+                    x_touch(net, pre, t);
                     const double xp = x[pre];
                     for (int64_t e = a; e < b; e++) { g[net->indices[e]] += net->w[e] * xp; blk[net->indices[e] / BLK] = 1; }
                     x[pre] = xp - u[pre] * xp;
@@ -278,7 +300,7 @@ int32_t lif_blk(void) { return BLK; }
 int64_t lif_state_size(const lif_net *net) {
     int64_t n = net->n, D = net->dly_steps;
     return 4 * n * (int64_t)sizeof(double) + (n + D * n + D + 1) * (int64_t)sizeof(int32_t)
-         + (int64_t)sizeof(uint64_t) + (int64_t)sizeof(int64_t) + net->nblk;
+         + (int64_t)sizeof(uint64_t) + (int64_t)sizeof(int64_t) + net->nblk + n * (int64_t)sizeof(int64_t);
 }
 void lif_get_state(const lif_net *net, void *buf) {
     int64_t n = net->n, D = net->dly_steps;
@@ -293,7 +315,8 @@ void lif_get_state(const lif_net *net, void *buf) {
     memcpy(p, &net->ring_pos, sizeof(int32_t)); p += sizeof(int32_t);
     memcpy(p, &net->rng, sizeof(uint64_t)); p += sizeof(uint64_t);
     memcpy(p, &net->step, sizeof(int64_t)); p += sizeof(int64_t);
-    memcpy(p, net->blk, (size_t)net->nblk);
+    memcpy(p, net->blk, (size_t)net->nblk); p += net->nblk;
+    memcpy(p, net->x_step, n * sizeof(int64_t));
 }
 void lif_set_state(lif_net *net, const void *buf) {
     int64_t n = net->n, D = net->dly_steps;
@@ -308,12 +331,19 @@ void lif_set_state(lif_net *net, const void *buf) {
     memcpy(&net->ring_pos, p, sizeof(int32_t)); p += sizeof(int32_t);
     memcpy(&net->rng, p, sizeof(uint64_t)); p += sizeof(uint64_t);
     memcpy(&net->step, p, sizeof(int64_t)); p += sizeof(int64_t);
-    memcpy(net->blk, p, (size_t)net->nblk);
+    memcpy(net->blk, p, (size_t)net->nblk); p += net->nblk;
+    memcpy(net->x_step, p, n * sizeof(int64_t));
+}
+/* A state saved before lazy recovery existed carried x already current: mark every x as
+ * brought up to date at the current step. */
+void lif_x_current(lif_net *net) {
+    for (int32_t i = 0; i < net->n; i++) net->x_step[i] = net->step;
 }
 void lif_recover(lif_net *net, double ms) {
     const double fr = (net->std_u > 0.0 && net->p.std_tau_rec > 0.0) ? exp(-ms / net->p.std_tau_rec) : 0.0;
     const double fs = (net->sfa_b > 0.0 && net->p.sfa_tau > 0.0) ? exp(-ms / net->p.sfa_tau) : 0.0;
     for (int32_t i = 0; i < net->n; i++) {
+        x_touch(net, i, net->step);
         net->x[i] = 1.0 - (1.0 - net->x[i]) * fr;
         net->theta[i] *= fs;
         if (net->theta[i] < THETA_EPS) net->theta[i] = 0.0;
@@ -323,7 +353,10 @@ void lif_set_std_u(lif_net *net, const double *u) {
     memcpy(net->u, u, (size_t)net->n * sizeof(double));
 }
 void lif_get_x(const lif_net *net, double *x_out) {
-    memcpy(x_out, net->x, (size_t)net->n * sizeof(double));
+    for (int32_t i = 0; i < net->n; i++) {
+        int64_t k = net->step - net->x_step[i];
+        x_out[i] = k > 0 ? 1.0 - (1.0 - net->x[i]) * powi(net->e_rec, k) : net->x[i];
+    }
 }
 void lif_get_v(const lif_net *net, double *v_out) {
     memcpy(v_out, net->v, (size_t)net->n * sizeof(double));

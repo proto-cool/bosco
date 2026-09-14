@@ -68,6 +68,8 @@ intro:
 # works too and needs no words.  "come back" from the same account lifts it.
 opt_out:
   patterns:
+    - "\\bshoo,? ?fly\\b"
+    - "\\bshoo\\b"
     - "\\bgo away\\b"
     - "\\bleave me alone\\b"
     - "\\bopt(-| )?out\\b"
