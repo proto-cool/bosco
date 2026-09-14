@@ -273,7 +273,7 @@ def main(argv=None) -> int:
 
         src = Path(a.state_dir) if a.state_dir else _paths.ROOT / "state"
         tmp = Path(tempfile.mkdtemp())
-        for f in ("state.npz",):
+        for f in ("brain_state.npz", "voice.json"):
             if (src / f).exists():
                 shutil.copy(src / f, tmp / f)
         L = Ledger(f"{tmp}/bench.sqlite")
