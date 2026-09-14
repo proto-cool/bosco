@@ -1,18 +1,26 @@
 {
  "_note": "Per-population rate thresholds (Hz). Provisional values come from a synthetic stimulus battery (scripts/calibrate_thresholds.py --synthetic); at freeze-v1 they are re-set from the dev-period distribution of real activity, never from outcomes.",
- "engage": 7.307499999999998,
- "reply": 1.0,
+ "engage": 4.994999999999999,
+ "reply": 12.975000000000001,
  "like": 1.0,
- "leave": 5.516666666666664,
- "groom": 10.548684210526304,
+ "leave": 5.111111111111111,
+ "groom": 14.796052631578945,
  "kc_range": [
-  0.004183070866141733,
-  0.12182886318897637
+  0.00012303149606299212,
+  0.10002460629921262
  ],
  "_calibration": {
-  "q": 0.85,
-  "min_hz": 1.0,
-  "n_episodes": 320,
-  "source": "synthetic-dev (n=240+80)"
+  "policy": "config/thresholds_policy.yaml",
+  "source": {
+   "engage": "snapshots/dev-ledger.sqlite",
+   "like": "snapshots/dev-ledger.sqlite",
+   "leave": "snapshots/dev-ledger.sqlite",
+   "reply": "synthetic-dev (n=240+40 landings)",
+   "groom": "synthetic-dev (n=240+40 landings)"
+  },
+  "kept": [
+   "reply",
+   "groom"
+  ]
  }
 }
