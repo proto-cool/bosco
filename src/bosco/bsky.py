@@ -487,6 +487,16 @@ class Bsky:
 
 
 def run_loop(ledger: Ledger, dry_run: bool, once: bool, interval: int) -> int:
+    import signal
+
+    stop = {"now": False}
+
+    def _term(signum, frame):  # noqa: ARG001
+        stop["now"] = True
+        print("stop requested; finishing this poll and saving state")
+
+    signal.signal(signal.SIGTERM, _term)
+    signal.signal(signal.SIGINT, _term)
     b = Bsky(ledger, dry_run)
     print(f"bosco {'DRY-RUN' if dry_run else 'LIVE'} as {b.me}; operator {b.operator_did}")
     b.agent.bio_ms(time.time())  # start his clock now if it has not started
@@ -506,6 +516,13 @@ def run_loop(ledger: Ledger, dry_run: bool, once: bool, interval: int) -> int:
             )
         except Exception as e:  # noqa: BLE001
             print("poll error:", repr(e), file=sys.stderr)
-        if once:
+        if once or stop["now"]:
+            b.agent.save_state()
             return 0
-        time.sleep(interval)
+        for _ in range(interval):
+            if stop["now"]:
+                break
+            time.sleep(1)
+        if stop["now"]:
+            b.agent.save_state()
+            return 0
