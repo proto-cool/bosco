@@ -247,7 +247,14 @@ class Agent:
         self.save_state()
         return skipped
 
-    def advance_to(self, ts: float, fast: bool = False, on_groom=None, max_slices: int | None = None) -> list[Outcome]:
+    def advance_to(
+        self,
+        ts: float,
+        fast: bool = False,
+        on_groom=None,
+        max_slices: int | None = None,
+        max_wall_s: float | None = None,
+    ) -> list[Outcome]:
         """Simulate idle time up to ts in one-second slices.  Each slice is read out; a groom
         is logged as a spontaneous episode and returned.  fast=True jumps without simulating
         (development only; logged as a jump).  max_slices bounds the work per call: on a slow
@@ -257,6 +264,7 @@ class Agent:
         target = self.bio_ms(ts)
         outs: list[Outcome] = []
         n_done = 0
+        t_begin = _time.time()
         if fast and target > self.live.t_ms:
             # development shortcut: skip the gap but simulate its last SETTLE_MS so the
             # network arrives at the event settled, as it would have in real time
@@ -274,6 +282,8 @@ class Agent:
             return outs
         while self.live.t_ms + SLICE_MS <= target and not self.stop_requested:
             if max_slices is not None and n_done >= max_slices:
+                break
+            if max_wall_s is not None and _time.time() - t_begin >= max_wall_s:
                 break
             n_done += 1
             w_start = _time.time()
