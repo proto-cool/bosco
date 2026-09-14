@@ -9,7 +9,7 @@ EnvironmentFile=%h/bosco/.env
 Environment=BOSCO_PANEL_DIR=/app/state/panel
 Volume=%h/bosco/data/raw:/app/data/raw:ro,Z
 Volume=%h/bosco/data/cache:/app/data/cache:Z
-Volume=%h/bosco/state:/app/state:Z
+Volume=%h/bosco/state:/app/state:z
 Exec=run --interval 120
 StopTimeout=30
 
