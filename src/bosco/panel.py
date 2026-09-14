@@ -89,6 +89,16 @@ class Panel:
         rates = [float(dec.scores.get(p, 0.0)) for p in self.pop_names]
         _atomic_write(self.dir / "activity.bin", pack_activity(w.t1_ms, w.counts, rates, dust, dec.learned, kc_active))
 
+    def _words(self) -> dict:
+        """The words his mushroom body has learned something about, sweetest and bitterest first."""
+        wv = self.agent.word_valences()
+        ranked = sorted(wv.items(), key=lambda kv: kv[1])
+        return {
+            "sweet": [[w, round(v, 3)] for w, v in reversed(ranked[-8:]) if v > 0],
+            "bitter": [[w, round(v, 3)] for w, v in ranked[:8] if v < 0],
+            "air": list(self.agent.air(int(self.agent.live.t_ms))),
+        }
+
     # ---- per poll -----------------------------------------------------------------
     def status(self, ts: float, extra: dict | None = None) -> dict:
         L, ag = self.L, self.agent
@@ -220,6 +230,7 @@ class Panel:
             "recent": recent,
             "posts": posts,
             "voice": dict(sorted(ag.voice.items(), key=lambda kv: -abs(kv[1] - 1.0))[:12]),
+            "words": self._words(),
             "corpus_digest": ag.generator.digest(),
             "last_poll_ts": L.get_cursor("last_poll_ts"),
         }

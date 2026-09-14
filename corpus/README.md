@@ -29,3 +29,8 @@ familiarity registers, `095-learning`, and the sweet/bitter topic variants
 
 v3 (2026-09-14): `130`–`169`, one file per new topic, written by Claude in
 the register of `011-banana.txt`.
+
+State tags (2026-09-14): `time=night|morning|day|evening` and
+`appetite=hungry|sated` select files by his clock and his appetite for
+contact, so an own post is about the hour and the itch he is answering,
+not a thought. `095-learning.txt` was removed for reading as one.

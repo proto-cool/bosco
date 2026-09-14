@@ -35,15 +35,18 @@ def cmd_poke(a) -> int:
     ts = _ts(a.at)
     v = vader_compound(a.text) if a.text else 0.0
     topics = agent.enc.topics.match(a.text) if a.text else ()
-    f = Features(a.did, v, bool(a.mention), L.familiarity(a.did), False, topics)
+    words = agent.enc.words_for(a.text) if a.text else ()
+    question = bool(a.mention) and "?" in (a.text or "")
+    f = Features(a.did, v, bool(a.mention), L.familiarity(a.did), False, topics, question, words)
     src = a.uri or f"poke://{a.did}/{int(ts)}"
     qid = agent.identity.match(a.text) if a.text else None
-    out = agent.run(f, ts, src, kind="event", note="poke", fast=not a.simulate_gaps)
+    out = agent.run(f, ts, src, kind="event", note="poke", fast=not a.simulate_gaps, thread=a.thread)
     L.bump_inbound(a.did, dt.datetime.fromtimestamp(ts, dt.UTC).strftime("%Y-%m-%d"))
     d = out.decision
     print(
         f"episode {out.episode_id}  seed {out.seed}  hour {agent.clock.local_hour(ts):.2f}  "
-        f"vader {v:+.3f}  mention {bool(a.mention)}  topics {list(topics)}"
+        f"vader {v:+.3f}  mention {bool(a.mention)}  topics {list(topics)}  words {list(words)}  "
+        f"context {list(out.context) if hasattr(out, 'context') else []}"
     )
     print("scores Hz:", {k: round(x, 2) for k, x in d.scores.items()})
     print("ratios  :", {k: round(x, 2) for k, x in d.ratios.items()})
@@ -152,6 +155,7 @@ def main(argv=None) -> int:
     s.add_argument("--mention", action="store_true")
     s.add_argument("--at")
     s.add_argument("--uri")
+    s.add_argument("--thread", default=None, help="thread root; its lingering words are smelled too")
     s.set_defaults(fn=cmd_poke)
     s = sub.add_parser("spontaneous")
     s.add_argument("--at")
@@ -308,6 +312,23 @@ def main(argv=None) -> int:
         return 0
 
     s.set_defaults(fn=_bench)
+    s = sub.add_parser("words", help="what his mushroom body has learned about his words")
+    s.add_argument("-n", type=int, default=15)
+
+    def _words(a):
+        L = Ledger(a.ledger)
+        agent = Agent(L, state_dir=a.state_dir)
+        wv = agent.word_valences()
+        if not wv:
+            print("no word memory yet (data/word_kc_v1.npz missing, or nothing learned)")
+            return 0
+        ranked = sorted(wv.items(), key=lambda kv: kv[1])
+        print("sweet:", ", ".join(f"{w} {v:+.2f}" for w, v in reversed(ranked[-a.n :]) if v > 0))
+        print("bitter:", ", ".join(f"{w} {v:+.2f}" for w, v in ranked[: a.n] if v < 0))
+        print("in the air:", list(agent.air(int(agent.live.t_ms))))
+        return 0
+
+    s.set_defaults(fn=_words)
     s = sub.add_parser("status")
     s.set_defaults(fn=cmd_status)
     s = sub.add_parser("integrity")

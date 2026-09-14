@@ -219,6 +219,26 @@ Every number below has a gate report under `docs/`.
    reconciled on each sweep (`unliked_in_app`, `unfollowed_in_app`); the
    learning they earned stays, because the reward was for the window.
 
+29. **Words as smells** (`config/words_v1.yaml`, decided 2026-09-14). Every
+   content word of his closed vocabulary (850 words from the corpus and
+   phrasebook, minus a published stop list) is an odor: two neutral glomeruli
+   and a rate chosen by its hash, exactly as an account is an odor. A post's
+   words that are in his vocabulary (up to eight, in order) are driven on
+   top of the account and topic odors; the sentence is never seen. The
+   mushroom body then learns, per word, what came with it. A word's
+   Kenyon-cell signature (`data/word_kc_v1.npz`, `scripts/build_word_atlas.py`:
+   the word presented alone to a quiet network, once, a property of the
+   wiring) lets that memory be read from the weights with no simulation;
+   the generator multiplies a word's chance by (1 + learned valence). A
+   thread lingers: the words of its last three posts stay in the air for
+   15 minutes and are smelled again, fainter, with the next post in it,
+   and his own posts draw on whatever is in the air. His own posts are also
+   tied to his state by corpus tags: the hour (`time=`), his appetite
+   (`appetite=`), and the grooming he is doing when he posts. The
+   reflective corpus file that read as thought was removed. What he says
+   is stitched from fragments by a trigram; none of this is understanding,
+   and it is not meant to look like it.
+
 Not in v1: visual input.
 
 ## Running

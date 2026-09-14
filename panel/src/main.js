@@ -228,6 +228,18 @@ async function pollStatus() {
         b(fmt(br.plastic_synapses)), ' plastic synapses. dust on his bristles ', b(pct(br.dust)), '.', hunger]
       : ['no traces yet across ', b(fmt(br.plastic_synapses)), ' plastic synapses. dust on his bristles ', b(pct(br.dust)), '.', hunger],
   );
+  const wd = st.words || {};
+  const sweet = (wd.sweet || []).map(([w]) => w).slice(0, 6);
+  const bitter = (wd.bitter || []).map(([w]) => w).slice(0, 6);
+  const air = (wd.air || []).slice(0, 8);
+  $('words-sentence').replaceChildren();
+  if (sweet.length || bitter.length || air.length) {
+    const parts = [];
+    if (sweet.length) parts.push('words that have been sweet: ', b(sweet.join(', ')), '. ');
+    if (bitter.length) parts.push('words that have been bitter: ', b(bitter.join(', ')), '. ');
+    if (air.length) parts.push('in the air right now: ', b(air.join(', ')), '.');
+    sentence($('words-sentence'), parts);
+  }
   const list = $('people');
   list.replaceChildren(
     ...people.slice(0, 6).map((p) => {

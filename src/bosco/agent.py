@@ -106,6 +106,8 @@ class Agent:
         self.appetite = 0.5  # appetite for contact in [0, 1]; config/appetite_v1.yaml
         self.appetite_t = 0.0  # hours (simulation time) it was last stepped
         self._appetite_loaded = False
+        self.threads: dict[str, list[list]] = {}  # thread root -> [[t_ms, [words...]], ...]: what lingers in the air
+        self._word_atlas = None  # data/word_kc_v1.npz, loaded on first use; None if absent
         self.on_window = None  # optional observer (Window, Decision, dust) -> None; the panel. Never feeds back.
         self.stop_requested = False
         self.slice_wall_s = 0.5  # running estimate of wall seconds per simulated second
@@ -174,6 +176,7 @@ class Agent:
         st["dust"] = np.array([self.dust])
         st["landing"] = np.array([self.landing_id, self.landing_until], dtype=np.int64)
         st["appetite"] = np.array([self.appetite, self.appetite_t])
+        st["threads"] = np.array(json.dumps(self.threads, sort_keys=True))
         return st
 
     def _unpack(self, st: dict) -> None:
@@ -185,6 +188,7 @@ class Agent:
         if "appetite" in st:
             self.appetite, self.appetite_t = (float(x) for x in np.asarray(st["appetite"]).ravel()[:2])
             self._appetite_loaded = True
+        self.threads = json.loads(str(np.asarray(st["threads"]).ravel()[0])) if "threads" in st else {}
 
     def _load_state(self) -> None:
         if self.state_path.exists():
@@ -225,6 +229,74 @@ class Agent:
         """Everything that runs on his clock between windows: forgetting and appetite."""
         self.mb.forget(t_hours)
         self.appetite_step(t_hours)
+
+    # ---- a thread's lingering smell ---------------------------------------------
+    def thread_context(self, thread: str | None, t_ms: int) -> tuple[str, ...]:
+        """Words from the last posts of this thread that are still in the air.  Bookkeeping, not
+        hashed state: what he actually smelled is logged on the row, and replay reads that."""
+        if not thread:
+            return ()
+        c = self.enc.words_cfg
+        tau_ms = float(c["thread_tau_s"]) * 1000.0
+        out: list[str] = []
+        for t_prev, words in self.threads.get(thread, [])[-int(c["thread_keep"]) :]:
+            if t_ms - t_prev <= tau_ms:
+                for w in words:
+                    if w not in out:
+                        out.append(w)
+        return tuple(out[: int(c["max_words"])])
+
+    def air(self, t_ms: int) -> tuple[str, ...]:
+        """Every word still in the air around him, from any thread: what his own posts smell of."""
+        c = self.enc.words_cfg
+        tau_ms = float(c["thread_tau_s"]) * 1000.0
+        out: list[str] = []
+        for entries in self.threads.values():
+            for t_prev, words in entries:
+                if t_ms - t_prev <= tau_ms:
+                    for w in words:
+                        if w not in out:
+                            out.append(w)
+        return tuple(out[: 2 * int(c["max_words"])])
+
+    # ---- what he has learned about his words ----------------------------------------
+    def word_atlas(self):
+        if self._word_atlas is None:
+            p = paths.ROOT / "data" / "word_kc_v1.npz"
+            if p.exists():
+                z = np.load(p)
+                self._word_atlas = (list(z["words"]), z["indptr"], z["indices"].astype(np.int64))
+            else:
+                self._word_atlas = False
+        return self._word_atlas or None
+
+    def word_valences(self) -> dict[str, float]:
+        """Learned valence per word, from the weights over each word's Kenyon-cell signature."""
+        atlas = self.word_atlas()
+        if atlas is None:
+            return {}
+        words, indptr, indices = atlas
+        v = self.mb.learned_valence_batch(indptr, indices)
+        return {w: float(x) for w, x in zip(words, v, strict=True) if x != 0.0}
+
+    def state_register(self, ts: float) -> dict[str, str]:
+        """The parts of his state the corpus is tagged by: the hour and his appetite."""
+        h = self.clock.local_hour(ts)
+        t = "night" if h < 5 or h >= 22 else "morning" if h < 11 else "day" if h < 17 else "evening"
+        a = "hungry" if self.appetite > 0.7 else "sated" if self.appetite < 0.3 else ""
+        return {"time": t, "appetite": a}
+
+    def remember_thread(self, thread: str | None, t_ms: int, words: tuple[str, ...]) -> None:
+        if not thread or not words:
+            return
+        c = self.enc.words_cfg
+        tau_ms = float(c["thread_tau_s"]) * 1000.0
+        entries = self.threads.setdefault(thread, [])
+        entries.append([int(t_ms), list(words)])
+        del entries[: -int(c["thread_keep"])]
+        # forget threads whose smell has gone
+        for root in [r for r, e in self.threads.items() if e and t_ms - e[-1][0] > 4 * tau_ms]:
+            del self.threads[root]
 
     SAVE_MIN_S = 30.0  # the live loop calls save_state every few seconds; write at most this often
 
@@ -449,8 +521,20 @@ class Agent:
             if line is not None and coin == 0:
                 text, text_source = line.text, "phrasebook"
             else:
+                air = tuple(f.words) + tuple(w for w in f.context if w not in f.words) if f else self.air(w.t0_ms)
+                c = self.enc.words_cfg
                 text = self.generator.generate(
-                    dec.behaviour, dec.valence, dec.arousal, seed, topics=f.topics if f else (), familiarity=fb
+                    dec.behaviour,
+                    dec.valence,
+                    dec.arousal,
+                    seed,
+                    topics=f.topics if f else (),
+                    familiarity=fb,
+                    state=self.state_register(ts),
+                    word_valence=self.word_valences(),
+                    air=air,
+                    beta=float(c.get("valence_beta", 1.0)),
+                    gamma=float(c.get("echo_gamma", 0.5)),
                 )
                 text_source = "generated" if text else None
                 if text is None and line is not None:
@@ -491,6 +575,8 @@ class Agent:
             brain_digest=self.digest(),
             topics=",".join(f.topics) if f and f.topics else None,
             appetite=self.appetite,
+            words=",".join(f.words) if f and f.words else None,
+            context=",".join(f.context) if f and f.context else None,
         )
         eid = self.ledger.add_episode(row, ts=ts)
         return Outcome(eid, dec, line, seed, text, text_source, ts, bool(f.mentioned) if f else False)
@@ -503,9 +589,13 @@ class Agent:
         kind: str = "event",
         note: str | None = None,
         fast: bool = False,
+        thread: str | None = None,
     ) -> Outcome:
-        """Present the event for one second at his current time (after a bounded catch-up), decide, record."""
+        """Present the event for one second at his current time (after a bounded catch-up), decide, record.
+        `thread` names the conversation the post belongs to: its lingering words are smelled too."""
         self.advance_to(ts, fast=fast, max_wall_s=EVENT_CATCHUP_WALL_S)
+        if f is not None and thread:
+            f = replace(f, context=self.thread_context(thread, self.live.t_ms))
         self.live.set_base(self._base_drives(self.live.t_ms))
         drives = list(self.enc.encode(f, self.appetite).drives) if f is not None else []
         w = self.live.present(drives, PRESENT_MS)
@@ -515,6 +605,8 @@ class Agent:
         if self.on_window is not None:
             self.on_window(w, dec, self.dust)
         out = self._log(f, w, dec, ts, source_uri, kind, note, self.dust)
+        if f is not None:
+            self.remember_thread(thread, self.live.t_ms, f.words)
         self.save_state()
         return out
 
@@ -537,8 +629,18 @@ class Agent:
         labeled = "labeled" in (r["note"] or "")
         topics = tuple((r["topics"] or "").split(",")) if r["topics"] else ()
         question = "question" in (r["note"] or "")
+        words = tuple(r["words"].split(",")) if r["words"] else ()
+        context = tuple(r["context"].split(",")) if r["context"] else ()
         f = Features(
-            r["did"], float(r["vader"]), bool(r["mentioned"]), int(r["familiarity"]), labeled, topics, question
+            r["did"],
+            float(r["vader"]),
+            bool(r["mentioned"]),
+            int(r["familiarity"]),
+            labeled,
+            topics,
+            question,
+            words,
+            context,
         )
         self.live.set_base(self._base_drives(self.live.t_ms))
         d_before = self.mb.digest()
@@ -650,6 +752,8 @@ class Agent:
                     "labeled" in note,
                     topics,
                     "question" in note,
+                    tuple(r["words"].split(",")) if r["words"] else (),
+                    tuple(r["context"].split(",")) if r["context"] else (),
                 )
             self.advance_to(ts)
             self.live.set_base(self._base_drives(self.live.t_ms))

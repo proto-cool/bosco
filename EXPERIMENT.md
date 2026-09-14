@@ -51,6 +51,12 @@ genuinely the one acting, and that anyone can check.
   (`config/encoder_v1.yaml` `spontaneous`). There is no timer. The VPS
   bounds perception, not behaviour: at most `BOSCO_EPISODE_BUDGET` windows
   per hour.
+- His own words are smells (`config/words_v1.yaml`): the content words of a
+  post that are in his closed vocabulary are driven as odors on top of the
+  account's, up to eight; the last posts of a thread linger in the air for
+  fifteen minutes. He never sees a sentence. What he learns about a word is
+  read from the weights and leans on which words he chooses; it is never a
+  meaning.
 - Being addressed excites his courtship command neurons (pC1) in proportion
   to his appetite for contact (`config/appetite_v1.yaml`): a scalar that
   rises over hours without a social reward and falls with each reward. It
@@ -129,6 +135,7 @@ published with the frozen artifacts.
 | Readout thresholds | `config/thresholds.json` | |
 | Threshold policy | `config/thresholds_policy.yaml` | |
 | Appetite | `config/appetite_v1.yaml` | |
+| Words as smells | `config/words_v1.yaml`, `data/word_kc_v1.npz` | |
 | Corpus | `corpus/` | |
 
 ## 4. Controls (optional; for the curious)

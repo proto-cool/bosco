@@ -472,11 +472,20 @@ class Bsky:
         labels = labels or set()
         note = ("labeled:" + ",".join(sorted(labels))) if labels else None
         topics = self.agent.enc.topics.match(text)
+        words = self.agent.enc.words_for(text)
         question = mentioned and "?" in text
         if question:
             note = (note + "; " if note else "") + "question"
+        reply = getattr(record, "reply", None)
+        root = getattr(reply, "root", None)
+        parent = getattr(reply, "parent", None)
         out = self.agent.run(
-            Features(did, v, mentioned, fam, bool(labels), topics, question), ts, uri, kind="event", note=note
+            Features(did, v, mentioned, fam, bool(labels), topics, question, words),
+            ts,
+            uri,
+            kind="event",
+            note=note,
+            thread=root.uri if root else uri,
         )
         d = out.decision
         top = max(d.ratios, key=d.ratios.get) if d.ratios else "-"
@@ -505,9 +514,6 @@ class Bsky:
             )
         if mentioned:
             self.L.bump_inbound(did, _day(ts))
-        reply = getattr(record, "reply", None)
-        root = getattr(reply, "root", None)
-        parent = getattr(reply, "parent", None)
         ours = self.L.our_uris()
         in_thread = (
             bool(parent and parent.uri in ours)

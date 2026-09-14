@@ -33,6 +33,10 @@ class Features:
     topics: tuple[str, ...] = ()
     # the post asks something ('?'): a stronger touch (JO drive x question_gain); approach becomes a reply
     question: bool = False
+    # his own words that were in the post (config/words_v1.yaml): each is an odor.  Never the sentence.
+    words: tuple[str, ...] = ()
+    # words still in the air from earlier posts in this thread, smelled again at a lower rate
+    context: tuple[str, ...] = ()
 
 
 class Encoder:
@@ -57,6 +61,62 @@ class Encoder:
             brain.index_of_present(pop.bodies_of_types(sp.get("bristle_types", []))) if sp else np.zeros(0, np.int32)
         )
         self.pc1 = brain.index_of_present(pop.pc1()) if self.cfg.get("courtship") else np.zeros(0, np.int32)
+        self.words_cfg = yaml.safe_load(open(paths.CONFIG / "words_v1.yaml"))
+        self.vocab = self._load_vocab()
+
+    # ---- words as smells --------------------------------------------------
+    def _load_vocab(self) -> frozenset[str]:
+        """His closed vocabulary: content words of the corpus and phrasebook."""
+        from bosco.textgen import Generator, tokenize
+
+        stop = set(self.words_cfg["stopwords"])
+        min_len = int(self.words_cfg["min_len"])
+        words: set[str] = set()
+        try:
+            from bosco.phrasebook import Phrasebook
+
+            lines = [ln.text for ln in Phrasebook().lines]
+        except Exception:  # noqa: BLE001
+            lines = []
+        g = Generator(phrasebook_lines=lines)
+        for d in g.docs:
+            for sent in d.sentences:
+                for t in sent:
+                    w = t.lower().replace("'", "")
+                    if w.isalpha() and len(w) >= min_len and w not in stop:
+                        words.add(w)
+        for t in tokenize(" ".join(lines)):
+            w = t.lower().replace("'", "")
+            if w.isalpha() and len(w) >= min_len and w not in stop:
+                words.add(w)
+        return frozenset(words)
+
+    def words_for(self, text: str) -> tuple[str, ...]:
+        """The words of his vocabulary in a post, in order of first appearance, at most max_words.
+        The text is read once and discarded; only these words are kept."""
+        from bosco.textgen import tokenize
+
+        out: list[str] = []
+        seen: set[str] = set()
+        for t in tokenize(text):
+            w = t.lower().replace("'", "")
+            if w in self.vocab and w not in seen:
+                seen.add(w)
+                out.append(w)
+                if len(out) >= int(self.words_cfg["max_words"]):
+                    break
+        return tuple(out)
+
+    def word_drive(self, word: str, scale: float = 1.0) -> Drive:
+        """A word is k neutral glomeruli and a rate, both chosen by its hash."""
+        c = self.words_cfg
+        seed = int.from_bytes(hashlib.blake2b(f"word|{word}".encode(), digest_size=8).digest(), "little")
+        rng = np.random.default_rng(seed)
+        chosen = rng.choice(len(self.neutral), size=int(c["k"]), replace=False)
+        lo, hi = c["rate_hz"]
+        rate = float(lo + (hi - lo) * rng.random()) * scale
+        idx = np.concatenate([self.orn_by_glom[self.neutral[i]] for i in chosen]).astype(np.int32)
+        return Drive(np.sort(idx), round(rate, 6), f"word:{word}")
 
     # ---- account odor ---------------------------------------------------
     def glomeruli_for(self, did: str) -> list[str]:
@@ -129,6 +189,9 @@ class Encoder:
         sets how hard being addressed excites the courtship command."""
         drives = [self.odor_drive(f.did)]
         drives += [self.topic_drive(t) for t in f.topics]
+        drives += [self.word_drive(w) for w in f.words]
+        scale = float(self.words_cfg.get("context_rate_scale", 0.5))
+        drives += [self.word_drive(w, scale) for w in f.context if w not in f.words]
         g = self.gustatory_drive(-1.0) if f.labeled else self.gustatory_drive(f.vader)
         if g is not None:
             drives.append(g)

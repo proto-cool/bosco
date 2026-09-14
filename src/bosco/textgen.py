@@ -218,10 +218,14 @@ class Generator:
         return True
 
     @staticmethod
-    def _want(behaviour: str, valence: str, arousal: str, familiarity: str | None) -> dict[str, str]:
+    def _want(
+        behaviour: str, valence: str, arousal: str, familiarity: str | None, state: dict[str, str] | None = None
+    ) -> dict[str, str]:
         want = {"behaviour": behaviour, "valence": valence, "arousal": arousal}
         if familiarity:
             want["familiarity"] = familiarity  # new | known | familiar (phrasebook bins)
+        for k, v in (state or {}).items():  # time=night|morning|day|evening, appetite=hungry|sated|""
+            want[k] = v  # an empty value still excludes documents tagged with that key
         return want
 
     def matching_docs(
@@ -231,9 +235,10 @@ class Generator:
         arousal: str,
         topics: tuple[str, ...] = (),
         familiarity: str | None = None,
+        state: dict[str, str] | None = None,
     ) -> list[str]:
         """Names of tagged documents that matched this register (the ones what-to-say learning touches)."""
-        want = self._want(behaviour, valence, arousal, familiarity)
+        want = self._want(behaviour, valence, arousal, familiarity, state)
         return [d.name for d in self.docs if d.tags and self._doc_matches(d, want, topics)]
 
     def set_doc_weights(self, w: dict[str, float]) -> None:
@@ -247,11 +252,12 @@ class Generator:
         arousal: str,
         topics: tuple[str, ...] = (),
         familiarity: str | None = None,
+        state: dict[str, str] | None = None,
     ) -> NGram:
-        key = (behaviour, valence, arousal, tuple(sorted(topics)), familiarity)
+        key = (behaviour, valence, arousal, tuple(sorted(topics)), familiarity, tuple(sorted((state or {}).items())))
         if key in self._models:
             return self._models[key]
-        want = self._want(behaviour, valence, arousal, familiarity)
+        want = self._want(behaviour, valence, arousal, familiarity, state)
         pool: list[list[str]] = []
         for d in self.docs:
             if self._doc_matches(d, want, topics):
@@ -275,10 +281,20 @@ class Generator:
         max_sentences: int = 3,
         topics: tuple[str, ...] = (),
         familiarity: str | None = None,
+        state: dict[str, str] | None = None,
+        word_valence: dict[str, float] | None = None,
+        air: tuple[str, ...] = (),
+        beta: float = 1.0,
+        gamma: float = 0.5,
     ) -> str | None:
+        """`word_valence` is what his mushroom body has learned about each word (from the weights);
+        a sweet word is chosen more, a bitter one less.  `air` is the words around him right now
+        (the post he answers, the thread, the last things he smelled); they come up a little more."""
         if self.empty:
             return None
-        m = self.model_for(behaviour, valence, arousal, topics, familiarity)
+        m = self.model_for(behaviour, valence, arousal, topics, familiarity, state)
+        wv = word_valence or {}
+        in_air = set(air)
         temp = {"low": 0.8, "mid": 1.0, "high": 1.15}.get(arousal, 1.0)
         rng = _Rng(
             int.from_bytes(
@@ -302,7 +318,12 @@ class Generator:
             fresh = [c for c in cands if (a, b, c) not in used or c == EOS]
             if fresh:
                 cands = fresh
-            ws = [m.p_tri(a, b, w) ** (1.0 / temp) for w in cands]
+            ws = [
+                m.p_tri(a, b, w) ** (1.0 / temp)
+                * max(0.1, 1.0 + beta * wv.get(w, 0.0))
+                * (1.0 + gamma if w in in_air else 1.0)
+                for w in cands
+            ]
             tot = sum(ws)
             if tot <= 0:
                 break

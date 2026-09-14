@@ -152,6 +152,8 @@ class EpisodeRow:
     brain_digest: str | None = None
     topics: str | None = None
     appetite: float | None = None
+    words: str | None = None
+    context: str | None = None
 
 
 class Ledger:
@@ -175,6 +177,8 @@ class Ledger:
             ("brain_digest", "TEXT"),
             ("topics", "TEXT"),
             ("appetite", "REAL"),
+            ("words", "TEXT"),
+            ("context", "TEXT"),
         ):
             if col not in ecols:
                 self.db.execute(f"ALTER TABLE episodes ADD COLUMN {col} {typ}")
@@ -185,8 +189,8 @@ class Ledger:
         cur = self.db.execute(
             "INSERT INTO episodes (ts, kind, did, source_uri, vader, mentioned, familiarity, hour, seed, "
             "weight_digest_before, weight_digest_after, scores, mbon, kc_active, behaviour, action, valence, arousal, "
-            "line_key, line_id, note, drive, t_ms, brain_digest, topics, appetite) "
-            "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+            "line_key, line_id, note, drive, t_ms, brain_digest, topics, appetite, words, context) "
+            "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
             (
                 ts or time.time(),
                 e.kind,
@@ -214,6 +218,8 @@ class Ledger:
                 e.brain_digest,
                 e.topics,
                 e.appetite,
+                e.words,
+                e.context,
             ),
         )
         self.db.commit()
