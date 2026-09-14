@@ -74,7 +74,7 @@ export class BrainView {
     this.yaw = 0;
     this.pitch = 0;
     this.target = null; // [yaw, pitch] to ease toward
-    this.orbit = true; // slow turn about the vertical axis when nobody is holding it
+    this.orbit = false; // slow turn about the vertical axis; a toggle on the page, off by default
     this.orbitRate = TWO_PI / 90; // one revolution in 90 s
     this.pauseUntil = 0;
     this.hold = false; // a still: lit cells do not decay

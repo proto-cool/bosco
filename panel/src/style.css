@@ -217,6 +217,11 @@ a:hover {
   color: var(--accent-primary);
   text-shadow: var(--glow-xs);
 }
+.views .toggle {
+  margin-left: var(--space-sm);
+  padding-left: var(--space-sm);
+  border-left: 1px solid var(--divider); /* a neutral rail between the angles and the switch */
+}
 .caption {
   margin: 0;
   font-size: var(--annot-size);

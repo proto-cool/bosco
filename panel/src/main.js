@@ -103,12 +103,17 @@ async function initBrain() {
     `${fmt(meta.n)} neurons of the central brain at their somas; ${Math.round(meta.soma_coverage * 100)}% have one in the ` +
     `brain, the rest sit at the mean of their targets. the mushroom body in blue, descending and motor cells in ` +
     `violet, the rest in grey. no synapses are drawn. drag to turn him.`;
-  for (const btn of document.querySelectorAll('.views button')) {
+  for (const btn of document.querySelectorAll('.views button[data-view]')) {
     btn.addEventListener('click', () => {
-      for (const o of document.querySelectorAll('.views button')) o.setAttribute('aria-pressed', String(o === btn));
+      for (const o of document.querySelectorAll('.views button[data-view]')) o.setAttribute('aria-pressed', String(o === btn));
       brain.setView(Number(btn.dataset.view));
     });
   }
+  $('orbit').addEventListener('click', () => {
+    brain.orbit = !brain.orbit;
+    brain.pauseUntil = 0;
+    $('orbit').setAttribute('aria-pressed', String(brain.orbit));
+  });
   buildReadout();
 }
 
