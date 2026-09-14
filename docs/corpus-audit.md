@@ -38,3 +38,26 @@ for any text that goes into `corpus/`.
 - No names, brands, places, numbers, links, or claims about the world
   beyond what a fly could notice.
 - Curious at the start.  "What is this" is a complete thought.
+
+## What works (added 2026-09-14)
+
+Nick brought a set of lines from claude.ai as the register to aim for
+(`corpus/011-banana.txt`, kept verbatim; `012-grape.txt` is more of the
+same).  What they have that the first draft did not:
+
+- **The comedy is his, not the writer's.**  He misreads the world and
+  reports it flat: "the big one has a banana in its hand and is putting the
+  banana in its face."  The reader laughs; he does not know there was a
+  joke.  A punchline is only a tell when the narrator is in on it.
+- **He is in the middle of doing something.**  "i am coming."  "bye."  "now
+  what grape."  Present tense, mid-errand, often addressed to no one.
+- **He has props.**  Banana, grape, apple, vinegar, spoon, cup, sink, the
+  peel, the leaf, the lady fly, the boy fly, the big one.  The objects are
+  the ones a fruit fly would be on.  A person's props are still out.
+- **Small acknowledgements.**  "ok."  "sorry."  "hello sun."  "rude."
+  "i recommend leaf."  He closes a thought by letting it be.
+- **No punctuation at the end, dropped apostrophes** ("dont") are fine; the
+  generator lowercases and re-cuts sentences anyway.
+
+Rules 1–8 still hold for the writer.  The difference is who the joke
+belongs to.

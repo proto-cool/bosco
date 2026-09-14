@@ -141,8 +141,8 @@ def test_voice_learning_nudges_matching_documents(fly):
         ),
         ts=T0,
     )
-    docs = ag.generator.matching_docs("engage", "positive", "mid")
-    assert docs
+    docs = ag.generator.matching_docs("engage", "positive", "mid", (), "known")
+    assert docs and "093-known.txt" in docs and "092-new.txt" not in docs  # the familiarity register
     touched = ag.voice_update(eid, "reward", T0 / 3600.0)
     assert set(touched) == set(docs) and all(ag.voice[d] > 1.0 for d in docs)
     ag.voice_update(eid, "punishment", T0 / 3600.0 + 1)

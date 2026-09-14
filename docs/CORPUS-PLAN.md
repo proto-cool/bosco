@@ -91,3 +91,8 @@ Everything in the table above is on disk (`100`–`119`), plus:
 Corpus is ~7,400 words.  Brand names in the topic map (consoles, streaming
 services) do not appear in the corpus; he echoes the generic word.  Still
 Nick's to write: the phrasebook, and anything with a name in it.
+
+`011-banana.txt` and `012-grape.txt` (untagged, always in the pool) carry
+the register Nick chose on 2026-09-14; see the audit's "What works".  The
+topic files are more solemn than these and could take a pass in the same
+voice.
