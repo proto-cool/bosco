@@ -321,11 +321,22 @@ class Bsky:
 
     # ---- the first post ---------------------------------------------------------
     def introduce_if_needed(self) -> bool:
-        """Once, before anything else: the introduction (config/identity_v1.yaml `intro`)."""
-        done = self.L.db.execute(
-            "SELECT 1 FROM actions WHERE kind='intro' AND dry_run=0 AND deleted_ts IS NULL LIMIT 1"
+        """Once, before anything else: the introduction (config/identity_v1.yaml `intro`).
+        If the last one was deleted (through him or in the app), he introduces himself again."""
+        row = self.L.db.execute(
+            "SELECT our_uri FROM actions WHERE kind='intro' AND dry_run=0 AND deleted_ts IS NULL ORDER BY id DESC LIMIT 1"
         ).fetchone()
-        if done or self.L.asleep():
+        if row and row["our_uri"]:
+            try:
+                still = self.client.get_posts([row["our_uri"]]).posts
+            except Exception as e:  # noqa: BLE001
+                print("could not check the intro post:", e, file=sys.stderr)
+                return False
+            if still:
+                return False
+            self.L.mark_deleted(row["our_uri"])
+            print("intro post is gone; introducing again")
+        if self.L.asleep():
             return False
         seed = int(self.agent.brain_t0 or time.time())
         text = self.agent.identity.intro_text(seed)
