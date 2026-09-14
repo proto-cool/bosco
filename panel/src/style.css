@@ -1,6 +1,7 @@
 /* bosco.proto.cool — specimen and rail.  ARC tokens only (DESIGN.md); no cards, no boxes. */
 
 :root {
+  --annot-size: calc(var(--text-sm) - 2px); /* captions, data rows, the top line */
   --top-h: calc(var(--space-xl) + var(--space-sm));
   --rail-w: minmax(20rem, 4fr);
   --gutter: var(--space-lg);
@@ -71,7 +72,7 @@ a:hover {
 .top .handle,
 .top .dev {
   font-family: var(--font-mono);
-  font-size: var(--text-sm);
+  font-size: var(--annot-size);
   color: var(--text-muted);
   text-decoration: none;
 }
@@ -86,7 +87,7 @@ a:hover {
   align-items: center;
   gap: var(--space-xs);
   font-family: var(--font-mono);
-  font-size: var(--text-sm);
+  font-size: var(--annot-size);
   color: var(--text-muted);
 }
 .live-dot {
@@ -174,7 +175,7 @@ a:hover {
 }
 .captions .small dd {
   font-family: var(--font-mono);
-  font-size: var(--text-sm);
+  font-size: var(--annot-size);
   color: var(--text-secondary);
 }
 .numeral {
@@ -218,7 +219,7 @@ a:hover {
 }
 .caption {
   margin: 0;
-  font-size: var(--text-sm);
+  font-size: var(--annot-size);
   line-height: var(--body-lh);
   max-width: 60ch;
 }
@@ -290,12 +291,12 @@ a:hover {
 }
 .ro .k {
   font-family: var(--font-label);
-  font-size: var(--text-sm);
+  font-size: var(--annot-size);
   letter-spacing: var(--label-inline-spacing);
 }
 .ro .v {
   font-family: var(--font-mono);
-  font-size: var(--text-sm);
+  font-size: var(--annot-size);
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
@@ -355,7 +356,7 @@ a:hover {
 }
 .person .who {
   font-family: var(--font-mono);
-  font-size: var(--text-sm);
+  font-size: var(--annot-size);
   color: var(--text-secondary);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -396,7 +397,7 @@ a:hover {
 }
 .person .fam {
   font-family: var(--font-mono);
-  font-size: var(--text-sm);
+  font-size: var(--annot-size);
   color: var(--text-muted);
   text-align: right;
   font-variant-numeric: tabular-nums;
@@ -422,7 +423,7 @@ a:hover {
   display: block;
   margin-top: var(--space-xs);
   font-family: var(--font-mono);
-  font-size: var(--text-sm);
+  font-size: var(--annot-size);
   color: var(--text-muted);
 }
 .post:hover .m {
@@ -439,11 +440,11 @@ a:hover {
 }
 .win {
   display: grid;
-  grid-template-columns: 3.5rem 4.5rem 1fr 6rem;
+  grid-template-columns: 3rem 4rem 1fr 7rem;
   gap: var(--space-sm);
   align-items: baseline;
   font-family: var(--font-mono);
-  font-size: var(--text-sm);
+  font-size: var(--annot-size);
   color: var(--text-muted);
   min-height: 24px;
 }
@@ -471,7 +472,7 @@ a:hover {
 }
 .fine {
   font-family: var(--font-mono);
-  font-size: var(--text-sm);
+  font-size: var(--annot-size);
   color: var(--text-muted);
 }
 .empty {
@@ -507,7 +508,7 @@ a:hover {
     gap: var(--space-sm) var(--space-lg);
   }
   .win {
-    grid-template-columns: 3.5rem 1fr 6rem;
+    grid-template-columns: 3rem 1fr 7rem;
   }
   .win .smell {
     display: none;
