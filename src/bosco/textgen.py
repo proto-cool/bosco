@@ -81,19 +81,13 @@ def sentences(text: str) -> list[list[str]]:
 
 
 def detokenize(toks: list[str]) -> str:
+    """Join tokens. Bosco talks all lowercase: no capitals, 'i' stays 'i'."""
     s = ""
-    cap = True
     for t in toks:
         if t in {".", ",", "!", "?", ";", ":"}:
             s += t
-            cap = cap or t in END_PUNCT
-            continue
-        if t == "i" or t.startswith("i'") or t.startswith("i’"):
-            t = "I" + t[1:]
-        if cap:
-            t = t[0].upper() + t[1:]
-            cap = False
-        s += (" " if s else "") + t
+        else:
+            s += (" " if s else "") + t.lower()
     return s
 
 
@@ -269,7 +263,7 @@ class Generator:
                 continue
             if "http" in w or "://" in w:
                 continue
-            out.append(m.surface_form(w))
+            out.append(w)
             used.add((a, b, w))
             sent_len += 1
             a, b = b, w

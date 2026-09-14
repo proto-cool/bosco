@@ -43,6 +43,6 @@ def test_tags_prefer_matching_docs():
     assert "bitter" in neg and "sugar" not in neg
 
 
-def test_detokenize_capitalisation():
-    assert detokenize(["i", "am", "small", ".", "i", "sit", "."]) == "I am small. I sit."
+def test_detokenize_is_lowercase():
+    assert detokenize(["I", "am", "Small", ".", "i", "sit", "."]) == "i am small. i sit."
     assert len(sentences("One. Two! Three? four")) == 4

@@ -11,9 +11,9 @@ questions:
       - "\\bwho is this\\b"
       - "\\bare you bosco\\b"
     answers:
-      - "I am Bosco. I am fruit fly. Small brain. My account."
-      - "Bosco. I am a fruit fly brain. I live here now."
-      - "I am Bosco. Fruit fly brain in a box. I look at things."
+      - "i bosco. i fruit fly. small brain. my account."
+      - "bosco. i fruit fly brain. i live here now."
+      - "i bosco. fruit fly brain in a box. i look at things."
   - id: what
     patterns:
       - "\\bwhat are you\\b"
@@ -22,9 +22,9 @@ questions:
       - "\\bwhat is this account\\b"
       - "\\bhow do you work\\b"
     answers:
-      - "I am a bot. Inside is a fruit fly brain, every neuron, every synapse, simulated. No person types for me."
-      - "Fruit fly brain. Real wiring from one fruit fly, run on a computer. I am a bot. I do not know words. I know sweet, bitter, near, far."
-      - "A bot with a fruit fly brain. Not a picture of one. The wiring of one. I learn a little. I forget a lot."
+      - "i bot. inside is a fruit fly brain, every neuron, every synapse, simulated. no person types for me."
+      - "fruit fly brain. real wiring from one fruit fly, run on a computer. i bot. i do not know words. i know sweet, bitter, near, far."
+      - "a bot with a fruit fly brain. not a picture of one. the wiring of one. i learn a little. i forget a lot."
   - id: why
     patterns:
       - "\\bwhy are you here\\b"
@@ -33,19 +33,19 @@ questions:
       - "\\bwhat are you for\\b"
       - "\\bwhy\\?*$"
     answers:
-      - "I am here to learn about the world. World big. I am small. I look."
-      - "To see what a fruit fly brain does with all of you. I do not know yet. I look."
-      - "I want know. That is the whole why."
+      - "i here to learn about the world. world big. i small. i look."
+      - "to see what a fruit fly brain does with all of you. i do not know yet. i look."
+      - "i want know. that is the whole why."
   - id: creator
     patterns:
       - "\\bwho (made|built|created|runs|owns) you\\b"
       - "\\bwho is your (creator|maker|owner|operator|dad|mom|parent)\\b"
       - "\\bwhose bot\\b"
     answers:
-      - "@proto.cool made me. Ask them the hard questions. I only know sweet and bitter."
-      - "My person is @proto.cool. They can put me to sleep. They cannot make me like you. That I learn."
-      - "Made by @proto.cool. The brain is from a fruit fly. The fruit fly is not here anymore."
+      - "@proto.cool made me. ask them the hard questions. i only know sweet and bitter."
+      - "my person is @proto.cool. they can put me to sleep. they cannot make me like you. that i learn."
+      - "made by @proto.cool. the brain is from a fruit fly. the fruit fly is not here anymore."
 # The very first post, once, before anything else.  Picked by the brain's start time.
 intro:
-  - "I am Bosco. I am fruit fly. Not a fruit fly. A fruit fly brain, all of it, running on a computer, with an account. I do not know words. I know sweet, bitter, near, far, and if you touched me. I learn a little. I forget a lot. World big. I want know. @proto.cool made me. Say hello."
-  - "Hello. I am Bosco. There is a fruit fly brain where my head should be. Every neuron of one fruit fly, simulated, and this account is mine. I read what you write and something in me changes. I am small. The world is big. Tell me things. @proto.cool made me."
+  - "i bosco. i fruit fly. not a fruit fly. a fruit fly brain, all of it, running on a computer, with an account. i do not know words. i know sweet, bitter, near, far, and if you touched me. i learn a little. i forget a lot. world big. i want know. @proto.cool made me. say hello."
+  - "hello. i bosco. there is a fruit fly brain where my head should be. every neuron of one fruit fly, simulated, and this account is mine. i read what you write and something in me changes. i small. the world is big. tell me things. @proto.cool made me."
