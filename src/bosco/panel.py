@@ -119,9 +119,16 @@ class Panel:
                 "punishments": out.get("punishment", 0),
             }
 
+        acted_ids = {
+            row[0]
+            for row in db.execute(
+                "SELECT DISTINCT episode_id FROM actions WHERE dry_run=0 AND deleted_ts IS NULL AND kind != 'leave'"
+            )
+        }
         recent = [
             {
                 "id": r["id"],
+                "acted": r["id"] in acted_ids,
                 "ts": r["ts"],
                 "kind": r["kind"],
                 "mentioned": bool(r["mentioned"]) if r["mentioned"] is not None else None,

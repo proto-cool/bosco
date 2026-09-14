@@ -235,6 +235,9 @@ def main(argv=None) -> int:
     s = sub.add_parser("panel", help="write status.json (and one activity.bin) for the public panel")
     s.add_argument("--out", required=True)
     s.add_argument("--at")
+    s.add_argument(
+        "--stimulus", action="store_true", help="also present one mention (a real event second) for activity.bin"
+    )
 
     def _panel(a):
         from bosco.panel import Panel
@@ -246,6 +249,14 @@ def main(argv=None) -> int:
         ts = _ts(a.at)
         agent.advance_to(ts, fast=True, max_slices=1)  # catch up without simulating
         agent.advance_to(agent.wall(agent.live.t_ms) + 1.0, fast=False, max_slices=1)  # one simulated second
+        if a.stimulus:
+            agent.run(
+                Features("did:plc:panelstimulus", 0.5, True, 0, False, ("fruit",), True),
+                agent.wall(agent.live.t_ms),
+                "panel://stimulus",
+                kind="event",
+                fast=True,
+            )
         st = panel.status(ts)
         print(f"wrote {a.out}/status.json ({len(st['people'])} people, {len(st['recent'])} recent) and activity.bin")
         return 0

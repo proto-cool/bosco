@@ -39,20 +39,17 @@ export function parseAtlas(buf, meta) {
   return { n, x, y, z, sc, flags, pop, meta };
 }
 
-// Colour groups, in legend order.  A neuron belongs to the first group that claims it.
+// Colour groups, in draw order.  A neuron belongs to the first group that claims it.
 export const GROUPS = [
-  { key: 'kc', name: 'kenyon cells', test: (a, i) => a.flags[i] & 1 },
-  { key: 'mbon', name: 'mushroom body output', test: (a, i) => a.flags[i] & 2 },
-  { key: 'dan', name: 'dopamine', test: (a, i) => a.flags[i] & 4 },
-  { key: 'dn', name: 'descending', test: (a, i) => a.flags[i] & 8 },
-  { key: 'sensory', name: 'sensory', test: (a, i) => [1, 5, 9, 10, 13].includes(a.sc[i]) },
-  { key: 'other', name: 'the rest', test: () => true },
+  { key: 'mb', name: 'mushroom body', test: (a, i) => a.flags[i] & 7 }, // kenyon cells, output neurons, dopamine
+  { key: 'dn', name: 'descending and motor', test: (a, i) => (a.flags[i] & 8) || a.sc[i] === 2 },
+  { key: 'rest', name: 'the rest', test: () => true },
 ];
 
 export class BrainView {
   constructor(canvas, atlas, colors) {
     this.canvas = canvas;
-    this.ctx = canvas.getContext('2d', { alpha: false });
+    this.ctx = canvas.getContext('2d');
     this.atlas = atlas;
     this.colors = colors; // key -> [r,g,b]
     this.group = new Uint8Array(atlas.n);
@@ -67,6 +64,7 @@ export class BrainView {
     this.px = new Float32Array(atlas.n);
     this.py = new Float32Array(atlas.n);
     this.reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this.hold = false; // a still: lit cells do not decay
     this.ro = new ResizeObserver(() => this.resize());
     this.ro.observe(canvas);
     this.resize();
@@ -87,6 +85,7 @@ export class BrainView {
   resize() {
     const r = this.canvas.getBoundingClientRect();
     const dpr = Math.min(devicePixelRatio || 1, 2);
+    this.dpr = dpr;
     this.w = Math.max(1, Math.round(r.width * dpr));
     this.h = Math.max(1, Math.round(r.height * dpr));
     this.canvas.width = this.w;
@@ -110,13 +109,11 @@ export class BrainView {
     base.width = this.w;
     base.height = this.h;
     const c = base.getContext('2d');
-    c.fillStyle = this.colors.bg;
-    c.fillRect(0, 0, this.w, this.h);
-    const r = Math.max(0.6, 0.9 * (this.w / 900));
+    const r = Math.max(0.8, 1.0 * (this.w / this.dpr / 900)) * this.dpr; // constant in css pixels
     for (let g = GROUPS.length - 1; g >= 0; g--) {
       if (!this.visible[g]) continue;
       const [cr, cg, cb] = this.colors[GROUPS[g].key];
-      c.fillStyle = `rgba(${cr},${cg},${cb},0.22)`;
+      c.fillStyle = `rgba(${cr},${cg},${cb},${GROUPS[g].key === 'rest' ? 0.3 : 0.5})`;
       c.beginPath();
       for (let i = 0; i < a.n; i++) {
         if (this.group[i] !== g) continue;
@@ -140,28 +137,31 @@ export class BrainView {
 
   tick() {
     const c = this.ctx;
+    c.clearRect(0, 0, this.w, this.h);
     if (this.base) c.drawImage(this.base, 0, 0);
     const decay = this.reduced ? 0.7 : 0.9;
-    const r = Math.max(1.2, 1.8 * (this.w / 900));
+    const r = Math.max(1.2, 1.8 * (this.w / this.dpr / 900)) * this.dpr;
     c.globalCompositeOperation = 'lighter';
     for (let g = 0; g < GROUPS.length; g++) {
       if (!this.visible[g]) continue;
       const [cr, cg, cb] = this.colors[GROUPS[g].key];
+      const rest = GROUPS[g].key === 'rest';
       c.fillStyle = `rgb(${cr},${cg},${cb})`;
       c.beginPath();
       for (const i of this.hot) {
         if (this.group[i] !== g) continue;
         const v = this.intensity[i];
-        const rr = r * (0.6 + v);
+        const rr = r * (0.6 + v) * (rest ? 0.75 : 1);
         c.moveTo(this.px[i] + rr, this.py[i]);
         c.arc(this.px[i], this.py[i], rr, 0, 6.2832);
       }
-      c.globalAlpha = 0.9;
+      c.globalAlpha = rest ? 0.45 : 0.9; // the mushroom body and the motor side read over the crowd
       c.fill();
     }
     c.globalAlpha = 1;
     c.globalCompositeOperation = 'source-over';
     for (const i of this.hot) {
+      if (this.hold) break;
       this.intensity[i] *= decay;
       if (this.intensity[i] < 0.03) {
         this.intensity[i] = 0;

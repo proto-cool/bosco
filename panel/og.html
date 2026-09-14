@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <title>bosco og</title>
+    <style>
+      /* 1200x630 social card, rendered once by scripts/render_og.cjs into panel/public/og.png. */
+      html,
+      body {
+        margin: 0;
+        background: var(--bg-deep);
+        color: var(--text-primary);
+        font-family: var(--font-body);
+        font-weight: var(--font-body-weight);
+      }
+      .card {
+        position: relative;
+        width: 1200px;
+        height: 630px;
+        overflow: hidden;
+        display: grid;
+        grid-template-columns: 700px 1fr;
+      }
+      .glass {
+        position: relative;
+        background: radial-gradient(
+          ellipse at 50% 45%,
+          rgba(var(--accent-primary-rgb), 0.22) 0%,
+          rgba(var(--accent-primary-rgb), 0) 68%
+        );
+      }
+      canvas {
+        display: block;
+        width: 700px;
+        height: 630px;
+      }
+      .words {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: var(--space-md);
+        padding-right: var(--space-2xl);
+      }
+      .name {
+        font-family: var(--font-display);
+        font-size: calc(var(--heading-size) * 2.4);
+        font-weight: var(--heading-weight);
+        line-height: var(--glyph-lh);
+      }
+      .line {
+        font-size: calc(var(--body-size) * 1.45);
+        line-height: var(--body-lh);
+        max-width: 18ch;
+        color: var(--text-secondary);
+      }
+      .url {
+        font-family: var(--font-mono);
+        font-size: var(--label-size);
+        letter-spacing: var(--label-spacing);
+        color: var(--text-muted);
+      }
+      .cap {
+        position: absolute;
+        left: var(--space-lg);
+        bottom: var(--space-lg);
+        font-family: var(--font-label);
+        font-size: var(--label-inline-size);
+        letter-spacing: var(--label-inline-spacing);
+        color: var(--text-muted);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="glass">
+        <canvas id="brain" width="1400" height="1260"></canvas>
+        <div class="cap" id="cap">40,939 neurons at their somas · lit where they fired in one real second</div>
+      </div>
+      <div class="words">
+        <div class="name">bosco</div>
+        <div class="line">a fruit fly brain, every neuron, living on bluesky.</div>
+        <div class="url">bosco.proto.cool</div>
+      </div>
+    </div>
+    <script type="module">
+      import '@arclux/arc-ui/base.css';
+      import { BrainView, parseActivity, parseAtlas } from './src/brain.js';
+      const rgbOf = (token) => {
+        const probe = document.createElement('span');
+        probe.style.color = `var(${token})`;
+        document.body.appendChild(probe);
+        const css = getComputedStyle(probe).color;
+        probe.remove();
+        const c = document.createElement('canvas');
+        c.width = c.height = 1;
+        const g = c.getContext('2d');
+        g.fillStyle = css;
+        g.fillRect(0, 0, 1, 1);
+        const d = g.getImageData(0, 0, 1, 1).data;
+        return [d[0], d[1], d[2]];
+      };
+      const [meta, buf, act] = await Promise.all([
+        fetch('./atlas.json').then((r) => r.json()),
+        fetch('./atlas.bin').then((r) => r.arrayBuffer()),
+        fetch('./data/activity.bin').then((r) => r.arrayBuffer()),
+      ]);
+      const view = new BrainView(document.getElementById('brain'), parseAtlas(buf, meta), {
+        mb: rgbOf('--accent-primary'),
+        dn: rgbOf('--accent-secondary'),
+        rest: rgbOf('--text-secondary'),
+      });
+      view.hold = true; // a still: the lit cells stay lit
+      view.push(parseActivity(act));
+      window.__ogReady = true;
+    </script>
+  </body>
+</html>

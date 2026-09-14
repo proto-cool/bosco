@@ -1,11 +1,6 @@
 import '@arclux/arc-ui/base.css';
-import '@arclux/arc-ui/badge';
-import '@arclux/arc-ui/tabs';
-import '@arclux/arc-ui/tab';
-import '@arclux/arc-ui/list';
-import '@arclux/arc-ui/list-item';
 import './style.css';
-import { BrainView, GROUPS, parseActivity, parseAtlas } from './brain.js';
+import { BrainView, parseActivity, parseAtlas } from './brain.js';
 
 const DATA = './data';
 const PUBLIC_API = 'https://public.api.bsky.app/xrpc';
@@ -30,12 +25,9 @@ function colours() {
   const bg = rgbOf('--bg-deep');
   return {
     bg: `rgb(${bg.join(',')})`,
-    kc: rgbOf('--chart-1'),
-    mbon: rgbOf('--chart-2'),
-    dan: rgbOf('--chart-3'),
-    dn: rgbOf('--chart-4'),
-    sensory: rgbOf('--chart-5'),
-    other: rgbOf('--text-muted'),
+    mb: rgbOf('--accent-primary'),
+    dn: rgbOf('--accent-secondary'),
+    rest: rgbOf('--text-secondary'),
   };
 }
 
@@ -44,10 +36,10 @@ const fmt = (n) => (n == null ? '–' : Number(n).toLocaleString('en-US'));
 const pct = (x) => (x == null ? '–' : `${Math.round(x * 100)}%`);
 function ago(ts) {
   const s = Math.max(0, Date.now() / 1000 - ts);
-  if (s < 90) return `${Math.round(s)}s ago`;
-  if (s < 5400) return `${Math.round(s / 60)}m ago`;
-  if (s < 172800) return `${Math.round(s / 3600)}h ago`;
-  return `${Math.round(s / 86400)}d ago`;
+  if (s < 90) return `${Math.round(s)}s`;
+  if (s < 5400) return `${Math.round(s / 60)}m`;
+  if (s < 172800) return `${Math.round(s / 3600)}h`;
+  return `${Math.round(s / 86400)}d`;
 }
 function alive(ms) {
   const h = ms / 3.6e6;
@@ -60,6 +52,14 @@ function el(tag, cls, text) {
   if (text != null) e.textContent = text;
   return e;
 }
+function b(text) {
+  return el('b', null, text);
+}
+// a sentence from parts: strings and <b> nodes
+function sentence(node, parts) {
+  node.replaceChildren(...parts.map((p) => (typeof p === 'string' ? document.createTextNode(p) : p)));
+}
+const plural = (n, one, many) => `${fmt(n)} ${n === 1 ? one : many}`;
 async function getJSON(url) {
   const r = await fetch(url, { cache: 'no-store' });
   if (!r.ok) throw new Error(`${r.status} ${url}`);
@@ -84,6 +84,11 @@ const postLink = (uri) => {
   const m = uri.match(/^at:\/\/([^/]+)\/app\.bsky\.feed\.post\/(.+)$/);
   return m ? `https://bsky.app/profile/${m[1]}/post/${m[2]}` : '#';
 };
+const short = (did) => did.replace('did:plc:', '').slice(0, 12);
+function nameInto(node, did) {
+  node.textContent = short(did);
+  profile(did).then((p) => p && (node.textContent = `@${p.handle}`));
+}
 
 // ---- brain ------------------------------------------------------------------------------------
 let brain = null;
@@ -93,26 +98,17 @@ async function initBrain() {
   const [meta, buf] = await Promise.all([getJSON('./atlas.json'), fetch('./atlas.bin').then((r) => r.arrayBuffer())]);
   const atlas = parseAtlas(buf, meta);
   popNames = meta.pops;
-  const col = colours();
-  brain = new BrainView($('brain'), atlas, col);
+  brain = new BrainView($('brain'), atlas, colours());
   $('atlas-caption').textContent =
-    `${fmt(meta.n)} neurons of the central brain at their somas ` +
-    `(${Math.round(meta.soma_coverage * 100)}% have one in the volume; the rest sit at the mean of their targets).`;
-  const legend = $('legend');
-  GROUPS.forEach((g, k) => {
-    const b = el('button', null, null);
-    b.setAttribute('aria-pressed', 'true');
-    const dot = el('span', 'dot');
-    dot.style.setProperty('--_rgb', col[g.key].join(','));
-    b.append(dot, el('span', null, g.name));
-    b.addEventListener('click', () => {
-      const on = b.getAttribute('aria-pressed') !== 'true';
-      b.setAttribute('aria-pressed', String(on));
-      brain.setVisible(k, on);
+    `${fmt(meta.n)} neurons of the central brain at their somas; ${Math.round(meta.soma_coverage * 100)}% have one in the ` +
+    `volume, the rest sit at the mean of their targets. the mushroom body in blue, descending and motor cells in ` +
+    `violet, the rest in grey. no synapses are drawn.`;
+  for (const btn of document.querySelectorAll('.views button')) {
+    btn.addEventListener('click', () => {
+      for (const o of document.querySelectorAll('.views button')) o.setAttribute('aria-pressed', String(o === btn));
+      brain.setView(Number(btn.dataset.view));
     });
-    legend.append(b);
-  });
-  $('view').addEventListener('arc-change', (e) => brain.setView(Number(e.detail?.value ?? 0)));
+  }
   buildReadout();
 }
 
@@ -124,8 +120,7 @@ function buildReadout() {
     row.dataset.pop = p;
     row.append(el('span', 'k', p));
     const track = el('div', 'track');
-    const fill = el('i', `fill${p === 'leave' ? ' avoid' : ''}`);
-    track.append(fill, el('i', 'tick'));
+    track.append(el('i', `fill${p === 'leave' ? ' avoid' : ''}`), el('i', 'tick'));
     row.append(track, el('span', 'v', '–'));
     box.append(row);
   }
@@ -139,6 +134,7 @@ async function pollActivity() {
     if (!r.ok) throw new Error(r.status);
     const act = parseActivity(await r.arrayBuffer());
     setLive(true);
+    if (!brain) return; // the atlas is still loading; try this second again
     if (act.tMs !== lastT) {
       lastT = act.tMs;
       brain?.push(act);
@@ -165,13 +161,6 @@ function setLive(on) {
 }
 
 // ---- status ------------------------------------------------------------------------------------
-function stat(label, value, sub) {
-  const s = el('div', 'stat');
-  s.append(el('span', 'numeral', value), el('span', 'stat-label', label));
-  if (sub) s.append(el('span', 'stat-label', sub));
-  return s;
-}
-
 async function pollStatus() {
   let st;
   try {
@@ -184,106 +173,125 @@ async function pollStatus() {
     $('handle').textContent = `@${st.identity.handle}`;
     $('handle').href = `https://bsky.app/profile/${st.identity.handle}`;
   }
-  const b = st.brain;
-  $('bio-time').textContent = `${alive(b.t_ms)} lived · ${b.lag_s > 120 ? `${Math.round(b.lag_s / 60)} min behind` : 'in step'} · ${b.wall_per_bio.toFixed(2)} wall s per s`;
-  $('dev').hidden = false;
+  const br = st.brain;
+  $('bio-time').textContent =
+    `${alive(br.t_ms)} lived · ${br.lag_s > 120 ? `${Math.round(br.lag_s / 60)} min behind` : 'in step'}`;
 
+  // today: one figure, one sentence
   const t = st.today, a = t.actions || {};
-  $('today').replaceChildren(
-    stat('posts read', fmt(t.episodes)),
-    stat('silence', pct(t.silence)),
-    stat('replies', fmt((a.reply || 0) + (a.identity || 0))),
-    stat('likes', fmt(a.like || 0)),
-    stat('follows', fmt(a.follow || 0)),
-    stat('own posts', fmt(a.spontaneous_post || 0)),
-    stat('rewards', fmt(t.rewards)),
-    stat('punishments', fmt(t.punishments)),
-  );
-  const topics = Object.entries(st.topics_today || {}).sort((x, y) => y[1] - x[1]).slice(0, 14);
-  $('topics').replaceChildren(
-    ...topics.map(([k, v]) => {
-      const c = el('span', 'chip');
-      c.append(el('b', null, k), document.createTextNode(` ${v}`));
-      return c;
-    }),
-  );
-
-  $('memory').replaceChildren(
-    stat('short-term traces', fmt(b.stm_depressed), `of ${fmt(b.plastic_synapses)} plastic synapses`),
-    stat('long-term traces', fmt(b.ltm_depressed)),
-    stat('people he can smell', fmt((st.people || []).length)),
-    stat('dust on his bristles', pct(b.dust)),
-  );
-
-  // people
-  const list = $('people');
-  const rows = (st.people || []).slice(0, 12);
-  list.replaceChildren(
-    ...rows.map((p) => {
-      const item = document.createElement('arc-list-item');
-      const row = el('div', 'person');
-      const av = el('span', 'noavatar');
-      const who = el('span', `who${p.familiarity ? ' known' : ''}`, p.did.replace('did:plc:', '').slice(0, 14));
-      const bar = el('div', 'valence');
-      const seg = el('i', p.learned >= 0 ? 'pos' : 'neg');
-      seg.style.width = `${Math.min(50, Math.abs(p.learned) * 50)}%`;
-      bar.append(seg);
-      row.append(av, who, bar, el('span', 'fam', `×${p.familiarity}`));
-      item.append(row);
-      profile(p.did).then((pr) => {
-        if (!pr) return;
-        who.textContent = `@${pr.handle}`;
-        if (pr.avatar) {
-          const img = document.createElement('img');
-          img.src = pr.avatar;
-          img.alt = '';
-          img.loading = 'lazy';
-          av.replaceWith(img);
-        }
+  $('silence').textContent = t.silence == null ? '–' : pct(t.silence);
+  const replies = (a.reply || 0) + (a.identity || 0);
+  if (t.episodes) {
+    const acts = [
+      [replies, 'reply', 'replies'],
+      [a.like || 0, 'like', 'likes'],
+      [a.follow || 0, 'follow', 'follows'],
+      [a.spontaneous_post || 0, 'post of his own', 'posts of his own'],
+    ].filter(([n]) => n > 0);
+    const parts = ['he read ', b(plural(t.episodes, 'post', 'posts')), ' and said nothing to ',
+      b(fmt(Math.round(t.episodes * (t.silence || 0)))), ' of them. '];
+    if (acts.length) {
+      acts.forEach(([n, one, many], i) => {
+        parts.push(b(plural(n, one, many)), i < acts.length - 1 ? ', ' : '. ');
       });
-      return item;
+    } else {
+      parts.push('he did nothing else. ');
+    }
+    if (t.rewards || t.punishments) {
+      parts.push(b(plural(t.rewards, 'reward', 'rewards')), ' and ', b(plural(t.punishments, 'punishment', 'punishments')), '.');
+    } else {
+      parts.push('nothing rewarded or punished him yet.');
+    }
+    sentence($('today-sentence'), parts);
+  } else {
+    $('today-sentence').textContent = 'nothing read yet today.';
+  }
+  const topics = Object.entries(st.topics_today || {}).sort((x, y) => y[1] - x[1]).slice(0, 6);
+  $('topics-sentence').textContent = topics.length
+    ? `smelled most: ${topics.map(([k, v]) => `${k} ×${v}`).join(', ')}.`
+    : '';
+
+  // memory: one figure, one sentence, a short list
+  const people = st.people || [];
+  $('people-count').textContent = fmt(people.length);
+  sentence(
+    $('memory-sentence'),
+    br.stm_depressed || br.ltm_depressed
+      ? [b(fmt(br.stm_depressed)), ' short-term and ', b(fmt(br.ltm_depressed)), ' long-term traces across ',
+        b(fmt(br.plastic_synapses)), ' plastic synapses. dust on his bristles ', b(pct(br.dust)), '.']
+      : ['no traces yet across ', b(fmt(br.plastic_synapses)), ' plastic synapses. dust on his bristles ', b(pct(br.dust)), '.'],
+  );
+  const list = $('people');
+  list.replaceChildren(
+    ...people.slice(0, 6).map((p) => {
+      const li = el('li', 'person');
+      const who = el('a', 'who');
+      who.href = `https://bsky.app/profile/${p.did}`;
+      nameInto(who, p.did);
+      const bar = el('span', 'valence');
+      const seg = el('i', p.learned >= 0 ? 'pos' : 'neg');
+      const w = Math.min(50, Math.abs(p.learned) * 50);
+      seg.style.width = `${w}%`;
+      seg.style.left = p.learned >= 0 ? '50%' : `${50 - w}%`;
+      bar.append(seg);
+      li.append(who, bar, el('span', 'fam', `×${p.familiarity}`));
+      return li;
     }),
   );
-  if (!rows.length) list.replaceChildren(el('p', 'caption', 'nobody yet. he has not met anyone he remembers.'));
+  if (!people.length) list.replaceChildren(el('li', 'empty', 'nobody yet. he has not met anyone he remembers.'));
 
   // his posts
-  const uris = (st.posts || []).map((p) => p.uri).slice(0, 8);
+  const uris = (st.posts || []).map((p) => p.uri).slice(0, 4);
   const got = await posts(uris);
   const byUri = new Map(got.map((p) => [p.uri, p]));
+  const shown = (st.posts || []).slice(0, 4).filter((p) => byUri.has(p.uri));
   $('posts').replaceChildren(
-    ...(st.posts || [])
-      .slice(0, 8)
-      .filter((p) => byUri.has(p.uri))
-      .map((p) => {
-        const post = byUri.get(p.uri);
-        const link = el('a', 'post');
-        link.href = postLink(p.uri);
-        link.append(el('p', 't', post.record?.text || ''), el('span', 'm', `${p.kind.replace('_', ' ')} · ${ago(p.ts)} · ${post.likeCount || 0} likes`));
-        return link;
-      }),
-  );
-  if (!uris.length) $('posts').replaceChildren(el('p', 'caption', 'nothing yet.'));
-
-  // recent windows
-  $('recent').replaceChildren(
-    ...(st.recent || []).slice(0, 20).map((w) => {
-      const row = el('div', `win${w.action !== 'nothing' ? ' acted' : ''}`);
-      row.append(
-        el('span', null, ago(w.ts)),
-        el('span', null, w.kind === 'spontaneous' ? 'landing' : w.mentioned ? 'mention' : 'browse'),
-        el('span', 'did', w.did ? w.did.replace('did:plc:', '') : '–'),
-        el('span', 'why', w.topics?.length ? w.topics.join(' ') : w.note || ''),
-        el('span', null, w.action === 'nothing' ? 'silence' : `${w.behaviour} → ${w.action}`),
+    ...shown.map((p) => {
+      const post = byUri.get(p.uri);
+      const li = el('li');
+      const link = el('a', 'post');
+      link.href = postLink(p.uri);
+      link.append(
+        el('p', 't', post.record?.text || ''),
+        el('span', 'm', `${p.kind.replace('_', ' ')} · ${ago(p.ts)} ago · ${plural(post.likeCount || 0, 'like', 'likes')}`),
       );
-      if (w.did) profile(w.did).then((pr) => pr && (row.querySelector('.did').textContent = `@${pr.handle}`));
-      return row;
+      li.append(link);
+      return li;
+    }),
+  );
+  if (!shown.length) $('posts').replaceChildren(el('li', 'empty', 'nothing yet.'));
+
+  // the record
+  $('recent').replaceChildren(
+    ...(st.recent || []).slice(0, 12).map((w) => {
+      const li = el('li', `win${w.action !== 'nothing' ? ' acted' : ''}`);
+      const who = el('span', 'who');
+      if (w.did) nameInto(who, w.did);
+      else who.textContent = w.kind === 'spontaneous' ? 'a landing' : '–';
+      li.append(
+        el('span', null, ago(w.ts)),
+        el('span', 'smell', w.kind === 'spontaneous' ? 'dust' : w.mentioned ? 'mention' : 'browse'),
+        who,
+        el('span', 'what', w.action === 'nothing' ? 'silence' : `${w.action.replace('_', ' ')}${w.acted ? '' : ' · withheld'}`),
+      );
+      return li;
     }),
   );
 
   $('fine').textContent =
-    `memory ${b.digest.slice(0, 12)} · corpus ${st.corpus_digest.slice(0, 12)} · ` +
-    `${fmt(b.neurons)} neurons · ${fmt(b.synapses)} synapses · status ${ago(st.generated)}`;
+    `memory ${br.digest.slice(0, 12)} · corpus ${st.corpus_digest.slice(0, 12)} · ` +
+    `${fmt(br.neurons)} neurons · ${fmt(br.synapses)} synapses · status ${ago(st.generated)} ago`;
 }
+
+// ---- the rail's current row brightens as it passes the top ------------------------------------
+const rows = [...document.querySelectorAll('.rail .row')];
+const io = new IntersectionObserver(
+  (entries) => {
+    for (const e of entries) e.target.classList.toggle('is-current', e.isIntersecting);
+  },
+  { rootMargin: '-10% 0px -70% 0px' },
+);
+rows.forEach((r) => io.observe(r));
 
 // ---- go ----------------------------------------------------------------------------------------
 initBrain().catch((e) => {

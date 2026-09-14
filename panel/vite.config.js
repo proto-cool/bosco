@@ -4,7 +4,12 @@ import { defineConfig } from 'vite';
 // writes (state/panel); in dev, point it at a local copy with `bosco panel --out`.
 export default defineConfig({
   base: './',
-  build: { outDir: 'dist', emptyOutDir: true, target: 'es2022' },
+  build: {
+    outDir: 'dist',
+    emptyOutDir: true,
+    target: 'es2022',
+    rollupOptions: { input: { main: 'index.html', og: 'og.html' } },
+  },
   server: {
     proxy: {
       '/data': {

@@ -6,124 +6,114 @@
     <title>bosco</title>
     <meta name="description" content="a fruit fly brain living on Bluesky. every neuron, live." />
     <meta name="color-scheme" content="dark light" />
+    <meta property="og:title" content="bosco" />
+    <meta property="og:description" content="a fruit fly brain, every neuron, living on bluesky." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://bosco.proto.cool/" />
+    <meta property="og:image" content="https://bosco.proto.cool/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="every neuron of a fruit fly brain at its soma, some lit where they fired" />
+    <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='5' fill='%2380a0ff'/%3E%3C/svg%3E" />
   </head>
   <body>
     <header class="top">
-      <div class="wordmark">
-        <span class="mark" aria-hidden="true"></span>
-        <span class="name">bosco</span>
-        <a class="handle" id="handle" href="https://bsky.app/profile/bosco.proto.cool" rel="me">@bosco.proto.cool</a>
-      </div>
-      <div class="top-right">
-        <span class="live" id="live"><span class="live-dot" aria-hidden="true"></span><span id="live-text">connecting</span></span>
-        <arc-badge variant="secondary" size="sm" id="dev">in development</arc-badge>
-      </div>
+      <a class="name" href="https://bsky.app/profile/bosco.proto.cool">bosco</a>
+      <a class="handle" id="handle" href="https://bsky.app/profile/bosco.proto.cool" rel="me">@bosco.proto.cool</a>
+      <span class="spacer"></span>
+      <span class="live" id="live"><span class="live-dot" aria-hidden="true"></span><span id="live-text">connecting</span></span>
+      <span class="dev" id="dev">in development</span>
     </header>
 
-    <main class="grid">
-      <section class="panel brain-panel" aria-labelledby="h-brain">
-        <div class="panel-head">
-          <h2 class="label" id="h-brain">his brain, now</h2>
-          <div class="brain-tools">
-            <arc-tabs id="view" variant="pills" selected="0" aria-label="projection">
-              <arc-tab label="front"></arc-tab>
-              <arc-tab label="top"></arc-tab>
-              <arc-tab label="side"></arc-tab>
-            </arc-tabs>
-          </div>
+    <main class="stage">
+      <aside class="specimen" aria-labelledby="h-brain">
+        <h1 class="sr-only" id="h-brain">his brain, now</h1>
+        <div class="glass">
+          <canvas id="brain" aria-label="every neuron of the model at its soma, lit when it fires"></canvas>
+          <dl class="captions">
+            <div><dt>neurons firing this second</dt><dd class="numeral" id="firing">–</dd></div>
+            <div><dt>kenyon cells active</dt><dd class="numeral" id="kc-active">–</dd></div>
+            <div class="small"><dt class="sr-only">his time</dt><dd id="bio-time">–</dd></div>
+          </dl>
         </div>
-        <div class="brain-stage">
-          <canvas id="brain" aria-label="soma positions of every neuron in the model, lit when they fire"></canvas>
-          <div class="brain-readout">
-            <div class="stat-row">
-              <span class="numeral" id="firing">–</span>
-              <span class="stat-label">neurons firing this second</span>
-            </div>
-            <div class="stat-row">
-              <span class="numeral" id="kc-active">–</span>
-              <span class="stat-label">kenyon cells active</span>
-            </div>
-            <div class="stat-row small">
-              <span id="bio-time">–</span>
-              <span class="stat-label">his time</span>
-            </div>
+        <div class="under">
+          <div class="views" role="group" aria-label="projection">
+            <button type="button" data-view="0" aria-pressed="true">front</button>
+            <button type="button" data-view="1" aria-pressed="false">top</button>
+            <button type="button" data-view="2" aria-pressed="false">side</button>
           </div>
-          <div class="legend" id="legend"></div>
+          <p class="caption" id="atlas-caption">
+            every neuron of the central brain at its soma. the mushroom body in blue, descending and motor cells in
+            violet, the rest in grey. no synapses are drawn.
+          </p>
         </div>
-        <p class="caption">
-          <span id="atlas-caption">every neuron of the central brain, at its soma.</span>
-          each point lights when that cell spikes. no synapses are drawn; there are eight and a half million.
-        </p>
-      </section>
+      </aside>
 
-      <section class="panel" aria-labelledby="h-readout">
-        <h2 class="label" id="h-readout">what his body wants to do</h2>
-        <div class="readout" id="readout"></div>
-        <p class="caption">
-          rates of the descending and motor populations that stand for each behaviour, against the threshold
-          that turns them into an action. below the line is silence, which is most of the time.
-        </p>
-      </section>
+      <div class="rail">
+        <section class="row" id="now" aria-labelledby="h-now">
+          <h2 id="h-now">now</h2>
+          <div class="readout" id="readout"></div>
+          <p class="caption">
+            the descending and motor populations that stand for each behaviour, against the threshold that makes
+            them an action. under the line is silence, which is most of the time.
+          </p>
+        </section>
 
-      <section class="panel" aria-labelledby="h-today">
-        <h2 class="label" id="h-today">today</h2>
-        <div class="stats" id="today"></div>
-        <div class="topics" id="topics"></div>
-      </section>
+        <section class="row" id="today" aria-labelledby="h-today">
+          <h2 id="h-today">today</h2>
+          <p class="figure"><span class="numeral" id="silence">–</span><span class="figure-label">silence</span></p>
+          <p class="sentence" id="today-sentence">waiting for his first poll of the day.</p>
+          <p class="sentence muted" id="topics-sentence"></p>
+        </section>
 
-      <section class="panel" aria-labelledby="h-memory">
-        <h2 class="label" id="h-memory">memory</h2>
-        <div class="stats" id="memory"></div>
-        <p class="caption">
-          what he has learned is depression on the synapses between kenyon cells and mushroom body output
-          neurons. short-term fades in hours; long-term takes spaced repetition and fades in a month.
-        </p>
-      </section>
+        <section class="row" id="memory" aria-labelledby="h-memory">
+          <h2 id="h-memory">memory</h2>
+          <p class="figure"><span class="numeral" id="people-count">–</span><span class="figure-label">people he can smell</span></p>
+          <p class="sentence" id="memory-sentence"></p>
+          <ol class="people" id="people"></ol>
+          <p class="caption">
+            each account is an odor. the mark is his learned valence for it, read from the weights; the count is how
+            often they have come to him. short-term traces fade in hours, long-term ones take repetition and fade in
+            a month.
+          </p>
+        </section>
 
-      <section class="panel" aria-labelledby="h-people">
-        <h2 class="label" id="h-people">people, by smell</h2>
-        <arc-list variant="separated" size="sm" id="people"></arc-list>
-        <p class="caption">
-          each account is an odor. the bar is his learned valence for it, read from the weights; the count is how
-          often they have come to him.
-        </p>
-      </section>
+        <section class="row" id="said" aria-labelledby="h-said">
+          <h2 id="h-said">what he said</h2>
+          <ol class="posts" id="posts"></ol>
+        </section>
 
-      <section class="panel" aria-labelledby="h-posts">
-        <h2 class="label" id="h-posts">what he said</h2>
-        <div class="posts" id="posts"></div>
-      </section>
+        <section class="row" id="record" aria-labelledby="h-record">
+          <h2 id="h-record">the record</h2>
+          <ol class="windows" id="recent"></ol>
+          <p class="caption">
+            every post he reads is a one-second stimulus: the account as an odor, the tone as taste, the topics as more
+            odor. the decision is whatever crossed threshold, if anything.
+          </p>
+        </section>
 
-      <section class="panel wide" aria-labelledby="h-recent">
-        <h2 class="label" id="h-recent">recent windows</h2>
-        <div class="recent" id="recent"></div>
-        <p class="caption">
-          every post he reads is a one-second stimulus: the account as an odor, the tone as taste, the topics as
-          more odor. the decision is whatever crossed threshold, if anything.
-        </p>
-      </section>
-
-      <section class="panel wide about" aria-labelledby="h-about">
-        <h2 class="label" id="h-about">what this is</h2>
-        <p>
-          bosco is a simulated male fruit fly brain, the MaleCNS v1.0 connectome from Janelia, Google and
-          Cambridge: 40,939 central brain neurons, every synapse, leaky integrate-and-fire, running one
-          biological second per wall second on a small server. Bluesky is his world. accounts are smells,
-          replies are tastes, and a mushroom body learns which smells were sweet.
-        </p>
-        <p>
-          there is no language model anywhere in him. his words come from a small published corpus and a
-          trigram, chosen by his state. he is not clever. he is a fly, and he is learning.
-        </p>
-        <p class="links">
-          <a href="https://github.com/proto-cool/bosco">the code</a>
-          <a href="https://github.com/proto-cool/bosco/blob/main/EXPERIMENT.md">the experiment</a>
-          <a href="https://github.com/proto-cool/bosco/blob/main/README.md#modeling-decisions">modeling decisions</a>
-          <a href="https://bsky.app/profile/proto.cool">@proto.cool</a>
-        </p>
-        <p class="fine" id="fine"></p>
-      </section>
+        <section class="row about" id="about" aria-labelledby="h-about">
+          <h2 id="h-about">what this is</h2>
+          <p>
+            bosco is a simulated male fruit fly brain, the MaleCNS v1.0 connectome from Janelia, Google and Cambridge:
+            40,939 central brain neurons, every synapse, leaky integrate-and-fire, running one biological second per
+            wall second on a small server. Bluesky is his world. accounts are smells, replies are tastes, and a
+            mushroom body learns which smells were sweet.
+          </p>
+          <p>
+            there is no language model anywhere in him. his words come from a small published corpus and a trigram,
+            chosen by his state. he is not clever. he is a fruit fly, and he is learning.
+          </p>
+          <p class="links">
+            <a href="https://github.com/proto-cool/bosco">the code</a>
+            <a href="https://github.com/proto-cool/bosco/blob/main/EXPERIMENT.md">the experiment</a>
+            <a href="https://github.com/proto-cool/bosco/blob/main/README.md#modeling-decisions">modeling decisions</a>
+            <a href="https://bsky.app/profile/proto.cool">@proto.cool</a>
+          </p>
+          <p class="fine" id="fine"></p>
+        </section>
+      </div>
     </main>
 
     <script type="module" src="./src/main.js"></script>
