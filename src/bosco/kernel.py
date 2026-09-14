@@ -193,6 +193,10 @@ class Net:
 
     def set_state(self, state: bytes) -> None:
         size = int(self.lib.lif_state_size(self._h))
+        nblk = (self.n + 63) // 64
+        if len(state) == size - nblk:
+            # state saved before activity blocks existed: arm every block; they disarm at rest
+            state = bytes(state) + b"\x01" * nblk
         if len(state) != size:
             raise ValueError(f"state size {len(state)} != {size}")
         self.lib.lif_set_state(self._h, C.c_char_p(state))
