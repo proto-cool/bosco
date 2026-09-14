@@ -20,7 +20,8 @@ body {
   font-weight: var(--font-body-weight);
   font-size: var(--body-size);
   line-height: var(--body-lh);
-  padding: 0;
+  padding-inline: var(--gutter);
+  padding-block: 0;
 }
 ::selection {
   background: var(--accent-primary-subtle);
