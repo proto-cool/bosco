@@ -2,15 +2,16 @@
 # closed vocabulary (the corpus and phrasebook, minus the function words below) is an odor:
 # blake2b(word) chooses k neutral glomeruli and a rate in rate_hz, the same way an account
 # is an odor.  A post's content words (in his vocabulary, up to max_words in order of first
-# appearance) are driven on top of the account odor and the topics.  He never sees the
+# appearance) are driven on top of the account odor and the topics.  A word alone reaches a
+# few dozen Kenyon cells at these rates; fainter and its memory is all-or-nothing.  He never sees the
 # sentence; he smells which of his own words were in it.  The mushroom body then learns,
 # per word, what came with it; that memory is read back from the weights (word valence)
 # and leans on the generator's choice of words.  A thread lingers: the words of the last
 # posts in a thread he is in stay in the air for thread_tau_s and are smelled again, at a
 # lower rate, with the next post in that thread.
-k: 2
-rate_hz: [40.0, 90.0]
-max_words: 8
+k: 3
+rate_hz: [90.0, 130.0]
+max_words: 6
 context_rate_scale: 0.5     # lingering words are driven at this fraction of their rate
 thread_tau_s: 900.0         # a thread's smell lasts this long after its last post
 thread_keep: 3              # the last posts of a thread that linger

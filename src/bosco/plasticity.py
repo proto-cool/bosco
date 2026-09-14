@@ -167,31 +167,6 @@ class MushroomBody:
         v = float(np.clip(2.0 * (dr - dp), -1.0, 1.0))
         return v, {"reward_depression": dr, "punishment_depression": dp, "n_active_kc": int(pre.sum())}
 
-    def learned_valence_batch(self, indptr: np.ndarray, indices: np.ndarray) -> np.ndarray:
-        """learned_valence for many KC sets at once (CSR over KC positions): the same numbers,
-        read from the weights with no simulation.  Used for his words."""
-        m = self.fly.multiplier
-        dep = 1.0 - m
-        n_kc = int(self.fly.kc_pos_of_edge.max()) + 1 if len(self.fly.kc_pos_of_edge) else 0
-        out = np.zeros(len(indptr) - 1, dtype=np.float64)
-        rew_e = self.target_edges("reward")
-        pun_e = self.target_edges("punishment")
-        # per-KC sums and counts over the edges it drives, by compartment valence
-        kc = self.fly.kc_pos_of_edge
-        rew_sum = np.bincount(kc[rew_e], weights=dep[rew_e], minlength=n_kc)
-        rew_n = np.bincount(kc[rew_e], minlength=n_kc)
-        pun_sum = np.bincount(kc[pun_e], weights=dep[pun_e], minlength=n_kc)
-        pun_n = np.bincount(kc[pun_e], minlength=n_kc)
-        for i in range(len(out)):
-            ks = indices[indptr[i] : indptr[i + 1]]
-            if len(ks) == 0:
-                continue
-            rn, pn = rew_n[ks].sum(), pun_n[ks].sum()
-            dr = rew_sum[ks].sum() / rn if rn else 0.0
-            dp = pun_sum[ks].sum() / pn if pn else 0.0
-            out[i] = float(np.clip(2.0 * (dr - dp), -1.0, 1.0))
-        return out
-
     # ---- pairing --------------------------------------------------------------
     def pair_counts(self, kc_counts_per_s: np.ndarray, valence: str, t_hours: float) -> np.ndarray:
         """Three-factor rule from KC spike counts (per second of presentation) already observed."""

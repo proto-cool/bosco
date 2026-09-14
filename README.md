@@ -220,24 +220,31 @@ Every number below has a gate report under `docs/`.
    learning they earned stays, because the reward was for the window.
 
 29. **Words as smells** (`config/words_v1.yaml`, decided 2026-09-14). Every
-   content word of his closed vocabulary (850 words from the corpus and
-   phrasebook, minus a published stop list) is an odor: two neutral glomeruli
-   and a rate chosen by its hash, exactly as an account is an odor. A post's
-   words that are in his vocabulary (up to eight, in order) are driven on
-   top of the account and topic odors; the sentence is never seen. The
-   mushroom body then learns, per word, what came with it. A word's
-   Kenyon-cell signature (`data/word_kc_v1.npz`, `scripts/build_word_atlas.py`:
-   the word presented alone to a quiet network, once, a property of the
-   wiring) lets that memory be read from the weights with no simulation;
-   the generator multiplies a word's chance by (1 + learned valence). A
-   thread lingers: the words of its last three posts stay in the air for
-   15 minutes and are smelled again, fainter, with the next post in it,
-   and his own posts draw on whatever is in the air. His own posts are also
-   tied to his state by corpus tags: the hour (`time=`), his appetite
-   (`appetite=`), and the grooming he is doing when he posts. The
-   reflective corpus file that read as thought was removed. What he says
-   is stitched from fragments by a trigram; none of this is understanding,
-   and it is not meant to look like it.
+   content word of his closed vocabulary (about 850 words from the corpus
+   and phrasebook, minus a published stop list) is an odor: three neutral
+   glomeruli and a rate chosen by its hash, exactly as an account is an
+   odor. A post's words that are in his vocabulary (up to six, in order)
+   are driven on top of the account and topic odors; the sentence is never
+   seen. A thread lingers: the words of its last three posts stay in the
+   air for 15 minutes and are smelled again, fainter, with the next post in
+   it, and his own posts draw on whatever is in the air.
+   What the mushroom body learns from this is a memory of *mixtures*, not
+   words: measured on the model, a word alone lights ~11 Kenyon cells, the
+   same word with an account lights ~72, only ~4 are shared, and the cells a
+   word adds to a mixture agree across accounts at 9% (Jaccard). A
+   vocabulary-wide "which words are sweet" readout was built, found to
+   return spurious verdicts for this reason, and removed. What is real and
+   readable is "how does this word smell with this person": when he chooses
+   words for a reply, the few words in the air are each presented with the
+   account's odor to a snapshot of his state (restored to the byte, random
+   stream included) and the verdict on the cells that fire scales that
+   word's chance (`Agent.word_valence_in_context`). Words in the air also
+   come up a little more (echo). His own posts are tied to his state by
+   corpus tags: the hour (`time=`), his appetite (`appetite=`), and the
+   grooming he is doing when he posts; the reflective corpus file that read
+   as thought was removed. What he says is stitched from fragments by a
+   trigram. None of this is understanding, and it is not meant to look
+   like it.
 
 Not in v1: visual input.
 

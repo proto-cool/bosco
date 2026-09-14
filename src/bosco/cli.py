@@ -312,19 +312,17 @@ def main(argv=None) -> int:
         return 0
 
     s.set_defaults(fn=_bench)
-    s = sub.add_parser("words", help="what his mushroom body has learned about his words")
-    s.add_argument("-n", type=int, default=15)
+    s = sub.add_parser("words", help="how his words smell with an account, read from the weights")
+    s.add_argument("--did", required=True)
+    s.add_argument("--text", default="", help="a post; its words in his vocabulary are probed with the account's odor")
 
     def _words(a):
         L = Ledger(a.ledger)
         agent = Agent(L, state_dir=a.state_dir)
-        wv = agent.word_valences()
-        if not wv:
-            print("no word memory yet (data/word_kc_v1.npz missing, or nothing learned)")
-            return 0
-        ranked = sorted(wv.items(), key=lambda kv: kv[1])
-        print("sweet:", ", ".join(f"{w} {v:+.2f}" for w, v in reversed(ranked[-a.n :]) if v > 0))
-        print("bitter:", ", ".join(f"{w} {v:+.2f}" for w, v in ranked[: a.n] if v < 0))
+        words = agent.enc.words_for(a.text) if a.text else agent.air(int(agent.live.t_ms))
+        wv = agent.word_valence_in_context(a.did, tuple(words))
+        print("words:", list(words))
+        print("with this account:", {w: round(v, 2) for w, v in wv.items()} or "nothing learned yet")
         print("in the air:", list(agent.air(int(agent.live.t_ms))))
         return 0
 

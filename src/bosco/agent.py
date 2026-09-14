@@ -107,7 +107,7 @@ class Agent:
         self.appetite_t = 0.0  # hours (simulation time) it was last stepped
         self._appetite_loaded = False
         self.threads: dict[str, list[list]] = {}  # thread root -> [[t_ms, [words...]], ...]: what lingers in the air
-        self._word_atlas = None  # data/word_kc_v1.npz, loaded on first use; None if absent
+        self._probe_cache: dict[tuple[str, str, str], float] = {}  # (did, word, weights digest) -> valence
         self.on_window = None  # optional observer (Window, Decision, dust) -> None; the panel. Never feeds back.
         self.stop_requested = False
         self.slice_wall_s = 0.5  # running estimate of wall seconds per simulated second
@@ -259,25 +259,42 @@ class Agent:
                             out.append(w)
         return tuple(out[: 2 * int(c["max_words"])])
 
-    # ---- what he has learned about his words ----------------------------------------
-    def word_atlas(self):
-        if self._word_atlas is None:
-            p = paths.ROOT / "data" / "word_kc_v1.npz"
-            if p.exists():
-                z = np.load(p)
-                self._word_atlas = (list(z["words"]), z["indptr"], z["indices"].astype(np.int64))
-            else:
-                self._word_atlas = False
-        return self._word_atlas or None
+    # ---- what he has learned about a word, with this person -------------------------
+    PROBE_MS = 500.0
+    PROBE_MAX = 6
 
-    def word_valences(self) -> dict[str, float]:
-        """Learned valence per word, from the weights over each word's Kenyon-cell signature."""
-        atlas = self.word_atlas()
-        if atlas is None:
+    def word_valence_in_context(self, did: str | None, words: tuple[str, ...]) -> dict[str, float]:
+        """How each word smells with this account, read from the weights: the account's odor and
+        the word are presented together to a copy of his state (snapshot, present, restore; the
+        kernel's random stream is part of the snapshot, so nothing about him changes) and the
+        mushroom body's verdict on the cells that fired is read back.  The brain codes mixtures,
+        not parts (a word alone and the same word with an account share few Kenyon cells), so a
+        word's memory only exists with a smell beside it; this is that memory.  A few words, when
+        he is choosing what to say; never the whole vocabulary."""
+        if not did or not words:
             return {}
-        words, indptr, indices = atlas
-        v = self.mb.learned_valence_batch(indptr, indices)
-        return {w: float(x) for w, x in zip(words, v, strict=True) if x != 0.0}
+        key_d = self.mb.digest()[:8]
+        out: dict[str, float] = {}
+        todo = [w for w in words[: self.PROBE_MAX] if (did, w, key_d) not in self._probe_cache]
+        if todo:
+            saved = self.live.snapshot()
+            base = self._base_drives(self.live.t_ms)
+            try:
+                for w in todo:
+                    self.live.set_base(base)
+                    win = self.live.present([self.enc.odor_drive(did), self.enc.word_drive(w)], self.PROBE_MS)
+                    v, _ = self.mb.learned_valence(win.counts[self.fly.kc])
+                    self._probe_cache[(did, w, key_d)] = float(v)
+                    self.live.restore(saved)
+            finally:
+                self.live.restore(saved)
+            if len(self._probe_cache) > 4096:
+                self._probe_cache.clear()
+        for w in words[: self.PROBE_MAX]:
+            v = self._probe_cache.get((did, w, key_d), 0.0)
+            if v != 0.0:
+                out[w] = v
+        return out
 
     def state_register(self, ts: float) -> dict[str, str]:
         """The parts of his state the corpus is tagged by: the hour and his appetite."""
@@ -531,7 +548,7 @@ class Agent:
                     topics=f.topics if f else (),
                     familiarity=fb,
                     state=self.state_register(ts),
-                    word_valence=self.word_valences(),
+                    word_valence=self.word_valence_in_context(did, air) if f is not None else {},
                     air=air,
                     beta=float(c.get("valence_beta", 1.0)),
                     gamma=float(c.get("echo_gamma", 0.5)),

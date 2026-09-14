@@ -105,3 +105,27 @@ def test_state_tags_select_documents(tmp_path):
     g = Generator(tmp_path)
     assert g.matching_docs("groom", "neutral", "mid", state={"time": "night", "appetite": ""}) == ["n.txt"]
     assert g.matching_docs("groom", "neutral", "mid", state={"time": "day", "appetite": "hungry"}) == ["h.txt"]
+
+
+@needs_data
+def test_word_memory_is_read_with_the_account_and_leaves_him_unchanged(fly):
+    from bosco.agent import Agent
+    from bosco.encoder import Features
+    from bosco.ledger import Ledger
+
+    tmp = tempfile.mkdtemp()
+    ag = Agent(Ledger(f"{tmp}/l.sqlite"), fly, state_dir=tmp)
+    ag.mb.reset()
+    ag.live.net.reset(0)
+    ag.live.t_ms = 0
+    o = ag.run(Features("did:plc:nick", 0.5, True, 0, False, (), False, ("banana",)), T0, "at://a/1", fast=True)
+    ag.apply_outcome(o.episode_id, "reward", "test", "did:plc:nick", "at://x", T0 + 10, fast=True)
+    before = ag.digest()
+    with_nick = ag.word_valence_in_context("did:plc:nick", ("banana", "spider"))
+    stranger = ag.word_valence_in_context("did:plc:stranger", ("banana",))
+    assert ag.digest() == before  # probing changed nothing about him
+    assert with_nick.get("banana", 0.0) > 0.0  # banana, with Nick, was sweet
+    assert with_nick.get("banana", 0.0) > stranger.get("banana", 0.0)  # and it is Nick's banana, not anyone's
+    assert with_nick.get("banana", 0.0) >= with_nick.get("spider", 0.0)
+    again = ag.word_valence_in_context("did:plc:nick", ("banana",))
+    assert again["banana"] == with_nick["banana"]  # deterministic, and cached
