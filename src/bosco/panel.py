@@ -253,14 +253,18 @@ class Panel:
                 hours[dt.datetime.fromtimestamp(ts_l, tz).hour]["landings"] += 1
             except (ValueError, IndexError, TypeError):
                 pass
-        for p in people.values():
-            try:
-                _, v = ag.memory_report(p["did"], ts)
-                p["learned"] = round(float(v), 3)
-            except Exception:  # noqa: BLE001
-                p["learned"] = 0.0
+        ppl = sorted(people.values(), key=lambda p: (-p["mentions"], -p["acted"], -p["n"]))[:24]
+        for p in ppl:
+            # a report never probes: the verdict is read only for accounts whose odor signature he
+            # already holds (the live status fills those in, a few per poll); the rest read 0
+            p["learned"] = 0.0
+            if p["did"] in getattr(ag, "_signatures", {}):
+                try:
+                    _, v = ag.memory_report(p["did"], ts)
+                    p["learned"] = round(float(v), 3)
+                except Exception:  # noqa: BLE001
+                    pass
             p["familiarity"] = L.familiarity(p["did"])
-        ppl = sorted(people.values(), key=lambda p: (-p["mentions"], -p["acted"], -p["n"]))
         posts = [
             {"uri": r["our_uri"], "ts": r["ts"], "kind": r["kind"]}
             for r in db.execute(
@@ -319,7 +323,7 @@ class Panel:
             "feeds": feeds,
             "topics": dict(sorted(topics.items(), key=lambda kv: (-kv[1], kv[0]))[:12]),
             "words": dict(sorted(words.items(), key=lambda kv: (-kv[1], kv[0]))[:12]),
-            "people": ppl[:24],
+            "people": ppl,
             "posts": posts,
             "outcomes": outcomes,
             "control": control,
@@ -429,10 +433,13 @@ class Panel:
             )
         ]
         people = []
-        fresh = 0  # an account's odor signature is probed once and kept; a few new ones per poll
+        # an account's odor signature is probed once and kept; a few new ones per poll, and none
+        # while he is behind the wall clock (a probe is a simulated half second he does not live)
+        budget = 0 if ag.lag_s(ts) > 120 else 4
+        fresh = 0
         for did in dids:
             if did not in ag._signatures:
-                if fresh >= 8:
+                if fresh >= budget:
                     continue
                 fresh += 1
             try:
