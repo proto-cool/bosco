@@ -16,6 +16,7 @@ import datetime as dt
 import json
 import sys
 import time
+from pathlib import Path
 
 from bosco.agent import Agent
 from bosco.encoder import Features, vader_compound
@@ -250,6 +251,52 @@ def main(argv=None) -> int:
         return 0
 
     s.set_defaults(fn=_panel)
+    s = sub.add_parser("bench", help="how much wall time one of his seconds costs here (reads state, writes nothing)")
+    s.add_argument("--slices", type=int, default=20)
+
+    def _bench(a):
+        import shutil
+        import tempfile
+
+        from bosco import paths as _paths
+
+        src = Path(a.state_dir) if a.state_dir else _paths.ROOT / "state"
+        tmp = Path(tempfile.mkdtemp())
+        for f in ("state.npz",):
+            if (src / f).exists():
+                shutil.copy(src / f, tmp / f)
+        L = Ledger(f"{tmp}/bench.sqlite")
+        t0 = time.time()
+        agent = Agent(L, state_dir=tmp)
+        agent.bio_ms(time.time())  # start a clock if the state has none
+        print(
+            f"load {time.time() - t0:.1f} s; brain at t={agent.live.t_ms / 1000:.0f} s; awake {agent.active_fraction():.0%}"
+        )
+        # kernel alone, with his real base drive
+        agent.live.set_base(agent._base_drives(agent.live.t_ms))
+        t0 = time.time()
+        for _ in range(a.slices):
+            agent.live.idle(1000)
+        k = (time.time() - t0) / a.slices
+        print(f"kernel idle second: {k:.3f} wall s (awake {agent.active_fraction():.0%})")
+        # the whole live step (dust, base, kernel, forgetting, valence, readout, panel-less)
+        t0 = time.time()
+        agent.advance_to(agent.wall(agent.live.t_ms) + a.slices, fast=False, max_slices=a.slices)
+        w = (time.time() - t0) / a.slices
+        print(f"full idle second: {w:.3f} wall s ({w - k:.3f} s of python around the kernel)")
+        t0 = time.time()
+        agent.run(
+            Features("did:plc:bench", 0.4, True, 0, False, ("fruit",), True),
+            agent.wall(agent.live.t_ms),
+            "bench://1",
+            kind="event",
+            fast=True,
+        )
+        print(f"one event (mention, topic): {time.time() - t0:.2f} wall s (awake after: {agent.active_fraction():.0%})")
+        shutil.rmtree(tmp, ignore_errors=True)
+        return 0
+
+    s.set_defaults(fn=_bench)
     s = sub.add_parser("status")
     s.set_defaults(fn=cmd_status)
     s = sub.add_parser("integrity")

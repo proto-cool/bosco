@@ -18,6 +18,7 @@ import datetime as dt
 import hashlib
 import json
 import math
+import time
 import zoneinfo
 from dataclasses import dataclass, replace
 from pathlib import Path
@@ -178,9 +179,21 @@ class Agent:
         t0 = self.ledger.get_cursor("brain_t0")
         self.brain_t0 = float(t0) if t0 else None
 
-    def save_state(self) -> None:
+    SAVE_MIN_S = 30.0  # the live loop calls save_state every few seconds; write at most this often
+
+    def save_state(self, force: bool = False) -> None:
+        now = time.time()
+        if not force and now - getattr(self, "_last_save", 0.0) < self.SAVE_MIN_S:
+            return
+        self._last_save = now
         self.state_dir.mkdir(parents=True, exist_ok=True)
         np.savez(self.state_path, **self._pack())
+
+    def active_fraction(self) -> float:
+        """Share of the kernel's 64-neuron blocks that are awake (cost of a simulated second scales with it)."""
+        st = self.live.net.get_state()
+        nblk = (self.live.net.n + 63) // 64
+        return sum(st[-nblk:]) / nblk
 
     def snapshot(self) -> Path:
         self.snapshot_dir.mkdir(parents=True, exist_ok=True)

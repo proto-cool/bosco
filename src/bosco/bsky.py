@@ -652,40 +652,63 @@ def run_loop(ledger: Ledger, dry_run: bool, once: bool, interval: int) -> int:
     if skipped:
         print(f"downtime skipped: {skipped:.0f} s not lived")
     b.introduce_if_needed()
+    # Two cadences.  Notifications (someone talking to him) every notify_s: cheap, and he
+    # should answer quickly.  The timeline and discover feed every `interval`: browsing is
+    # what costs simulated seconds, and a bot on the network does not do much unprompted.
+    # Between both he lives, one simulated second per wall second, in bounded steps.
+    notify_s = float(os.environ.get("BOSCO_NOTIFY_S", "20"))
     polls = 0
+    next_notify = time.time()
+    next_browse = time.time()
     while True:
-        try:
-            polls += 1
-            if polls % 5 == 1:
-                b.sweep_deleted()
-            n = b.poll_notifications()
-            nb = b.browse()
-            nk = b.check_blocks()
-            if b.agent.lag_s(time.time()) > 3600:
-                print(f"an hour behind wall time; skipping ahead ({b.agent.lag_s(time.time()):.0f} s)")
-                b.agent.skip_downtime(time.time())
-            sp = b.spontaneous(budget_s=max(10.0, interval * 0.6))
-            lag = time.time() - b.agent.wall(b.agent.live.t_ms)
-            ledger.set_cursor("last_poll_ts", repr(time.time()))
-            if panel is not None:
-                try:
-                    panel.status(time.time(), {"poll": {"notifications": n, "browsed": nb, "grooms": sp, "lag_s": lag}})
-                except Exception as e:  # noqa: BLE001
-                    print("panel status failed:", repr(e), file=sys.stderr)
-            ledger.set_cursor("brain_lag_s", repr(lag))
-            print(
-                f"{dt.datetime.now(dt.UTC).isoformat()} poll: {n} notifications, {nb} browsed, "
-                f"{nk} blocks, grooms {sp}, lag {lag:.0f}s, {b.agent.slice_wall_s:.2f} wall s per bio s"
-            )
-        except Exception as e:  # noqa: BLE001
-            print("poll error:", repr(e), file=sys.stderr)
-        if once or stop["now"]:
-            b.agent.save_state()
-            return 0
-        for _ in range(interval):
-            if stop["now"]:
-                break
-            time.sleep(1)
+        now = time.time()
+        if now >= next_notify:
+            try:
+                n = b.poll_notifications()
+                if n:
+                    lag_n = b.agent.lag_s(time.time())
+                    print(f"{dt.datetime.now(dt.UTC).isoformat()} notifications: {n} perceived, lag {lag_n:.0f}s")
+            except Exception as e:  # noqa: BLE001
+                print("notification error:", repr(e), file=sys.stderr)
+            next_notify = max(next_notify + notify_s, time.time() + notify_s * 0.25)
+        if now >= next_browse:
+            try:
+                polls += 1
+                if polls % 5 == 1:
+                    b.sweep_deleted()
+                nb = b.browse()
+                nk = b.check_blocks()
+                if b.agent.lag_s(time.time()) > 3600:
+                    print(f"an hour behind wall time; skipping ahead ({b.agent.lag_s(time.time()):.0f} s)")
+                    b.agent.skip_downtime(time.time())
+                lag = b.agent.lag_s(time.time())
+                ledger.set_cursor("last_poll_ts", repr(time.time()))
+                if panel is not None:
+                    try:
+                        panel.status(time.time(), {"poll": {"browsed": nb, "lag_s": lag}})
+                    except Exception as e:  # noqa: BLE001
+                        print("panel status failed:", repr(e), file=sys.stderr)
+                ledger.set_cursor("brain_lag_s", repr(lag))
+                print(
+                    f"{dt.datetime.now(dt.UTC).isoformat()} poll: {nb} browsed, {nk} blocks, lag {lag:.0f}s, "
+                    f"{b.agent.slice_wall_s:.2f} wall s per bio s, {b.agent.active_fraction():.0%} of the brain awake"
+                )
+            except Exception as e:  # noqa: BLE001
+                print("poll error:", repr(e), file=sys.stderr)
+            # the next browse is one interval after this one was due; a slow one does not pile up
+            next_browse = max(next_browse + interval, time.time() + interval * 0.25)
+            if once:
+                b.agent.save_state(force=True)
+                return 0
         if stop["now"]:
-            b.agent.save_state()
+            b.agent.save_state(force=True)
             return 0
+        # between polls he lives: bounded steps toward now, never past the next check
+        try:
+            until = min(next_notify, next_browse) - time.time()
+            b.spontaneous(budget_s=max(0.5, min(5.0, until)))
+        except Exception as e:  # noqa: BLE001
+            print("live error:", repr(e), file=sys.stderr)
+            time.sleep(1)
+        if b.agent.lag_s(time.time()) < 1.0:
+            time.sleep(0.25)  # caught up with the wall clock; wait for it
