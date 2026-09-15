@@ -177,3 +177,26 @@ def test_a_question_is_always_answered_once():
     n = len(_kinds(L))
     b.answer_anyway(out, "at://x/2", "cid", root, "did:plc:x", 2.0)
     assert len(_kinds(L)) == n  # asleep: nothing goes out
+
+
+def test_he_reads_the_whole_thread():
+    from bosco.bsky import Bsky
+
+    b = object.__new__(Bsky)
+    words = {"at://a/1": ("banana", "wall"), "at://a/2": ("wall", "cup"), "at://a/3": ("spoon",)}
+    b.agent = SimpleNamespace(
+        enc=SimpleNamespace(words_for=lambda t: words.get(t, ()), words_cfg={"max_words": 6}),
+    )
+    mk = lambda uri, parent: SimpleNamespace(post=SimpleNamespace(record=SimpleNamespace(text=uri)), parent=parent)  # noqa: E731
+    chain = mk("at://a/3", mk("at://a/2", mk("at://a/1", None)))
+    b.client = SimpleNamespace(
+        app=SimpleNamespace(
+            bsky=SimpleNamespace(
+                feed=SimpleNamespace(
+                    get_post_thread=lambda params: SimpleNamespace(thread=SimpleNamespace(parent=chain))
+                )
+            )
+        )
+    )
+    assert b.thread_words("at://a/4", SimpleNamespace(reply=SimpleNamespace())) == ("banana", "wall", "cup", "spoon")
+    assert b.thread_words("at://a/4", SimpleNamespace(reply=None)) == ()  # not a reply: nothing to read

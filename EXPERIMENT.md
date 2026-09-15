@@ -18,7 +18,8 @@ genuinely the one acting, and that anyone can check.
 
 - No LLM, embedding, or classifier anywhere in the runtime loop. The only
   text scorer is the VADER lexicon. The only text generator is a word
-  n-gram model (four words of context) over the published `corpus/`, seeded by the episode and
+  n-gram model (four words of context) over the published `corpus/`, and a
+  lexical retrieval over the same corpus by the words on his antennae, seeded by the episode and
   conditioned on the fly's state. **Closed vocabulary** (decided
   2026-09-13): nothing Bosco reads ever enters the generator; he learns
   people, not words. Letting him acquire words from accounts he has

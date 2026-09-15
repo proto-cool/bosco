@@ -106,8 +106,12 @@ class Encoder:
     def words_for(self, text: str) -> tuple[str, ...]:
         """The words of his vocabulary in a post, in order of first appearance, at most max_words.
         The text is read once and discarded; only these words are kept."""
+        import re
+
         from bosco.textgen import tokenize
 
+        # handles and links are not words: "@bosco.proto.cool" would otherwise smell of bosco and cool
+        text = re.sub(r"@[\w.\-]+|https?://\S+|\b[\w\-]+\.[a-z]{2,}(?:/\S*)?", " ", text)
         out: list[str] = []
         seen: set[str] = set()
         for t in tokenize(text):

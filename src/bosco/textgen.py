@@ -299,6 +299,65 @@ class Generator:
         self._models[key] = m
         return m
 
+    def pick_sentence(
+        self,
+        behaviour: str,
+        valence: str,
+        arousal: str,
+        seed: int,
+        air: dict[str, float] | tuple[str, ...] = (),
+        topics: tuple[str, ...] = (),
+        familiarity: str | None = None,
+        state: dict[str, str] | None = None,
+        word_valence: dict[str, float] | None = None,
+        beta: float = 1.0,
+        avoid: set[str] | None = None,
+        top_k: int = 5,
+    ) -> str | None:
+        """The sentence of his that smells most like the moment: every sentence in the matching
+        register is scored by the words on his antennae it contains (each by its freshness, and
+        by what he has learned of that word with this person), and the seed picks among the top
+        few.  Whole, his, and about what is in front of him.  None when nothing in the air is in
+        any sentence, or nothing is in the air; the caller then stitches as before."""
+        in_air = dict(air) if isinstance(air, dict) else dict.fromkeys(air, 1.0)
+        if self.empty or not in_air:
+            return None
+        want = self._want(behaviour, valence, arousal, familiarity, state)
+        wv = word_valence or {}
+        avoid = avoid or set()
+        scored: list[tuple[float, str]] = []
+        seen: set[str] = set()
+        for d in self.docs:
+            if not self._doc_matches(d, want, topics):
+                continue
+            bonus = 1.0 if not d.tags else (1.5 if "topic" in d.tags else 1.2)
+            for sent in d.sentences:
+                toks = [t.lower() for t in sent if t not in END_PUNCT and t not in {",", ";", ":"}]
+                if not toks:
+                    continue
+                hit = sum(in_air.get(t, 0.0) * max(0.1, 1.0 + beta * wv.get(t, 0.0)) for t in set(toks))
+                if hit <= 0:
+                    continue
+                text = detokenize(sent)
+                if text in seen or text in avoid or len(text) > MAX_CHARS:
+                    continue
+                seen.add(text)
+                # a short sentence that is mostly about the thing beats a long one that mentions it
+                scored.append((bonus * hit / (1.0 + 0.05 * len(toks)), text))
+        if not scored:
+            return None
+        scored.sort(key=lambda x: (-x[0], x[1]))
+        top = scored[:top_k]
+        rng = _Rng(int.from_bytes(hashlib.blake2b(f"{seed}|pick".encode(), digest_size=8).digest(), "little"))
+        tot = sum(sc for sc, _ in top)
+        u = rng.unit() * tot
+        acc = 0.0
+        for sc, text in top:
+            acc += sc
+            if u <= acc:
+                return text
+        return top[-1][1]
+
     def generate(
         self,
         behaviour: str,
@@ -314,6 +373,7 @@ class Generator:
         beta: float = 1.0,
         gamma: float = 0.5,
         prime: bool = False,
+        opening: str | None = None,
     ) -> str | None:
         """`word_valence` is what his mushroom body has learned about each word (from the weights);
         a sweet word is chosen more, a bitter one less.  `air` is what is on his antennae right
@@ -337,6 +397,16 @@ class Generator:
         z, a, b = BOS, BOS, BOS
         n_done = 0
         sent_len = 0
+        if opening:
+            # a whole sentence of his, picked by smell (pick_sentence); the walk adds to it only if
+            # he has more than one sentence in him
+            out = tokenize(opening)
+            if out and out[-1] not in END_PUNCT:
+                out.append(".")
+            n_done = 1
+            prime = False
+            if n_done >= n_sent:
+                return detokenize(out)
         if prime and in_air:
             # open on one of their words: a context of his that ends in it, chosen by freshness
             options = [(w, d) for w, d in in_air.items() if m.pred.get(w)]

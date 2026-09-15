@@ -435,6 +435,23 @@ Every number below has a gate report under `docs/`.
    second corpus pass broke its grammar toward the reference files without
    lengthening a single line.
 
+42. **He reads the whole thread, and picks a sentence by smell before he
+   stitches one** (decided 2026-09-14). A post that is part of a thread is
+   no longer one second of smell: he reads the posts above it, up to
+   twelve, oldest first, and their words of his vocabulary are smelled with
+   it at the lower rate as context, a word said again counting as fresher.
+   Text is read once and discarded; the words are logged on the row as
+   before. Then, when he speaks, the first sentence is retrieval, not
+   stitching: every sentence in the matching register is scored by the
+   words on his antennae it contains, each by its freshness and by what he
+   has learned of that word with this person, and the seed picks among the
+   top five; the last thirty openings are excluded so he does not repeat
+   himself. That sentence is whole and his; the n-gram adds to it only when
+   his appetite gives him more than one sentence. This is lexical retrieval
+   over his own corpus, no model and no embeddings: he says the sentence of
+   his that smells most like the moment. When nothing in the air is in any
+   sentence of his, he stitches as before.
+
 Not in v1: visual input.
 
 ## Running

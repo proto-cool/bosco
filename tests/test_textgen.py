@@ -90,3 +90,22 @@ def test_priming_opens_on_a_word_in_the_air(tmp_path):
     mixed = [g.generate("reply", "neutral", "mid", s, air={"apple": 0.9, "banana": 0.1}, prime=True) for s in range(60)]
     n_apple = sum(t.lower().startswith("apple") for t in mixed)
     assert 60 > n_apple > 30  # fresher words open more often, faint ones still can
+
+
+def test_pick_sentence_by_smell_then_stitch(tmp_path):
+    from bosco.textgen import Generator
+
+    (tmp_path / "a.txt").write_text(
+        "the banana is soft. i go on the banana. the wall is warm. i sit on the wall. rain on the leaf.\n"
+    )
+    g = Generator(tmp_path)
+    s = g.pick_sentence("reply", "neutral", "mid", 1, air={"banana": 1.0})
+    assert s in ("the banana is soft.", "i go on the banana.")
+    assert g.pick_sentence("reply", "neutral", "mid", 1, air={"wall": 1.0, "banana": 0.1}).endswith("wall.")
+    assert g.pick_sentence("reply", "neutral", "mid", 1, air={"spoon": 1.0}) is None  # nothing of his smells of it
+    assert g.pick_sentence("reply", "neutral", "mid", 1, air={}) is None
+    assert g.pick_sentence("reply", "neutral", "mid", 1, air={"banana": 1.0}, avoid={s}) != s  # not twice running
+    one = g.generate("reply", "neutral", "mid", 0, max_sentences=1, opening=s)
+    assert one == s
+    more = [g.generate("reply", "neutral", "mid", k, max_sentences=3, opening=s) for k in range(20)]
+    assert all(t.startswith(s) for t in more) and any(len(t) > len(s) for t in more)

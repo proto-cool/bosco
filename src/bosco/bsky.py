@@ -527,6 +527,38 @@ class Bsky:
         return n
 
     # ---- one post -> one episode -----------------------------------------------
+    THREAD_HEIGHT = 12  # posts above the one he is reading that he reads through first
+
+    def thread_words(self, uri: str, record) -> tuple[str, ...]:
+        """He reads the whole thread: the words of his vocabulary in the posts above this one,
+        oldest first, as the context he smells with it.  Text is read once and discarded; only
+        the words are kept.  Nothing when the post is not a reply or the thread cannot be read."""
+        if getattr(record, "reply", None) is None:
+            return ()
+        try:
+            r = self.client.app.bsky.feed.get_post_thread(
+                params={"uri": uri, "depth": 0, "parentHeight": self.THREAD_HEIGHT}
+            )
+        except Exception as e:  # noqa: BLE001
+            print("thread read failed:", e, file=sys.stderr)
+            return ()
+        chain = []
+        node = getattr(r.thread, "parent", None)
+        while node is not None and len(chain) < self.THREAD_HEIGHT:
+            post = getattr(node, "post", None)
+            if post is None:
+                break
+            chain.append(post)
+            node = getattr(node, "parent", None)
+        words: list[str] = []
+        for post in reversed(chain):  # oldest first
+            for w in self.agent.enc.words_for(getattr(post.record, "text", "") or ""):
+                if w in words:
+                    words.remove(w)  # a word said again is fresher now
+                words.append(w)
+        cap = 2 * int(self.agent.enc.words_cfg["max_words"])
+        return tuple(words[-cap:])
+
     def perceive_post(
         self,
         uri: str,
@@ -558,6 +590,7 @@ class Bsky:
             kind="event",
             note=note,
             thread=root.uri if root else uri,
+            context=self.thread_words(uri, record),
         )
         d = out.decision
         top = max(d.ratios, key=d.ratios.get) if d.ratios else "-"

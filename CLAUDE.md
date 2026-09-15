@@ -204,8 +204,12 @@ absolute-discount backoff: the fly picks the corpus subset (tags), the
 temperature (arousal) and the seed; the corpus never contains other
 people's posts. Utterance policy: when a phrasebook line exists for the key
 a seeded coin uses it verbatim half the time, otherwise the generator
-speaks. When he answers someone the utterance opens on one of their words
-(the freshest on his antennae); when he grooms, the register is his day:
+speaks. He reads a thread through before answering in it (the posts above,
+oldest first, as context). His first sentence is retrieval: the sentence of
+his that smells most like the moment (lexical, over his corpus, weighted by
+freshness and learned word valence), then the n-gram adds if his appetite
+allows; when nothing of his smells of it, the utterance opens on one of
+their words. When he grooms, the register is his day:
 the balance of his own verdicts on what he read, a `mood=` tag from the
 ledger, and the day's words as faint air. Corpus and phrasebook digests are
 frozen artifacts.

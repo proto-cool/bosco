@@ -108,6 +108,7 @@ class Agent:
         self._appetite_loaded = False
         self.threads: dict[str, list[list]] = {}  # thread root -> [[t_ms, [words...]], ...]: what lingers in the air
         self._probe_cache: dict[tuple[str, str, str], float] = {}  # (did, word, weights digest) -> valence
+        self._recent_openings: list[str] = []  # sentences he opened with lately; not the same one twice running
         self._load_signatures()
         self.on_window = None  # optional observer (Window, Decision, dust) -> None; the panel. Never feeds back.
         self.stop_requested = False
@@ -630,6 +631,25 @@ class Agent:
                 cands = tuple(f.words) + tuple(x for x in f.context if x not in f.words) if f else None
                 air = self.air(w.t0_ms, cands) if f is not None else self.day_air(ts, w.t0_ms)
                 c = self.enc.words_cfg
+                wv = self.word_valence_in_context(did, tuple(air)) if f is not None else {}
+                # first, a whole sentence of his that smells like the moment; then the walk, if he
+                # has more in him.  Not the same sentence twice in a row of utterances.
+                opening = self.generator.pick_sentence(
+                    speak_as,
+                    dec.valence,
+                    dec.arousal,
+                    seed,
+                    air=air,
+                    topics=f.topics if f else (),
+                    familiarity=fb,
+                    state=self.state_register(ts),
+                    word_valence=wv,
+                    beta=float(c.get("valence_beta", 1.0)),
+                    avoid=set(self._recent_openings),
+                )
+                if opening:
+                    self._recent_openings.append(opening)
+                    del self._recent_openings[:-30]
                 text = self.generator.generate(
                     speak_as,
                     dec.valence,
@@ -639,11 +659,12 @@ class Agent:
                     topics=f.topics if f else (),
                     familiarity=fb,
                     state=self.state_register(ts),
-                    word_valence=self.word_valence_in_context(did, tuple(air)) if f is not None else {},
+                    word_valence=wv,
                     air=air,
                     beta=float(c.get("valence_beta", 1.0)),
                     gamma=float(c.get("echo_gamma", 0.5)),
                     prime=bool(f is not None and f.mentioned),
+                    opening=opening,
                 )
                 text_source = "generated" if text else None
                 if text is None and line is not None:
@@ -700,12 +721,18 @@ class Agent:
         note: str | None = None,
         fast: bool = False,
         thread: str | None = None,
+        context: tuple[str, ...] = (),
     ) -> Outcome:
         """Present the event for one second at his current time (after a bounded catch-up), decide, record.
-        `thread` names the conversation the post belongs to: its lingering words are smelled too."""
+        `thread` names the conversation the post belongs to: its lingering words are smelled too;
+        `context` is the thread read through (the words of the posts above this one, oldest
+        first), smelled with it at the lower rate."""
         self.advance_to(ts, fast=fast, max_wall_s=EVENT_CATCHUP_WALL_S)
-        if f is not None and thread:
-            f = replace(f, context=self.thread_context(thread, self.live.t_ms))
+        if f is not None and (thread or context):
+            lingering = self.thread_context(thread, self.live.t_ms) if thread else ()
+            merged = list(context) + [w for w in lingering if w not in context]
+            cap = 2 * int(self.enc.words_cfg["max_words"])
+            f = replace(f, context=tuple(merged[-cap:]))
         self.live.set_base(self._base_drives(self.live.t_ms))
         drives = list(self.enc.encode(f, self.appetite).drives) if f is not None else []
         w = self.live.present(drives, PRESENT_MS)
