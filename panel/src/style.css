@@ -630,7 +630,7 @@ a:hover {
 }
 .win {
   display: grid;
-  grid-template-columns: 3rem 4rem 1fr max-content;
+  grid-template-columns: 3rem minmax(4rem, max-content) 1fr max-content;
   gap: var(--space-sm);
   align-items: baseline;
   font-family: var(--font-mono);
