@@ -189,15 +189,17 @@ int64_t lif_run(lif_net *net, int64_t n_steps, int32_t *t_out, int32_t *id_out,
     const int32_t n = net->n;
     const double e_m = net->e_m, e_s = net->e_s, c_g = net->c_g;
     const double v0 = net->p.v0, v_th = net->p.v_th, v_rst = net->p.v_rst;
-    double *v = net->v, *g = net->g, *x = net->x, *theta = net->theta;
+    /* These arrays are separate allocations and never overlap; saying so keeps the compiler
+     * from wrapping every eight-neuron block in a runtime aliasing check. */
+    double *restrict v = net->v, *restrict g = net->g, *x = net->x, *restrict theta = net->theta;
     const double sfa_b = net->sfa_b, e_sfa = net->e_sfa;
     const int sfa_on = (sfa_b > 0.0);
     const double *u = net->u;
     const int std_on = (net->std_u > 0.0);
-    int32_t *rfc_left = net->rfc_left;
-    const int32_t *rfc_len = net->rfc_len;
-    uint8_t *spiked = net->spiked;
-    uint8_t *blk = net->blk;
+    int32_t *restrict rfc_left = net->rfc_left;
+    const int32_t *restrict rfc_len = net->rfc_len;
+    uint8_t *restrict spiked = net->spiked;
+    uint8_t *restrict blk = net->blk;
     const int32_t nblk = net->nblk;
     const int32_t D = net->dly_steps;
     int64_t total = 0;
@@ -210,6 +212,8 @@ int64_t lif_run(lif_net *net, int64_t n_steps, int32_t *t_out, int32_t *id_out,
               while every neuron in it is at rest (|v-v0|, |g|, theta all flushed to exactly
               zero below REST_EPS).  Blocks are re-armed by synaptic delivery, inputs and
               spikes.  The inner loop is branch-free so it vectorises. */
+        int32_t *slot = net->ring + (size_t)net->ring_pos * (size_t)n;
+        int32_t cnt = 0;
         for (int32_t bI = 0; bI < nblk; bI++) {
             if (!blk[bI]) continue;
             const int32_t i0 = bI * BLK, i1 = (i0 + BLK < n) ? i0 + BLK : n;
@@ -233,14 +237,12 @@ int64_t lif_run(lif_net *net, int64_t n_steps, int32_t *t_out, int32_t *id_out,
                 any |= (!free) | (u != 0.0) | (gn != 0.0) | (th != 0.0);
             }
             blk[bI] = (uint8_t)any;
-        }
-        /* 2. threshold (refractory neurons were skipped above and cannot spike:
-              their v is frozen at v_rst) */
-        int32_t *slot = net->ring + (size_t)net->ring_pos * (size_t)n;
-        int32_t cnt = 0;
-        for (int32_t bI = 0; bI < nblk; bI++) {
-          if (!blk[bI]) continue;
-          const int32_t i0 = bI * BLK, i1 = (i0 + BLK < n) ? i0 + BLK : n;
+            /* 2. threshold, fused into the same pass so the block is read once, not twice
+                  (refractory neurons were skipped above and cannot spike: their v is frozen
+                  at v_rst).  A block that just went to rest is skipped exactly as the
+                  separate pass skipped it: at rest v is v0, which is below threshold. */
+            if (!any) continue;
+            {
           for (int32_t i = i0; i < i1; i++) {
             if (rfc_left[i] == 0 && v[i] > v_th + theta[i]) {
                 spiked[i] = 1;
@@ -252,6 +254,7 @@ int64_t lif_run(lif_net *net, int64_t n_steps, int32_t *t_out, int32_t *id_out,
                 spiked[i] = 0;
             }
           }
+            }
         }
         net->ring_cnt[net->ring_pos] = cnt;
         /* 3a. deliver spikes emitted D steps ago */
