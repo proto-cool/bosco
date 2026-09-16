@@ -1,9 +1,15 @@
 # Moving him to another box
 
-Written 2026-09-16 for the move from the Vultr VPS to a Kimsufi KS-5-A in
-Vint Hill. Follow top to bottom. The rule underneath every step: **nothing
-is reset**. His state moves as files, the gap is a logged downtime, and the
-record must say exactly where the old machine stops and the new one starts.
+Written 2026-09-16 for the move from the Vultr VPS (root, rootful podman)
+to a Kimsufi KS-5-A in Vint Hill (AlmaLinux 9, everything under the user
+`nick`, rootless podman). Follow top to bottom. The rule underneath every
+step: **nothing is reset**. His state moves as files, the gap is a logged
+downtime, and the record must say exactly where the old machine stops and
+the new one starts.
+
+On the new box he runs as `nick`: the repo is `/home/nick/bosco`, the
+containers are rootless, the units are user units (`systemctl --user`), and
+root never logs in. The quadlets already use `%h` paths for this.
 
 ## 0. What can go wrong, and the one thing to check first
 
@@ -16,10 +22,10 @@ is built for x86-64-v3, and the agent records the level he runs at; a
 change writes a `numerics` control row and a snapshot, so the record marks
 the boundary by itself.
 
-Before touching the new box, on the old one:
+Before touching the new box, on the old one (still root there):
 
 ```
-cd /root/bosco && git checkout db60d73 && podman build -t bosco -f ops/Containerfile .
+cd /root/bosco && git checkout b3ff9bd && podman build -t bosco -f ops/Containerfile .
 cp ops/bosco.container /etc/containers/systemd/   # the numpy pin is in the unit, not the image
 sed -i 's|%h/bosco|/root/bosco|g' /etc/containers/systemd/bosco.container
 systemctl daemon-reload && systemctl restart bosco
@@ -37,30 +43,37 @@ boundary, and it is in the record, like the `plasticity` row of 2026-09-15.
 
 ## 1. Order the box
 
-Kimsufi KS-5-A, Vint Hill. OS **Rocky Linux 9** (or AlmaLinux 9; Ubuntu
-24.04 also works; not Debian 12, whose podman has no quadlets). Default
-soft RAID 1 over the two NVMe disks. Add your ssh key. Note the IP. Lower
-the TTL on the `bosco.proto.cool` A record to 300 now, so the panel's DNS
+Kimsufi KS-5-A, Vint Hill. OS **AlmaLinux 9** (or Rocky 9; Ubuntu 24.04
+also works; not Debian 12, whose podman has no quadlets). Default soft
+RAID 1 over the two NVMe disks. Add your ssh key. Note the IP. Lower the
+TTL on the `bosco.proto.cool` A record to 300 now, so the panel's DNS
 switch in §5 is quick.
 
 ## 1a. Harden the new box (AlmaLinux 9, before anything of his lands on it)
 
-As root, or with `sudo` in front of each line. Keep the terminal you are in
-open until step 2 has been checked from a second one.
+Start as root (or with `sudo` in front of each line). Keep the terminal
+you are in open until the SSH check in step 3 passes from a second one.
 
 1. Update, and reboot if the kernel changed:
    ```
-   dnf -y update && dnf -y install epel-release && dnf -y install podman git rsync sqlite tar firewalld fail2ban fail2ban-firewalld dnf-automatic chrony policycoreutils-python-utils
+   dnf -y update && dnf -y install epel-release && dnf -y install podman git rsync sqlite tar gcc make firewalld fail2ban fail2ban-firewalld dnf-automatic chrony policycoreutils-python-utils
    needs-restarting -r || reboot
    ```
-2. SSH: keys only, no passwords, root only by key. Put your key in
-   `/root/.ssh/authorized_keys` first (`ssh-copy-id root@<new>` from your machine).
+2. The user. Everything of his lives under `nick`; root never logs in again.
+   ```
+   useradd -m -s /bin/bash nick && passwd nick        # the password is for sudo, not for ssh
+   usermod -aG wheel nick
+   mkdir -p /home/nick/.ssh && cp /root/.ssh/authorized_keys /home/nick/.ssh/ && chown -R nick:nick /home/nick/.ssh && chmod 700 /home/nick/.ssh && chmod 600 /home/nick/.ssh/authorized_keys
+   loginctl enable-linger nick                          # his user units run without a login and start at boot
+   ```
+3. SSH: keys only, no passwords, no root.
    ```
    cat > /etc/ssh/sshd_config.d/50-bosco.conf <<'EOT'
    PasswordAuthentication no
    KbdInteractiveAuthentication no
-   PermitRootLogin prohibit-password
+   PermitRootLogin no
    PubkeyAuthentication yes
+   AllowUsers nick
    MaxAuthTries 3
    X11Forwarding no
    AllowAgentForwarding no
@@ -70,12 +83,14 @@ open until step 2 has been checked from a second one.
    EOT
    sshd -t && systemctl reload sshd
    ```
-   From a second terminal: `ssh root@<new>` must work by key, and
-   `ssh -o PubkeyAuthentication=no root@<new>` must be refused. Only then
-   close the first. Set a strong root password anyway (`passwd`) and keep it
-   in your password manager: SSH will not take it, but the provider's rescue
+   From a second terminal: `ssh nick@<new>` must work by key and `sudo -v`
+   must take nick's password; `ssh root@<new>` and
+   `ssh -o PubkeyAuthentication=no nick@<new>` must be refused. Only then
+   close the first. Set a strong root password too (`passwd`) and keep it in
+   your password manager: SSH will not take it, but the provider's rescue
    console will.
-3. Firewall: ssh, the panel's 80 and 443 (443/udp is HTTP/3), nothing else.
+4. Firewall: ssh, the panel's 80 and 443 (443/udp is HTTP/3), nothing else;
+   and let a rootless container bind 80 and 443.
    ```
    systemctl enable --now firewalld
    firewall-cmd --permanent --set-default-zone=public
@@ -83,10 +98,9 @@ open until step 2 has been checked from a second one.
    firewall-cmd --permanent --add-port=443/udp
    firewall-cmd --permanent --remove-service=cockpit --remove-service=dhcpv6-client
    firewall-cmd --reload && firewall-cmd --list-all
+   echo 'net.ipv4.ip_unprivileged_port_start=80' > /etc/sysctl.d/80-bosco-panel.conf && sysctl --system | grep unprivileged_port
    ```
-   Podman publishes the panel's ports through firewalld itself (netavark);
-   nothing more to open.
-4. fail2ban on sshd:
+5. fail2ban on sshd:
    ```
    cat > /etc/fail2ban/jail.local <<'EOT'
    [DEFAULT]
@@ -99,53 +113,79 @@ open until step 2 has been checked from a second one.
    EOT
    systemctl enable --now fail2ban && fail2ban-client status sshd
    ```
-5. Security updates apply themselves (a kernel update still waits for you to
+6. Security updates apply themselves (a kernel update still waits for you to
    reboot; his restart is a logged downtime, so pick the moment):
    ```
    sed -i 's/^apply_updates = .*/apply_updates = yes/; s/^upgrade_type = .*/upgrade_type = security/' /etc/dnf/automatic.conf
    systemctl enable --now dnf-automatic.timer
    ```
-6. Clock in UTC (his timers are UTC; his own day is `config` and does not
+7. Clock in UTC (his timers are UTC; his own day is `config` and does not
    depend on the box), SELinux enforcing (the quadlets label their volumes),
-   persistent journal:
+   persistent journal, hostname:
    ```
    timedatectl set-timezone UTC && systemctl enable --now chronyd && timedatectl
    getenforce            # Enforcing; leave it
    mkdir -p /var/log/journal && systemctl restart systemd-journald
    hostnamectl set-hostname bosco
    ```
-7. Nothing else listening: `ss -tlnup` should show sshd, chronyd's udp, and
+8. Nothing else listening: `ss -tlnup` should show sshd and chronyd, and
    later Caddy's 80 and 443. Disable anything else (`systemctl disable --now
    cockpit.socket` if present). Leave the provider's monitoring agent alone
-   if the image shipped one.
+   if the image shipped one. Log out of root; from here on everything is
+   `nick`, and `sudo` only where a line says so.
 
-## 2. Prepare the new box (he keeps running on the old one)
+## 2. Prepare the new box, as nick (he keeps running on the old one)
 
-`docs/DEPLOY.md` Part B, steps B2 to B6, with two differences:
+```
+cd ~ && git clone https://github.com/proto-cool/bosco.git && cd ~/bosco && git checkout b3ff9bd
+mkdir -p data/raw data/cache state
+rsync -a root@<old>:/root/bosco/data/raw/ data/raw/        # 1.1 GB; faster than fetching it again
+rsync -a root@<old>:/root/bosco/data/cache/ data/cache/    # rebuilding it on first start costs minutes he would spend behind the clock
+rsync -a root@<old>:/root/bosco/.env .env && chmod 600 .env
+```
 
-- B4: copy the data from the old box instead of fetching it,
-  `rsync -a root@<old>:/root/bosco/data/raw/ /root/bosco/data/raw/`, and
-  the cache too, `rsync -a root@<old>:/root/bosco/data/cache/ /root/bosco/data/cache/`
-  (rebuilding it on first start costs minutes he would spend behind the clock).
-- B5: copy `.env` from the old box rather than writing it again. Set
-  `BOSCO_RSYNC_TARGET` to somewhere that is not the old box.
+Edit `.env`: `BOSCO_RSYNC_TARGET` must be somewhere that is not the old
+box (or empty for now). `uv` on the host, for the nightly integrity report:
 
-Then build both images and install the units, but **do not start `bosco`
-yet**, and skip Part C: he is live already and the dry run would post his
-introduction again.
+```
+curl -LsSf https://astral.sh/uv/install.sh | sh && source ~/.bashrc
+cd ~/bosco && uv sync && make -C kernel
+```
+
+Build both images and install the user units, but **do not start `bosco`
+yet**, and skip DEPLOY.md Part C: he is live already and the dry run would
+post his introduction again.
 
 ```
 podman build -t bosco -f ops/Containerfile .
 podman build -t bosco-panel -f ops/Containerfile.panel .
-cp ops/bosco.container ops/bosco-panel.container /etc/containers/systemd/
-sed -i 's|%h/bosco|/root/bosco|g' /etc/containers/systemd/bosco.container /etc/containers/systemd/bosco-panel.container
-systemctl daemon-reload
+mkdir -p ~/.config/containers/systemd ~/.config/systemd/user
+cp ops/bosco.container ops/bosco-panel.container ~/.config/containers/systemd/
+cp ops/bosco-nightly.service ops/bosco-nightly.timer ~/.config/systemd/user/
+cat > ~/.config/systemd/user/bosco-deadman.service <<'EOT'
+[Unit]
+Description=bosco dead-man check
+[Service]
+Type=oneshot
+ExecStart=%h/bosco/ops/bosco-deadman.sh
+EOT
+cat > ~/.config/systemd/user/bosco-deadman.timer <<'EOT'
+[Unit]
+Description=bosco dead-man check every 30 min
+[Timer]
+OnCalendar=*:0/30
+Persistent=true
+[Install]
+WantedBy=timers.target
+EOT
+systemctl --user daemon-reload
+systemctl --user list-unit-files | grep bosco     # bosco.service, bosco-panel.service, the two timers
 ```
 
 Check the new box computes like the old one, on a scratch brain:
 
 ```
-podman run --rm -v /root/bosco/data/raw:/app/data/raw:ro,Z -v /root/bosco/data/cache:/app/data/cache:Z \
+podman run --rm -v ~/bosco/data/raw:/app/data/raw:ro,Z -v ~/bosco/data/cache:/app/data/cache:Z \
   --entrypoint /app/.venv/bin/python bosco /app/scripts/cpu_determinism.py
 ```
 
@@ -154,17 +194,26 @@ box's from §0. If it does not, stop and look: something other than the
 pinned path differs (glibc in the image, numpy version), and he must not
 move until it is understood.
 
+The nightly job commits `snapshots/<date>` and pushes. As nick that needs
+a key with write access to the repo: `ssh-keygen -t ed25519 -f
+~/.ssh/bosco-deploy -N ''`, add the public key as a deploy key with write
+access on GitHub, and in `~/bosco`: `git remote set-url origin
+git@github.com:proto-cool/bosco.git` plus `git config core.sshCommand "ssh
+-i ~/.ssh/bosco-deploy"`. Also `git config user.name Nick` and
+`user.email` as on the old box. Without this the push part silently skips
+(`|| true`) and the snapshots only pile up locally.
+
 ## 3. Cut over
 
-On the old box. This is the only part with a gap; it is a few minutes and
-it is logged as `downtime` by his first poll on the new box.
+On the old box, as root. This is the only part with a gap; it is a few
+minutes and it is logged as `downtime` by his first poll on the new box.
 
 ```
 systemctl stop bosco-nightly.timer bosco-deadman.timer
 systemctl stop bosco          # SIGTERM: he saves his state and stops (journal: the last save)
 ls -l state/brain_state.npz   # mtime after the stop
 sqlite3 state/ledger.sqlite "PRAGMA wal_checkpoint(TRUNCATE);"
-rsync -a --delete /root/bosco/state/ root@<new>:/root/bosco/state/
+rsync -a --delete /root/bosco/state/ nick@<new>:/home/nick/bosco/state/
 ```
 
 `state/` holds the ledger, his weights and snapshots, the associations,
@@ -172,11 +221,12 @@ the panel files; the rsync must be complete before he starts anywhere. Do
 not start him again on the old box after this: two of him with one account
 would write two records.
 
-On the new box:
+On the new box, as nick (`ls -ln state` must show nick's uid on every
+file; rootless podman maps the container's root onto nick):
 
 ```
-systemctl start bosco
-journalctl -fu bosco
+systemctl --user start bosco
+journalctl --user -fu bosco
 ```
 
 The journal shows the load, `downtime skipped: N s not lived`, and the
@@ -184,7 +234,7 @@ first poll. Then the gate:
 
 ```
 podman exec bosco /app/.venv/bin/bosco replay
-sqlite3 state/ledger.sqlite "SELECT ts, kind, target_uri FROM control ORDER BY id DESC LIMIT 5"
+sqlite3 ~/bosco/state/ledger.sqlite "SELECT ts, kind, target_uri FROM control ORDER BY id DESC LIMIT 5"
 ```
 
 `replay ... bit-identical True` means the new box reproduced the last span
@@ -195,16 +245,20 @@ next nightly integrity report will flag the one span that straddles it.
 
 ## 4. Timers and the dead-man
 
-`docs/DEPLOY.md` D3 on the new box. Then:
+```
+systemctl --user enable --now bosco bosco-nightly.timer bosco-deadman.timer
+systemctl --user list-timers | grep bosco
+```
 
-```
-systemctl list-timers | grep bosco
-```
+`enable` on `bosco` makes him start at boot (linger from §1a). Test the
+dead-man once by hand: `~/bosco/ops/bosco-deadman.sh` prints nothing and
+exits 0 while he is alive.
 
 ## 5. The panel
 
 ```
-systemctl start bosco-panel
+systemctl --user enable --now bosco-panel
+ss -tlnp | grep -E ':80 |:443 '     # caddy, owned by nick
 ```
 
 Point the `bosco.proto.cool` A record at the new IP. Caddy issues a new
@@ -217,7 +271,7 @@ comes from the activity file the new box writes.
 
 Do not delete it. `systemctl disable --now bosco bosco-panel` there, and
 keep the provider snapshot. After seven clean nightly integrity reports on
-the new box (`snapshots/<date>/integrity.md`), destroy it.
+the new box (`~/bosco/snapshots/<date>/integrity.md`), destroy it.
 
 ## 7. What replaces the provider snapshot
 
@@ -226,28 +280,32 @@ A dedicated server has no console snapshot. The nightly already rsyncs
 overwrite the only copy:
 
 ```
-cat > /etc/systemd/system/bosco-weekly.service <<'EOT'
+cat > ~/.config/systemd/user/bosco-weekly.service <<'EOT'
 [Unit]
 Description=bosco weekly state tarball
 [Service]
 Type=oneshot
-ExecStart=/bin/sh -c 'tar -C /root/bosco -czf /root/bosco-state-$(date -u +%%F).tgz state && rsync -a /root/bosco-state-*.tgz ${BOSCO_RSYNC_TARGET}'
-EnvironmentFile=/root/bosco/.env
+EnvironmentFile=%h/bosco/.env
+ExecStart=/bin/sh -c 'tar -C %h/bosco -czf %h/bosco-state-$(date -u +%%F).tgz state && rsync -a %h/bosco-state-*.tgz "$BOSCO_RSYNC_TARGET"'
 EOT
-cat > /etc/systemd/system/bosco-weekly.timer <<'EOT'
+cat > ~/.config/systemd/user/bosco-weekly.timer <<'EOT'
 [Unit]
 Description=bosco weekly state tarball
 [Timer]
-OnCalendar=Sun 04:30
+OnCalendar=Sun 04:30 UTC
 Persistent=true
 [Install]
 WantedBy=timers.target
 EOT
-systemctl daemon-reload && systemctl enable --now bosco-weekly.timer
+systemctl --user daemon-reload && systemctl --user enable --now bosco-weekly.timer
 ```
 
-## 8. Afterwards
+## 8. Living with him as nick
 
+- `journalctl --user -fu bosco` for the log; `podman exec bosco ...` for
+  his commands (`bosco status`, `bosco replay`, `bosco memory --did`).
+- After a code change: `cd ~/bosco && git checkout <sha> && podman build -t bosco -f ops/Containerfile . && systemctl --user restart bosco`,
+  and the same with `Containerfile.panel` and `bosco-panel` for the site.
 - The panel's peer bench line (idle 0.138 / event 1.91 wall seconds on the
   VPS) will change; note the new numbers in the monthly report.
 - With four cores, `dunce` can run live beside him at the freeze and the
