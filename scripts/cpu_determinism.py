@@ -5,7 +5,7 @@ NPY_DISABLE_CPU_FEATURES) and compare the last line: equal digests mean spans re
 bit across the two; different digests mean the move is a `numerics` boundary in the record,
 which the agent logs by itself on its first start (docs/MIGRATE.md).
 
-    podman exec bosco /app/.venv/bin/python /app/scripts/cpu_determinism.py
+    podman exec systemd-bosco /app/.venv/bin/python /app/scripts/cpu_determinism.py
 """
 
 from __future__ import annotations

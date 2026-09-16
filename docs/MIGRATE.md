@@ -31,7 +31,7 @@ sed -i 's|%h/bosco|/root/bosco|g' /etc/containers/systemd/bosco.container
 systemctl daemon-reload && systemctl restart bosco
 journalctl -u bosco -n 30 --no-pager
 sqlite3 state/ledger.sqlite "SELECT ts, kind, target_uri FROM control WHERE kind='numerics'"
-podman exec bosco /app/.venv/bin/python /app/scripts/cpu_determinism.py
+podman exec systemd-bosco /app/.venv/bin/python /app/scripts/cpu_determinism.py
 ```
 
 The `numerics` row says `?->x86_v3` (the pin took; the first level is
@@ -245,7 +245,7 @@ The journal shows the load, `downtime skipped: N s not lived`, and the
 first poll. Then the gate:
 
 ```
-podman exec bosco /app/.venv/bin/bosco replay
+podman exec systemd-bosco /app/.venv/bin/bosco replay
 sqlite3 ~/bosco/state/ledger.sqlite "SELECT ts, kind, target_uri FROM control ORDER BY id DESC LIMIT 5"
 ```
 
@@ -314,7 +314,7 @@ systemctl --user daemon-reload && systemctl --user enable --now bosco-weekly.tim
 
 ## 8. Living with him as nick
 
-- `journalctl --user -fu bosco` for the log; `podman exec bosco ...` for
+- `journalctl --user -fu bosco` for the log; `podman exec systemd-bosco ...` for
   his commands (`bosco status`, `bosco replay`, `bosco memory --did`).
 - After a code change: `cd ~/bosco && git checkout <sha> && podman build -t bosco -f ops/Containerfile . && systemctl --user restart bosco`,
   and the same with `Containerfile.panel` and `bosco-panel` for the site.
