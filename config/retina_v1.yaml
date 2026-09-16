@@ -34,7 +34,7 @@ kc_types: [KCg-d, KCab-p]
 k_per_channel: 15
 rate_hz: 6.0
 max_images: 2
-fetch_timeout_s: 3.0
+fetch_timeout_s: 1.0     # p50 from the box is ~70 ms; a stall waits at most 2 s per post, not 6
 visual_words:
   img: [picture, pictures, photo, photos, photograph, image, images, drawing, drawings]
   motion: [video, videos, gif, gifs]
