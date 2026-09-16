@@ -122,6 +122,12 @@ TEXT_COLUMNS = {
         "line_id",
         "note",
         "kind",
+        "topics",
+        "words",
+        "context",
+        "feed",
+        "others",
+        "embed",
     ],
     "actions": ["kind", "our_uri", "target_uri"],
     "outcomes": ["valence", "source", "did", "evidence_uri"],
@@ -159,6 +165,8 @@ class EpisodeRow:
     words: str | None = None
     context: str | None = None
     feed: str | None = None
+    others: str | None = None  # comma-joined DIDs mentioned in or quoted by the post
+    embed: str | None = None  # comma-joined tokens: img, video, card, quote, site:<domain>, retina channels
 
 
 class Ledger:
@@ -185,6 +193,8 @@ class Ledger:
             ("words", "TEXT"),
             ("context", "TEXT"),
             ("feed", "TEXT"),
+            ("others", "TEXT"),
+            ("embed", "TEXT"),
         ):
             if col not in ecols:
                 self.db.execute(f"ALTER TABLE episodes ADD COLUMN {col} {typ}")
@@ -195,8 +205,9 @@ class Ledger:
         cur = self.db.execute(
             "INSERT INTO episodes (ts, kind, did, source_uri, vader, mentioned, familiarity, hour, seed, "
             "weight_digest_before, weight_digest_after, scores, mbon, kc_active, behaviour, action, valence, arousal, "
-            "line_key, line_id, note, drive, t_ms, brain_digest, topics, appetite, words, context, feed) "
-            "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+            "line_key, line_id, note, drive, t_ms, brain_digest, topics, appetite, words, context, feed, "
+            "others, embed) "
+            "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
             (
                 ts or time.time(),
                 e.kind,
@@ -227,6 +238,8 @@ class Ledger:
                 e.words,
                 e.context,
                 e.feed,
+                e.others,
+                e.embed,
             ),
         )
         self.db.commit()

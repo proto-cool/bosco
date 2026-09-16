@@ -38,3 +38,38 @@ def test_encode_channels(fly):
     assert [d.label.split(":")[0] for d in s.drives] == ["odor", "bitter"]
     idx, rate = s.merged()
     assert np.all(np.diff(idx) >= 0)
+
+
+@needs_data
+def test_other_people_and_sites_are_smells(fly):
+    """A DID mentioned in or quoted by a post is that account's odor at a lower rate; a link
+    card's site is a place, two neutral glomeruli by its domain (config/encoder_v1.yaml `embeds`)."""
+    from bosco.encoder import Encoder, Features
+
+    e = Encoder(fly.brain)
+    f = Features(
+        "did:plc:x",
+        0.0,
+        False,
+        0,
+        False,
+        (),
+        False,
+        (),
+        (),
+        None,
+        ("did:plc:y", "did:plc:x"),
+        ("img", "site:example.com", "card"),
+    )
+    s = e.encode(f)
+    labels = [d.label for d in s.drives]
+    assert labels == ["odor:did:plc:x", "other:did:plc:y", "site:example.com"]  # the author is not another
+    other = next(d for d in s.drives if d.label == "other:did:plc:y")
+    assert np.array_equal(other.idx, e.odor_drive("did:plc:y").idx)
+    assert other.rate_hz == e.odor_drive("did:plc:y").rate_hz * e.cfg["embeds"]["others_rate_scale"]
+    site = next(d for d in s.drives if d.label == "site:example.com")
+    assert np.array_equal(site.idx, e.site_drive("example.com").idx)
+    assert not np.array_equal(site.idx, e.site_drive("example.org").idx)
+    assert (
+        len({g for g in e.all_glomeruli if set(e.orn_by_glom[g]) & set(site.idx.tolist())}) == e.cfg["embeds"]["site_k"]
+    )

@@ -15,8 +15,10 @@ def test_words_are_his_vocabulary_and_deterministic_odors(fly):
 
     enc = Encoder(fly.brain)
     assert "banana" in enc.vocab and "the" not in enc.vocab and "you" not in enc.vocab
-    w = enc.words_for("the banana is on the table, and the BANANA is soft; xylophone quantum")
-    assert w == ("banana", "table", "soft")  # his words only, once each, in order
+    text = "the banana is on the table, and the BANANA is soft; xylophone quantum"
+    assert enc.words_for(text, hashed=False) == ("banana", "table", "soft")  # his words only, once each, in order
+    w = enc.words_for(text)
+    assert w[:3] == ("banana", "table", "soft") and w[3:] == (enc.hashed("xylophone"), enc.hashed("quantum"))
     a, b = enc.word_drive("banana"), enc.word_drive("banana")
     assert a.rate_hz == b.rate_hz and np.array_equal(a.idx, b.idx)
     assert not np.array_equal(enc.word_drive("table").idx, a.idx)
@@ -243,3 +245,32 @@ def test_account_memory_is_its_own_smell(fly):
     assert va > vb  # the reward was with a; b only shares the place and the word
     ag2 = Agent(Ledger(f"{tmp}/l2.sqlite"), fly, state_dir=tmp)
     assert "did:plc:a" in ag2._signatures  # signatures survive a restart
+
+
+@needs_data
+def test_a_word_he_cannot_say_is_still_a_smell(fly):
+    """Perception vocabulary (config/words_v1.yaml `perception`): a word outside the corpus is kept
+    as a hash token that is the word's own smell, learnable and recognisable, and it never reaches
+    his mouth: it is in no sentence of his, so retrieval and the generator weigh it at nothing."""
+    from bosco.encoder import Encoder, Features
+    from bosco.textgen import Generator
+
+    enc = Encoder(fly.brain)
+    tok = enc.hashed("xylophone")
+    assert tok.startswith("h:") and len(tok) == 18 and tok == enc.hashed("xylophone") != enc.hashed("quantum")
+    assert "xylophone" not in enc.vocab and "xylophone" not in tok
+    a, b = enc.word_drive(tok), enc.word_drive("xylophone")
+    assert np.array_equal(a.idx, b.idx) and a.rate_hz == b.rate_hz  # the hash is the word's smell
+    assert np.array_equal(enc.word_drive(enc.hashed("table")).idx, enc.word_drive("table").idx)
+    labels = [d.label for d in enc.encode(Features("did:plc:a", 0.0, False, 0, False, (), False, (tok,))).drives]
+    assert f"word:{tok}" in labels
+    # stopwords and short words are not kept even as hashes; at most max_hashed per post
+    w = enc.words_for("the of and zzzz aaaaa bbbbb ccccc ddddd eeeee")
+    assert len(w) == int(enc.words_cfg["perception"]["max_hashed"]) and all(x.startswith("h:") for x in w)
+    # and it cannot be said: the generator never emits it, with it in the air or not
+    g = Generator()
+    air = {tok: 1.0, "banana": 0.5}
+    for seed in range(5):
+        t = g.generate("reply", "neutral", "mid", seed, max_sentences=2, air=air, gamma=2.0, prime=True) or ""
+        assert "h:" not in t and "xylophone" not in t
+    assert g.pick_sentence("reply", "neutral", "mid", 1, air={tok: 1.0}) is None  # nothing of his smells of it

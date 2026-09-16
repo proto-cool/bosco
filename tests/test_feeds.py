@@ -47,7 +47,9 @@ def test_browse_reads_across_feeds_and_logs_where():
     b.ignore_set = lambda: set()
     b.episodes_last_hour = lambda: 0
     read = []
-    b.perceive_post = lambda uri, cid, did, record, ts, mentioned, labels=None, feed=None: read.append((uri, feed))
+    b.perceive_post = lambda uri, cid, did, record, ts, mentioned, labels=None, feed=None, view=None: read.append(
+        (uri, feed)
+    )
     calls = []
 
     def get_feed(params):

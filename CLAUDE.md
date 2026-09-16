@@ -39,7 +39,9 @@ convenience, "just for testing," or because a result would look better.
   snapshotted hourly. Any span must replay bit-identical from the snapshot
   before it plus the log.
 - **Store features and URIs, never post text.** Other people's posts do not
-  live in our database, and never enter the generator's corpus.
+  live in our database, and never enter the generator's corpus. Words
+  outside his vocabulary are kept as hashes (`h:<16 hex>`), never as words;
+  images are never stored, only the retina's channel names.
 - **Rate caps are hard** but by kind (`config/caps_v1.yaml`): they are loop
   guards, not a schedule. Timing of posts and replies is the network's;
   never add a timer. Self-label as a bot.
@@ -58,7 +60,9 @@ convenience, "just for testing," or because a result would look better.
 - **Moderation labels are bitter** (EXPERIMENT.md §2b): labeled posts and
   accounts are never approached and never reward. The vocabulary is closed
   (`corpus/`), so words cannot drift; associations can, and labels plus the
-  ignore list plus `bosco people` are the guard.
+  ignore list plus `bosco people` are the guard. Since 2026-09-15 the
+  closed vocabulary is his *mouth*: perception is open (every word is a
+  smell, by hash), production is the corpus and phrasebook only.
 
 ## Architecture
 
@@ -175,7 +179,13 @@ Do not download the EM volume. `neuprint-python` against
   real glomeruli (`config/innate_v1.yaml`: fruit, vinegar, rot, dirt); a
   thread's last posts linger for a few minutes. Never the sentence. What
   is "in the air" when he speaks is read from his antennae (habituation
-  depth over the logged words), not from a list.
+  depth over the logged words), not from a list. Words outside his
+  vocabulary are smells too, up to four per post, as `h:` hashes
+  (decided 2026-09-15); a hash is in no sentence of his, so it is never said.
+- Other people and places in a post (decided 2026-09-15): a mention facet
+  or quoted author is that account's odor at half rate (up to three); a
+  link card's site is a place by domain; alt text, cards and quoted posts
+  are read as context words; `img`/`video` tokens go to the retina.
 - Feeds → places (`config/feeds_v1.yaml`): a published list of feeds, each
   an odor of two neutral glomeruli driven with every post read there. His
   browse budget is split across them by his own recent approaches (like,

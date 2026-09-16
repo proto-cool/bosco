@@ -40,6 +40,11 @@ class Features:
     context: tuple[str, ...] = ()
     # where he read it (config/feeds_v1.yaml): a place has a smell.  None for a mention.
     feed: str | None = None
+    # other people in the post (mention facets, a quoted post's author): each an odor at a lower rate
+    others: tuple[str, ...] = ()
+    # what else the post carried (config/encoder_v1.yaml `embeds`): img, video, card, quote,
+    # site:<domain>, and the retina's channels for an image.  Never the image, never the text.
+    embed: tuple[str, ...] = ()
 
 
 class Encoder:
@@ -103,32 +108,59 @@ class Encoder:
                 words.add(w)
         return frozenset(words)
 
-    def words_for(self, text: str) -> tuple[str, ...]:
-        """The words of his vocabulary in a post, in order of first appearance, at most max_words.
-        The text is read once and discarded; only these words are kept."""
+    HASH_PREFIX = "h:"
+
+    @staticmethod
+    def word_hash(word: str) -> bytes:
+        return hashlib.blake2b(f"word|{word}".encode(), digest_size=8).digest()
+
+    @classmethod
+    def hashed(cls, word: str) -> str:
+        """A word outside his vocabulary as he keeps it: the hash that seeds its smell, never the word."""
+        return cls.HASH_PREFIX + cls.word_hash(word).hex()
+
+    def words_for(self, text: str, hashed: bool | None = None) -> tuple[str, ...]:
+        """The words of his vocabulary in a post, in order of first appearance, at most max_words;
+        then, if the perception vocabulary is on (config/words_v1.yaml `perception`), up to
+        max_hashed other content words as `h:` tokens.  The text is read once and discarded;
+        only these are kept."""
         import re
 
         from bosco.textgen import tokenize
 
         # handles and links are not words: "@bosco.proto.cool" would otherwise smell of bosco and cool
         text = re.sub(r"@[\w.\-]+|https?://\S+|\b[\w\-]+\.[a-z]{2,}(?:/\S*)?", " ", text)
+        pc = self.words_cfg.get("perception") or {}
+        max_hashed = int(pc.get("max_hashed", 0)) if (hashed is None or hashed) else 0
+        stop = set(self.words_cfg["stopwords"])
+        min_len = int(self.words_cfg["min_len"])
         out: list[str] = []
+        other: list[str] = []
         seen: set[str] = set()
         for t in tokenize(text):
             w = t.lower().replace("'", "")
-            if w in self.vocab and w not in seen:
+            if w in seen:
+                continue
+            if w in self.vocab:
                 seen.add(w)
-                out.append(w)
-                if len(out) >= int(self.words_cfg["max_words"]):
-                    break
-        return tuple(out)
+                if len(out) < int(self.words_cfg["max_words"]):
+                    out.append(w)
+            elif max_hashed and w.isalpha() and len(w) >= min_len and w not in stop:
+                seen.add(w)
+                if len(other) < max_hashed:
+                    other.append(self.hashed(w))
+        return tuple(out) + tuple(other)
 
     def word_glomeruli(self, word: str) -> tuple[list[np.ndarray], float]:
         """A word's glomeruli (the olfactory neurons of each) and its rate.  A word that names a
         smell a fly is born to answer (config/innate_v1.yaml) is those glomeruli; any other word
-        is k neutral glomeruli chosen by its hash.  The rate is by hash either way."""
+        is k neutral glomeruli chosen by its hash.  The rate is by hash either way.  An `h:`
+        token seeds from the hash it carries, so a hashed word is the word's own smell."""
         c = self.words_cfg
-        seed = int.from_bytes(hashlib.blake2b(f"word|{word}".encode(), digest_size=8).digest(), "little")
+        if word.startswith(self.HASH_PREFIX):
+            seed = int.from_bytes(bytes.fromhex(word[len(self.HASH_PREFIX) :]), "little")
+        else:
+            seed = int.from_bytes(self.word_hash(word), "little")
         rng = np.random.default_rng(seed)
         chosen = rng.choice(len(self.neutral), size=int(c["k"]), replace=False)
         lo, hi = c["rate_hz"]
@@ -163,6 +195,33 @@ class Encoder:
         chosen = rng.choice(len(self.neutral), size=self.topics.k, replace=False)
         idx = np.concatenate([self.orn_by_glom[self.neutral[i]] for i in chosen]).astype(np.int32)
         return Drive(np.sort(idx), self.topics.rate_hz, f"topic:{topic}")
+
+    # ---- other people, and where a link goes ---------------------------------
+    def others_drive(self, did: str) -> Drive:
+        """Someone mentioned in or quoted by the post: their odor, fainter than the author's."""
+        em = self.cfg.get("embeds") or {}
+        gl = self.glomeruli_for(did)
+        idx = np.concatenate([self.orn_by_glom[g] for g in gl]).astype(np.int32)
+        rate = float(self.cfg["odor"]["rate_hz"]) * float(em.get("others_rate_scale", 0.5))
+        return Drive(np.sort(idx), round(rate, 6), f"other:{did}")
+
+    def site_drive(self, domain: str) -> Drive:
+        """A link card's site is a place: k neutral glomeruli chosen by the domain, like a feed."""
+        em = self.cfg.get("embeds") or {}
+        seed = int.from_bytes(hashlib.blake2b(f"site|{domain}".encode(), digest_size=8).digest(), "little")
+        rng = np.random.default_rng(seed)
+        chosen = rng.choice(len(self.neutral), size=int(em.get("site_k", 2)), replace=False)
+        idx = np.concatenate([self.orn_by_glom[self.neutral[i]] for i in chosen]).astype(np.int32)
+        return Drive(np.sort(idx), float(em.get("site_rate_hz", 60.0)), f"site:{domain}")
+
+    def embed_drives(self, tokens: tuple[str, ...]) -> list[Drive]:
+        """Drives for the embed tokens on a post: a site is a place; the rest (img, video, card,
+        quote) name what was there and drive nothing here.  The retina's channels are its own."""
+        out: list[Drive] = []
+        for t in tokens:
+            if t.startswith("site:") and len(t) > 5:
+                out.append(self.site_drive(t[5:]))
+        return out
 
     # ---- place ------------------------------------------------------------
     def feed_drive(self, feed: str) -> Drive:
@@ -224,6 +283,8 @@ class Encoder:
         drives = [self.odor_drive(f.did)]
         if f.feed:
             drives.append(self.feed_drive(f.feed))
+        drives += [self.others_drive(d) for d in f.others if d and d != f.did]
+        drives += self.embed_drives(f.embed)
         drives += [self.topic_drive(t) for t in f.topics]
         drives += [self.word_drive(w) for w in f.words]
         scale = float(self.words_cfg.get("context_rate_scale", 0.5))

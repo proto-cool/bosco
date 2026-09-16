@@ -200,3 +200,74 @@ def test_he_reads_the_whole_thread():
     )
     assert b.thread_words("at://a/4", SimpleNamespace(reply=SimpleNamespace())) == ("banana", "wall", "cup", "spoon")
     assert b.thread_words("at://a/4", SimpleNamespace(reply=None)) == ()  # not a reply: nothing to read
+
+
+def test_embeds_are_read_as_words_people_and_tokens():
+    """What a post carries besides its text (decided 2026-09-15): alt text, cards and quoted posts
+    give words; mention facets and quoted authors give people; tokens say what was there; the
+    thumbnails go to the retina.  Nothing else is kept."""
+    from bosco.bsky import embed_features
+
+    NS = SimpleNamespace
+    record = NS(
+        text="look at this @friend",
+        facets=[NS(features=[NS(py_type="app.bsky.richtext.facet#mention", did="did:plc:friend")])],
+        embed=NS(py_type="app.bsky.embed.images#main", images=[NS(alt="a cat on a wall", image=None)]),
+    )
+    # the record alone (a notification): alt text from the record's own embed
+    em = embed_features(record, None, author="did:plc:author", me="did:plc:me")
+    assert (
+        em.tokens == ("img",) and em.others == ("did:plc:friend",) and em.text == "a cat on a wall" and em.thumbs == ()
+    )
+    # the hydrated view: thumbnails, a card with its site, a quoted post with its author and text
+    view = NS(
+        embed=NS(
+            py_type="app.bsky.embed.recordWithMedia#view",
+            media=NS(
+                py_type="app.bsky.embed.images#view", images=[NS(alt="a cat on a wall", thumb="https://cdn/x.jpg")]
+            ),
+            record=NS(
+                py_type="app.bsky.embed.record#view",
+                record=NS(
+                    py_type="app.bsky.embed.record#viewRecord",
+                    author=NS(did="did:plc:quoted"),
+                    value=NS(text="my dog is here"),
+                    embeds=[
+                        NS(
+                            py_type="app.bsky.embed.external#view",
+                            external=NS(
+                                uri="https://www.Example.com/a/b",
+                                title="Big News",
+                                description="about birds",
+                                thumb="https://cdn/y.jpg",
+                            ),
+                        )
+                    ],
+                ),
+            ),
+        )
+    )
+    em = embed_features(record, view, author="did:plc:author", me="did:plc:me")
+    assert em.tokens == ("img", "quote", "card", "site:example.com")
+    assert em.others == ("did:plc:friend", "did:plc:quoted")
+    assert em.text == "a cat on a wall my dog is here Big News about birds"
+    assert em.thumbs == ("https://cdn/x.jpg", "https://cdn/y.jpg")
+    # the author and he himself are never "others"; the cap holds
+    record2 = NS(
+        text="",
+        facets=[
+            NS(
+                features=[
+                    NS(py_type="app.bsky.richtext.facet#mention", did=d)
+                    for d in ("did:plc:author", "did:plc:me", "did:plc:a", "did:plc:b", "did:plc:c", "did:plc:d")
+                ]
+            )
+        ],
+        embed=None,
+    )
+    assert embed_features(record2, None, author="did:plc:author", me="did:plc:me").others == (
+        "did:plc:a",
+        "did:plc:b",
+        "did:plc:c",
+    )
+    assert embed_features(NS(text="", facets=None, embed=None), None) == embed_features(NS(text=""), None)

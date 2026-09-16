@@ -37,15 +37,28 @@ def cmd_poke(a) -> int:
     topics = agent.enc.topics.match(a.text) if a.text else ()
     words = agent.enc.words_for(a.text) if a.text else ()
     question = bool(a.mention) and "?" in (a.text or "")
-    f = Features(a.did, v, bool(a.mention), L.familiarity(a.did), False, topics, question, words)
+    extra = " ".join(x for x in (a.alt, a.card) if x)
+    if extra:
+        topics = agent.enc.topics.match((a.text or "") + " " + extra)
+    context = tuple(w for w in agent.enc.words_for(extra) if w not in words) if extra else ()
+    others = tuple(x for x in (a.others or "").split(",") if x)
+    embed = tuple(x for x in (a.embed or "").split(",") if x)
+    if a.alt and "img" not in embed:
+        embed += ("img",)
+    if a.card and "card" not in embed:
+        embed += ("card",)
+    f = Features(
+        a.did, v, bool(a.mention), L.familiarity(a.did), False, topics, question, words, others=others, embed=embed
+    )
     src = a.uri or f"poke://{a.did}/{int(ts)}"
     qid = agent.identity.match(a.text) if a.text else None
-    out = agent.run(f, ts, src, kind="event", note="poke", fast=not a.simulate_gaps, thread=a.thread)
+    out = agent.run(f, ts, src, kind="event", note="poke", fast=not a.simulate_gaps, thread=a.thread, context=context)
     L.bump_inbound(a.did, dt.datetime.fromtimestamp(ts, dt.UTC).strftime("%Y-%m-%d"))
     d = out.decision
     print(
         f"episode {out.episode_id}  seed {out.seed}  hour {agent.clock.local_hour(ts):.2f}  "
         f"vader {v:+.3f}  mention {bool(a.mention)}  topics {list(topics)}  words {list(words)}  "
+        f"others {list(others)}  embed {list(embed)}  familiar {d.familiar:.2f}  "
         f"context {list(out.context) if hasattr(out, 'context') else []}"
     )
     print("scores Hz:", {k: round(x, 2) for k, x in d.scores.items()})
@@ -156,6 +169,10 @@ def main(argv=None) -> int:
     s.add_argument("--at")
     s.add_argument("--uri")
     s.add_argument("--thread", default=None, help="thread root; its lingering words are smelled too")
+    s.add_argument("--alt", default=None, help="alt text of an image on the post (read as context; adds img)")
+    s.add_argument("--card", default=None, help="title/description of a link card (read as context; adds card)")
+    s.add_argument("--others", default=None, help="comma-separated DIDs mentioned or quoted")
+    s.add_argument("--embed", default=None, help="comma-separated embed tokens (img, video, card, quote, site:x)")
     s.set_defaults(fn=cmd_poke)
     s = sub.add_parser("spontaneous")
     s.add_argument("--at")

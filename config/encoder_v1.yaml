@@ -74,3 +74,17 @@ spontaneous:
   # logged as `landing` windows so the grooming threshold can be set from real responses.
   tau_s: 600.0
   window_s: 15
+embeds:
+  # What else is in a post besides its text (decided 2026-09-15).  Other people: a DID in a mention
+  # facet, or the author of a quoted post, is that account's odor at others_rate_scale of the
+  # usual rate (up to max_others).  A link card's site is a place: k neutral glomeruli chosen by
+  # the domain, driven at site_rate_hz with the post, like a feed.  Alt text, card title and
+  # description, and a quoted post's text are read like the thread above a post: their words of
+  # his vocabulary (and hashed ones) are context at the lower rate, and the topic map reads them.
+  # Images and video are the retina's (config/retina_v1.yaml).  Tokens on the row: img, video,
+  # card, quote, site:<domain>, and the retina's channels.
+  others_rate_scale: 0.5
+  max_others: 3
+  site_k: 2
+  site_rate_hz: 60.0
+  max_context_words: 12

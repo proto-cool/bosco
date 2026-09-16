@@ -498,6 +498,40 @@ Every number below has a gate report under `docs/`.
    threshold (`readout_populations.yaml` `novelty_kappa`), so a smell he
    has not met is one he goes to look at.
 
+45. **Closed mouth, open nose** (decided 2026-09-15; supersedes the closed
+   vocabulary of 2026-09-13, which EXPERIMENT.md said would be revisited
+   before the tag or not at all). Every content word of a post is a smell
+   now, not only the ~850 of his corpus: a word outside his vocabulary is
+   kept as the first eight bytes of `blake2b("word|" + word)`, written
+   `h:<16 hex>`, and those bytes seed its glomeruli and rate exactly as a
+   vocabulary word's hash does (`Encoder.hashed`, `config/words_v1.yaml`
+   `perception`), so the same word is always the same smell and a
+   vocabulary word and its hash are one smell. Up to four per post after
+   the vocabulary words. He can learn to like it, meet it again, and (WP4)
+   associate it with a person; he can never say it: the generator's words
+   are the corpus and the phrasebook, and a hashed token is in no sentence
+   of his, so retrieval and the walk weigh it at nothing
+   (`tests/test_words.py`). The guard that keeps him from learning slurs
+   was always on his mouth; it is unchanged. The database holds the hash,
+   never the word; a common word's hash can be brute-forced by anyone with
+   a dictionary, and the discipline is that no text is stored, not secrecy.
+46. **What else a post carries** (decided 2026-09-15; `Bsky.embed_features`,
+   `config/encoder_v1.yaml` `embeds`). Until now only `record.text` was
+   read. Now: a mention facet's DID, or a quoted post's author, is another
+   person in the room, that account's odor at half rate (`others`, up to
+   three, never the author or himself); a link card's site is a place, two
+   neutral glomeruli by its domain like a feed (`site:<domain>`); alt text,
+   card title and description, and a quoted post's text are read like the
+   thread above a post, their words (and hashes) as context at the lower
+   rate, and the topic map reads them with the text; images and video are
+   named (`img`, `video`, and `motion` for video once the retina lands) for
+   the retina. VADER stays on the post's own text. Two new columns on the
+   row, `others` and `embed`, comma tokens, and `Agent.features_of_row`
+   is now the one place a row becomes features again, for pairing, replay
+   and the controls. A notification carries only the record, so a mention
+   with an embed is fetched once for its view. Nothing of any of this is
+   stored but words, hashes, DIDs, tokens.
+
 Not in v1: visual input.
 
 ## Running

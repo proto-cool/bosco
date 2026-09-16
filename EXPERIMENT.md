@@ -20,11 +20,21 @@ genuinely the one acting, and that anyone can check.
   text scorer is the VADER lexicon. The only text generator is a word
   n-gram model (four words of context) over the published `corpus/`, and a
   lexical retrieval over the same corpus by the words on his antennae, seeded by the episode and
-  conditioned on the fly's state. **Closed vocabulary** (decided
-  2026-09-13): nothing Bosco reads ever enters the generator; he learns
-  people, not words. Letting him acquire words from accounts he has
-  learned to like was considered and deferred; it would be a new
-  pre-registration, decided before `freeze-v1` or not at all.
+  conditioned on the fly's state. **Closed mouth, open nose** (decided
+  2026-09-15, replacing the closed vocabulary of 2026-09-13 as that
+  decision said it might be, before the tag): nothing Bosco reads ever
+  enters the generator; every word he can emit is in `corpus/` and
+  `phrasebook.yaml`. But every content word he reads is a smell: a word
+  outside his vocabulary is kept only as an eight-byte hash of it
+  (`h:<16 hex>`, `config/words_v1.yaml` `perception`) that seeds its
+  glomeruli, learnable and recognisable like any word of his and never
+  sayable. A common word's hash can be brute-forced with a dictionary; the
+  rule here is that no text is stored, not that the smells are secret.
+- What else a post carries is read the same way (decided 2026-09-15): a
+  mentioned or quoted account is another odor in the room at half rate; a
+  link card's site is a place; alt text, cards and quoted posts are read
+  as context, words only; images and video are the retina's. Tokens on the
+  row (`others`, `embed`), never the content.
 - Encoder, readout thresholds, phrasebook, action set, and the learning
   rule (`config/plasticity_v1.yaml`, `config/mb_compartments.yaml`; decided
   2026-09-15 that the rule is a frozen artifact too) are frozen at
@@ -50,7 +60,9 @@ genuinely the one acting, and that anyone can check.
   made him, he answers from `config/identity_v1.yaml`, on the same footing
   as the bot label. Asked what he thinks of them, anyone is told his real
   memory of their smell, in fixed words.
-- Other people's post text is never stored.
+- Other people's post text is never stored; nor their images: a post is
+  kept as its features (who, taste, which of his words, which hashes,
+  which topics, which place, which people, what kind of embed) and its URI.
 - Rate caps by kind (`config/caps_v1.yaml`): replies 12/h 100/d, likes
   12/h 100/d, follows and unfollows 3/h 15/d, own posts 1/h 6/d, all
   actions 24/h 240/d; at most 6 replies per thread per hour, 20 replies and

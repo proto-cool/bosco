@@ -214,3 +214,43 @@ def test_browsing_teaches_taste_and_familiarity_and_replays(fly):
     assert ag.memory_report("did:plc:bitter", T0 + 11)[1] < 0
     ok, logged, got = ag.replay_span(snap, ag.live.t_ms)
     assert ok and logged == got
+
+
+@needs_data
+def test_others_and_embeds_are_logged_and_replayed(fly):
+    from bosco.agent import Agent
+    from bosco.encoder import Features
+    from bosco.ledger import Ledger
+
+    tmp = tempfile.mkdtemp()
+    ag = Agent(Ledger(f"{tmp}/l.sqlite"), fly, state_dir=tmp)
+    ag.mb.reset()
+    ag.live.net.reset(0)
+    ag.live.t_ms = 0
+    ag.run(Features("did:plc:a", 0.0, False, 0), T0, "at://a/1", fast=True)
+    snap = ag.snapshot()
+    f = Features(
+        "did:plc:b",
+        0.2,
+        False,
+        0,
+        False,
+        ("animals",),
+        False,
+        ("cat", ag.enc.hashed("zebra")),
+        (),
+        "art",
+        ("did:plc:c",),
+        ("img", "site:example.com"),
+    )
+    o = ag.run(f, T0 + 5, "at://b/1")
+    r = ag.ledger.episode(o.episode_id)
+    assert (
+        r["others"] == "did:plc:c"
+        and r["embed"] == "img,site:example.com"
+        and r["words"].endswith(ag.enc.hashed("zebra"))
+    )
+    assert ag.features_of_row(r) == f
+    ok, logged, got = ag.replay_span(snap, ag.live.t_ms)
+    assert ok and logged == got
+    assert ag.ledger.assert_no_text() == []

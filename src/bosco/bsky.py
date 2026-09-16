@@ -26,7 +26,9 @@ import os
 import re
 import sys
 import time
+from dataclasses import dataclass
 from types import SimpleNamespace
+from urllib.parse import urlsplit
 
 from atproto import Client, client_utils, models
 
@@ -48,6 +50,116 @@ def _day(ts: float) -> str:
 
 def _ts(iso: str) -> float:
     return dt.datetime.fromisoformat(iso.replace("Z", "+00:00")).timestamp()
+
+
+@dataclass
+class Embedded:
+    """What a post carries besides its text, read once and discarded (decided 2026-09-15): the
+    words of alt text, link cards and quoted posts (as context), the people it points at
+    (mention facets, a quoted author), tokens naming what was there, and thumbnail URLs for
+    the retina.  Never the image, never the text."""
+
+    text: str = ""
+    others: tuple[str, ...] = ()
+    tokens: tuple[str, ...] = ()
+    thumbs: tuple[str, ...] = ()
+
+
+def _domain(uri: str | None) -> str | None:
+    try:
+        host = urlsplit(uri or "").hostname or ""
+    except ValueError:
+        return None
+    host = host.lower().removeprefix("www.")
+    return host or None
+
+
+def _did_of_uri(uri: str | None) -> str | None:
+    if uri and uri.startswith("at://"):
+        return uri[5:].split("/", 1)[0] or None
+    return None
+
+
+def embed_features(
+    record, view=None, author: str | None = None, me: str | None = None, max_others: int = 3
+) -> Embedded:
+    """Read a post's facets and embed.  `record` is the post record (facets, and the embed as
+    written); `view` is the hydrated post view when there is one (thumbnails, a quoted post's
+    text).  Handles images, video, external cards, quoted records, and record-with-media, one
+    level down.  Nothing is kept but words, DIDs, tokens and thumbnail URLs."""
+    texts: list[str] = []
+    others: list[str] = []
+    tokens: list[str] = []
+    thumbs: list[str] = []
+
+    def add_other(did: str | None) -> None:
+        if did and did != author and did != me and did not in others and len(others) < max_others:
+            others.append(did)
+
+    def add_token(t: str) -> None:
+        if t not in tokens:
+            tokens.append(t)
+
+    for facet in getattr(record, "facets", None) or []:
+        for feat in getattr(facet, "features", None) or []:
+            if str(getattr(feat, "py_type", "")).endswith("#mention"):
+                add_other(getattr(feat, "did", None))
+
+    def read(e, depth: int = 0) -> None:
+        if e is None or depth > 1:
+            return
+        t = str(getattr(e, "py_type", "") or "")
+        if t.startswith("app.bsky.embed.images"):
+            add_token("img")
+            for im in getattr(e, "images", None) or []:
+                if getattr(im, "alt", None):
+                    texts.append(str(im.alt))
+                th = getattr(im, "thumb", None)
+                if isinstance(th, str) and len(thumbs) < 2:
+                    thumbs.append(th)
+        elif t.startswith("app.bsky.embed.video"):
+            add_token("video")
+            if getattr(e, "alt", None):
+                texts.append(str(e.alt))
+            th = getattr(e, "thumbnail", None)
+            if isinstance(th, str) and len(thumbs) < 2:
+                thumbs.append(th)
+        elif t.startswith("app.bsky.embed.external"):
+            add_token("card")
+            ex = getattr(e, "external", None)
+            if ex is not None:
+                d = _domain(getattr(ex, "uri", None))
+                if d:
+                    add_token(f"site:{d}")
+                for k in ("title", "description"):
+                    if getattr(ex, k, None):
+                        texts.append(str(getattr(ex, k)))
+                th = getattr(ex, "thumb", None)
+                if isinstance(th, str) and len(thumbs) < 2:
+                    thumbs.append(th)
+        elif t.startswith("app.bsky.embed.recordWithMedia"):
+            read(getattr(e, "media", None), depth)
+            read(getattr(e, "record", None), depth)
+        elif t.startswith("app.bsky.embed.record"):
+            add_token("quote")
+            r = getattr(e, "record", None)  # a view: ViewRecord; as written: a strong ref
+            if r is None:
+                return
+            rt = str(getattr(r, "py_type", "") or "")
+            if rt.endswith("#viewRecord"):
+                add_other(getattr(getattr(r, "author", None), "did", None))
+                val = getattr(r, "value", None)
+                if getattr(val, "text", None):
+                    texts.append(str(val.text))
+                for sub in getattr(r, "embeds", None) or []:
+                    read(sub, depth + 1)
+            else:
+                add_other(_did_of_uri(getattr(r, "uri", None)))
+
+    read(getattr(view, "embed", None) if view is not None else None)
+    if not tokens:
+        read(getattr(record, "embed", None))
+    return Embedded(" ".join(texts), tuple(others), tuple(tokens), tuple(thumbs))
 
 
 class Bsky:
@@ -529,6 +641,19 @@ class Bsky:
     # ---- one post -> one episode -----------------------------------------------
     THREAD_HEIGHT = 12  # posts above the one he is reading that he reads through first
 
+    def embedded(self, uri: str, record, view, did: str) -> Embedded:
+        """What the post carries besides its text.  A browsed post comes with its view; a
+        notification carries only the record, so a post with an embed is fetched once for the
+        thumbnails and the quoted text."""
+        em = self.agent.enc.cfg.get("embeds") or {}
+        if view is None and getattr(record, "embed", None) is not None and self.client is not None:
+            try:
+                got = self.client.get_posts([uri]).posts
+                view = got[0] if got else None
+            except Exception as e:  # noqa: BLE001
+                print("post view failed:", e, file=sys.stderr)
+        return embed_features(record, view, author=did, me=self.me, max_others=int(em.get("max_others", 3)))
+
     def thread_words(self, uri: str, record) -> tuple[str, ...]:
         """He reads the whole thread: the words of his vocabulary in the posts above this one,
         oldest first, as the context he smells with it.  Text is read once and discarded; only
@@ -569,13 +694,15 @@ class Bsky:
         mentioned: bool,
         labels: set[str] | None = None,
         feed: str | None = None,
+        view=None,
     ) -> Outcome:
         text = getattr(record, "text", "") or ""
         v = vader_compound(text)
         fam = self.L.familiarity(did)
         labels = labels or set()
         note = ("labeled:" + ",".join(sorted(labels))) if labels else None
-        topics = self.agent.enc.topics.match(text)
+        em = self.embedded(uri, record, view, did)
+        topics = self.agent.enc.topics.match(text + " " + em.text if em.text else text)
         words = self.agent.enc.words_for(text)
         question = mentioned and "?" in text
         if question:
@@ -583,14 +710,34 @@ class Bsky:
         reply = getattr(record, "reply", None)
         root = getattr(reply, "root", None)
         parent = getattr(reply, "parent", None)
+        context = list(self.thread_words(uri, record))
+        if em.text:
+            # alt text, a card, a quoted post: read like the posts above, as context at the lower rate
+            cap = int((self.agent.enc.cfg.get("embeds") or {}).get("max_context_words", 12))
+            for w in self.agent.enc.words_for(em.text):
+                if w not in context and w not in words:
+                    context.append(w)
+            context = context[-cap:]
         out = self.agent.run(
-            Features(did, v, mentioned, fam, bool(labels), topics, question, words, feed=feed),
+            Features(
+                did,
+                v,
+                mentioned,
+                fam,
+                bool(labels),
+                topics,
+                question,
+                words,
+                feed=feed,
+                others=em.others,
+                embed=em.tokens,
+            ),
             ts,
             uri,
             kind="event",
             note=note,
             thread=root.uri if root else uri,
-            context=self.thread_words(uri, record),
+            context=tuple(context),
         )
         d = out.decision
         top = max(d.ratios, key=d.ratios.get) if d.ratios else "-"
@@ -794,7 +941,15 @@ class Bsky:
                 continue
             labels = self.mod.aversive_labels_on(post, post.author)
             self.perceive_post(
-                post.uri, post.cid, did, post.record, time.time(), mentioned=False, labels=labels, feed=where
+                post.uri,
+                post.cid,
+                did,
+                post.record,
+                time.time(),
+                mentioned=False,
+                labels=labels,
+                feed=where,
+                view=post,
             )
             self.read_by_feed[where] = self.read_by_feed.get(where, 0) + 1
             n_ep += 1

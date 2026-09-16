@@ -64,6 +64,8 @@ def main(argv=None) -> int:
                 tuple(r["words"].split(",")) if r["words"] else (),
                 tuple(r["context"].split(",")) if r["context"] else (),
                 r["feed"],
+                tuple(r["others"].split(",")) if r["others"] else (),
+                tuple(r["embed"].split(",")) if r["embed"] else (),
             )
             out = agent.run(f, r["ts"], r["source_uri"], kind="event", fast=True)
             idmap[r["id"]] = out.episode_id

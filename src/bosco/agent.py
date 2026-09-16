@@ -327,6 +327,7 @@ class Agent:
         he is choosing what to say; never the whole vocabulary."""
         if not did or not words:
             return {}
+        words = tuple(w for w in words if not w.startswith(self.enc.HASH_PREFIX))  # a hash is in no sentence of his
         key_d = self.mb.digest()[:8]
         out: dict[str, float] = {}
         todo = [w for w in words[: self.PROBE_MAX] if (did, w, key_d) not in self._probe_cache]
@@ -748,6 +749,8 @@ class Agent:
             words=",".join(f.words) if f and f.words else None,
             context=",".join(f.context) if f and f.context else None,
             feed=f.feed if f else None,
+            others=",".join(f.others) if f and f.others else None,
+            embed=",".join(f.embed) if f and f.embed else None,
         )
         eid = self.ledger.add_episode(row, ts=ts)
         return Outcome(eid, dec, line, seed, text, text_source, ts, bool(f.mentioned) if f else False)
@@ -827,6 +830,32 @@ class Agent:
         self.mb.pair_counts(per_s, valence, t, scale=scale)
         return f"taste:{valence}"
 
+    @staticmethod
+    def features_of_row(r) -> Features:
+        """The features of a logged window, rebuilt from its row: everything the encoder needs to
+        present it again.  Any new feature must be reconstructible here or replay diverges."""
+        note = r["note"] or ""
+        keys = r.keys()
+
+        def toks(col: str) -> tuple[str, ...]:
+            v = r[col] if col in keys else None
+            return tuple(v.split(",")) if v else ()
+
+        return Features(
+            r["did"],
+            float(r["vader"]),
+            bool(r["mentioned"]),
+            int(r["familiarity"]),
+            "labeled" in note,
+            toks("topics"),
+            "question" in note,
+            toks("words"),
+            toks("context"),
+            r["feed"],
+            toks("others"),
+            toks("embed"),
+        )
+
     def apply_outcome(
         self,
         episode_id: int,
@@ -843,23 +872,7 @@ class Agent:
         if r is None or r["did"] is None:
             return None
         self.advance_to(ts, fast=fast, max_wall_s=EVENT_CATCHUP_WALL_S)
-        labeled = "labeled" in (r["note"] or "")
-        topics = tuple((r["topics"] or "").split(",")) if r["topics"] else ()
-        question = "question" in (r["note"] or "")
-        words = tuple(r["words"].split(",")) if r["words"] else ()
-        context = tuple(r["context"].split(",")) if r["context"] else ()
-        f = Features(
-            r["did"],
-            float(r["vader"]),
-            bool(r["mentioned"]),
-            int(r["familiarity"]),
-            labeled,
-            topics,
-            question,
-            words,
-            context,
-            r["feed"],
-        )
+        f = self.features_of_row(r)
         self.live.set_base(self._base_drives(self.live.t_ms))
         d_before = self.mb.digest()
         self._tick(self.sim_hours())
@@ -992,22 +1005,7 @@ class Agent:
                 self.advance_to(ts + SLICE_MS / 1000.0)
                 logged = r["brain_digest"]
                 continue
-            f = None
-            if r["did"] is not None:
-                note = r["note"] or ""
-                topics = tuple(r["topics"].split(",")) if r["topics"] else ()
-                f = Features(
-                    r["did"],
-                    float(r["vader"]),
-                    bool(r["mentioned"]),
-                    int(r["familiarity"]),
-                    "labeled" in note,
-                    topics,
-                    "question" in note,
-                    tuple(r["words"].split(",")) if r["words"] else (),
-                    tuple(r["context"].split(",")) if r["context"] else (),
-                    r["feed"],
-                )
+            f = self.features_of_row(r) if r["did"] is not None else None
             self.advance_to(ts)
             self.live.set_base(self._base_drives(self.live.t_ms))
             if r["kind"] == "pairing":
