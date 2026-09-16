@@ -69,8 +69,9 @@ click. Nothing is assumed. You are `root` on the box and the repo lives at
    32 GB ECC, 2 × 960 GB NVMe in soft RAID, Vint Hill). Any x86-64-v3
    machine (AVX2 and FMA, every server since 2013) computes his numbers the
    same way; a VPS with 2 dedicated vCPUs and 4 GB is the floor.
-2. OS: Rocky Linux 9 or AlmaLinux 9 (podman 4.9 with quadlets). Ubuntu
-   24.04 also works. **Not Debian 12**: its podman 4.3 has no quadlets.
+2. OS: AlmaLinux 10 (podman 5, quadlets; built for x86-64-v3 like his
+   numerics). Alma 9, Rocky 9 or Ubuntu 24.04 also work. **Not Debian 12**:
+   its podman 4.3 has no quadlets.
    Keep the installer's default soft RAID 1 across the two disks.
 3. Hostname `bosco`. Add your ssh key. Note the IP.
 4. Moving him from one box to another is `docs/MIGRATE.md`, not this part.

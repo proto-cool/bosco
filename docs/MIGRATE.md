@@ -1,7 +1,7 @@
 # Moving him to another box
 
 Written 2026-09-16 for the move from the Vultr VPS (root, rootful podman)
-to a Kimsufi KS-5-A in Vint Hill (AlmaLinux 9, everything under the user
+to a Kimsufi KS-5-A in Vint Hill (AlmaLinux 10, everything under the user
 `nick`, rootless podman). Follow top to bottom. The rule underneath every
 step: **nothing is reset**. His state moves as files, the gap is a logged
 downtime, and the record must say exactly where the old machine stops and
@@ -43,13 +43,15 @@ boundary, and it is in the record, like the `plasticity` row of 2026-09-15.
 
 ## 1. Order the box
 
-Kimsufi KS-5-A, Vint Hill. OS **AlmaLinux 9** (or Rocky 9; Ubuntu 24.04
-also works; not Debian 12, whose podman has no quadlets). Default soft
+Kimsufi KS-5-A, Vint Hill. OS **AlmaLinux 10** (podman 5, quadlets; the
+whole distribution is built for x86-64-v3, the level his numerics are
+pinned to; Alma 9, Rocky 9 or Ubuntu 24.04 also work; not Debian 12, whose
+podman has no quadlets). Default soft
 RAID 1 over the two NVMe disks. Add your ssh key. Note the IP. Lower the
 TTL on the `bosco.proto.cool` A record to 300 now, so the panel's DNS
 switch in §5 is quick.
 
-## 1a. Harden the new box (AlmaLinux 9, before anything of his lands on it)
+## 1a. Harden the new box (AlmaLinux 10, before anything of his lands on it)
 
 Start as root (or with `sudo` in front of each line). Keep the terminal
 you are in open until the SSH check in step 3 passes from a second one.
