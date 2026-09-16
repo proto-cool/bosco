@@ -212,8 +212,12 @@ def test_browsing_teaches_taste_and_familiarity_and_replays(fly):
     r3 = ag.ledger.episode(o3.episode_id)
     assert "taste:punishment" in r3["note"] and "labeled" in r3["note"]
     assert ag.memory_report("did:plc:bitter", T0 + 11)[1] < 0
+    o4 = ag.run(Features("did:plc:bitter", -0.8, True, 0, True, (), True), T0 + 15, "at://b/2", note="labeled:rude")
+    r4 = ag.ledger.episode(o4.episode_id)
+    assert r4["note"] == "labeled:rude;taste:punishment;question" and ag.features_of_row(r4).labeled
     ok, logged, got = ag.replay_span(snap, ag.live.t_ms)
     assert ok and logged == got
+    assert ag.ledger.assert_no_text() == []  # notes are tokens joined without spaces
 
 
 @needs_data

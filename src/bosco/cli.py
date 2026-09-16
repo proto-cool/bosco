@@ -70,6 +70,7 @@ def cmd_poke(a) -> int:
         print("(no phrasebook line and empty corpus; action dropped)")
     if qid:
         print(f"identity reflex ({qid}): {agent.identity.answer(qid, out.seed).text}")
+    agent.save_state(force=True)  # save_state is rate-limited; a CLI process must not lose its window
     return 0
 
 
@@ -90,6 +91,7 @@ def cmd_spontaneous(a) -> int:
         )
         if o.text:
             print(f"    text ({o.text_source}): {o.text}")
+    agent.save_state(force=True)
     return 0
 
 
@@ -102,6 +104,7 @@ def cmd_outcome(a) -> int:
         a.episode, a.valence, a.source, did, f"cli://outcome/{a.episode}/{int(_ts(a.at))}", _ts(a.at)
     )
     print("pairing episode", pid, "weights", agent.fly.weight_digest())
+    agent.save_state(force=True)
     return 0
 
 
@@ -256,6 +259,62 @@ def main(argv=None) -> int:
         return 0
 
     s.set_defaults(fn=_people)
+    s = sub.add_parser("taste", help="what he approaches and what he has met: accounts, topics, places, words, colours")
+    s.add_argument("--at")
+    s.add_argument("--days", type=float, default=7.0, help="tokens from what he read in the last N days")
+    s.add_argument("--limit", type=int, default=40, help="tokens probed per kind (the most met first)")
+
+    def _taste(a):
+        """Numbers only: each smell presented alone to a copy of his state, its learned verdict
+        and its a'3 familiarity read from the weights.  Drift visible before it is behaviour."""
+        L = Ledger(a.ledger)
+        agent = Agent(L, state_dir=a.state_dir)
+        ts = _ts(a.at)
+        since = ts - a.days * 86400.0
+        counts: dict[str, dict[str, int]] = {"topic": {}, "place": {}, "word": {}, "hash": {}, "see": {}}
+        for r in L.db.execute(
+            "SELECT topics, words, feed, embed FROM episodes WHERE kind='event' AND ts>=? AND ts<=?", (since, ts)
+        ):
+            for t in (r["topics"] or "").split(","):
+                if t:
+                    counts["topic"][f"topic:{t}"] = counts["topic"].get(f"topic:{t}", 0) + 1
+            if r["feed"]:
+                counts["place"][f"feed:{r['feed']}"] = counts["place"].get(f"feed:{r['feed']}", 0) + 1
+            for w in (r["words"] or "").split(","):
+                if w:
+                    kind = "hash" if w.startswith("h:") else "word"
+                    counts[kind][w] = counts[kind].get(w, 0) + 1
+            for e in (r["embed"] or "").split(","):
+                if e.startswith("site:"):
+                    counts["place"][e] = counts["place"].get(e, 0) + 1
+                elif e.startswith(("hue:", "lum:", "edge:", "sat:")) or e in ("img", "motion"):
+                    counts["see"][e] = counts["see"].get(e, 0) + 1
+        print(f"taste at {dt.datetime.fromtimestamp(ts, dt.UTC).isoformat()}  (tokens from the last {a.days:g} days)")
+        print(f"{'kind':6s} {'token':34s} {'met':>4s} {'learned':>8s} {'familiar':>8s} {'kcs':>4s}")
+        for kind, table in counts.items():
+            rows = []
+            for tok, n in sorted(table.items(), key=lambda kv: (-kv[1], kv[0]))[: a.limit]:
+                drives = agent.drives_for_token(tok)
+                if not drives:
+                    continue
+                v, fam, k = agent.probe(drives)
+                rows.append((v, tok, n, fam, k))
+            for v, tok, n, fam, k in sorted(rows, reverse=True):
+                print(f"{kind:6s} {tok:34s} {n:4d} {v:+8.2f} {fam:8.2f} {k:4d}")
+        dids = [
+            r[0] for r in L.db.execute("SELECT DISTINCT did FROM episodes WHERE did IS NOT NULL AND ts>=?", (since,))
+        ]
+        rows = []
+        for did in dids[: a.limit * 3]:
+            _, v = agent.memory_report(did, ts)
+            sig = agent.account_signature(did)
+            fam = agent.mb.familiarity(sig) if sig is not None else 0.0
+            rows.append((v, did, L.familiarity(did), fam))
+        for v, did, n, fam in sorted(rows, reverse=True)[: a.limit]:
+            print(f"{'who':6s} {did:34s} {n:4d} {v:+8.2f} {fam:8.2f}")
+        return 0
+
+    s.set_defaults(fn=_taste)
     s = sub.add_parser("panel", help="write status.json (and one activity.bin) for the public panel")
     s.add_argument("--out", required=True)
     s.add_argument("--at")

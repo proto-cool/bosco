@@ -19,7 +19,7 @@ from bosco.model import Brain
 from bosco.sim import EpisodeResult
 
 BEHAVIOURS = ("engage", "reply", "like", "leave", "groom")
-ACTIONS = ("reply", "like", "follow", "leave", "spontaneous_post", "nothing")
+ACTIONS = ("reply", "like", "follow", "walk", "leave", "spontaneous_post", "nothing")
 
 
 APPROACH = ("engage", "like", "reply")
@@ -65,6 +65,7 @@ class Readout:
             self.pops[name] = idx
         th = json.load(open(thresholds_path))
         self.thresholds: dict[str, float | None] = {k: th.get(k) for k in self.pops}
+        self.thresholds["walk"] = th.get("walk")  # a lower rung on engage (thresholds_policy.yaml)
         # valence: reward-compartment MBONs vs punishment-compartment MBONs
         comp = yaml.safe_load(open(compartments_path))
         dan_to_mbons: dict[str, set[str]] = {}
@@ -126,7 +127,7 @@ class Readout:
             else:
                 g = 1.0
             gated[k] = x * max(0.0, g)
-        ratios = {k: (gated[k] / t if t else 0.0) for k, t in self.thresholds.items()}
+        ratios = {k: (gated[k] / t if t else 0.0) for k, t in self.thresholds.items() if k in gated}
         winner = max(ratios, key=lambda k: (ratios[k], k))
         also: tuple[str, ...] = ()
         if addressed and ratios.get("reply", 0.0) > 1.0:
@@ -139,6 +140,11 @@ class Readout:
             behaviour, action = winner, self.action_of[winner]
         else:
             behaviour, action = "nothing", "nothing"
+            # chemotaxis (decided 2026-09-15): browsing, walking that did not cross its own threshold
+            # but crosses the lower `walk` rung is a walk toward the source: he reads more of it
+            walk_th = self.thresholds.get("walk")
+            if not addressed and walk_th and gated.get("engage", 0.0) >= walk_th:
+                behaviour, action = "engage", "walk"
         valence = "positive" if v > valence_cut else "negative" if v < -valence_cut else "neutral"
         dn_rate = float(np.asarray(counts)[self.dn_all].mean() * 1000.0 / ms)
         arousal = "low" if dn_rate < arousal_cuts[0] else "high" if dn_rate > arousal_cuts[1] else "mid"

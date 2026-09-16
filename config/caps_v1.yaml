@@ -9,8 +9,11 @@ per_kind:
   spontaneous_post: {hour: 1,  day: 6}
   identity:         {hour: 20, day: 100}   # who/what/why/creator answers
   answer:           {hour: 12, day: 100}   # the etiquette reflex: whoever spoke to him answered when the song did not cross
+  walk:             {hour: 6,  day: 40}    # walks toward a source (reads more of an account): not outward, a loop guard
+  quote:            {hour: 4,  day: 20}    # a liked post embedded in an answer to a question ("this one")
 global:             {hour: 24, day: 240}
 # loop guards
 per_thread_replies_per_hour: 6      # replies from Bosco in one thread (by root uri)
 per_account_replies_per_day: 20     # replies to the same account
 per_account_actions_per_day: 30     # any action toward the same account
+walk_posts: 3                       # posts of the account he reads on a walk

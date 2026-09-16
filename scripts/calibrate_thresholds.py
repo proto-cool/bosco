@@ -104,6 +104,7 @@ def main(argv=None) -> int:
     ap.add_argument("--policy", default=str(paths.CONFIG / "thresholds_policy.yaml"))
     ap.add_argument("--allow-partial", action="store_true")
     ap.add_argument("--write", action="store_true")
+    ap.add_argument("--only", action="append", default=[], help="calibrate only these thresholds (e.g. --only walk)")
     a = ap.parse_args(argv)
     policy = yaml.safe_load(open(a.policy))
     if a.synthetic:
@@ -117,10 +118,13 @@ def main(argv=None) -> int:
     skipped: list[str] = []
     cache: dict[str, list[dict]] = {}
     for p, rule in policy["populations"].items():
+        if a.only and p not in a.only:
+            continue
         sel = rule["over"]
+        pop = rule.get("population", p)  # a rung on another population's rate (walk on engage)
         rows = cache.setdefault(sel, rows_for(L, sel))
         need = int(policy["min_rows"].get(sel, 0))
-        v = np.array([s.get(p, 0.0) for s in rows]) if rows else np.zeros(0)
+        v = np.array([s.get(pop, 0.0) for s in rows]) if rows else np.zeros(0)
         if len(v) < need:
             msg = f"{p:7s} over {sel}: only {len(v)} windows; need {need}"
             if not a.allow_partial:

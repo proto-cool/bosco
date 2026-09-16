@@ -86,27 +86,30 @@ def main(argv=None) -> int:
     ok4 = not bad_text
     out.append(f"- no post text in database: {'PASS' if ok4 else 'FAIL ' + str(bad_text[:3])}")
 
-    # 5. digest chain
+    # 5. manual state edits and rule changes.  Between two windows the weights change only by
+    # forgetting (lazy, deterministic from the timestamps) and by what the window itself
+    # taught, both of which replay (check 1); so a break in the digest chain that is not
+    # time passing is a manual edit, and those are logged as `forget` control rows.  Any
+    # such row is reported, as is a change of learning rule (`plasticity` control rows).
     chain_bad = []
     if agent is not None:
         prev = None
         for r in rows:
-            if prev is not None and prev["weight_digest_after"] != r["weight_digest_before"]:
-                # must be explained by forgetting between prev.ts and r.ts
-                try:
-                    agent.load_weights_digest(prev["weight_digest_after"])
-                    agent.mb.t_last = prev["ts"] / 3600.0
-                    agent.mb.forget(r["ts"] / 3600.0)
-                    if agent.mb.digest() != r["weight_digest_before"]:
-                        # a logged operator 'forget' between the two rows explains the break; still reported
-                        forgets = L.db.execute(
-                            "SELECT COUNT(*) FROM control WHERE kind='forget' AND ts>=? AND ts<=?",
-                            (prev["ts"], r["ts"]),
-                        ).fetchone()[0]
-                        chain_bad.append(f"{r['id']}(forget x{forgets})" if forgets else r["id"])
-                except FileNotFoundError:
-                    chain_bad.append(r["id"])
+            if (
+                prev is not None
+                and prev["weight_digest_after"] != r["weight_digest_before"]
+                and (r["t_ms"] or 0) <= (prev["t_ms"] or 0)
+            ):
+                chain_bad.append(r["id"])  # no time passed and the weights moved: not forgetting
             prev = r
+    forgets = L.db.execute("SELECT COUNT(*) FROM control WHERE kind='forget'").fetchone()[0]
+    rules = [
+        f"{r['target_uri']}@{int(r['ts'])}"
+        for r in L.db.execute("SELECT ts, target_uri FROM control WHERE kind='plasticity' ORDER BY ts")
+    ]
+    if forgets:
+        chain_bad.append(f"manual forget x{forgets}")
+    out.append(f"- learning-rule changes logged: {rules or 'none'}")
     ok5 = not chain_bad
     out.append(
         f"- weight digest chain ({len(rows)} rows): {'PASS' if ok5 else 'FAIL at episodes ' + str(chain_bad[:10])}"

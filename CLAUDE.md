@@ -221,9 +221,13 @@ Do not download the EM volume. `neuprint-python` against
 - Winner-take-all over population activity; silence if nothing crosses
   threshold. Thresholds from dev-period real activity distribution
   (provisional synthetic-battery thresholds until then).
-- Action set: `reply`, `like`, `follow`, `leave`, `spontaneous_post`,
-  `nothing`. engage → follow while browsing (nothing if already followed),
-  reply when addressed; leave → unfollow. A reply is only ever an answer.
+- Action set: `reply`, `like`, `follow`, `walk`, `leave`,
+  `spontaneous_post`, `nothing`. engage → follow while browsing (a walk if
+  already followed), reply when addressed; a walking rate over the lower
+  `walk` rung but under engage's threshold → walk (read a few more of the
+  account's posts; not outward; capped; decided 2026-09-15); leave →
+  unfollow. A reply is only ever an answer; an answer to a question may
+  quote a post he already publicly liked that smells of it.
 - Own posts are grooming. Debris lands on his bristle neurons as discrete
   seeded events; a landing is an onset; his grooming neurons answer onsets
   and adapt to held input; if the answer crosses threshold he grooms, which

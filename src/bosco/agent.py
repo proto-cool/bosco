@@ -84,6 +84,8 @@ class Outcome:
     text_source: str | None = None
     ts: float = 0.0
     mentioned: bool = False  # the post addressed him (mention / reply / quote)
+    question: bool = False  # the post asked something
+    tokens: tuple[str, ...] = ()  # what it smelled of: his words in it, topic:<name>; for "this one"
 
 
 class Agent:
@@ -111,6 +113,7 @@ class Agent:
         self._probe_cache: dict[tuple[str, str, str], float] = {}  # (did, word, weights digest) -> valence
         self._recent_openings: list[str] = []  # sentences he opened with lately; not the same one twice running
         self.assoc = Associations()  # what he remembers about each account (config/associations_v1.yaml)
+        self._idle_kc = np.zeros(len(self.fly.kc), dtype=bool)  # KCs busy in the last idle second (background)
         self._load_signatures()
         self.on_window = None  # optional observer (Window, Decision, dust) -> None; the panel. Never feeds back.
         self.stop_requested = False
@@ -182,6 +185,7 @@ class Agent:
         st["appetite"] = np.array([self.appetite, self.appetite_t])
         st["threads"] = np.array(json.dumps(self.threads, sort_keys=True))
         st["assoc"] = np.array(self.assoc.to_json())
+        st["idle_kc"] = self._idle_kc
         return st
 
     def _unpack(self, st: dict) -> None:
@@ -195,6 +199,8 @@ class Agent:
             self._appetite_loaded = True
         self.threads = json.loads(str(np.asarray(st["threads"]).ravel()[0])) if "threads" in st else {}
         self.assoc.load_json(str(np.asarray(st["assoc"]).ravel()[0]) if "assoc" in st else None)
+        if "idle_kc" in st and len(st["idle_kc"]) == len(self._idle_kc):
+            self._idle_kc = np.asarray(st["idle_kc"], dtype=bool).copy()
 
     # The learning rule's version.  A change to what a window teaches (config/plasticity_v1.yaml,
     # config/mb_compartments.yaml, MushroomBody) is legitimate before freeze-v1, but it means
@@ -387,6 +393,35 @@ class Agent:
 
     SEEN_PROBE_MS = 500.0
 
+    def probe(self, drives: list[Drive]) -> tuple[float, float, int]:
+        """A smell presented alone to a copy of his state: (learned valence, familiarity, KCs lit).
+        Snapshot, present, read the weights on the cells that fire, restore; nothing changes."""
+        saved = self.live.snapshot()
+        try:
+            self.live.net.reset(0)  # from rest, so only the smell's own cells fire; the weights stay
+            self.live.set_base({})
+            win = self.live.present(drives, self.SEEN_PROBE_MS)
+            kc = win.counts[self.fly.kc]
+            v, _ = self.mb.learned_valence(kc)
+            return float(v), self.mb.familiarity(kc), int((kc > 0).sum())
+        finally:
+            self.live.restore(saved)
+
+    def drives_for_token(self, token: str) -> list[Drive]:
+        """The drive a ledger token names: topic:<name>, site:<domain>, a retina channel, a word or hash."""
+        from bosco.retina import is_channel
+
+        if token.startswith("topic:"):
+            return [self.enc.topic_drive(token[6:])]
+        if token.startswith("site:"):
+            return [self.enc.site_drive(token[5:])]
+        if token.startswith("feed:"):
+            return [self.enc.feed_drive(token[5:])]
+        if is_channel(token):
+            d = self.enc.visual_drive(token)
+            return [d] if d else []
+        return [self.enc.word_drive(token)]
+
     def familiarity_of(self, words: tuple[str, ...]) -> dict[str, float]:
         """How well he has met each smell lately, each presented alone to a copy of his state
         (snapshot, present, read the a'3 trace on the cells that fire, restore)."""
@@ -394,10 +429,10 @@ class Agent:
         if not words:
             return out
         saved = self.live.snapshot()
-        base = self._base_drives(self.live.t_ms)
         try:
             for w in words:
-                self.live.set_base(base)
+                self.live.net.reset(0)  # from rest: the smell's own cells, not the background's
+                self.live.set_base({})
                 win = self.live.present([self.enc.word_drive(w)], self.SEEN_PROBE_MS)
                 out[w] = self.mb.familiarity(win.counts[self.fly.kc])
                 self.live.restore(saved)
@@ -626,7 +661,7 @@ class Agent:
             while self.live.t_ms + SLICE_MS <= target_settled:
                 self._dust_step(self.live.t_ms // 1000, SLICE_MS)
                 self.live.set_base(self._base_drives(self.live.t_ms))
-                self.live.idle(SLICE_MS)
+                self._idle_kc = self.live.idle(SLICE_MS).counts[self.fly.kc] > 0
             self._tick(self.sim_hours())
             self.save_state()
             return outs
@@ -641,6 +676,7 @@ class Agent:
             self._dust_step(slice_index, SLICE_MS)
             self.live.set_base(self._base_drives(self.live.t_ms))
             w = self.live.idle(SLICE_MS)
+            self._idle_kc = w.counts[self.fly.kc] > 0
             self._tick(self.sim_hours())
             v, _ = self.mb.learned_valence(w.counts[self.fly.kc])
             dec = self.readout.decide(w.counts, w.ms, learned=v, appetite=self.appetite)
@@ -713,9 +749,9 @@ class Agent:
         if f is not None and f.labeled and dec.action in ("like", "follow", "reply"):
             dec = replace(dec, behaviour="nothing", action="nothing")
         if f is not None and f.labeled and "labeled" not in (note or ""):
-            note = (note + "; " if note else "") + "labeled"  # replay rebuilds the features from the note
+            note = (note + ";" if note else "") + "labeled"  # replay rebuilds the features from the note
         if f is not None and f.question and "question" not in (note or ""):
-            note = (note + "; " if note else "") + "question"  # replay rebuilds the features from the note
+            note = (note + ";" if note else "") + "question"  # replay rebuilds the features from the note
         line = None
         line_key = None
         text = None
@@ -828,7 +864,10 @@ class Agent:
             embed=",".join(f.embed) if f and f.embed else None,
         )
         eid = self.ledger.add_episode(row, ts=ts)
-        return Outcome(eid, dec, line, seed, text, text_source, ts, bool(f.mentioned) if f else False)
+        toks = (tuple(f.words) + tuple(f"topic:{t}" for t in f.topics)) if f else ()
+        return Outcome(
+            eid, dec, line, seed, text, text_source, ts, bool(f.mentioned) if f else False, bool(f and f.question), toks
+        )
 
     def run(
         self,
@@ -857,7 +896,8 @@ class Agent:
         self._tick(self.sim_hours())
         kc = w.counts[self.fly.kc]
         v, info = self.mb.learned_valence(kc)
-        fam = self.mb.familiarity(kc) if f is not None else 0.0
+        # familiarity is read on the cells the smell added, not the ones the clock keeps busy
+        fam = self.mb.familiarity(np.where(self._idle_kc, 0, kc)) if f is not None else 0.0
         dec = self.readout.decide(
             w.counts,
             w.ms,
@@ -873,7 +913,7 @@ class Agent:
         if f is not None:
             tasted = self.learn_from_window(f, kc, w.ms)
             if tasted:
-                note = (note + "; " if note else "") + tasted
+                note = (note + ";" if note else "") + tasted
             # what arrived with this account is now part of what he remembers about it; before the
             # row is written, since the row's digest is the state after the window
             self.assoc.observe(f.did, self.assoc_tokens(f), self.sim_hours())

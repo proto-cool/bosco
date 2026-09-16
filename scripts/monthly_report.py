@@ -53,13 +53,55 @@ def main(argv=None) -> int:
         f"- outcomes: reward {rewards}, punishment {punish} (blocks {blocks})",
         f"- operator control events: {json.dumps(ctrl, sort_keys=True)}",
     ]
+    # what he did on his own feet (2026-09-15): walks, quotes, taste pairings, familiarity
+    walks = sum(1 for r in acts if r["kind"] == "walk")
+    quotes = sum(1 for r in acts if r["kind"] == "quote")
+    taste = {"reward": 0, "punishment": 0}
+    fam_first, fam_later = [], []
+    seen_dids: dict[str, int] = {}
+    for r in ev:
+        note = r["note"] or ""
+        for k in taste:
+            if f"taste:{k}" in note:
+                taste[k] += 1
+        try:
+            f = json.loads(r["mbon"]).get("_familiar")
+        except (TypeError, ValueError):
+            f = None
+        if f is not None and r["did"]:
+            n = seen_dids.get(r["did"], 0)
+            (fam_first if n == 0 else fam_later if n >= 5 else []).append(float(f))
+            seen_dids[r["did"]] = n + 1
+    out += [
+        f"- walks (posts read on his own feet): {walks}; quotes in answers: {quotes}",
+        f"- taste pairings while reading: {json.dumps(taste)}",
+        f"- familiarity of an account on first meeting vs from the sixth: "
+        f"{sum(fam_first) / max(1, len(fam_first)):.3f} (n={len(fam_first)}) vs "
+        f"{sum(fam_later) / max(1, len(fam_later)):.3f} (n={len(fam_later)})",
+    ]
     if a.dunce_ledger:
         D = Ledger(a.dunce_ledger)
         by_src = {r["source_uri"]: r["action"] for r in D.episodes(since_ts=t0, kind="event") if r["ts"] < t1}
         paired = [(r["action"], by_src[r["source_uri"]]) for r in ev if r["source_uri"] in by_src]
         agree = sum(1 for x, y_ in paired if x == y_) / max(1, len(paired))
         out.append(f"- dunce action agreement over {len(paired)} shared stimuli: {agree:.3f}")
-    out.append("- integrity checks: see snapshots/<date>/integrity.md for each nightly run")
+    # which integrity checks passed, from the nightly reports of the month
+    from pathlib import Path
+
+    from bosco import paths
+
+    passed, failed, nights = 0, 0, 0
+    for d in sorted(Path(paths.SNAPSHOTS).glob(f"{y}-{m:02d}-*")):
+        f = d / "integrity.md"
+        if f.exists():
+            nights += 1
+            txt = f.read_text()
+            passed += txt.count("PASS")
+            failed += txt.count("FAIL")
+    if nights:
+        out.append(f"- integrity checks over {nights} nightly reports: {passed} PASS, {failed} FAIL")
+    else:
+        out.append("- integrity checks: see snapshots/<date>/integrity.md for each nightly run")
     print("\n".join(out))
     return 0
 

@@ -129,7 +129,7 @@ TEXT_COLUMNS = {
         "others",
         "embed",
     ],
-    "actions": ["kind", "our_uri", "target_uri"],
+    "actions": ["kind", "our_uri", "target_uri", "root_uri", "target_did", "embed_uri"],
     "outcomes": ["valence", "source", "did", "evidence_uri"],
     "control": ["kind", "by_did", "evidence_uri", "target_uri"],
 }
@@ -180,7 +180,7 @@ class Ledger:
 
     def _migrate(self) -> None:
         cols = {r["name"] for r in self.db.execute("PRAGMA table_info(actions)")}
-        for col in ("root_uri", "target_did"):
+        for col in ("root_uri", "target_did", "embed_uri"):
             if col not in cols:
                 self.db.execute(f"ALTER TABLE actions ADD COLUMN {col} TEXT")
         ecols = {r["name"] for r in self.db.execute("PRAGMA table_info(episodes)")}
@@ -256,6 +256,32 @@ class Ledger:
             )
         }
 
+    def best_liked_match(
+        self, tokens: tuple[str, ...], since: float, exclude_dids: set[str] | None = None
+    ) -> tuple[str, str] | None:
+        """The post he liked (really, not dry) since `since` whose tokens (his words in it, its
+        topics, what it carried) overlap the given tokens most, recency breaking ties: (uri, did),
+        or None when nothing overlaps.  For "this one" in an answer to a question."""
+        want = {t for t in tokens if t}
+        if not want:
+            return None
+        best: tuple[float, float, str, str] | None = None
+        rows = self.db.execute(
+            "SELECT e.source_uri AS uri, e.did AS did, e.ts AS ts, e.words AS words, e.topics AS topics, "
+            "e.embed AS embed FROM episodes e JOIN actions a ON a.episode_id=e.id "
+            "WHERE a.kind='like' AND a.dry_run=0 AND a.deleted_ts IS NULL AND e.ts>=? AND e.source_uri IS NOT NULL",
+            (since,),
+        ).fetchall()
+        for r in rows:
+            if exclude_dids and r["did"] in exclude_dids:
+                continue
+            have = set((r["words"] or "").split(",")) | {f"topic:{t}" for t in (r["topics"] or "").split(",") if t}
+            have |= set((r["embed"] or "").split(","))
+            n = len(want & have - {""})
+            if n and (best is None or (n, r["ts"]) > (best[0], best[1])):
+                best = (n, float(r["ts"]), r["uri"], r["did"])
+        return (best[2], best[3]) if best else None
+
     def approaches_by_feed(self, since: float) -> dict[str, int]:
         """His approaches (like, follow, reply decided) on posts read from each feed since `since`:
         his behaviour there, which is what decides where he reads next.  Never outcomes."""
@@ -263,7 +289,7 @@ class Ledger:
             r[0]: int(r[1])
             for r in self.db.execute(
                 "SELECT feed, COUNT(*) FROM episodes WHERE kind='event' AND mentioned=0 AND feed IS NOT NULL "
-                "AND ts>=? AND action IN ('like','follow','reply') GROUP BY feed",
+                "AND ts>=? AND action IN ('like','follow','reply','walk') GROUP BY feed",
                 (since,),
             )
         }
@@ -293,11 +319,12 @@ class Ledger:
         ts: float | None = None,
         root_uri: str | None = None,
         target_did: str | None = None,
+        embed_uri: str | None = None,
     ) -> int:
         cur = self.db.execute(
-            "INSERT INTO actions (episode_id, ts, kind, our_uri, target_uri, root_uri, target_did, dry_run) "
-            "VALUES (?,?,?,?,?,?,?,?)",
-            (episode_id, ts or time.time(), kind, our_uri, target_uri, root_uri, target_did, int(dry_run)),
+            "INSERT INTO actions (episode_id, ts, kind, our_uri, target_uri, root_uri, target_did, dry_run, embed_uri) "
+            "VALUES (?,?,?,?,?,?,?,?,?)",
+            (episode_id, ts or time.time(), kind, our_uri, target_uri, root_uri, target_did, int(dry_run), embed_uri),
         )
         self.db.commit()
         return int(cur.lastrowid)

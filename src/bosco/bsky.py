@@ -414,8 +414,15 @@ class Bsky:
         if action == "follow":
             if addressed:
                 action = "reply" if did is not None and out.text else "nothing"
-            elif did is None or did in following:
+            elif did is None:
                 action = "nothing"
+            elif did in following:
+                action = "walk"  # already his: walking toward someone he follows is reading more of them
+        if action == "walk":
+            if addressed or did is None:
+                return
+            self.walk(out, did, target_uri, root_uri, ts)
+            return
         if action == "reply" and not addressed:
             withheld("not addressed")
             return
@@ -446,6 +453,7 @@ class Bsky:
             print(f"rate cap ({why}): action suppressed", action)
             return
         our_uri = None
+        embed_uri = None
         if action == "like" and target_uri:
             if not self.dry:
                 our_uri = self.client.like(target_uri, target_cid).uri
@@ -483,9 +491,16 @@ class Bsky:
                     parent=models.ComAtprotoRepoStrongRef.Main(uri=target_uri, cid=target_cid),
                     root=models.ComAtprotoRepoStrongRef.Main(uri=root_uri or target_uri, cid=root_cid or target_cid),
                 )
+            quote = self.quote_for(out, did, root_uri or target_uri, ts) if action == "reply" else None
             if not self.dry:
-                our_uri = self.client.send_post(self.rich(out.text), reply_to=reply_to, langs=["en"]).uri
-            print(f"{action} ({out.text_source}) {out.text!r} -> {target_uri} ({'dry' if self.dry else our_uri})")
+                our_uri = self.client.send_post(
+                    self.rich(out.text), reply_to=reply_to, langs=["en"], embed=self.embed_of(quote)
+                ).uri
+            print(
+                f"{action} ({out.text_source}) {out.text!r} -> {target_uri} ({'dry' if self.dry else our_uri})"
+                + (f" quoting {quote[0]}" if quote else "")
+            )
+            embed_uri = quote[0] if quote else None
         self.L.add_action(
             out.episode_id,
             action,
@@ -495,7 +510,93 @@ class Bsky:
             ts=ts,
             root_uri=root_uri or target_uri,
             target_did=did,
+            embed_uri=embed_uri,
         )
+
+    # ---- chemotaxis: a walk toward the source ---------------------------------------
+    def walk(self, out: Outcome, did: str, from_uri: str | None, root_uri: str | None, ts: float) -> int:
+        """He walks toward a smell he liked the look of: a few more of the account's own posts
+        are read, each an ordinary stimulus from the place `walk` (decided 2026-09-15).  Not
+        outward; a loop guard caps it.  The action row keeps where he walked from; the posts'
+        rows say which walk brought them."""
+        if self.L.asleep():
+            print("asleep: walk suppressed")
+            return 0
+        ok, why = self.agent.caps_allow(ts, "walk", root_uri or from_uri, did)
+        if not ok:
+            self.L.add_action(out.episode_id, "leave", None, from_uri, dry_run=True, ts=ts, target_did=did)
+            print(f"rate cap ({why}): walk suppressed")
+            return 0
+        aid = self.L.add_action(
+            out.episode_id, "walk", None, from_uri, dry_run=False, ts=ts, root_uri=root_uri or from_uri, target_did=did
+        )
+        n_posts = int((getattr(self.agent, "caps", None) or {}).get("walk_posts", 3))
+        try:
+            got = self.client.get_author_feed(actor=did, limit=min(50, 3 * n_posts + 2), filter="posts_no_replies")
+            posts = [fv.post for fv in got.feed]
+        except Exception as e:  # noqa: BLE001
+            print("walk failed:", e, file=sys.stderr)
+            return 0
+        ignore = self.ignore_set()
+        n = 0
+        for post in posts:
+            if n >= n_posts:
+                break
+            if post.author.did != did or did in ignore or self.L.seen_source(post.uri) or post.uri == from_uri:
+                continue
+            if not self.reads(post.record):
+                continue
+            labels = self.mod.aversive_labels_on(post, post.author)
+            self.perceive_post(
+                post.uri,
+                post.cid,
+                did,
+                post.record,
+                time.time(),
+                mentioned=False,
+                labels=labels,
+                feed="walk",
+                view=post,
+                note=f"walk:{aid}",
+            )
+            n += 1
+        print(f"walk toward {did}: read {n}")
+        return n
+
+    # ---- "this one": a liked post in an answer to a question ------------------------------
+    def quote_for(self, out: Outcome, did: str | None, root_uri: str | None, ts: float) -> tuple[str, str] | None:
+        """Asked something, he may point at the post he liked lately that smells most of the
+        question (decided 2026-09-15): only posts he really liked (public already), never from an
+        account he ignores, at most one, under its own cap.  (uri, did) or None."""
+        if not out.question or not out.tokens:
+            return None
+        hours = float(self.agent.enc.words_cfg.get("day_hours", 6.0))
+        exclude = set(self.ignore_set()) | {self.me}
+        got = self.L.best_liked_match(out.tokens, ts - 4 * hours * 3600.0, exclude_dids=exclude)
+        if got is None:
+            return None
+        ok, why = self.agent.caps_allow(ts, "quote", root_uri, did)
+        if not ok:
+            print(f"rate cap ({why}): quote withheld")
+            return None
+        self.L.add_action(
+            out.episode_id, "quote", None, got[0], dry_run=self.dry, ts=ts, root_uri=root_uri, target_did=got[1]
+        )
+        return got
+
+    def embed_of(self, quote: tuple[str, str] | None):
+        """The record embed for a quote, with the post's current cid from the public view."""
+        if quote is None:
+            return None
+        try:
+            posts = self.client.get_posts([quote[0]]).posts
+            if not posts:
+                return None
+            ref = models.ComAtprotoRepoStrongRef.Main(uri=posts[0].uri, cid=posts[0].cid)
+            return models.AppBskyEmbedRecord.Main(record=ref)
+        except Exception as e:  # noqa: BLE001
+            print("quote embed failed:", e, file=sys.stderr)
+            return None
 
     def identity_reply(
         self, out: Outcome, qid: str, uri: str, cid: str, record, did: str, ts: float, text_override: str | None = None
@@ -723,18 +824,20 @@ class Bsky:
         labels: set[str] | None = None,
         feed: str | None = None,
         view=None,
+        note: str | None = None,
     ) -> Outcome:
         text = getattr(record, "text", "") or ""
         v = vader_compound(text)
         fam = self.L.familiarity(did)
         labels = labels or set()
-        note = ("labeled:" + ",".join(sorted(labels))) if labels else None
+        if labels:
+            note = (note + ";" if note else "") + "labeled:" + ",".join(sorted(labels))
         em = self.embedded(uri, record, view, did)
         topics = self.agent.enc.topics.match(text + " " + em.text if em.text else text)
         words = self.agent.enc.words_for(text)
         question = mentioned and "?" in text
         if question:
-            note = (note + "; " if note else "") + "question"
+            note = (note + ";" if note else "") + "question"
         reply = getattr(record, "reply", None)
         root = getattr(reply, "root", None)
         parent = getattr(reply, "parent", None)
@@ -847,9 +950,15 @@ class Bsky:
             root=models.ComAtprotoRepoStrongRef.Main(uri=root.uri if root else uri, cid=root.cid if root else cid),
         )
         our_uri = None
+        quote = self.quote_for(out, did, root.uri if root else uri, ts)
         if not self.dry:
-            our_uri = self.client.send_post(self.rich(out.text), reply_to=ref, langs=["en"]).uri
-        print(f"answer ({out.text_source}) {out.text!r} -> {uri} ({'dry' if self.dry else our_uri})")
+            our_uri = self.client.send_post(
+                self.rich(out.text), reply_to=ref, langs=["en"], embed=self.embed_of(quote)
+            ).uri
+        print(
+            f"answer ({out.text_source}) {out.text!r} -> {uri} ({'dry' if self.dry else our_uri})"
+            + (f" quoting {quote[0]}" if quote else "")
+        )
         self.L.add_action(
             out.episode_id,
             "answer",
@@ -859,6 +968,7 @@ class Bsky:
             ts=ts,
             root_uri=root.uri if root else uri,
             target_did=did,
+            embed_uri=quote[0] if quote else None,
         )
 
     # ---- polling ---------------------------------------------------------------

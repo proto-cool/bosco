@@ -12,6 +12,10 @@ populations:
   leave:  {q: 0.85, over: event}
   reply:  {q: 0.40, over: mentioned}      # song-DN rate when he is addressed; ~6 in 10 mentions may answer before gating
   groom:  {q: 0.70, over: landing_peak}   # ~3 landings in 10 are enough to groom
+  # walk (decided 2026-09-15): a lower rung on the walking population while browsing.  Between
+  # this and engage's own threshold he walks toward the source (reads more of the account)
+  # instead of following.  About 4 posts in 10 would be walks before gating and caps.
+  walk:   {q: 0.60, over: event, population: engage}
 # mentioned: was 60; lowered 2026-09-14 with 17 real windows in hand, so the song's threshold
 # is his own activity, not the synthetic battery's.  The quantile is unchanged.
 min_rows: {event: 200, mentioned: 15, landing_peak: 30}

@@ -197,3 +197,26 @@ def test_verbosity_is_appetite_and_the_smell():
     assert v(0.0, 0.0) == 1 and v(0.5, 0.0) == 2 and v(1.0, 0.0) == 3
     assert v(1.0, 0.5) == 4 and v(0.0, 0.5) == 2  # a sweet smell: one more
     assert v(0.0, -0.5) == 1 and v(1.0, -0.5) == 2  # a bitter one: one fewer, never none
+
+
+@needs_data
+def test_walking_short_of_its_threshold_is_a_walk_while_browsing(fly):
+    """The walk rung (thresholds.json `walk`, thresholds_policy.yaml): browsing, a walking rate
+    between the rung and engage's own threshold is a walk; over it, a follow; addressed, never."""
+    from bosco.readout import Readout
+
+    ro = Readout(fly.brain)
+    assert ro.thresholds["walk"] and ro.thresholds["walk"] < ro.thresholds["engage"]
+    counts = np.zeros(fly.brain.n, dtype=np.int64)
+    counts[ro.pops["engage"]] = int(ro.thresholds["walk"] * 1.2) + 1
+    d = ro.decide(counts, 1000.0, familiarity=1.0)  # a familiar smell: no novelty gain
+    assert (d.behaviour, d.action) == ("engage", "walk") and "walk" not in d.ratios
+    assert ro.decide(counts, 1000.0, addressed=True, familiarity=1.0).action == "nothing"
+    counts[ro.pops["engage"]] = int(ro.thresholds["engage"] * 1.5) + 1
+    assert ro.decide(counts, 1000.0, familiarity=1.0).action == "follow"
+    counts[ro.pops["engage"]] = 0
+    assert ro.decide(counts, 1000.0).action == "nothing"
+    # a novel smell alerts: the same rate walks sooner when it is new than when it is familiar
+    counts[ro.pops["engage"]] = int(ro.thresholds["walk"] * 0.8)
+    assert ro.decide(counts, 1000.0, familiarity=1.0).action == "nothing"
+    assert ro.decide(counts, 1000.0, familiarity=0.0).action == "walk"

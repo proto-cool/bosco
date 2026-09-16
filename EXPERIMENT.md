@@ -100,7 +100,11 @@ genuinely the one acting, and that anyone can check.
   unfollow, and post on his own; he replies only to someone who replied to
   him or tagged him, once per post of theirs, never to a post he merely
   browsed (2026-09-14). The action
-  set is `reply, like, follow, leave, spontaneous_post, nothing`. Toward
+  set is `reply, like, follow, walk, leave, spontaneous_post, nothing`
+  (walk added 2026-09-15: browsing, walking short of its own threshold but
+  over a lower rung is reading a few more of that account's posts; not
+  outward, capped). An answer to a question may embed a post he already
+  publicly liked that smells of the question (2026-09-15; `quote` cap). Toward
   accounts that never interacted with him and that his memory does not
   favour, browsing yields only leave or nothing: outward actions go to
   people who came to him (this is also what keeps him from looking like
@@ -222,6 +226,10 @@ published with the frozen artifacts.
 - **frozen-MB** (plasticity off) and **random policy** — offline replays of
   Bosco's stimulus stream. Reported as action-agreement rates in the
   monthly note. Descriptive only.
+- Since walks (2026-09-15) his stream depends on his policy: the posts a
+  walk brought are in the log and replay as ordinary stimuli, but a control
+  that would not have walked there is off-policy from that point. Stated,
+  not corrected.
 
 ## 5. Integrity checks (binding)
 

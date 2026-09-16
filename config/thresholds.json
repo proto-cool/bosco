@@ -16,10 +16,12 @@
    "like": "snapshots/dev-2026-09-14/ledger.sqlite",
    "leave": "snapshots/dev-2026-09-14/ledger.sqlite",
    "reply": "snapshots/dev-2026-09-14/ledger.sqlite",
-   "groom": "synthetic-dev (n=240+40 landings)"
+   "groom": "synthetic-dev (n=240+40 landings)",
+   "walk": "snapshots/dev-2026-09-14/ledger.sqlite"
   },
   "kept": [
    "groom"
   ]
- }
+ },
+ "walk": 2.9
 }

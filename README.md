@@ -490,7 +490,13 @@ Every number below has a gate report under `docs/`.
    day, so "today" is familiar and last week is not), and the mean
    depression over the KCs a smell lights is his familiarity with it
    (`MushroomBody.familiarity`, logged as `_familiar` on the row). It
-   carries no valence and learned valence does not read it. The trace is
+   carries no valence and learned valence does not read it. It is read on
+   the cells the smell *added*: the KCs busy in the idle second before the
+   window (the clock's, kept as state) are left out, and a smell probed
+   alone is probed from rest, as the account signature is (decision 39);
+   otherwise the cells the clock keeps busy are met every second and
+   everything reads familiar within the hour, which is what the first
+   end-to-end run showed. The trace is
    kept per Kenyon cell and applied on that cell's edges into α'3 rather
    than per synapse, because in this model an account odor is carried
    almost entirely by γ KCs (about 110 cells fire, one or two of them
@@ -509,7 +515,10 @@ Every number below has a gate report under `docs/`.
    vocabulary word's hash does (`Encoder.hashed`, `config/words_v1.yaml`
    `perception`), so the same word is always the same smell and a
    vocabulary word and its hash are one smell. Up to four per post after
-   the vocabulary words. He can learn to like it, meet it again, and (WP4)
+   the vocabulary words. A plural of his word is his word ("cats" is the
+   smell of cat, `Encoder.fold`: a trailing s or es only, only when the
+   singular is his; a rule you can read, not a stemmer), because the first
+   end-to-end run asked him about cats and he smelled a hash. He can learn to like it, meet it again, and (WP4)
    associate it with a person; he can never say it: the generator's words
    are the corpus and the phrasebook, and a hashed token is in no sentence
    of his, so retrieval and the walk weigh it at nothing
@@ -598,6 +607,36 @@ Every number below has a gate report under `docs/`.
    any cats today" is the smell of cat on his antennae, and the answer is
    whether that smell is one he has met lately. Nick writes the yes and
    the no (`docs/CORPUS-PLAN.md` v4).
+
+49. **Chemotaxis: a walk toward the source** (decided 2026-09-15). A fly
+   that smells something it likes walks toward it. Browsing, the walking
+   population now has a lower rung under its own threshold
+   (`thresholds_policy.yaml` `walk`: the 60th percentile of the engage rate
+   over real event windows, 2.9 Hz from the dev ledger of 2026-09-14;
+   engage's own is 5.05): between the two he walks, which on the network
+   is reading a few more of that account's own posts (`Bsky.walk`, three,
+   from the place `walk`, each an ordinary stimulus with `walk:<action>`
+   on its row); over engage's threshold he follows as before, and engage
+   toward someone he already follows is a walk instead of nothing. A
+   novel smell alerts (decision 44), so the same rate walks sooner when
+   the smell is new. Addressed, never: walking toward whoever spoke to him
+   is still a reply. A walk is not outward; `caps_v1.yaml` `walk` (6/h,
+   40/d) is a loop guard, and a walk counts as an approach for the feed he
+   walked from, so his browsing follows his own feet. The controls replay
+   the walked posts as ordinary stimuli and are off-policy after the first
+   walk they would not have taken (EXPERIMENT.md §4).
+50. **"This one": a liked post in an answer to a question** (decided
+   2026-09-15). Asked something, he may point at the post he liked lately
+   that smells most of the question: the words of the question and its
+   topics are matched against the words, topics and embed tokens on the
+   rows of posts he really liked in the last day (`Ledger.best_liked_match`,
+   recency breaking ties), and the best is embedded as a quote in the
+   reply or the etiquette answer, with its current cid from the public
+   view. Only posts he already publicly liked, never from an account he
+   ignores, one per answer, under `caps_v1.yaml` `quote` (4/h, 20/d); the
+   action row's `embed_uri` keeps what he pointed at, and a `quote` row
+   marks the choice. It is the difference between "yes" and "this one",
+   built from data he already keeps.
 
 Visual input since 2026-09-15: a retina (decision 47), not the optic lobes.
 

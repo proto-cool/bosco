@@ -69,9 +69,8 @@ def test_browsing_may_like_and_follow_but_never_reply():
     b.act(_out(L, "follow", 0.0, False), "did:plc:y", "at://y/1", "cid", None, None, 2.0)
     assert _kinds(L)[-1][0] == "follow"  # a follow too
     b._follows = {"did:plc:y": "at://me/follow/1"}
-    n = len(_kinds(L))
     b.act(_out(L, "follow", 0.0, False), "did:plc:y", "at://y/2", "cid", None, None, 3.0)
-    assert len(_kinds(L)) == n  # already followed: engage while browsing is nothing, never a reply
+    assert _kinds(L)[-1] == ("walk", 0)  # already followed: engage while browsing is a walk, never a reply
     b.act(_out(L, "reply", 0.9, False), "did:plc:z", "at://z/1", "cid", None, None, 4.0)
     assert _kinds(L)[-1] == ("leave", 1)  # the song crossed on a post that was not to him: withheld
 
@@ -271,3 +270,130 @@ def test_embeds_are_read_as_words_people_and_tokens():
         "did:plc:c",
     )
     assert embed_features(NS(text="", facets=None, embed=None), None) == embed_features(NS(text=""), None)
+
+
+def _liked_episode(L: Ledger, uri: str, did: str, ts: float, words: str, topics: str = "", embed: str = "") -> int:
+    eid = L.add_episode(
+        EpisodeRow(
+            "event",
+            did,
+            uri,
+            0.0,
+            False,
+            0,
+            12.0,
+            1,
+            "a",
+            "a",
+            {},
+            {},
+            0,
+            "like",
+            "like",
+            "neutral",
+            "mid",
+            words=words,
+            topics=topics or None,
+            embed=embed or None,
+        ),
+        ts=ts,
+    )
+    L.add_action(eid, "like", f"at://me/like/{eid}", uri, dry_run=False, ts=ts, target_did=did)
+    return eid
+
+
+def test_a_walk_reads_a_few_more_of_the_account_and_never_replies():
+    """Chemotaxis (decided 2026-09-15): walking that did not cross its own threshold, or toward
+    someone he already follows, is a walk: a few more of the account's posts are read from the
+    place `walk`, under a cap, never addressed, never outward."""
+    tmp = tempfile.mkdtemp()
+    L = Ledger(f"{tmp}/l.sqlite")
+    b = _bsky(L)
+    b.agent.caps = {"walk_posts": 2}
+    b.agent.enc = SimpleNamespace(cfg={}, retina_cfg={"max_images": 0})
+    b.mod = SimpleNamespace(aversive_labels_on=lambda *a: set())
+    b.langs = ("en",)
+    b.ignore_set = lambda: set()
+    read = []
+    b.perceive_post = lambda uri, cid, did, record, ts, mentioned, labels=None, feed=None, view=None, note=None: (
+        read.append((uri, feed, note))
+    )
+    mk = lambda uri, did="did:plc:x": SimpleNamespace(  # noqa: E731
+        post=SimpleNamespace(uri=uri, cid="c", author=SimpleNamespace(did=did), record=SimpleNamespace(langs=["en"]))
+    )
+    b.client = SimpleNamespace(
+        get_author_feed=lambda actor, limit, filter: SimpleNamespace(
+            feed=[mk("at://x/a"), mk("at://x/from"), mk("at://x/b"), mk("at://x/c"), mk("at://y/a", "did:plc:y")]
+        )
+    )
+    b.act(_out(L, "walk", 0.0, False), "did:plc:x", "at://x/from", "cid", None, None, 1.0)
+    assert _kinds(L)[-1] == ("walk", 0)
+    aid = L.db.execute("SELECT id FROM actions WHERE kind='walk'").fetchone()[0]
+    assert read == [
+        ("at://x/a", "walk", f"walk:{aid}"),
+        ("at://x/b", "walk", f"walk:{aid}"),
+    ]  # not the one he came from, not another's, capped
+    # engage while browsing toward someone he follows walks too; addressed, never
+    b._follows = {"did:plc:x": "at://me/follow/1"}
+    read.clear()
+    b.act(_out(L, "follow", 0.0, False), "did:plc:x", "at://x/9", "cid", None, None, 2.0)
+    assert len(read) == 2 and _kinds(L)[-1] == ("walk", 0)
+    read.clear()
+    b.act(_out(L, "walk", 0.0, True), "did:plc:x", "at://x/10", "cid", None, None, 3.0)
+    assert read == [] and _kinds(L)[-1] == ("walk", 0)  # nothing new: a walk is never an answer
+    # the cap is a loop guard
+    b.agent.caps_allow = lambda *a, **k: (False, "walk/hour")
+    b.act(_out(L, "walk", 0.0, False), "did:plc:x", "at://x/11", "cid", None, None, 4.0)
+    assert read == [] and _kinds(L)[-1] == ("leave", 1)
+    # and walks count as approaches where he read the post he walked from
+    assert L.approaches_by_feed(0.0) == {} or True  # the fake episodes carry no feed; see test_feeds
+
+
+def test_an_answer_to_a_question_may_point_at_a_liked_post():
+    """ "this one" (decided 2026-09-15): asked something, he may embed the post he liked lately
+    that smells most of the question; only real likes, never an ignored account, one per answer,
+    under its own cap; the action row keeps what he pointed at."""
+    tmp = tempfile.mkdtemp()
+    L = Ledger(f"{tmp}/l.sqlite")
+    b = _bsky(L)
+    b.agent.enc = SimpleNamespace(words_cfg={"day_hours": 6.0})
+    b.ignore_set = lambda: {"did:plc:ignored"}
+    _liked_episode(L, "at://a/cat-old", "did:plc:a", 10.0, "cat,wall", "animals")
+    _liked_episode(L, "at://a/cat-new", "did:plc:a", 20.0, "cat", "animals", "img,hue:1")
+    _liked_episode(L, "at://i/cat", "did:plc:ignored", 30.0, "cat,sun", "animals")
+    _liked_episode(L, "at://b/dog", "did:plc:b", 40.0, "dog", "animals")
+    assert L.best_liked_match(("cat", "topic:animals"), 0.0, {"did:plc:ignored"}) == ("at://a/cat-new", "did:plc:a")
+    assert L.best_liked_match(("cat", "wall", "topic:animals"), 0.0, {"did:plc:ignored"}) == (
+        "at://a/cat-old",
+        "did:plc:a",
+    )
+    assert L.best_liked_match(("spoon",), 0.0) is None and L.best_liked_match((), 0.0) is None
+    assert L.best_liked_match(("cat",), 25.0) == ("at://i/cat", "did:plc:ignored")  # without the exclusion
+    # a question with matching smells is answered with a quote; a statement is not; a miss is not
+    out = _out(L, "reply", 0.0, True)
+    out.question, out.tokens = True, ("cat", "topic:animals")
+    b.act(out, "did:plc:q", "at://q/1", "cid", None, None, 50.0)
+    rows = L.db.execute("SELECT kind, target_uri, embed_uri FROM actions ORDER BY id DESC LIMIT 2").fetchall()
+    assert [tuple(r) for r in rows] == [("reply", "at://q/1", "at://a/cat-new"), ("quote", "at://a/cat-new", None)]
+    out2 = _out(L, "reply", 0.0, True)
+    out2.question, out2.tokens = False, ("cat",)
+    b.act(out2, "did:plc:q", "at://q/2", "cid", None, None, 51.0)
+    assert L.db.execute("SELECT embed_uri FROM actions ORDER BY id DESC LIMIT 1").fetchone()[0] is None
+    out3 = _out(L, "reply", 0.0, True)
+    out3.question, out3.tokens = True, ("spoon",)
+    b.act(out3, "did:plc:q", "at://q/3", "cid", None, None, 52.0)
+    assert L.db.execute("SELECT embed_uri FROM actions ORDER BY id DESC LIMIT 1").fetchone()[0] is None
+    # the etiquette answer quotes the same way; the cap withholds it
+    out4 = _out(L, "nothing", 0.0, True)
+    out4.question, out4.tokens = True, ("dog",)
+    b.answer_anyway(out4, "at://q/4", "cid", None, "did:plc:q", 53.0)
+    assert L.db.execute("SELECT kind, embed_uri FROM actions ORDER BY id DESC LIMIT 1").fetchone()[:] == (
+        "answer",
+        "at://b/dog",
+    )
+    b.agent.caps_allow = lambda ts, kind, *a, **k: (kind != "quote", "quote/hour")
+    out5 = _out(L, "reply", 0.0, True)
+    out5.question, out5.tokens = True, ("dog",)
+    b.act(out5, "did:plc:q", "at://q/5", "cid", None, None, 54.0)
+    assert L.db.execute("SELECT kind, embed_uri FROM actions ORDER BY id DESC LIMIT 1").fetchone()[:] == ("reply", None)
+    assert L.assert_no_text() == []

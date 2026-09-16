@@ -19,6 +19,9 @@ def test_words_are_his_vocabulary_and_deterministic_odors(fly):
     assert enc.words_for(text, hashed=False) == ("banana", "table", "soft")  # his words only, once each, in order
     w = enc.words_for(text)
     assert w[:3] == ("banana", "table", "soft") and w[3:] == (enc.hashed("xylophone"), enc.hashed("quantum"))
+    assert enc.words_for("cats and cats", hashed=False) == ("cat",)  # a plural folds to his word
+    assert enc.words_for("catses", hashed=False) == ()  # only a trailing s or es on a word of his
+    assert enc.fold("cats") == "cat" and enc.fold("glass") == "glass" and enc.fold("zzzs") == "zzzs"
     a, b = enc.word_drive("banana"), enc.word_drive("banana")
     assert a.rate_hz == b.rate_hz and np.array_equal(a.idx, b.idx)
     assert not np.array_equal(enc.word_drive("table").idx, a.idx)

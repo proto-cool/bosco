@@ -148,7 +148,7 @@ class Encoder:
         other: list[str] = []
         seen: set[str] = set()
         for t in tokenize(text):
-            w = t.lower().replace("'", "")
+            w = self.fold(t.lower().replace("'", ""))
             if w in seen:
                 continue
             if w in self.vocab:
@@ -160,6 +160,18 @@ class Encoder:
                 if len(other) < max_hashed:
                     other.append(self.hashed(w))
         return tuple(out) + tuple(other)
+
+    def fold(self, w: str) -> str:
+        """A plural of his word is his word: "cats" is the smell of cat, "pictures" of picture.
+        Only the trailing s or es, only when the singular is his; nothing else is folded.  Not a
+        stemmer: a rule you can read (config/words_v1.yaml)."""
+        if w in self.vocab or not (self.words_cfg.get("perception") or {}).get("fold_plurals", True):
+            return w
+        if w.endswith("es") and w[:-2] in self.vocab:
+            return w[:-2]
+        if w.endswith("s") and w[:-1] in self.vocab:
+            return w[:-1]
+        return w
 
     def word_glomeruli(self, word: str) -> tuple[list[np.ndarray], float]:
         """A word's glomeruli (the olfactory neurons of each) and its rate.  A word that names a
