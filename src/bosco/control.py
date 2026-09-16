@@ -7,9 +7,12 @@
     @bosco forget @handle              (manual state edit; logged and announced)
     @bosco introduce                   (post a fresh introduction; otherwise it happens once, ever)
 
-Free text around the keyword is fine: "hey @bosco start learning your corpus
-again" reloads.  Output is posted as a reply to the command and logged as a
-control row; it is operator tooling, not a phrasebook utterance.
+The command opens the post, right after the mention: "@bosco status",
+"@bosco sleep", "@bosco memory @alice".  Anything else the operator says to
+him ("hi @bosco. how are you today?") is a post like anyone's and reaches
+his senses (decided 2026-09-16: the operator talks to him often).  Output is
+posted as a reply to the command and logged as a control row; it is
+operator tooling, not a phrasebook utterance.
 """
 
 from __future__ import annotations
@@ -23,7 +26,7 @@ COMMANDS = {
     "delete": r"\bdelete\b|\bremove that\b",
     "reload": r"\breload\b|\brelearn\b|\blearn(ing)? your corpus\b|\bre-?read\b",
     "restart": r"\brestart\b|\breboot\b",
-    "status": r"\bstatus\b|\bhow are you\b|\breport\b",
+    "status": r"\bstatus\b|\breport\b",
     "people": r"\bpeople\b|\bwho do you like\b",
     "memory": r"\bmemory\b|\bwhat do you (know|think) about\b",
     "ignore": r"\bignore\b|\bblocklist\b",
@@ -47,6 +50,7 @@ ORDER = [
     "status",
 ]
 HANDLE_RE = re.compile(r"@([a-z0-9][a-z0-9.-]*\.[a-z]{2,})", re.I)
+LEADING_MENTIONS_RE = re.compile(r"^(?:\s*@[\w.\-]+[\s,:;!.]*)+")
 
 
 @dataclass(frozen=True)
@@ -57,14 +61,15 @@ class Command:
 
 
 def parse(text: str, bot_handle: str) -> Command | None:
-    """Return the command in text, or None.  Requires the bot's handle to be mentioned or the
-    text to be a bare command (reply to a Bosco post)."""
+    """Return the command in text, or None.  The command word must open the text once the
+    leading mentions are stripped ("@bosco status", "wake up @bosco", a bare "delete" in a reply
+    to a Bosco post); a keyword later in a sentence is conversation, not a command."""
     t = text.strip()
-    low = t.lower()
+    head = LEADING_MENTIONS_RE.sub("", t).lower().lstrip()
     handles = [h.lower() for h in HANDLE_RE.findall(t)]
     target = next((h for h in handles if h != bot_handle.lower()), None)
     for kind in ORDER:
-        if re.search(COMMANDS[kind], low):
+        if re.match(COMMANDS[kind], head):
             if kind in ("memory", "ignore", "unignore", "unfollow", "forget") and target is None:
                 return None
             return Command(kind, target, t)

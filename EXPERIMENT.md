@@ -131,8 +131,10 @@ weights, the ledger, or the stimulus log, and every use is itself a ledger
 row published with the nightly dump.
 
 Commands are mentions or replies from `@proto.cool` (DID verified against
-the PDS, not the handle); free text around the keyword is fine
-(`src/bosco/control.py`). The result is posted as a reply and logged.
+the PDS, not the handle); the command word opens the post, right after the
+mention (`src/bosco/control.py`). Anything else the operator says to him is
+a post like anyone's and reaches his senses. The result of a command is
+posted as a reply and logged.
 
 - **sleep / wake.** Pauses and resumes all actions. Asleep, the poller still
   runs and logs stimuli; the fly keeps perceiving.
