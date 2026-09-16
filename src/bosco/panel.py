@@ -372,7 +372,7 @@ class Panel:
             for r in db.execute(
                 "SELECT ts, kind, target_uri FROM control WHERE ts>=? AND ts<? AND kind IN "
                 "('downtime','slow','sleep','wake','forget','ignored','deleted_in_app','unliked_in_app',"
-                "'unfollowed_in_app') "
+                "'unfollowed_in_app','plasticity') "
                 "ORDER BY id",
                 (t0, t1),
             )
@@ -391,7 +391,7 @@ class Panel:
         appr_f = dict(
             db.execute(
                 "SELECT feed, COUNT(*) FROM episodes WHERE ts>=? AND ts<? AND kind='event' AND mentioned=0 "
-                "AND feed IS NOT NULL AND action IN ('like','follow','reply') GROUP BY feed",
+                "AND feed IS NOT NULL AND action IN ('like','follow','reply','walk') GROUP BY feed",
                 (t0, t1),
             ).fetchall()
         )

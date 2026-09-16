@@ -202,6 +202,11 @@ async function show(date) {
       const at = clockTime(x.ts, tz);
       return m ? `${Math.round(m[1] / 60)} min behind the clock at ${at}` : `behind the clock at ${at}`;
     }
+    if (x.kind === 'plasticity') {
+      // the learning rule changed here (README, Agent.PLASTICITY_VERSION): spans before this
+      // replay under the old rule, spans after under the new; a boundary, not a break
+      return `learning rule ${(x.target || '').replace('->', ' → ')} from ${clockTime(x.ts, tz)}`;
+    }
     return `${x.kind.replaceAll('_', ' ')} at ${clockTime(x.ts, tz)}`;
   });
   $('fine').textContent = [
