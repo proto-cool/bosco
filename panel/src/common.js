@@ -174,8 +174,10 @@ export function markNav() {
 }
 // the ladder on the left of a sheet lifts as its row passes the top (same rule as the rail)
 export function trackCurrent(rows, onCurrent) {
+  let atEnd = false; // at the end of the document the last row is current, whatever the band says
   const io = new IntersectionObserver(
     (entries) => {
+      if (atEnd) return;
       for (const e of entries) {
         e.target.classList.toggle('is-current', e.isIntersecting);
         if (e.isIntersecting && onCurrent) onCurrent(e.target);
@@ -184,6 +186,24 @@ export function trackCurrent(rows, onCurrent) {
     { rootMargin: '-10% 0px -70% 0px' },
   );
   rows.forEach((r) => io.observe(r));
+  // the last row can never reach the band once the page has no more to scroll: at the end of
+  // the document it is the current one; scrolling back up hands the rows to the observer again
+  const last = rows[rows.length - 1];
+  const onScroll = () => {
+    const end = innerHeight + scrollY >= document.documentElement.scrollHeight - 2;
+    if (end === atEnd) return;
+    atEnd = end;
+    if (end) {
+      rows.forEach((r) => r.classList.toggle('is-current', r === last));
+      if (last && onCurrent) onCurrent(last);
+    } else {
+      rows.forEach((r) => {
+        io.unobserve(r);
+        io.observe(r);
+      });
+    }
+  };
+  if (last) addEventListener('scroll', onScroll, { passive: true });
   return io;
 }
 // the top line's handle and the "in development" word, from status.json when a page has it

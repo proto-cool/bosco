@@ -1,6 +1,6 @@
 // Soma-position renderer.  Every neuron is a point at its soma in the volume; the cloud is
 // rotated in three dimensions (a slow orbit, or a resting angle, or wherever it was dragged),
-// projected orthographically, and painted: a dim depth-shaded base layer of all neurons, cached
+// projected with a mild perspective, and painted: a dim depth-shaded base layer of all neurons, cached
 // on an offscreen canvas until the angle or the size changes, then the cells with residual
 // intensity on top, additively, every frame.  Nothing here is a graph: no edges, no layout.
 
@@ -51,14 +51,17 @@ export const GROUPS = [
   { key: 'rest', name: 'the rest', test: () => true },
 ];
 
-// resting angles: [yaw about the vertical axis, pitch about the horizontal]
+// resting angles: [yaw about the vertical axis, pitch about the horizontal].  The atlas frame is
+// MaleCNS voxel space: +x his left, +y ventral, +z posterior (a right-handed frame, so no view
+// is a mirror image).
 export const VIEWS = [
-  [0, 0], // front: anterior toward the viewer
-  [0, Math.PI / 2], // top: dorsal toward the viewer
-  [Math.PI / 2, 0], // side
+  [0, 0], // front: anterior toward the viewer, dorsal up, his left on the viewer's right
+  [Math.PI, Math.PI / 2], // top: dorsal toward the viewer, anterior up
+  [Math.PI / 2, 0], // side: his left side toward the viewer, anterior to the left
 ];
 
 const TWO_PI = 6.2832;
+const PERSPECTIVE = 0.4; // near face (z2 = -0.5) 1.25x, far face 0.83x: enough to see which way he faces
 
 export class BrainView {
   constructor(canvas, atlas, colors) {
@@ -111,7 +114,7 @@ export class BrainView {
     });
     c.addEventListener('pointermove', (e) => {
       if (!last) return;
-      this.yaw += (e.clientX - last[0]) * 0.008;
+      this.yaw -= (e.clientX - last[0]) * 0.008; // the near face follows the pointer, as it does vertically
       this.pitch = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, this.pitch + (e.clientY - last[1]) * 0.008));
       last = [e.clientX, e.clientY];
     });
@@ -154,8 +157,11 @@ export class BrainView {
       const z1 = -x * sy + z * cy;
       const y2 = y * cp - z1 * sp;
       const z2 = y * sp + z1 * cp;
-      this.px[i] = ox + x1 * s;
-      this.py[i] = oy + y2 * s;
+      // a mild perspective: the near half is drawn larger, so front and back are not the same
+      // picture and the turn reads one way (orthographic, a symmetric cloud flips in the eye)
+      const k = s / (1 + PERSPECTIVE * z2);
+      this.px[i] = ox + x1 * k;
+      this.py[i] = oy + y2 * k;
       this.depth[i] = 0.5 - z2; // anterior (negative z) is near in the front view
     }
   }
