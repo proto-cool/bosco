@@ -1,3 +1,4 @@
+import re
 import tempfile
 from pathlib import Path
 
@@ -109,3 +110,35 @@ def test_pick_sentence_by_smell_then_stitch(tmp_path):
     assert one == s
     more = [g.generate("reply", "neutral", "mid", k, max_sentences=3, opening=s) for k in range(20)]
     assert all(t.startswith(s) for t in more) and any(len(t) > len(s) for t in more)
+
+
+def test_every_sentence_ends_with_a_period_even_from_a_line_end(tmp_path):
+    """A corpus line ends without a period; when the walk reaches that end it still closes the
+    sentence, so two of his sentences never run together."""
+    (tmp_path / "a.txt").write_text("the wall is warm\ni sit on the wall\nbanana is here\n")
+    g = Generator(tmp_path)
+    for s in range(20):
+        t = g.generate("reply", "neutral", "mid", s, max_sentences=3) or ""
+        for sent in re.split(r"(?<=[.!?])\s+", t):
+            assert sent.rstrip(".") in ("the wall is warm", "i sit on the wall", "banana is here"), t
+
+
+def test_seen_register_is_most_of_the_answer():
+    """Asked whether he has met a smell, his yes (190-seen-met) outweighs the rest of the reply
+    pool (textgen.SEEN_WEIGHT): over a hundred seeds, in the state a question produces, more
+    answers than not contain a sentence from that file."""
+    from bosco.phrasebook import Phrasebook
+
+    g = Generator(phrasebook_lines=[ln.text for ln in Phrasebook().lines])
+    met = next(d for d in g.docs if d.name == "190-seen-met.txt")
+    mine = {detokenize(s).rstrip(".") for s in met.sentences}
+    state = {"time": "day", "appetite": "", "mood": "", "seen": "met"}
+    hits = 0
+    for seed in range(100):
+        t = g.generate("reply", "neutral", "mid", seed, familiarity="known", state=state) or ""
+        hits += any(x.strip().rstrip(".") in mine for x in re.split(r"(?<=[.!?])", t))
+    assert hits > 50, hits
+    # and not when he was not asked: without a seen key the file counts as any tagged one
+    m_asked = g.model_for("reply", "neutral", "mid", (), "known", state)
+    m_plain = g.model_for("reply", "neutral", "mid", (), "known", {"time": "day", "appetite": "", "mood": ""})
+    assert m_asked.c1["came"] > 3 * m_plain.c1["came"]

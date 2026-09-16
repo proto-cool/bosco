@@ -144,21 +144,27 @@ class Encoder:
         max_hashed = int(pc.get("max_hashed", 0)) if (hashed is None or hashed) else 0
         stop = set(self.words_cfg["stopwords"])
         min_len = int(self.words_cfg["min_len"])
+        # shorthand he understands but never says: "gn" is heard as his words good and night
+        shorthand = {
+            str(k): [str(x) for x in (v if isinstance(v, list) else [v])]
+            for k, v in (pc.get("shorthand") or {}).items()
+        }
         out: list[str] = []
         other: list[str] = []
         seen: set[str] = set()
         for t in tokenize(text):
-            w = self.fold(t.lower().replace("'", ""))
-            if w in seen:
-                continue
-            if w in self.vocab:
-                seen.add(w)
-                if len(out) < int(self.words_cfg["max_words"]):
-                    out.append(w)
-            elif max_hashed and w.isalpha() and len(w) >= min_len and w not in stop:
-                seen.add(w)
-                if len(other) < max_hashed:
-                    other.append(self.hashed(w))
+            raw = t.lower().replace("'", "")
+            for w in shorthand.get(raw) or (self.fold(raw),):
+                if w in seen:
+                    continue
+                if w in self.vocab:
+                    seen.add(w)
+                    if len(out) < int(self.words_cfg["max_words"]):
+                        out.append(w)
+                elif max_hashed and w.isalpha() and len(w) >= min_len and w not in stop:
+                    seen.add(w)
+                    if len(other) < max_hashed:
+                        other.append(self.hashed(w))
         return tuple(out) + tuple(other)
 
     def fold(self, w: str) -> str:

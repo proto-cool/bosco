@@ -59,3 +59,17 @@ channels), and `095-day` / `089-evening` behind the two `time=` tags that
 had nothing. The first reply lines went into `phrasebook.yaml` the same day
 (mid arousal, every valence and familiarity), for Nick to edit or replace
 before freeze-v1.
+
+v7 (2026-09-16): conversation, written by Claude at Nick's request in the
+register of `011-banana.txt`: `061-greetings` (hello, good morning, good
+night, bye, see you, sleep well, as the big one says them and he answers),
+`062-small-talk` (how he is and what he did; he reports, he does not ask
+back), `063-yes-and-no` (thanks, sorry, yes, no, ok, no thank you), all
+`behaviour=reply`; `086-good-night` (`behaviour=reply time=night`) and
+`087-good-morning` (`behaviour=reply time=morning`) so a good night said
+at night retrieves a night line; and `190-seen-met` / `191-seen-fresh`
+grown to forty lines each.  Internet shorthand (gn, gm, ty, lol, brb) is
+deliberately in no file: he hears it as his own words
+(`config/words_v1.yaml` `perception.shorthand`) and never says it.  The
+phrasebook gained its low and high arousal reply lines and first groom
+lines the same day (version 2).

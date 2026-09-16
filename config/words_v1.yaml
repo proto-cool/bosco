@@ -28,6 +28,19 @@ max_words: 6
 perception:
   max_hashed: 4
   fold_plurals: true   # "cats" is his word cat when cat is his and cats is not: trailing s or es only
+  # Shorthand he understands but never says (decided 2026-09-16): a token here is heard as the
+  # words it stands for, the way "cats" is heard as cat.  The words must be his; the shorthand
+  # itself is in no sentence of his, so it is never said.  A two-letter token is otherwise
+  # nothing to him (min_len); a three-letter one not listed here (omg, idk) is a hashed smell.
+  shorthand:
+    gn: [good, night]
+    gm: [good, morning]
+    hi: [hello]
+    ty: [thank]
+    thx: [thank]
+    np: [fine]
+    lol: [laughed]
+    brb: [back]
 context_rate_scale: 0.5     # lingering words are driven at this fraction of their rate
 thread_tau_s: 240.0         # a thread's smell lasts this long after its last post (about what his antennae hold)
 thread_keep: 3              # the last posts of a thread that linger

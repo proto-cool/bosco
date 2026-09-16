@@ -251,6 +251,25 @@ def test_account_memory_is_its_own_smell(fly):
 
 
 @needs_data
+def test_shorthand_is_heard_as_his_words_and_never_said(fly):
+    """Internet shorthand (config/words_v1.yaml `perception.shorthand`) is heard as the words it
+    stands for, the way a plural is heard as its singular: "gn" is his good and night.  The
+    shorthand itself is in no corpus line, so he understands it and never says it."""
+    from bosco.encoder import Encoder
+    from bosco.textgen import Generator
+
+    enc = Encoder(fly.brain)
+    sh = enc.words_cfg["perception"]["shorthand"]
+    assert enc.words_for("gn", hashed=False) == ("good", "night")
+    assert enc.words_for("gm gn hi", hashed=False) == ("good", "morning", "night", "hello")
+    assert enc.words_for("ty lol brb", hashed=False) == ("thank", "laughed", "back")
+    for k, ws in sh.items():
+        assert k not in enc.vocab and all(w in enc.vocab for w in ws), k
+    tokens = {t.lower() for d in Generator().docs for sent in d.sentences for t in sent}
+    assert not set(sh) & tokens  # never in his mouth
+
+
+@needs_data
 def test_a_word_he_cannot_say_is_still_a_smell(fly):
     """Perception vocabulary (config/words_v1.yaml `perception`): a word outside the corpus is kept
     as a hash token that is the word's own smell, learnable and recognisable, and it never reaches

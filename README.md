@@ -518,7 +518,11 @@ Every number below has a gate report under `docs/`.
    the vocabulary words. A plural of his word is his word ("cats" is the
    smell of cat, `Encoder.fold`: a trailing s or es only, only when the
    singular is his; a rule you can read, not a stemmer), because the first
-   end-to-end run asked him about cats and he smelled a hash. He can learn to like it, meet it again, and (WP4)
+   end-to-end run asked him about cats and he smelled a hash. Internet
+   shorthand is heard the same way (`perception.shorthand`, 2026-09-16):
+   "gn" is his good and night, "ty" his thank, "lol" his laughed; the
+   table is short and published, the shorthand is in no line of his, so he
+   understands it and never says it. He can learn to like it, meet it again, and (WP4)
    associate it with a person; he can never say it: the generator's words
    are the corpus and the phrasebook, and a hashed token is in no sentence
    of his, so retrieval and the walk weigh it at nothing
@@ -603,7 +607,9 @@ Every number below has a gate report under `docs/`.
    familiarity of the cells that fire is read (`Agent.familiarity_of`); if
    the least familiar is above `seen_cut` (0.3, `words_v1.yaml`) the state
    tag is `seen=met`, else `seen=fresh`, and corpus files carrying that tag
-   join the pool (`bosco say --seen met`). Nothing is parsed: "did you see
+   join the pool at twenty times a plain file's weight (`textgen.SEEN_WEIGHT`,
+   about half the pool, so his yes or his no is most of the answer; a
+   mention that asks nothing sets no tag) (`bosco say --seen met`). Nothing is parsed: "did you see
    any cats today" is the smell of cat on his antennae, and the answer is
    whether that smell is one he has met lately. Nick writes the yes and
    the no (`docs/CORPUS-PLAN.md` v4).

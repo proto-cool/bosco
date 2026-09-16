@@ -780,7 +780,7 @@ class Agent:
                     # what he remembers about this account is faintly in the air, and its subjects
                     # join the pool; asked something, whether he has met it lately is his yes or no
                     air, topics = self.answer_air(did, air, topics, self.sim_hours())
-                    if f.mentioned:
+                    if f.question:  # asked something: his yes or his no weighs most (textgen SEEN_WEIGHT)
                         state["seen"] = self.seen_register(tuple(x for x in air if x in f.words)[:3])
                 wv = self.word_valence_in_context(did, tuple(air)) if f is not None else {}
                 # first, a whole sentence of his that smells like the moment; then the walk, if he

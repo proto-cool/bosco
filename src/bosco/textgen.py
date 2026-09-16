@@ -27,6 +27,7 @@ MAX_CHARS = 280
 MAX_SENT_TOKENS = 22
 EOS_BIAS = 2.5  # weight on ending a sentence where a corpus sentence ended, against splicing on
 MIN_SENT_TOKENS = 1  # a one-word sentence is his register ("banana", "rude", "warm")
+SEEN_WEIGHT = 20  # asked about a smell, his yes or his no (seen=met|fresh) is about half the pool: most of the answer
 # a sentence may not end on one of these (function words, dangling pronouns)
 NO_END = {
     "the",
@@ -293,6 +294,8 @@ class Generator:
                     base = 3  # matching tagged docs count triple
                     if "topic" in d.tags:
                         base = 5  # a document about what was just smelled counts most
+                    if "seen" in d.tags and "seen" in want:
+                        base = SEEN_WEIGHT  # he was asked about a smell: his yes or his no outweighs the rest
                 weight = max(0, int(round(base * self.doc_weight.get(d.name, 1.0))))
                 pool.extend(d.sentences * weight)
         m = NGram(pool)
@@ -456,8 +459,8 @@ class Generator:
                     w = c
                     break
             if w == EOS or sent_len >= MAX_SENT_TOKENS:
-                if w != EOS and out and out[-1] not in END_PUNCT:
-                    out.append(".")
+                if out and out[-1] not in END_PUNCT:
+                    out.append(".")  # a corpus line ends without a period; his sentences still do
                 n_done += 1
                 sent_len = 0
                 if n_done >= n_sent or len(detokenize(out)) > MAX_CHARS * 0.7:
