@@ -652,7 +652,35 @@ class Bsky:
                 view = got[0] if got else None
             except Exception as e:  # noqa: BLE001
                 print("post view failed:", e, file=sys.stderr)
-        return embed_features(record, view, author=did, me=self.me, max_others=int(em.get("max_others", 3)))
+        got = embed_features(record, view, author=did, me=self.me, max_others=int(em.get("max_others", 3)))
+        return self.see(got)
+
+    SEEN_CACHE = 256
+
+    def see(self, em: Embedded) -> Embedded:
+        """The retina looks at the thumbnails (config/retina_v1.yaml): each becomes a few channel
+        names, added to the tokens; a video is also motion.  Thumbnails are fetched once, reduced
+        and dropped; the same URL again is remembered by its channels, not refetched."""
+        from bosco.retina import look
+
+        if not em.thumbs and "video" not in em.tokens:
+            return em
+        cache = getattr(self, "_seen", None)
+        if cache is None:
+            cache = self._seen = {}
+        tokens = list(em.tokens)
+        if "video" in tokens and "motion" not in tokens:
+            tokens.append("motion")
+        cfg = self.agent.enc.retina_cfg
+        for u in em.thumbs[: int(cfg.get("max_images", 2))]:
+            if u not in cache:
+                if len(cache) >= self.SEEN_CACHE:
+                    cache.clear()
+                cache[u] = look((u,), cfg)
+            for t in cache[u]:
+                if t not in tokens:
+                    tokens.append(t)
+        return Embedded(em.text, em.others, tuple(tokens), em.thumbs)
 
     def thread_words(self, uri: str, record) -> tuple[str, ...]:
         """He reads the whole thread: the words of his vocabulary in the posts above this one,

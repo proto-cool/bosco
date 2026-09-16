@@ -99,6 +99,20 @@ genuinely the one acting, and that anyone can check.
   people who came to him (this is also what keeps him from looking like
   spam).
 
+## 2c. Senses (binding)
+
+Every function between the network and his senses is fixed, public, and has
+no trained weights; every judgment about what a sensation means is formed
+inside the fly. The senses, all published under `config/`: an account's
+odor (`encoder_v1.yaml`), taste from VADER, touch from being addressed,
+words as smells including hashed ones (`words_v1.yaml`), innate smells
+(`innate_v1.yaml`), topics (`topics_v1.yaml`), places (`feeds_v1.yaml`,
+and a link's site), other people in a post, and the retina
+(`retina_v1.yaml`): a thumbnail reduced to a few channel names by a fixed
+transform, driving the visual Kenyon cells. No classifier, no embedding, no
+image stored; what a picture means is whatever the mushroom body comes to
+associate with it.
+
 ## 2a. Operator controls (binding)
 
 These are rails on the *account*, not hands on the *fly*. None of them touch
@@ -188,6 +202,7 @@ published with the frozen artifacts.
 | Appetite | `config/appetite_v1.yaml` | |
 | Words as smells | `config/words_v1.yaml` | |
 | Learning rule | `config/plasticity_v1.yaml`, `config/mb_compartments.yaml` | |
+| Retina | `config/retina_v1.yaml` | |
 | Corpus | `corpus/` | |
 
 ## 4. Controls (optional; for the curious)
@@ -222,7 +237,8 @@ Any failure is announced from the account and fixed under a new tag.
 
 - People interact with Bosco because it is a fly.
 - The phrasebook is human-written; its voice is Nick's.
-- The encoder sees who and how toxic, not what.
+- The encoder sees who, how toxic, which of his words, which topics, which
+  place, which people, and a few colours: never what.
 - Punishment is sparse; aversion is mostly innate.
 - He will come to like sweet talkers. Since 2026-09-15 the taste of what he
   reads trains him, and a fly likes sugar; the brakes are bitter text,

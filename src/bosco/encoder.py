@@ -74,6 +74,16 @@ class Encoder:
         self.words_cfg = yaml.safe_load(open(paths.CONFIG / "words_v1.yaml"))
         self.vocab = self._load_vocab()
         self.feeds = Feeds()
+        # the retina (config/retina_v1.yaml): channels drive the visual Kenyon cells; colour words
+        # and the words for pictures are those channels
+        from bosco.retina import load_retina_cfg
+
+        self.retina_cfg = load_retina_cfg()
+        self.visual_kcs = brain.index_of_present(pop.visual_kcs(tuple(self.retina_cfg["kc_types"])))
+        self.visual_words: dict[str, str] = {}
+        for ch, ws in (self.retina_cfg.get("visual_words") or {}).items():
+            for w in ws:
+                self.visual_words[str(w)] = str(ch)
         # innate smells (config/innate_v1.yaml): word -> the glomeruli a fly is born to answer
         innate = yaml.safe_load(open(paths.CONFIG / "innate_v1.yaml"))
         self.innate: dict[str, tuple[str, list[str]]] = {}
@@ -167,6 +177,9 @@ class Encoder:
         rate = float(lo + (hi - lo) * rng.random())
         if word in self.innate:
             return [self.orn_by_glom[g] for g in self.innate[word][1] if g in self.orn_by_glom], rate
+        if word in self.visual_words:
+            # a colour word, or the word for a picture, is the retina's channel (config/retina_v1.yaml)
+            return [self.visual_channel_idx(self.visual_words[word])], float(self.retina_cfg["rate_hz"])
         return [self.orn_by_glom[self.neutral[i]] for i in chosen], rate
 
     def word_drive(self, word: str, scale: float = 1.0) -> Drive:
@@ -174,6 +187,23 @@ class Encoder:
         gloms, rate = self.word_glomeruli(word)
         idx = np.concatenate(gloms).astype(np.int32)
         return Drive(np.sort(idx), round(rate * scale, 6), f"word:{word}")
+
+    # ---- the retina --------------------------------------------------------
+    def visual_channel_idx(self, channel: str) -> np.ndarray:
+        """The visual Kenyon cells of a channel: k_per_channel of them chosen by the channel's name."""
+        rc = self.retina_cfg
+        if len(self.visual_kcs) == 0:
+            return np.zeros(0, np.int32)
+        seed = int.from_bytes(hashlib.blake2b(f"retina|{channel}".encode(), digest_size=8).digest(), "little")
+        rng = np.random.default_rng(seed)
+        k = min(int(rc["k_per_channel"]), len(self.visual_kcs))
+        return np.sort(self.visual_kcs[rng.choice(len(self.visual_kcs), size=k, replace=False)]).astype(np.int32)
+
+    def visual_drive(self, channel: str) -> Drive | None:
+        idx = self.visual_channel_idx(channel)
+        if len(idx) == 0:
+            return None
+        return Drive(idx, float(self.retina_cfg["rate_hz"]), f"see:{channel}")
 
     # ---- account odor ---------------------------------------------------
     def glomeruli_for(self, did: str) -> list[str]:
@@ -215,12 +245,19 @@ class Encoder:
         return Drive(np.sort(idx), float(em.get("site_rate_hz", 60.0)), f"site:{domain}")
 
     def embed_drives(self, tokens: tuple[str, ...]) -> list[Drive]:
-        """Drives for the embed tokens on a post: a site is a place; the rest (img, video, card,
-        quote) name what was there and drive nothing here.  The retina's channels are its own."""
+        """Drives for the embed tokens on a post: a site is a place; the retina's channels (img,
+        motion, hue/lum/edge/sat) drive the visual Kenyon cells; card and quote name what was
+        there and drive nothing."""
+        from bosco.retina import is_channel
+
         out: list[Drive] = []
         for t in tokens:
             if t.startswith("site:") and len(t) > 5:
                 out.append(self.site_drive(t[5:]))
+            elif is_channel(t):
+                d = self.visual_drive(t)
+                if d is not None:
+                    out.append(d)
         return out
 
     # ---- place ------------------------------------------------------------

@@ -63,7 +63,7 @@ def test_other_people_and_sites_are_smells(fly):
     )
     s = e.encode(f)
     labels = [d.label for d in s.drives]
-    assert labels == ["odor:did:plc:x", "other:did:plc:y", "site:example.com"]  # the author is not another
+    assert labels == ["odor:did:plc:x", "other:did:plc:y", "see:img", "site:example.com"]  # the author is not another
     other = next(d for d in s.drives if d.label == "other:did:plc:y")
     assert np.array_equal(other.idx, e.odor_drive("did:plc:y").idx)
     assert other.rate_hz == e.odor_drive("did:plc:y").rate_hz * e.cfg["embeds"]["others_rate_scale"]

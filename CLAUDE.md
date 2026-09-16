@@ -107,9 +107,13 @@ Do not download the EM volume. `neuprint-python` against
   ("A Drosophila computational brain model reveals sensorimotor processing").
   Their code is public; take parameters from it, do not invent them.
 - **Weights**: synapse count × sign from neurotransmitter prediction.
-- **Pruning (v1)**: central brain only. Optic lobes dropped (no visual
-  input). VNC dropped; descending neurons are the behavioral readout.
-  Document this as a modeling decision in the README.
+- **Pruning (v1)**: central brain only. Optic lobes dropped; since
+  2026-09-15 a hand-built retina (`config/retina_v1.yaml`) drives the
+  visual Kenyon cells directly: a fixed, parameter-free transform from a
+  thumbnail to a few channel names (hues, brightness, edges, saturation),
+  never a classifier, never the image stored. VNC dropped; descending
+  neurons are the behavioral readout. Documented as modeling decisions in
+  the README.
 - **Short-term depression** on sensory synapses only (habituation; on).
 - **Thresholds** follow `config/thresholds_policy.yaml` (pre-registered
   quantiles per population over named window sets); calibrate with
@@ -197,6 +201,11 @@ Do not download the EM volume. `neuprint-python` against
 - Topics: a hand-authored 60-topic keyword→odor map, published
   (`config/topics_v1.yaml`); up to three topics per post, each three
   neutral glomeruli on top of the account odor (decided 2026-09-14).
+- Pictures → the retina (`config/retina_v1.yaml`, decided 2026-09-15): a
+  thumbnail becomes channel names (two dominant hues, brightness, edges,
+  saturation, `img`, `motion`) by a fixed transform; each channel drives
+  fifteen visual Kenyon cells; colour words and "picture" are the same
+  channels. Nothing tells him what he is looking at.
 
 ## Readout (frozen at tag)
 

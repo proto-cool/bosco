@@ -28,8 +28,10 @@ Every number below has a gate report under `docs/`.
 
 1. **Neuron set** (`model.CB_SUPERCLASSES`): 40,939 traced central-brain
    bodies: cb_intrinsic/sensory/motor/endocrine/efferent, plus descending
-   and ascending neurons.  Optic lobes dropped (no visual input in v1).  VNC
-   dropped; descending neurons are the readout.  8.49 M edges, 45.7 M synapses.
+   and ascending neurons.  Optic lobes dropped (no visual input until
+   2026-09-15; since then a hand-built retina drives the visual Kenyon cells
+   directly, decision 47).  VNC dropped; descending neurons are the readout.
+   8.49 M edges, 45.7 M synapses.
 2. **LIF parameters** are Shiu et al. 2024 verbatim (`config/model_v1.yaml`),
    except the per-synapse weight, which Shiu calibrate per connectome:
    "W_syn such that activation of sugar GRNs at 100 Hz resulted in roughly
@@ -532,7 +534,44 @@ Every number below has a gate report under `docs/`.
    with an embed is fetched once for its view. Nothing of any of this is
    stored but words, hashes, DIDs, tokens.
 
-Not in v1: visual input.
+47. **A retina** (decided 2026-09-15; `config/retina_v1.yaml`,
+   `src/bosco/retina.py`, `docs/phase8-retina.md`). He can see, at a fly's
+   resolution, and nothing tells him what he is looking at. A post's
+   thumbnails (images, a video's poster, a link card's picture; at most two)
+   are fetched once, reduced to a 32×24 grid of facets, and read as a few
+   channel names by a fixed, public, parameter-free transform: the two
+   dominant hues of eight (saturation-weighted, dull facets have no hue),
+   the mean brightness in four bins, the mean edge strength in three, the
+   mean saturation in three, plus `img` for any picture and `motion` for
+   video. The channel names are what is stored (`embed` column); the
+   histograms are a sensation and nothing comes back out of them, where a
+   colour grid would be a thumbnail. Each channel is fifteen visual Kenyon
+   cells chosen by its name, driven at 6 Hz: KCγd and KCα/βp are the cells
+   that receive the visual projection neurons in the fly (Vogt et al. 2016;
+   Li et al. 2020), and those afferents (246 traced bodies, ~10 k synapses
+   onto them: aMe12, aMe26, MeVP41, …) went with the optic lobes, so the
+   retina drives the KCs directly and they stand in for them; restoring
+   `visual_projection` (9,201 bodies) was considered and rejected for cost
+   and because no one knows which of them carries which feature. The
+   visual KCs habituate like afferents (`model_v1.yaml`
+   `habituation_extra_types`), so the same picture again fades and a
+   picture's channels read as being in the air. Colour words and the words
+   for pictures are the channels, the way "fruit" is the fruit glomeruli:
+   "red" is the smell of red, "picture" is the smell of a picture, so a
+   question about red things and a red thing he saw share a smell;
+   "orange" stays fruit. What a picture means is whatever the mushroom
+   body comes to associate with it; he will mistake a fox for a cat and a
+   sunset for a ginger cat, and that is the resolution of the eye, not a
+   bug in a classifier. Measured (`docs/phase8-retina.md`): a picture alone
+   lights 1.8% of KCs, all of them visual KCs, and drives ten MBON types;
+   with an account odor 4.4%; the same picture five times is familiar by
+   the third and a different one right after is half familiar through the
+   channels they share (`img`, brightness), as two feeds share a place.
+   The live code depends on the machine's JPEG decoder; the logged
+   channels are what replays, so replay and the controls are unaffected.
+   Not a classifier, and it never becomes one.
+
+Visual input since 2026-09-15: a retina (decision 47), not the optic lobes.
 
 ## Running
 

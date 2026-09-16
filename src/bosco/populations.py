@@ -38,6 +38,14 @@ def kc_by_lobe() -> dict[str, list[int]]:
     return {k: sorted(v) for k, v in out.items()}
 
 
+def visual_kcs(types: tuple[str, ...] = ("KCg-d", "KCab-p")) -> list[int]:
+    """The Kenyon cells that receive visual projection neurons in the fly (Vogt et al. 2016;
+    Li et al. 2020): gamma-d and alpha/beta-posterior.  The retina drives these directly
+    (config/retina_v1.yaml), their afferents having gone with the optic lobes."""
+    a = annotations()
+    return sorted(a.index[(a["class"] == "Kenyon_Cell") & a["type"].isin(list(types))])
+
+
 def mbons() -> pd.DataFrame:
     a = annotations()
     m = a[a["class"] == "MBON"]

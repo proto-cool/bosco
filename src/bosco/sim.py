@@ -75,7 +75,11 @@ class Fly:
         if self.params.std_u > 0 and wiring.get("habituation_scope", "sensory") == "sensory":
             from bosco.data import annotations
 
-            sc = annotations().reindex(b.ids)["superclass"].fillna("").str.contains("sensory").to_numpy()
+            ann = annotations().reindex(b.ids)
+            sc = ann["superclass"].fillna("").str.contains("sensory").to_numpy()
+            extra = wiring.get("habituation_extra_types") or []
+            if extra:
+                sc = sc | ann["type"].isin(list(extra)).to_numpy()
             self.net.set_std_u(np.where(sc, self.params.std_u, 0.0))
         self.kc = b.index_of_present(pop.kenyon_cells())
         mb = pop.mbons()

@@ -1,0 +1,50 @@
+# The retina (decided 2026-09-15; part of the encoder, frozen at freeze-v1).  See README 47.
+#
+# A fly's eye is about 800 facets, a few colour channels, strong edge and motion sensitivity,
+# and no object recognition.  So this is not a classifier and never becomes one: a fixed,
+# public, parameter-free transform from a thumbnail to a handful of channel names, and the
+# channels drive the visual Kenyon cells (KCg-d and KCab-p, the cells that receive the visual
+# projection neurons in the fly; those afferents were pruned with the optic lobes, so the
+# retina drives the KCs directly and they stand in for them).  Nothing tells him what he is
+# looking at; what a picture means is whatever the mushroom body comes to associate with it.
+#
+# The transform (src/bosco/retina.py): the image is downsampled to grid facets; each facet
+# has a hue, a saturation and a brightness; the hue histogram (hue_bins, weighted by
+# saturation, facets duller than sat_floor have no hue) names its top_hues bins; mean
+# brightness, mean edge strength (gradient of brightness) and mean saturation each fall into
+# one bin by the cuts.  The channel names are what is stored (`embed` column): hue:3 hue:6
+# lum:2 edge:1 sat:1, plus img for any image and motion for video.  A 32x24 colour grid would
+# be a thumbnail; the histograms are a sensation, and nothing comes back out of them.
+#
+# Each channel is k_per_channel visual KCs chosen by the channel's name, driven at rate_hz
+# (Kenyon cells fire at a few Hz; c_sat for learning is 3/s).  Colour words and the words for
+# pictures are those channels too, the way "fruit" is the fruit glomeruli (innate_v1.yaml):
+# "red" is the smell of red, so a question about red things and a red thing he saw share it.
+# "orange" stays fruit.  The visual KCs habituate like afferents (model_v1.yaml
+# habituation_extra_types), so the same picture again fades and reads as being in the air.
+grid: [32, 24]
+hue_bins: 8          # 45 degrees each: 0 red, 1 yellow, 2 green, 3 spring green, 4 cyan, 5 blue, 6 violet, 7 pink
+top_hues: 2
+hue_min_share: 0.05  # a hue bin must hold this share of the facets' saturation weight to be named
+sat_floor: 0.15      # a facet duller than this has no hue
+lum_cuts: [0.25, 0.5, 0.75]   # 0 dark, 1 dim, 2 light, 3 bright
+edge_cuts: [0.04, 0.10]       # 0 flat, 1 some, 2 busy (mean |gradient| of brightness, 0..1)
+sat_cuts: [0.15, 0.40]        # 0 grey, 1 some colour, 2 vivid
+kc_types: [KCg-d, KCab-p]
+k_per_channel: 15
+rate_hz: 6.0
+max_images: 2
+fetch_timeout_s: 3.0
+visual_words:
+  img: [picture, pictures, photo, photos, photograph, image, images, drawing, drawings]
+  motion: [video, videos, gif, gifs]
+  "hue:0": [red]
+  "hue:1": [yellow]
+  "hue:2": [green]
+  "hue:5": [blue]
+  "hue:6": [purple, violet]
+  "hue:7": [pink]
+  "lum:0": [dark, black]
+  "lum:2": [light]
+  "lum:3": [bright, white]
+  "sat:0": [grey, gray]
