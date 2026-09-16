@@ -1,0 +1,20 @@
+# What he remembers about you (decided 2026-09-15; frozen at freeze-v1).  An association
+# memory between an account's odor and the smells that arrive with it: each window, every
+# token in the post (his words and hashed ones, topics, a link's site, a picture's hues) is
+# strengthened for that account by `increment`, and every strength decays e-fold tau_d days.
+# When that account speaks to him again, its strongest associations are faintly in the air
+# (`echo` of a fresh word's weight, scaled by strength / saturation, at most max_per_account),
+# so the sentence of his that smells most like the moment can be about the thing you two
+# talked about last week, and the topics they carry join the pool.  Hashed and channel tokens
+# are in no sentence of his, so they fall out of retrieval by themselves.
+#
+# This is NOT in the connectome; it is a tool, named as such in EXPERIMENT.md 2.  It holds no
+# content that could be read back as text (tokens only), it is a pure function of the logged
+# rows so replay rebuilds it, it is in the brain digest, and it fades by itself.  It replaces
+# nothing the mushroom body does: the verdict on a person is still the weights.
+tau_d: 14.0
+increment: 1.0
+saturation: 3.0        # three meetings of a token with a person is a full-strength association
+max_per_account: 12
+echo: 0.25             # the air weight of a full-strength association (a fresh word is 1.0)
+min_strength: 0.05     # below this, forgotten

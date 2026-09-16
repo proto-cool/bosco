@@ -30,6 +30,13 @@ genuinely the one acting, and that anyone can check.
   glomeruli, learnable and recognisable like any word of his and never
   sayable. A common word's hash can be brute-forced with a dictionary; the
   rule here is that no text is stored, not that the smells are secret.
+- One tool stands outside the connectome and is named here (decided
+  2026-09-15): an association memory between an account and the tokens
+  that arrived with it (`config/associations_v1.yaml`), decaying over
+  weeks, that puts what you talked about faintly in the air when you come
+  back and lets him say whether he has met a smell lately (`seen=`). It
+  holds tokens, never text; it is a pure function of the logged rows and
+  part of the brain digest; the verdict on a person is still the weights.
 - What else a post carries is read the same way (decided 2026-09-15): a
   mentioned or quoted account is another odor in the room at half rate; a
   link card's site is a place; alt text, cards and quoted posts are read
@@ -203,6 +210,7 @@ published with the frozen artifacts.
 | Words as smells | `config/words_v1.yaml` | |
 | Learning rule | `config/plasticity_v1.yaml`, `config/mb_compartments.yaml` | |
 | Retina | `config/retina_v1.yaml` | |
+| Association memory | `config/associations_v1.yaml` | |
 | Corpus | `corpus/` | |
 
 ## 4. Controls (optional; for the curious)

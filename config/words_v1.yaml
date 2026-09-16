@@ -32,6 +32,7 @@ thread_tau_s: 240.0         # a thread's smell lasts this long after its last po
 thread_keep: 3              # the last posts of a thread that linger
 context_fresh_s: 60.0       # words smelled this recently are not re-presented; their afferents are still depressed
 air_floor: 0.05             # a word whose afferents are depressed less than this is not in the air
+seen_cut: 0.3               # asked about a smell: `seen=met` if its a'3 familiarity is at least this, else `seen=fresh`
 min_len: 3
 valence_beta: 1.0           # generator: p(word) x (1 + beta * learned valence of the word)
 echo_gamma: 2.0             # generator: p(word) x (1 + gamma * depression) for words in the air right now

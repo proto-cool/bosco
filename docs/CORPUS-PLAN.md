@@ -105,3 +105,31 @@ only, he reports what happened, the line ends when the event ends, no
 definitions ("you say X. it is…") and no verdicts ("i recommend").  Those
 two were the tells in the first draft of these files.  `165-fruit.txt` is
 the one that matters most to him.
+
+## v4: the senses he gained on 2026-09-15 (to write)
+
+New tags and words the generator can now use.  Register as before
+(`docs/corpus-audit.md`): events only, he reports what happened.
+
+- `190-seen-met.txt` (`#tags: behaviour=reply seen=met`) and
+  `191-seen-fresh.txt` (`#tags: behaviour=reply seen=fresh`): his yes and
+  his no.  Asked about a smell he has met lately the pool gets the first;
+  one he has not, the second.  "it came. i saw it. many came." / "it did
+  not come. i did not see it. new to me. i look now."  `bosco say
+  --behaviour reply --seen met -n 5` samples it.
+- `180-colour.txt` (untagged): red, green, blue, yellow, white, black,
+  bright, dark, light, grey, as a fly meets them on glass, walls, fruit and
+  sky.  These words are the retina's channels now (`config/retina_v1.yaml`
+  `visual_words`), so a red thing he saw and the word red share a smell;
+  retrieval can only find a sentence if the corpus has one with the word.
+- `181-looking.txt` (untagged): looking and going verbs.  "i looked. i went
+  near. i went to see. i looked a long time."
+- `182-when-and-how-many.txt` (untagged): morning, evening, again, once,
+  many, none, one.
+- `183-pictures.txt` (untagged, or `topic=art`): things people photograph,
+  at a fly's scale; `picture` and `photo` used as words (they are the
+  `img` channel).
+- `184-moving.txt` (untagged): video, things that move on the glass
+  (`motion`).
+- `time=evening` and `time=day` files: the tags are live with nothing
+  behind them.

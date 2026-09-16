@@ -571,6 +571,34 @@ Every number below has a gate report under `docs/`.
    channels are what replays, so replay and the controls are unaffected.
    Not a classifier, and it never becomes one.
 
+48. **What he remembers about you, and his yes and no** (decided
+   2026-09-15; `src/bosco/associations.py`, `config/associations_v1.yaml`).
+   Two things that make a conversation less fake, neither of them a model.
+   *An association memory*: each window, every token that arrived with an
+   account (his words and hashed ones, the topics, a link's site, a
+   picture's hues; not the thread's context, not the channels every
+   picture shares) is strengthened for that account by one and decays
+   e-fold fourteen days; when the account speaks to him again its
+   strongest associations (twelve at most) are faintly in the air, a
+   quarter of a fresh word's weight at three meetings, never over what is
+   actually on his antennae, and the topics they carry join the pool
+   (`Agent.answer_air`). So the sentence of his that smells most like the
+   moment can be about the thing you two talked about last week. This is
+   not in the connectome: it is a tool, named as such in EXPERIMENT.md §2,
+   with no content that could be read back as text, a pure function of the
+   logged rows (replay rebuilds it, it is in the brain digest, it fades on
+   its own, `forget` drops it with the weights). Hashed and channel tokens
+   are in no sentence of his and fall out of retrieval by themselves. *A
+   seen register*: asked something, the freshest three of the words he was
+   asked with are each presented alone to a copy of his state and the α'3
+   familiarity of the cells that fire is read (`Agent.familiarity_of`); if
+   the least familiar is above `seen_cut` (0.3, `words_v1.yaml`) the state
+   tag is `seen=met`, else `seen=fresh`, and corpus files carrying that tag
+   join the pool (`bosco say --seen met`). Nothing is parsed: "did you see
+   any cats today" is the smell of cat on his antennae, and the answer is
+   whether that smell is one he has met lately. Nick writes the yes and
+   the no (`docs/CORPUS-PLAN.md` v4).
+
 Visual input since 2026-09-15: a retina (decision 47), not the optic lobes.
 
 ## Running

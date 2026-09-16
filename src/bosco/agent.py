@@ -28,6 +28,7 @@ import yaml
 
 from bosco import paths
 from bosco import populations as pop
+from bosco.associations import Associations
 from bosco.brain import SLICE_MS, Simulation, Window
 from bosco.encoder import Encoder, Features
 from bosco.identity import IdentityReflex
@@ -109,6 +110,7 @@ class Agent:
         self.threads: dict[str, list[list]] = {}  # thread root -> [[t_ms, [words...]], ...]: what lingers in the air
         self._probe_cache: dict[tuple[str, str, str], float] = {}  # (did, word, weights digest) -> valence
         self._recent_openings: list[str] = []  # sentences he opened with lately; not the same one twice running
+        self.assoc = Associations()  # what he remembers about each account (config/associations_v1.yaml)
         self._load_signatures()
         self.on_window = None  # optional observer (Window, Decision, dust) -> None; the panel. Never feeds back.
         self.stop_requested = False
@@ -179,6 +181,7 @@ class Agent:
         st["landing"] = np.array([self.landing_id, self.landing_until], dtype=np.int64)
         st["appetite"] = np.array([self.appetite, self.appetite_t])
         st["threads"] = np.array(json.dumps(self.threads, sort_keys=True))
+        st["assoc"] = np.array(self.assoc.to_json())
         return st
 
     def _unpack(self, st: dict) -> None:
@@ -191,6 +194,7 @@ class Agent:
             self.appetite, self.appetite_t = (float(x) for x in np.asarray(st["appetite"]).ravel()[:2])
             self._appetite_loaded = True
         self.threads = json.loads(str(np.asarray(st["threads"]).ravel()[0])) if "threads" in st else {}
+        self.assoc.load_json(str(np.asarray(st["assoc"]).ravel()[0]) if "assoc" in st else None)
 
     # The learning rule's version.  A change to what a window teaches (config/plasticity_v1.yaml,
     # config/mb_compartments.yaml, MushroomBody) is legitimate before freeze-v1, but it means
@@ -351,6 +355,67 @@ class Agent:
                 out[w] = v
         return out
 
+    # ---- what he remembers about you, and whether he has met a smell lately ----------
+    ASSOC_TOKEN_PREFIXES = ("topic:", "site:", "hue:")
+
+    def assoc_tokens(self, f: Features) -> tuple[str, ...]:
+        """The tokens a window associates with its account: his words and hashed ones in the
+        post, its topics, a link's site, a picture's hues.  Not the thread's context (that is
+        other people's), not the generic channels (img, brightness) every picture shares."""
+        out = list(f.words) + [f"topic:{t}" for t in f.topics]
+        out += [t for t in f.embed if t.startswith(("site:", "hue:"))]
+        return tuple(dict.fromkeys(out))
+
+    def answer_air(
+        self, did: str | None, air: dict[str, float], topics: tuple[str, ...], t_h: float
+    ) -> tuple[dict[str, float], tuple[str, ...]]:
+        """Merge what he associates with this account into the air (faintly, never over what is
+        actually on his antennae) and its subjects into the topics.  Hashed and channel tokens
+        are in no sentence of his and weigh nothing downstream."""
+        got = self.assoc.air_for(did, t_h)
+        if not got:
+            return air, topics
+        air = dict(air)
+        extra = list(topics)
+        for tok, wgt in got.items():
+            if tok.startswith("topic:"):
+                if tok[6:] not in extra:
+                    extra.append(tok[6:])
+            elif not tok.startswith(self.ASSOC_TOKEN_PREFIXES):
+                air.setdefault(tok, wgt)
+        return air, tuple(extra)
+
+    SEEN_PROBE_MS = 500.0
+
+    def familiarity_of(self, words: tuple[str, ...]) -> dict[str, float]:
+        """How well he has met each smell lately, each presented alone to a copy of his state
+        (snapshot, present, read the a'3 trace on the cells that fire, restore)."""
+        out: dict[str, float] = {}
+        if not words:
+            return out
+        saved = self.live.snapshot()
+        base = self._base_drives(self.live.t_ms)
+        try:
+            for w in words:
+                self.live.set_base(base)
+                win = self.live.present([self.enc.word_drive(w)], self.SEEN_PROBE_MS)
+                out[w] = self.mb.familiarity(win.counts[self.fly.kc])
+                self.live.restore(saved)
+        finally:
+            self.live.restore(saved)
+        return out
+
+    def seen_register(self, words: tuple[str, ...]) -> str:
+        """His yes or no, from his own sensory state: `met` if every smell asked about is one he
+        has met lately (the a'3 familiarity of each, the least deciding), else `fresh`.  Nothing
+        is parsed; the words of the question are smells and the answer is whether they are
+        familiar (config/words_v1.yaml `seen_cut`)."""
+        if not words:
+            return "fresh"
+        cut = float(self.enc.words_cfg.get("seen_cut", 0.3))
+        fam = self.familiarity_of(words)
+        return "met" if fam and min(fam.values()) >= cut else "fresh"
+
     @staticmethod
     def verbosity(appetite: float, learned: float, cut: float = 0.2) -> int:
         """How many sentences he has in him: one when sated, up to three when hungry for company,
@@ -447,6 +512,8 @@ class Agent:
         h.update(self.mb.digest().encode())
         h.update(repr(self.dust).encode())
         h.update(repr((self.landing_id, self.appetite, self.appetite_t)).encode())
+        if self.assoc.table:
+            h.update(self.assoc.digest().encode())
         return h.hexdigest()
 
     # ---- time -------------------------------------------------------------------
@@ -671,6 +738,14 @@ class Agent:
                 cands = tuple(f.words) + tuple(x for x in f.context if x not in f.words) if f else None
                 air = self.air(w.t0_ms, cands) if f is not None else self.day_air(ts, w.t0_ms)
                 c = self.enc.words_cfg
+                topics = f.topics if f else ()
+                state = self.state_register(ts)
+                if f is not None:
+                    # what he remembers about this account is faintly in the air, and its subjects
+                    # join the pool; asked something, whether he has met it lately is his yes or no
+                    air, topics = self.answer_air(did, air, topics, self.sim_hours())
+                    if f.mentioned:
+                        state["seen"] = self.seen_register(tuple(x for x in air if x in f.words)[:3])
                 wv = self.word_valence_in_context(did, tuple(air)) if f is not None else {}
                 # first, a whole sentence of his that smells like the moment; then the walk, if he
                 # has more in him.  Not the same sentence twice in a row of utterances.
@@ -680,9 +755,9 @@ class Agent:
                     dec.arousal,
                     seed,
                     air=air,
-                    topics=f.topics if f else (),
+                    topics=topics,
                     familiarity=fb,
-                    state=self.state_register(ts),
+                    state=state,
                     word_valence=wv,
                     beta=float(c.get("valence_beta", 1.0)),
                     avoid=set(self._recent_openings),
@@ -696,9 +771,9 @@ class Agent:
                     dec.arousal,
                     seed,
                     max_sentences=self.verbosity(self.appetite, dec.learned),
-                    topics=f.topics if f else (),
+                    topics=topics,
                     familiarity=fb,
-                    state=self.state_register(ts),
+                    state=state,
                     word_valence=wv,
                     air=air,
                     beta=float(c.get("valence_beta", 1.0)),
@@ -799,6 +874,9 @@ class Agent:
             tasted = self.learn_from_window(f, kc, w.ms)
             if tasted:
                 note = (note + "; " if note else "") + tasted
+            # what arrived with this account is now part of what he remembers about it; before the
+            # row is written, since the row's digest is the state after the window
+            self.assoc.observe(f.did, self.assoc_tokens(f), self.sim_hours())
         out = self._log(f, w, dec, ts, source_uri, kind, note, self.dust, d_before=d_before)
         if f is not None:
             self.remember_thread(thread, self.live.t_ms, f.words)
@@ -980,6 +1058,7 @@ class Agent:
         w = self.live.present([self.enc.odor_drive(did)], PRESENT_MS)
         pre = (w.counts[self.fly.kc] > 0)[self.fly.kc_pos_of_edge]
         n = self.mb.forget_edges(pre)
+        self.assoc.forget(did)
         self.save_state()
         return n
 
@@ -1019,6 +1098,7 @@ class Agent:
                 self._tick(self.sim_hours())
                 if f is not None:
                     self.learn_from_window(f, w.counts[self.fly.kc], w.ms)
+                    self.assoc.observe(f.did, self.assoc_tokens(f), self.sim_hours())
             logged = r["brain_digest"]
         got = self.digest()
         self._unpack(saved)

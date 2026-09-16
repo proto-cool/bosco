@@ -274,3 +274,53 @@ def test_a_word_he_cannot_say_is_still_a_smell(fly):
         t = g.generate("reply", "neutral", "mid", seed, max_sentences=2, air=air, gamma=2.0, prime=True) or ""
         assert "h:" not in t and "xylophone" not in t
     assert g.pick_sentence("reply", "neutral", "mid", 1, air={tok: 1.0}) is None  # nothing of his smells of it
+
+
+@needs_data
+def test_he_remembers_what_you_talk_about_and_whether_he_has_met_it(fly):
+    """After X has talked about cats, X's arrival brings cat faintly into the air and animals into
+    the pool (the association memory); asked about a smell, his `seen` register is his own a'3
+    familiarity with it.  Both replay; probing changes nothing."""
+    import tempfile
+
+    from bosco.agent import Agent
+    from bosco.encoder import Features
+    from bosco.ledger import Ledger
+
+    tmp = tempfile.mkdtemp()
+    ag = Agent(Ledger(f"{tmp}/l.sqlite"), fly, state_dir=tmp)
+    ag.mb.reset()
+    ag.live.net.reset(0)
+    ag.live.t_ms = 0
+    zebra = ag.enc.hashed("zebra")
+    for i in range(2):
+        ag.run(
+            Features("did:plc:x", 0.0, False, 0, False, ("animals",), False, ("cat", zebra)),
+            T0 + 60 * i,
+            f"at://x/{i}",
+            fast=True,
+        )
+    t_h = ag.sim_hours()
+    assert set(ag.assoc.strengths("did:plc:x", t_h)) == {"cat", zebra, "topic:animals"}
+    air, topics = ag.answer_air("did:plc:x", {"wall": 1.0}, (), t_h)
+    assert air["wall"] == 1.0 and 0 < air["cat"] <= ag.assoc.echo and zebra in air and topics == ("animals",)
+    assert ag.answer_air("did:plc:stranger", {"wall": 1.0}, (), t_h) == ({"wall": 1.0}, ())
+    # the hashed token is in no sentence of his: retrieval ignores it, cat it can find
+    assert ag.generator.pick_sentence("reply", "neutral", "mid", 1, air={zebra: 1.0}) is None
+    assert ag.generator.pick_sentence("reply", "neutral", "mid", 1, air=air, topics=topics) is not None
+    # seen: cat he has met lately; a word he has not is fresh; the least familiar decides
+    d0 = ag.digest()
+    fam = ag.familiarity_of(("cat", "spoon"))
+    assert fam["cat"] > fam["spoon"] and ag.digest() == d0
+    assert ag.seen_register(("cat",)) == "met" and ag.seen_register(("spoon",)) == "fresh"
+    assert ag.seen_register(("cat", "spoon")) == "fresh" and ag.seen_register(()) == "fresh"
+    # asked, the register reaches the pool: the state carries seen=met for a cat question
+    snap = ag.snapshot()
+    o = ag.run(Features("did:plc:x", 0.0, True, 2, False, ("animals",), True, ("cat",)), T0 + 200, "at://x/q")
+    assert o.text  # answered
+    ok, logged, got = ag.replay_span(snap, ag.live.t_ms)
+    assert ok and logged == got  # the association memory is part of the digest and replays
+    assert ag.assoc.strengths("did:plc:x", ag.sim_hours())["cat"] > 2.0
+    ag.save_state(force=True)
+    fresh = Agent(Ledger(f"{tmp}/l.sqlite"), fly, state_dir=tmp)  # reloaded from disk
+    assert fresh.assoc.to_json() == ag.assoc.to_json()

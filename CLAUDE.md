@@ -140,6 +140,12 @@ Do not download the EM volume. `neuprint-python` against
 - **Learned valence reaches behaviour through the readout**: the mushroom
   body's verdict on a stimulus, read from the depression on the active KCs'
   synapses, scales approach vs avoid populations before thresholds.
+- **What he remembers about you** (`config/associations_v1.yaml`, decided
+  2026-09-15): a decaying association between an account and the tokens
+  that arrived with it, faintly in the air when they speak to him again.
+  A named tool outside the connectome, tokens only, replayed, in the
+  digest. Asked something, `seen=met|fresh` is his α'3 familiarity with
+  the words he was asked with; the corpus carries his yes and his no.
 - **Identity is a reflex**: who/what/why/creator are answered from
   `config/identity_v1.yaml` regardless of the network. `bosco memory --did X`
   shows what he has learned about an account and why.
