@@ -95,7 +95,7 @@ you are in open until the SSH check in step 3 passes from a second one.
    and let a rootless container bind 80 and 443.
    ```
    systemctl enable --now firewalld
-   firewall-cmd --permanent --set-default-zone=public
+   firewall-cmd --set-default-zone=public
    firewall-cmd --permanent --add-service=ssh --add-service=http --add-service=https
    firewall-cmd --permanent --add-port=443/udp
    firewall-cmd --permanent --remove-service=cockpit --remove-service=dhcpv6-client
