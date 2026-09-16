@@ -16,3 +16,26 @@ ltm:
   stm_floor: 0.9      # the synapse must still carry STM (m_stm below this)
   m_min: 0.2
   tau_d: 30.0
+# Taste while browsing (decided 2026-09-15).  In the fly, sugar sensory neurons drive the PAM
+# reward DANs and bitter ones the PPL1 punishment DANs; that is how odor-taste conditioning
+# works at all.  So the taste of a post he reads (VADER -> sugar/bitter GRNs, config/encoder_v1.yaml
+# `gustatory`) pairs the mixture in that window (account, place, topics, words) with reward or
+# punishment, at strength = gain x the gustatory rate fraction min(1, |c| / c_sat).  A labeled post
+# (bitter at full rate, EXPERIMENT.md 2b) pairs punishment at labeled_gain.  Small, so a day of
+# reading moves a verdict a little; spaced repetition consolidates it like any pairing.  Not a
+# social reward: no appetite bite, no outcomes row; the episode row carries the weight digests and
+# a `taste:` note.  Never set from outcomes.
+taste:
+  reward_gain: 0.15
+  punishment_gain: 0.1
+  labeled_gain: 0.3
+# Exposure (decided 2026-09-15): the novelty compartment a'3 (config/mb_compartments.yaml
+# `exposure`).  Every stimulus window depresses the a'3 synapses of the KCs that fired, on its own
+# multiplier with its own decay, so the same smell later drives MBON-a'3 less: that depression,
+# read on the active KCs, is his familiarity with the smell (0 novel .. 1 well met).  tau_h about
+# a day, so "today" is familiar and last week is not.  Hattori et al. 2017.
+exposure:
+  eta: 0.3
+  c_sat: 3.0
+  m_min: 0.3
+  tau_h: 24.0

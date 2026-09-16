@@ -882,13 +882,16 @@ def run_loop(ledger: Ledger, dry_run: bool, once: bool, interval: int) -> int:
     b.agent.bio_ms(time.time())  # start his clock now if it has not started
     skipped = b.agent.skip_downtime(time.time())
     if skipped:
-        print(f"downtime skipped: {skipped:.0f} s not lived")
+        print(f"downtime skipped: {skipped:.0f} s not lived (he was off that long)")
+    if b.agent.lag_s(time.time()) > 60:
+        print(f"still {b.agent.lag_s(time.time()):.0f} s behind wall time; that time he lived, and he keeps it")
     b.introduce_if_needed()
     # Two cadences.  Notifications (someone talking to him) every notify_s: cheap, and he
     # should answer quickly.  The timeline and discover feed every `interval`: browsing is
     # what costs simulated seconds, and a bot on the network does not do much unprompted.
     # Between both he lives, one simulated second per wall second, in bounded steps.
     notify_s = float(os.environ.get("BOSCO_NOTIFY_S", "20"))
+    slow_logged = 0  # whole hours of lag already written to the record
     polls = 0
     next_notify = time.time()
     next_browse = time.time()
@@ -910,10 +913,16 @@ def run_loop(ledger: Ledger, dry_run: bool, once: bool, interval: int) -> int:
                     b.sweep_deleted()
                 nb = b.browse()
                 nk = b.check_blocks()
-                if b.agent.lag_s(time.time()) > 3600:
-                    print(f"an hour behind wall time; skipping ahead ({b.agent.lag_s(time.time()):.0f} s)")
-                    b.agent.skip_downtime(time.time())
                 lag = b.agent.lag_s(time.time())
+                # A slow box makes him live behind the wall clock.  That time is his and is not
+                # skipped: he works it off when the box lets him.  The record says so once for
+                # each hour he falls behind, so 'slow' is never mistaken later for 'was down'.
+                behind_h = int(lag // 3600)
+                if behind_h != slow_logged:
+                    if behind_h > slow_logged:
+                        ledger.add_control("slow", "system", None, f"lag={lag:.0f}s", ts=time.time())
+                        print(f"{behind_h} h behind wall time and living it; not skipping")
+                    slow_logged = behind_h
                 ledger.set_cursor("last_poll_ts", repr(time.time()))
                 panel_s = 0.0
                 if panel is not None:

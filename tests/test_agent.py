@@ -151,3 +151,34 @@ def test_voice_learning_nudges_matching_documents(fly):
     ag.voice_decay(T0 / 3600.0 + 24 * 365)
     assert all(abs(ag.voice[d] - 1.0) < 1e-6 for d in docs)
     assert Features("did:plc:v", 0.0, False).topics == ()
+
+
+@needs_data
+def test_slow_running_is_kept_and_only_real_downtime_is_skipped(fly):
+    """Time he was not running is not lived; time he lived slowly is his and he keeps it."""
+    import tempfile
+
+    from bosco.agent import Agent
+    from bosco.ledger import Ledger
+
+    with tempfile.TemporaryDirectory() as d:
+        L = Ledger(f"{d}/l.sqlite")
+        ag = Agent(L, state_dir=d, fly=fly)
+        ag.bio_ms(T0)
+        # he is an hour behind the wall clock, but the loop polled a moment ago: he was up the
+        # whole time, just slow.  None of it may be skipped.
+        ts = T0 + 3600.0
+        L.set_cursor("last_poll_ts", repr(ts - 30.0))
+        assert ag.lag_s(ts) > 3500
+        before = ag.live.t_ms
+        assert ag.skip_downtime(ts) == 0.0
+        assert ag.live.t_ms == before
+        assert L.db.execute("SELECT COUNT(*) FROM control WHERE kind='downtime'").fetchone()[0] == 0
+
+        # now the process really was off for half an hour on top: only that is skipped, and the
+        # hour he lived slowly is still his.
+        ts2 = ts + 1800.0
+        skipped = ag.skip_downtime(ts2)
+        assert 1700.0 < skipped < 1900.0, skipped
+        assert ag.lag_s(ts2) > 3500, "the lag he earned by being slow survived the skip"
+        assert L.db.execute("SELECT COUNT(*) FROM control WHERE kind='downtime'").fetchone()[0] == 1

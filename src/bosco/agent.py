@@ -476,13 +476,31 @@ class Agent:
         """How far the simulation is behind wall time."""
         return ts - self.wall(self.live.t_ms) if self.brain_t0 is not None else 0.0
 
-    def skip_downtime(self, ts: float, max_lag_s: float = 600.0) -> float:
-        """Time he was not running is not lived: if the simulation is more than max_lag_s behind,
-        jump to now (with passive recovery), logged as 'downtime'.  Returns the seconds skipped."""
-        lag = self.lag_s(ts)
-        if lag <= max_lag_s:
+    def down_s(self, ts: float) -> float:
+        """How long the process was not running: wall seconds since the last poll it recorded.
+        Zero on his first ever run, when there is no poll to measure from."""
+        last = self.ledger.get_cursor("last_poll_ts")
+        if last is None:
             return 0.0
-        target = self.bio_ms(ts) - SETTLE_MS
+        try:
+            return max(0.0, ts - float(last))
+        except ValueError:
+            return 0.0
+
+    def skip_downtime(self, ts: float, min_down_s: float = 600.0) -> float:
+        """Time he was not running is not lived.  Time he lived slowly is.
+
+        Only the wall time the process was actually off is skipped -- never the lag he earned by
+        running behind a slow box, which is his and which he works off when the box lets him.  So
+        the jump is bounded by how long he was down, not by how far behind he is.  Returns the
+        seconds skipped, logged as 'downtime'."""
+        down = self.down_s(ts)
+        lag = self.lag_s(ts)
+        if down <= min_down_s or lag <= 0.0:
+            return 0.0
+        target = min(self.bio_ms(ts) - SETTLE_MS, self.live.t_ms + int(down * 1000.0))
+        if target <= self.live.t_ms:
+            return 0.0
         skipped = (target - self.live.t_ms) / 1000.0
         self.ledger.add_control("downtime", "system", None, f"{self.live.t_ms}->{target}", ts=ts)
         self.live.net.recover(float(target - self.live.t_ms))
