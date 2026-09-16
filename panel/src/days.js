@@ -132,6 +132,31 @@ async function show(date) {
   if (!sm.length) sm.push('nothing he has a word for.');
   sentence($('smell-sentence'), sm);
 
+  // favorite and least favorite: the post by its smell, and the post itself only when he liked it in public
+  const tasteOf = (p) => {
+    const parts = [p.mentioned ? 'a mention' : p.feed ? `something in ${p.feed}` : 'something he browsed', ' around ', b(clockTime(p.ts, tz))];
+    if (p.topics?.length) parts.push(', about ', b(list(p.topics)));
+    if (p.words?.length) parts.push(', with ', b(list(p.words.slice(0, 4))), ' in it');
+    if (p.vader != null && Math.abs(p.vader) >= 0.05) parts.push('; it tasted ', b(p.vader > 0 ? 'sweet' : 'bitter'));
+    if (Math.abs(p.learned) >= 0.05) parts.push(p.vader != null && Math.abs(p.vader) >= 0.05 ? ' and ' : '; ', 'he had learned it was ', b(p.learned > 0 ? 'good' : 'bad'));
+    return parts;
+  };
+  const didOf = (p) => {
+    const did = { like: 'he liked it', follow: 'he followed', reply: 'he answered', walk: 'he walked toward it', leave: 'he left', nothing: 'he did nothing' }[p.action] || `he chose ${p.action}`;
+    return p.action !== 'nothing' && !p.acted ? `${did}, withheld at the door` : did;
+  };
+  const fav = rep.favorite, least = rep.least;
+  if (fav) {
+    sentence($('favorite-sentence'), ['favorite: ', ...tasteOf(fav), '. ', didOf(fav), ` (${fav.ratio.toFixed(2)}× threshold).`]);
+    if (fav.uri) await renderPosts($('favorite-post'), [{ uri: fav.uri, ts: fav.ts, kind: 'liked' }], 1);
+    else $('favorite-post').replaceChildren();
+  } else {
+    $('favorite-sentence').textContent = 'nothing drew his tongue out that day.';
+    $('favorite-post').replaceChildren();
+  }
+  if (least) sentence($('least-sentence'), ['least favorite: ', ...tasteOf(least), '. ', didOf(least), ` (${least.ratio.toFixed(2)}× threshold).`]);
+  else $('least-sentence').textContent = 'nothing made him turn away that day.';
+
   // who
   const people = rep.people || [];
   const plist = $('people');

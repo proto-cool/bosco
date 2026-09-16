@@ -63,6 +63,17 @@ def test_day_reports_from_the_ledger(fly, tmp_path):
     assert y["topics"] == {"fruit": 1} and y["words"] == {"banana": 1}
     assert y["people"][0]["did"] == "did:plc:a" and y["people"][0]["mentions"] == 1
     assert t["feeds"][0]["name"] == "science" and t["feeds"][0]["reads"] == 1
+    # favorite and least favorite: from the row's rates alone; the least is never named, the favorite
+    # only when he liked it in public
+    for rep in (y, t):
+        for k in ("favorite", "least"):
+            p = rep[k]
+            if p is None:
+                continue
+            assert p["ratio"] > 0 and set(p) >= {"ts", "feed", "topics", "words", "vader", "action", "acted", "ratio"}
+            assert k == "favorite" or ("uri" not in p and "did" not in p)
+            assert "uri" not in p or (p["action"] == "like" and p["acted"])
+    assert y["favorite"] is not None and y["favorite"]["topics"] == ["fruit"] and y["favorite"]["words"] == ["banana"]
     idx = json.loads((tmp_path / "panel" / "days" / "index.json").read_text())
     assert [d["date"] for d in idx["days"]][:2] == [d_today.isoformat(), d_yest.isoformat()]
     # a finished day is not rewritten

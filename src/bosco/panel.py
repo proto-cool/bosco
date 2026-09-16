@@ -291,8 +291,18 @@ class Panel:
         landings: set[str] = set()
         grooms = 0
         record = []
+        # the post where his like neurons beat his avoidance neurons by most, and the one where the
+        # avoidance neurons beat the like neurons by most; a post is never both
+        fav: tuple[float, float, object] | None = None
+        least: tuple[float, float, object] | None = None
         for r in rows:
             h = dt.datetime.fromtimestamp(r["ts"], tz).hour
+            if r["kind"] == "event" and r["source_uri"]:
+                like_r, leave_r = self._taste_ratios(r)
+                if like_r > leave_r and (fav is None or like_r - leave_r > fav[0]):
+                    fav = (like_r - leave_r, like_r, r)
+                if leave_r > like_r and (least is None or leave_r - like_r > least[0]):
+                    least = (leave_r - like_r, leave_r, r)
             if r["kind"] == "landing":
                 if r["note"]:
                     landings.add(r["note"])
@@ -417,9 +427,59 @@ class Panel:
             "outcomes": outcomes,
             "control": control,
             "record": record[-120:],
+            # the favorite is a post only when he liked it in public; the least favorite is its smell, never a name
+            "favorite": self._post_of_the_day(fav, acted_ids, public=True) if fav else None,
+            "least": self._post_of_the_day(least, acted_ids, public=False) if least else None,
             "silent": sum(h["episodes"] for h in hours) - len(record),
             "digest": {"brain": last["brain_digest"], "weights": last["weight_digest_after"]} if last else None,
         }
+
+    def _taste_ratios(self, r) -> tuple[float, float]:
+        """How hard a read post drove his like (proboscis extension) and leave (avoidance)
+        populations against their thresholds, gated as the readout gated them that second: the
+        mushroom body's verdict on the smell and his appetite are both in the row."""
+        ro = self.agent.readout
+        try:
+            sc = json.loads(r["scores"] or "{}")
+            mb = json.loads(r["mbon"] or "{}")
+        except ValueError:
+            return 0.0, 0.0
+        v = float(mb.get("_learned", 0.0))
+        a = float(r["appetite"]) if r["appetite"] is not None else 0.5
+        g_app = max(0.0, (1.0 + ro.kappa * v) * (1.0 + ro.kappa_a * (a - 0.5)))
+        g_av = max(0.0, 1.0 - ro.kappa * v)
+        th_like, th_leave = ro.thresholds.get("like"), ro.thresholds.get("leave")
+        like_r = float(sc.get("like", 0.0)) * g_app / th_like if th_like else 0.0
+        leave_r = float(sc.get("leave", 0.0)) * g_av / th_leave if th_leave else 0.0
+        return like_r, leave_r
+
+    @staticmethod
+    def _post_of_the_day(best: tuple[float, float, object], acted_ids: set, public: bool) -> dict:
+        """What the day page says of his favorite or least favorite post: when, where, what it
+        smelled of, how it tasted, what he did.  The link and the account go in only for a
+        favorite he liked in public; a least favorite is never named."""
+        _, ratio, r = best
+        acted = r["id"] in acted_ids
+        mb = {}
+        try:
+            mb = json.loads(r["mbon"] or "{}")
+        except ValueError:
+            pass
+        out = {
+            "ts": r["ts"],
+            "feed": r["feed"],
+            "mentioned": bool(r["mentioned"]),
+            "topics": [t for t in (r["topics"] or "").split(",") if t],
+            "words": [w for w in (r["words"] or "").split(",") if w and not w.startswith("h:")],
+            "vader": r["vader"],
+            "learned": round(float(mb.get("_learned", 0.0)), 3),
+            "action": r["action"],
+            "acted": acted,
+            "ratio": round(float(ratio), 3),
+        }
+        if public and r["action"] == "like" and acted:
+            out["uri"], out["did"] = r["source_uri"], r["did"]
+        return out
 
     def write_days(self, ts: float, backfill: bool = False) -> list[str]:
         """Write today's report (every poll) and finish yesterday's once; with backfill, every day
