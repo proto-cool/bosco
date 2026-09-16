@@ -20,6 +20,8 @@ import datetime as dt
 import json
 import os
 import struct
+import sys
+import threading
 import time
 from pathlib import Path
 
@@ -89,6 +91,79 @@ def _atomic_write(path: Path, data: bytes) -> None:
     os.replace(tmp, path)
 
 
+class Writer:
+    """One background thread for the panel's serialisation and file writes.
+
+    The loop thread builds the dicts, because they read the fly (and `status` may probe him,
+    which runs the kernel); this thread turns them into bytes and puts them on disk.  The
+    kernel is entered through ctypes, which releases the GIL for the duration of the call,
+    so while he is simulating this thread genuinely runs on the second core.
+
+    Jobs are keyed and the newest wins: if the writer falls behind, an activity frame or a
+    status snapshot that has already been superseded is dropped rather than queued.  Order
+    between different keys is kept, so a day file is always written before the index that
+    lists it.  Nothing here can raise into the loop; a failed write is counted and reported.
+    """
+
+    def __init__(self) -> None:
+        self._jobs: dict[str, object] = {}
+        self._order: list[str] = []
+        self._cv = threading.Condition()
+        self._stopping = False
+        self.coalesced = 0
+        self.errors = 0
+        self.written = 0
+        self._t = threading.Thread(target=self._run, name="panel-writer", daemon=True)
+        self._t.start()
+
+    def submit(self, key: str, fn) -> None:
+        with self._cv:
+            if key in self._jobs:
+                self.coalesced += 1  # the queued one is stale; this replaces it in place
+            else:
+                self._order.append(key)
+            self._jobs[key] = fn
+            self._cv.notify()
+
+    def _run(self) -> None:
+        while True:
+            with self._cv:
+                while not self._order and not self._stopping:
+                    self._cv.wait()
+                if not self._order:
+                    return
+                fn = self._jobs.pop(self._order.pop(0))
+            try:
+                fn()
+                self.written += 1
+            except Exception as e:  # noqa: BLE001  - the panel must never take the fly down
+                self.errors += 1
+                print("panel writer:", repr(e), file=sys.stderr)
+
+    def drain(self, timeout: float = 10.0) -> bool:
+        """Block until everything queued has been written.  For callers that write the panel and
+        then look at it (the CLI, the tests); the live loop never waits."""
+        end = time.time() + timeout
+        while time.time() < end:
+            with self._cv:
+                if not self._order:
+                    return True
+            time.sleep(0.005)
+        return False
+
+    def stop(self, timeout: float = 10.0) -> None:
+        """Finish what is queued and stop.  Called when he is shutting down, so the panel on
+        disk matches the state he was saved in."""
+        with self._cv:
+            self._stopping = True
+            self._cv.notify_all()
+        self._t.join(timeout)
+
+    def depth(self) -> int:
+        with self._cv:
+            return len(self._order)
+
+
 class Panel:
     def __init__(self, agent, ledger, out_dir: Path | str, min_interval: float = 0.5) -> None:
         self.agent = agent
@@ -97,6 +172,7 @@ class Panel:
         self.dir.mkdir(parents=True, exist_ok=True)
         self.min_interval = min_interval
         self._last_activity = 0.0
+        self.writer = Writer()
         self.pop_names = list(agent.readout.pops)
         self.identity: dict[str, str] = {}
 
@@ -108,8 +184,11 @@ class Panel:
         self._last_activity = now
         kc_active = int((w.counts[self.agent.fly.kc] > 0).sum())
         rates = [float(dec.scores.get(p, 0.0)) for p in self.pop_names]
-        _atomic_write(
-            self.dir / "activity.bin", pack_activity(w.t1_ms, w.counts, rates, dust, dec.learned, kc_active, now)
+        self.writer.submit(
+            "activity",
+            lambda t=w.t1_ms, c=w.counts, r=rates, d=dust, le=dec.learned, k=kc_active, n=now: _atomic_write(
+                self.dir / "activity.bin", pack_activity(t, c, r, d, le, k, n)
+            ),
         )
 
     def _words(self) -> dict:
@@ -365,8 +444,18 @@ class Panel:
                 except (OSError, ValueError):
                     pass
             rep = self.day_report(day, ts)
-            _atomic_write(path, json.dumps(rep, separators=(",", ":")).encode())
+            self.writer.submit(
+                f"day:{day.isoformat()}",
+                lambda p=path, r=rep: _atomic_write(p, json.dumps(r, separators=(",", ":")).encode()),
+            )
             written.append(day.isoformat())
+        # the index lists the day files, and the writer keeps submission order, so it lands after them
+        self.writer.submit("days-index", lambda d=ddir, z=tz: self._write_index(d, z))
+        return written
+
+    def _write_index(self, ddir: Path, tz) -> None:
+        """Rebuild days/index.json from the day files on disk.  Every poll re-reads and re-parses
+        every day of his life, which is why it belongs on the writer thread and not in the loop."""
         index = []
         for path in sorted(ddir.glob("*.json"), reverse=True):
             if path.name == "index.json":
@@ -390,7 +479,6 @@ class Panel:
                 }
             )
         _atomic_write(ddir / "index.json", json.dumps({"tz": str(tz), "days": index}, separators=(",", ":")).encode())
-        return written
 
     # ---- per poll -----------------------------------------------------------------
     def status(self, ts: float, extra: dict | None = None) -> dict:
@@ -522,5 +610,8 @@ class Panel:
         }
         if extra:
             status.update(extra)
-        _atomic_write(self.dir / "status.json", json.dumps(status, separators=(",", ":")).encode())
+        self.writer.submit(
+            "status",
+            lambda st=status: _atomic_write(self.dir / "status.json", json.dumps(st, separators=(",", ":")).encode()),
+        )
         return status

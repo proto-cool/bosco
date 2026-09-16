@@ -263,6 +263,7 @@ def main(argv=None) -> int:
             )
         st = panel.status(ts)
         days = panel.write_days(ts, backfill=True)
+        panel.writer.stop()  # the writes are on a background thread; do not exit before they land
         print(
             f"wrote {a.out}/status.json ({len(st['people'])} people, {len(st['recent'])} recent), activity.bin "
             f"and days {days}"

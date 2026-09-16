@@ -915,18 +915,24 @@ def run_loop(ledger: Ledger, dry_run: bool, once: bool, interval: int) -> int:
                     b.agent.skip_downtime(time.time())
                 lag = b.agent.lag_s(time.time())
                 ledger.set_cursor("last_poll_ts", repr(time.time()))
+                panel_s = 0.0
                 if panel is not None:
+                    t_panel = time.time()
                     try:
                         panel.status(time.time(), {"poll": {"browsed": nb, "lag_s": lag, "feeds": b.read_by_feed}})
                         panel.write_days(time.time())
                     except Exception as e:  # noqa: BLE001
                         print("panel status failed:", repr(e), file=sys.stderr)
+                    # what the loop thread still spends: building the dicts (they read him).  The
+                    # serialising and the writing are on the writer thread, on the second core.
+                    panel_s = time.time() - t_panel
                 ledger.set_cursor("brain_lag_s", repr(lag))
                 print(
                     f"{dt.datetime.now(dt.UTC).isoformat()} poll: {nb} browsed "
                     f"({', '.join(f'{k} {v}' for k, v in b.read_by_feed.items()) or 'nothing new'}), "
                     f"{b.skipped_lang} not in his languages, {nk} blocks, lag {lag:.0f}s, "
                     f"{b.agent.slice_wall_s:.2f} wall s per bio s, {b.agent.active_fraction():.0%} of the brain awake"
+                    + (f", panel {panel_s:.2f}s on the loop (writer queue {panel.writer.depth()})" if panel else "")
                 )
             except Exception as e:  # noqa: BLE001
                 print("poll error:", repr(e), file=sys.stderr)
@@ -934,9 +940,13 @@ def run_loop(ledger: Ledger, dry_run: bool, once: bool, interval: int) -> int:
             next_browse = max(next_browse + interval, time.time() + interval * 0.25)
             if once:
                 b.agent.save_state(force=True)
+                if panel is not None:
+                    panel.writer.stop()
                 return 0
         if stop["now"]:
             b.agent.save_state(force=True)
+            if panel is not None:
+                panel.writer.stop()  # let the panel on disk match the state he was saved in
             return 0
         # between polls he lives: bounded steps toward now, never past the next check
         try:

@@ -51,6 +51,7 @@ def test_day_reports_from_the_ledger(fly, tmp_path):
     panel = Panel(ag, L, tmp_path / "panel", min_interval=0.0)
     now = t_yesterday + 90_000 + 60
     written = panel.write_days(now, backfill=True)
+    assert panel.writer.drain(), "panel writer did not finish"
     tz = ag.clock.tz
     d_today = dt.datetime.fromtimestamp(now, tz).date()
     d_yest = dt.datetime.fromtimestamp(t_yesterday, tz).date()
@@ -67,4 +68,5 @@ def test_day_reports_from_the_ledger(fly, tmp_path):
     # a finished day is not rewritten
     before = (tmp_path / "panel" / "days" / f"{d_yest.isoformat()}.json").stat().st_mtime_ns
     panel.write_days(now + 5)
+    assert panel.writer.drain(), "panel writer did not finish"
     assert (tmp_path / "panel" / "days" / f"{d_yest.isoformat()}.json").stat().st_mtime_ns == before
