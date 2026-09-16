@@ -11,7 +11,7 @@ His numbers depend on the CPU in one way: numpy chooses its code path by
 CPU level (x86-64-v2, v3, v4, the AVX-512 tiers) and the levels round float
 reductions differently. Two boxes at the same level replay each other bit
 for bit; two at different levels do not (README, *numerics*). From
-`a96d675`+1 the container pins numpy to x86-64-v3 on every box, the kernel
+`db60d73` the container pins numpy to x86-64-v3 on every box, the kernel
 is built for x86-64-v3, and the agent records the level he runs at; a
 change writes a `numerics` control row and a snapshot, so the record marks
 the boundary by itself.
@@ -19,7 +19,9 @@ the boundary by itself.
 Before touching the new box, on the old one:
 
 ```
-cd /root/bosco && git checkout <this commit> && podman build -t bosco -f ops/Containerfile . && systemctl restart bosco
+cd /root/bosco && git checkout db60d73 && podman build -t bosco -f ops/Containerfile .
+cp ops/bosco.container /etc/containers/systemd/   # the numpy pin is in the unit, not the image
+systemctl daemon-reload && systemctl restart bosco
 journalctl -u bosco -n 30 --no-pager
 sqlite3 state/ledger.sqlite "SELECT ts, kind, target_uri FROM control WHERE kind='numerics'"
 podman exec bosco /app/.venv/bin/python /app/scripts/cpu_determinism.py
