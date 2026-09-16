@@ -7,6 +7,9 @@ After=network-online.target
 Image=localhost/bosco:latest
 EnvironmentFile=%h/bosco/.env
 Environment=BOSCO_PANEL_DIR=/app/state/panel
+# numpy's CPU code path pinned to x86-64-v3 (AVX2, FMA) on every box, so a move between machines
+# does not change his numbers (README: numerics); scripts/cpu_determinism.py checks a box
+Environment=NPY_DISABLE_CPU_FEATURES=AVX512F AVX512CD AVX512_KNL AVX512_KNM AVX512_SKX AVX512_CLX AVX512_CNL AVX512_ICL AVX512_SPR X86_V4
 Volume=%h/bosco/data/raw:/app/data/raw:ro,Z
 Volume=%h/bosco/data/cache:/app/data/cache:Z
 Volume=%h/bosco/state:/app/state:z

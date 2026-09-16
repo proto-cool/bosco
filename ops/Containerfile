@@ -5,7 +5,8 @@ WORKDIR /app
 COPY pyproject.toml uv.lock ./
 RUN uv sync --frozen --no-dev --no-install-project
 COPY . .
-RUN uv sync --frozen --no-dev && make -C kernel CFLAGS="-O3 -march=native -std=c99 -fPIC -fno-fast-math -ffp-contract=off -fexcess-precision=standard -fno-trapping-math"
+RUN uv sync --frozen --no-dev && make -C kernel CFLAGS="-O3 -march=x86-64-v3 -std=c99 -fPIC -fno-fast-math -ffp-contract=off -fexcess-precision=standard -fno-trapping-math"
+# The kernel is built for x86-64-v3 (AVX2, FMA), not the host: the same code on every box.
 # data/raw (feathers) and state/ are volumes; data/cache is built on first run
 ENV BOSCO_LEDGER=/app/state/ledger.sqlite PYTHONUNBUFFERED=1
 ENTRYPOINT ["/app/.venv/bin/bosco"]

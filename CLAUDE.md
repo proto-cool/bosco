@@ -66,8 +66,8 @@ convenience, "just for testing," or because a result would look better.
 
 ## Architecture
 
-One Python process, one container (Podman quadlet), one Vultr dedicated-vCPU
-VPS. No GPU.
+One Python process, one container (Podman quadlet), one dedicated x86-64-v3
+server (Kimsufi KS-5-A from 2026-09; a dedicated-vCPU VPS before). No GPU.
 
 ```
 poller  ->  encoder  ->  kernel (C, ctypes)  ->  plasticity  ->  readout  ->  poster
@@ -287,7 +287,9 @@ matters.
 ## Ops
 
 - systemd/quadlet with restart-on-failure.
-- Nightly: ledger + weights rsync off-box. Weekly: Vultr snapshot.
+- Nightly: ledger + weights rsync off-box. Weekly: dated tarball of state
+  off-box. numpy pinned to x86-64-v3; a change of numerics level is a logged
+  boundary (`docs/MIGRATE.md`).
 - Dead-man alert if no episode has run in 4 h.
 - Bio says "in development" until `freeze-v1`.
 

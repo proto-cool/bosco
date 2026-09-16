@@ -227,6 +227,11 @@ async function show(date) {
       const at = clockTime(x.ts, tz);
       return m ? `${Math.round(m[1] / 60)} min behind the clock at ${at}` : `behind the clock at ${at}`;
     }
+    if (x.kind === 'numerics') {
+      // the CPU code path numpy runs on changed here (a new machine): spans before this replay on
+      // the old level, spans after on the new; a boundary, not a break
+      return `numerics ${(x.target || '').replace('->', ' → ')} from ${clockTime(x.ts, tz)}`;
+    }
     if (x.kind === 'plasticity') {
       // the learning rule changed here (README, Agent.PLASTICITY_VERSION): spans before this
       // replay under the old rule, spans after under the new; a boundary, not a break

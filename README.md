@@ -102,7 +102,17 @@ Every number below has a gate report under `docs/`.
    fast-math, splitmix64 RNG.  His full state (voltages,
    conductances, adaptation, delay ring, RNG, plastic weights, debris drive)
    is snapshotted hourly; any span replays bit-identically from the snapshot
-   before it plus the logged inputs (`bosco replay`).
+   before it plus the logged inputs (`bosco replay`). *Numerics* (decided
+   2026-09-16, before the move to a dedicated server): numpy dispatches its
+   kernels by CPU level (x86-64-v2, v3, v4, the AVX-512 tiers) and the
+   levels round float reductions differently, so the same log on two
+   machines at different levels diverges in the last bits (measured: the
+   brain digest changes between the v2 and v3 paths, glibc's libm makes no
+   difference). The container pins numpy to x86-64-v3 (`ops/bosco.container`)
+   and the kernel is built for x86-64-v3, not the host; the level he runs at
+   is recorded (`Agent.numerics_level`, cursor `numerics`) and a change is a
+   `numerics` control row and a snapshot, a boundary like a change of
+   learning rule. `scripts/cpu_determinism.py` compares two boxes.
 14. **Bosco runs continuously** (decided 2026-09-13; `src/bosco/brain.py`).
    No episodes from rest.  One biological second per wall second, about half
    a core.  Idle time is simulated in one-second slices with only the

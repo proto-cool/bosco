@@ -219,6 +219,35 @@ class Agent:
         if not self._appetite_loaded and self.brain_t0 is not None:
             self._init_appetite()
         self._mark_plasticity_version()
+        self._mark_numerics()
+
+    @staticmethod
+    def numerics_level() -> str:
+        """The CPU code path numpy is running on, as a name: numpy dispatches its kernels by CPU
+        feature level (x86-64-v2, v3, v4, then the AVX-512 tiers) and the levels round float
+        reductions differently, so two machines at different levels do not replay each other
+        bit for bit.  The level is recorded and a change is a logged boundary (`numerics` control
+        row), like a change of learning rule.  ops/bosco.container pins the level to x86_v3."""
+        try:
+            from numpy._core._multiarray_umath import __cpu_features__ as feats
+        except ImportError:  # numpy 1.x
+            from numpy.core._multiarray_umath import __cpu_features__ as feats
+        for name in ("AVX512_SPR", "AVX512_ICL", "X86_V4", "AVX512_SKX", "AVX512F", "X86_V3", "X86_V2"):
+            if feats.get(name):
+                return name.lower()
+        import platform
+
+        return f"baseline:{platform.machine()}"
+
+    def _mark_numerics(self) -> None:
+        had = self.ledger.get_cursor("numerics")
+        now = self.numerics_level()
+        if had == now:
+            return
+        if self.brain_t0 is not None and self.live.t_ms > 0:
+            self.ledger.add_control("numerics", "system", None, f"{had or '?'}->{now}")
+            self.snapshot()
+        self.ledger.set_cursor("numerics", now)
 
     def _mark_plasticity_version(self) -> None:
         had = self.ledger.get_cursor("plasticity_version")

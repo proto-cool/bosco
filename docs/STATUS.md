@@ -40,7 +40,7 @@
 2. **Account.** Create `bosco.proto.cool`, an app password, the bot
    self-label, "in development" in the bio, and a list named `bosco-ignore`
    on `@proto.cool`.  Fill `ops/env.example` → `.env`.
-3. **Box.** Vultr VPS, `podman build`, quadlet, timers (`ops/README.md`).
+3. **Box.** A dedicated server (`docs/DEPLOY.md` B1, `docs/MIGRATE.md`), `podman build`, quadlet, timers (`ops/README.md`).
    Feathers go in `data/raw/` (1.1 GB; `scripts/` has the URLs in `paths.py`).
 
 ## Try it now

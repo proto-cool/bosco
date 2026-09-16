@@ -258,3 +258,28 @@ def test_others_and_embeds_are_logged_and_replayed(fly):
     ok, logged, got = ag.replay_span(snap, ag.live.t_ms)
     assert ok and logged == got
     assert ag.ledger.assert_no_text() == []
+
+
+@needs_data
+def test_a_change_of_numerics_level_is_a_logged_boundary(fly, tmp_path):
+    """The CPU code path numpy runs on is recorded; when it changes (a new machine) the agent
+    writes a `numerics` control row and a snapshot, like a change of learning rule."""
+    from bosco.agent import Agent
+    from bosco.encoder import Features
+    from bosco.ledger import Ledger
+
+    L = Ledger(tmp_path / "l.sqlite")
+    ag = Agent(L, fly, state_dir=tmp_path)
+    level = Agent.numerics_level()
+    assert level and L.get_cursor("numerics") == level
+    assert not L.db.execute("SELECT 1 FROM control WHERE kind='numerics'").fetchall()  # a fresh brain: no row
+    ag.mb.reset()
+    ag.live.net.reset(0)
+    ag.live.t_ms = 0
+    ag.run(Features("did:plc:a", 0.0, False, 0, False, (), False, ("banana",)), 1_800_000_000.0, "at://a/1", fast=True)
+    ag.save_state(force=True)
+    L.set_cursor("numerics", "x86_v4")  # as if the last box ran a level up
+    ag2 = Agent(L, fly, state_dir=tmp_path)
+    rows = L.db.execute("SELECT target_uri FROM control WHERE kind='numerics'").fetchall()
+    assert rows and rows[0][0] == f"x86_v4->{level}" and L.get_cursor("numerics") == level
+    assert ag2.digest() == ag.digest()

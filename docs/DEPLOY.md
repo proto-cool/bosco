@@ -65,10 +65,15 @@ click. Nothing is assumed. You are `root` on the box and the repo lives at
 
 ### B1. Create it
 
-1. Vultr → **Deploy new server → Cloud Compute → Dedicated CPU**.
-2. Plan: 2 vCPU, 4 GB RAM (the 1 vCPU, 2 GB one also works; it is the floor).
-3. OS: Rocky Linux 9 (or Debian 12 / Ubuntu 24.04). Region: anywhere.
-4. Hostname `bosco`. Deploy. Note the IP.
+1. A dedicated server (from 2026-09: Kimsufi KS-5-A, Xeon E-2274G 4c/8t,
+   32 GB ECC, 2 × 960 GB NVMe in soft RAID, Vint Hill). Any x86-64-v3
+   machine (AVX2 and FMA, every server since 2013) computes his numbers the
+   same way; a VPS with 2 dedicated vCPUs and 4 GB is the floor.
+2. OS: Rocky Linux 9 or AlmaLinux 9 (podman 4.9 with quadlets). Ubuntu
+   24.04 also works. **Not Debian 12**: its podman 4.3 has no quadlets.
+   Keep the installer's default soft RAID 1 across the two disks.
+3. Hostname `bosco`. Add your ssh key. Note the IP.
+4. Moving him from one box to another is `docs/MIGRATE.md`, not this part.
 
 ### B2. Log in and install the basics
 

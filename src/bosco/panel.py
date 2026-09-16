@@ -382,7 +382,7 @@ class Panel:
             for r in db.execute(
                 "SELECT ts, kind, target_uri FROM control WHERE ts>=? AND ts<? AND kind IN "
                 "('downtime','slow','sleep','wake','forget','ignored','deleted_in_app','unliked_in_app',"
-                "'unfollowed_in_app','plasticity') "
+                "'unfollowed_in_app','plasticity','numerics') "
                 "ORDER BY id",
                 (t0, t1),
             )
