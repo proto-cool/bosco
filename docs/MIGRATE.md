@@ -21,6 +21,7 @@ Before touching the new box, on the old one:
 ```
 cd /root/bosco && git checkout db60d73 && podman build -t bosco -f ops/Containerfile .
 cp ops/bosco.container /etc/containers/systemd/   # the numpy pin is in the unit, not the image
+sed -i 's|%h/bosco|/root/bosco|g' /etc/containers/systemd/bosco.container
 systemctl daemon-reload && systemctl restart bosco
 journalctl -u bosco -n 30 --no-pager
 sqlite3 state/ledger.sqlite "SELECT ts, kind, target_uri FROM control WHERE kind='numerics'"
@@ -42,6 +43,82 @@ soft RAID 1 over the two NVMe disks. Add your ssh key. Note the IP. Lower
 the TTL on the `bosco.proto.cool` A record to 300 now, so the panel's DNS
 switch in §5 is quick.
 
+## 1a. Harden the new box (AlmaLinux 9, before anything of his lands on it)
+
+As root, or with `sudo` in front of each line. Keep the terminal you are in
+open until step 2 has been checked from a second one.
+
+1. Update, and reboot if the kernel changed:
+   ```
+   dnf -y update && dnf -y install epel-release && dnf -y install podman git rsync sqlite tar firewalld fail2ban fail2ban-firewalld dnf-automatic chrony policycoreutils-python-utils
+   needs-restarting -r || reboot
+   ```
+2. SSH: keys only, no passwords, root only by key. Put your key in
+   `/root/.ssh/authorized_keys` first (`ssh-copy-id root@<new>` from your machine).
+   ```
+   cat > /etc/ssh/sshd_config.d/50-bosco.conf <<'EOT'
+   PasswordAuthentication no
+   KbdInteractiveAuthentication no
+   PermitRootLogin prohibit-password
+   PubkeyAuthentication yes
+   MaxAuthTries 3
+   X11Forwarding no
+   AllowAgentForwarding no
+   AllowTcpForwarding no
+   ClientAliveInterval 300
+   ClientAliveCountMax 2
+   EOT
+   sshd -t && systemctl reload sshd
+   ```
+   From a second terminal: `ssh root@<new>` must work by key, and
+   `ssh -o PubkeyAuthentication=no root@<new>` must be refused. Only then
+   close the first. Set a strong root password anyway (`passwd`) and keep it
+   in your password manager: SSH will not take it, but the provider's rescue
+   console will.
+3. Firewall: ssh, the panel's 80 and 443 (443/udp is HTTP/3), nothing else.
+   ```
+   systemctl enable --now firewalld
+   firewall-cmd --permanent --set-default-zone=public
+   firewall-cmd --permanent --add-service=ssh --add-service=http --add-service=https
+   firewall-cmd --permanent --add-port=443/udp
+   firewall-cmd --permanent --remove-service=cockpit --remove-service=dhcpv6-client
+   firewall-cmd --reload && firewall-cmd --list-all
+   ```
+   Podman publishes the panel's ports through firewalld itself (netavark);
+   nothing more to open.
+4. fail2ban on sshd:
+   ```
+   cat > /etc/fail2ban/jail.local <<'EOT'
+   [DEFAULT]
+   banaction = firewallcmd-rich-rules
+   bantime = 1h
+   findtime = 10m
+   maxretry = 4
+   [sshd]
+   enabled = true
+   EOT
+   systemctl enable --now fail2ban && fail2ban-client status sshd
+   ```
+5. Security updates apply themselves (a kernel update still waits for you to
+   reboot; his restart is a logged downtime, so pick the moment):
+   ```
+   sed -i 's/^apply_updates = .*/apply_updates = yes/; s/^upgrade_type = .*/upgrade_type = security/' /etc/dnf/automatic.conf
+   systemctl enable --now dnf-automatic.timer
+   ```
+6. Clock in UTC (his timers are UTC; his own day is `config` and does not
+   depend on the box), SELinux enforcing (the quadlets label their volumes),
+   persistent journal:
+   ```
+   timedatectl set-timezone UTC && systemctl enable --now chronyd && timedatectl
+   getenforce            # Enforcing; leave it
+   mkdir -p /var/log/journal && systemctl restart systemd-journald
+   hostnamectl set-hostname bosco
+   ```
+7. Nothing else listening: `ss -tlnup` should show sshd, chronyd's udp, and
+   later Caddy's 80 and 443. Disable anything else (`systemctl disable --now
+   cockpit.socket` if present). Leave the provider's monitoring agent alone
+   if the image shipped one.
+
 ## 2. Prepare the new box (he keeps running on the old one)
 
 `docs/DEPLOY.md` Part B, steps B2 to B6, with two differences:
@@ -61,6 +138,7 @@ introduction again.
 podman build -t bosco -f ops/Containerfile .
 podman build -t bosco-panel -f ops/Containerfile.panel .
 cp ops/bosco.container ops/bosco-panel.container /etc/containers/systemd/
+sed -i 's|%h/bosco|/root/bosco|g' /etc/containers/systemd/bosco.container /etc/containers/systemd/bosco-panel.container
 systemctl daemon-reload
 ```
 
