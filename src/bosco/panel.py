@@ -371,7 +371,8 @@ class Panel:
             {"ts": r["ts"], "kind": r["kind"], "target": r["target_uri"]}
             for r in db.execute(
                 "SELECT ts, kind, target_uri FROM control WHERE ts>=? AND ts<? AND kind IN "
-                "('downtime','sleep','wake','forget','ignored','deleted_in_app','unliked_in_app','unfollowed_in_app') "
+                "('downtime','slow','sleep','wake','forget','ignored','deleted_in_app','unliked_in_app',"
+                "'unfollowed_in_app') "
                 "ORDER BY id",
                 (t0, t1),
             )

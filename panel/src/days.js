@@ -196,6 +196,12 @@ async function show(date) {
   const ctl = rep.control || [];
   const ctlText = ctl.map((x) => {
     if (x.kind === 'downtime') return `downtime skipped at ${clockTime(x.ts, tz)}`;
+    if (x.kind === 'slow') {
+      // he was awake for this, just running behind the wall clock; the time is his and he keeps it
+      const m = /lag=(\d+)/.exec(x.target || '');
+      const at = clockTime(x.ts, tz);
+      return m ? `${Math.round(m[1] / 60)} min behind the clock at ${at}` : `behind the clock at ${at}`;
+    }
     return `${x.kind.replaceAll('_', ' ')} at ${clockTime(x.ts, tz)}`;
   });
   $('fine').textContent = [
