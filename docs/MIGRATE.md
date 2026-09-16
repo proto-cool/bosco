@@ -13,14 +13,14 @@ root never logs in. The quadlets already use `%h` paths for this.
 
 ## 0. What can go wrong, and the one thing to check first
 
-His numbers depend on the CPU in one way: numpy chooses its code path by
-CPU level (x86-64-v2, v3, v4, the AVX-512 tiers) and the levels round float
-reductions differently. Two boxes at the same level replay each other bit
-for bit; two at different levels do not (README, *numerics*). From
-`db60d73` the container pins numpy to x86-64-v3 on every box, the kernel
-is built for x86-64-v3, and the agent records the level he runs at; a
-change writes a `numerics` control row and a snapshot, so the record marks
-the boundary by itself.
+The state digest used to differ between machines while his dynamics did
+not: the kernel's delay ring was allocated uncleared and copied whole into
+the state, so its unwritten slots carried heap garbage. Fixed on
+2026-09-16 (the ring is cleared on reset); since then one synthetic run
+gives one digest across processes, machines, numpy's CPU code paths and
+BLAS thread counts (README, determinism). As a guard the container still
+pins numpy to x86-64-v3 and the agent records the level he runs at; a
+change would write a `numerics` control row and a snapshot.
 
 Before touching the new box, on the old one (still root there):
 

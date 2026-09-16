@@ -223,11 +223,11 @@ class Agent:
 
     @staticmethod
     def numerics_level() -> str:
-        """The CPU code path numpy is running on, as a name: numpy dispatches its kernels by CPU
-        feature level (x86-64-v2, v3, v4, then the AVX-512 tiers) and the levels round float
-        reductions differently, so two machines at different levels do not replay each other
-        bit for bit.  The level is recorded and a change is a logged boundary (`numerics` control
-        row), like a change of learning rule.  ops/bosco.container pins the level to x86_v3."""
+        """The CPU code path numpy is running on, as a name (x86-64-v2, v3, v4, the AVX-512
+        tiers).  A guard: no level dependence was measured once the kernel's delay ring was
+        cleared (README, determinism), but numpy does dispatch by level, so the level he runs at
+        is recorded and a change is a logged boundary (`numerics` control row), like a change of
+        learning rule.  ops/bosco.container pins the level to x86_v3."""
         try:
             from numpy._core._multiarray_umath import __cpu_features__ as feats
         except ImportError:  # numpy 1.x

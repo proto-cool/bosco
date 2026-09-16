@@ -152,6 +152,9 @@ void lif_reset(lif_net *net, uint64_t seed) {
     for (int32_t k = 0; k < net->n_in; k++) net->rfc_len[net->in_idx[k]] = 0;
     memset(net->blk, 0, (size_t)net->nblk);
     memset(net->ring_cnt, 0, (size_t)net->dly_steps * sizeof(int32_t));
+    /* the ring's unwritten slots are never read, but lif_get_state copies the whole ring: clear
+     * it, or the state digest carries whatever the heap held (differs by process and machine) */
+    memset(net->ring, 0, (size_t)net->dly_steps * (size_t)net->n * sizeof(int32_t));
     net->ring_pos = 0;
     net->rng = seed ^ 0xD1B54A32D192ED03ULL;
     /* warm the generator so seed 0 is not the raw state */
