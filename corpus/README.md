@@ -48,3 +48,14 @@ lately happened to him chooses the file. A reward within two hours is warm,
 a punishment within six is stung, a day without anyone coming to him is
 alone. Fifteen lines each; no verdicts, no lessons, things that happened
 and where he is now.
+
+v6 (2026-09-16): the senses of 2026-09-15 (`docs/CORPUS-PLAN.md` v4),
+written by Claude at Nick's request in the register of `011-banana.txt`:
+`190-seen-met` and `191-seen-fresh` (`seen=met|fresh`, his yes and his no
+when asked about a smell), `180-colour` (the retina's colour words as he
+meets them), `181-looking`, `182-when-and-how-many`, `183-pictures` and
+`184-moving` (`picture`, `photo`, `video`: the `img` and `motion`
+channels), and `095-day` / `089-evening` behind the two `time=` tags that
+had nothing. The first reply lines went into `phrasebook.yaml` the same day
+(mid arousal, every valence and familiarity), for Nick to edit or replace
+before freeze-v1.

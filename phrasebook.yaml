@@ -15,25 +15,116 @@
 # Format: each entry has an id (stable, used in the ledger), the key, and the text.
 # Text must be <= 300 graphemes. No links, no mentions except @proto.cool.
 #
-# Claude does not write lines.  Placeholders below are structure only and
-# are skipped by the loader (text: null).
-version: 0
+# Reply lines (mid arousal) drafted by Claude at Nick's request on 2026-09-16 in the
+# register of corpus/011-banana.txt; Nick edits or replaces them before freeze-v1.
+# An entry with text: null is structure only and is skipped by the loader.
+version: 1
 lines:
-  - id: engage-neutral-mid-new-001
-    behaviour: engage
+  - id: reply-positive-mid-new-001
+    behaviour: reply
+    valence: positive
+    arousal: mid
+    familiarity: new
+    text: you said a sweet thing. i dont know you. i came anyway
+  - id: reply-positive-mid-new-002
+    behaviour: reply
+    valence: positive
+    arousal: mid
+    familiarity: new
+    text: new smell. sweet one. i stay near
+  - id: reply-positive-mid-known-001
+    behaviour: reply
+    valence: positive
+    arousal: mid
+    familiarity: known
+    text: you again. you said a good thing. i am on the wall near you
+  - id: reply-positive-mid-known-002
+    behaviour: reply
+    valence: positive
+    arousal: mid
+    familiarity: known
+    text: you came back. i know your smell. good
+  - id: reply-positive-mid-familiar-001
+    behaviour: reply
+    valence: positive
+    arousal: mid
+    familiarity: familiar
+    text: i know you. this is one of the good days. i am coming
+  - id: reply-positive-mid-familiar-002
+    behaviour: reply
+    valence: positive
+    arousal: mid
+    familiarity: familiar
+    text: you. i went to you before the fruit today
+  - id: reply-neutral-mid-new-001
+    behaviour: reply
     valence: neutral
     arousal: mid
     familiarity: new
-    text: null
-  - id: reply-positive-high-known-001
+    text: i dont know you. i dont know the word. say it slow
+  - id: reply-neutral-mid-new-002
     behaviour: reply
-    valence: positive
-    arousal: high
-    familiarity: known
-    text: null
-  - id: groom-neutral-low-new-001
-    behaviour: groom
     valence: neutral
-    arousal: low
+    arousal: mid
     familiarity: new
-    text: null
+    text: hello. i am small. what is that
+  - id: reply-neutral-mid-known-001
+    behaviour: reply
+    valence: neutral
+    arousal: mid
+    familiarity: known
+    text: you again. i heard the word. i dont know it. i keep it
+  - id: reply-neutral-mid-known-002
+    behaviour: reply
+    valence: neutral
+    arousal: mid
+    familiarity: known
+    text: i know you a little. say it again. slower
+  - id: reply-neutral-mid-familiar-001
+    behaviour: reply
+    valence: neutral
+    arousal: mid
+    familiarity: familiar
+    text: i know you. i dont know the thing. tell me the thing
+  - id: reply-neutral-mid-familiar-002
+    behaviour: reply
+    valence: neutral
+    arousal: mid
+    familiarity: familiar
+    text: you. ok. what is it. is it sweet
+  - id: reply-negative-mid-new-001
+    behaviour: reply
+    valence: negative
+    arousal: mid
+    familiarity: new
+    text: that was sharp. i dont know you. i am on the far wall
+  - id: reply-negative-mid-new-002
+    behaviour: reply
+    valence: negative
+    arousal: mid
+    familiarity: new
+    text: bitter. i turn away. i dont know you yet
+  - id: reply-negative-mid-known-001
+    behaviour: reply
+    valence: negative
+    arousal: mid
+    familiarity: known
+    text: you were loud at me before. you are loud again. i go under the leaf
+  - id: reply-negative-mid-known-002
+    behaviour: reply
+    valence: negative
+    arousal: mid
+    familiarity: known
+    text: you came back. that word was sharp. i remember
+  - id: reply-negative-mid-familiar-001
+    behaviour: reply
+    valence: negative
+    arousal: mid
+    familiarity: familiar
+    text: i know you. that was not a kind one. i am still here. on the far side
+  - id: reply-negative-mid-familiar-002
+    behaviour: reply
+    valence: negative
+    arousal: mid
+    familiarity: familiar
+    text: you are one of the ones i know. that was bitter. i go to the dark for a bit
