@@ -142,6 +142,19 @@ Do not download the EM volume. `neuprint-python` against
 - **Punishment DANs**: block records (public, real) and VADER-negative
   replies or quotes to his posts. Punishment is sparse; the innate bitter
   channel carries most aversion. Do not "fix" the sparsity by adding a model.
+- **Taste while browsing** (decided 2026-09-15): the sugar or bitter of a
+  post he reads pairs that window's mixture with reward or punishment at a
+  small published strength (`config/plasticity_v1.yaml` `taste`), in the
+  window, as sugar drives PAM and bitter drives PPL1 in the fly. Not a
+  social reward: no appetite bite, no outcomes row. Sizes come from the
+  gate (`scripts/phase8_taste_gate.py`), never from outcomes.
+- **Familiarity is the α'3 compartment** (decided 2026-09-15; Hattori et
+  al. 2017): every stimulus window depresses the exposure trace of the KCs
+  that fired; the mean over a smell's KCs is his familiarity with it, no
+  valence, e-fold a day. A novel smell alerts (scales walking). PPL104 is in
+  the `exposure` set, not punishment. The learning rule is a frozen artifact
+  at `freeze-v1`; a change of rule bumps `Agent.PLASTICITY_VERSION`, which
+  writes a `plasticity` control row and a snapshot.
 - **Habituation**: short-term depression on sensory afferents only; the
   same smell every few minutes fades, a new one is fresh.
 - **Appetite** (`config/appetite_v1.yaml`): a scalar that rises with hours

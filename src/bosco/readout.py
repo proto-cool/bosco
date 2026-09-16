@@ -38,6 +38,7 @@ class Decision:
     mbon: dict[str, float] | None = None  # depression on reward/punishment-side synapses of the active KCs
     appetite: float = 0.5  # his appetite for contact at the window (config/appetite_v1.yaml)
     also: tuple[str, ...] = ()  # compatible actions taken alongside: a like with a reply, when both crossed
+    familiar: float = 0.0  # how well he has met this smell, from the a'3 weights (0 new .. 1 well met)
 
 
 class Readout:
@@ -53,6 +54,7 @@ class Readout:
         g = cfg.get("gating", {})
         self.kappa = float(g.get("kappa", 1.0))
         self.valence_cut = float(g.get("valence_cut", 0.2))
+        self.novelty_kappa = float(g.get("novelty_kappa", 0.0))
         ap = yaml.safe_load(open(paths.CONFIG / "appetite_v1.yaml"))
         self.kappa_a = float(ap.get("readout_kappa", 0.0))
         self.pops: dict[str, np.ndarray] = {}
@@ -96,11 +98,14 @@ class Readout:
         valence_cut: float | None = None,
         appetite: float = 0.5,
         addressed: bool = False,
+        familiarity: float = 0.0,
     ) -> Decision:
         """Winner-take-all over gated population rates from a window's spike counts.  `learned`
         is the mushroom body's verdict on this stimulus, read from the weights
         (MushroomBody.learned_valence).  Approach populations x (1 + kappa v) x (1 + kappa_a (a - 0.5)),
-        avoid x (1 - kappa v); `a` is his appetite for contact, centred so it never forces or silences."""
+        avoid x (1 - kappa v); `a` is his appetite for contact, centred so it never forces or silences.
+        `familiarity` is how well he has met the smell (MushroomBody.familiarity); a novel one
+        alerts him (Hattori et al. 2017): walking x (1 + novelty_kappa (1 - familiarity))."""
         if isinstance(counts, EpisodeResult):
             counts = counts.counts
         kappa = self.kappa if kappa is None else kappa
@@ -109,10 +114,13 @@ class Readout:
         v = float(learned)
         mb = dict(mb_info or {})
         a = float(np.clip(appetite, 0.0, 1.0))
+        fam = float(np.clip(familiarity, 0.0, 1.0))
         gated = {}
         for k, x in sc.items():
             if k in APPROACH:
                 g = (1.0 + kappa * v) * (1.0 + self.kappa_a * (a - 0.5))
+                if k == "engage":
+                    g *= 1.0 + self.novelty_kappa * (1.0 - fam)
             elif k in AVOID:
                 g = 1.0 - kappa * v
             else:
@@ -134,4 +142,4 @@ class Readout:
         valence = "positive" if v > valence_cut else "negative" if v < -valence_cut else "neutral"
         dn_rate = float(np.asarray(counts)[self.dn_all].mean() * 1000.0 / ms)
         arousal = "low" if dn_rate < arousal_cuts[0] else "high" if dn_rate > arousal_cuts[1] else "mid"
-        return Decision(behaviour, action, sc, ratios, valence, arousal, v, mb, a, also)
+        return Decision(behaviour, action, sc, ratios, valence, arousal, v, mb, a, also, fam)

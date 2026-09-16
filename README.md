@@ -452,6 +452,52 @@ Every number below has a gate report under `docs/`.
    his that smells most like the moment. When nothing in the air is in any
    sentence of his, he stitches as before.
 
+43. **What he reads teaches him: taste while browsing** (decided
+   2026-09-15). Until now dopamine fired only for outcomes (likes, kind
+   replies, blocks); a thousand posts a day changed nothing but habituation.
+   In the fly, sugar sensory neurons drive the PAM reward dopamine neurons
+   and bitter ones the PPL1 punishment neurons; that is how odor-taste
+   conditioning works at all. So the taste of a post he reads (VADER ->
+   sugar or bitter GRNs, decision 7) now pairs the whole mixture in that
+   window (account, place, topics, words) with reward or punishment in the
+   window itself, at strength gain x the gustatory rate fraction
+   (`config/plasticity_v1.yaml` `taste`: 0.15 reward, 0.1 punishment, a
+   labeled post 0.3 as full bitter). Same rule as an outcome pairing
+   (`Agent.learn_from_window`, `MushroomBody.pair_counts(scale=)`), a
+   fraction of the strength, spaced repetition consolidating it like any
+   other. Not a social reward: no appetite bite, no outcomes row; the
+   episode row carries the weight digests and a `taste:` note, and replay
+   does the same from the features. Sizes from `scripts/phase8_taste_gate.py`
+   (`docs/phase8-taste.md`), never from outcomes. The confound is stated in
+   EXPERIMENT.md §7: he will come to like sweet talkers, because a fly
+   likes sugar; bitter, labels and blocks are the brakes, and because the
+   rule is symmetric his taste is correctable. A change of learning rule
+   breaks the replay chain across the commit that lands it, so the boundary
+   is written down: `Agent.PLASTICITY_VERSION`, a `plasticity` control row
+   and a snapshot the first time the new rule runs.
+44. **Familiarity is a compartment** (decided 2026-09-15; Hattori et al.
+   2017, Cell 169:956). The PPL1-α'3 dopamine neuron fires on mere
+   exposure to an odor and depresses the α'3 terminals of the KCs that
+   fired, so a familiar odor drives MBON-α'3 less than a novel one, and
+   the fly's alerting response to a novel odor wanes as it becomes
+   familiar. Compartment `a'3` (PPL104 -> MBON16/17/28 and MBON17-like,
+   which the data supports at 49 synapses) moves out of the punishment set
+   into its own `exposure` set (`config/mb_compartments.yaml`); every
+   stimulus window depresses the exposure trace of the KCs that fired
+   (`config/plasticity_v1.yaml` `exposure`: eta 0.3, floor 0.3, e-fold a
+   day, so "today" is familiar and last week is not), and the mean
+   depression over the KCs a smell lights is his familiarity with it
+   (`MushroomBody.familiarity`, logged as `_familiar` on the row). It
+   carries no valence and learned valence does not read it. The trace is
+   kept per Kenyon cell and applied on that cell's edges into α'3 rather
+   than per synapse, because in this model an account odor is carried
+   almost entirely by γ KCs (about 110 cells fire, one or two of them
+   α'/β') and only α'/β' KCs reach the α'3 MBONs: a per-synapse trace saw
+   nothing. Novelty reaches behaviour as Hattori describes, alerting: the
+   walking population is scaled by (1 + 0.5 (1 − familiarity)) before
+   threshold (`readout_populations.yaml` `novelty_kappa`), so a smell he
+   has not met is one he goes to look at.
+
 Not in v1: visual input.
 
 ## Running

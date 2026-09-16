@@ -37,6 +37,11 @@ actions:
 # populations (engage, like, reply) are scaled by (1 + kappa v), avoid (leave)
 # by (1 - kappa v), before thresholds.  kappa 2: a fully learned account can
 # triple its approach drive or silence it.  valence_cut sets the phrasebook key.
+# Novelty (decided 2026-09-15): a smell he has not met alerts him (Hattori et al. 2017: MBON-a'3
+# drives locomotion for a novel odor and quiets as it becomes familiar).  Familiarity f in [0, 1]
+# is read from the a'3 weights (MushroomBody.familiarity); walking is scaled by
+# (1 + novelty_kappa (1 - f)) before threshold.  Only walking: curiosity is going to look.
 gating:
   kappa: 2.0
   valence_cut: 0.2
+  novelty_kappa: 0.5

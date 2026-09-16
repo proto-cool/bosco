@@ -192,6 +192,15 @@ class Agent:
             self._appetite_loaded = True
         self.threads = json.loads(str(np.asarray(st["threads"]).ravel()[0])) if "threads" in st else {}
 
+    # The learning rule's version.  A change to what a window teaches (config/plasticity_v1.yaml,
+    # config/mb_compartments.yaml, MushroomBody) is legitimate before freeze-v1, but it means
+    # the spans logged before it no longer replay under the new rule.  So the boundary is
+    # written down: a `plasticity` control row and a snapshot at the moment the new rule first
+    # runs, so an auditor reads a change of fly, not a broken replay.
+    #   1  two timescales, outcomes only (2026-09-13)
+    #   2  exposure trace and taste while browsing (2026-09-15)
+    PLASTICITY_VERSION = 2
+
     def _load_state(self) -> None:
         if self.state_path.exists():
             self._unpack(dict(np.load(self.state_path)))
@@ -199,6 +208,17 @@ class Agent:
         self.brain_t0 = float(t0) if t0 else None
         if not self._appetite_loaded and self.brain_t0 is not None:
             self._init_appetite()
+        self._mark_plasticity_version()
+
+    def _mark_plasticity_version(self) -> None:
+        had = self.ledger.get_cursor("plasticity_version")
+        now = str(self.PLASTICITY_VERSION)
+        if had == now:
+            return
+        if self.brain_t0 is not None and self.live.t_ms > 0:
+            self.ledger.add_control("plasticity", "system", None, f"{had or '1'}->{now}")
+            self.snapshot()
+        self.ledger.set_cursor("plasticity_version", now)
 
     # ---- appetite for contact ----------------------------------------------------
     def sim_hours(self) -> float:
@@ -624,7 +644,8 @@ class Agent:
         fam = self.ledger.familiarity(did) if did else 0
         if f is not None and f.labeled and dec.action in ("like", "follow", "reply"):
             dec = replace(dec, behaviour="nothing", action="nothing")
-            note = (note + "; " if note else "") + "labeled"
+        if f is not None and f.labeled and "labeled" not in (note or ""):
+            note = (note + "; " if note else "") + "labeled"  # replay rebuilds the features from the note
         if f is not None and f.question and "question" not in (note or ""):
             note = (note + "; " if note else "") + "question"  # replay rebuilds the features from the note
         line = None
@@ -689,6 +710,7 @@ class Agent:
                     text, text_source = line.text, "phrasebook"
         mbon = {t: r for t, r in self.fly.mbon_rates_from_counts(w.counts, w.ms).items()}
         mbon["_learned"] = dec.learned
+        mbon["_familiar"] = dec.familiar
         for k, v in (dec.mbon or {}).items():
             mbon[f"_{k}"] = v
         row = EpisodeRow(
@@ -755,17 +777,55 @@ class Agent:
         drives = list(self.enc.encode(f, self.appetite).drives) if f is not None else []
         w = self.live.present(drives, PRESENT_MS)
         self._tick(self.sim_hours())
-        v, info = self.mb.learned_valence(w.counts[self.fly.kc])
+        kc = w.counts[self.fly.kc]
+        v, info = self.mb.learned_valence(kc)
+        fam = self.mb.familiarity(kc) if f is not None else 0.0
         dec = self.readout.decide(
-            w.counts, w.ms, learned=v, mb_info=info, appetite=self.appetite, addressed=bool(f and f.mentioned)
+            w.counts,
+            w.ms,
+            learned=v,
+            mb_info=info,
+            appetite=self.appetite,
+            addressed=bool(f and f.mentioned),
+            familiarity=fam,
         )
         if self.on_window is not None:
             self.on_window(w, dec, self.dust)
-        out = self._log(f, w, dec, ts, source_uri, kind, note, self.dust)
+        d_before = self.mb.digest()
+        if f is not None:
+            tasted = self.learn_from_window(f, kc, w.ms)
+            if tasted:
+                note = (note + "; " if note else "") + tasted
+        out = self._log(f, w, dec, ts, source_uri, kind, note, self.dust, d_before=d_before)
         if f is not None:
             self.remember_thread(thread, self.live.t_ms, f.words)
         self.save_state()
         return out
+
+    def learn_from_window(self, f: Features, kc_counts: np.ndarray, ms: float) -> str | None:
+        """What a stimulus window teaches by itself (decided 2026-09-15).  Exposure: the a'3
+        synapses of the KCs that fired are depressed, so the smell is more familiar next time.
+        Taste: the sugar or bitter he tasted in the post pairs the mixture with reward or
+        punishment at a small strength (config/plasticity_v1.yaml `taste`), as sugar drives the
+        PAM and bitter the PPL1 dopamine neurons in the fly.  Not a social reward: no appetite
+        bite.  Returns the `taste:` note for the row, or None.  A pure function of the features,
+        so replay does the same."""
+        per_s = kc_counts * (1000.0 / ms)
+        t = self.sim_hours()
+        self.mb.expose_counts(per_s, t)
+        g = self.enc.cfg["gustatory"]
+        if f.labeled:
+            valence, frac = "punishment", 1.0
+        elif abs(f.vader) <= float(g["dead_zone"]):
+            return None
+        else:
+            valence = "reward" if f.vader > 0 else "punishment"
+            frac = min(1.0, abs(float(f.vader)) / float(g["c_sat"]))
+        scale = self.mb.taste_scale(valence, frac, labeled=f.labeled)
+        if scale <= 0.0:
+            return None
+        self.mb.pair_counts(per_s, valence, t, scale=scale)
+        return f"taste:{valence}"
 
     def apply_outcome(
         self,
@@ -959,6 +1019,8 @@ class Agent:
             else:
                 w = self.live.present(list(self.enc.encode(f, self.appetite).drives) if f else [], PRESENT_MS)
                 self._tick(self.sim_hours())
+                if f is not None:
+                    self.learn_from_window(f, w.counts[self.fly.kc], w.ms)
             logged = r["brain_digest"]
         got = self.digest()
         self._unpack(saved)

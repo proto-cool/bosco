@@ -25,8 +25,20 @@ genuinely the one acting, and that anyone can check.
   people, not words. Letting him acquire words from accounts he has
   learned to like was considered and deferred; it would be a new
   pre-registration, decided before `freeze-v1` or not at all.
-- Encoder, readout thresholds, phrasebook, and action set are frozen at
+- Encoder, readout thresholds, phrasebook, action set, and the learning
+  rule (`config/plasticity_v1.yaml`, `config/mb_compartments.yaml`; decided
+  2026-09-15 that the rule is a frozen artifact too) are frozen at
   `freeze-v1`.
+- What a window teaches by itself (decided 2026-09-15). Dopamine fires for
+  outcomes, and also for taste: the sugar or bitter of a post he reads
+  pairs the mixture in that window with reward or punishment at a small,
+  published strength, as sugar drives the PAM and bitter the PPL1 dopamine
+  neurons in the fly. Mere exposure leaves a familiarity trace in the α'3
+  compartment (Hattori et al. 2017), which carries no valence. Both are
+  pure functions of the logged features and replay with the window. A
+  change of learning rule is marked in the record (a `plasticity` control
+  row and a snapshot) so the replay chain reads as a change of fly, not a
+  break.
 - After `freeze-v1`, humans influence Bosco only through the network. No
   manual edits to weights, ledger, or stimulus log. Code bug fixes are
   allowed and tagged; behavior changes are a new tag and a note here.
@@ -163,6 +175,7 @@ published with the frozen artifacts.
 | Threshold policy | `config/thresholds_policy.yaml` | |
 | Appetite | `config/appetite_v1.yaml` | |
 | Words as smells | `config/words_v1.yaml` | |
+| Learning rule | `config/plasticity_v1.yaml`, `config/mb_compartments.yaml` | |
 | Corpus | `corpus/` | |
 
 ## 4. Controls (optional; for the curious)
@@ -199,6 +212,10 @@ Any failure is announced from the account and fixed under a new tag.
 - The phrasebook is human-written; its voice is Nick's.
 - The encoder sees who and how toxic, not what.
 - Punishment is sparse; aversion is mostly innate.
+- He will come to like sweet talkers. Since 2026-09-15 the taste of what he
+  reads trains him, and a fly likes sugar; the brakes are bitter text,
+  labels and blocks, and the rule is symmetric, so his taste is
+  correctable and `bosco people` shows it moving.
 - Short-term memory fades in hours; long-term memory needs spaced
   repetition and fades in a month. Bosco forgets most things.
 - Dev-period interaction shaped early weights before the tag.

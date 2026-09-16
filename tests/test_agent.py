@@ -182,3 +182,35 @@ def test_slow_running_is_kept_and_only_real_downtime_is_skipped(fly):
         assert 1700.0 < skipped < 1900.0, skipped
         assert ag.lag_s(ts2) > 3500, "the lag he earned by being slow survived the skip"
         assert L.db.execute("SELECT COUNT(*) FROM control WHERE kind='downtime'").fetchone()[0] == 1
+
+
+@needs_data
+def test_browsing_teaches_taste_and_familiarity_and_replays(fly):
+    """A post he merely reads pairs its taste and exposes its smell (decided 2026-09-15): a
+    sweet post from an account makes the account sweeter and more familiar, with no outcome;
+    a neutral post only more familiar; and a span of such windows replays bit-identically."""
+    from bosco.agent import Agent
+    from bosco.encoder import Features
+    from bosco.ledger import Ledger
+
+    tmp = tempfile.mkdtemp()
+    ag = Agent(Ledger(f"{tmp}/l.sqlite"), fly, state_dir=tmp)
+    ag.mb.reset()
+    ag.live.net.reset(0)
+    ag.live.t_ms = 0
+    o1 = ag.run(Features("did:plc:sweet", 0.8, False, 0), T0, "at://s/1", fast=True)
+    assert o1.decision.familiar == 0.0
+    r1 = ag.ledger.episode(o1.episode_id)
+    assert "taste:reward" in (r1["note"] or "") and r1["weight_digest_before"] != r1["weight_digest_after"]
+    assert ag.ledger.db.execute("SELECT COUNT(*) FROM outcomes").fetchone()[0] == 0
+    line, v = ag.memory_report("did:plc:sweet", T0 + 1)
+    assert v > 0, line
+    snap = ag.snapshot()
+    o2 = ag.run(Features("did:plc:sweet", 0.0, False, 0), T0 + 5, "at://s/2")
+    assert o2.decision.familiar > 0.0 and "taste" not in (ag.ledger.episode(o2.episode_id)["note"] or "")
+    o3 = ag.run(Features("did:plc:bitter", -0.8, False, 0, True), T0 + 10, "at://b/1")
+    r3 = ag.ledger.episode(o3.episode_id)
+    assert "taste:punishment" in r3["note"] and "labeled" in r3["note"]
+    assert ag.memory_report("did:plc:bitter", T0 + 11)[1] < 0
+    ok, logged, got = ag.replay_span(snap, ag.live.t_ms)
+    assert ok and logged == got
