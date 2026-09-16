@@ -146,6 +146,11 @@ rsync -a root@<old>:/root/bosco/data/cache/ data/cache/    # rebuilding it on fi
 rsync -a root@<old>:/root/bosco/.env .env && chmod 600 .env
 ```
 
+Every copy from the old box is a pull by nick, so nick needs a key the old
+box accepts: `ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519 -N '' -C nick@bosco`
+on the new box, append `~/.ssh/id_ed25519.pub` to `/root/.ssh/authorized_keys`
+on the old one, and `ssh root@<old> hostname` from nick must answer.
+
 Edit `.env`: `BOSCO_RSYNC_TARGET` must be somewhere that is not the old
 box (or empty for now). `uv` on the host, for the nightly integrity report:
 
@@ -215,7 +220,12 @@ systemctl stop bosco-nightly.timer bosco-deadman.timer
 systemctl stop bosco          # SIGTERM: he saves his state and stops (journal: the last save)
 ls -l state/brain_state.npz   # mtime after the stop
 sqlite3 state/ledger.sqlite "PRAGMA wal_checkpoint(TRUNCATE);"
-rsync -a --delete /root/bosco/state/ nick@<new>:/home/nick/bosco/state/
+```
+
+Then on the new box, as nick, pull his state:
+
+```
+rsync -a --delete root@<old>:/root/bosco/state/ ~/bosco/state/
 ```
 
 `state/` holds the ledger, his weights and snapshots, the associations,
@@ -223,8 +233,8 @@ the panel files; the rsync must be complete before he starts anywhere. Do
 not start him again on the old box after this: two of him with one account
 would write two records.
 
-On the new box, as nick (`ls -ln state` must show nick's uid on every
-file; rootless podman maps the container's root onto nick):
+Still on the new box (`ls -ln state` must show nick's uid on every file;
+rootless podman maps the container's root onto nick):
 
 ```
 systemctl --user start bosco
