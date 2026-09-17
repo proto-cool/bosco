@@ -656,10 +656,23 @@ Every number below has a gate report under `docs/`.
    API and kept only word counts) showed vocabulary was not the gap: most
    posts carried several of his words, but the sentences that share them
    were narrations, not answers, and what people call him (guy, bud,
-   buddy, fella, pal) was not his at all. Three files in the banana
-   register: `064-you-say.txt` (echo answers on the words people use to
-   him), `065-what-they-call-me.txt`, `066-about-me.txt`; the vocabulary
-   grew from 896 to 913 words. Retrieval now scores and returns a whole
+   buddy, fella, pal) was not his at all. A conversation layer in the
+   banana register, all `behaviour=reply`: `064-you-say.txt` (the words
+   people use to him, in his own report of the thing), `065-what-they-
+   call-me.txt`, `066-about-me.txt`, `067-praise.txt` (valence=positive),
+   `068-insults.txt` (valence=negative), `069-feelings.txt`,
+   `070-requests.txt`, `071-opinions.txt`, `072-time-and-days.txt`,
+   `073-food.txt`, `074-animals.txt`, `075-internet-words.txt`,
+   `076-the-world.txt`: 518 lines, the vocabulary from 896 to about
+   1,100 words. A first draft opened every line with "you said X" /
+   "you asked X"; Nick: he does not need to parrot the conversation to
+   mimic intelligence. The word is in the line for retrieval, inside what
+   he notices or does, never as a quote. With a reply pool this size the
+   seen file's fixed weight no longer made it half the pool, so
+   `model_for` sets that weight from the pool (at least `SEEN_WEIGHT`, at
+   least half), and retrieval gives a seen line three times its score
+   when he was asked (`SEEN_PICK`), so a question about a smell still
+   gets his yes or his no first. Retrieval now scores and returns a whole
    corpus line (one thought, one to a few sentences) instead of one
    sentence: "you said thank." alone was a stub, and a short fragment
    always won the length penalty. The walk adds to the thought only when

@@ -27,7 +27,8 @@ MAX_CHARS = 280
 MAX_SENT_TOKENS = 22
 EOS_BIAS = 2.5  # weight on ending a sentence where a corpus sentence ended, against splicing on
 MIN_SENT_TOKENS = 1  # a one-word sentence is his register ("banana", "rude", "warm")
-SEEN_WEIGHT = 20  # asked about a smell, his yes or his no (seen=met|fresh) is about half the pool: most of the answer
+SEEN_WEIGHT = 20  # asked about a smell, his yes or his no (seen=met|fresh) is at least this, and at least half the pool
+SEEN_PICK = 3.0  # and in retrieval a line from that file counts three times over (2026-09-16, with a bigger corpus)
 # a sentence may not end on one of these (function words, dangling pronouns)
 NO_END = {
     "the",
@@ -292,7 +293,7 @@ class Generator:
         if key in self._models:
             return self._models[key]
         want = self._want(behaviour, valence, arousal, familiarity, state)
-        pool: list[list[str]] = []
+        chosen: list[tuple[Document, int]] = []
         for d in self.docs:
             if self._doc_matches(d, want, topics):
                 base = 1
@@ -301,9 +302,16 @@ class Generator:
                     if "topic" in d.tags:
                         base = 5  # a document about what was just smelled counts most
                     if "seen" in d.tags and "seen" in want:
-                        base = SEEN_WEIGHT  # he was asked about a smell: his yes or his no outweighs the rest
-                weight = max(0, int(round(base * self.doc_weight.get(d.name, 1.0))))
-                pool.extend(d.sentences * weight)
+                        base = 0  # set below: he was asked about a smell, his yes or his no is half the pool
+                chosen.append((d, base))
+        # the seen file's weight keeps it at least half the pool however large the corpus grows
+        others = sum(len(d.sentences) * b for d, b in chosen if b)
+        seen_n = sum(len(d.sentences) for d, b in chosen if not b)
+        seen_w = max(SEEN_WEIGHT, -(-others // seen_n)) if seen_n else 0
+        pool: list[list[str]] = []
+        for d, base in chosen:
+            weight = max(0, int(round((base or seen_w) * self.doc_weight.get(d.name, 1.0))))
+            pool.extend(d.sentences * weight)
         m = NGram(pool)
         self._models[key] = m
         return m
@@ -342,6 +350,8 @@ class Generator:
             if not self._doc_matches(d, want, topics):
                 continue
             bonus = 1.0 if not d.tags else (1.5 if "topic" in d.tags else 1.2)
+            if d.tags and "seen" in d.tags and "seen" in want:
+                bonus = SEEN_PICK  # asked about a smell: his yes or his no leads the answer
             for line in d.lines:
                 sent = [t for s in line for t in s]
                 toks = [t.lower() for t in sent if t not in END_PUNCT and t not in {",", ";", ":"}]
