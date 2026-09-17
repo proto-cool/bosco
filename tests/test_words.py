@@ -357,6 +357,7 @@ def test_small_talk_reaches_him_and_the_rarer_words_win(fly):
 
     enc = Encoder(fly.brain)
     assert enc.words_for("i see", hashed=False) == ("see",)
+    assert enc.words_for("how are you?", hashed=False) == ("how",)  # the commonest thing said to him
     assert enc.words_for("do you know me? yes. ok", hashed=False) == ("know", "yes", "ok")  # two letters are enough
     assert enc.words_for("no. go up. i am on it", hashed=False) == (
         "no",
