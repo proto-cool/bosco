@@ -175,7 +175,12 @@ def main(argv=None) -> int:
             "pre-registered policy in config/thresholds_policy.yaml: each is a quantile of that "
             "population's rate over the named set of real windows, floored at min_hz. Never from "
             "outcomes, never hand-set. `_calibration.source` names the ledger each came from; "
-            "`_calibration.kept` lists any left at their previous value for want of windows."
+            "`_calibration.kept` lists any left at their previous value for want of windows. "
+            "`kc_range` is the recorded spread of KC sparseness over the dev period and "
+            "`kc_band` the band around its median: the nightly tests the day's tail against "
+            "kc_range's top and the day's median against kc_band (a single window where "
+            "nothing fires is ordinary), while scripts/phase8_retina_gate.py uses kc_range "
+            "whole, as the window a picture's own activity must land in."
         )
         if ev and kcs:
             cfg["kc_median"] = med

@@ -25,19 +25,20 @@
 ## Before `freeze-v1`
 
 1. ~~Re-calibrate thresholds on the full dev period.~~ Done 2026-09-17 off
-   `snapshots/2026-09-17/`: engage 4.85, like 3.84, leave 4.00, reply 8.75, groom 12.48, walk 2.05,
-   plus `kc_band`. Re-run after the `tasted` window set lands so `like` comes off it:
-   `uv run python scripts/calibrate_thresholds.py --ledger snapshots/<day>/ledger.sqlite --write`,
-   then rebuild the image. Never from outcomes.
-2. **Phrasebook.** 58 lines: `reply` covers all 27 (valence × arousal × familiarity) twice over,
-   `groom` has 4 (neutral, low and mid, new). Nick's to extend or leave; under the 2026-09-16
-   utterance policy the phrasebook is the fallback, not the voice.
+   `snapshots/2026-09-17/`, every population from real activity and `min_hz` binding on none of
+   them: engage 4.85, like 3.84 (over `tasted`), leave 4.00, reply 8.75, groom 12.48, walk 2.05,
+   plus `kc_band`. `_calibration.kept` is empty; nothing synthetic survives. Never from outcomes.
+2. ~~Phrasebook.~~ Done 2026-09-17 (version 3, 72 lines): `reply` covers all 27 keys twice over
+   and `groom` all nine, so no groom borrows a line through the fallback chain any more. The
+   seven new groom keys were drafted by Claude at Nick's direction, strictly in the fly's
+   physical world -- his day picks the key, the line never says what happened to him.
 3. **Pin the artifacts.** `scripts/freeze.py --write` writes `config/frozen_digests.json` (the
    test suite then holds corpus, phrasebook, topics and identity to it) and prints the
    EXPERIMENT.md §3 table with sha256s to paste in.
 4. **Snapshot the freeze**: `snapshots/freeze-v1/` (ledger + `brain_state.npz`), a clean integrity
    report beside it, EXPERIMENT.md out of DRAFT, and "in development" out of the bio.
-5. **Confirm the nightly publishes.** The repo had no snapshot commit between 2026-09-14 and
+5. ~~Confirm the nightly publishes.~~ It does, and ALL: PASS, since 2026-09-17 19:00 UTC.
+   What went wrong, for the record. The repo had no snapshot commit between 2026-09-14 and
    2026-09-17. The timer was enabled and firing; `uv` was never installed on the new box, so the
    job exited 127 after copying the ledger and before the integrity report, and the failed unit
    went unread -- the dead-man watches episodes, and he was living fine. Fixed 2026-09-17: `uv`
