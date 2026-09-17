@@ -167,6 +167,16 @@ def main(argv=None) -> int:
         kc_range = cfg.get("kc_range")
     if a.write:
         cfg.update(th)
+        # the file describes itself, so a reader of the frozen artifact is not told the numbers
+        # are provisional when they are not (they said "synthetic battery" for a day after they
+        # stopped being that)
+        cfg["_note"] = (
+            "Per-population rate thresholds (Hz), set by scripts/calibrate_thresholds.py from the "
+            "pre-registered policy in config/thresholds_policy.yaml: each is a quantile of that "
+            "population's rate over the named set of real windows, floored at min_hz. Never from "
+            "outcomes, never hand-set. `_calibration.source` names the ledger each came from; "
+            "`_calibration.kept` lists any left at their previous value for want of windows."
+        )
         if ev and kcs:
             cfg["kc_median"] = med
             cfg["kc_band"] = band

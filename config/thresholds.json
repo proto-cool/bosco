@@ -1,5 +1,5 @@
 {
- "_note": "Per-population rate thresholds (Hz). Provisional values come from a synthetic stimulus battery (scripts/calibrate_thresholds.py --synthetic); at freeze-v1 they are re-set from the dev-period distribution of real activity, never from outcomes.",
+ "_note": "Per-population rate thresholds (Hz), set by scripts/calibrate_thresholds.py from the pre-registered policy in config/thresholds_policy.yaml: each is a quantile of that population's rate over the named set of real windows, floored at min_hz. Never from outcomes, never hand-set. `_calibration.source` names the ledger each came from; `_calibration.kept` lists any left at their previous value for want of windows.",
  "engage": 4.85,
  "reply": 8.75,
  "like": 3.838461538461528,
