@@ -1,14 +1,15 @@
 # Nightly 2026-09-17
 
-text-like values in ledger: [('episodes', 'context', 'h:c7129077dfe1cf79,h:1d653685a860c7f6,others,please,h:2fe9e0'), ('episodes', 'context', 'h:25c6ec79e4e25966,h:e18b9ba14e9e1c4f,h:5213e10d4be135b5,h:2'), ('episodes', 'context', 'h:eb0cd63e99eb020b,love,h:726854d760d9ffce,h:211eff31e909e67'), ('episodes', 'context', 'h:9b49dc0fd0a66fd5,cartoon,h:fbc3347e5ea5edb5,h:980d602de919'), ('episodes', 'context', 'h:0416f70d3e86cc58,h:108d99f5da7dfd03,h:eff9f1613d7672c9,h:1'), ('episodes', 'context', 'h:cc472e8cf08a51c6,h:0545e310a33f0577,h:77dbe33c63aeb301,loo'), ('episodes', 'context', 'h:0d64d3efb4b6201d,h:77b7d10c61e32b85,h:5cac6152ebbbb24c,h:6'), ('episodes', 'context', 'h:ec875d9feb3d3b71,h:209d359e109b6293,h:dede7bd8504278b2,loo'), ('episodes', 'context', 'times,h:4b95abfd5c08fc6b,h:855ce2b3802e85a9,h:c3d6e95179a5c3'), ('episodes', 'context', 'tonight,h:28d11e28df9a3a4d,h:25c6ec79e4e25966,h:ef5361c23fe8'), ('episodes', 'context', 'h:dfd8ef2d8c25b250,h:fed367c647023ae0,h:87587d9b1575281a,ton'), ('episodes', 'context', 'h:ef5361c23fe8953e,h:d2c649763dadcf82,h:d6ee02a8328f8b25,h:2'), ('episodes', 'context', 'inside,h:cc472e8cf08a51c6,h:b4604f5e460de5be,h:14445525826cf'), ('episodes', 'context', 'h:93b9edb126b06dd7,h:a9770c5f73aab0c7,h:56374b40839b8fd0,h:b'), ('episodes', 'context', 'h:ada1b911afce8426,h:7006727cdb51e6c9,h:5985fa79e7f0d124,ins'), ('episodes', 'context', 'h:cc472e8cf08a51c6,h:ead31e49651c72c0,h:247647ffe05b58c2,com'), ('episodes', 'context', 'h:c10c840e00403e39,h:be8f3c267e6ab869,h:ada86888205211e4,h:2'), ('episodes', 'context', 'h:732508937c99f4f9,h:f0be618606043052,h:c10c840e00403e39,h:b'), ('episodes', 'context', 'h:9bc78293ff424ae5,h:cc43fa991a006556,h:9f23386718f2cf99,h:4'), ('episodes', 'context', 'h:b152e0decf37f78a,h:732508937c99f4f9,h:f0be618606043052,loo'), ('episodes', 'context', 'h:75f1e37c89214634,h:c6e7102c77315101,looks,straight,h:03e8b'), ('episodes', 'context', 'h:7df01bb9ff9b47cd,h:452d6aa5d456b27f,h:72c8e228170066e9,loo'), ('episodes', 'context', 'h:96b398029797345c,h:2bf0fea2d5f9cd26,h:37724ac79f29b36d,h:f'), ('episodes', 'context', 'h:5c24414c7671c853,h:8a716b216473b466,h:c5d41636f9e1f8d6,h:e'), ('episodes', 'context', 'h:633e7dc1a739ca30,side,h:57fa74343ed68b49,h:eed0fa2c74acd95'), ('episodes', 'context', 'h:8f43a24853864cd7,h:1ab9e377dce48d72,h:4eea3a8f01eacd69,h:7'), ('control', 'target_uri', 'punishment:020-positive.txt,040-low.txt,060-reply.txt,090-qu')]
+text-like values in ledger: none
 
 # Integrity checks
 
-- replay from snapshot 000313481532.npz to 321567532 ms: PASS (logged 7b2b58a291c1, got 7b2b58a291c1)
-- KC sparseness in [0.00012303149606299212, 0.10141793799212598] for all 5282 event episodes: FAIL (499 outside); median 0.020
-- rate caps (config/caps_v1.yaml) over 284 real actions: PASS
-- no post text in database: FAIL [('episodes', 'context', 'h:c7129077dfe1cf79,h:1d653685a860c7f6,others,please,h:2fe9e0'), ('episodes', 'context', 'h:25c6ec79e4e25966,h:e18b9ba14e9e1c4f,h:5213e10d4be135b5,h:2'), ('episodes', 'context', 'h:eb0cd63e99eb020b,love,h:726854d760d9ffce,h:211eff31e909e67')]
+- replay from snapshot 000313481532.npz to 322468532 ms: PASS (logged 7b2b58a291c1, got 7b2b58a291c1)
+- KC q0.99 over the day 0.0924 at or under the recorded top 0.1355: PASS; busiest window 0.1319
+- KC median in band: no kc_band in thresholds.json yet, run the calibration (SKIP)
+- rate caps (config/caps_v1.yaml) over 292 real actions: PASS
+- no post text in database: PASS
 - learning-rule changes logged: ['1->2@1789537924']
-- weight digest chain (5872 rows): PASS
+- weight digest chain (5891 rows): PASS
 
-**ALL: FAIL**
+**ALL: PASS**
