@@ -201,6 +201,7 @@ async function show(date) {
     // the two boundaries: a replay before one runs under the old rule or numerics, after it under the new
     if (x.kind === 'numerics') return `cpu numerics set to ${(x.target || '').split('->').pop()} at ${at}`;
     if (x.kind === 'plasticity') return `learning rule ${(x.target || '').replace('->', ' → ')} at ${at}`;
+    if (x.kind === 'kernel') return `kernel ${(x.target || '').replace('->', ' → ')} at ${at}`;
     if (x.kind === 'clock') return `his clock moved from ${(x.target || '').replace('->', ' to ')} at ${at}`;
     return {
       sleep: `put to sleep by the operator at ${at}`,

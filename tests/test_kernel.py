@@ -141,3 +141,50 @@ def test_lazy_recovery_matches_eager_and_loads_older_states():
     net.run_ms(5.0)
     net2.run_ms(5.0)
     assert net.get_state() == net2.get_state()
+
+
+def test_lazy_recovery_survives_a_step_counter_past_int32():
+    """His habituation recovers on both sides of step 2^31.
+
+    The run loop measured the lazy recovery from a step index truncated to int32 until
+    2026-09-17.  At dt 0.1 ms that wrapped after 2^31 steps -- 59.7 h of biological time,
+    which he passed on 2026-09-16 -- and every (t - x_step) went negative from then on: no
+    synaptic resource recovered again, his sensory afferents faded to nothing, and the KCs
+    firing per window fell from about a hundred to a handful.
+    """
+    import struct
+
+    p = LifParams(std_u=0.004, std_tau_rec=180000.0)  # his own habituation (config/model_v1.yaml)
+    indptr, indices, w = csr_from_edges(2, [0], [1], [20.0])
+
+    def bursts(wrap=None, n=12):
+        """A smell for a second every minute; the stored x after each burst."""
+        net = Net(indptr, indices, w, p)
+        net.reset(seed=3)
+        net.set_std_u(np.array([p.std_u, 0.0]))
+        size, n_neu, nblk = len(net.get_state()), net.n, net.nblk
+        off_x, off_step, off_xstep = 2 * 8 * n_neu, size - (nblk + 8 * n_neu + 8), size - 8 * n_neu
+        if wrap is not None:  # start him just short of the wrap, x and its bookkeeping current
+            b = bytearray(net.get_state())
+            struct.pack_into("<q", b, off_step, wrap)
+            for i in range(n_neu):
+                struct.pack_into("<q", b, off_xstep + 8 * i, wrap)
+            net.set_state(bytes(b))
+        out = []
+        for _ in range(n):
+            net.set_inputs(np.array([0]), np.array([120.0]))
+            net.run_ms(1000.0)
+            net.clear_inputs()
+            net.run_ms(60000.0)
+            st = net.get_state()
+            # the stored x, not net.x(): the getter measures from the 64-bit step and so reads
+            # back what x would be if the recovery had been applied
+            out.append((struct.unpack_from("<d", st, off_x)[0], struct.unpack_from("<q", st, off_xstep)[0]))
+        return out
+
+    below = bursts()
+    above = bursts(wrap=2**31 - 5_000)
+    assert [x for x, _ in below] == [x for x, _ in above]  # the same smells, the same habituation
+    x_last, x_step_last = above[-1]
+    assert x_last > 0.2  # it settles where it settles; truncated, it ratcheted to zero
+    assert x_step_last > 2**31  # and the recovery is still being applied, past the wrap

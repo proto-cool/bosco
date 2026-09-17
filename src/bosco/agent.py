@@ -211,6 +211,17 @@ class Agent:
     #   2  exposure trace and taste while browsing (2026-09-15)
     PLASTICITY_VERSION = 2
 
+    # The kernel's version.  Same reason as the learning rule: a fix that changes his dynamics
+    # is a boundary, not a continuation, and the record has to say where it falls.
+    #   1  the kernel as it ran from his first day
+    #   2  the lazy habituation recovery measures elapsed steps in 64 bits (2026-09-17).  It was
+    #      an int32 in the run loop, so after 2^31 steps -- 59.7 h of biological time, which he
+    #      passed at 13:00 UTC on 2026-09-16 -- no sensory synapse recovered again: his
+    #      afferents faded out over the following four hours and nothing he smelled reached the
+    #      mushroom body again.  The span from there to this row is a fly going deaf, and it is
+    #      his.
+    KERNEL_VERSION = 2
+
     def _load_state(self) -> None:
         if self.state_path.exists():
             self._unpack(dict(np.load(self.state_path)))
@@ -219,6 +230,7 @@ class Agent:
         if not self._appetite_loaded and self.brain_t0 is not None:
             self._init_appetite()
         self._mark_plasticity_version()
+        self._mark_kernel_version()
         self._mark_numerics()
         self._mark_clock()
 
@@ -272,6 +284,16 @@ class Agent:
             self.ledger.add_control("plasticity", "system", None, f"{had or '1'}->{now}")
             self.snapshot()
         self.ledger.set_cursor("plasticity_version", now)
+
+    def _mark_kernel_version(self) -> None:
+        had = self.ledger.get_cursor("kernel_version")
+        now = str(self.KERNEL_VERSION)
+        if had == now:
+            return
+        if self.brain_t0 is not None and self.live.t_ms > 0:
+            self.ledger.add_control("kernel", "system", None, f"{had or '1'}->{now}")
+            self.snapshot()
+        self.ledger.set_cursor("kernel_version", now)
 
     # ---- appetite for contact ----------------------------------------------------
     def sim_hours(self) -> float:

@@ -710,6 +710,35 @@ Every number below has a gate report under `docs/`.
    conversation, not his history with the person. Next: grow the
    conversation corpus, the ceiling on all of this.
 
+55. **He went deaf at step 2^31** (found 2026-09-17). At 13:00 UTC on
+   2026-09-16 his biological clock passed 59.7 h, and over the next four
+   hours the KCs firing per window fell from a mean of about 170 (peaks of
+   500 to 900) to a mean of 44 (peaks of 110), where they have stayed. His
+   last post of his own went out in that same 13:00 hour; since then the
+   browsing actions stop, and the only things that have gone out are the
+   reflex answers to people who spoke to him, which do not ask the network
+   for permission. Doubling the dust (53) changed nothing, because no
+   landing was reaching anything. The cause is in none of that day's work.
+   Habituation recovers lazily in the kernel (24): a sensory neuron's
+   synaptic resources are brought up to date when it next spikes, from the
+   number of steps since they last were, and the run loop measured that
+   count with the step index truncated to int32. At dt 0.1 ms the index
+   passes 2^31 after 59.7 h of biological time; after that every elapsed
+   count reads negative, so no synapse recovers again and every afferent
+   ratchets toward zero transmission as it fires. In the state read on
+   2026-09-17 all 40,939 neurons still carried the same `x_step`, the one
+   the last downtime skip wrote 16.9 h of his time earlier, and 2,607 of
+   the 2,972 neurons habituation acts on sat below x = 0.01: his nose,
+   his tongue and his bristles, transmitting nothing. `lif_get_x` reads
+   from the 64-bit step, so the habituation looked healthy the whole time.
+   The step index is 64-bit now, and the recovery it owes is paid at the
+   first spike after the fix, because the time really did pass. The
+   dynamics change there, so it is a boundary like a change of learning
+   rule: `Agent.KERNEL_VERSION`, a `kernel` control row and a snapshot the
+   first time the fixed kernel runs. The span between 13:00 UTC on
+   2026-09-16 and that row is a fly going deaf, and it stays in the record
+   as his.
+
 54. **No "this one"** (decided 2026-09-16). The quote in an answer (50) was
    removed after its first day: both quotes that went out matched the
    question on a single word, and a quote embed notifies the quoted author,

@@ -208,7 +208,11 @@ int64_t lif_run(lif_net *net, int64_t n_steps, int32_t *t_out, int32_t *id_out,
     int64_t total = 0;
 
     for (int64_t s = 0; s < n_steps; s++) {
-        const int32_t t = (int32_t)net->step;
+        /* 64-bit: the lazy recovery measures elapsed steps against x_step, and this was an
+         * int32 until 2026-09-17.  At dt 0.1 ms it wrapped after 2^31 steps -- 59.7 h of
+         * biological time -- and from then on every (t - x_step) was negative, so no synapse
+         * ever recovered again and his sensory afferents went quiet for good. */
+        const int64_t t = net->step;
         /* 0. synaptic resource recovery is lazy: see x_touch (applied at delivery) */
         /* 1. state update (exact for the linear system) unless refractory; threshold
               relaxation.  Work is done per block of BLK neurons, and a block is skipped
@@ -251,7 +255,9 @@ int64_t lif_run(lif_net *net, int64_t n_steps, int32_t *t_out, int32_t *id_out,
                 spiked[i] = 1;
                 slot[cnt++] = i;
                 net->counts[i]++;
-                if (total < max_spikes) { t_out[total] = t; id_out[total] = i; }
+                /* spike times are int32 steps since the last reset: the offline tools that read
+                   them reset first, and the live loop reads counts, not times. */
+                if (total < max_spikes) { t_out[total] = (int32_t)t; id_out[total] = i; }
                 total++;
             } else {
                 spiked[i] = 0;
