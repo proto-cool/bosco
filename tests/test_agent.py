@@ -66,8 +66,11 @@ def test_rate_caps(fly):
     tmp = tempfile.mkdtemp()
     L = Ledger(f"{tmp}/l.sqlite")
     ag = Agent(L, fly, state_dir=tmp)
-    assert ag.caps_allow(T0, "spontaneous_post")[0]
-    L.add_action(1, "spontaneous_post", "at://me/1", None, dry_run=False, ts=T0)
+    # read the ceiling from the config rather than fixing it here: the numbers move before the tag
+    posts_per_hour = ag.caps["per_kind"]["spontaneous_post"]["hour"]
+    for i in range(posts_per_hour):
+        assert ag.caps_allow(T0 + i, "spontaneous_post")[0]
+        L.add_action(1, "spontaneous_post", f"at://me/{i}", None, dry_run=False, ts=T0 + i)
     assert not ag.caps_allow(T0 + 100, "spontaneous_post")[0]
     assert ag.caps_allow(T0 + 100, "reply", "at://x/root", "did:plc:a")[0]
     assert ag.caps_allow(T0 + 3601, "spontaneous_post")[0]
@@ -85,6 +88,32 @@ def test_rate_caps(fly):
         )
     assert ag.caps_allow(T0 + 300, "reply", "at://x/root", "did:plc:a") == (False, "thread/hour")
     assert ag.caps_allow(T0 + 300, "reply", "at://y/root", "did:plc:b")[0]
+
+
+@needs_data
+def test_a_walk_spends_no_global_budget(fly):
+    """Reading a few more posts of one account reaches nobody, so it does not use up the budget
+    that keeps him off the network's back (2026-09-17).  The loop it could make is still held by
+    its own cap and by the per-account limit, which does count walks."""
+    from bosco.agent import Agent
+    from bosco.ledger import Ledger
+
+    tmp = tempfile.mkdtemp()
+    L = Ledger(f"{tmp}/l.sqlite")
+    ag = Agent(L, fly, state_dir=tmp)
+    for i in range(ag.caps["global"]["hour"] + 5):
+        L.add_action(1, "walk", None, f"at://x/{i}", dry_run=False, ts=T0 + i, target_did=f"did:plc:w{i}")
+    assert ag.caps_allow(T0 + 100, "like")[0]  # the global budget is untouched by his reading
+    assert ag.caps_allow(T0 + 100, "follow")[0]
+    # but a walk still answers to its own ceiling
+    for i in range(ag.caps["per_kind"]["walk"]["hour"]):
+        L.add_action(1, "walk", None, f"at://y/{i}", dry_run=False, ts=T0 + 200 + i, target_did="did:plc:one")
+    assert ag.caps_allow(T0 + 300, "walk") == (False, "walk/hour")
+    # and walks toward one account still count toward what he may do toward them
+    n = ag.caps["per_account_actions_per_day"]
+    for i in range(n):
+        L.add_action(1, "walk", None, f"at://z/{i}", dry_run=False, ts=T0 + 4000 + i, target_did="did:plc:same")
+    assert ag.caps_allow(T0 + 5000, "like", None, "did:plc:same") == (False, "account-actions/day")
 
 
 @needs_data

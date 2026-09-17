@@ -54,13 +54,31 @@ async function initBrain() {
   }
 }
 
+// The five groups named by the act they make, not by the group: a reader cannot know that a groom
+// is a post of his own.  Which neurons each one is stands in the caption underneath.
+const ACT_OF = {
+  engage: 'go to them',
+  reply: 'answer',
+  like: 'like',
+  leave: 'turn away',
+  groom: 'post',
+};
+// How close a group is to the point where he acts.  Hz is the ledger's business, not the page's;
+// it stays on the row's title for anyone who wants it.
+function nearness(ratio) {
+  if (ratio >= 1) return 'over';
+  if (ratio >= 0.75) return 'nearly';
+  if (ratio >= 0.35) return 'stirring';
+  return 'quiet';
+}
+
 function buildReadout() {
   const box = $('readout');
   box.replaceChildren();
   for (const p of popNames) {
     const row = el('div', 'ro');
     row.dataset.pop = p;
-    row.append(el('span', 'k', p));
+    row.append(el('span', 'k', ACT_OF[p] || p));
     const track = el('div', 'track');
     track.append(el('i', `fill${p === 'leave' ? ' avoid' : ''}`), el('i', 'tick'));
     if (p === 'engage') track.append(el('i', 'tick walk')); // the lower rung: a walk, not a follow
@@ -109,7 +127,8 @@ async function pollActivity() {
         const rate = act.pops[k], th = thresholds[p];
         const ratio = th ? rate / th : 0;
         row.querySelector('.fill').style.transform = `scaleX(${Math.min(1, ratio / 1.6)})`;
-        row.querySelector('.v').textContent = `${rate.toFixed(1)} Hz`;
+        row.querySelector('.v').textContent = th ? nearness(ratio) : '–';
+        row.title = `${p}: ${rate.toFixed(1)} Hz${th ? ` against ${th.toFixed(1)} Hz, where he acts` : ''}`;
         row.classList.toggle('over', th != null && rate > th);
       });
     }
@@ -150,7 +169,7 @@ async function renderStatus(st) {
   }
   const br = st.brain;
   $('bio-time').textContent =
-    `${alive(br.t_ms)} lived · ${br.lag_s > 120 ? `${Math.round(br.lag_s / 60)} min behind` : 'in step'}`;
+    `${alive(br.t_ms)} of life · ${br.lag_s > 120 ? `running ${Math.round(br.lag_s / 60)} min behind the clock` : 'keeping up with the clock'}`;
 
   // today: one figure, one sentence
   const t = st.today;
@@ -172,7 +191,9 @@ async function renderStatus(st) {
   $('people-count').textContent = fmt(people.length);
   const hunger =
     br.appetite == null ? '' : br.appetite > 0.7 ? ' he is hungry for company.' : br.appetite < 0.3 ? ' he has had his fill of company for now.' : ' he could take some company.';
-  const dust = [' dust on him ', b(pct(br.dust)), '; enough dust and he grooms, and a groom is a post.'];
+  const dust = br.dust
+    ? [' he is carrying ', b(pct(br.dust)), ' of a load of dust; when enough lands he cleans himself off, and that is a post.']
+    : [' no dust on him just now; when enough lands he cleans himself off, and that is a post.'];
   sentence(
     $('memory-sentence'),
     br.stm_depressed || br.ltm_depressed
@@ -202,9 +223,11 @@ async function renderStatus(st) {
   // the record
   $('recent').replaceChildren(...(st.recent || []).slice(0, 12).map((w) => windowRow(w, ago(w.ts), caps)));
 
+  // for anyone checking a replay against the published ledger
   $('fine').textContent =
-    `brain digest ${br.digest.slice(0, 12)} · corpus digest ${st.corpus_digest.slice(0, 12)} · ` +
-    `${fmt(br.neurons)} neurons · ${fmt(br.synapses)} synapses · written ${ago(st.generated)} ago`;
+    `fingerprints, so a replay can be checked against this: his brain ${br.digest.slice(0, 12)}, ` +
+    `his corpus ${st.corpus_digest.slice(0, 12)}. ${fmt(br.neurons)} neurons, ${fmt(br.synapses)} synapses. ` +
+    `this page was written ${ago(st.generated)} ago.`;
 }
 
 // ---- go ----------------------------------------------------------------------------------------

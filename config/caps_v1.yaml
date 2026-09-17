@@ -1,16 +1,23 @@
 # Rate caps (EXPERIMENT.md §2).  Hard limits on real actions, by kind.
 # A fixed VPS has headroom for far more than this; these are behaviour
 # limits and loop guards, not resource limits.
+# 2026-09-17: likes, follows, own posts and replies all doubled.  The record showed the follow cap
+# stopping him hour after hour -- he was asking to follow far more often than three an hour -- and
+# the ceilings, not his neurons, were shaping the account.  They are still loop guards: nothing
+# makes him use them.
 per_kind:
-  reply:            {hour: 12, day: 100}
-  like:             {hour: 6,  day: 40}
-  follow:           {hour: 3,  day: 15}
-  leave:            {hour: 3,  day: 15}     # unfollows
-  spontaneous_post: {hour: 1,  day: 10}    # was 6 a day until 2026-09-16
+  reply:            {hour: 24, day: 200}   # was 12/100 until 2026-09-17
+  like:             {hour: 12, day: 80}    # was 6/40
+  follow:           {hour: 6,  day: 30}    # was 3/15
+  leave:            {hour: 3,  day: 15}     # unfollows; unchanged, an unfollow is not undone by reading more
+  spontaneous_post: {hour: 2,  day: 20}    # was 6 a day until 2026-09-16, 1/10 until 2026-09-17
   identity:         {hour: 20, day: 100}   # who/what/why/creator answers
-  answer:           {hour: 12, day: 100}   # the etiquette reflex: whoever spoke to him answered when the song did not cross
-  walk:             {hour: 6,  day: 40}    # walks toward a source (reads more of an account): not outward, a loop guard
-global:             {hour: 24, day: 240}
+  answer:           {hour: 24, day: 200}   # the etiquette reflex: whoever spoke to him answered when the song did not cross
+  walk:             {hour: 24, day: 160}   # was 6/40; reads more of an account, reaches nobody, and
+                                           # since 2026-09-17 spends no global budget either
+# the backstop across kinds, kept just above what the three outward ones can spend in an hour
+# (24 + 12 + 6), as it was before (12 + 6 + 3 under 24)
+global:             {hour: 48, day: 480}
 # loop guards
 per_thread_replies_per_hour: 6      # replies from Bosco in one thread (by root uri)
 per_account_replies_per_day: 20     # replies to the same account

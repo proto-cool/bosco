@@ -350,14 +350,21 @@ class Ledger:
         root_uri: str | None = None,
         target_did: str | None = None,
         real_only: bool = True,
+        exclude: tuple[str, ...] = ("leave",),
     ) -> int:
-        q = "SELECT COUNT(*) FROM actions WHERE ts>=? AND kind!='leave'"
+        """Actions since a time.  Without a `kind` the kinds in `exclude` are left out of the
+        tally: an unfollow is a withdrawal and a walk is not outward at all, so neither spends the
+        budget that exists to keep him off the network's back."""
+        q = "SELECT COUNT(*) FROM actions WHERE ts>=?"
         args: list = [since_ts]
         if real_only:
             q += " AND dry_run=0"
         if kind:
-            q = q.replace(" AND kind!='leave'", "") + " AND kind=?"
+            q += " AND kind=?"
             args.append(kind)
+        elif exclude:
+            q += f" AND kind NOT IN ({','.join('?' * len(exclude))})"
+            args.extend(exclude)
         if root_uri:
             q += " AND root_uri=?"
             args.append(root_uri)

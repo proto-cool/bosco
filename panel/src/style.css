@@ -546,7 +546,7 @@ a:hover {
 }
 .person {
   display: grid;
-  grid-template-columns: 1fr 7rem 3.2rem max-content;
+  grid-template-columns: minmax(0, 1fr) 6rem 7.5rem max-content;
   align-items: center;
   gap: var(--space-sm);
   min-height: 24px;
@@ -847,35 +847,79 @@ a:hover {
   text-decoration-color: var(--accent-primary);
 }
 
+/* his limits: a table of hairlines, like every other row on the page */
+.caps {
+  width: 100%;
+  max-width: 46ch;
+  border-collapse: collapse;
+  font-size: var(--annot-size);
+  color: var(--text-secondary);
+}
+.caps th,
+.caps td {
+  padding: var(--space-xs) 0;
+  border-bottom: 1px solid var(--divider);
+  text-align: left;
+  font-weight: inherit;
+}
+.caps thead th {
+  font-family: var(--font-label);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.75px;
+  color: var(--text-muted);
+}
+.caps .n {
+  width: 5rem;
+  text-align: right;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+.caps tbody th {
+  padding-right: var(--space-sm);
+}
+.caps .sum th,
+.caps .sum td {
+  color: var(--text-primary);
+}
+.caps .guard th,
+.caps .guard td {
+  color: var(--text-muted);
+}
+.caps tbody tr:last-child th,
+.caps tbody tr:last-child td {
+  border-bottom: none;
+}
+
 /* the record */
 .windows {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  gap: var(--space-xs);
+  gap: var(--space-sm);
 }
+/* a record line is his clock and one sentence about him; the sentence wraps like prose, so it
+   needs no columns to squeeze and nothing to truncate at any width */
 .win {
   display: grid;
-  grid-template-columns: 3rem minmax(4rem, max-content) 1fr max-content;
+  grid-template-columns: 3rem minmax(0, 1fr);
   gap: var(--space-sm);
   align-items: baseline;
-  font-family: var(--font-mono);
   font-size: var(--annot-size);
+  line-height: 1.6;
   color: var(--text-muted);
-  min-height: 24px;
 }
 .win.acted {
   color: var(--text-primary);
 }
+.win .when,
 .win .who {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  font-family: var(--font-mono);
 }
 .win .what {
-  text-align: right;
-  white-space: nowrap;
+  max-width: 54ch;
+  overflow-wrap: break-word;
 }
 
 /* about */
@@ -939,23 +983,8 @@ a:hover {
     flex-wrap: wrap;
     gap: var(--space-sm) var(--space-lg);
   }
-  /* A record line is about 55 mono characters and a phone holds 40, so on the wide layout the
-     nowrap action column ("unfollow withheld: nobody to unfollow") ran past the viewport and
-     scrolled the whole page sideways.  Here the line folds instead: when and who on the first
-     row, what came of it right-aligned under them.  Every row folds, so the ladder of times
-     stays straight, the handle is never cut to a stub, and no reason is truncated. */
-  .win {
-    grid-template-columns: 3rem minmax(0, 1fr);
-    row-gap: 0;
-  }
-  .win .what {
-    grid-column: 1 / -1;
-  }
   .person {
-    grid-template-columns: 1fr 5rem 3.2rem max-content;
-  }
-  .win .smell {
-    display: none;
+    grid-template-columns: minmax(0, 1fr) 3rem 7.5rem max-content;
   }
 }
 

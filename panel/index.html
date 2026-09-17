@@ -38,7 +38,7 @@
           <canvas id="brain" aria-label="every neuron of the model at its soma, lit when it fires"></canvas>
           <dl class="captions">
             <div><dt>neurons firing this second</dt><dd class="numeral" id="firing">–</dd></div>
-            <div><dt>kenyon cells active · the smell code</dt><dd class="numeral" id="kc-active">–</dd></div>
+            <div><dt>of them carry the smell he is reading</dt><dd class="numeral" id="kc-active">–</dd></div>
             <div class="small"><dt class="sr-only">his time</dt><dd id="bio-time">–</dd></div>
           </dl>
         </div>
@@ -61,10 +61,11 @@
           <h2 id="h-now">now</h2>
           <div class="readout" id="readout"></div>
           <p class="caption">
-            five groups of descending and motor neurons, each standing for an act. engage is a follow, or a reply when
-            he was spoken to; like is a like; leave is an unfollow; groom is a post of his own. the tick is the
-            threshold: the group furthest over it wins, and none over is silence, which is most of the time. engage past
-            the faint lower tick but under threshold is a walk: he reads a few more of that account's posts.
+            five things he can be about to do, each a real group of descending and motor neurons. the bar is how close
+            he is; the mark is where he does it. the one furthest past the mark wins, and most seconds nothing reaches
+            it, which is why he is quiet most of the time. going to them is a follow, or an answer if they spoke to him
+            first; posting is grooming, which is what a fly does when something lands on it. past the faint lower mark
+            but short of the other, he only stays and reads a few more of their posts.
           </p>
         </section>
 
@@ -82,15 +83,15 @@
 
         <section class="row" id="memory" aria-labelledby="h-memory">
           <h2 id="h-memory">memory</h2>
-          <p class="figure"><span class="numeral" id="people-count">–</span><span class="figure-label">accounts he has a smell for</span></p>
+          <p class="figure"><span class="numeral" id="people-count">–</span><span class="figure-label">accounts he remembers</span></p>
           <p class="sentence" id="memory-sentence"></p>
           <p class="sentence muted" id="words-sentence"></p>
           <ol class="people" id="people"></ol>
           <p class="caption">
-            each account is a smell. the bar and the number are what he has learned of it, read from his weights:
-            right and blue is sweet, so he approaches; left and violet is bitter, so he avoids; full at ±0.5.
-            ×n is how many times they have come to him. a short-term memory fades in hours; a long-term one takes a
-            repeat and fades in a month.
+            every account is a smell to him. the bar is what he has learned of it, read out of his own synapses: to
+            the right and blue he goes closer, to the left and violet he keeps away. then how many times they have come
+            to him. one sweet or bitter thing fades in hours; it takes a second one, a while later, for anything to
+            last, and then it fades over a month.
           </p>
         </section>
 
@@ -103,17 +104,14 @@
           <h2 id="h-record">the record</h2>
           <ol class="windows" id="recent"></ol>
           <p class="caption">
-            the last windows, newest first. each post he reads is a one-second stimulus: the account as a smell, the
-            tone as a taste, the topics and the feed as more smell. the last column is what came of it: the act that
-            went out, or silence.
+            one line per second of his life that came to something, newest first. every post he reads is one second of
+            stimulus: the account is a smell, the tone is a taste, the topics and the feed are more smell.
           </p>
           <p class="caption">
-            <b>withheld</b> means his neurons chose the act and a rail stopped it at the door; the row names the rail.
-            the rails: he replies only to someone who spoke to him, once per post; hard caps by kind; the operator's
-            sleep; nobody to unfollow. a rail never touches his brain, so the choice stays in the record as his.
-            <b>walk</b> is not outward: he read a few more of that account's posts. <b>answered by reflex</b> means his
-            song neurons stayed under threshold, but whoever speaks to him is answered once anyway. a post with a
-            moderation label is bitter to him and never approached; it shows as silence.
+            where a line says he wanted something and did not get it, what stopped him was a limit of his own — how
+            much he may do in an hour, or in a day, or toward one person. the limits are set in advance and published,
+            and they stop an act at the door without ever touching his brain, so what he chose stays in the record as
+            his. a post carrying a moderation label he never goes near.
           </p>
         </section>
 

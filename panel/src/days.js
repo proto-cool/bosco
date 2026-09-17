@@ -1,7 +1,7 @@
 // days.html: one report per local day of his life, from data/days/*.json (the ledger alone).
 import {
   $, DATA, fmt, pct, el, b, sentence, plural, list, longDate, clockTime, getJSON, renderPosts, personRow,
-  windowRow, daySentence, whyText, saidNote, CHOSE, OUTCOME_SOURCE, markNav, trackCurrent, applyIdentity,
+  windowRow, daySentence, cameOfIt, saidNote, OUTCOME_SOURCE, markNav, trackCurrent, applyIdentity,
 } from './common.js';
 
 let index = null;
@@ -85,7 +85,8 @@ async function show(date) {
   const app = rep.hours.map((h, i) => [i, h.appetite]).filter(([, v]) => v != null);
   const whenParts = [];
   if (c.episodes) whenParts.push('busiest around ', b(hourLabel(busiest)), '. ');
-  if (rep.landings) whenParts.push('dust landed on him ', b(plural(rep.landings, 'time', 'times')), ' and he groomed ', b(plural(rep.grooms, 'time', 'times')), rep.grooms ? '; a groom is a post when his cap allows. ' : '. ');
+  const howOften = (n) => (n === 1 ? 'once' : plural(n, 'time', 'times'));
+  if (rep.landings) whenParts.push('dust landed on him ', b(howOften(rep.landings)), ' and he cleaned himself off ', b(howOften(rep.grooms)), rep.grooms ? ', which is where his own posts come from. ' : '. ');
   if (app.length > 1) {
     const lo = app.reduce((m, x) => (x[1] < m[1] ? x : m)), hi = app.reduce((m, x) => (x[1] > m[1] ? x : m));
     whenParts.push('his appetite for company was lowest around ', b(hourLabel(lo[0])), ' and highest around ', b(hourLabel(hi[0])), '.');
@@ -110,30 +111,27 @@ async function show(date) {
   const sm = [];
   if (topics.length) sm.push('topics: ', b(topics.slice(0, 8).map(([k, v]) => `${k} ×${v}`).join(', ')), '. ');
   if (words.length) sm.push('his own words in what he read: ', b(words.slice(0, 10).map(([k, v]) => `${k} ×${v}`).join(', ')), '. ');
-  if (rep.words_unknown) sm.push('and ', b(plural(rep.words_unknown, 'smell', 'smells')), ' of words he has no word for, kept as hashes, never as words.');
+  if (rep.words_unknown) sm.push('and ', b(plural(rep.words_unknown, 'smell', 'smells')), ' of words he has no word for, which he keeps as numbers and can never say.');
   if (!sm.length) sm.push('nothing he has a word for.');
   sentence($('smell-sentence'), sm);
 
   // favorite and least favorite: the post by its smell, and the post itself only when he liked it in public
   const tasteOf = (p) => {
-    const parts = [p.mentioned ? 'a mention' : p.feed ? `something in ${p.feed}` : 'something he browsed', ' around ', b(clockTime(p.ts, tz))];
+    const parts = [
+      p.mentioned ? 'someone spoke to him' : p.feed ? `a post from his ${p.feed} feed` : 'a post he came across',
+      ' around ', b(clockTime(p.ts, tz)),
+    ];
     if (p.topics?.length) parts.push(', about ', b(list(p.topics)));
-    if (p.words?.length) parts.push(', with ', b(list(p.words.slice(0, 4))), ' in it');
-    if (p.vader != null && Math.abs(p.vader) >= 0.05) parts.push('; it tasted ', b(p.vader > 0 ? 'sweet' : 'bitter'));
-    if (Math.abs(p.learned) >= 0.05) parts.push(p.vader != null && Math.abs(p.vader) >= 0.05 ? ' and ' : '; ', 'he had learned it was ', b(p.learned > 0 ? 'good' : 'bad'));
+    if (p.words?.length) parts.push(', with the words ', b(list(p.words.slice(0, 4))), ' in it');
+    if (p.vader != null && Math.abs(p.vader) >= 0.05) parts.push('. the tone of it tasted ', b(p.vader > 0 ? 'sweet' : 'bitter'), ' to him');
+    if (Math.abs(p.learned) >= 0.05) parts.push(p.vader != null && Math.abs(p.vader) >= 0.05 ? ', and ' : '. ', 'that smell was one he had learned was ', b(p.learned > 0 ? 'good' : 'bad'));
     return parts;
   };
-  const didOf = (p) => {
-    if (p.done) {
-      return { like: 'he liked it', follow: 'he followed them', walk: 'he walked toward it and read more of them', reply: 'he answered', answer: 'he answered by reflex', leave: 'he unfollowed them', spontaneous_post: 'he posted' }[p.done] || `he did ${p.done.replace('_', ' ')}`;
-    }
-    if (p.action === 'nothing') return 'he did nothing';
-    return `his neurons chose ${CHOSE[p.action] || p.action}, withheld: ${whyText(p.why, caps)}`;
-  };
+  const didOf = (p) => cameOfIt(p, caps);
   const times = (x) => (x >= 10 ? Math.round(x) : x.toFixed(1));
   const fav = rep.favorite, least = rep.least;
   if (fav) {
-    sentence($('favorite-sentence'), ['favorite: ', ...tasteOf(fav), '. ', didOf(fav), '; his like neurons ran at ', b(`${times(fav.ratio)}×`), ' their threshold.']);
+    sentence($('favorite-sentence'), ['favorite: ', ...tasteOf(fav), '. ', didOf(fav), '. it pulled at him ', b(`${times(fav.ratio)}×`), ' harder than it takes to make him act.']);
     // the sentence above already says he liked it and when, so the card carries no note of its own
     if (fav.uri) await renderPosts($('favorite-post'), [{ uri: fav.uri, ts: fav.ts, kind: 'liked', label: '' }], 1);
     else $('favorite-post').replaceChildren();
@@ -141,7 +139,7 @@ async function show(date) {
     $('favorite-sentence').textContent = 'nothing drew his tongue out that day.';
     $('favorite-post').replaceChildren();
   }
-  if (least) sentence($('least-sentence'), ['least favorite: ', ...tasteOf(least), '. ', didOf(least), '; his leave neurons ran at ', b(`${times(least.ratio)}×`), ' their threshold.']);
+  if (least) sentence($('least-sentence'), ['least favorite: ', ...tasteOf(least), '. ', didOf(least), '. it pushed him away ', b(`${times(least.ratio)}×`), ' harder than it takes to make him turn.']);
   else $('least-sentence').textContent = 'nothing made him turn away that day.';
 
   // who
@@ -182,42 +180,51 @@ async function show(date) {
   $('record-list').replaceChildren(...rec.slice().reverse().slice(0, 80).map((w) => windowRow(w, clockTime(w.ts, tz), caps)));
   if (!rec.length) $('record-list').replaceChildren(el('li', 'empty', 'nothing crossed threshold and nobody spoke to him.'));
   $('record-caption').textContent =
-    `every window that day where something crossed threshold, and every time someone spoke to him (${fmt(rec.length)}, newest first); ` +
-    `the other ${fmt(rep.silent)} windows were silence.`;
+    `every second of that day that came to something, and every time someone spoke to him ` +
+    `(${fmt(rec.length)}, newest first). the other ${fmt(rep.silent)} seconds he read on and did nothing.`;
 
   // fine print
-  const ctl = rep.control || [];
+  // He falls behind the clock a few dozen times on a busy day and catches up again; one line each
+  // buried everything else in the fine print, so they are counted and said once.
+  const ctlAll = rep.control || [];
+  const slow = ctlAll.filter((x) => x.kind === 'slow');
+  const ctl = ctlAll.filter((x) => x.kind !== 'slow');
+  if (slow.length) {
+    const worst = Math.max(...slow.map((x) => Number(/lag=(\d+)/.exec(x.target || '')?.[1] || 0)));
+    ctl.unshift({ ts: slow[0].ts, kind: 'slow_run', target: String(worst) });
+  }
   const ctlText = ctl.map((x) => {
     const at = clockTime(x.ts, tz);
     const span = /^(\d+)->(\d+)$/.exec(x.target || ''); // a span of his time, ms
     if (x.kind === 'downtime') {
       // the process was down; on restart the gap was skipped, not lived
-      return span ? `off for ${Math.round((span[2] - span[1]) / 60000)} min at ${at}, skipped not lived` : `off for a while at ${at}, skipped not lived`;
+      return span ? `switched off for ${Math.round((span[2] - span[1]) / 60000)} min at ${at}; that time was skipped, not lived` : `switched off for a while at ${at}; that time was skipped, not lived`;
     }
-    if (x.kind === 'slow') {
-      // he was awake for this, just running behind the wall clock; the time is his and he keeps it
-      const m = /lag=(\d+)/.exec(x.target || '');
-      return m ? `${Math.round(m[1] / 60)} min behind the clock at ${at}` : `behind the clock at ${at}`;
+    if (x.kind === 'slow_run') {
+      // he was awake for all of it, just running behind the wall clock; that time is his and he keeps it
+      const worst = Number(x.target || 0);
+      const how = worst >= 120 ? `at worst ${Math.round(worst / 60)} min behind` : 'never by more than a minute or two';
+      return `he fell behind the clock ${plural(slow.length, 'time', 'times')} today, ${how}, and lived every second of it`;
     }
     // the two boundaries: a replay before one runs under the old rule or numerics, after it under the new
-    if (x.kind === 'numerics') return `cpu numerics set to ${(x.target || '').split('->').pop()} at ${at}`;
-    if (x.kind === 'plasticity') return `learning rule ${(x.target || '').replace('->', ' → ')} at ${at}`;
-    if (x.kind === 'kernel') return `kernel ${(x.target || '').replace('->', ' → ')} at ${at}`;
-    if (x.kind === 'clock') return `his clock moved from ${(x.target || '').replace('->', ' to ')} at ${at}`;
+    if (x.kind === 'numerics') return `the machine's arithmetic was pinned to ${(x.target || '').split('->').pop()} at ${at}`;
+    if (x.kind === 'plasticity') return `how he learns changed at ${at} (rule ${(x.target || '').replace('->', ' → ')})`;
+    if (x.kind === 'kernel') return `the simulation itself changed at ${at} (kernel ${(x.target || '').replace('->', ' → ')})`;
+    if (x.kind === 'clock') return `his day moved from ${(x.target || '').replace('->', ' to ')} at ${at}`;
     return {
       sleep: `put to sleep by the operator at ${at}`,
       wake: `woken by the operator at ${at}`,
       forget: `made to forget an account by the operator at ${at}`,
-      ignored: `an account he was told to ignore spoke; not perceived, at ${at}`,
+      ignored: `someone he was told to ignore spoke at ${at}; he never smelled it`,
       deleted_in_app: `a post of his deleted from the app at ${at}`,
       unliked_in_app: `a like of his undone from the app at ${at}`,
       unfollowed_in_app: `a follow of his undone from the app at ${at}`,
     }[x.kind] || `${x.kind.replaceAll('_', ' ')} at ${at}`;
   });
   $('fine').textContent = [
-    rep.digest ? `brain digest at close ${rep.digest.brain.slice(0, 12)} · weights ${rep.digest.weights.slice(0, 12)}` : '',
+    rep.digest ? `at the close of the day his brain fingerprints to ${rep.digest.brain.slice(0, 12)}, his synapses to ${rep.digest.weights.slice(0, 12)}` : '',
     ctlText.length ? ctlText.join(' · ') : 'no operator action and no downtime',
-    `written ${new Date(rep.generated * 1000).toISOString().slice(0, 16).replace('T', ' ')} utc`,
+    `this report was written ${new Date(rep.generated * 1000).toISOString().slice(0, 16).replace('T', ' ')} utc`,
   ].filter(Boolean).join(' · ');
 }
 

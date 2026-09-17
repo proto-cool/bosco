@@ -297,89 +297,196 @@ export function personRow(p, extra) {
   who.href = `https://bsky.app/profile/${p.did}`;
   nameInto(who, p.did);
   const bar = el('span', 'valence');
-  bar.title = `learned valence ${p.learned >= 0 ? '+' : ''}${p.learned.toFixed(2)}`;
+  // the exact number stays here for anyone auditing; the row itself says it in his own words
+  bar.title = `what he has learned of them: ${p.learned >= 0 ? '+' : ''}${p.learned.toFixed(2)}`;
   const seg = el('i', p.learned >= 0 ? 'pos' : 'neg');
   const w = Math.min(50, (Math.abs(p.learned) / VALENCE_FULL) * 50);
   seg.style.width = `${w}%`;
   seg.style.left = p.learned >= 0 ? '50%' : `${50 - w}%`;
   bar.append(seg);
-  const val = el('span', 'val', `${p.learned >= 0 ? '+' : '−'}${Math.abs(p.learned).toFixed(2)}`);
-  if (Math.abs(p.learned) < 0.005) val.textContent = '0';
-  li.append(who, bar, val, el('span', 'fam', extra ?? `×${p.familiarity}`));
+  // his verdicts live well inside ±0.5, so a faint lean must not read as a settled opinion
+  const v = Math.abs(p.learned);
+  const which = p.learned > 0 ? 'sweet' : 'bitter';
+  const val = el('span', 'val', v < 0.02 ? 'no verdict' : v < 0.12 ? `barely ${which}` : v < 0.35 ? which : `very ${which}`);
+  li.append(who, bar, val, el('span', 'fam', extra ?? (p.familiarity ? `met ${fmt(p.familiarity)}×` : 'not met yet')));
   return li;
 }
 
-// ---- what came of a window --------------------------------------------------------------------
-// the words of the record. a window carries the network's decision (`action`), the real action
-// that went out (`done`, if any) and, when nothing did, the rail that stopped it (`why`).
-const DONE = {
-  like: 'like',
-  follow: 'follow',
-  reply: 'reply',
-  answer: 'answered by reflex',
-  identity: 'said who he is',
-  walk: 'walk',
-  leave: 'unfollow',
-  spontaneous_post: 'a post',
-  intro: 'introduced himself',
-};
+// ---- what happened in one window, in words ------------------------------------------------------
+// The record is the page's receipts, and a receipt nobody can read is not evidence.  Every row is
+// one sentence about him: what he did, or what he was about to do and what stopped him.  Nothing
+// here names a part the reader cannot see -- no cap, no rail, no window, no episode -- and where
+// something of his has a number behind it, the number is printed (config/caps_v1.yaml, carried on
+// status.json).  A window carries the network's decision (`action`), the act that actually went
+// out (`done`, if any) and, when none did, what stood in the way (`why`).
+
+// the plain name of an act, for the places that name one outside a sentence
 export const CHOSE = {
-  like: 'like',
-  follow: 'follow',
-  reply: 'reply',
-  walk: 'walk',
-  leave: 'unfollow',
-  spontaneous_post: 'post',
+  like: 'a like',
+  follow: 'a follow',
+  reply: 'an answer',
+  walk: 'reading more of them',
+  leave: 'an unfollow',
+  spontaneous_post: 'a post',
   nothing: 'silence',
 };
-// "like/hour" with the caps from status.json -> "cap 6 an hour"
-export function capText(which, caps) {
+
+// How many of a thing he may do, said the way a person counts.  `which` is "<kind>/<hour|day>".
+function capPhrase(which, caps) {
   const [name, per] = (which || '').split('/');
-  const perWord = per === 'day' ? 'a day' : 'an hour';
+  const when = per === 'day' ? 'today' : 'this hour';
+  const times = (n) => (n === 1 ? 'once' : `${fmt(n)} times`);
   if (name === 'global') {
     const n = caps?.global?.[per];
-    return n ? `cap ${n} acts ${perWord}` : 'cap on everything';
+    return n ? `he had already done ${fmt(n)} things ${when}` : `he had already done all he does ${when}`;
   }
-  if (name === 'thread') return 'cap for one thread';
-  if (name === 'account-replies' || name === 'account-actions') return 'cap toward one account';
+  if (name === 'thread') {
+    const n = caps?.per_thread_replies_per_hour;
+    return n ? `he had already answered ${times(n)} in that thread this hour` : 'he had already said enough in that thread';
+  }
+  if (name === 'account-replies') {
+    const n = caps?.per_account_replies_per_day;
+    return n ? `he had already answered them ${times(n)} today` : 'he had already answered them enough today';
+  }
+  if (name === 'account-actions') {
+    const n = caps?.per_account_actions_per_day;
+    return n ? `he had already done ${fmt(n)} things toward them today` : 'he had already done enough toward them today';
+  }
   const n = caps?.per_kind?.[name]?.[per];
-  return n ? `cap ${n} ${perWord}` : 'a cap';
-}
-export function whyText(why, caps) {
-  if (!why) return '';
-  if (why.startsWith('cap:')) return capText(why.slice(4), caps);
+  if (!n) return `he had already done as much of that as he does ${when}`;
   return {
-    not_addressed: 'not addressed to him',
-    answered: 'already answered',
-    not_following: 'nobody to unfollow',
-    asleep: 'asleep',
-    cap: 'a cap was full',
-    already_following: 'already follows them',
-    labeled: 'a labeled post',
-    unrecorded: 'reason not recorded',
+    like: `he had already liked ${fmt(n)} posts ${when}`,
+    follow: `he had already followed ${fmt(n)} people ${when}`,
+    leave: `he had already unfollowed ${fmt(n)} people ${when}`,
+    reply: `he had already answered ${times(n)} ${when}`,
+    answer: `he had already answered ${times(n)} ${when}`,
+    identity: `he had already said who he is ${times(n)} ${when}`,
+    spontaneous_post: `he had already posted ${times(n)} ${when}`,
+    walk: `he had already stopped to read ${times(n)} ${when}`,
+  }[name] || `he had already done that ${times(n)} ${when}`;
+}
+
+// What stood in the way, as the end of a sentence that began "he wanted to ...".
+function inTheWay(w, caps) {
+  const why = w.why || '';
+  if (why.startsWith('cap:')) return capPhrase(why.slice(4), caps);
+  return {
+    not_addressed: 'they were not talking to him',
+    answered: 'he had answered them already',
+    not_following: 'he does not follow them anyway',
+    already_following: 'he already does',
+    asleep: 'he was asleep',
+    labeled: 'the post carries a moderation label',
+    cap: 'he had already done as much as his own limits allow',
+    unrecorded: 'the record does not say what stopped him',
   }[why] || why.replaceAll('_', ' ');
 }
-export function outcomeText(w, caps) {
-  if (w.done) {
-    if (w.action === 'follow' && w.done === 'walk') return 'already follows · walk';
-    return DONE[w.done] || w.done.replace('_', ' ');
-  }
-  if (w.action === 'nothing') return w.labeled ? 'silence · labeled post' : 'silence';
-  const what = CHOSE[w.action] || w.action.replace('_', ' ');
-  return `${what} withheld: ${whyText(w.why, caps)}`;
+
+function whoNode(did, fallback = 'someone') {
+  const who = el('span', 'who');
+  if (did) nameInto(who, did);
+  else who.textContent = fallback;
+  return who;
 }
-// one row of the record: when, where it came from, who, what came of it
+// "@handle's"
+const possessive = (node) => [node, "'s"];
+
+// One window as a sentence: an array of strings and nodes, for `sentence()`.
+export function windowSentence(w, caps) {
+  const dust = w.kind === 'spontaneous' || !w.did;
+  const who = () => whoNode(w.did);
+  const inFeed = w.feed ? ` in the ${w.feed} feed` : '';
+
+  if (w.done) {
+    switch (w.done) {
+      case 'like':
+        return ['he liked a post by ', who(), inFeed];
+      case 'follow':
+        return ['he followed ', who()];
+      case 'reply':
+        return ['he answered ', who()];
+      case 'answer':
+        return ['he answered ', who(), ' because they spoke to him, not because he chose to'];
+      case 'identity':
+        return [who(), ' asked who he is, so he said'];
+      case 'intro':
+        return ['he introduced himself'];
+      case 'leave':
+        return ['he unfollowed ', who()];
+      case 'spontaneous_post':
+        return ['dust landed on him, and he posted'];
+      case 'walk':
+        return w.action === 'follow'
+          ? ['he already follows ', who(), ', so he stayed and read a few more of their posts']
+          : ['he stayed and read a few more of ', ...possessive(who()), ' posts'];
+      default:
+        return [`he did ${w.done.replaceAll('_', ' ')}`];
+    }
+  }
+
+  if (w.action === 'nothing') {
+    if (w.labeled) return ['he kept away from ', who(), ' — the post carries a moderation label'];
+    if (dust) return ['dust landed on him and nothing came of it'];
+    return ['he read ', who(), inFeed, ' and did nothing'];
+  }
+
+  // his neurons chose an act and something of his own stood in the way
+  const why = inTheWay(w, caps);
+  switch (w.action) {
+    case 'like':
+      return ['he wanted to like a post by ', who(), ', but ', why];
+    case 'follow':
+      // already following them, so the act on offer was to stay and read, and that is what was stopped
+      return (w.why || '').startsWith('cap:walk')
+        ? ['he already follows ', who(), ', so he would have stayed and read a few more of their posts, but ', why]
+        : ['he wanted to follow ', who(), ', but ', why];
+    case 'reply':
+      return ['he had an answer for ', who(), ', but ', why];
+    case 'walk':
+      return ['he wanted to read more of ', ...possessive(who()), ' posts, but ', why];
+    case 'leave':
+      return w.why === 'not_following'
+        ? ['he turned away from ', who(), ', who he does not follow anyway']
+        : ['he wanted to unfollow ', who(), ', but ', why];
+    case 'spontaneous_post':
+      return ['dust landed on him and he wanted to post, but ', why];
+    default:
+      return ['he wanted ', CHOSE[w.action] || w.action.replaceAll('_', ' '), ', but ', why];
+  }
+}
+
+// What came of one post he read, for the day page's favorite and least favorite.
+const DID_TO_IT = {
+  like: 'he liked it',
+  follow: 'he followed them',
+  reply: 'he answered',
+  answer: 'he answered because they spoke to him',
+  identity: 'he told them who he is',
+  intro: 'he introduced himself',
+  walk: 'he stayed and read more of them',
+  leave: 'he unfollowed them',
+  spontaneous_post: 'he posted',
+};
+const WANTED_TO = {
+  like: 'like it',
+  follow: 'follow them',
+  reply: 'answer',
+  walk: 'read more of them',
+  leave: 'unfollow them',
+  spontaneous_post: 'post',
+};
+export function cameOfIt(p, caps) {
+  if (p.done) return DID_TO_IT[p.done] || `he did ${p.done.replaceAll('_', ' ')}`;
+  if (p.action === 'nothing') return 'he did nothing';
+  return `he wanted to ${WANTED_TO[p.action] || p.action.replaceAll('_', ' ')}, but ${inTheWay(p, caps)}`;
+}
+
+// One row of the record: his clock, then the sentence.
 export function windowRow(w, when, caps) {
   const li = el('li', `win${w.acted ? ' acted' : ''}`);
-  const who = el('span', 'who');
-  if (w.did) nameInto(who, w.did);
-  else who.textContent = w.kind === 'spontaneous' ? 'a landing' : '–';
-  li.append(
-    el('span', null, when),
-    el('span', 'smell', w.kind === 'spontaneous' ? 'dust' : w.mentioned ? 'mention' : w.feed || 'browse'),
-    who,
-    el('span', 'what', outcomeText(w, caps)),
-  );
+  const what = el('span', 'what');
+  sentence(what, windowSentence(w, caps));
+  li.append(el('span', 'when', when), what);
   return li;
 }
 // the one-sentence day: what he read, what he did about it, what reached him

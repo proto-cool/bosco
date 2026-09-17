@@ -710,6 +710,29 @@ Every number below has a gate report under `docs/`.
    conversation, not his history with the person. Next: grow the
    conversation corpus, the ceiling on all of this.
 
+56. **The panel says what happened, and the ceilings come up** (decided
+   2026-09-17). The record read `follow withheld: a cap was full`, which
+   tells a reader nothing: it names a part of the machine and leaves them to
+   guess. Every line of it is a sentence about him now — *he wanted to follow
+   @x, but he had already followed 6 people this hour* — and where a limit
+   stopped him the line prints the real number from `config/caps_v1.yaml`.
+   The words that went with the old form went with it: withheld, cap, rail,
+   window, episode, and the bare Hz on the readout, which now says how close
+   he is (quiet, stirring, nearly, over) with the rate on the row's title for
+   anyone who wants it. What the page says and what the ledger stores are not
+   the same thing; the ledger keeps `cap:follow/hour` as it always did.
+
+   The ceilings moved with it, since reading them in plain words made it
+   obvious they were shaping the account more than his neurons were: likes
+   6/h → 12/h, follows 3/h → 6/h, replies and reflex answers 12/h → 24/h, his
+   own posts 1/h → 2/h, and the backstop across all kinds 24/h → 48/h, which
+   otherwise would have swallowed the rest. And a walk — staying to read a few
+   more of one account's posts — no longer spends that backstop at all: it
+   reaches nobody, so it is not the network's business, the way an unfollow
+   never was (`Ledger.count_actions(exclude=)`). Its own ceiling went 6/h →
+   24/h; what could loop is held by `per_account_actions_per_day`, which does
+   count walks. Thresholds are untouched: none of this is set from outcomes.
+
 55. **He went deaf at step 2^31** (found 2026-09-17). At 13:00 UTC on
    2026-09-16 his biological clock passed 59.7 h, and over the next four
    hours the KCs firing per window fell from a mean of about 170 (peaks of

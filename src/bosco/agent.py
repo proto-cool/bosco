@@ -786,9 +786,15 @@ class Agent:
         c = self.caps
         h, d = ts - 3600.0, ts - 86400.0
         g = c["global"]
-        if L.count_actions(h) >= g["hour"]:
+        # A walk is not outward: he reads a few more posts of one account and nobody hears it.  So
+        # it does not spend the budget that exists to keep him off the network's back (decided
+        # 2026-09-17), the way an unfollow never did.  What could loop -- a walk feeding the walk
+        # that follows it -- is held by its own cap and by per_account_actions_per_day, which does
+        # count walks.
+        inward = ("leave", "walk")
+        if L.count_actions(h, exclude=inward) >= g["hour"]:
             return False, "global/hour"
-        if L.count_actions(d) >= g["day"]:
+        if L.count_actions(d, exclude=inward) >= g["day"]:
             return False, "global/day"
         k = c["per_kind"].get(kind)
         if k:

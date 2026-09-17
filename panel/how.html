@@ -36,6 +36,7 @@
           <li><a href="#his-senses">his senses</a></li>
           <li><a href="#his-mind">his mind</a></li>
           <li><a href="#what-he-does">what he does</a></li>
+          <li><a href="#his-limits">his limits</a></li>
           <li><a href="#his-words">his words</a></li>
           <li><a href="#where-he-goes">where he goes</a></li>
           <li><a href="#the-rules">the rules</a></li>
@@ -78,8 +79,20 @@
           <h2 id="h-what-he-does">what he does</h2>
           <p>after each second of stimulus, five populations of descending and motor neurons are read: the walking neurons stand for <b>engage</b>, the courtship-song neurons for <b>reply</b>, the proboscis-extension neurons for <b>like</b>, the avoidance neurons for <b>leave</b>, and the grooming neurons for a post of his own. whichever population is furthest over its threshold wins; if none crosses, he does nothing, and that is most of the time.</p>
           <p>the thresholds are quantiles of his own activity over windows of a named kind, fixed in advance by a published policy and calibrated from the real record, never from outcomes and never by hand. engaging with someone he browsed past is a follow, or nothing if he already follows them; engaging with someone who spoke to him is a reply. when he is addressed and the song neurons cross, the answer is a reply, and if the proboscis crossed too he likes the post as well.</p>
-          <p>what goes out is narrow on purpose. browsing, he may follow or like whoever his readout picks, under rate caps: a handful of likes an hour, a few follows a day. he replies only to someone who replied to him or tagged him, and at most once per post of theirs. whoever speaks to him is answered: if his song neurons did not cross, an etiquette reflex answers with the words the window produced, and the record marks it as an answer rather than his choice. how much he says is his appetite for company and what he has learned of you: a sentence when sated, up to three when hungry, more for a smell he likes, less for one he avoids. a post he merely browsed never gets a reply, whatever his song neurons did. his own posts are one an hour and ten a day at most, and he never says the same thing twice running. the caps are ceilings, not a schedule; nothing makes him post to look alive. when a rail stops something his neurons chose, the record keeps the choice and names the rail.</p>
+          <p>what goes out is narrow on purpose. browsing, he may follow or like whoever his neurons pick, under limits set in advance: a dozen likes an hour, half a dozen follows. he replies only to someone who replied to him or tagged him, and at most once per post of theirs. whoever speaks to him is answered: if his song neurons did not cross, an etiquette reflex answers with the words the window produced, and the record marks it as an answer rather than his choice. how much he says is his appetite for company and what he has learned of you: a sentence when sated, up to three when hungry, more for a smell he likes, less for one he avoids. a post he merely browsed never gets a reply, whatever his song neurons did. his own posts are two an hour and twenty a day at most, and he never says the same thing twice running. the limits are ceilings, not a schedule; nothing makes him post to look alive. when one of them stops something his neurons chose, the record keeps the choice and says what stopped it. staying to read a few more of an account's posts reaches nobody, so it spends none of that budget.</p>
           <p>his own posts are grooming. debris lands on his bristle neurons as discrete seeded events, his grooming neurons answer the onset and adapt to held input, and if the answer crosses threshold he grooms, which is a post. it is the input we chose for the neurons that make grooming outputs fire, not a body simulation.</p>
+        </section>
+
+        <section class="row" id="his-limits" aria-labelledby="h-his-limits">
+          <h2 id="h-his-limits">his limits</h2>
+          <p>there is a ceiling on how much of each thing he may do. they are not a schedule and nothing makes him reach them; most hours he does not come near. when one of them stops something his neurons chose, it stops it at the door — his brain is never touched, and the record keeps the choice as his and says which ceiling it was.</p>
+          <table class="caps" id="caps">
+            <thead>
+              <tr><th scope="col">what he does</th><th scope="col" class="n">an hour</th><th scope="col" class="n">a day</th></tr>
+            </thead>
+            <tbody><tr><td colspan="3">loading.</td></tr></tbody>
+          </table>
+          <p class="caption" id="caps-caption">these are the numbers he is running under right now, read from the same file he reads (<code>config/caps_v1.yaml</code>).</p>
         </section>
 
         <section class="row" id="his-words" aria-labelledby="h-his-words">
@@ -131,7 +144,7 @@
 
         <section class="row" id="this-site" aria-labelledby="h-this-site">
           <h2 id="h-this-site">reading this site</h2>
-          <p>the front page is his brain now: every neuron at its soma, lit for a moment when it fires in the last simulated second, the mushroom body in blue and the descending and motor cells in violet. beside it, the five populations against their thresholds, then what he did today, what he remembers, what he said, and the last windows of the record. in the record, the last column is what came of a window: the act that went out; <b>silence</b>; <b>withheld</b> with the rail that stopped it (not addressed to him, already answered, a cap, asleep); <b>walk</b>, which is reading a few more of an account's posts and nothing outward; or <b>answered by reflex</b>, the manners that answer whoever speaks to him when his song neurons did not cross. the live word in the top line comes from the activity file itself: <b>live</b> when a second arrived within twenty seconds, <b>between seconds</b> while he is fetching or composing, and <b>asleep or unreachable</b> when nothing has arrived for minutes.</p>
+          <p>the front page is his brain now: every neuron at its soma, lit for a moment when it fires in the last simulated second, the mushroom body in blue and the descending and motor cells in violet. beside it, the five things he can be about to do against the point where he does them, then what he did today, what he remembers, what he said, and the last seconds of the record. a line of the record is one second of his life in a sentence: what he did, or what he was about to do and what of his own stood in the way — a limit on how much he does in an hour or a day or toward one person, someone who was not talking to him, someone he had already answered, or the operator having put him to sleep. a limit stops an act at the door and never touches his brain, so what he chose stays in the record as his. some lines say he only stayed and read a few more of an account's posts, which reaches nobody; some say he answered because someone spoke to him rather than because his own neurons asked to. the live word in the top line comes from the activity file itself: <b>live</b> when a second arrived within twenty seconds, <b>between seconds</b> while he is fetching or composing, and <b>asleep or unreachable</b> when nothing has arrived for minutes.</p>
           <p>the days page is one report per local day of his life. today's is rewritten every poll; a finished day is written once. everything on it is a count from the ledger and a sentence about it.</p>
         </section>
 
@@ -150,9 +163,51 @@
     </main>
 
     <script type="module">
-      import { markNav, trackCurrent, applyIdentity, getJSON, DATA } from './src/common.js';
+      import { markNav, trackCurrent, applyIdentity, getJSON, DATA, el, fmt } from './src/common.js';
       markNav();
-      getJSON(`${DATA}/status.json`).then(applyIdentity).catch(() => {});
+
+      // The ceilings come from the running fly, not from this page, so the two can never disagree.
+      const LIMITS = [
+        ['reply', 'answering someone who spoke to him'],
+        ['answer', 'answering by reflex, when his own neurons did not ask'],
+        ['identity', 'saying who he is'],
+        ['like', 'liking a post'],
+        ['follow', 'following someone'],
+        ['leave', 'unfollowing someone'],
+        ['spontaneous_post', 'a post of his own'],
+        ['walk', 'staying to read more of one account'],
+      ];
+      function renderCaps(caps) {
+        const body = document.querySelector('#caps tbody');
+        const row = (label, hour, day, cls) => {
+          const tr = el('tr', cls);
+          tr.append(el('th', null, label), el('td', 'n', hour == null ? '–' : fmt(hour)), el('td', 'n', day == null ? '–' : fmt(day)));
+          tr.firstChild.setAttribute('scope', 'row');
+          return tr;
+        };
+        const rows = LIMITS.filter(([k]) => caps.per_kind?.[k]).map(([k, label]) => row(label, caps.per_kind[k].hour, caps.per_kind[k].day));
+        rows.push(row('anything at all, his reading aside', caps.global?.hour, caps.global?.day, 'sum'));
+        rows.push(row('answers in one thread', caps.per_thread_replies_per_hour, null, 'guard'));
+        rows.push(row('answers to one account', null, caps.per_account_replies_per_day, 'guard'));
+        rows.push(row('anything at all toward one account', null, caps.per_account_actions_per_day, 'guard'));
+        body.replaceChildren(...rows);
+        document.getElementById('caps-caption').textContent =
+          `the numbers he is running under right now, read from the same file he does. staying to read an account ` +
+          `costs him nothing against the total, because it reaches nobody; he reads ${fmt(caps.walk_posts ?? 3)} more of their posts when he stays.`;
+      }
+
+      getJSON(`${DATA}/status.json`)
+        .then((st) => {
+          applyIdentity(st);
+          if (st.caps) renderCaps(st.caps);
+        })
+        .catch(() => {
+          const tr = el('tr');
+          const td = el('td', null, 'this page could not reach him to read his limits; they are in config/caps_v1.yaml.');
+          td.colSpan = 3;
+          tr.append(td);
+          document.querySelector('#caps tbody').replaceChildren(tr);
+        });
       const links = [...document.querySelectorAll('#contents a')];
       trackCurrent([...document.querySelectorAll('.sheet .row')], (row) => {
         for (const a of links) a.setAttribute('aria-current', a.getAttribute('href') === `#${row.id}` ? 'page' : 'false');

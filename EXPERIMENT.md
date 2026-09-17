@@ -70,11 +70,15 @@ genuinely the one acting, and that anyone can check.
 - Other people's post text is never stored; nor their images: a post is
   kept as its features (who, taste, which of his words, which hashes,
   which topics, which place, which people, what kind of embed) and its URI.
-- Rate caps by kind (`config/caps_v1.yaml`): replies 12/h 100/d, likes
-  12/h 100/d, follows and unfollows 3/h 15/d, own posts 1/h 6/d, all
-  actions 24/h 240/d; at most 6 replies per thread per hour, 20 replies and
-  30 actions toward one account per day. These are loop guards, not a
-  schedule. Bot self-label on the account.
+- Rate caps by kind (`config/caps_v1.yaml`, the file is the authority; as of
+  2026-09-17): replies and reflex answers 24/h 200/d, likes 12/h 80/d,
+  follows 6/h 30/d, unfollows 3/h 15/d, own posts 2/h 20/d, saying who he is
+  20/h 100/d, and reading more of one account 24/h 160/d; 48/h 480/d across
+  all of them together; at most 6 replies per thread per hour, 20 replies and
+  30 actions toward one account per day. Reading more of an account reaches
+  nobody, so since 2026-09-17 it does not count against the total, as an
+  unfollow never has. These are loop guards, not a schedule. Bot self-label on
+  the account.
 - When he posts or replies is the network's decision. Replies follow
   events. Own posts follow grooming: debris lands on his bristles as
   discrete seeded events (about one every two hours), each landing is one
