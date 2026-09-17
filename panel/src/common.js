@@ -103,7 +103,171 @@ export function nameInto(node, did) {
   profile(did).then((p) => p && (node.textContent = `@${p.handle}`));
 }
 
-// ---- his posts, as a list --------------------------------------------------------------------
+// ---- a post, the way bluesky shows it -----------------------------------------------------------
+// Everything in the card comes from the public API at view time: the server holds the URI and
+// nothing else, no text, no handle, no picture (PRODUCT.md, nothing of anyone else's is stored).
+// The card is the page's one box, because what is inside it belongs to the network and not to us;
+// his own note about it stays outside, on the ground (DESIGN.md, the quoted-specimen rule).
+
+const SVG_NS = 'http://www.w3.org/2000/svg';
+// One icon system, drawn on a 24 grid at a 2px stroke; `play` is the only solid one.
+const ICONS = {
+  reply: ['M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z'],
+  repost: ['M17 1l4 4-4 4', 'M3 11V9a4 4 0 0 1 4-4h14', 'M7 23l-4-4 4-4', 'M21 13v2a4 4 0 0 1-4 4H3'],
+  like: ['M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z'],
+  out: ['M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6', 'M15 3h6v6', 'M10 14 21 3'],
+  play: ['M8 5v14l11-7z'],
+};
+export function icon(name, cls) {
+  const s = document.createElementNS(SVG_NS, 'svg');
+  s.setAttribute('viewBox', '0 0 24 24');
+  s.setAttribute('aria-hidden', 'true');
+  s.setAttribute('focusable', 'false');
+  if (cls) s.setAttribute('class', cls);
+  for (const d of ICONS[name] || []) {
+    const path = document.createElementNS(SVG_NS, 'path');
+    path.setAttribute('d', d);
+    s.append(path);
+  }
+  return s;
+}
+
+// what the AppView hung on the post: pictures, a video, a link card, or a post he quoted
+function mediaOf(embed) {
+  if (!embed) return null;
+  const t = embed.$type || '';
+  if (t.startsWith('app.bsky.embed.recordWithMedia')) return mediaOf(embed.media) || mediaOf(embed.record);
+  if (t.startsWith('app.bsky.embed.images')) return { kind: 'images', images: (embed.images || []).slice(0, 4) };
+  if (t.startsWith('app.bsky.embed.video')) return { kind: 'video', thumb: embed.thumbnail, alt: embed.alt || '' };
+  if (t.startsWith('app.bsky.embed.external')) return { kind: 'external', ...(embed.external || {}) };
+  if (t.startsWith('app.bsky.embed.record')) return { kind: 'quote', handle: embed.record?.author?.handle };
+  return null;
+}
+
+function frame(src, alt, cls) {
+  const f = el('div', cls ? `frame ${cls}` : 'frame');
+  if (src) {
+    const img = el('img');
+    img.src = src;
+    img.alt = alt || '';
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    f.append(img);
+  }
+  // bluesky's own badge: this picture was described, and the description is the img's alt
+  if (alt) f.append(el('span', 'alt-badge', 'alt'));
+  return f;
+}
+
+function mediaNode(m) {
+  if (!m) return null;
+  if (m.kind === 'images' && m.images.length) {
+    const n = Math.min(4, m.images.length);
+    const grid = el('div', `shot n${n}`);
+    for (const im of m.images) {
+      const f = frame(im.thumb || im.fullsize, im.alt);
+      const r = im.aspectRatio;
+      // one picture keeps its own shape, clamped the way bluesky clamps it: a very tall or very
+      // wide one is cropped to the frame rather than running the length of the rail
+      if (n === 1 && r?.width && r?.height) f.style.aspectRatio = `${Math.min(Math.max(r.width / r.height, 0.8), 1.78)}`;
+      grid.append(f);
+    }
+    return grid;
+  }
+  if (m.kind === 'video' && m.thumb) {
+    const grid = el('div', 'shot n1');
+    const f = frame(m.thumb, m.alt);
+    const play = el('span', 'play');
+    play.append(icon('play', 'solid'));
+    f.append(play);
+    grid.append(f);
+    return grid;
+  }
+  if (m.kind === 'external' && (m.title || m.uri)) {
+    const card = el('div', 'link-card');
+    if (m.thumb) card.append(frame(m.thumb, '', 'thumb'));
+    const t = el('div', 'link-text');
+    t.append(el('span', 'link-title', m.title || m.uri), el('span', 'link-site', siteOf(m.uri)));
+    card.append(t);
+    return card;
+  }
+  if (m.kind === 'quote' && m.handle) return el('p', 'quote-note', `quoting @${m.handle}`);
+  return null;
+}
+
+const siteOf = (uri) => {
+  try {
+    return new URL(uri).hostname.replace(/^www\./, '');
+  } catch {
+    return '';
+  }
+};
+
+function count(name, n, one, many) {
+  const c = el('span', 'count');
+  c.append(icon(name), el('span', null, fmt(n || 0)));
+  c.setAttribute('aria-label', plural(n || 0, one, many));
+  return c;
+}
+
+// One post as bluesky draws it: who, what, what came with it, and how the network answered.
+export function postCard(post) {
+  const card = el('article', 'post-card');
+  const author = post.author || {};
+  const handle = author.handle || '';
+
+  const who = el('header', 'who');
+  const avatar = el('span', 'avatar');
+  if (author.avatar) {
+    const img = el('img');
+    img.src = author.avatar;
+    img.alt = '';
+    img.loading = 'lazy';
+    avatar.append(img);
+  }
+  const names = el('span', 'names');
+  names.append(el('span', 'name', author.displayName || handle || 'someone'), el('span', 'handle', handle ? `@${handle}` : ''));
+  const made = post.record?.createdAt || post.indexedAt;
+  const when = el('time', 'when', made ? ago(new Date(made).getTime() / 1000) : '');
+  if (made) when.dateTime = made;
+  who.append(avatar, names, when);
+  card.append(who);
+
+  const text = post.record?.text || '';
+  if (text) card.append(el('p', 'text', text));
+  const media = mediaNode(mediaOf(post.embed));
+  if (media) card.append(media);
+
+  const foot = el('footer', 'foot');
+  const counts = el('span', 'counts');
+  counts.append(
+    count('reply', post.replyCount, 'reply', 'replies'),
+    count('repost', (post.repostCount || 0) + (post.quoteCount || 0), 'repost', 'reposts'),
+    count('like', post.likeCount, 'like', 'likes'),
+  );
+  const open = el('a', 'open');
+  open.href = postLink(post.uri);
+  open.target = '_blank';
+  open.rel = 'noopener noreferrer';
+  open.setAttribute('aria-label', `open ${handle ? `@${handle}'s` : 'this'} post on bluesky`);
+  open.append(el('span', null, 'bluesky'), icon('out'));
+  foot.append(counts, open);
+  card.append(foot);
+  return card;
+}
+
+// ---- his posts, and the one he liked most, as a list ---------------------------------------------
+// what the ledger says he did, in his voice; the card underneath is the network's own record, so
+// the note never repeats what the card already shows (the author, the clock, how it was answered)
+export const SAID = {
+  spontaneous_post: 'he posted',
+  reply: 'he answered',
+  answer: 'he answered by reflex',
+  identity: 'he said who he is',
+  intro: 'he introduced himself',
+  liked: 'he liked this',
+};
+export const saidNote = (kind) => SAID[kind] || kind.replaceAll('_', ' ');
 export async function renderPosts(node, items, limit = 4) {
   const uris = items.map((p) => p.uri).slice(0, limit);
   const got = await posts(uris);
@@ -111,15 +275,11 @@ export async function renderPosts(node, items, limit = 4) {
   const shown = items.slice(0, limit).filter((p) => byUri.has(p.uri));
   node.replaceChildren(
     ...shown.map((p) => {
-      const post = byUri.get(p.uri);
-      const li = el('li');
-      const link = el('a', 'post');
-      link.href = postLink(p.uri);
-      link.append(
-        el('p', 't', post.record?.text || ''),
-        el('span', 'm', `${p.kind.replace('_', ' ')} · ${ago(p.ts)} ago · ${plural(post.likeCount || 0, 'like', 'likes')}`),
-      );
-      li.append(link);
+      const li = el('li', 'post-item');
+      // the note is his record's; an item can pass label: '' where the sentence above already said it
+      const note = p.label === undefined ? `${saidNote(p.kind)} · ${ago(p.ts)} ago` : p.label;
+      if (note) li.append(el('p', 'label', note));
+      li.append(postCard(byUri.get(p.uri)));
       return li;
     }),
   );

@@ -104,6 +104,23 @@ components:
     backgroundColor: "{colors.text-ghost}"
     rounded: "{rounded.full}"
     size: "8px"
+  post-card:
+    backgroundColor: "{colors.ground}"
+    borderColor: "{colors.border-default}"
+    textColor: "{colors.text-primary}"
+    typography: "{typography.body}"
+    padding: "16px"
+    rounded: "0"
+  post-card-hover:
+    backgroundColor: "{colors.ground}"
+    borderColor: "{colors.border-bright}"
+    textColor: "{colors.text-primary}"
+    typography: "{typography.body}"
+    padding: "16px"
+    rounded: "0"
+  post-card-note:
+    textColor: "{colors.text-muted}"
+    typography: "{typography.annotation}"
   record-line:
     textColor: "{colors.text-muted}"
     typography: "{typography.annotation}"
@@ -169,6 +186,8 @@ that means "the rest".
 
 **The Lift Rule.** Hierarchy on the rail is made by lifting muted text to `--text-primary` (the current heading, the over-threshold line, the acted window), never by stepping down the grey ramp or adding a colour.
 
+**The Selection Rule.** Selected text is a lit band of the primary accent at 0.32 alpha (0.38 over the specimen, which is already lit), and every selected glyph lifts to `--text-primary`. ARC's `--accent-primary-subtle` is the accent at 0.06 and cannot be seen on this ground, so the band is composed from `--accent-primary-rgb` directly. It is the one place a filled accent surface appears on the page, and it exists only while the reader is holding it: the record and the captions are evidence, and evidence has to be copyable.
+
 **The One Lobe Rule.** Light exists once, as a radial gradient of the primary accent behind the brain. It is written directly on `.glass` rather than through ARC's `--lobe-ambient`, because a custom property resolves its `var()` inputs where it is declared (`:root`), not on the box that uses it; the ARC lobe token would resolve to the neutral default. No other element carries a lobe, tint, or gradient.
 
 ## Typography
@@ -220,7 +239,7 @@ action column sized to content so it never wraps.
 4:3 canvas would cover most of a phone screen); the canvas locks to 4:3,
 captions fall below it as static text, the handle leaves the top line, the
 projection words and caption wrap, and the record drops its "smell" column
-(`3rem 1fr max-content`). The rail follows at full width.
+and folds (`3rem minmax(0, 1fr)`, the outcome spanning both on a second row). The rail follows at full width.
 
 ## Elevation & Depth
 
@@ -234,7 +253,13 @@ rail by repainting the ground, not by a shadow.
 ### Named Rules
 **The Hairlines-Not-Boxes Rule.** Structure is a 1px `--divider` line: under
 the top line, between rows, as the readout track, as the valence baseline.
-Nothing is boxed, tinted, bordered on four sides, or lifted.
+Nothing of ours is boxed, tinted, bordered on four sides, or lifted.
+
+**The Quoted-Specimen Rule.** The one box on the page is a post: a 1px
+`--border-default` frame around what Bluesky holds, because the contents are
+the network's and not the page's, and the reader should be able to see where
+one ends and the other begins. His own note about it stays outside the frame,
+on the ground. Nothing else is ever boxed, and a box never nests inside a box.
 
 **The Glow-Is-State Rule.** A glow appears only when something crosses a
 threshold (live, over-threshold, pressed). It is never decorative and never
@@ -242,8 +267,10 @@ at rest.
 
 ## Shapes
 
-Square. Nothing has a radius except the live dot (`--radius-full`, 8px) and
-the focus ring (`--radius-xs`, 2px outline corner). Tracks and fills are 1px
+Square. Nothing has a radius except the live dot (`--radius-full`, 8px), the
+avatar on a post card (`--radius-full`, 36px, round because that is what makes
+a Bluesky post legible as one) and the focus ring (`--radius-xs`, 2px outline
+corner). Tracks and fills are 1px
 and 2px rules; the valence mark is a 2px segment from a centre line. Links
 are underlined with `--border-bright` at `0.2em` offset, lifting to the
 accent on hover. The projection words are buttons stripped to text with a
@@ -287,14 +314,41 @@ centre, 2px segment right in blue or left in violet, up to 50% each way), and
 a familiarity count `×n` in muted mono.
 
 ### Post
-A block link at `44ch`: his text in body, then a mono annotation line (kind ·
-age · likes) in muted that lifts to secondary on hover. Text is fetched by
-URI at view time; the server never stores it.
+A post as Bluesky draws it, at `44ch`, under one mono annotation note of his
+own. The note is the ledger's (`he posted · 14:32`, `he liked this`), on the
+ground, outside the box; the box is the network's record and carries only what
+Bluesky shows: a `--radius-full` avatar, display name in `--text-sm` 600, handle
+and age in mono annotation, the text in body, the pictures, and a footer of
+reply / repost / like counts in mono against one `bluesky ↗` link. Pictures
+follow Bluesky's grid (one to four, a single one keeping its own ratio clamped
+to between 4:5 and 16:9, cropped to the frame); a described picture carries the
+`alt` badge and the description is the image's `alt`. A link card and a quoted
+post are a hairline and a line of text, never a second box.
+
+Everything inside the box is fetched from the public API by URI at view time —
+text, handle, avatar, pictures, counts. The server stores the URI and nothing
+else.
+
+- **The link:** the footer's anchor is stretched over the whole box
+  (`.open::after`, `inset: 0`), so the box is one large target that opens the
+  post on bluesky.app in a new tab; the box takes the focus ring, the anchor
+  draws none. The text and the name ride above the overlay, so a post can still
+  be selected and copied: the cursor is a pointer over the box and a caret over
+  his words, which is the affordance for both.
+- **State:** the border lifts from `--border-default` to `--border-bright` and
+  the `bluesky` link from `--text-secondary` to `--accent-primary` on hover and
+  on keyboard focus.
 
 ### Record line
 `3rem 4rem 1fr max-content` in mono annotation, muted; a window where he acted
 lifts to primary. Columns: age, smell (dust / mention / browse), who, what
 (silence, or the action, with "· withheld" when a cap held it).
+
+On a phone the line runs to about 55 mono characters against the 40 that fit,
+so it folds rather than truncating or scrolling the page sideways: the smell
+column goes, age and who hold the first row, and what came of the window spans
+both columns on a second, still right-aligned. Every line folds, so the column
+of times stays a straight ladder.
 
 ### Empty state
 One muted sentence in the fly's voice ("nobody yet. he has not met anyone he

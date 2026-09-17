@@ -27,8 +27,18 @@ body {
   padding-inline: var(--gutter);
   padding-block: 0;
 }
+/* Selection is a browser surface and it belongs to the page: ARC's --accent-primary-subtle is
+   the accent at 0.06 alpha, which on this ground cannot be seen at all.  The same accent token
+   at 0.32 reads as a lit band, and every selected glyph lifts to primary (11:1 on the band), so
+   selected mono annotations and muted captions are legible too, not only body prose. */
 ::selection {
-  background: var(--accent-primary-subtle);
+  background: rgba(var(--accent-primary-rgb), 0.32);
+  color: var(--text-primary);
+  text-shadow: none;
+}
+/* the canvas captions sit on the specimen; the same band, so a selection there reads as one thing */
+.glass ::selection {
+  background: rgba(var(--accent-primary-rgb), 0.38);
   color: var(--text-primary);
 }
 :focus-visible {
@@ -600,31 +610,241 @@ a:hover {
   white-space: nowrap;
 }
 
-/* posts */
+/* posts: his note on the ground, and under it the one box on the page (the quoted-specimen
+   rule).  What is inside the box is the network's own record of the post, fetched at view time. */
 .posts {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  gap: var(--space-md);
-}
-.post {
-  display: block;
-  text-decoration: none;
+  gap: var(--space-lg);
   max-width: 44ch;
 }
-.post .t {
-  margin: 0;
+.post-item {
+  display: grid;
+  gap: var(--space-xs);
 }
-.post .m {
-  display: block;
-  margin-top: var(--space-xs);
+.post-item > .label {
+  margin: 0;
   font-family: var(--font-mono);
   font-size: var(--annot-size);
   color: var(--text-muted);
 }
-.post:hover .m {
+.post-card {
+  position: relative;
+  display: grid;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  border: 1px solid var(--border-default);
+  background: var(--bg-deep);
+  cursor: pointer;
+  transition: border-color var(--duration-fast) var(--ease-out);
+}
+.post-card:hover {
+  border-color: var(--border-bright);
+}
+/* the link is the whole box, so the box takes the focus ring and the link does not draw a second */
+.post-card:has(.open:focus-visible) {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+.post-card .open:focus-visible {
+  outline: none;
+}
+/* the whole box is the link; the text rides above it so a post can still be selected and copied */
+.post-card .open::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+.post-card .names,
+.post-card .text {
+  position: relative;
+  z-index: 1;
+}
+.post-card .text {
+  cursor: text;
+}
+
+.post-card .who {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr) max-content;
+  gap: var(--space-sm);
+  align-items: center;
+}
+.post-card .avatar {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  background: var(--divider);
+}
+.post-card .avatar img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.post-card .names {
+  display: grid;
+  min-width: 0;
+}
+.post-card .name,
+.post-card .handle {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.post-card .name {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.post-card .handle,
+.post-card .when {
+  font-family: var(--font-mono);
+  font-size: var(--annot-size);
   color: var(--text-secondary);
+}
+.post-card .when {
+  align-self: start;
+  color: var(--text-muted);
+}
+.post-card .text {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+/* pictures: bluesky's grid, one to four, and the alt badge it earns by being described */
+.post-card .shot {
+  display: grid;
+  gap: 2px;
+}
+.post-card .shot.n2,
+.post-card .shot.n3,
+.post-card .shot.n4 {
+  grid-template-columns: 1fr 1fr;
+}
+.post-card .shot.n3 .frame:first-child {
+  grid-column: span 2;
+}
+.post-card .frame {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+  background: var(--divider);
+}
+.post-card .shot.n1 .frame,
+.post-card .shot.n3 .frame:first-child {
+  aspect-ratio: 16 / 10;
+}
+.post-card .frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.post-card .alt-badge {
+  position: absolute;
+  left: var(--space-xs);
+  bottom: var(--space-xs);
+  padding: 1px var(--space-xs);
+  background: var(--bg-deep);
+  border: 1px solid var(--border-default);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+.post-card .play {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--text-primary);
+}
+.post-card .play svg {
+  width: 2.5rem;
+  height: 2.5rem;
+  fill: currentColor;
+  stroke: none;
+}
+
+/* a link he was shown, and a post he quoted: a hairline, never a second box */
+.post-card .link-card {
+  display: grid;
+  grid-template-columns: 4rem minmax(0, 1fr);
+  gap: var(--space-sm);
+  align-items: center;
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--divider);
+}
+.post-card .link-card .frame.thumb {
+  width: 4rem;
+  aspect-ratio: 1 / 1;
+}
+.post-card .link-text {
+  display: grid;
+  min-width: 0;
+}
+.post-card .link-title {
+  font-size: var(--annot-size);
+  color: var(--text-primary);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.post-card .link-site,
+.post-card .quote-note {
+  font-family: var(--font-mono);
+  font-size: var(--annot-size);
+  color: var(--text-muted);
+}
+.post-card .quote-note {
+  margin: 0;
+}
+
+/* how the network answered, and the way out to it */
+.post-card .foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  font-family: var(--font-mono);
+  font-size: var(--annot-size);
+  color: var(--text-muted);
+}
+.post-card .counts {
+  display: flex;
+  gap: var(--space-md);
+}
+.post-card .count {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-variant-numeric: tabular-nums;
+}
+.post-card svg {
+  width: 1em;
+  height: 1em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.post-card .open {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--text-secondary);
+  text-decoration-color: var(--border-bright);
+  transition: color var(--duration-fast) var(--ease-out);
+}
+.post-card:hover .open,
+.post-card .open:focus-visible {
+  color: var(--accent-primary);
+  text-decoration-color: var(--accent-primary);
 }
 
 /* the record */
@@ -719,8 +939,17 @@ a:hover {
     flex-wrap: wrap;
     gap: var(--space-sm) var(--space-lg);
   }
+  /* A record line is about 55 mono characters and a phone holds 40, so on the wide layout the
+     nowrap action column ("unfollow withheld: nobody to unfollow") ran past the viewport and
+     scrolled the whole page sideways.  Here the line folds instead: when and who on the first
+     row, what came of it right-aligned under them.  Every row folds, so the ladder of times
+     stays straight, the handle is never cut to a stub, and no reason is truncated. */
   .win {
-    grid-template-columns: 3rem 1fr max-content;
+    grid-template-columns: 3rem minmax(0, 1fr);
+    row-gap: 0;
+  }
+  .win .what {
+    grid-column: 1 / -1;
   }
   .person {
     grid-template-columns: 1fr 5rem 3.2rem max-content;
@@ -733,7 +962,9 @@ a:hover {
 @media (prefers-reduced-motion: reduce) {
   .fill,
   .ro,
-  .row h2 {
+  .row h2,
+  .post-card,
+  .post-card .open {
     transition: none;
   }
 }

@@ -1,7 +1,7 @@
 // days.html: one report per local day of his life, from data/days/*.json (the ledger alone).
 import {
   $, DATA, fmt, pct, el, b, sentence, plural, list, longDate, clockTime, getJSON, renderPosts, personRow,
-  windowRow, daySentence, whyText, CHOSE, OUTCOME_SOURCE, markNav, trackCurrent, applyIdentity,
+  windowRow, daySentence, whyText, saidNote, CHOSE, OUTCOME_SOURCE, markNav, trackCurrent, applyIdentity,
 } from './common.js';
 
 let index = null;
@@ -134,7 +134,8 @@ async function show(date) {
   const fav = rep.favorite, least = rep.least;
   if (fav) {
     sentence($('favorite-sentence'), ['favorite: ', ...tasteOf(fav), '. ', didOf(fav), '; his like neurons ran at ', b(`${times(fav.ratio)}×`), ' their threshold.']);
-    if (fav.uri) await renderPosts($('favorite-post'), [{ uri: fav.uri, ts: fav.ts, kind: 'liked' }], 1);
+    // the sentence above already says he liked it and when, so the card carries no note of its own
+    if (fav.uri) await renderPosts($('favorite-post'), [{ uri: fav.uri, ts: fav.ts, kind: 'liked', label: '' }], 1);
     else $('favorite-post').replaceChildren();
   } else {
     $('favorite-sentence').textContent = 'nothing drew his tongue out that day.';
@@ -158,8 +159,8 @@ async function show(date) {
       : ['nobody spoke to him. he read ', b(plural(people.length, 'account', 'accounts')), '.'],
   );
 
-  // said
-  await renderPosts($('posts'), rep.posts || [], 12);
+  // said: the note carries his clock that day, since the card's own time is counted from now
+  await renderPosts($('posts'), (rep.posts || []).map((p) => ({ ...p, label: `${saidNote(p.kind)} · ${clockTime(p.ts, tz)}` })), 12);
 
   // learned
   const oc = rep.outcomes || [];
