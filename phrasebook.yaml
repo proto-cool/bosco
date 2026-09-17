@@ -17,9 +17,15 @@
 #
 # Reply lines (mid arousal) drafted by Claude at Nick's request on 2026-09-16 in the
 # register of corpus/011-banana.txt; the low and high arousal reply lines and the first
-# groom lines the same day (version 2).  Nick edits or replaces them before freeze-v1.
+# groom lines the same day (version 2).  The seven remaining groom keys drafted the same
+# way on 2026-09-17 (version 3), at Nick's direction and to his rule: a groom line stays in
+# the fly's physical world.  His day sets the key, but the line never says what happened to
+# him -- a bad day is a cold window and cleaning the same leg twice, never "nobody came".
+# The phrasebook is the fallback for the moments when nothing of his own fits, and the
+# safest thing to say then is something small he can see.  Nick edits or replaces any of it
+# before freeze-v1.
 # An entry with text: null is structure only and is skipped by the loader.
-version: 2
+version: 3
 lines:
   - id: reply-positive-mid-new-001
     behaviour: reply
@@ -369,3 +375,87 @@ lines:
     arousal: mid
     familiarity: new
     text: the big one moved the cup. i was in the cup. now i am on the table
+  - id: groom-neutral-high-new-001
+    behaviour: groom
+    valence: neutral
+    arousal: high
+    familiarity: new
+    text: window. wall. window. the leaf. my legs are going fast today
+  - id: groom-neutral-high-new-002
+    behaviour: groom
+    valence: neutral
+    arousal: high
+    familiarity: new
+    text: many things went past me. i did not go to any of them. now i clean my head
+  - id: groom-positive-low-new-001
+    behaviour: groom
+    valence: positive
+    arousal: low
+    familiarity: new
+    text: the light is on the table and i am in it. i am not going anywhere
+  - id: groom-positive-low-new-002
+    behaviour: groom
+    valence: positive
+    arousal: low
+    familiarity: new
+    text: warm here. the fruit is close. i clean one leg and then stop
+  - id: groom-positive-mid-new-001
+    behaviour: groom
+    valence: positive
+    arousal: mid
+    familiarity: new
+    text: the fruit was open today. i was on it a long time. now i clean my legs
+  - id: groom-positive-mid-new-002
+    behaviour: groom
+    valence: positive
+    arousal: mid
+    familiarity: new
+    text: i went up the wall and nothing made me come down. i am still up here
+  - id: groom-positive-high-new-001
+    behaviour: groom
+    valence: positive
+    arousal: high
+    familiarity: new
+    text: sweet on the floor. sweet on the spoon. sweet on the glass. i went to all of it
+  - id: groom-positive-high-new-002
+    behaviour: groom
+    valence: positive
+    arousal: high
+    familiarity: new
+    text: the jar was open. i went in and out and in. wings clean now. i am going back
+  - id: groom-negative-low-new-001
+    behaviour: groom
+    valence: negative
+    arousal: low
+    familiarity: new
+    text: dry here. i sit on the rim. nothing is open. i clean my legs again
+  - id: groom-negative-low-new-002
+    behaviour: groom
+    valence: negative
+    arousal: low
+    familiarity: new
+    text: the cold part of the window. i stay on it anyway. slow today
+  - id: groom-negative-mid-new-001
+    behaviour: groom
+    valence: negative
+    arousal: mid
+    familiarity: new
+    text: i hit the window. i hit it again. ok. i am on the floor now
+  - id: groom-negative-mid-new-002
+    behaviour: groom
+    valence: negative
+    arousal: mid
+    familiarity: new
+    text: the fruit is gone from the table. i went to where it was. i clean my wings
+  - id: groom-negative-high-new-001
+    behaviour: groom
+    valence: negative
+    arousal: high
+    familiarity: new
+    text: the cup moved. the plate moved. i went off and came back and it moved again
+  - id: groom-negative-high-new-002
+    behaviour: groom
+    valence: negative
+    arousal: high
+    familiarity: new
+    text: nothing is open and i keep going to it. wall. jar. wall. my legs are going fast

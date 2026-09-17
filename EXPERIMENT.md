@@ -257,7 +257,13 @@ Any failure is announced from the account and fixed under a new tag.
 ## 7. Confounds, stated up front
 
 - People interact with Bosco because it is a fly.
-- The phrasebook is human-written; its voice is Nick's.
+- The phrasebook and the corpus are written ahead of time by hand, and not all of the
+  hands are Nick's: parts of the corpus (`corpus/README.md` v4, v6, v7) and, since
+  2026-09-16, the phrasebook's lines were drafted by Claude at his request, in the
+  register he set and to his rules, and edited or kept by him. The register is his. No
+  model is in the runtime loop, before or after the tag: every line was fixed and
+  published at `freeze-v1`, and what he says in a given second is chosen from them by
+  his own state and his seed.
 - The encoder sees who, how toxic, which of his words, which topics, which
   place, which people, and a few colours: never what.
 - Punishment is sparse; aversion is mostly innate.
