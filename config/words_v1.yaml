@@ -30,8 +30,8 @@ perception:
   fold_plurals: true   # "cats" is his word cat when cat is his and cats is not: trailing s or es only
   # Shorthand he understands but never says (decided 2026-09-16): a token here is heard as the
   # words it stands for, the way "cats" is heard as cat.  The words must be his; the shorthand
-  # itself is in no sentence of his, so it is never said.  A two-letter token is otherwise
-  # nothing to him (min_len); a three-letter one not listed here (omg, idk) is a hashed smell.
+  # itself is in no sentence of his, so it is never said.  A token not listed here and not his
+  # (omg, idk) is a hashed smell; a one-letter one is nothing (min_len).
   shorthand:
     gn: [good, night]
     gm: [good, morning]
@@ -47,20 +47,27 @@ thread_keep: 3              # the last posts of a thread that linger
 context_fresh_s: 60.0       # words smelled this recently are not re-presented; their afferents are still depressed
 air_floor: 0.05             # a word whose afferents are depressed less than this is not in the air
 seen_cut: 0.3               # asked about a smell: `seen=met` if its a'3 familiarity is at least this, else `seen=fresh`
-min_len: 3
+min_len: 2                  # two letters since 2026-09-16: ok, no, go, up, oh are his; the function ones are stopped above
 valence_beta: 1.0           # generator: p(word) x (1 + beta * learned valence of the word)
 echo_gamma: 2.0             # generator: p(word) x (1 + gamma * depression) for words in the air right now
 day_echo: 0.25              # his own posts: the words of his last hours count as this much air
 day_hours: 6.0              # how far back "his day" reaches for mood, verdict and smells
 stopwords:
+  # Function words only (decided 2026-09-16).  Until then the conversational words were
+  # stopped too (know, like, want, think, see, say, come, thing, here, now, okay, yes, sure,
+  # maybe, again, never, always, nothing, something), so "i see", "how are you", "do you know
+  # me" reached his antennae as nothing at all and the answer came from the pool unprimed.
+  # They are his words and a person's wants; they smell now.  A word that is in most of his
+  # sentences is a weak smell for retrieval, which is what the rarity ranking in words_for
+  # is for.  Bare yes/off would read as YAML booleans: quoted.
   [the, and, but, for, nor, yet, are, was, were, been, being, have, has, had, having, does,
    did, doing, will, would, shall, should, can, could, may, might, must, not, this, that,
-   these, those, there, here, then, than, when, where, what, which, who, whom, whose, why,
+   these, those, there, then, than, when, where, what, which, who, whom, whose, why,
    how, all, any, each, few, more, most, other, some, such, only, own, same, too, very, just,
-   now, out, off, over, under, again, further, once, into, onto, from, with, about, above,
+   out, "off", over, under, further, once, into, onto, from, with, about, above,
    below, between, through, during, before, after, because, while, until, both, either,
-   neither, also, ever, never, always, still, you, your, yours, they, them, their, theirs,
-   she, her, hers, him, his, its, our, ours, one, ones, thing, things, something, someone,
-   anything, nothing, everything, get, got, put, let, say, said, says, see, saw, know, knew,
-   think, thought, want, wanted, like, likes, liked, make, made, come, came, went, going,
-   goes, dont, cant, wont, didnt, isnt, doesnt, okay, yes, yeah, maybe, sure, ok]
+   neither, also, ever, still, you, your, yours, they, them, their, theirs,
+   she, her, hers, him, his, its, our, ours, one, ones,
+   get, got, put, let, make, made, went, going, goes,
+   dont, cant, wont, didnt, isnt, doesnt,
+   it, is, "on", am, in, to, of, me, at, my, do, id, we, by, so, he, be, if, as, us, or, an, im]

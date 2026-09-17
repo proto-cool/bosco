@@ -346,3 +346,35 @@ def test_he_remembers_what_you_talk_about_and_whether_he_has_met_it(fly):
     ag.save_state(force=True)
     fresh = Agent(Ledger(f"{tmp}/l.sqlite"), fly, state_dir=tmp)  # reloaded from disk
     assert fresh.assoc.to_json() == ag.assoc.to_json()
+
+
+@needs_data
+def test_small_talk_reaches_him_and_the_rarer_words_win(fly):
+    """The stoplist is function words only (decided 2026-09-16): "i see", "how are you", "do you
+    know me" smell of see, how, know.  A post with more of his words than max_words keeps the
+    rarer ones in his corpus, so a common word never crowds out the one the post is about."""
+    from bosco.encoder import Encoder
+
+    enc = Encoder(fly.brain)
+    assert enc.words_for("i see", hashed=False) == ("see",)
+    assert enc.words_for("do you know me? yes. ok", hashed=False) == ("know", "yes", "ok")  # two letters are enough
+    assert enc.words_for("no. go up. i am on it", hashed=False) == (
+        "no",
+        "go",
+        "up",
+    )  # his; am/on/it are function words
+    assert "how" not in enc.vocab and "you" not in enc.vocab  # function words stay function words
+    assert enc.words_for("i think i know what i want here now", hashed=False) == (
+        "think",
+        "know",
+        "want",
+        "here",
+        "now",
+    )
+    many = "i know i like i want i think i see the little bird on the leaf"
+    got = enc.words_for(many, hashed=False)
+    all8 = ("know", "like", "want", "think", "see", "little", "bird", "leaf")
+    assert len(got) == int(enc.words_cfg["max_words"]) and "bird" in got
+    assert set(got) == set(sorted(all8, key=lambda w: (enc.word_lines[w], all8.index(w)))[:6])  # the rarer six
+    assert got == tuple(w for w in all8 if w in got)  # in order of appearance
+    assert enc.word_lines["banana"] > enc.word_lines["bird"] > 0

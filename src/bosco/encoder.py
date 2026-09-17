@@ -93,12 +93,15 @@ class Encoder:
 
     # ---- words as smells --------------------------------------------------
     def _load_vocab(self) -> frozenset[str]:
-        """His closed vocabulary: content words of the corpus and phrasebook."""
+        """His closed vocabulary: content words of the corpus and phrasebook.  Also counts, per
+        word, the corpus lines it is in (`word_lines`): how common a word is in his mouth, which
+        words_for uses to keep the rarer words of a post when there are more than max_words."""
         from bosco.textgen import Generator, tokenize
 
         stop = set(self.words_cfg["stopwords"])
         min_len = int(self.words_cfg["min_len"])
         words: set[str] = set()
+        self.word_lines: dict[str, int] = {}
         try:
             from bosco.phrasebook import Phrasebook
 
@@ -107,11 +110,16 @@ class Encoder:
             lines = []
         g = Generator(phrasebook_lines=lines)
         for d in g.docs:
-            for sent in d.sentences:
-                for t in sent:
-                    w = t.lower().replace("'", "")
-                    if w.isalpha() and len(w) >= min_len and w not in stop:
-                        words.add(w)
+            for line in d.lines:
+                in_line: set[str] = set()
+                for sent in line:
+                    for t in sent:
+                        w = t.lower().replace("'", "")
+                        if w.isalpha() and len(w) >= min_len and w not in stop:
+                            words.add(w)
+                            in_line.add(w)
+                for w in in_line:
+                    self.word_lines[w] = self.word_lines.get(w, 0) + 1
         for t in tokenize(" ".join(lines)):
             w = t.lower().replace("'", "")
             if w.isalpha() and len(w) >= min_len and w not in stop:
@@ -130,10 +138,12 @@ class Encoder:
         return cls.HASH_PREFIX + cls.word_hash(word).hex()
 
     def words_for(self, text: str, hashed: bool | None = None) -> tuple[str, ...]:
-        """The words of his vocabulary in a post, in order of first appearance, at most max_words;
-        then, if the perception vocabulary is on (config/words_v1.yaml `perception`), up to
-        max_hashed other content words as `h:` tokens.  The text is read once and discarded;
-        only these are kept."""
+        """The words of his vocabulary in a post, at most max_words, in order of first
+        appearance; when a post has more, the rarer ones in his corpus are kept (decided
+        2026-09-16, when the conversational words stopped being stopwords: "i know i like the
+        little bird" keeps bird over know).  Then, if the perception vocabulary is on
+        (config/words_v1.yaml `perception`), up to max_hashed other content words as `h:`
+        tokens.  The text is read once and discarded; only these are kept."""
         import re
 
         from bosco.textgen import tokenize
@@ -149,7 +159,7 @@ class Encoder:
             str(k): [str(x) for x in (v if isinstance(v, list) else [v])]
             for k, v in (pc.get("shorthand") or {}).items()
         }
-        out: list[str] = []
+        found: list[str] = []
         other: list[str] = []
         seen: set[str] = set()
         for t in tokenize(text):
@@ -159,13 +169,17 @@ class Encoder:
                     continue
                 if w in self.vocab:
                     seen.add(w)
-                    if len(out) < int(self.words_cfg["max_words"]):
-                        out.append(w)
+                    found.append(w)
                 elif max_hashed and w.isalpha() and len(w) >= min_len and w not in stop:
                     seen.add(w)
                     if len(other) < max_hashed:
                         other.append(self.hashed(w))
-        return tuple(out) + tuple(other)
+        max_words = int(self.words_cfg["max_words"])
+        if len(found) > max_words:
+            lines = getattr(self, "word_lines", {})
+            keep = set(sorted(found, key=lambda w: (lines.get(w, 0), found.index(w)))[:max_words])
+            found = [w for w in found if w in keep]
+        return tuple(found) + tuple(other)
 
     def fold(self, w: str) -> str:
         """A plural of his word is his word: "cats" is the smell of cat, "pictures" of picture.

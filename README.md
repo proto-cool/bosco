@@ -650,6 +650,22 @@ Every number below has a gate report under `docs/`.
    walked from, so his browsing follows his own feet. The controls replay
    the walked posts as ordinary stimuli and are off-policy after the first
    walk they would not have taken (EXPERIMENT.md §4).
+57. **Small talk reaches him** (decided 2026-09-16). The stoplist in
+   `config/words_v1.yaml` is function words only now. Until then the
+   conversational words were stopped too (know, like, want, think, see,
+   say, come, thing, here, now, okay, yes, sure, maybe, again, never,
+   always, nothing, something), so "i see", "how are you", "do you know
+   me" reached his antennae as nothing and the answer came from the pool
+   unprimed. `min_len` is 2: ok, no, go, up are his, and the two-letter
+   function words (it, is, on, am, in, to, me, ...) are stopped by name.
+   Bare `yes`, `no`, `on`, `off` are YAML booleans, so the list quotes
+   them; the old list had silently carried `True`/`False` in place of
+   `yes`/`off`. With common words smellable, a post can carry more of his
+   words than `max_words`; `Encoder.words_for` then keeps the rarer ones
+   in his corpus (`word_lines`, the number of corpus lines a word is in),
+   in order of appearance, so "know" never crowds out "bird". Words are
+   logged per row, so replay is unaffected; new rows smell of more.
+
 56. **Answer-shaped corpus, and a thought is the unit of retrieval**
    (2026-09-16). A report over three days of posts addressed to him
    (33 posts, 23 answered; the script fetched the texts from the public
