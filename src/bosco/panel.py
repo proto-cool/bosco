@@ -165,6 +165,10 @@ class Writer:
 
 
 class Panel:
+    # the day report's shape; when it changes, every finished day is rewritten once (write_days)
+    #   2  words outside his vocabulary counted, not listed (2026-09-16)
+    DAYS_FORMAT = 2
+
     def __init__(self, agent, ledger, out_dir: Path | str, min_interval: float = 0.5) -> None:
         self.agent = agent
         self.L = ledger
@@ -193,7 +197,7 @@ class Panel:
 
     def _words(self) -> dict:
         """The words in the air around him right now (from the threads he is in)."""
-        return {"air": list(self.agent.air(int(self.agent.live.t_ms)))}
+        return {"air": [w for w in self.agent.air(int(self.agent.live.t_ms)) if not w.startswith("h:")]}
 
     def _feeds(self, ts: float) -> dict:
         """Where he reads: each feed's reads and approaches over the window, and the share of his
@@ -331,6 +335,7 @@ class Panel:
         hours = [{"episodes": 0, "acted": 0, "appetite": [], "landings": 0} for _ in range(24)]
         topics: dict[str, int] = {}
         words: dict[str, int] = {}
+        unknown = 0  # smells of words outside his vocabulary (kept as hashes, never as words)
         people: dict[str, dict] = {}
         landings: set[str] = set()
         grooms = 0
@@ -364,7 +369,9 @@ class Panel:
                 if t:
                     topics[t] = topics.get(t, 0) + 1
             for w in (r["words"] or "").split(","):
-                if w:
+                if w.startswith("h:"):
+                    unknown += 1
+                elif w:
                     words[w] = words.get(w, 0) + 1
             if r["did"]:
                 p = people.setdefault(r["did"], {"did": r["did"], "n": 0, "mentions": 0, "acted": 0})
@@ -474,6 +481,7 @@ class Panel:
             "feeds": feeds,
             "topics": dict(sorted(topics.items(), key=lambda kv: (-kv[1], kv[0]))[:12]),
             "words": dict(sorted(words.items(), key=lambda kv: (-kv[1], kv[0]))[:12]),
+            "words_unknown": unknown,
             "people": ppl,
             "posts": posts,
             "outcomes": outcomes,
@@ -547,10 +555,12 @@ class Panel:
         today = dt.datetime.fromtimestamp(ts, tz).date()
         ddir = self.dir / "days"
         ddir.mkdir(parents=True, exist_ok=True)
-        # his time zone changed since the days were written: every day is re-bucketed, once
+        # his time zone or the report's shape changed since the days were written: every day is
+        # rewritten, once
         rewrite = False
         try:
-            rewrite = json.loads((ddir / "index.json").read_text()).get("tz") not in (None, str(tz))
+            idx = json.loads((ddir / "index.json").read_text())
+            rewrite = idx.get("tz") not in (None, str(tz)) or idx.get("format") != self.DAYS_FORMAT
         except (OSError, ValueError):
             pass
         if rewrite:
@@ -606,7 +616,10 @@ class Panel:
                     "punishments": c.get("punishments", 0),
                 }
             )
-        _atomic_write(ddir / "index.json", json.dumps({"tz": str(tz), "days": index}, separators=(",", ":")).encode())
+        _atomic_write(
+            ddir / "index.json",
+            json.dumps({"tz": str(tz), "format": self.DAYS_FORMAT, "days": index}, separators=(",", ":")).encode(),
+        )
 
     # ---- per poll -----------------------------------------------------------------
     def status(self, ts: float, extra: dict | None = None) -> dict:

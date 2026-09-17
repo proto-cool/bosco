@@ -109,7 +109,8 @@ async function show(date) {
   const words = Object.entries(rep.words || {});
   const sm = [];
   if (topics.length) sm.push('topics: ', b(topics.slice(0, 8).map(([k, v]) => `${k} ×${v}`).join(', ')), '. ');
-  if (words.length) sm.push('his own words in what he read: ', b(words.slice(0, 10).map(([k, v]) => `${k} ×${v}`).join(', ')), '.');
+  if (words.length) sm.push('his own words in what he read: ', b(words.slice(0, 10).map(([k, v]) => `${k} ×${v}`).join(', ')), '. ');
+  if (rep.words_unknown) sm.push('and ', b(plural(rep.words_unknown, 'smell', 'smells')), ' of words he has no word for, kept as hashes, never as words.');
   if (!sm.length) sm.push('nothing he has a word for.');
   sentence($('smell-sentence'), sm);
 

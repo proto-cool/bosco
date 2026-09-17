@@ -85,7 +85,7 @@ def test_day_reports_from_the_ledger(fly, tmp_path):
     t = json.loads((tmp_path / "panel" / "days" / f"{d_today.isoformat()}.json").read_text())
     assert y["final"] is True and t["final"] is False
     assert y["counts"]["episodes"] == 1 and sum(h["episodes"] for h in y["hours"]) == 1
-    assert y["topics"] == {"fruit": 1} and y["words"] == {"banana": 1}
+    assert y["topics"] == {"fruit": 1} and y["words"] == {"banana": 1} and y["words_unknown"] == 0
     assert y["people"][0]["did"] == "did:plc:a" and y["people"][0]["mentions"] == 1
     assert t["feeds"][0]["name"] == "science" and t["feeds"][0]["reads"] == 1
     # favorite and least favorite: from the row's rates alone; the least is never named, the favorite
