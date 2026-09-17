@@ -567,14 +567,29 @@ class Ledger:
 
     # ---- integrity ----------------------------------------------------------
     def assert_no_text(self, max_len: int = 200) -> list[tuple[str, str, str]]:
-        """Return (table, column, value) for any text value that looks like prose:
-        longer than max_len, or containing two or more spaces (URIs/DIDs/labels/keys have none)."""
+        """Return (table, column, value) for any text value that looks like prose.
+
+        Every text value here is a token or a comma-separated list of them: a DID, a URI, a
+        label, a `key:value` note, a word of his, or an `h:` hash of one that is not
+        (config/words_v1.yaml `perception`).  None of them carries a space.  Since 2026-09-15
+        `words` and `context` hold up to a dozen smells at once, so the list can be long
+        without being a sentence -- the length test belongs on the tokens, not on the row, or
+        every window he reads with a full nose is reported as stored text.
+
+        What it still catches is what it is for: a sentence has spaces, and a pasted post with
+        the spaces stripped would be one token far over max_len.
+        """
         bad = []
         for table, cols in TEXT_COLUMNS.items():
+            # An older dump does not have the newer columns, and opening one read-only no longer
+            # migrates it into having them: audit what the file holds, not what today's fly writes.
+            have = {r["name"] for r in self.db.execute(f"PRAGMA table_info({table})")}
             for c in cols:
+                if c not in have:
+                    continue
                 for (v,) in self.db.execute(f"SELECT {c} FROM {table} WHERE {c} IS NOT NULL"):
                     s = str(v)
-                    if len(s) > max_len or s.count(" ") >= 2:
+                    if s.count(" ") >= 2 or any(len(t) > max_len for t in s.split(",")):
                         bad.append((table, c, s[:60]))
         return bad
 
