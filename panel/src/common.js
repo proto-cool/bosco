@@ -538,12 +538,25 @@ export function liveText(state, ageS) {
   if (state === 'stale') return `last second ${ago(Date.now() / 1000 - ageS)} ago`;
   return 'asleep or unreachable';
 }
+// the same state in fewer characters, for the top line of a phone, where the full phrase would be
+// cut mid-word; the full one stays on the element for a screen reader and a hover
+export function liveShort(state, ageS) {
+  if (state === 'live') return 'live';
+  if (state === 'busy') return `${Math.round(ageS)}s`;
+  if (state === 'stale') return ago(Date.now() / 1000 - ageS);
+  return 'asleep';
+}
 export function setLive(state, ageS) {
   const live = $('live');
   if (!live) return;
   live.classList.toggle('is-live', state === 'live');
   live.classList.toggle('is-busy', state === 'busy');
-  $('live-text').textContent = liveText(state, ageS);
+  const full = liveText(state, ageS);
+  $('live-text').textContent = full;
+  const short = $('live-short');
+  if (short) short.textContent = liveShort(state, ageS);
+  live.title = full;
+  live.setAttribute('aria-label', full);
 }
 // the current page's word in the top line
 export function markNav() {

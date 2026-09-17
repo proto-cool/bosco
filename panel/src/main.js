@@ -55,12 +55,14 @@ async function initBrain() {
 }
 
 // The five groups named by the act they make, not by the group: a reader cannot know that a groom
-// is a post of his own.  Which neurons each one is stands in the caption underneath.
+// is a post of his own.  One word each, and the same word the record uses for the act when it goes
+// out, so the bars and the lines underneath can be read against each other.  Which neurons each one
+// is stands in the caption.
 const ACT_OF = {
-  engage: 'go to them',
+  engage: 'follow',
   reply: 'answer',
   like: 'like',
-  leave: 'turn away',
+  leave: 'unfollow',
   groom: 'post',
 };
 // How close a group is to the point where he acts.  Hz is the ledger's business, not the page's;

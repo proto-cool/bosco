@@ -468,25 +468,33 @@ a:hover {
   display: grid;
   gap: var(--space-sm);
 }
+/* One row is one line of one track's height, always: the act, the track, how close he is.  Both
+   text cells are held to one line, so no word can ever push the bar onto a second row. */
 .ro {
   display: grid;
-  grid-template-columns: 4.5rem 1fr 4.5rem;
+  grid-template-columns: 5rem minmax(0, 1fr) 4.75rem;
   align-items: center;
   gap: var(--space-sm);
+  min-height: var(--space-md);
   color: var(--text-muted);
   transition: color var(--duration-fast) var(--ease-out);
 }
 .ro.over {
   color: var(--text-primary);
 }
+.ro .k,
+.ro .v {
+  font-size: var(--annot-size);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .ro .k {
   font-family: var(--font-label);
-  font-size: var(--annot-size);
   letter-spacing: var(--label-inline-spacing);
 }
 .ro .v {
   font-family: var(--font-mono);
-  font-size: var(--annot-size);
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
@@ -891,6 +899,10 @@ a:hover {
   border-bottom: none;
 }
 
+#live-short {
+  display: none;
+}
+
 /* the record */
 .windows {
   list-style: none;
@@ -965,6 +977,22 @@ a:hover {
   .top .handle,
   .top .dev {
     display: none;
+  }
+  /* the wordmark, three nav words and the live line have to share 390px: tighten the gaps, and
+     let the live line shrink rather than push the page sideways when its phrase is a long one */
+  .top {
+    gap: var(--space-sm);
+  }
+  .top .live {
+    white-space: nowrap;
+  }
+  /* the phrase would be cut mid-word here, so the short form stands in; the full one is still on
+     the element for a screen reader and a long press */
+  .top #live-text {
+    display: none;
+  }
+  .top #live-short {
+    display: inline;
   }
   .nav a {
     white-space: nowrap;

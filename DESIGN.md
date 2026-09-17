@@ -238,7 +238,9 @@ action column sized to content so it never wraps.
 **Phone (≤ 64rem):** one column. The specimen is no longer sticky (a pinned
 4:3 canvas would cover most of a phone screen); the canvas locks to 4:3,
 captions fall below it as static text, the handle leaves the top line, the
-projection words and caption wrap, and the record drops its "smell" column
+projection words and caption wrap, the live indicator wears its short form
+(`live`, `12s`, `50m`, `asleep`) with the full phrase on its `aria-label` and
+`title`, and the record drops its "smell" column
 and folds (`3rem minmax(0, 1fr)`, the outcome spanning both on a second row). The rail follows at full width.
 
 ## Elevation & Depth
@@ -300,8 +302,10 @@ to primary on hover.
 - **Contents:** at most one figure, one or two sentences at `44ch`, an optional list, one caption at `60ch`.
 
 ### Readout line
-- **Style:** behaviour name (label-inline, muted), a 16px-tall track with a hairline and a 1px `--text-secondary` tick at threshold, and a 2px fill scaled from the left; rate in mono annotation, right-aligned, tabular.
-- **State:** fill is `--accent-primary`, or `--accent-secondary` for `leave`. Over threshold the whole line lifts to primary (`--duration-fast`) and the fill takes `--glow-xs`.
+`5rem minmax(0, 1fr) 4.75rem`, one track tall and never taller.
+- **Style:** the act it makes in label-inline, muted — `follow`, `answer`, `like`, `unfollow`, `post`, the same words the record uses when one of them goes out, never the name of the neuron group. Then a 16px-tall track with a hairline and a 1px `--text-secondary` tick at threshold, and a 2px fill scaled from the left. Then how close he is, in mono annotation, right-aligned: `quiet`, `stirring`, `nearly`, `over`. The rate in Hz is the ledger's business and rides on the row's `title`.
+- **The One Line Rule.** Both text cells are `nowrap` with ellipsis and the row carries a `min-height` of one track, so a longer word shortens itself rather than folding the bar onto a second line. That is what "go to them" did before the labels became one word each.
+- **State:** fill is `--accent-primary`, or `--accent-secondary` for `unfollow`. Over threshold the whole line lifts to primary (`--duration-fast`) and the fill takes `--glow-xs`.
 
 ### Sentence
 Body prose at `44ch`; counts inside it are `<b>` at body weight lifted to
