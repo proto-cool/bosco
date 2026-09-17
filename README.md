@@ -650,6 +650,14 @@ Every number below has a gate report under `docs/`.
    walked from, so his browsing follows his own feet. The controls replay
    the walked posts as ordinary stimuli and are off-policy after the first
    walk they would not have taken (EXPERIMENT.md §4).
+54. **No "this one"** (decided 2026-09-16). The quote in an answer (50) was
+   removed after its first day: both quotes that went out matched the
+   question on a single word, and a quote embed notifies the quoted author,
+   who never spoke to him. That is the outward reach the outward policy
+   (35) forbids for replies, through a side door, and it looked like spam.
+   `Ledger.best_liked_match` stays for the record; the `quote` cap is gone;
+   the two `quote` rows in the ledger remain what they were.
+
 53. **Not the same words twice, and more dust** (decided 2026-09-16). He
    answered twice in one thread with the same phrasebook line (the coin fell
    on the phrasebook both times and the key had few lines). Every utterance
@@ -689,7 +697,7 @@ Every number below has a gate report under `docs/`.
    introduce command never parsed; both are in the order now.
 
 50. **"This one": a liked post in an answer to a question** (decided
-   2026-09-15). Asked something, he may point at the post he liked lately
+   2026-09-15; **removed 2026-09-16**, see 54). Asked something, he could point at the post he liked lately
    that smells most of the question: the words of the question and its
    topics are matched against the words, topics and embed tokens on the
    rows of posts he really liked in the last day (`Ledger.best_liked_match`,

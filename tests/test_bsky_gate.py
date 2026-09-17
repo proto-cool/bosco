@@ -356,56 +356,6 @@ def test_a_walk_reads_a_few_more_of_the_account_and_never_replies():
     assert L.approaches_by_feed(0.0) == {} or True  # the fake episodes carry no feed; see test_feeds
 
 
-def test_an_answer_to_a_question_may_point_at_a_liked_post():
-    """ "this one" (decided 2026-09-15): asked something, he may embed the post he liked lately
-    that smells most of the question; only real likes, never an ignored account, one per answer,
-    under its own cap; the action row keeps what he pointed at."""
-    tmp = tempfile.mkdtemp()
-    L = Ledger(f"{tmp}/l.sqlite")
-    b = _bsky(L)
-    b.agent.enc = SimpleNamespace(words_cfg={"day_hours": 6.0})
-    b.ignore_set = lambda: {"did:plc:ignored"}
-    _liked_episode(L, "at://a/cat-old", "did:plc:a", 10.0, "cat,wall", "animals")
-    _liked_episode(L, "at://a/cat-new", "did:plc:a", 20.0, "cat", "animals", "img,hue:1")
-    _liked_episode(L, "at://i/cat", "did:plc:ignored", 30.0, "cat,sun", "animals")
-    _liked_episode(L, "at://b/dog", "did:plc:b", 40.0, "dog", "animals")
-    assert L.best_liked_match(("cat", "topic:animals"), 0.0, {"did:plc:ignored"}) == ("at://a/cat-new", "did:plc:a")
-    assert L.best_liked_match(("cat", "wall", "topic:animals"), 0.0, {"did:plc:ignored"}) == (
-        "at://a/cat-old",
-        "did:plc:a",
-    )
-    assert L.best_liked_match(("spoon",), 0.0) is None and L.best_liked_match((), 0.0) is None
-    assert L.best_liked_match(("cat",), 25.0) == ("at://i/cat", "did:plc:ignored")  # without the exclusion
-    # a question with matching smells is answered with a quote; a statement is not; a miss is not
-    out = _out(L, "reply", 0.0, True)
-    out.question, out.tokens = True, ("cat", "topic:animals")
-    b.act(out, "did:plc:q", "at://q/1", "cid", None, None, 50.0)
-    rows = L.db.execute("SELECT kind, target_uri, embed_uri FROM actions ORDER BY id DESC LIMIT 2").fetchall()
-    assert [tuple(r) for r in rows] == [("reply", "at://q/1", "at://a/cat-new"), ("quote", "at://a/cat-new", None)]
-    out2 = _out(L, "reply", 0.0, True)
-    out2.question, out2.tokens = False, ("cat",)
-    b.act(out2, "did:plc:q", "at://q/2", "cid", None, None, 51.0)
-    assert L.db.execute("SELECT embed_uri FROM actions ORDER BY id DESC LIMIT 1").fetchone()[0] is None
-    out3 = _out(L, "reply", 0.0, True)
-    out3.question, out3.tokens = True, ("spoon",)
-    b.act(out3, "did:plc:q", "at://q/3", "cid", None, None, 52.0)
-    assert L.db.execute("SELECT embed_uri FROM actions ORDER BY id DESC LIMIT 1").fetchone()[0] is None
-    # the etiquette answer quotes the same way; the cap withholds it
-    out4 = _out(L, "nothing", 0.0, True)
-    out4.question, out4.tokens = True, ("dog",)
-    b.answer_anyway(out4, "at://q/4", "cid", None, "did:plc:q", 53.0)
-    assert L.db.execute("SELECT kind, embed_uri FROM actions ORDER BY id DESC LIMIT 1").fetchone()[:] == (
-        "answer",
-        "at://b/dog",
-    )
-    b.agent.caps_allow = lambda ts, kind, *a, **k: (kind != "quote", "quote/hour")
-    out5 = _out(L, "reply", 0.0, True)
-    out5.question, out5.tokens = True, ("dog",)
-    b.act(out5, "did:plc:q", "at://q/5", "cid", None, None, 54.0)
-    assert L.db.execute("SELECT kind, embed_uri FROM actions ORDER BY id DESC LIMIT 1").fetchone()[:] == ("reply", None)
-    assert L.assert_no_text() == []
-
-
 def test_primer_thread_is_posted_once_pinned_and_not_a_conversation():
     """The pinned primer (decided 2026-09-16): a thread from identity_v1.yaml, posted by the
     operator's command, first post pinned through the profile record, each post logged as

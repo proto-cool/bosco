@@ -230,8 +230,8 @@ Do not download the EM volume. `neuprint-python` against
   already followed), reply when addressed; a walking rate over the lower
   `walk` rung but under engage's threshold → walk (read a few more of the
   account's posts; not outward; capped; decided 2026-09-15); leave →
-  unfollow. A reply is only ever an answer; an answer to a question may
-  quote a post he already publicly liked that smells of it.
+  unfollow. A reply is only ever an answer, and it embeds nothing: a quote
+  notifies someone who never spoke to him (removed 2026-09-16).
 - Own posts are grooming. Debris lands on his bristle neurons as discrete
   seeded events; a landing is an onset; his grooming neurons answer onsets
   and adapt to held input; if the answer crosses threshold he grooms, which

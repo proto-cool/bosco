@@ -103,8 +103,7 @@ genuinely the one acting, and that anyone can check.
   set is `reply, like, follow, walk, leave, spontaneous_post, nothing`
   (walk added 2026-09-15: browsing, walking short of its own threshold but
   over a lower rung is reading a few more of that account's posts; not
-  outward, capped). An answer to a question may embed a post he already
-  publicly liked that smells of the question (2026-09-15; `quote` cap). Toward
+  outward, capped). Toward
   accounts that never interacted with him and that his memory does not
   favour, browsing yields only leave or nothing: outward actions go to
   people who came to him (this is also what keeps him from looking like
