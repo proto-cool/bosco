@@ -3,6 +3,9 @@ Description=bosco nightly snapshot
 [Service]
 Type=oneshot
 WorkingDirectory=%h/bosco
+# BOSCO_ALERT_URL and BOSCO_RSYNC_TARGET live in .env; without this the nightly could neither
+# alert nor copy state off-box, and said nothing about either.
+EnvironmentFile=-%h/bosco/.env
 # A user unit gets systemd's PATH, not the login shell's, and uv installs under ~/.local/bin.
 # Without this the job died at `uv: command not found` (127) before it could report anything.
 Environment=PATH=%h/.local/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin
