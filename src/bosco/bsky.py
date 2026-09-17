@@ -1211,6 +1211,11 @@ def run_loop(ledger: Ledger, dry_run: bool, once: bool, interval: int) -> int:
     signal.signal(signal.SIGTERM, _term)
     signal.signal(signal.SIGINT, _term)
     print(f"bosco {'DRY-RUN' if dry_run else 'LIVE'} as {b.me}; operator {b.operator_did}")
+    # which wiring is in the room: his own, or a control's (BOSCO_BRAIN; EXPERIMENT.md 4).
+    from bosco.model import CACHE_FILE, brain_file
+
+    bf = brain_file()
+    print(f"brain: {bf}{'' if bf == CACHE_FILE else '  (NOT his own wiring)'}; digest {b.agent.fly.brain.digest()}")
     panel = None
     if os.environ.get("BOSCO_PANEL_DIR"):
         from bosco.panel import Panel

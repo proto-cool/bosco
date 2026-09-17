@@ -5,6 +5,8 @@
 - `bosco-nightly.{sh,service,timer}` — ledger + weights into `snapshots/<date>/`, integrity report, rsync, commit.
 - `bosco-deadman.sh` — exits 1 and POSTs to `BOSCO_ALERT_URL` if no episode in 4 h.
 - `env.example` — copy to `~/bosco/.env`.
+- `bosco-dunce.container`, `env.dunce.example` — the control (EXPERIMENT.md §4), live weeks 3–4
+  after `freeze-v1`: same image, `BOSCO_BRAIN` a shuffled matrix, its own account and `state-dunce/`.
 
 Weekly: a dated tarball of `state/` off-box (docs/MIGRATE.md §7); a dedicated server has no
 provider snapshots. `bosco.container` pins numpy's CPU code path to x86-64-v3 (README, numerics);

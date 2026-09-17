@@ -14,6 +14,7 @@ Modeling decisions (v1):
 from __future__ import annotations
 
 import hashlib
+import os
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -199,9 +200,24 @@ def build(min_count: int = 1) -> Brain:
     return Brain(ids, indptr, indices, cnt_sorted.astype(np.int32), sign, nt_sign)
 
 
+def brain_file() -> Path:
+    """Which wiring this process runs.  `BOSCO_BRAIN` points a second fly at another matrix in
+    the same image -- dunce, the degree-preserving shuffle (EXPERIMENT.md 4), built by
+    scripts/make_dunce.py.  Unset, it is his own.  A path that is set and missing is an error:
+    a control that quietly fell back to Bosco's wiring would be no control at all."""
+    env = os.environ.get("BOSCO_BRAIN")
+    if not env:
+        return CACHE_FILE
+    p = Path(env)
+    if not p.exists():
+        raise FileNotFoundError(f"BOSCO_BRAIN={p} does not exist")
+    return p
+
+
 def load_or_build() -> Brain:
-    if CACHE_FILE.exists():
-        return Brain.load()
+    path = brain_file()
+    if path.exists():
+        return Brain.load(path)
     b = build()
     b.save()
     return b

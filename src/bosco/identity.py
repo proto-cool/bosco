@@ -7,6 +7,7 @@ classifier.  Answers are picked deterministically from the episode seed.
 from __future__ import annotations
 
 import hashlib
+import os
 import re
 from dataclasses import dataclass
 
@@ -22,7 +23,10 @@ class Identity:
 
 
 class IdentityReflex:
-    def __init__(self, path=paths.CONFIG / "identity_v1.yaml") -> None:
+    def __init__(self, path=None) -> None:
+        # `BOSCO_IDENTITY` gives a second fly its own answers (dunce is not Bosco and must not
+        # say he is); unset, it is his.  The file is hand-authored and published either way.
+        path = path or os.environ.get("BOSCO_IDENTITY") or paths.CONFIG / "identity_v1.yaml"
         cfg = yaml.safe_load(open(path))
         self.intro: list[str] = list(cfg.get("intro", []))
         # the pinned primer thread (decided 2026-09-16): posted once by the operator, never by the network

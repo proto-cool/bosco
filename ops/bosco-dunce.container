@@ -1,0 +1,36 @@
+# Podman quadlet: ~/.config/containers/systemd/bosco-dunce.container
+#
+# dunce (EXPERIMENT.md 4): the same image, the same plasticity and readout, the wiring shuffled
+# degree-preserving (scripts/make_dunce.py -> data/cache/dunce_v1.npz).  Live on its own account
+# for weeks 3-4 after freeze-v1, then off.
+#
+# A different fly: its own account, its own state dir, its own ledger, its own identity answers.
+# Nothing is shared but the image and the read-only inputs.  If it ever writes into bosco's
+# state/ the experiment is over, so the volume line below is the one to read twice.
+#
+# SELinux: data/raw and data/cache are now mounted by two containers, so they take the shared
+# label `z`.  Change bosco.container's `Z` to `z` on those two lines before starting this, or
+# each container's relabel breaks the other's access.
+[Unit]
+Description=dunce: bosco's shuffled control
+After=network-online.target
+
+[Container]
+Image=localhost/bosco:latest
+EnvironmentFile=%h/bosco/.env.dunce
+Environment=BOSCO_BRAIN=/app/data/cache/dunce_v1.npz
+Environment=BOSCO_IDENTITY=/app/config/identity_v1_dunce.yaml
+# numpy's CPU code path pinned exactly as bosco's: a control is only a control at the same numerics
+Environment=NPY_DISABLE_CPU_FEATURES=AVX512F AVX512CD AVX512_KNL AVX512_KNM AVX512_SKX AVX512_CLX AVX512_CNL AVX512_ICL AVX512_SPR X86_V4
+Volume=%h/bosco/data/raw:/app/data/raw:ro,z
+Volume=%h/bosco/data/cache:/app/data/cache:ro,z
+Volume=%h/bosco/state-dunce:/app/state:z
+Exec=run --interval 120
+StopTimeout=30
+
+[Service]
+Restart=on-failure
+RestartSec=30s
+
+[Install]
+WantedBy=default.target
