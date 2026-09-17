@@ -32,4 +32,5 @@ kc_sparseness:
   statistic: median
   window_hours: 24        # the night's windows, not the whole history: a death shows up at once
   band: [0.4, 2.5]        # of the dev-period median, written by the calibration as kc_band
+  upper_quantile: 0.99    # the day's tail, against kc_range's top: one busy post is not a runaway
   min_rows: 200           # a thin night (he was off, or the box was) is reported, never failed

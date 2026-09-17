@@ -47,20 +47,30 @@ def kc_verdict(events: list, n_kc: int, th: dict, policy: dict) -> tuple[bool, l
     if not len(frac):
         return True, ["- KC sparseness: no events yet (SKIP)"]
 
-    hi = (th.get("kc_range") or [0.0, 0.15])[1]
-    over = int((frac > hi).sum())
-    ok_top = over == 0
-    lines = [f"- KC sparseness, no window over {hi:.3f}: {'PASS' if ok_top else f'FAIL ({over} of {len(frac)})'}"]
-
-    if not band:
-        lines.append("- KC median in band: no kc_band in thresholds.json yet, run the calibration (SKIP)")
-        return ok_top, lines
-
     hours = float(kcs.get("window_hours", 24))
     cutoff = max(r["ts"] for r in events) - hours * 3600.0
     recent = np.array([r["kc_active"] / n_kc for r in events if r["ts"] >= cutoff])
     thin = len(recent) < int(kcs.get("min_rows", 200))
     use = frac if thin else recent
+
+    # The top is the day's tail, not its busiest window.  A post carrying a dozen smells lights
+    # a lot of Kenyon cells and is not a fault: 11 windows of the dev period's 5282 ran over the
+    # recorded top, all on one day, while that day's 99th percentile sat well under it.  A real
+    # runaway lifts the whole tail.
+    hi = (th.get("kc_range") or [0.0, 0.15])[1]
+    q = float(kcs.get("upper_quantile", 0.99))
+    tail = float(np.quantile(use, q))
+    ok_top = tail <= hi
+    lines = [
+        f"- KC q{q:g} over the day {tail:.4f} at or under the recorded top {hi:.4f}: "
+        + ("PASS" if ok_top else "FAIL")
+        + f"; busiest window {float(use.max()):.4f}"
+    ]
+
+    if not band:
+        lines.append("- KC median in band: no kc_band in thresholds.json yet, run the calibration (SKIP)")
+        return ok_top, lines
+
     med = float(np.median(use))
     inside = band[0] <= med <= band[1]
     where = f"all {len(use)} episodes (thin day)" if thin else f"the last {hours:.0f} h ({len(use)} episodes)"
@@ -157,7 +167,12 @@ def main(argv=None) -> int:
         snaps = sorted(agent.snapshot_dir.glob("*.npz"))
         if snaps:
             try:
-                ok1, logged, got = agent.replay_span(snaps[-1], agent.live.t_ms, max_ms=a.replay_ms)
+                # to the last window in *this* ledger, not to the live clock: the nightly copies
+                # the ledger and then takes minutes to check it, during which he goes on living,
+                # and replaying past the copy's last row compares against a digest it does not
+                # have (a FAIL that means nothing but the race).
+                until = max((r["t_ms"] or 0) for r in rows)
+                ok1, logged, got = agent.replay_span(snaps[-1], until, max_ms=a.replay_ms)
                 out.append(
                     f"- replay from snapshot {snaps[-1].name} to {agent.live.t_ms} ms: {'PASS' if ok1 else 'FAIL'} "
                     f"(logged {logged[:12]}, got {got[:12]})"

@@ -46,9 +46,14 @@ def test_a_smouldering_one_fails():
     assert not ok
 
 
-def test_one_runaway_window_fails_on_its_own():
-    day = [0.02] * 500 + [0.4]  # median fine, one window far over kc_range
-    ok, lines = verdict(day)
+def test_one_busy_window_is_not_a_runaway():
+    """A post carrying a dozen smells lights a lot of cells; 11 of the dev period's did."""
+    ok, lines = verdict([0.02] * 500 + [0.4])
+    assert ok, lines
+
+
+def test_a_lifted_tail_is_a_runaway():
+    ok, lines = verdict([0.02] * 400 + [0.3] * 100)
     assert not ok
     assert "FAIL" in lines[0]
 
