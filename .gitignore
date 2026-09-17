@@ -15,3 +15,4 @@ state/
 panel/node_modules/
 panel/dist/
 .claude/worktrees/
+.DS_Store

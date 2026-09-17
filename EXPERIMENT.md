@@ -1,7 +1,10 @@
 # Experiment: bosco
 
-Status: DRAFT. Sections marked **binding** lock at git tag `freeze-v1` and do
-not change without a new tag. Everything before the tag is development.
+Status: binding as of git tag `freeze-v1`. Sections marked **binding** are fixed
+there and do not change without a new tag and a new pre-registration written
+before it. Everything dated before the tag was the development period, when they
+could still change; what changed then, and why, is in the git history and in
+`docs/STATUS.md`.
 
 ## 1. Question
 
@@ -205,22 +208,39 @@ and where his words land. Three rails, all inside the rules:
 Labeler subscriptions on the account are an operator setting and are
 published with the frozen artifacts.
 
-## 3. Frozen artifacts (fill at tag)
+## 3. Frozen artifacts (binding)
+
+Fixed at `freeze-v1` and published with it. sha256, first 16 hex; check any of them
+with `sha256sum <file>`. `config/frozen_digests.json` holds the same artifacts as the
+code reads them (corpus, phrasebook, topics, identity), and the test suite fails if
+any of those four changes.
 
 | Artifact | Location | Hash |
 |---|---|---|
-| Code | proto-cool/bosco @ `freeze-v1` | |
-| Weights snapshot | `snapshots/freeze-v1/` | |
-| Phrasebook | `phrasebook.yaml` | |
-| Encoder spec | `docs/encoder.md` | |
-| Readout thresholds | `config/thresholds.json` | |
-| Threshold policy | `config/thresholds_policy.yaml` | |
-| Appetite | `config/appetite_v1.yaml` | |
-| Words as smells | `config/words_v1.yaml` | |
-| Learning rule | `config/plasticity_v1.yaml`, `config/mb_compartments.yaml` | |
-| Retina | `config/retina_v1.yaml` | |
-| Association memory | `config/associations_v1.yaml` | |
-| Corpus | `corpus/` | |
+| Code | proto-cool/bosco @ `freeze-v1` | the commit the tag names (`git rev-parse freeze-v1`) |
+| Weights snapshot | `snapshots/freeze-v1/` | `b84a52c441bb2d0e` |
+| Phrasebook | `phrasebook.yaml` | `dbf39b7df2444326` |
+| Encoder spec | `docs/encoder.md` | `956a1f329b257a7f` |
+| Readout thresholds | `config/thresholds.json` | `267b71435699db05` |
+| Threshold policy | `config/thresholds_policy.yaml` | `bbe7465f6331f912` |
+| Appetite | `config/appetite_v1.yaml` | `ac43868532c0bb43` |
+| Words as smells | `config/words_v1.yaml` | `02aced12613512dc` |
+| Learning rule | `config/plasticity_v1.yaml`, `config/mb_compartments.yaml` | `7c9ba5a7aa765add` `95357c67159471f6` |
+| Retina | `config/retina_v1.yaml` | `76245712d449c0da` |
+| Association memory | `config/associations_v1.yaml` | `ef70f73c86cf0d7c` |
+| Readout populations | `config/readout_populations.yaml` | `244b2189225a1e8b` |
+| Innate smells | `config/innate_v1.yaml` | `f341b785e71a4327` |
+| Topics | `config/topics_v1.yaml` | `e5a9a046d1f5d465` |
+| Feeds | `config/feeds_v1.yaml` | `9697ed7615000840` |
+| Identity | `config/identity_v1.yaml` | `4be8620e37b2169c` |
+| Caps | `config/caps_v1.yaml` | `d2e502688e2962d4` |
+| Model | `config/model_v1.yaml` | `f5faa07357e612d5` |
+| Encoder config | `config/encoder_v1.yaml` | `783c40f376d2dc62` |
+| Circadian | `config/circadian_v1.yaml` | `7132c468358ad9f7` |
+| Moderation | `config/moderation_v1.yaml` | `e912337be240aaff` |
+| Corpus | `corpus/` | `c8f75741097c8e65` |
+
+Regenerate with `uv run python scripts/freeze.py`; it refuses a dirty tree.
 
 ## 4. Controls (optional; for the curious)
 

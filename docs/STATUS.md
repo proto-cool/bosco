@@ -32,11 +32,13 @@
    and `groom` all nine, so no groom borrows a line through the fallback chain any more. The
    seven new groom keys were drafted by Claude at Nick's direction, strictly in the fly's
    physical world -- his day picks the key, the line never says what happened to him.
-3. **Pin the artifacts.** `scripts/freeze.py --write` writes `config/frozen_digests.json` (the
-   test suite then holds corpus, phrasebook, topics and identity to it) and prints the
-   EXPERIMENT.md §3 table with sha256s to paste in.
-4. **Snapshot the freeze**: `snapshots/freeze-v1/` (ledger + `brain_state.npz`), a clean integrity
-   report beside it, EXPERIMENT.md out of DRAFT, and "in development" out of the bio.
+3. ~~Pin the artifacts.~~ Done: `config/frozen_digests.json` holds corpus, phrasebook, topics and
+   identity as the code reads them, and `tests/test_corpus.py` fails if any of the four moves.
+   EXPERIMENT.md §3 carries sha256s for 22 artifacts, ten more than it used to ask for.
+4. ~~Snapshot the freeze.~~ `snapshots/freeze-v1/` holds his ledger (5993 episodes, 2026-09-13
+   18:42:54 to 2026-09-17 19:29:53 UTC) and `brain_state.npz`, with a clean integrity report
+   beside it: replay, both sparseness tests, rate caps, no text, and the weight digest chain all
+   PASS. EXPERIMENT.md is out of DRAFT. Still to do by hand: "in development" out of the bio.
 5. ~~Confirm the nightly publishes.~~ It does, and ALL: PASS, since 2026-09-17 19:00 UTC.
    What went wrong, for the record. The repo had no snapshot commit between 2026-09-14 and
    2026-09-17. The timer was enabled and firing; `uv` was never installed on the new box, so the

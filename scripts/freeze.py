@@ -106,12 +106,20 @@ def main(argv=None) -> int:
     for k, v in digests.items():
         print(f"  {k:10} {v}")
 
-    rev, dirty = git("rev-parse", "HEAD"), git("status", "--porcelain")
+    dirty = git("status", "--porcelain")
     print("\n## EXPERIMENT.md 3 -- frozen artifacts\n")
     print("| Artifact | Location | Hash |")
     print("|---|---|---|")
-    print(f"| Code | proto-cool/bosco @ `freeze-v1` | `{rev}` |")
-    print("| Weights snapshot | `snapshots/freeze-v1/` | (sha256 of `brain_state.npz` at the tag) |")
+    # not a sha: the commit that carries this table cannot contain its own hash.  The tag is the
+    # artifact, and `git rev-parse freeze-v1` resolves it.
+    print("| Code | proto-cool/bosco @ `freeze-v1` | the commit the tag names (`git rev-parse freeze-v1`) |")
+    wsnap = paths.SNAPSHOTS / "freeze-v1" / "brain_state.npz"
+    wcell = (
+        f"`{sha256_file(str(wsnap.relative_to(paths.ROOT)))[:16]}`"
+        if wsnap.exists()
+        else "(sha256 of `brain_state.npz` once the freeze snapshot is taken)"
+    )
+    print(f"| Weights snapshot | `snapshots/freeze-v1/` | {wcell} |")
     for label, rels in ARTIFACTS:
         loc = ", ".join(f"`{r}`" for r in rels)
         print(f"| {label} | {loc} | {' '.join('`' + sha256_file(r)[:16] + '`' for r in rels)} |")
