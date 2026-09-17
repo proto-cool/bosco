@@ -248,9 +248,9 @@ Frozen and published at tag. Claude does not write phrasebook lines.
 a person's wants, flat declaratives, no jokes (`docs/corpus-audit.md`). `textgen.py` is a word n-gram (four words of context, backing off) with
 absolute-discount backoff: the fly picks the corpus subset (tags), the
 temperature (arousal) and the seed; the corpus never contains other
-people's posts. Utterance policy: when a phrasebook line exists for the key
-a seeded coin uses it verbatim half the time, otherwise the generator
-speaks. He reads a thread through before answering in it (the posts above,
+people's posts. Utterance policy (revised 2026-09-16): retrieval first; a phrasebook
+line is used only when nothing of his smells of the moment, and then a
+seeded coin picks between the line and the generator. He reads a thread through before answering in it (the posts above,
 oldest first, as context). His first sentence is retrieval: the sentence of
 his that smells most like the moment (lexical, over his corpus, weighted by
 freshness and learned word valence), then the n-gram adds if his appetite

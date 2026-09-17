@@ -108,6 +108,13 @@ def test_pick_sentence_by_smell_then_stitch(tmp_path):
     assert g.pick_sentence("reply", "neutral", "mid", 1, air={"banana": 1.0}, avoid={s}) != s  # not twice running
     one = g.generate("reply", "neutral", "mid", 0, max_sentences=1, opening=s)
     assert one == s
+    # coverage (decided 2026-09-16): a sentence sharing two of their words beats one loud word
+    (tmp_path / "b.txt").write_text("the banana is on the leaf.\n")
+    g2 = Generator(tmp_path)
+    for seed in range(6):
+        assert g2.pick_sentence("reply", "neutral", "mid", seed, air={"banana": 1.0, "leaf": 0.5}, top_k=1) == (
+            "the banana is on the leaf."
+        )
     more = [g.generate("reply", "neutral", "mid", k, max_sentences=3, opening=s) for k in range(20)]
     assert all(t.startswith(s) for t in more) and any(len(t) > len(s) for t in more)
 

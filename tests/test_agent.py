@@ -324,7 +324,7 @@ def test_he_does_not_say_the_same_thing_twice_running(fly, tmp_path):
     ag.live.t_ms = 0
     f = Features("did:plc:a", 0.0, True, 3, False, (), False, ("banana", "leaf"))
     first = ag.run(f, 1_800_000_000.0, "at://a/1", fast=True)
-    assert first.text
+    assert first.text and first.text_source == "generated"  # his words are in it: the phrasebook stays shut
     h = ag.said_hash(first.text)
     row = L.db.execute("SELECT note FROM episodes WHERE id=?", (first.episode_id,)).fetchone()
     assert f"said:{h}" in (row["note"] or "")

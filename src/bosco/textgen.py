@@ -338,9 +338,13 @@ class Generator:
                 toks = [t.lower() for t in sent if t not in END_PUNCT and t not in {",", ";", ":"}]
                 if not toks:
                     continue
-                hit = sum(in_air.get(t, 0.0) * max(0.1, 1.0 + beta * wv.get(t, 0.0)) for t in set(toks))
+                shared = [t for t in set(toks) if in_air.get(t, 0.0) > 0]
+                hit = sum(in_air[t] * max(0.1, 1.0 + beta * wv.get(t, 0.0)) for t in shared)
                 if hit <= 0:
                     continue
+                # a sentence that shares two of their words beats one that shares one, whatever
+                # its freshness: coverage of the moment, not one loud word
+                hit *= 1.0 + 0.5 * (len(shared) - 1)
                 text = detokenize(sent)
                 if text in seen or text in avoid or len(text) > MAX_CHARS:
                     continue

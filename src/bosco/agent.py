@@ -420,18 +420,21 @@ class Agent:
     ) -> tuple[dict[str, float], tuple[str, ...]]:
         """Merge what he associates with this account into the air (faintly, never over what is
         actually on his antennae) and its subjects into the topics.  Hashed and channel tokens
-        are in no sentence of his and weigh nothing downstream."""
+        are in no sentence of his and weigh nothing downstream.  Inside a thread the thread
+        leads (decided 2026-09-16): a remembered word weighs at most half the faintest word
+        actually on his antennae, so an answer tracks the conversation, not his history."""
         got = self.assoc.air_for(did, t_h)
         if not got:
             return air, topics
         air = dict(air)
         extra = list(topics)
+        cap = 0.5 * min(air.values()) if air else None
         for tok, wgt in got.items():
             if tok.startswith("topic:"):
                 if tok[6:] not in extra:
                     extra.append(tok[6:])
             elif not tok.startswith(self.ASSOC_TOKEN_PREFIXES):
-                air.setdefault(tok, wgt)
+                air.setdefault(tok, wgt if cap is None else min(wgt, cap))
         return air, tuple(extra)
 
     SEEN_PROBE_MS = 500.0
@@ -834,39 +837,41 @@ class Agent:
             line = self.phrasebook.pick(speak_as, dec.valence, dec.arousal, fb, seed)
             coin = (seed >> 7) & 1
             recent = self.recent_said()  # not the same words twice running
-            if line is not None and coin == 0 and self.said_hash(line.text) not in recent:
+            cands = tuple(f.words) + tuple(x for x in f.context if x not in f.words) if f else None
+            air = self.air(w.t0_ms, cands) if f is not None else self.day_air(ts, w.t0_ms)
+            c = self.enc.words_cfg
+            topics = f.topics if f else ()
+            state = self.state_register(ts)
+            if f is not None:
+                # what he remembers about this account is faintly in the air, and its subjects
+                # join the pool; asked something, whether he has met it lately is his yes or no
+                air, topics = self.answer_air(did, air, topics, self.sim_hours())
+                if f.question:  # asked something: his yes or his no weighs most (textgen SEEN_WEIGHT)
+                    state["seen"] = self.seen_register(tuple(x for x in air if x in f.words)[:3])
+            wv = self.word_valence_in_context(did, tuple(air)) if f is not None else {}
+            # first, a whole sentence of his that smells like the moment; then the walk, if he
+            # has more in him.  Not the same sentence twice in a row of utterances.
+            opening = self.generator.pick_sentence(
+                speak_as,
+                dec.valence,
+                dec.arousal,
+                seed,
+                air=air,
+                topics=topics,
+                familiarity=fb,
+                state=state,
+                word_valence=wv,
+                beta=float(c.get("valence_beta", 1.0)),
+                avoid=set(self._recent_openings),
+            )
+            if opening:
+                self._recent_openings.append(opening)
+                del self._recent_openings[:-30]
+            # the phrasebook speaks only when nothing of his smells of the moment (decided
+            # 2026-09-16: a line said whatever was asked read as a non sequitur); then the coin
+            if opening is None and line is not None and coin == 0 and self.said_hash(line.text) not in recent:
                 text, text_source = line.text, "phrasebook"
             else:
-                cands = tuple(f.words) + tuple(x for x in f.context if x not in f.words) if f else None
-                air = self.air(w.t0_ms, cands) if f is not None else self.day_air(ts, w.t0_ms)
-                c = self.enc.words_cfg
-                topics = f.topics if f else ()
-                state = self.state_register(ts)
-                if f is not None:
-                    # what he remembers about this account is faintly in the air, and its subjects
-                    # join the pool; asked something, whether he has met it lately is his yes or no
-                    air, topics = self.answer_air(did, air, topics, self.sim_hours())
-                    if f.question:  # asked something: his yes or his no weighs most (textgen SEEN_WEIGHT)
-                        state["seen"] = self.seen_register(tuple(x for x in air if x in f.words)[:3])
-                wv = self.word_valence_in_context(did, tuple(air)) if f is not None else {}
-                # first, a whole sentence of his that smells like the moment; then the walk, if he
-                # has more in him.  Not the same sentence twice in a row of utterances.
-                opening = self.generator.pick_sentence(
-                    speak_as,
-                    dec.valence,
-                    dec.arousal,
-                    seed,
-                    air=air,
-                    topics=topics,
-                    familiarity=fb,
-                    state=state,
-                    word_valence=wv,
-                    beta=float(c.get("valence_beta", 1.0)),
-                    avoid=set(self._recent_openings),
-                )
-                if opening:
-                    self._recent_openings.append(opening)
-                    del self._recent_openings[:-30]
                 text = None
                 for attempt in range(4):
                     # the same seed walks the same way, and at low arousal the walk is nearly

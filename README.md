@@ -650,6 +650,20 @@ Every number below has a gate report under `docs/`.
    walked from, so his browsing follows his own feet. The controls replay
    the walked posts as ordinary stimuli and are off-policy after the first
    walk they would not have taken (EXPERIMENT.md §4).
+55. **Holding a conversation** (decided 2026-09-16; the point of the
+   experiment is whether he holds a more coherent thread than the bottom
+   of the feed). Three rules, no model. The phrasebook speaks only when
+   nothing of his smells of the moment: the retrieval opening is computed
+   first, and the seeded coin between a line and the generator is tossed
+   only when retrieval finds nothing (a line said whatever was asked read
+   as a non sequitur). Retrieval scores coverage: a sentence sharing two
+   of their words beats one loud word (`pick_sentence`, ×1.5 per extra
+   shared word). Inside a thread the thread leads: a remembered word from
+   the account's associations weighs at most half the faintest word
+   actually on his antennae (`Agent.answer_air`), so an answer tracks the
+   conversation, not his history with the person. Next: grow the
+   conversation corpus, the ceiling on all of this.
+
 54. **No "this one"** (decided 2026-09-16). The quote in an answer (50) was
    removed after its first day: both quotes that went out matched the
    question on a single word, and a quote embed notifies the quoted author,

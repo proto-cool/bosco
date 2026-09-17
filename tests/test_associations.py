@@ -38,3 +38,23 @@ def test_associations_strengthen_decay_and_forget():
     a.observe(None, ("cat",), 0.0)  # no account: nothing
     a.observe("did:plc:q", (), 0.0)
     assert "did:plc:q" not in a.table
+
+
+def test_in_a_thread_the_thread_leads_the_memory():
+    """A remembered word weighs at most half the faintest word actually on his antennae
+    (decided 2026-09-16), so an answer tracks the conversation, not his history with you."""
+    from types import SimpleNamespace
+
+    from bosco.agent import Agent
+    from bosco.associations import Associations
+
+    a = Associations()
+    for _ in range(3):
+        a.observe("did:plc:x", ("cat", "topic:animals"), 0.0)
+    me = SimpleNamespace(assoc=a, ASSOC_TOKEN_PREFIXES=Agent.ASSOC_TOKEN_PREFIXES)
+    air, topics = Agent.answer_air(me, "did:plc:x", {"leaf": 0.2}, (), 0.0)
+    assert air["leaf"] == 0.2 and air["cat"] == 0.1 and topics == ("animals",)  # half the faintest
+    air, _ = Agent.answer_air(me, "did:plc:x", {}, (), 0.0)
+    assert air["cat"] == a.echo  # nothing on his antennae: the memory speaks at its own strength
+    air, _ = Agent.answer_air(me, "did:plc:x", {"cat": 1.0}, (), 0.0)
+    assert air["cat"] == 1.0  # a word actually said keeps its freshness
