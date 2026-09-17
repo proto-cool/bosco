@@ -321,7 +321,10 @@ systemctl --user daemon-reload && systemctl --user enable --now bosco-weekly.tim
 
 - `journalctl --user -fu bosco` for the log; `podman exec systemd-bosco ...` for
   his commands (`bosco status`, `bosco replay`, `bosco memory --did`).
-- After a code change: `cd ~/bosco && git checkout <sha> && podman build -t bosco -f ops/Containerfile . && systemctl --user restart bosco`,
+- The box's checkout stays **on `main`**, not on a detached commit: the nightly commits
+  `snapshots/<date>` and pushes it, and a detached HEAD has nothing to push (2026-09-17). Deploy
+  a specific commit by landing it on main first.
+- After a code change: `cd ~/bosco && git pull --ff-only && podman build -t bosco -f ops/Containerfile . && systemctl --user restart bosco`,
   and the same with `Containerfile.panel` and `bosco-panel` for the site.
 - The panel's peer bench line (idle 0.138 / event 1.91 wall seconds on the
   VPS) will change; note the new numbers in the monthly report.
