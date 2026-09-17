@@ -364,7 +364,7 @@ def test_small_talk_reaches_him_and_the_rarer_words_win(fly):
         "go",
         "up",
     )  # his; am/on/it are function words
-    assert "how" not in enc.vocab and "you" not in enc.vocab  # function words stay function words
+    assert "you" not in enc.vocab and "what" not in enc.vocab  # function words stay function words
     assert enc.words_for("i think i know what i want here now", hashed=False) == (
         "think",
         "know",
