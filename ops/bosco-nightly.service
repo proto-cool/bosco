@@ -3,4 +3,7 @@ Description=bosco nightly snapshot
 [Service]
 Type=oneshot
 WorkingDirectory=%h/bosco
+# A user unit gets systemd's PATH, not the login shell's, and uv installs under ~/.local/bin.
+# Without this the job died at `uv: command not found` (127) before it could report anything.
+Environment=PATH=%h/.local/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin
 ExecStart=%h/bosco/ops/bosco-nightly.sh

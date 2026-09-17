@@ -36,10 +36,14 @@
    EXPERIMENT.md §3 table with sha256s to paste in.
 4. **Snapshot the freeze**: `snapshots/freeze-v1/` (ledger + `brain_state.npz`), a clean integrity
    report beside it, EXPERIMENT.md out of DRAFT, and "in development" out of the bio.
-5. **Confirm the nightly publishes.** The repo has no snapshot commit since 2026-09-14: the
-   nightly aborted under `set -e` on a stale rate-cap check that called legal activity a
-   violation (fixed 2026-09-17; the check now reads `config/caps_v1.yaml`, and a failing night
-   still commits its report and alerts). Check `systemctl --user list-timers` on the box.
+5. **Confirm the nightly publishes.** The repo had no snapshot commit between 2026-09-14 and
+   2026-09-17. The timer was enabled and firing; `uv` was never installed on the new box, so the
+   job exited 127 after copying the ledger and before the integrity report, and the failed unit
+   went unread -- the dead-man watches episodes, and he was living fine. Fixed 2026-09-17: `uv`
+   installed, `PATH` set in the unit (a user unit does not get the login shell's), and the script
+   now names a missing tool in an alert instead of dying at 127. Behind it sat a second fault:
+   the rate-cap check called legal activity a violation, which would have aborted the job on the
+   next line; it now reads `config/caps_v1.yaml`, and a failing night commits its report anyway.
 
 ## Before dunce goes live (weeks 3–4 after the tag)
 

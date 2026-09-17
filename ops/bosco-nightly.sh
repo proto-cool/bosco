@@ -17,6 +17,13 @@ alert() {
   if [ -n "${BOSCO_ALERT_URL:-}" ]; then curl -fsS -m 10 -d "$1" "$BOSCO_ALERT_URL" || true; fi
 }
 
+# A missing tool must be heard, not exit 127 into a failed unit nobody reads: between
+# 2026-09-14 and 2026-09-17 `uv` was not installed on the box and the snapshot stopped
+# being published, while the fly went on living and the dead-man stayed quiet.
+for cmd in sqlite3 uv git; do
+  command -v "$cmd" >/dev/null || { alert "bosco: nightly cannot run, $cmd is not on PATH"; exit 127; }
+done
+
 sqlite3 state/ledger.sqlite ".backup '$dst/ledger.sqlite'"
 cp state/brain_state.npz "$dst/brain_state.npz"
 
