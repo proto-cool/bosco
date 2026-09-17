@@ -152,7 +152,10 @@ on the new box, append `~/.ssh/id_ed25519.pub` to `/root/.ssh/authorized_keys`
 on the old one, and `ssh root@<old> hostname` from nick must answer.
 
 Edit `.env`: `BOSCO_RSYNC_TARGET` must be somewhere that is not the old
-box (or empty for now). `uv` on the host, for the nightly integrity report:
+box (or empty for now).  The nightly integrity report runs inside his own image
+(same kernel flags, same numpy CPU path), so the host needs no Python
+toolchain: `sqlite3`, `podman` and `git`, which it has.  `uv` on the host is
+optional, for running his commands by hand:
 
 ```
 curl -LsSf https://astral.sh/uv/install.sh | sh && source ~/.bashrc
