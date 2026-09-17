@@ -528,20 +528,23 @@ a:hover {
 .ro.over .fill {
   box-shadow: var(--glow-xs);
 }
+/* The marks on the track carry the whole meaning of the bar, so their geometry is in pixels
+   against the track's own 16px and their colour carries the token's value as a fallback: an
+   undefined token or a calc a browser will not take must not leave a mark invisible. */
 .tick {
   position: absolute;
   left: 62.5%;
-  top: calc(50% - var(--space-xs));
-  height: var(--space-sm);
+  top: 4px;
+  height: 8px;
   width: 1px;
-  background: var(--text-secondary);
+  background: var(--text-secondary, rgb(150, 152, 162));
 }
 .tick.walk {
   /* the lower rung on engage: over it but under threshold is a walk, not a follow */
   left: 36%;
-  height: var(--space-xs);
-  top: calc(50% - var(--space-xs) / 2);
-  background: var(--text-muted);
+  top: 6px;
+  height: 4px;
+  background: var(--text-muted, rgb(142, 142, 155));
 }
 
 /* people */

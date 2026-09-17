@@ -4,23 +4,39 @@ import {
 } from './common.js';
 import { BrainView, parseActivity, parseAtlas } from './brain.js';
 
-// ---- colours from tokens (any colour syntax -> rgb triplet via a 1x1 canvas) --------------
-function rgbOf(token) {
+// ---- colours from tokens (any colour syntax -> rgb triplet) -------------------------------
+// Read the computed value straight off a probe when it is already rgb(), which it is in every
+// browser we have seen; fall through to a 1x1 canvas for the wide-gamut syntaxes; and if the
+// browser refuses a canvas readback at all (Firefox with resistFingerprinting, a privacy
+// extension), fall back to the token's own value from DESIGN.md rather than throwing, which used
+// to take the whole readout down with it.
+function rgbOf(token, fallback) {
   const probe = document.createElement('span');
   probe.style.color = `var(${token})`;
   document.body.appendChild(probe);
   const css = getComputedStyle(probe).color;
   probe.remove();
-  const c = document.createElement('canvas');
-  c.width = c.height = 1;
-  const g = c.getContext('2d');
-  g.fillStyle = css;
-  g.fillRect(0, 0, 1, 1);
-  const d = g.getImageData(0, 0, 1, 1).data;
-  return [d[0], d[1], d[2]];
+  const m = /rgba?\(\s*([\d.]+)[\s,]+([\d.]+)[\s,]+([\d.]+)/.exec(css);
+  if (m) return [Math.round(+m[1]), Math.round(+m[2]), Math.round(+m[3])];
+  try {
+    const c = document.createElement('canvas');
+    c.width = c.height = 1;
+    const g = c.getContext('2d');
+    if (!g) return fallback;
+    g.fillStyle = css;
+    g.fillRect(0, 0, 1, 1);
+    const d = g.getImageData(0, 0, 1, 1).data;
+    return d[3] ? [d[0], d[1], d[2]] : fallback;
+  } catch {
+    return fallback;
+  }
 }
 function colours() {
-  return { mb: rgbOf('--accent-primary'), dn: rgbOf('--accent-secondary'), rest: rgbOf('--text-secondary') };
+  return {
+    mb: rgbOf('--accent-primary', [77, 126, 247]),
+    dn: rgbOf('--accent-secondary', [149, 103, 255]),
+    rest: rgbOf('--text-secondary', [150, 152, 162]),
+  };
 }
 
 // ---- brain ------------------------------------------------------------------------------------
@@ -74,8 +90,13 @@ function nearness(ratio) {
   return 'quiet';
 }
 
+// The bars must not depend on the brain: whichever of the atlas and status.json arrives first
+// builds them, and if the canvas or the atlas fails the readout still stands.  Both files take
+// their population order from the same readout.pops, so either is a safe source.
 function buildReadout() {
   const box = $('readout');
+  if (!popNames.length || box.dataset.built === popNames.join(',')) return;
+  box.dataset.built = popNames.join(',');
   box.replaceChildren();
   for (const p of popNames) {
     const row = el('div', 'ro');
@@ -165,6 +186,10 @@ async function renderStatus(st) {
   thresholds = st.readout?.thresholds || {};
   caps = st.caps || null;
   applyIdentity(st);
+  if (!popNames.length && st.readout?.pops?.length) {
+    popNames = st.readout.pops;
+    buildReadout();
+  }
   const walkTick = document.querySelector('.ro[data-pop="engage"] .tick.walk');
   if (walkTick && thresholds.walk && thresholds.engage) {
     walkTick.style.left = `${(62.5 * thresholds.walk) / thresholds.engage}%`;
