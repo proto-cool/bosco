@@ -1,27 +1,25 @@
 {
  "_note": "Per-population rate thresholds (Hz). Provisional values come from a synthetic stimulus battery (scripts/calibrate_thresholds.py --synthetic); at freeze-v1 they are re-set from the dev-period distribution of real activity, never from outcomes.",
- "engage": 5.05,
- "reply": 4.65,
+ "engage": 4.85,
+ "reply": 8.75,
  "like": 1.0,
- "leave": 5.091666666666665,
- "groom": 14.796052631578945,
+ "leave": 4.0,
+ "groom": 12.481578947368419,
  "kc_range": [
-  0.00012303149606299212,
-  0.10141793799212598
+  0.0,
+  0.13545767716535434
  ],
  "_calibration": {
   "policy": "config/thresholds_policy.yaml",
   "source": {
-   "engage": "snapshots/dev-2026-09-14/ledger.sqlite",
-   "like": "snapshots/dev-2026-09-14/ledger.sqlite",
-   "leave": "snapshots/dev-2026-09-14/ledger.sqlite",
-   "reply": "snapshots/dev-2026-09-14/ledger.sqlite",
-   "groom": "synthetic-dev (n=240+40 landings)",
-   "walk": "snapshots/dev-2026-09-14/ledger.sqlite"
+   "engage": "snapshots/2026-09-17/ledger.sqlite",
+   "like": "snapshots/2026-09-17/ledger.sqlite",
+   "leave": "snapshots/2026-09-17/ledger.sqlite",
+   "reply": "snapshots/2026-09-17/ledger.sqlite",
+   "groom": "snapshots/2026-09-17/ledger.sqlite",
+   "walk": "snapshots/2026-09-17/ledger.sqlite"
   },
-  "kept": [
-   "groom"
-  ]
+  "kept": []
  },
- "walk": 2.9
+ "walk": 2.05
 }
