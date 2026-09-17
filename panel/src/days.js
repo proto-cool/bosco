@@ -94,7 +94,8 @@ async function show(date) {
   sentence($('when-sentence'), whenParts);
 
   // where
-  const feeds = rep.feeds || [];
+  // walk rows carry feed="walk" as their source; it is not a feed and does not belong in the list
+  const feeds = (rep.feeds || []).filter((f) => f.name !== 'walk');
   if (feeds.length) {
     const parts = ['he read from ', b(list(feeds.slice(0, 5).map((f) => `${f.name} ×${f.reads}`))), '. '];
     const liked = feeds.filter((f) => f.approaches > 0).sort((x, y) => y.approaches - x.approaches);
@@ -118,7 +119,7 @@ async function show(date) {
   // favorite and least favorite: the post by its smell, and the post itself only when he liked it in public
   const tasteOf = (p) => {
     const parts = [
-      p.mentioned ? 'someone spoke to him' : p.feed ? `a post from his ${p.feed} feed` : 'a post he came across',
+      p.mentioned ? 'someone spoke to him' : p.feed === 'walk' ? 'another post of an account he had stayed with' : p.feed ? `a post from his ${p.feed} feed` : 'a post he came across',
       ' around ', b(clockTime(p.ts, tz)),
     ];
     if (p.topics?.length) parts.push(', about ', b(list(p.topics)));

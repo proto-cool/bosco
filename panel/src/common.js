@@ -395,12 +395,15 @@ const possessive = (node) => [node, "'s"];
 export function windowSentence(w, caps) {
   const dust = w.kind === 'spontaneous' || !w.did;
   const who = () => whoNode(w.did);
-  const inFeed = w.feed ? ` in the ${w.feed} feed` : '';
+  // `walk` is not a feed: it is a post he read because he had stayed with that account
+  const inFeed = !w.feed ? '' : w.feed === 'walk' ? ', having stayed with them' : ` in the ${w.feed} feed`;
 
   if (w.done) {
     switch (w.done) {
       case 'like':
-        return ['he liked a post by ', who(), inFeed];
+        return w.feed === 'walk'
+          ? ['he liked another of ', ...possessive(who()), ' posts, having stayed with them']
+          : ['he liked a post by ', who(), inFeed];
       case 'follow':
         return ['he followed ', who()];
       case 'reply':
@@ -427,6 +430,7 @@ export function windowSentence(w, caps) {
   if (w.action === 'nothing') {
     if (w.labeled) return ['he kept away from ', who(), ' — the post carries a moderation label'];
     if (dust) return ['dust landed on him and nothing came of it'];
+    if (w.feed === 'walk') return ['he read another of ', ...possessive(who()), ' posts and did nothing'];
     return ['he read ', who(), inFeed, ' and did nothing'];
   }
 
