@@ -2,12 +2,12 @@
  "_note": "Per-population rate thresholds (Hz). Provisional values come from a synthetic stimulus battery (scripts/calibrate_thresholds.py --synthetic); at freeze-v1 they are re-set from the dev-period distribution of real activity, never from outcomes.",
  "engage": 4.85,
  "reply": 8.75,
- "like": 1.0,
+ "like": 3.838461538461528,
  "leave": 4.0,
  "groom": 12.481578947368419,
  "kc_range": [
   0.0,
-  0.13545767716535434
+  0.1363804133858268
  ],
  "_calibration": {
   "policy": "config/thresholds_policy.yaml",
