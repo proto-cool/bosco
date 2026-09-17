@@ -170,8 +170,17 @@ class EpisodeRow:
 
 
 class Ledger:
-    def __init__(self, path: Path | str | None = None) -> None:
+    def __init__(self, path: Path | str | None = None, read_only: bool = False) -> None:
+        """`read_only` opens a published dump without touching it.  Opening a ledger normally
+        runs the schema and the migrations, which rewrites the file -- fine for his own state,
+        wrong for a snapshot in `snapshots/`, whose bytes are the evidence someone else is
+        auditing (EXPERIMENT.md 5, 6).  Tools that only read a dump pass it."""
         self.path = Path(path) if path else paths.STATE / "ledger.sqlite"
+        self.read_only = read_only
+        if read_only:
+            self.db = sqlite3.connect(f"file:{self.path}?mode=ro", uri=True)
+            self.db.row_factory = sqlite3.Row
+            return
         self.path.parent.mkdir(parents=True, exist_ok=True)
         self.db = sqlite3.connect(self.path)
         self.db.row_factory = sqlite3.Row

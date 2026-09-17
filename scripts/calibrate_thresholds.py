@@ -111,7 +111,7 @@ def main(argv=None) -> int:
         L = synthetic_ledger(a.synthetic, a.synthetic_landings, seed=0)
         source = f"synthetic-dev (n={a.synthetic}+{a.synthetic_landings} landings)"
     else:
-        L = Ledger(a.ledger)
+        L = Ledger(a.ledger, read_only=True)  # a dev dump is evidence; calibration never writes to it
         source = a.ledger
     cfg = json.load(open(paths.CONFIG / "thresholds.json"))
     th: dict[str, float] = {}

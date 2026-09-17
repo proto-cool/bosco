@@ -31,7 +31,7 @@ def main(argv=None) -> int:
     ap.add_argument("--dunce", default="data/cache/dunce_v1.npz")
     ap.add_argument("--seed", type=int, default=0)
     a = ap.parse_args(argv)
-    src = Ledger(a.ledger)
+    src = Ledger(a.ledger, read_only=True)
     rows = src.episodes()
     events = [r for r in rows if r["kind"] == "event"]
     print(f"{len(events)} event episodes, {sum(1 for r in rows if r['kind'] == 'pairing')} pairings")

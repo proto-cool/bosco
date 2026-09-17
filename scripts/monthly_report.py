@@ -23,7 +23,7 @@ def main(argv=None) -> int:
         y, m = first.year, first.month
     t0 = dt.datetime(y, m, 1, tzinfo=dt.UTC).timestamp()
     t1 = dt.datetime(y + (m == 12), (m % 12) + 1, 1, tzinfo=dt.UTC).timestamp()
-    L = Ledger(a.ledger)
+    L = Ledger(a.ledger, read_only=True)
     ev = [r for r in L.episodes(since_ts=t0, kind="event") if r["ts"] < t1]
     sp = [r for r in L.episodes(since_ts=t0, kind="spontaneous") if r["ts"] < t1]
     pr = [r for r in L.episodes(since_ts=t0, kind="pairing") if r["ts"] < t1]
