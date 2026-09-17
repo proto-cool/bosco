@@ -216,6 +216,51 @@ class Panel:
             ],
         }
 
+    # ---- what came of a window --------------------------------------------------
+    def _acts(self, where: str, args: tuple) -> dict[int, list[tuple[str, bool, str | None]]]:
+        """The action rows of the episodes matching `where`: episode_id -> [(kind, dry, note)]."""
+        acts: dict[int, list] = {}
+        for r in self.L.db.execute(
+            f"SELECT episode_id, kind, dry_run, note FROM actions WHERE deleted_ts IS NULL AND {where} ORDER BY id",
+            args,
+        ):
+            acts.setdefault(r["episode_id"], []).append((r["kind"], bool(r["dry_run"]), r["note"]))
+        return acts
+
+    # the outward policy (README 35) replaced the stranger rail, which also wrote a dry 'leave':
+    # before this a dry leave on a like or follow was either, and the record says so
+    OUTWARD_POLICY_TS = 1789420592.0  # 2026-09-14 21:16:32 UTC
+
+    @classmethod
+    def outcome_of(
+        cls, decision: str, mentioned: bool, acts: list, followed_before: bool = False, ts: float = float("inf")
+    ) -> tuple[str | None, str | None]:
+        """(done, why) for a window: `done` is the kind of the real action that went out, if any;
+        `why` names the rail that stopped the decision when nothing did.  A withheld row carries
+        its reason in its note (ledger.withhold) since 2026-09-16; rows from before are read
+        from what the poster did then: a dry row of the decision's own kind was sleep, a dry
+        'leave' was the door, no row at all for a follow was an account he already followed."""
+        real = [k for k, dry, _ in acts if not dry and k != "quote"]
+        dry = [(k, n) for k, dry_, n in acts if dry_]
+        done = real[0] if real else None
+        if decision == "nothing" or done is not None:
+            return done, None
+        for _, n in dry:
+            if n and ":" in n:
+                return None, n.split(":", 1)[1]
+        if dry:
+            kind = dry[0][0]
+            if decision == "leave":
+                return None, "not_following"  # (or the operator's sleep; before notes the two look alike)
+            if kind == decision:
+                return None, "asleep"
+            if decision == "reply":
+                return None, "answered" if mentioned else "not_addressed"
+            return None, "cap" if ts >= cls.OUTWARD_POLICY_TS else "unrecorded"
+        if decision == "follow" and followed_before:
+            return None, "already_following"
+        return None, "unrecorded"
+
     def _counts(self, since: float, until: float = float("inf")) -> dict:
         """What he read and did between two times, from the ledger."""
         db = self.L.db
@@ -276,12 +321,11 @@ class Panel:
                 (t0, t1),
             )
         }
-        answered = {
+        acts = self._acts("ts>=? AND ts<?", (t0, t1))
+        followed = {
             r[0]
             for r in db.execute(
-                "SELECT DISTINCT episode_id FROM actions WHERE ts>=? AND ts<? AND dry_run=0 AND deleted_ts IS NULL "
-                "AND kind='answer'",
-                (t0, t1),
+                "SELECT DISTINCT target_did FROM actions WHERE kind='follow' AND dry_run=0 AND ts<?", (t1,)
             )
         }
         hours = [{"episodes": 0, "acted": 0, "appetite": [], "landings": 0} for _ in range(24)]
@@ -327,7 +371,12 @@ class Panel:
                 p["n"] += 1
                 p["mentions"] += 1 if r["mentioned"] else 0
                 p["acted"] += 1 if r["id"] in acted_ids else 0
-            if r["id"] in acted_ids or r["action"] != "nothing":
+            # the record: every window where something crossed threshold, and every time someone
+            # spoke to him, whatever came of it
+            if r["id"] in acted_ids or r["action"] != "nothing" or r["mentioned"]:
+                done, why = self.outcome_of(
+                    r["action"], bool(r["mentioned"]), acts.get(r["id"], []), r["did"] in followed, r["ts"]
+                )
                 record.append(
                     {
                         "id": r["id"],
@@ -337,7 +386,10 @@ class Panel:
                         "did": r["did"],
                         "feed": r["feed"],
                         "topics": (r["topics"] or "").split(",") if r["topics"] else [],
-                        "action": "answer" if r["action"] == "nothing" and r["id"] in answered else r["action"],
+                        "action": r["action"],
+                        "done": done,
+                        "why": why,
+                        "labeled": "labeled" in (r["note"] or ""),
                         "acted": r["id"] in acted_ids,
                     }
                 )
@@ -382,7 +434,7 @@ class Panel:
             for r in db.execute(
                 "SELECT ts, kind, target_uri FROM control WHERE ts>=? AND ts<? AND kind IN "
                 "('downtime','slow','sleep','wake','forget','ignored','deleted_in_app','unliked_in_app',"
-                "'unfollowed_in_app','plasticity','numerics') "
+                "'unfollowed_in_app','plasticity','numerics','clock') "
                 "ORDER BY id",
                 (t0, t1),
             )
@@ -428,8 +480,8 @@ class Panel:
             "control": control,
             "record": record[-120:],
             # the favorite is a post only when he liked it in public; the least favorite is its smell, never a name
-            "favorite": self._post_of_the_day(fav, acted_ids, public=True) if fav else None,
-            "least": self._post_of_the_day(least, acted_ids, public=False) if least else None,
+            "favorite": self._post_of_the_day(fav, acted_ids, acts, followed, public=True) if fav else None,
+            "least": self._post_of_the_day(least, acted_ids, acts, followed, public=False) if least else None,
             "silent": sum(h["episodes"] for h in hours) - len(record),
             "digest": {"brain": last["brain_digest"], "weights": last["weight_digest_after"]} if last else None,
         }
@@ -453,13 +505,18 @@ class Panel:
         leave_r = float(sc.get("leave", 0.0)) * g_av / th_leave if th_leave else 0.0
         return like_r, leave_r
 
-    @staticmethod
-    def _post_of_the_day(best: tuple[float, float, object], acted_ids: set, public: bool) -> dict:
+    @classmethod
+    def _post_of_the_day(
+        cls, best: tuple[float, float, object], acted_ids: set, acts: dict, followed: set, public: bool
+    ) -> dict:
         """What the day page says of his favorite or least favorite post: when, where, what it
         smelled of, how it tasted, what he did.  The link and the account go in only for a
         favorite he liked in public; a least favorite is never named."""
         _, ratio, r = best
         acted = r["id"] in acted_ids
+        done, why = cls.outcome_of(
+            r["action"], bool(r["mentioned"]), acts.get(r["id"], []), r["did"] in followed, r["ts"]
+        )
         mb = {}
         try:
             mb = json.loads(r["mbon"] or "{}")
@@ -474,6 +531,8 @@ class Panel:
             "vader": r["vader"],
             "learned": round(float(mb.get("_learned", 0.0)), 3),
             "action": r["action"],
+            "done": done,
+            "why": why,
             "acted": acted,
             "ratio": round(float(ratio), 3),
         }
@@ -488,6 +547,14 @@ class Panel:
         today = dt.datetime.fromtimestamp(ts, tz).date()
         ddir = self.dir / "days"
         ddir.mkdir(parents=True, exist_ok=True)
+        # his time zone changed since the days were written: every day is re-bucketed, once
+        rewrite = False
+        try:
+            rewrite = json.loads((ddir / "index.json").read_text()).get("tz") not in (None, str(tz))
+        except (OSError, ValueError):
+            pass
+        if rewrite:
+            backfill = True
         wanted = [today]
         first_row = self.L.db.execute("SELECT MIN(ts) FROM episodes").fetchone()[0]
         if first_row is not None:
@@ -498,7 +565,7 @@ class Panel:
         written = []
         for day in wanted:
             path = ddir / f"{day.isoformat()}.json"
-            if day != today and path.exists():
+            if day != today and path.exists() and not rewrite:
                 try:
                     if json.loads(path.read_text()).get("final"):
                         continue
@@ -555,32 +622,39 @@ class Panel:
                 "SELECT DISTINCT episode_id FROM actions WHERE dry_run=0 AND deleted_ts IS NULL AND kind != 'leave'"
             )
         }
-        answered = {
-            row[0]
-            for row in db.execute(
-                "SELECT DISTINCT episode_id FROM actions WHERE dry_run=0 AND deleted_ts IS NULL AND kind='answer'"
-            )
+        rows = db.execute(
+            "SELECT * FROM episodes WHERE kind IN ('event','spontaneous') ORDER BY id DESC LIMIT 30"
+        ).fetchall()
+        acts = self._acts(f"episode_id IN ({','.join('?' * len(rows))})", tuple(r["id"] for r in rows)) if rows else {}
+        followed = {
+            r[0] for r in db.execute("SELECT DISTINCT target_did FROM actions WHERE kind='follow' AND dry_run=0")
         }
-        recent = [
-            {
-                "id": r["id"],
-                "acted": r["id"] in acted_ids,
-                "ts": r["ts"],
-                "kind": r["kind"],
-                "mentioned": bool(r["mentioned"]) if r["mentioned"] is not None else None,
-                "did": r["did"],
-                "topics": (r["topics"] or "").split(",") if r["topics"] else [],
-                "behaviour": r["behaviour"],
-                "action": "answer" if r["action"] == "nothing" and r["id"] in answered else r["action"],
-                "valence": r["valence"],
-                "arousal": r["arousal"],
-                "kc_active": r["kc_active"],
-                "note": r["note"],
-            }
-            for r in db.execute(
-                "SELECT * FROM episodes WHERE kind IN ('event','spontaneous') ORDER BY id DESC LIMIT 30"
-            ).fetchall()
-        ]
+        recent = []
+        for r in rows:
+            done, why = self.outcome_of(
+                r["action"], bool(r["mentioned"]), acts.get(r["id"], []), r["did"] in followed, r["ts"]
+            )
+            recent.append(
+                {
+                    "id": r["id"],
+                    "acted": r["id"] in acted_ids,
+                    "ts": r["ts"],
+                    "kind": r["kind"],
+                    "mentioned": bool(r["mentioned"]) if r["mentioned"] is not None else None,
+                    "did": r["did"],
+                    "feed": r["feed"],
+                    "topics": (r["topics"] or "").split(",") if r["topics"] else [],
+                    "behaviour": r["behaviour"],
+                    "action": r["action"],
+                    "done": done,
+                    "why": why,
+                    "labeled": "labeled" in (r["note"] or ""),
+                    "valence": r["valence"],
+                    "arousal": r["arousal"],
+                    "kc_active": r["kc_active"],
+                    "note": r["note"],
+                }
+            )
         posts = [
             {"uri": r["our_uri"], "ts": r["ts"], "kind": r["kind"]}
             for r in db.execute(
@@ -657,6 +731,7 @@ class Panel:
                 "sizes": {k: int(len(v)) for k, v in ag.readout.pops.items()},
                 "thresholds": ag.readout.thresholds,
             },
+            "caps": ag.caps,  # the rails' numbers, so the record can say which cap was full
             "today": counts(day0),
             "total": counts(0.0),
             "topics_today": topics_today,

@@ -22,6 +22,31 @@ def test_activity_carries_wall_time():
     assert a["wall_ts"] == 1234.5 and a["idx"].tolist() == [5]
 
 
+def test_what_came_of_a_window():
+    """The record says what went out, or which rail stopped the decision: from the withheld row's
+    note when there is one, from what the poster did before notes when there is not."""
+    from bosco.panel import Panel
+
+    o = Panel.outcome_of
+    assert o("like", False, [("like", False, None)]) == ("like", None)
+    assert o("follow", False, [("walk", False, None)]) == ("walk", None)  # already followed: a walk
+    assert o("nothing", True, [("answer", False, None)]) == ("answer", None)  # the etiquette reflex
+    assert o("nothing", False, []) == (None, None)
+    # rows with a reason
+    assert o("reply", False, [("leave", True, "reply:not_addressed")]) == (None, "not_addressed")
+    assert o("like", False, [("leave", True, "like:cap:like/hour")]) == (None, "cap:like/hour")
+    assert o("walk", False, [("leave", True, "walk:asleep")]) == (None, "asleep")
+    # rows from before reasons were written
+    assert o("like", False, [("like", True, None)]) == (None, "asleep")
+    assert o("reply", False, [("leave", True, None)]) == (None, "not_addressed")
+    assert o("reply", True, [("leave", True, None)]) == (None, "answered")
+    assert o("leave", False, [("leave", True, None)]) == (None, "not_following")
+    assert o("follow", False, [("leave", True, None)]) == (None, "cap")
+    assert o("follow", False, [("leave", True, None)], ts=1.0) == (None, "unrecorded")  # stranger rail days
+    assert o("follow", False, [], followed_before=True) == (None, "already_following")
+    assert o("walk", False, []) == (None, "unrecorded")
+
+
 @needs_data
 def test_day_reports_from_the_ledger(fly, tmp_path):
     """One report per local day, from the ledger alone; today rewritten, a finished day final."""
@@ -74,6 +99,11 @@ def test_day_reports_from_the_ledger(fly, tmp_path):
             assert k == "favorite" or ("uri" not in p and "did" not in p)
             assert "uri" not in p or (p["action"] == "like" and p["acted"])
     assert y["favorite"] is not None and y["favorite"]["topics"] == ["fruit"] and y["favorite"]["words"] == ["banana"]
+    # every window in the record says what came of it; a mention is in the record whatever came of it
+    assert y["record"] and y["record"][0]["mentioned"] is True
+    for w in y["record"] + t["record"]:
+        assert set(w) >= {"action", "done", "why", "labeled", "acted", "feed"}
+        assert (w["why"] is None) or (w["done"] is None and w["action"] != "nothing")
     idx = json.loads((tmp_path / "panel" / "days" / "index.json").read_text())
     assert [d["date"] for d in idx["days"]][:2] == [d_today.isoformat(), d_yest.isoformat()]
     # a finished day is not rewritten

@@ -411,6 +411,20 @@ def main(argv=None) -> int:
         return 0
 
     s.set_defaults(fn=_words)
+    s = sub.add_parser("primer", help="print the pinned primer thread (config/identity_v1.yaml) with lengths")
+
+    def _primer(a):
+        from bosco.identity import IdentityReflex
+
+        texts = IdentityReflex().primer
+        for i, t in enumerate(texts):
+            flag = "" if len(t) <= 300 else "  <- over 300"
+            print(f"{i + 1}/{len(texts)} ({len(t)} chars){flag}\n{t}\n")
+        print("posted and pinned by the operator, by mention: @bosco primer   (again: a fresh thread)")
+        return 0 if all(len(t) <= 300 for t in texts) else 1
+
+    s.set_defaults(fn=_primer)
+
     s = sub.add_parser("feeds", help="where he reads, and how his browsing is split by his own approaches")
 
     def _feeds(a):

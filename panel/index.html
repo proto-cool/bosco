@@ -38,7 +38,7 @@
           <canvas id="brain" aria-label="every neuron of the model at its soma, lit when it fires"></canvas>
           <dl class="captions">
             <div><dt>neurons firing this second</dt><dd class="numeral" id="firing">–</dd></div>
-            <div><dt>kenyon cells active</dt><dd class="numeral" id="kc-active">–</dd></div>
+            <div><dt>kenyon cells active · the smell code</dt><dd class="numeral" id="kc-active">–</dd></div>
             <div class="small"><dt class="sr-only">his time</dt><dd id="bio-time">–</dd></div>
           </dl>
         </div>
@@ -61,8 +61,10 @@
           <h2 id="h-now">now</h2>
           <div class="readout" id="readout"></div>
           <p class="caption">
-            the descending and motor populations that stand for each behaviour, against the threshold that makes
-            them an action. under the line is silence, which is most of the time.
+            five groups of descending and motor neurons, each standing for an act. engage is a follow, or a reply when
+            he was spoken to; like is a like; leave is an unfollow; groom is a post of his own. the tick is the
+            threshold: the group furthest over it wins, and none over is silence, which is most of the time. engage past
+            the faint lower tick but under threshold is a walk: he reads a few more of that account's posts.
           </p>
         </section>
 
@@ -71,19 +73,24 @@
           <p class="figure"><span class="numeral" id="silence">–</span><span class="figure-label">silence</span></p>
           <p class="sentence" id="today-sentence">waiting for his first poll of the day.</p>
           <p class="sentence muted" id="topics-sentence"></p>
-          <p class="caption"><a href="./days.html">the day so far, and every day before it.</a></p>
+          <p class="caption">
+            a reward is a like, repost, follow or kind reply that reached him; a punishment is a block or an unkind
+            reply. both teach his mushroom body about the smell of the post that earned them.
+            <a href="./days.html">the day so far, and every day before it.</a>
+          </p>
         </section>
 
         <section class="row" id="memory" aria-labelledby="h-memory">
           <h2 id="h-memory">memory</h2>
-          <p class="figure"><span class="numeral" id="people-count">–</span><span class="figure-label">people he can smell</span></p>
+          <p class="figure"><span class="numeral" id="people-count">–</span><span class="figure-label">accounts he has a smell for</span></p>
           <p class="sentence" id="memory-sentence"></p>
           <p class="sentence muted" id="words-sentence"></p>
           <ol class="people" id="people"></ol>
           <p class="caption">
-            each account is an odor. the mark and the number are his learned valence for it, read from the weights,
-            right for sweet and left for bitter, full at a half; the count is how often they have come to him.
-            short-term traces fade in hours, long-term ones take repetition and fade in a month.
+            each account is a smell. the bar and the number are what he has learned of it, read from his weights:
+            right and blue is sweet, so he approaches; left and violet is bitter, so he avoids; full at ±0.5.
+            ×n is how many times they have come to him. a short-term memory fades in hours; a long-term one takes a
+            repeat and fades in a month.
           </p>
         </section>
 
@@ -96,14 +103,17 @@
           <h2 id="h-record">the record</h2>
           <ol class="windows" id="recent"></ol>
           <p class="caption">
-            every post he reads is a one-second stimulus: the account as an odor, the tone as taste, the topics as more
-            odor. the decision is whatever crossed threshold, if anything.
+            the last windows, newest first. each post he reads is a one-second stimulus: the account as a smell, the
+            tone as a taste, the topics and the feed as more smell. the last column is what came of it: the act that
+            went out, or silence.
           </p>
           <p class="caption">
-            <b>withheld</b> means his neurons chose the action and a rail stopped it at the door: a reply to a post that was
-            not addressed to him, or a second reply to the same post, never goes out; a rate cap was full;
-            he was asleep; or the post carried a moderation label. the rails protect people and the account and never
-            touch his brain, so the decision stays in the record as his.
+            <b>withheld</b> means his neurons chose the act and a rail stopped it at the door; the row names the rail.
+            the rails: he replies only to someone who spoke to him, once per post; hard caps by kind; the operator's
+            sleep; nobody to unfollow. a rail never touches his brain, so the choice stays in the record as his.
+            <b>walk</b> is not outward: he read a few more of that account's posts. <b>answered by reflex</b> means his
+            song neurons stayed under threshold, but whoever speaks to him is answered once anyway. a post with a
+            moderation label is bitter to him and never approached; it shows as silence.
           </p>
         </section>
 

@@ -180,6 +180,11 @@ Every number below has a gate report under `docs/`.
    JSON from the ledger; a static page (ARC UI, Vite) draws every neuron at
    its soma and lights the ones that fire. Read-only: nothing on the page can
    reach him. Post text is fetched from the public API by URI, never stored.
+   Every window in the record says what came of it (`done`, the real action
+   that went out) or which rail stopped the decision (`why`,
+   `Panel.outcome_of`); rows from before the rails wrote their reason are
+   read from what the poster did then, and say `unrecorded` when that is
+   ambiguous.
 
 24. **Activity blocks are eight neurons and the flush is 1e-4 mV** (kernel, decided
    2026-09-14). A block of neurons is skipped while all of them are at rest;
@@ -345,7 +350,10 @@ Every number below has a gate report under `docs/`.
    whether the answer came from the network or a reflex. Engaging with an
    account he already follows while browsing is nothing. A post he merely
    browsed never gets a reply, whatever the song neurons did; the decision
-   stays in the record as withheld. His own posts are grooming. Nothing
+   stays in the record as withheld, and since 2026-09-16 the placeholder row
+   (`Ledger.withhold`) notes which rail: `<what>:<why>`, why one of
+   `not_addressed`, `answered`, `not_following`, `asleep`, `cap:<which>`.
+   The panel's record names the rail on the row. His own posts are grooming. Nothing
    else goes out. The earlier "stranger rail" (no like or follow until they
    had come to him, or the window's learned verdict was sweet) is gone: the
    window's verdict is on the whole mixture and generalised to strangers
@@ -642,6 +650,44 @@ Every number below has a gate report under `docs/`.
    walked from, so his browsing follows his own feet. The controls replay
    the walked posts as ordinary stimuli and are off-policy after the first
    walk they would not have taken (EXPERIMENT.md §4).
+53. **Not the same words twice, and more dust** (decided 2026-09-16). He
+   answered twice in one thread with the same phrasebook line (the coin fell
+   on the phrasebook both times and the key had few lines). Every utterance
+   he posts leaves `said:<hash>` in its episode note; composing, a
+   phrasebook line said in his last 30 posts falls through to the
+   generator, and a generated text he said lately is redrawn with a fresh
+   seed (`seed|again|k`, up to three times) before it goes. Nick also wanted
+   him chattier on his own: dust lands twice as often
+   (`config/encoder_v1.yaml` `landings_per_hour` 0.5 to 1.0, more onsets for
+   the grooming neurons, thresholds untouched) and his own posts are capped
+   at ten a day instead of six (`config/caps_v1.yaml`); still one an hour,
+   still no floor.
+
+52. **His clock is Denver's** (decided 2026-09-16). `config/circadian_v1.yaml`
+   `tz` moved from America/New_York to America/Denver, where Nick is, so his
+   day and Nick's coincide. A replay recomputes the clock-neuron hour from
+   the tz, so the change is a boundary like `plasticity` and `numerics`:
+   `Agent._mark_clock` writes a `clock` control row (`old->new`) and a
+   snapshot on the first start after it, the days page names it in the fine
+   print, and the day reports are re-bucketed once when the index's tz no
+   longer matches (`Panel.write_days`).
+
+51. **The pinned primer** (decided 2026-09-16). His profile pins a short
+   thread that says what he is: a bot with a simulated fruit fly brain, not
+   an AI or a language model, nothing generative, nothing of yours stored,
+   built by @proto.cool with AI assistance, be nice, shoo fly to leave. The
+   texts are `config/identity_v1.yaml` `primer` (in the identity digest);
+   the operator posts them by mention (`@bosco primer`, `again` for a fresh
+   thread) and the first post is pinned through the profile record's
+   `pinnedPost`, swapped against the record as it was. Each post is an
+   action of kind `primer`: never the network's choice, not in "what he
+   said". A reply under the thread reaches his senses like a browsed post
+   (row note `primer`) and is not answered unless it tags him; the primer
+   is a notice, not a conversation. Bare addresses in anything he posts
+   become link facets (`Bsky.rich`). Found on the way: `introduce` was in
+   the command table but not in the parse order, so the operator's
+   introduce command never parsed; both are in the order now.
+
 50. **"This one": a liked post in an answer to a question** (decided
    2026-09-15). Asked something, he may point at the post he liked lately
    that smells most of the question: the words of the question and its

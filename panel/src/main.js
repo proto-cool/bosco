@@ -1,6 +1,6 @@
 import {
-  $, DATA, fmt, pct, ago, alive, el, b, sentence, plural, list, getJSON, getBytes, nameInto, renderPosts, personRow,
-  setLive, markNav, trackCurrent, applyIdentity,
+  $, DATA, fmt, pct, ago, alive, el, b, sentence, list, getJSON, getBytes, renderPosts, personRow,
+  windowRow, daySentence, setLive, markNav, trackCurrent, applyIdentity,
 } from './common.js';
 import { BrainView, parseActivity, parseAtlas } from './brain.js';
 
@@ -63,6 +63,7 @@ function buildReadout() {
     row.append(el('span', 'k', p));
     const track = el('div', 'track');
     track.append(el('i', `fill${p === 'leave' ? ' avoid' : ''}`), el('i', 'tick'));
+    if (p === 'engage') track.append(el('i', 'tick walk')); // the lower rung: a walk, not a follow
     row.append(track, el('span', 'v', '–'));
     box.append(row);
   }
@@ -73,6 +74,7 @@ function buildReadout() {
 // the page says he is unreachable; the file's own wall stamp says whether he is between seconds
 // (a poll, a fetch, composing) or gone.
 let thresholds = {};
+let caps = null;
 let lastT = -1;
 let pending = null; // a second that arrived before the atlas did
 let inFlight = false;
@@ -140,40 +142,20 @@ async function pollStatus() {
 
 async function renderStatus(st) {
   thresholds = st.readout?.thresholds || {};
+  caps = st.caps || null;
   applyIdentity(st);
+  const walkTick = document.querySelector('.ro[data-pop="engage"] .tick.walk');
+  if (walkTick && thresholds.walk && thresholds.engage) {
+    walkTick.style.left = `${(62.5 * thresholds.walk) / thresholds.engage}%`;
+  }
   const br = st.brain;
   $('bio-time').textContent =
     `${alive(br.t_ms)} lived · ${br.lag_s > 120 ? `${Math.round(br.lag_s / 60)} min behind` : 'in step'}`;
 
   // today: one figure, one sentence
-  const t = st.today, a = t.actions || {};
+  const t = st.today;
   $('silence').textContent = t.silence == null ? '–' : pct(t.silence);
-  const replies = (a.reply || 0) + (a.answer || 0) + (a.identity || 0);
-  if (t.episodes) {
-    const acts = [
-      [replies, 'reply', 'replies'],
-      [a.like || 0, 'like', 'likes'],
-      [a.follow || 0, 'follow', 'follows'],
-      [a.spontaneous_post || 0, 'post of his own', 'posts of his own'],
-    ].filter(([n]) => n > 0);
-    const parts = ['he read ', b(plural(t.episodes, 'post', 'posts')), ' and said nothing to ',
-      b(fmt(Math.round(t.episodes * (t.silence || 0)))), ' of them. '];
-    if (acts.length) {
-      acts.forEach(([n, one, many], i) => {
-        parts.push(b(plural(n, one, many)), i < acts.length - 1 ? ', ' : '. ');
-      });
-    } else {
-      parts.push('he did nothing else. ');
-    }
-    if (t.rewards || t.punishments) {
-      parts.push(b(plural(t.rewards, 'reward', 'rewards')), ' and ', b(plural(t.punishments, 'punishment', 'punishments')), '.');
-    } else {
-      parts.push('nothing rewarded or punished him yet.');
-    }
-    sentence($('today-sentence'), parts);
-  } else {
-    $('today-sentence').textContent = 'nothing read yet today.';
-  }
+  daySentence($('today-sentence'), t, 'today');
   const topics = Object.entries(st.topics_today || {}).sort((x, y) => y[1] - x[1]).slice(0, 6);
   const fd = (st.feeds && st.feeds.feeds) || [];
   const haunts = fd.filter((f) => f.reads > 0).sort((x, y) => y.share - x.share);
@@ -190,12 +172,13 @@ async function renderStatus(st) {
   $('people-count').textContent = fmt(people.length);
   const hunger =
     br.appetite == null ? '' : br.appetite > 0.7 ? ' he is hungry for company.' : br.appetite < 0.3 ? ' he has had his fill of company for now.' : ' he could take some company.';
+  const dust = [' dust on him ', b(pct(br.dust)), '; enough dust and he grooms, and a groom is a post.'];
   sentence(
     $('memory-sentence'),
     br.stm_depressed || br.ltm_depressed
-      ? [b(fmt(br.stm_depressed)), ' short-term and ', b(fmt(br.ltm_depressed)), ' long-term traces across ',
-        b(fmt(br.plastic_synapses)), ' plastic synapses. dust on his bristles ', b(pct(br.dust)), '.', hunger]
-      : ['no traces yet across ', b(fmt(br.plastic_synapses)), ' plastic synapses. dust on his bristles ', b(pct(br.dust)), '.', hunger],
+      ? [b(fmt(br.stm_depressed)), ' synapses hold a short-term memory and ', b(fmt(br.ltm_depressed)),
+        ' a long-term one, of ', b(fmt(br.plastic_synapses)), ' that can learn.', ...dust, hunger]
+      : ['nothing learned yet, across ', b(fmt(br.plastic_synapses)), ' synapses that can.', ...dust, hunger],
   );
   const wd = st.words || {};
   const sweet = (wd.sweet || []).map(([w]) => w).slice(0, 6);
@@ -217,25 +200,11 @@ async function renderStatus(st) {
   await renderPosts($('posts'), st.posts || [], 4);
 
   // the record
-  $('recent').replaceChildren(
-    ...(st.recent || []).slice(0, 12).map((w) => {
-      const li = el('li', `win${w.action !== 'nothing' ? ' acted' : ''}`);
-      const who = el('span', 'who');
-      if (w.did) nameInto(who, w.did);
-      else who.textContent = w.kind === 'spontaneous' ? 'a landing' : '–';
-      li.append(
-        el('span', null, ago(w.ts)),
-        el('span', 'smell', w.kind === 'spontaneous' ? 'dust' : w.mentioned ? 'mention' : 'browse'),
-        who,
-        el('span', 'what', w.action === 'nothing' ? 'silence' : `${w.action.replace('_', ' ')}${w.acted ? '' : ' · withheld'}`),
-      );
-      return li;
-    }),
-  );
+  $('recent').replaceChildren(...(st.recent || []).slice(0, 12).map((w) => windowRow(w, ago(w.ts), caps)));
 
   $('fine').textContent =
-    `memory ${br.digest.slice(0, 12)} · corpus ${st.corpus_digest.slice(0, 12)} · ` +
-    `${fmt(br.neurons)} neurons · ${fmt(br.synapses)} synapses · status ${ago(st.generated)} ago`;
+    `brain digest ${br.digest.slice(0, 12)} · corpus digest ${st.corpus_digest.slice(0, 12)} · ` +
+    `${fmt(br.neurons)} neurons · ${fmt(br.synapses)} synapses · written ${ago(st.generated)} ago`;
 }
 
 // ---- go ----------------------------------------------------------------------------------------

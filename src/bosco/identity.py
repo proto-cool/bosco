@@ -25,6 +25,8 @@ class IdentityReflex:
     def __init__(self, path=paths.CONFIG / "identity_v1.yaml") -> None:
         cfg = yaml.safe_load(open(path))
         self.intro: list[str] = list(cfg.get("intro", []))
+        # the pinned primer thread (decided 2026-09-16): posted once by the operator, never by the network
+        self.primer: list[str] = list(cfg.get("primer", []))
         mq = cfg.get("memory_question", {})
         self.memory_patterns = [re.compile(p, re.I) for p in mq.get("patterns", [])]
         self.memory_answers: dict[str, str] = dict(mq.get("answers", {}))
@@ -90,6 +92,8 @@ class IdentityReflex:
         h = hashlib.blake2b(digest_size=16)
         for t in self.intro:
             h.update(t.encode())
+        for t in self.primer:
+            h.update(("primer:" + t).encode())
         for p in self.memory_patterns:
             h.update(p.pattern.encode())
         for k in sorted(self.memory_answers):

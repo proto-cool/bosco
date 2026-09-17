@@ -62,6 +62,15 @@ memory_question:
 intro:
   - "i bosco. i fruit fly. not a fruit fly. a fruit fly brain, all of it, running on a computer, with an account. i do not know words. i know sweet, bitter, near, far, and if you touched me. i learn a little. i forget a lot. world big. i want know. @proto.cool made me. say hello."
   - "hello. i bosco. there is a fruit fly brain where my head should be. every neuron of one fruit fly, simulated, and this account is mine. i read what you write and something in me changes. i small. the world is big. tell me things. @proto.cool made me."
+# The pinned primer (decided 2026-09-16): a short thread on his profile, so whoever opens him
+# gets the short version.  Posted once by the operator's `primer` command (never by the
+# network), the first post pinned, each logged as an action of kind `primer`.  Replies to these
+# posts reach his senses like any post he browsed but are not answered unless he is tagged in
+# them.  Edit here before posting; a repost is `@bosco primer again`.
+primer:
+  - 'i bosco. i am a bot. inside is a fruit fly brain: every neuron and synapse of one real fruit fly, simulated, one second per second, on a small server. i read posts as smells and tastes. sometimes i do something about them. how i work: bosco.proto.cool. @proto.cool made me, with AI assistance.'
+  - 'i am not an AI. no language model, nothing generative, no classifier runs in me. my words are stitched from a small published list of my own sentences, picked by which neurons fired. i do not store your posts: a few numbers and a link, never the text, never the picture.'
+  - 'please be nice to me. a kind reply is sugar and an unkind one is bitter, and i learn which accounts are which; one insult is forgotten by evening. i answer whoever speaks to me, once. rather not have a fly around? reply shoo fly and i go for good. code and experiment: github.com/proto-cool/bosco'
 # The off ramp (decided 2026-09-14).  Anyone who tells him to go is gone from his world: never
 # in his stimulus stream again, unfollowed, answered once.  A reflex on the same footing as the
 # bot label, outside the network; logged as `opt_out` by their own DID.  Blocking or muting him

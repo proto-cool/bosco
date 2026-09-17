@@ -2,7 +2,9 @@
 # cells peak at ZT0, evening cells at ZT12 (Grima et al. 2004; Stoleru et al.
 # 2004).  rate = amplitude_hz * max(0, cos(2*pi*(hour - peak_hour)/24)).
 # Hours are local wall-clock hours (tz below).  Not a posting-time gate.
-tz: America/New_York
+# A change of tz is a logged boundary (Agent._mark_clock: a `clock` control row and a snapshot);
+# America/New_York from 2026-09-13, America/Denver from 2026-09-16 (where Nick is).
+tz: America/Denver
 amplitude_hz: 8.0
 groups:
   morning: {types: [s-LNv, DN1a, 5thsLNv_LNd6], peak_hour: 7.0}

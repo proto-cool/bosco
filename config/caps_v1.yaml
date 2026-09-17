@@ -6,7 +6,7 @@ per_kind:
   like:             {hour: 6,  day: 40}
   follow:           {hour: 3,  day: 15}
   leave:            {hour: 3,  day: 15}     # unfollows
-  spontaneous_post: {hour: 1,  day: 6}
+  spontaneous_post: {hour: 1,  day: 10}    # was 6 a day until 2026-09-16
   identity:         {hour: 20, day: 100}   # who/what/why/creator answers
   answer:           {hour: 12, day: 100}   # the etiquette reflex: whoever spoke to him answered when the song did not cross
   walk:             {hour: 6,  day: 40}    # walks toward a source (reads more of an account): not outward, a loop guard

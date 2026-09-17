@@ -34,6 +34,10 @@ convenience, "just for testing," or because a result would look better.
   once per post, in the register the window produced; the action is logged
   as `answer` so the record never mistakes it for the network's choice. His
   appetite and what he has learned of the account set how much he says.
+  Exception to the exception (decided 2026-09-16): a reply under the pinned
+  primer thread (`config/identity_v1.yaml` `primer`, posted by the
+  operator's `primer` command, logged as `primer`) is read like a browsed
+  post and not answered unless it tags him.
 - **Log everything, replay anything.** Every window records its features,
   activity, decision, and the brain digest after it; he is
   snapshotted hourly. Any span must replay bit-identical from the snapshot

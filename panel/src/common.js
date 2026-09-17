@@ -149,6 +149,120 @@ export function personRow(p, extra) {
   return li;
 }
 
+// ---- what came of a window --------------------------------------------------------------------
+// the words of the record. a window carries the network's decision (`action`), the real action
+// that went out (`done`, if any) and, when nothing did, the rail that stopped it (`why`).
+const DONE = {
+  like: 'like',
+  follow: 'follow',
+  reply: 'reply',
+  answer: 'answered by reflex',
+  identity: 'said who he is',
+  walk: 'walk',
+  leave: 'unfollow',
+  spontaneous_post: 'a post',
+  intro: 'introduced himself',
+};
+export const CHOSE = {
+  like: 'like',
+  follow: 'follow',
+  reply: 'reply',
+  walk: 'walk',
+  leave: 'unfollow',
+  spontaneous_post: 'post',
+  nothing: 'silence',
+};
+// "like/hour" with the caps from status.json -> "cap 6 an hour"
+export function capText(which, caps) {
+  const [name, per] = (which || '').split('/');
+  const perWord = per === 'day' ? 'a day' : 'an hour';
+  if (name === 'global') {
+    const n = caps?.global?.[per];
+    return n ? `cap ${n} acts ${perWord}` : 'cap on everything';
+  }
+  if (name === 'thread') return 'cap for one thread';
+  if (name === 'account-replies' || name === 'account-actions') return 'cap toward one account';
+  const n = caps?.per_kind?.[name]?.[per];
+  return n ? `cap ${n} ${perWord}` : 'a cap';
+}
+export function whyText(why, caps) {
+  if (!why) return '';
+  if (why.startsWith('cap:')) return capText(why.slice(4), caps);
+  return {
+    not_addressed: 'not addressed to him',
+    answered: 'already answered',
+    not_following: 'nobody to unfollow',
+    asleep: 'asleep',
+    cap: 'a cap was full',
+    already_following: 'already follows them',
+    labeled: 'a labeled post',
+    unrecorded: 'reason not recorded',
+  }[why] || why.replaceAll('_', ' ');
+}
+export function outcomeText(w, caps) {
+  if (w.done) {
+    if (w.action === 'follow' && w.done === 'walk') return 'already follows · walk';
+    return DONE[w.done] || w.done.replace('_', ' ');
+  }
+  if (w.action === 'nothing') return w.labeled ? 'silence · labeled post' : 'silence';
+  const what = CHOSE[w.action] || w.action.replace('_', ' ');
+  return `${what} withheld: ${whyText(w.why, caps)}`;
+}
+// one row of the record: when, where it came from, who, what came of it
+export function windowRow(w, when, caps) {
+  const li = el('li', `win${w.acted ? ' acted' : ''}`);
+  const who = el('span', 'who');
+  if (w.did) nameInto(who, w.did);
+  else who.textContent = w.kind === 'spontaneous' ? 'a landing' : '–';
+  li.append(
+    el('span', null, when),
+    el('span', 'smell', w.kind === 'spontaneous' ? 'dust' : w.mentioned ? 'mention' : w.feed || 'browse'),
+    who,
+    el('span', 'what', outcomeText(w, caps)),
+  );
+  return li;
+}
+// the one-sentence day: what he read, what he did about it, what reached him
+export function daySentence(node, c, tense = 'past') {
+  const a = c.actions || {};
+  if (!c.episodes) {
+    node.textContent = tense === 'today' ? 'nothing read yet today.' : 'he read nothing that day.';
+    return;
+  }
+  const replies = (a.reply || 0) + (a.answer || 0) + (a.identity || 0);
+  const acts = [
+    [a.like || 0, 'like', 'likes'],
+    [a.follow || 0, 'follow', 'follows'],
+    [a.walk || 0, 'walk', 'walks'],
+    [replies, 'reply', 'replies'],
+    [a.leave || 0, 'unfollow', 'unfollows'],
+    [a.spontaneous_post || 0, 'post of his own', 'posts of his own'],
+  ].filter(([n]) => n > 0);
+  const parts = ['he read ', b(plural(c.episodes, 'post', 'posts')), ' and did nothing about ',
+    b(fmt(Math.round(c.episodes * (c.silence || 0)))), ' of them. '];
+  if (acts.length) acts.forEach(([n, one, many], i) => parts.push(b(plural(n, one, many)), i < acts.length - 1 ? ', ' : '. '));
+  else parts.push('nothing else. ');
+  if (c.rewards || c.punishments) {
+    parts.push(b(plural(c.rewards, 'reward', 'rewards')), ' and ', b(plural(c.punishments, 'punishment', 'punishments')), ' reached him.');
+  } else {
+    parts.push(tense === 'today' ? 'nothing has rewarded or punished him yet.' : 'nothing rewarded or punished him.');
+  }
+  sentence(node, parts);
+}
+// what an outcome was, for "what stuck"
+export const OUTCOME_SOURCE = {
+  like: 'a like', repost: 'a repost', follow: 'a follow',
+  like_on_post: 'a like on a post of his', repost_on_post: 'a repost of a post of his',
+  kind_reply: 'a kind reply',
+  known_account_reply: 'a known account replying',
+  known_account_inbound: 'a known account coming back',
+  known_account_follow: 'a known account following him',
+  known_account_like: 'a known account liking a post of his',
+  known_account_repost: 'a known account reposting him',
+  block: 'a block',
+  vader_negative_reply: 'an unkind reply',
+};
+
 // ---- the top line ----------------------------------------------------------------------------
 // the live indicator: what the last activity file says about him
 export function liveText(state, ageS) {

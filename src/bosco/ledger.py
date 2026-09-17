@@ -180,7 +180,9 @@ class Ledger:
 
     def _migrate(self) -> None:
         cols = {r["name"] for r in self.db.execute("PRAGMA table_info(actions)")}
-        for col in ("root_uri", "target_did", "embed_uri"):
+        # note: for a withheld action (dry_run=1, kind 'leave'), "<what>:<why>" names the rail that
+        # stopped it (bsky.py act); the panel shows the reason from it
+        for col in ("root_uri", "target_did", "embed_uri", "note"):
             if col not in cols:
                 self.db.execute(f"ALTER TABLE actions ADD COLUMN {col} TEXT")
         ecols = {r["name"] for r in self.db.execute("PRAGMA table_info(episodes)")}
@@ -320,11 +322,23 @@ class Ledger:
         root_uri: str | None = None,
         target_did: str | None = None,
         embed_uri: str | None = None,
+        note: str | None = None,
     ) -> int:
         cur = self.db.execute(
-            "INSERT INTO actions (episode_id, ts, kind, our_uri, target_uri, root_uri, target_did, dry_run, embed_uri) "
-            "VALUES (?,?,?,?,?,?,?,?,?)",
-            (episode_id, ts or time.time(), kind, our_uri, target_uri, root_uri, target_did, int(dry_run), embed_uri),
+            "INSERT INTO actions (episode_id, ts, kind, our_uri, target_uri, root_uri, target_did, dry_run, embed_uri, "
+            "note) VALUES (?,?,?,?,?,?,?,?,?,?)",
+            (
+                episode_id,
+                ts or time.time(),
+                kind,
+                our_uri,
+                target_uri,
+                root_uri,
+                target_did,
+                int(dry_run),
+                embed_uri,
+                note,
+            ),
         )
         self.db.commit()
         return int(cur.lastrowid)
@@ -391,6 +405,31 @@ class Ledger:
     def last_inbound_ts(self) -> float | None:
         r = self.db.execute("SELECT MAX(ts) FROM episodes WHERE mentioned=1").fetchone()
         return float(r[0]) if r and r[0] is not None else None
+
+    def withhold(
+        self,
+        episode_id: int,
+        what: str,
+        why: str,
+        target_uri: str | None,
+        ts: float,
+        root_uri: str | None = None,
+        target_did: str | None = None,
+    ) -> int:
+        """His neurons chose `what` and a rail stopped it at the door: a dry 'leave' row (counts
+        toward nothing) whose note names the rail, "<what>:<why>", so the record can say why.
+        why is one of not_addressed, answered, not_following, asleep, cap:<which>."""
+        return self.add_action(
+            episode_id,
+            "leave",
+            None,
+            target_uri,
+            dry_run=True,
+            ts=ts,
+            root_uri=root_uri,
+            target_did=target_did,
+            note=f"{what}:{why}",
+        )
 
     def replied_to(self, target_uri: str, real_only: bool = True) -> bool:
         """Has he already answered this post (by the network or by reflex)?  Once is the rule."""

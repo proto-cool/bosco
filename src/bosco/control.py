@@ -6,6 +6,8 @@
     @bosco ignore @handle | unignore @handle | unfollow @handle
     @bosco forget @handle              (manual state edit; logged and announced)
     @bosco introduce                   (post a fresh introduction; otherwise it happens once, ever)
+    @bosco primer [again]              (post and pin the primer thread from identity_v1.yaml, once;
+                                        "again" posts a fresh one and pins it)
 
 The command opens the post, right after the mention: "@bosco status",
 "@bosco sleep", "@bosco memory @alice".  Anything else the operator says to
@@ -34,8 +36,11 @@ COMMANDS = {
     "unfollow": r"\bunfollow\b",
     "forget": r"\bforget\b",
     "introduce": r"\bintroduce\b|\bintro\b",
+    "primer": r"\bprimer\b|\bpin\b",
 }
 ORDER = [
+    "primer",
+    "introduce",
     "unignore",
     "unfollow",
     "forget",

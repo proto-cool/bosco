@@ -220,6 +220,7 @@ class Agent:
             self._init_appetite()
         self._mark_plasticity_version()
         self._mark_numerics()
+        self._mark_clock()
 
     @staticmethod
     def numerics_level() -> str:
@@ -248,6 +249,19 @@ class Agent:
             self.ledger.add_control("numerics", "system", None, f"{had or '?'}->{now}")
             self.snapshot()
         self.ledger.set_cursor("numerics", now)
+
+    def _mark_clock(self) -> None:
+        """His time zone (config/circadian_v1.yaml) drives the clock neurons, and a replay
+        recomputes the hour from it, so a change is a boundary like a change of learning rule:
+        a `clock` control row and a snapshot.  He ran on America/New_York from his first day."""
+        had = self.ledger.get_cursor("clock_tz")
+        now = str(self.clock.tz)
+        if had == now:
+            return
+        if self.brain_t0 is not None and self.live.t_ms > 0:
+            self.ledger.add_control("clock", "system", None, f"{had or 'America/New_York'}->{now}")
+            self.snapshot()
+        self.ledger.set_cursor("clock_tz", now)
 
     def _mark_plasticity_version(self) -> None:
         had = self.ledger.get_cursor("plasticity_version")
@@ -771,6 +785,28 @@ class Agent:
         return True, "ok"
 
     # ---- events -----------------------------------------------------------------
+    @staticmethod
+    def said_hash(text: str) -> str:
+        """A short hash of an utterance, kept in the episode note as `said:<hash>`: the record
+        of what he said without storing it twice (his posts are on the network by URI)."""
+        return hashlib.blake2b(text.strip().lower().encode(), digest_size=6).hexdigest()
+
+    def recent_said(self, n: int = 30) -> set[str]:
+        """The hashes of his last n posted utterances (replies, answers, his own posts), so he
+        does not say the same thing twice running (decided 2026-09-16, after two identical
+        answers in one thread: the phrasebook coin and a small key)."""
+        out = set()
+        for (note,) in self.ledger.db.execute(
+            "SELECT e.note FROM actions a JOIN episodes e ON e.id=a.episode_id WHERE a.dry_run=0 "
+            "AND a.deleted_ts IS NULL AND a.kind IN ('reply','answer','spontaneous_post') AND e.note LIKE '%said:%' "
+            "ORDER BY a.id DESC LIMIT ?",
+            (n,),
+        ):
+            for part in (note or "").split(";"):
+                if part.startswith("said:"):
+                    out.add(part[5:])
+        return out
+
     def _log(self, f, w: Window, dec: Decision, ts: float, source_uri, kind, note, drive, d_before=None) -> Outcome:
         did = f.did if f else None
         seed = self.seed_for(ts, did, source_uri)
@@ -797,7 +833,8 @@ class Agent:
             line_key = f"{speak_as}/{dec.valence}/{dec.arousal}/{fb}"
             line = self.phrasebook.pick(speak_as, dec.valence, dec.arousal, fb, seed)
             coin = (seed >> 7) & 1
-            if line is not None and coin == 0:
+            recent = self.recent_said()  # not the same words twice running
+            if line is not None and coin == 0 and self.said_hash(line.text) not in recent:
                 text, text_source = line.text, "phrasebook"
             else:
                 cands = tuple(f.words) + tuple(x for x in f.context if x not in f.words) if f else None
@@ -830,25 +867,40 @@ class Agent:
                 if opening:
                     self._recent_openings.append(opening)
                     del self._recent_openings[:-30]
-                text = self.generator.generate(
-                    speak_as,
-                    dec.valence,
-                    dec.arousal,
-                    seed,
-                    max_sentences=self.verbosity(self.appetite, dec.learned),
-                    topics=topics,
-                    familiarity=fb,
-                    state=state,
-                    word_valence=wv,
-                    air=air,
-                    beta=float(c.get("valence_beta", 1.0)),
-                    gamma=float(c.get("echo_gamma", 0.5)),
-                    prime=bool(f is not None and f.mentioned),
-                    opening=opening,
-                )
+                text = None
+                for attempt in range(4):
+                    # the same seed walks the same way, and at low arousal the walk is nearly
+                    # greedy: something he said lately is drawn again with a fresh seed, a few times
+                    s2 = (
+                        seed
+                        if attempt == 0
+                        else int.from_bytes(
+                            hashlib.blake2b(f"{seed}|again|{attempt}".encode(), digest_size=8).digest(), "little"
+                        )
+                    )
+                    text = self.generator.generate(
+                        speak_as,
+                        dec.valence,
+                        dec.arousal,
+                        s2,
+                        max_sentences=self.verbosity(self.appetite, dec.learned),
+                        topics=topics,
+                        familiarity=fb,
+                        state=state,
+                        word_valence=wv,
+                        air=air,
+                        beta=float(c.get("valence_beta", 1.0)),
+                        gamma=float(c.get("echo_gamma", 0.5)),
+                        prime=bool(f is not None and f.mentioned),
+                        opening=opening if attempt == 0 else None,
+                    )
+                    if text is None or self.said_hash(text) not in recent:
+                        break
                 text_source = "generated" if text else None
                 if text is None and line is not None:
                     text, text_source = line.text, "phrasebook"
+            if text:
+                note = (note + ";" if note else "") + "said:" + self.said_hash(text)
         mbon = {t: r for t, r in self.fly.mbon_rates_from_counts(w.counts, w.ms).items()}
         mbon["_learned"] = dec.learned
         mbon["_familiar"] = dec.familiar

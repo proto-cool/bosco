@@ -214,7 +214,8 @@ def test_browsing_teaches_taste_and_familiarity_and_replays(fly):
     assert ag.memory_report("did:plc:bitter", T0 + 11)[1] < 0
     o4 = ag.run(Features("did:plc:bitter", -0.8, True, 0, True, (), True), T0 + 15, "at://b/2", note="labeled:rude")
     r4 = ag.ledger.episode(o4.episode_id)
-    assert r4["note"] == "labeled:rude;taste:punishment;question" and ag.features_of_row(r4).labeled
+    # (the composed answer leaves its `said:` hash at the end of the note)
+    assert r4["note"].startswith("labeled:rude;taste:punishment;question") and ag.features_of_row(r4).labeled
     ok, logged, got = ag.replay_span(snap, ag.live.t_ms)
     assert ok and logged == got
     assert ag.ledger.assert_no_text() == []  # notes are tokens joined without spaces
@@ -283,3 +284,55 @@ def test_a_change_of_numerics_level_is_a_logged_boundary(fly, tmp_path):
     rows = L.db.execute("SELECT target_uri FROM control WHERE kind='numerics'").fetchall()
     assert rows and rows[0][0] == f"x86_v4->{level}" and L.get_cursor("numerics") == level
     assert ag2.digest() == ag.digest()
+
+
+@needs_data
+def test_a_change_of_time_zone_is_a_logged_boundary(fly, tmp_path):
+    """His tz drives the clock neurons and a replay recomputes the hour from it, so a change
+    writes a `clock` control row and a snapshot (decided 2026-09-16, New York to Denver)."""
+    from bosco.agent import Agent
+    from bosco.encoder import Features
+    from bosco.ledger import Ledger
+
+    L = Ledger(tmp_path / "l.sqlite")
+    ag = Agent(L, fly, state_dir=tmp_path)
+    assert L.get_cursor("clock_tz") == str(ag.clock.tz)
+    assert not L.db.execute("SELECT 1 FROM control WHERE kind='clock'").fetchall()  # a fresh brain: no row
+    ag.mb.reset()
+    ag.live.net.reset(0)
+    ag.live.t_ms = 0
+    ag.run(Features("did:plc:a", 0.0, False, 0, False, (), False, ("banana",)), 1_800_000_000.0, "at://a/1", fast=True)
+    ag.save_state(force=True)
+    L.set_cursor("clock_tz", "America/New_York")  # as if he last ran on the old clock
+    Agent(L, fly, state_dir=tmp_path)
+    rows = L.db.execute("SELECT target_uri FROM control WHERE kind='clock'").fetchall()
+    assert rows and rows[0][0] == f"America/New_York->{ag.clock.tz}" and L.get_cursor("clock_tz") == str(ag.clock.tz)
+
+
+@needs_data
+def test_he_does_not_say_the_same_thing_twice_running(fly, tmp_path):
+    """Two identical answers in one thread (2026-09-16): what he posts leaves `said:<hash>` in
+    the row, and the same stimulus with the same seed says something else next time."""
+    from bosco.agent import Agent
+    from bosco.encoder import Features
+    from bosco.ledger import Ledger
+
+    L = Ledger(tmp_path / "l.sqlite")
+    ag = Agent(L, fly, state_dir=tmp_path)
+    ag.mb.reset()
+    ag.live.net.reset(0)
+    ag.live.t_ms = 0
+    f = Features("did:plc:a", 0.0, True, 3, False, (), False, ("banana", "leaf"))
+    first = ag.run(f, 1_800_000_000.0, "at://a/1", fast=True)
+    assert first.text
+    h = ag.said_hash(first.text)
+    row = L.db.execute("SELECT note FROM episodes WHERE id=?", (first.episode_id,)).fetchone()
+    assert f"said:{h}" in (row["note"] or "")
+    assert ag.recent_said() == set()  # composed, not yet posted
+    L.add_action(first.episode_id, "answer", "at://me/post/1", "at://a/1", dry_run=False, ts=1_800_000_000.0)
+    assert ag.recent_said() == {h}
+    ag.mb.reset()
+    ag.live.net.reset(0)
+    ag.live.t_ms = 0
+    second = ag.run(f, 1_800_000_000.0, "at://a/1", fast=True)  # same seed, same smell
+    assert second.text and second.text != first.text

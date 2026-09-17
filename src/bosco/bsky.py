@@ -192,20 +192,38 @@ class Bsky:
     # ---- rich text --------------------------------------------------------------
     _HANDLE_RE = re.compile(r"@([a-z0-9][a-z0-9.-]*\.[a-z]{2,})", re.I)
 
+    # a bare address in his text (bosco.proto.cool, github.com/proto-cool/bosco): a link facet, so it
+    # opens; a handle is matched first and never a link.  His corpus has no such tokens.
+    _URL_RE = re.compile(r"(?<![\w@])(?:https?://)?(?:[a-z0-9-]+\.)+[a-z]{2,6}(?:/[^\s]*)?", re.I)
+
     def rich(self, text: str) -> client_utils.TextBuilder:
-        """Text with @handles turned into real mention facets (resolved to DIDs)."""
+        """Text with @handles turned into real mention facets (resolved to DIDs) and addresses
+        into link facets."""
         tb = client_utils.TextBuilder()
         pos = 0
+        spans = []
         for m in self._HANDLE_RE.finditer(text):
-            tb.text(text[pos : m.start()])
-            handle = m.group(1)
-            try:
-                did = self._did_cache.get(handle) or self.client.resolve_handle(handle).did
-                self._did_cache[handle] = did
-                tb.mention(m.group(0), did)
-            except Exception:  # noqa: BLE001
-                tb.text(m.group(0))
-            pos = m.end()
+            spans.append((m.start(), m.end(), "mention", m.group(1)))
+        for m in self._URL_RE.finditer(text):
+            if any(a <= m.start() < b for a, b, _, _ in spans):
+                continue
+            end = m.end()
+            while end > m.start() and text[end - 1] in ".,;:!?)":
+                end -= 1  # the sentence's own punctuation is not part of the address
+            spans.append((m.start(), end, "link", text[m.start() : end]))
+        for start, end, kind, value in sorted(spans):
+            tb.text(text[pos:start])
+            if kind == "mention":
+                try:
+                    did = self._did_cache.get(value) or self.client.resolve_handle(value).did
+                    self._did_cache[value] = did
+                    tb.mention(text[start:end], did)
+                except Exception:  # noqa: BLE001
+                    tb.text(text[start:end])
+            else:
+                url = value if value.lower().startswith("http") else f"https://{value}"
+                tb.link(text[start:end], url)
+            pos = end
         tb.text(text[pos:])
         return tb
 
@@ -287,6 +305,9 @@ class Bsky:
             reply = "restarting"
         elif cmd.kind == "introduce":
             reply = "introduced" if self.introduce_if_needed(force=True) else "an introduction is already up"
+        elif cmd.kind == "primer":
+            uris = self.primer_if_needed(force="again" in text.lower())
+            reply = f"primer up and pinned: {len(uris)} posts" if uris else "the primer is already up"
         elif cmd.kind in ("ignore", "unignore") and did:
             self.L.set_ignored(did, n.author.did, cmd.kind == "ignore", ts=ts)
             if cmd.kind == "ignore":
@@ -394,15 +415,9 @@ class Bsky:
         addressed = out.mentioned
 
         def withheld(why: str) -> None:
-            self.L.add_action(
-                out.episode_id,
-                "leave",
-                None,
-                target_uri,
-                dry_run=True,
-                ts=ts,
-                root_uri=root_uri or target_uri,
-                target_did=did,
+            # the rail's name goes in the row so the record can say why (panel: "the record")
+            self.L.withhold(
+                out.episode_id, action, why, target_uri, ts, root_uri=root_uri or target_uri, target_did=did
             )
             print(f"{why}: {action} withheld")
 
@@ -424,33 +439,22 @@ class Bsky:
             self.walk(out, did, target_uri, root_uri, ts)
             return
         if action == "reply" and not addressed:
-            withheld("not addressed")
+            withheld("not_addressed")
             return
         if action == "reply" and target_uri and self.L.replied_to(target_uri, real_only=not self.dry):
-            withheld("already answered")
+            withheld("answered")
             return
         if action == "leave" and (did is None or did not in following):
-            self.L.add_action(out.episode_id, "leave", None, target_uri, dry_run=True, ts=ts)
+            withheld("not_following")  # nobody to unfollow
             return
         if action == "nothing":
             return
         if self.L.asleep():
-            self.L.add_action(out.episode_id, action, None, target_uri, dry_run=True, ts=ts)
-            print("asleep: action suppressed", action)
+            withheld("asleep")
             return
         ok, why = self.agent.caps_allow(ts, action, root_uri or target_uri, did)
         if not ok:
-            self.L.add_action(
-                out.episode_id,
-                "leave",
-                None,
-                target_uri,
-                dry_run=True,
-                ts=ts,
-                root_uri=root_uri or target_uri,
-                target_did=did,
-            )
-            print(f"rate cap ({why}): action suppressed", action)
+            withheld(f"cap:{why}")
             return
         our_uri = None
         embed_uri = None
@@ -520,11 +524,12 @@ class Bsky:
         outward; a loop guard caps it.  The action row keeps where he walked from; the posts'
         rows say which walk brought them."""
         if self.L.asleep():
+            self.L.withhold(out.episode_id, "walk", "asleep", from_uri, ts, target_did=did)
             print("asleep: walk suppressed")
             return 0
         ok, why = self.agent.caps_allow(ts, "walk", root_uri or from_uri, did)
         if not ok:
-            self.L.add_action(out.episode_id, "leave", None, from_uri, dry_run=True, ts=ts, target_did=did)
+            self.L.withhold(out.episode_id, "walk", f"cap:{why}", from_uri, ts, target_did=did)
             print(f"rate cap ({why}): walk suppressed")
             return 0
         aid = self.L.add_action(
@@ -606,6 +611,9 @@ class Bsky:
         )
         ok, why = self.agent.caps_allow(ts, "reply", uri, did)
         if not ok or self.L.asleep():
+            self.L.withhold(
+                out.episode_id, "identity", "asleep" if self.L.asleep() else f"cap:{why}", uri, ts, target_did=did
+            )
             print(f"identity ({qid}) suppressed: {'asleep' if self.L.asleep() else why}")
             return
         reply = getattr(record, "reply", None)
@@ -669,11 +677,87 @@ class Bsky:
         self.L.add_action(0, "intro", our_uri, None, dry_run=self.dry, ts=time.time())
         return True
 
+    # ---- the pinned primer (decided 2026-09-16) --------------------------------------------
+    def primer_uris(self) -> set[str]:
+        """The primer posts that are up: real ones live, dry ones in a dry run."""
+        q = "SELECT our_uri FROM actions WHERE kind='primer' AND our_uri IS NOT NULL AND deleted_ts IS NULL"
+        if not self.dry:
+            q += " AND dry_run=0"
+        return {r["our_uri"] for r in self.L.db.execute(q)}
+
+    def primer_if_needed(self, force: bool = False) -> list[str]:
+        """Post the primer thread from identity_v1.yaml (the short version of him, for whoever
+        opens his profile) and pin its first post.  Once: with the thread up, nothing happens
+        unless the operator asks for it again.  Not his grooming: the network chooses nothing
+        here, and each post is an action of kind `primer`.  Returns the posts' URIs."""
+        texts = list(self.agent.identity.primer)
+        if not texts:
+            return []
+        if self.primer_uris() and not force:
+            return []
+        if self.L.asleep():
+            print("asleep: primer not posted")
+            return []
+        for uri in self.primer_uris():
+            self.L.mark_deleted(
+                uri
+            )  # a fresh thread replaces the old one in the record; the operator deletes the posts
+        ts = time.time()
+        uris: list[str] = []
+        root = parent = None
+        for i, text in enumerate(texts):
+            our_uri = f"dry://primer/{i}"
+            cid = None
+            if not self.dry:
+                reply_to = (
+                    models.AppBskyFeedPost.ReplyRef(
+                        parent=models.ComAtprotoRepoStrongRef.Main(uri=parent[0], cid=parent[1]),
+                        root=models.ComAtprotoRepoStrongRef.Main(uri=root[0], cid=root[1]),
+                    )
+                    if parent
+                    else None
+                )
+                r = self.client.send_post(self.rich(text), reply_to=reply_to, langs=["en"])
+                our_uri, cid = r.uri, r.cid
+            print(f"primer {i + 1}/{len(texts)} {text!r} ({'dry' if self.dry else our_uri})")
+            self.L.add_action(
+                0, "primer", our_uri, None, dry_run=self.dry, ts=ts + i, root_uri=root[0] if root else None
+            )
+            uris.append(our_uri)
+            parent = (our_uri, cid)
+            root = root or parent
+        if not self.dry and root:
+            self.pin_post(root[0], root[1])
+        return uris
+
+    def pin_post(self, uri: str, cid: str) -> None:
+        """Pin a post on his profile: the profile record's pinnedPost, swapped against the record
+        as it was so nothing else in it (bio, avatar) is touched."""
+        params = {"repo": self.me, "collection": "app.bsky.actor.profile", "rkey": "self"}
+        try:
+            got = self.client.com.atproto.repo.get_record(params=params)
+            value, swap = got.value, got.cid
+        except Exception:  # noqa: BLE001
+            value, swap = models.AppBskyActorProfile.Record(), None
+        value.pinned_post = models.ComAtprotoRepoStrongRef.Main(uri=uri, cid=cid)
+        self.client.com.atproto.repo.put_record(
+            models.ComAtprotoRepoPutRecord.Data(record=value, swap_record=swap, **params)
+        )
+        print(f"pinned {uri}")
+
+    def mentions_me(self, record) -> bool:
+        """Does the post's text tag him (a mention facet with his DID)?"""
+        for facet in getattr(record, "facets", None) or []:
+            for feat in getattr(facet, "features", None) or []:
+                if str(getattr(feat, "py_type", "")).endswith("#mention") and getattr(feat, "did", None) == self.me:
+                    return True
+        return False
+
     def sweep_deleted(self, limit: int = 25) -> int:
         """Mark posts deleted in the app (as him) as deleted in the ledger, so his records match the network."""
         rows = self.L.db.execute(
             "SELECT our_uri FROM actions WHERE our_uri IS NOT NULL AND dry_run=0 AND deleted_ts IS NULL "
-            "AND kind IN ('reply','answer','spontaneous_post','identity','intro') ORDER BY id DESC LIMIT ?",
+            "AND kind IN ('reply','answer','spontaneous_post','identity','intro','primer') ORDER BY id DESC LIMIT ?",
             (limit,),
         ).fetchall()
         uris = [r["our_uri"] for r in rows]
@@ -939,10 +1023,16 @@ class Bsky:
         stayed under threshold.  The episode row keeps the network's decision; the action row is
         kind `answer` so the record never mistakes it for his choice."""
         if self.L.asleep():
+            self.L.withhold(
+                out.episode_id, "answer", "asleep", uri, ts, root_uri=root.uri if root else uri, target_did=did
+            )
             print("asleep: answer suppressed")
             return
         ok, why = self.agent.caps_allow(ts, "answer", root.uri if root else uri, did)
         if not ok:
+            self.L.withhold(
+                out.episode_id, "answer", f"cap:{why}", uri, ts, root_uri=root.uri if root else uri, target_did=did
+            )
             print(f"rate cap ({why}): answer suppressed")
             return
         ref = models.AppBskyFeedPost.ReplyRef(
@@ -993,7 +1083,23 @@ class Bsky:
                 continue
             labels = self.mod.aversive_labels_on(n, n.author)
             if n.reason in ("mention", "reply", "quote"):
-                self.perceive_post(uri, n.cid, did, n.record, ts, mentioned=True, labels=labels)
+                # a reply under the pinned primer is read like any post but not answered, unless
+                # it tags him (decided 2026-09-16: the primer is a notice, not a conversation)
+                parent = getattr(getattr(n.record, "reply", None), "parent", None)
+                under_primer = (
+                    n.reason == "reply" and parent is not None and getattr(parent, "uri", None) in self.primer_uris()
+                )
+                addressed = not under_primer or self.mentions_me(n.record)
+                self.perceive_post(
+                    uri,
+                    n.cid,
+                    did,
+                    n.record,
+                    ts,
+                    mentioned=addressed,
+                    labels=labels,
+                    note=None if addressed else "primer",
+                )
                 n_ep += 1
             elif n.reason in ("like", "follow", "repost"):
                 day = _day(ts)

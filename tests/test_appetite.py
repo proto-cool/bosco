@@ -140,7 +140,8 @@ def test_landing_windows_are_logged_and_groom_records_the_dust(fly):
     ag.landing_until = ag.enc.cfg["spontaneous"]["window_s"]
     ag.advance_to(T0 + 4, max_slices=4)
     rows = L.db.execute("SELECT kind, note, drive FROM episodes ORDER BY id").fetchall()
-    assert rows and all(r["note"] == "landing:0" for r in rows)
+    # every row belongs to a landing window (a second landing may arrive inside the first's window)
+    assert rows and all((r["note"] or "").startswith("landing:") for r in rows)
     assert all(r["kind"] in ("landing", "spontaneous") for r in rows)
     grooms = [r for r in rows if r["kind"] == "spontaneous"]
     assert all(r["drive"] > 0 for r in grooms)  # the dust he answered to, not the reset value

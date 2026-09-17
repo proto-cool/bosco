@@ -1,11 +1,12 @@
 // days.html: one report per local day of his life, from data/days/*.json (the ledger alone).
 import {
-  $, DATA, fmt, pct, el, b, sentence, plural, list, longDate, clockTime, getJSON, nameInto, renderPosts, personRow,
-  markNav, trackCurrent, applyIdentity,
+  $, DATA, fmt, pct, el, b, sentence, plural, list, longDate, clockTime, getJSON, renderPosts, personRow,
+  windowRow, daySentence, whyText, CHOSE, OUTCOME_SOURCE, markNav, trackCurrent, applyIdentity,
 } from './common.js';
 
 let index = null;
 let current = null;
+let caps = null; // the rails' numbers, from status.json
 
 const wanted = () => new URLSearchParams(location.search).get('d');
 
@@ -69,34 +70,14 @@ async function show(date) {
     $('day-sentence').textContent = 'no report for that day.';
     return;
   }
-  const c = rep.counts, a = c.actions || {};
+  const c = rep.counts;
   const tz = rep.tz;
   document.title = `bosco · ${rep.date}`;
   $('day-title').textContent = longDate(rep.date);
   $('day-sub').textContent =
     `${rep.day_of_life ? `day ${rep.day_of_life} of his life · ` : ''}${rep.final ? 'the whole day' : 'so far'} · his time is ${tz.toLowerCase()}`;
   $('silence').textContent = c.silence == null ? '–' : pct(c.silence);
-  const replies = (a.reply || 0) + (a.answer || 0) + (a.identity || 0);
-  if (c.episodes) {
-    const acts = [
-      [replies, 'reply', 'replies'],
-      [a.like || 0, 'like', 'likes'],
-      [a.follow || 0, 'follow', 'follows'],
-      [a.spontaneous_post || 0, 'post of his own', 'posts of his own'],
-    ].filter(([n]) => n > 0);
-    const parts = ['he read ', b(plural(c.episodes, 'post', 'posts')), ' and said nothing to ',
-      b(fmt(Math.round(c.episodes * (c.silence || 0)))), ' of them. '];
-    if (acts.length) acts.forEach(([n, one, many], i) => parts.push(b(plural(n, one, many)), i < acts.length - 1 ? ', ' : '. '));
-    else parts.push('he did nothing else. ');
-    parts.push(
-      c.rewards || c.punishments
-        ? [b(plural(c.rewards, 'reward', 'rewards')), ' and ', b(plural(c.punishments, 'punishment', 'punishments')), '.']
-        : ['nothing rewarded or punished him.'],
-    );
-    sentence($('day-sentence'), parts.flat());
-  } else {
-    $('day-sentence').textContent = 'he read nothing that day.';
-  }
+  daySentence($('day-sentence'), c, rep.final ? 'past' : 'today');
 
   // when
   hourStrip($('hours'), rep);
@@ -104,7 +85,7 @@ async function show(date) {
   const app = rep.hours.map((h, i) => [i, h.appetite]).filter(([, v]) => v != null);
   const whenParts = [];
   if (c.episodes) whenParts.push('busiest around ', b(hourLabel(busiest)), '. ');
-  if (rep.landings) whenParts.push('dust landed on him ', b(plural(rep.landings, 'time', 'times')), ' and he groomed ', b(plural(rep.grooms, 'time', 'times')), '. ');
+  if (rep.landings) whenParts.push('dust landed on him ', b(plural(rep.landings, 'time', 'times')), ' and he groomed ', b(plural(rep.grooms, 'time', 'times')), rep.grooms ? '; a groom is a post when his cap allows. ' : '. ');
   if (app.length > 1) {
     const lo = app.reduce((m, x) => (x[1] < m[1] ? x : m)), hi = app.reduce((m, x) => (x[1] > m[1] ? x : m));
     whenParts.push('his appetite for company was lowest around ', b(hourLabel(lo[0])), ' and highest around ', b(hourLabel(hi[0])), '.');
@@ -142,19 +123,23 @@ async function show(date) {
     return parts;
   };
   const didOf = (p) => {
-    const did = { like: 'he liked it', follow: 'he followed', reply: 'he answered', walk: 'he walked toward it', leave: 'he left', nothing: 'he did nothing' }[p.action] || `he chose ${p.action}`;
-    return p.action !== 'nothing' && !p.acted ? `${did}, withheld at the door` : did;
+    if (p.done) {
+      return { like: 'he liked it', follow: 'he followed them', walk: 'he walked toward it and read more of them', reply: 'he answered', answer: 'he answered by reflex', leave: 'he unfollowed them', spontaneous_post: 'he posted' }[p.done] || `he did ${p.done.replace('_', ' ')}`;
+    }
+    if (p.action === 'nothing') return 'he did nothing';
+    return `his neurons chose ${CHOSE[p.action] || p.action}, withheld: ${whyText(p.why, caps)}`;
   };
+  const times = (x) => (x >= 10 ? Math.round(x) : x.toFixed(1));
   const fav = rep.favorite, least = rep.least;
   if (fav) {
-    sentence($('favorite-sentence'), ['favorite: ', ...tasteOf(fav), '. ', didOf(fav), ` (${fav.ratio.toFixed(2)}× threshold).`]);
+    sentence($('favorite-sentence'), ['favorite: ', ...tasteOf(fav), '. ', didOf(fav), '; his like neurons ran at ', b(`${times(fav.ratio)}×`), ' their threshold.']);
     if (fav.uri) await renderPosts($('favorite-post'), [{ uri: fav.uri, ts: fav.ts, kind: 'liked' }], 1);
     else $('favorite-post').replaceChildren();
   } else {
     $('favorite-sentence').textContent = 'nothing drew his tongue out that day.';
     $('favorite-post').replaceChildren();
   }
-  if (least) sentence($('least-sentence'), ['least favorite: ', ...tasteOf(least), '. ', didOf(least), ` (${least.ratio.toFixed(2)}× threshold).`]);
+  if (least) sentence($('least-sentence'), ['least favorite: ', ...tasteOf(least), '. ', didOf(least), '; his leave neurons ran at ', b(`${times(least.ratio)}×`), ' their threshold.']);
   else $('least-sentence').textContent = 'nothing made him turn away that day.';
 
   // who
@@ -179,68 +164,55 @@ async function show(date) {
   const oc = rep.outcomes || [];
   const bySource = {};
   for (const o of oc) bySource[`${o.valence}:${o.source}`] = (bySource[`${o.valence}:${o.source}`] || 0) + 1;
-  const sourceName = {
-    known_account_inbound: 'a known account coming back',
-    like: 'a like', repost: 'a repost', follow: 'a follow', kind_reply: 'a kind reply',
-    block: 'a block', vader_negative_reply: 'an unkind reply',
-  };
   const learned = [];
   if (oc.length) {
     learned.push(
       b(plural(c.rewards, 'reward', 'rewards')), ' and ', b(plural(c.punishments, 'punishment', 'punishments')), ': ',
-      Object.entries(bySource).map(([k, v]) => `${sourceName[k.split(':')[1]] || k.split(':')[1].replaceAll('_', ' ')} ×${v}`).join(', '), '. ',
+      Object.entries(bySource).map(([k, v]) => `${OUTCOME_SOURCE[k.split(':')[1]] || k.split(':')[1].replaceAll('_', ' ')} ×${v}`).join(', '), '.',
     );
-    learned.push('each one re-presented the post it answered and fired the dopamine neurons of that compartment.');
   } else {
-    learned.push('no reward and no punishment reached him, so his weights only faded.');
+    learned.push('no reward and no punishment reached him, so what he had learned only faded.');
   }
   sentence($('learned-sentence'), learned);
 
   // the record
   const rec = rep.record || [];
-  $('record-list').replaceChildren(
-    ...rec.slice().reverse().slice(0, 80).map((w) => {
-      const li = el('li', `win${w.acted ? ' acted' : ''}`);
-      const who = el('span', 'who');
-      if (w.did) nameInto(who, w.did);
-      else who.textContent = w.kind === 'spontaneous' ? 'a landing' : '–';
-      li.append(
-        el('span', null, clockTime(w.ts, tz)),
-        el('span', 'smell', w.kind === 'spontaneous' ? 'dust' : w.mentioned ? 'mention' : w.feed || 'browse'),
-        who,
-        el('span', 'what', `${w.action.replace('_', ' ')}${w.acted ? '' : ' · withheld'}`),
-      );
-      return li;
-    }),
-  );
-  if (!rec.length) $('record-list').replaceChildren(el('li', 'empty', 'he acted on nothing.'));
+  $('record-list').replaceChildren(...rec.slice().reverse().slice(0, 80).map((w) => windowRow(w, clockTime(w.ts, tz), caps)));
+  if (!rec.length) $('record-list').replaceChildren(el('li', 'empty', 'nothing crossed threshold and nobody spoke to him.'));
   $('record-caption').textContent =
-    `every window that day where something crossed threshold (${fmt(rec.length)}); the other ${fmt(rep.silent)} were silence.`;
+    `every window that day where something crossed threshold, and every time someone spoke to him (${fmt(rec.length)}, newest first); ` +
+    `the other ${fmt(rep.silent)} windows were silence.`;
 
   // fine print
   const ctl = rep.control || [];
   const ctlText = ctl.map((x) => {
-    if (x.kind === 'downtime') return `downtime skipped at ${clockTime(x.ts, tz)}`;
+    const at = clockTime(x.ts, tz);
+    const span = /^(\d+)->(\d+)$/.exec(x.target || ''); // a span of his time, ms
+    if (x.kind === 'downtime') {
+      // the process was down; on restart the gap was skipped, not lived
+      return span ? `off for ${Math.round((span[2] - span[1]) / 60000)} min at ${at}, skipped not lived` : `off for a while at ${at}, skipped not lived`;
+    }
     if (x.kind === 'slow') {
       // he was awake for this, just running behind the wall clock; the time is his and he keeps it
       const m = /lag=(\d+)/.exec(x.target || '');
-      const at = clockTime(x.ts, tz);
       return m ? `${Math.round(m[1] / 60)} min behind the clock at ${at}` : `behind the clock at ${at}`;
     }
-    if (x.kind === 'numerics') {
-      // the CPU code path numpy runs on changed here (a new machine): spans before this replay on
-      // the old level, spans after on the new; a boundary, not a break
-      return `numerics ${(x.target || '').replace('->', ' → ')} from ${clockTime(x.ts, tz)}`;
-    }
-    if (x.kind === 'plasticity') {
-      // the learning rule changed here (README, Agent.PLASTICITY_VERSION): spans before this
-      // replay under the old rule, spans after under the new; a boundary, not a break
-      return `learning rule ${(x.target || '').replace('->', ' → ')} from ${clockTime(x.ts, tz)}`;
-    }
-    return `${x.kind.replaceAll('_', ' ')} at ${clockTime(x.ts, tz)}`;
+    // the two boundaries: a replay before one runs under the old rule or numerics, after it under the new
+    if (x.kind === 'numerics') return `cpu numerics set to ${(x.target || '').split('->').pop()} at ${at}`;
+    if (x.kind === 'plasticity') return `learning rule ${(x.target || '').replace('->', ' → ')} at ${at}`;
+    if (x.kind === 'clock') return `his clock moved from ${(x.target || '').replace('->', ' to ')} at ${at}`;
+    return {
+      sleep: `put to sleep by the operator at ${at}`,
+      wake: `woken by the operator at ${at}`,
+      forget: `made to forget an account by the operator at ${at}`,
+      ignored: `an account he was told to ignore spoke; not perceived, at ${at}`,
+      deleted_in_app: `a post of his deleted from the app at ${at}`,
+      unliked_in_app: `a like of his undone from the app at ${at}`,
+      unfollowed_in_app: `a follow of his undone from the app at ${at}`,
+    }[x.kind] || `${x.kind.replaceAll('_', ' ')} at ${at}`;
   });
   $('fine').textContent = [
-    rep.digest ? `memory at close ${rep.digest.brain.slice(0, 12)} · weights ${rep.digest.weights.slice(0, 12)}` : '',
+    rep.digest ? `brain digest at close ${rep.digest.brain.slice(0, 12)} · weights ${rep.digest.weights.slice(0, 12)}` : '',
     ctlText.length ? ctlText.join(' · ') : 'no operator action and no downtime',
     `written ${new Date(rep.generated * 1000).toISOString().slice(0, 16).replace('T', ' ')} utc`,
   ].filter(Boolean).join(' · ');
@@ -248,7 +220,13 @@ async function show(date) {
 
 async function main() {
   markNav();
-  getJSON(`${DATA}/status.json`).then(applyIdentity).catch(() => {});
+  try {
+    const st = await getJSON(`${DATA}/status.json`);
+    applyIdentity(st);
+    caps = st.caps || null;
+  } catch {
+    // the days stand on their own; a cap reads "a cap" without status.json
+  }
   try {
     index = await getJSON(`${DATA}/days/index.json`);
   } catch {

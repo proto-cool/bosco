@@ -518,6 +518,13 @@ a:hover {
   width: 1px;
   background: var(--text-secondary);
 }
+.tick.walk {
+  /* the lower rung on engage: over it but under threshold is a walk, not a follow */
+  left: 36%;
+  height: var(--space-xs);
+  top: calc(50% - var(--space-xs) / 2);
+  background: var(--text-muted);
+}
 
 /* people */
 .people {

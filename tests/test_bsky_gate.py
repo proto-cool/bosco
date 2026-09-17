@@ -48,6 +48,12 @@ def _kinds(L: Ledger) -> list[tuple[str, int]]:
     return [(r[0], r[1]) for r in L.db.execute("SELECT kind, dry_run FROM actions ORDER BY id")]
 
 
+def _why(L: Ledger) -> str | None:
+    """The note of the last action row: a withheld row says what was stopped and by which rail."""
+    r = L.db.execute("SELECT note FROM actions ORDER BY id DESC LIMIT 1").fetchone()
+    return r[0] if r else None
+
+
 def test_posts_in_languages_he_does_not_read_are_not_perceived():
     b = _bsky(Ledger(f"{tempfile.mkdtemp()}/l.sqlite"))
     b.langs = ("en",)
@@ -73,6 +79,7 @@ def test_browsing_may_like_and_follow_but_never_reply():
     assert _kinds(L)[-1] == ("walk", 0)  # already followed: engage while browsing is a walk, never a reply
     b.act(_out(L, "reply", 0.9, False), "did:plc:z", "at://z/1", "cid", None, None, 4.0)
     assert _kinds(L)[-1] == ("leave", 1)  # the song crossed on a post that was not to him: withheld
+    assert _why(L) == "reply:not_addressed"  # and the row says why
 
 
 def test_addressed_gets_one_reply_and_only_one():
@@ -82,7 +89,7 @@ def test_addressed_gets_one_reply_and_only_one():
     b.act(_out(L, "follow", 0.0, True), "did:plc:x", "at://x/1", "cid", None, None, 1.0)
     assert _kinds(L) == [("reply", 1)]  # walking toward whoever spoke to him is answering
     b.act(_out(L, "reply", 0.0, True), "did:plc:x", "at://x/1", "cid", None, None, 2.0)
-    assert _kinds(L)[-1] == ("leave", 1)  # the same post again: already answered
+    assert _kinds(L)[-1] == ("leave", 1) and _why(L) == "reply:answered"  # the same post again
     b.act(_out(L, "reply", 0.0, True), "did:plc:x", "at://x/2", "cid", None, None, 3.0)
     assert _kinds(L)[-1] == ("reply", 1)  # a new post of theirs: answered once
     assert L.replied_to("at://x/2", real_only=False) and not L.replied_to("at://x/3", real_only=False)
@@ -173,9 +180,9 @@ def test_a_question_is_always_answered_once():
     assert _kinds(L)[-1] == ("answer", 1)
     assert L.replied_to("at://x/1", real_only=False)  # once: the reflex will not fire again on this post
     L.add_control("sleep", "did:plc:op", None, None)
-    n = len(_kinds(L))
     b.answer_anyway(out, "at://x/2", "cid", root, "did:plc:x", 2.0)
-    assert len(_kinds(L)) == n  # asleep: nothing goes out
+    assert _kinds(L)[-1] == ("leave", 1) and _why(L) == "answer:asleep"  # asleep: nothing goes out, and why
+    assert not L.replied_to("at://x/2", real_only=False)  # a withheld answer is no answer
 
 
 def test_he_reads_the_whole_thread():
@@ -344,7 +351,7 @@ def test_a_walk_reads_a_few_more_of_the_account_and_never_replies():
     # the cap is a loop guard
     b.agent.caps_allow = lambda *a, **k: (False, "walk/hour")
     b.act(_out(L, "walk", 0.0, False), "did:plc:x", "at://x/11", "cid", None, None, 4.0)
-    assert read == [] and _kinds(L)[-1] == ("leave", 1)
+    assert read == [] and _kinds(L)[-1] == ("leave", 1) and _why(L) == "walk:cap:walk/hour"
     # and walks count as approaches where he read the post he walked from
     assert L.approaches_by_feed(0.0) == {} or True  # the fake episodes carry no feed; see test_feeds
 
@@ -397,3 +404,110 @@ def test_an_answer_to_a_question_may_point_at_a_liked_post():
     b.act(out5, "did:plc:q", "at://q/5", "cid", None, None, 54.0)
     assert L.db.execute("SELECT kind, embed_uri FROM actions ORDER BY id DESC LIMIT 1").fetchone()[:] == ("reply", None)
     assert L.assert_no_text() == []
+
+
+def test_primer_thread_is_posted_once_pinned_and_not_a_conversation():
+    """The pinned primer (decided 2026-09-16): a thread from identity_v1.yaml, posted by the
+    operator's command, first post pinned through the profile record, each post logged as
+    `primer`; a reply under it is read but not answered unless it tags him."""
+    from atproto import models
+
+    from bosco import control
+    from bosco.identity import IdentityReflex
+
+    L = Ledger(f"{tempfile.mkdtemp()}/l.sqlite")
+    b = _bsky(L)
+    b.dry = False
+    b.agent.identity = IdentityReflex()
+    b._did_cache = {"proto.cool": "did:plc:op"}
+    sent, pinned = [], []
+
+    class Repo:
+        def get_record(self, params):
+            assert params == {"repo": "did:plc:me", "collection": "app.bsky.actor.profile", "rkey": "self"}
+            return SimpleNamespace(value=models.AppBskyActorProfile.Record(description="in development"), cid="pc")
+
+        def put_record(self, data):
+            pinned.append(data)
+
+    class C:
+        com = SimpleNamespace(atproto=SimpleNamespace(repo=Repo()))
+
+        def send_post(self, tb, reply_to=None, langs=None, embed=None):
+            i = len(sent)
+            sent.append((tb.build_text(), tb.build_facets(), reply_to))
+            return SimpleNamespace(uri=f"at://me/post/{i}", cid=f"c{i}")
+
+        def resolve_handle(self, h):
+            return SimpleNamespace(did="did:plc:op")
+
+    b.client = C()
+    uris = b.primer_if_needed()
+    assert len(uris) == 3 and _kinds(L) == [("primer", 0)] * 3
+    assert sent[0][2] is None and sent[1][2].parent.uri == uris[0] and sent[2][2].root.uri == uris[0]
+    # links open and the operator is a real mention; the sentence's full stop is not part of the address
+    kinds = {(f.features[0].py_type.split("#")[1], getattr(f.features[0], "uri", None)) for f in sent[0][1]}
+    assert ("link", "https://bosco.proto.cool") in kinds and ("mention", None) in kinds
+    assert ("link", "https://github.com/proto-cool/bosco") in {
+        (f.features[0].py_type.split("#")[1], getattr(f.features[0], "uri", None)) for f in sent[2][1]
+    }
+    p = pinned[0]
+    assert p.record.pinned_post.uri == uris[0] and p.record.description == "in development" and p.swap_record == "pc"
+    assert b.primer_if_needed() == [] and len(sent) == 3  # once
+    assert b.primer_uris() == set(uris)
+    # the operator's word for it, and introduce, both parse (introduce was missing from the order)
+    assert control.parse("@bosco.proto.cool primer", "bosco.proto.cool").kind == "primer"
+    assert control.parse("@bosco.proto.cool introduce", "bosco.proto.cool").kind == "introduce"
+    # a reply under the thread: read, not addressed; tagged in it: addressed
+    seen = []
+    b.perceive_post = lambda uri, cid, did, record, ts, mentioned, labels=None, feed=None, view=None, note=None: (
+        seen.append((uri, mentioned, note))
+    )
+    b.handle_control = lambda n: False
+    b.ignore_set = lambda: set()
+    b.mod = SimpleNamespace(aversive_labels_on=lambda *a: set())
+    b.dry = True  # no update_seen call
+    b.L.seen_evidence = lambda uri: False
+    mention_me = SimpleNamespace(
+        features=[SimpleNamespace(py_type="app.bsky.richtext.facet#mention", did="did:plc:me")]
+    )
+    notes = [
+        SimpleNamespace(
+            uri="at://x/1",
+            cid="c",
+            author=SimpleNamespace(did="did:plc:x"),
+            indexed_at="2026-09-16T12:00:00Z",
+            reason="reply",
+            record=SimpleNamespace(text="hi", reply=SimpleNamespace(parent=SimpleNamespace(uri=uris[1])), facets=[]),
+        ),
+        SimpleNamespace(
+            uri="at://x/2",
+            cid="c",
+            author=SimpleNamespace(did="did:plc:x"),
+            indexed_at="2026-09-16T12:00:01Z",
+            reason="reply",
+            record=SimpleNamespace(
+                text="@bosco hi", reply=SimpleNamespace(parent=SimpleNamespace(uri=uris[1])), facets=[mention_me]
+            ),
+        ),
+        SimpleNamespace(
+            uri="at://x/3",
+            cid="c",
+            author=SimpleNamespace(did="did:plc:x"),
+            indexed_at="2026-09-16T12:00:02Z",
+            reason="reply",
+            record=SimpleNamespace(
+                text="hi", reply=SimpleNamespace(parent=SimpleNamespace(uri="at://me/post/other")), facets=[]
+            ),
+        ),
+    ]
+    b.client = SimpleNamespace(
+        app=SimpleNamespace(
+            bsky=SimpleNamespace(
+                notification=SimpleNamespace(list_notifications=lambda params: SimpleNamespace(notifications=notes))
+            )
+        )
+    )
+    assert b.poll_notifications() == 3
+    # oldest first, as the poll reads them
+    assert seen == [("at://x/3", True, None), ("at://x/2", True, None), ("at://x/1", False, "primer")]

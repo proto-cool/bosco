@@ -65,7 +65,7 @@ spontaneous:
   # onset; grooming neurons answer onsets and adapt to held input, so he
   # grooms (posts) when a landing is enough for his network, and the level
   # resets when he grooms.  There is no schedule.
-  landings_per_hour: 0.5
+  landings_per_hour: 1.0   # 0.5 until 2026-09-16; doubled so he grooms (posts) more often
   landing_size: [0.35, 0.7]
   # Debris settles off his bristles passively (e-fold tau_s seconds), like habituation
   # and unlike a timer: a landing itches for minutes, not hours.  The bristles a landing
