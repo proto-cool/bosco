@@ -19,3 +19,17 @@ populations:
 # mentioned: was 60; lowered 2026-09-14 with 17 real windows in hand, so the song's threshold
 # is his own activity, not the synthetic battery's.  The quantile is unchanged.
 min_rows: {event: 200, mentioned: 15, landing_peak: 30}
+
+# KC sparseness (EXPERIMENT.md 5), pre-registered with the thresholds and frozen with them.
+# The check is on the distribution, not on each window: 436 of the dev period's 5282 event
+# windows had no KC active at all (2026-09-17), so a per-window floor called his ordinary
+# silence a fault, and a floor of zero -- which is what the quantile gives -- could never notice
+# a mushroom body that had gone quiet for good.  What says he is alive is where the middle of
+# the day sits.  The band is wide because the median is allowed to move as he learns and
+# habituates; it is there to catch a dead fly and a smouldering one, not to hold him still.
+kc_sparseness:
+  over: event
+  statistic: median
+  window_hours: 24        # the night's windows, not the whole history: a death shows up at once
+  band: [0.4, 2.5]        # of the dev-period median, written by the calibration as kc_band
+  min_rows: 200           # a thin night (he was off, or the box was) is reported, never failed

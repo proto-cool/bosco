@@ -2,9 +2,12 @@
 
 1. Replay determinism: a sample of event episodes replays bit-identically
    at their logged weights.
-2. KC sparseness: per-episode kc_active/len(KC) stays within the range
-   recorded at tag (config/thresholds.json 'kc_range', default 0.005–0.15).
-3. Rate caps: no hour with >1 real action, no day with >24.
+2. KC sparseness: the median of the day's windows sits in the band around the
+   dev-period median (config/thresholds_policy.yaml `kc_sparseness`,
+   config/thresholds.json `kc_band`), and no single window runs away over
+   `kc_range`.  A window where nothing fires is ordinary and is not a fault.
+3. Rate caps: every cap in config/caps_v1.yaml, by kind, global, per thread
+   and per account, audited the way Agent.caps_allow enforces them.
 4. No post text in the database.
 5. No manual state edit: every episode's weight_digest_before equals the
    previous row's digest_after with forgetting applied over the elapsed
@@ -18,10 +21,52 @@ import json
 import sys
 
 import numpy as np
+import yaml
 
 from bosco import paths
 from bosco.agent import Agent, load_caps
 from bosco.ledger import Ledger
+
+
+def kc_verdict(events: list, n_kc: int, th: dict, policy: dict) -> tuple[bool, list[str]]:
+    """KC sparseness (EXPERIMENT.md §5), judged on the day's distribution and not on each window.
+
+    A window in which no Kenyon cell fires is ordinary: 436 of the dev period's 5282 were like
+    that.  So a per-window floor reported his ordinary silence as a fault, and the floor the
+    quantile actually gives is zero, which could never notice a mushroom body that had gone
+    quiet for good.  What says he is alive is where the middle of the day sits -- the median of
+    the last `window_hours` of windows, inside a band around the dev-period median fixed with
+    the thresholds (config/thresholds_policy.yaml `kc_sparseness`).
+
+    The top stays per-window: one runaway window is a fault by itself, whatever the median says.
+    A thin day is reported and never failed -- he may have been off, or the box may have been.
+    """
+    kcs = policy.get("kc_sparseness") or {}
+    band = th.get("kc_band")
+    frac = np.array([r["kc_active"] / n_kc for r in events]) if events else np.array([])
+    if not len(frac):
+        return True, ["- KC sparseness: no events yet (SKIP)"]
+
+    hi = (th.get("kc_range") or [0.0, 0.15])[1]
+    over = int((frac > hi).sum())
+    ok_top = over == 0
+    lines = [f"- KC sparseness, no window over {hi:.3f}: {'PASS' if ok_top else f'FAIL ({over} of {len(frac)})'}"]
+
+    if not band:
+        lines.append("- KC median in band: no kc_band in thresholds.json yet, run the calibration (SKIP)")
+        return ok_top, lines
+
+    hours = float(kcs.get("window_hours", 24))
+    cutoff = max(r["ts"] for r in events) - hours * 3600.0
+    recent = np.array([r["kc_active"] / n_kc for r in events if r["ts"] >= cutoff])
+    thin = len(recent) < int(kcs.get("min_rows", 200))
+    use = frac if thin else recent
+    med = float(np.median(use))
+    inside = band[0] <= med <= band[1]
+    where = f"all {len(use)} episodes (thin day)" if thin else f"the last {hours:.0f} h ({len(use)} episodes)"
+    verdict = "PASS" if inside else ("REPORTED (thin day, not failed)" if thin else "FAIL")
+    lines.append(f"- KC median over {where}: {med:.4f} in [{band[0]:.4f}, {band[1]:.4f}]: {verdict}")
+    return ok_top and (inside or thin), lines
 
 
 def cap_violations(acts: list, caps: dict) -> list[tuple]:
@@ -127,15 +172,10 @@ def main(argv=None) -> int:
 
     # 2. KC sparseness
     th = json.load(open(paths.CONFIG / "thresholds.json"))
-    lo, hi = th.get("kc_range", [0.005, 0.15])
+    policy = yaml.safe_load(open(paths.CONFIG / "thresholds_policy.yaml"))
     n_kc = len(agent.fly.kc) if agent else 4064
-    frac = np.array([r["kc_active"] / n_kc for r in events]) if events else np.array([])
-    bad = int(((frac < lo) | (frac > hi)).sum()) if len(frac) else 0
-    ok2 = bad == 0
-    out.append(
-        f"- KC sparseness in [{lo}, {hi}] for all {len(frac)} event episodes: {'PASS' if ok2 else f'FAIL ({bad} outside)'}"
-        + (f"; median {np.median(frac):.3f}" if len(frac) else "")
-    )
+    ok2, lines = kc_verdict(events, n_kc, th, policy)
+    out += lines
 
     # 3. rate caps
     acts = L.db.execute("SELECT * FROM actions WHERE dry_run=0 ORDER BY ts, id").fetchall()

@@ -139,15 +139,27 @@ def main(argv=None) -> int:
             f"{np.quantile(v, [0.5, 0.85, 0.95, 0.99]).round(2).tolist()} -> q{rule['q']} threshold {th[p]:.2f}"
         )
     ev = L.db.execute("SELECT kc_active FROM episodes WHERE kind='event'").fetchall()
+    kcs, med, band = {}, None, None
     if ev:
         kc = np.array([r["kc_active"] for r in ev]) / 4064.0
         lo, hi = np.quantile(kc, [0.025, 0.975])
         kc_range = [float(max(0.0, lo * 0.5)), float(hi * 1.5)]
         print("kc_range", kc_range)
+        # and the band the nightly judges a day by (policy kc_sparseness): the dev-period median
+        # times the pre-registered factors.  The per-window floor in kc_range is dead weight --
+        # a window with nothing in it is ordinary -- so only the top of it is still checked.
+        kcs = policy.get("kc_sparseness") or {}
+        if kcs:
+            med = float(np.median(kc))
+            band = [float(med * kcs["band"][0]), float(med * kcs["band"][1])]
+            print(f"kc_median {med:.5f} -> kc_band {[round(b, 5) for b in band]}")
     else:
         kc_range = cfg.get("kc_range")
     if a.write:
         cfg.update(th)
+        if ev and kcs:
+            cfg["kc_median"] = med
+            cfg["kc_band"] = band
         if kc_range:
             cfg["kc_range"] = kc_range
         prev = cfg.get("_calibration", {})
