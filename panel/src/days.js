@@ -132,7 +132,7 @@ async function show(date) {
   const times = (x) => (x >= 10 ? Math.round(x) : x.toFixed(1));
   const fav = rep.favorite, least = rep.least;
   if (fav) {
-    sentence($('favorite-sentence'), ['favorite: ', ...tasteOf(fav), '. ', didOf(fav), '. it pulled at him ', b(`${times(fav.ratio)}×`), ' harder than it takes to make him act.']);
+    sentence($('favorite-sentence'), ['favorite: ', ...tasteOf(fav), '. ', didOf(fav), '. the cells that put his tongue out ran ', b(`${times(fav.ratio)}×`), ' over the line.']);
     // the sentence above already says he liked it and when, so the card carries no note of its own
     if (fav.uri) await renderPosts($('favorite-post'), [{ uri: fav.uri, ts: fav.ts, kind: 'liked', label: '' }], 1);
     else $('favorite-post').replaceChildren();
@@ -140,7 +140,10 @@ async function show(date) {
     $('favorite-sentence').textContent = 'nothing drew his tongue out that day.';
     $('favorite-post').replaceChildren();
   }
-  if (least) sentence($('least-sentence'), ['least favorite: ', ...tasteOf(least), '. ', didOf(least), '. it pushed him away ', b(`${times(least.ratio)}×`), ' harder than it takes to make him turn.']);
+  // the ratio is his own cells against their threshold, not the post doing something to him: a
+  // bitter tone does not reach the cells that make him turn away (corr -0.02 over the dev period),
+  // so "it pushed him away" next to "tasted bitter" read as a cause that is not in the wiring.
+  if (least) sentence($('least-sentence'), ['least favorite: ', ...tasteOf(least), '. ', didOf(least), '. the cells that make him turn away ran ', b(`${times(least.ratio)}×`), ' over the line.']);
   else $('least-sentence').textContent = 'nothing made him turn away that day.';
 
   // who
