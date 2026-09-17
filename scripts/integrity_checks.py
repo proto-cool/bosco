@@ -20,8 +20,74 @@ import sys
 import numpy as np
 
 from bosco import paths
-from bosco.agent import Agent
+from bosco.agent import Agent, load_caps
 from bosco.ledger import Ledger
+
+
+def cap_violations(acts: list, caps: dict) -> list[tuple]:
+    """Every rate cap in config/caps_v1.yaml, audited after the fact (EXPERIMENT.md 5).
+
+    Mirrors Agent.caps_allow, which blocks a kind when the count in the hour or day *before* it
+    already stands at the cap; so afterwards no window ending on an action may hold more than the
+    cap.  Windows are [t-span, t], inclusive of the action itself, as count_actions counts them.
+    A walk reaches nobody and an unfollow is a withdrawal, so neither spends the global budget --
+    they are still held by their own kind's cap and by the per-account guard.
+    """
+    inward = ("leave", "walk")
+    g = caps["global"]
+    per_kind = caps["per_kind"]
+    out = []
+
+    def window(i, span, pred):
+        t0 = acts[i]["ts"] - span
+        return sum(1 for j in range(i, -1, -1) if acts[j]["ts"] >= t0 and pred(acts[j]))
+
+    for i, r in enumerate(acts):
+        kind, did, root = r["kind"], r["target_did"], r["root_uri"]
+        checks = []
+        if kind not in inward:
+            checks += [
+                ("global/hour", 3600.0, lambda x: x["kind"] not in inward, g["hour"]),
+                ("global/day", 86400.0, lambda x: x["kind"] not in inward, g["day"]),
+            ]
+        k = per_kind.get(kind)
+        if k:
+            checks += [
+                (f"{kind}/hour", 3600.0, lambda x, kind=kind: x["kind"] == kind, k["hour"]),
+                (f"{kind}/day", 86400.0, lambda x, kind=kind: x["kind"] == kind, k["day"]),
+            ]
+        if kind == "reply" and root:
+            checks.append(
+                (
+                    "thread/hour",
+                    3600.0,
+                    lambda x, root=root: x["kind"] == "reply" and x["root_uri"] == root,
+                    caps["per_thread_replies_per_hour"],
+                )
+            )
+        if did:
+            if kind == "reply":
+                checks.append(
+                    (
+                        "account-replies/day",
+                        86400.0,
+                        lambda x, did=did: x["kind"] == "reply" and x["target_did"] == did,
+                        caps["per_account_replies_per_day"],
+                    )
+                )
+            checks.append(
+                (
+                    "account-actions/day",
+                    86400.0,
+                    lambda x, did=did: x["target_did"] == did,
+                    caps["per_account_actions_per_day"],
+                )
+            )
+        for name, span, pred, cap in checks:
+            n = window(i, span, pred)
+            if n > cap:
+                out.append((name, r["id"], r["ts"], n, cap))
+    return out
 
 
 def main(argv=None) -> int:
@@ -72,13 +138,13 @@ def main(argv=None) -> int:
     )
 
     # 3. rate caps
-    acts = [r for r in L.actions_since(0.0, real_only=True)]
-    ts = sorted(r["ts"] for r in acts)
-    viol_h = sum(1 for i in range(1, len(ts)) if ts[i] - ts[i - 1] < 3600.0)
-    viol_d = sum(1 for i in range(24, len(ts)) if ts[i] - ts[i - 24] < 86400.0)
-    ok3 = viol_h == 0 and viol_d == 0
+    acts = L.db.execute("SELECT * FROM actions WHERE dry_run=0 ORDER BY ts, id").fetchall()
+    viols = cap_violations(acts, load_caps())
+    ok3 = not viols
+    shown = "; ".join(f"{v[0]} {v[3]}>{v[4]} at action {v[1]}" for v in viols[:5])
     out.append(
-        f"- rate caps over {len(ts)} real actions: {'PASS' if ok3 else f'FAIL (hourly {viol_h}, daily {viol_d})'}"
+        f"- rate caps (config/caps_v1.yaml) over {len(acts)} real actions: "
+        + ("PASS" if ok3 else f"FAIL ({len(viols)}): {shown}")
     )
 
     # 4. no text
