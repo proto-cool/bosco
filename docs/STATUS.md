@@ -24,10 +24,11 @@
 
 ## Before `freeze-v1`
 
-1. **Re-calibrate thresholds on the full dev period.** `ops/fetch_ledger.sh`, then
-   `scripts/calibrate_thresholds.py --ledger <dump> --allow-partial --write`. `groom` needs 30
-   `landing_peak` rows and `mentioned` 15; until it has them the groom threshold is the synthetic
-   battery's. Never from outcomes.
+1. ~~Re-calibrate thresholds on the full dev period.~~ Done 2026-09-17 off
+   `snapshots/2026-09-17/`: engage 4.85, like 3.84, leave 4.00, reply 8.75, groom 12.48, walk 2.05,
+   plus `kc_band`. Re-run after the `tasted` window set lands so `like` comes off it:
+   `uv run python scripts/calibrate_thresholds.py --ledger snapshots/<day>/ledger.sqlite --write`,
+   then rebuild the image. Never from outcomes.
 2. **Phrasebook.** 58 lines: `reply` covers all 27 (valence × arousal × familiarity) twice over,
    `groom` has 4 (neutral, low and mid, new). Nick's to extend or leave; under the 2026-09-16
    utterance policy the phrasebook is the fallback, not the voice.
@@ -77,8 +78,12 @@ uv run python scripts/integrity_checks.py --ledger /tmp/dev.sqlite --state-dir /
 
 ## Known limits to state at tag
 
-- The groom threshold is still the synthetic battery's (item 1 above); the rest are his own
-  activity. The rate caps, not the thresholds, bound how much he does.
+- Every threshold now comes from his own activity: groom off 44 real landings (2026-09-17), and
+  `like` off the windows in which something tasted sweet. `min_hz` binds on none of them. Over
+  every window `like` was 75% exact zeros, so its quantile fell inside that silence and the floor
+  had been deciding it; the policy already answered that shape for reply and groom by naming the
+  windows in which the behaviour can happen, and `tasted` is that answer for like. The rate caps,
+  not the thresholds, still bound how much he does.
 - The song-DN population (`reply`) has no sensory input in the model; since 2026-09-14 being
   addressed drives pC1 in proportion to appetite (README §26), and engage maps to reply when he
   was addressed.

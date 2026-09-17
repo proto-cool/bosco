@@ -79,6 +79,16 @@ def rows_for(L: Ledger, selector: str) -> list[dict]:
     if selector == "mentioned":
         rows = L.db.execute("SELECT scores FROM episodes WHERE kind='event' AND mentioned=1").fetchall()
         return [json.loads(r["scores"]) for r in rows]
+    if selector == "tasted":
+        # Windows in which there was something to taste: the post's VADER compound cleared the
+        # encoder's own dead zone on the sweet side, so the sugar GRNs fired at all.  The same
+        # move the policy already makes for reply (`mentioned`) and groom (`landing_peak`): a
+        # proboscis rate in a window with nothing sweet in it is not a measurement of how hard
+        # he wanted to taste something, and over every window `like` is 75% exact zeros.  The
+        # cutoff is the encoder's, not a new number (config/encoder_v1.yaml gustatory.dead_zone).
+        dz = float(yaml.safe_load(open(paths.CONFIG / "encoder_v1.yaml"))["gustatory"]["dead_zone"])
+        rows = L.db.execute("SELECT scores FROM episodes WHERE kind='event' AND vader > ?", (dz,)).fetchall()
+        return [json.loads(r["scores"]) for r in rows]
     if selector == "landing_peak":
         rows = L.db.execute(
             "SELECT note, scores FROM episodes WHERE kind IN ('landing','spontaneous') AND note LIKE 'landing:%'"

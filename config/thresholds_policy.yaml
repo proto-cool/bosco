@@ -3,12 +3,20 @@
 # rate over a named set of real windows.  Never outcomes, never hand-set.
 #   event         every event window (a post he read)
 #   mentioned     event windows in which he was addressed (mention, reply, quote)
+#   tasted        event windows in which the post tasted sweet at all (VADER compound over the
+#                 encoder's gustatory dead zone), the windows in which his sugar GRNs fired
 #   landing_peak  the peak groom rate in the window after each landing (landing + spontaneous rows
 #                 sharing one `landing:<id>` note): one number per landing
 min_hz: 1.0
 populations:
   engage: {q: 0.85, over: event}
-  like:   {q: 0.85, over: event}
+  # 2026-09-17, in the dev period and from activity alone: over every window `like` is 75% exact
+  # zeros -- his proboscis does nothing unless a post tastes sweet -- so the quantile fell inside
+  # that silence (0.23 Hz) and `min_hz` decided the threshold instead of his cells.  reply and
+  # groom had the same shape and the policy already answered it by naming the windows in which the
+  # behaviour can happen; this is that answer for like, with q untouched.  Over `tasted` the
+  # population is 48% zeros, which is where leave (49%) and engage (33%) already sit.
+  like:   {q: 0.85, over: tasted}
   leave:  {q: 0.85, over: event}
   reply:  {q: 0.40, over: mentioned}      # song-DN rate when he is addressed; ~6 in 10 mentions may answer before gating
   groom:  {q: 0.70, over: landing_peak}   # ~3 landings in 10 are enough to groom
@@ -18,7 +26,7 @@ populations:
   walk:   {q: 0.60, over: event, population: engage}
 # mentioned: was 60; lowered 2026-09-14 with 17 real windows in hand, so the song's threshold
 # is his own activity, not the synthetic battery's.  The quantile is unchanged.
-min_rows: {event: 200, mentioned: 15, landing_peak: 30}
+min_rows: {event: 200, mentioned: 15, landing_peak: 30, tasted: 200}
 
 # KC sparseness (EXPERIMENT.md 5), pre-registered with the thresholds and frozen with them.
 # The check is on the distribution, not on each window: 436 of the dev period's 5282 event
