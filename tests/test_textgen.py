@@ -97,17 +97,17 @@ def test_pick_sentence_by_smell_then_stitch(tmp_path):
     from bosco.textgen import Generator
 
     (tmp_path / "a.txt").write_text(
-        "the banana is soft. i go on the banana. the wall is warm. i sit on the wall. rain on the leaf.\n"
+        "the banana is soft. i go on the banana\nthe wall is warm. i sit on the wall\nrain on the leaf.\n"
     )
     g = Generator(tmp_path)
     s = g.pick_sentence("reply", "neutral", "mid", 1, air={"banana": 1.0})
-    assert s in ("the banana is soft.", "i go on the banana.")
-    assert g.pick_sentence("reply", "neutral", "mid", 1, air={"wall": 1.0, "banana": 0.1}).endswith("wall.")
+    assert s == "the banana is soft. i go on the banana"  # a whole line: one thought
+    assert g.pick_sentence("reply", "neutral", "mid", 1, air={"wall": 1.0, "banana": 0.1}).endswith("wall")
     assert g.pick_sentence("reply", "neutral", "mid", 1, air={"spoon": 1.0}) is None  # nothing of his smells of it
     assert g.pick_sentence("reply", "neutral", "mid", 1, air={}) is None
     assert g.pick_sentence("reply", "neutral", "mid", 1, air={"banana": 1.0}, avoid={s}) != s  # not twice running
-    one = g.generate("reply", "neutral", "mid", 0, max_sentences=1, opening=s)
-    assert one == s
+    one = g.generate("reply", "neutral", "mid", 0, max_sentences=2, opening=s)
+    assert one == s + "."  # the thought has two sentences already: nothing stitched on
     # coverage (decided 2026-09-16): a sentence sharing two of their words beats one loud word
     (tmp_path / "b.txt").write_text("the banana is on the leaf.\n")
     g2 = Generator(tmp_path)

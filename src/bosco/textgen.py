@@ -98,11 +98,17 @@ def detokenize(toks: list[str]) -> str:
     return s
 
 
+def lines_of(text: str) -> list[list[list[str]]]:
+    """The corpus lines, each as its sentences: a line is one thought, the unit of retrieval."""
+    return [sentences(line) for line in text.splitlines() if line.strip() and not line.startswith("#")]
+
+
 class Document:
     def __init__(self, text: str, tags: dict[str, str], name: str) -> None:
         self.tags = tags
         self.name = name
         self.sentences = sentences(text)
+        self.lines = lines_of(text)
 
 
 class NGram:
@@ -317,11 +323,13 @@ class Generator:
         avoid: set[str] | None = None,
         top_k: int = 5,
     ) -> str | None:
-        """The sentence of his that smells most like the moment: every sentence in the matching
-        register is scored by the words on his antennae it contains (each by its freshness, and
-        by what he has learned of that word with this person), and the seed picks among the top
-        few.  Whole, his, and about what is in front of him.  None when nothing in the air is in
-        any sentence, or nothing is in the air; the caller then stitches as before."""
+        """The line of his that smells most like the moment: every corpus line (one thought, one
+        to a few sentences) in the matching register is scored by the words on his antennae it
+        contains (each by its freshness, and by what he has learned of that word with this
+        person), and the seed picks among the top few.  Whole, his, and about what is in front
+        of him (a line, not a sentence, since 2026-09-16: "you said thank." alone was a stub).
+        None when nothing in the air is in any line, or nothing is in the air; the caller then
+        stitches as before."""
         in_air = dict(air) if isinstance(air, dict) else dict.fromkeys(air, 1.0)
         if self.empty or not in_air:
             return None
@@ -334,7 +342,8 @@ class Generator:
             if not self._doc_matches(d, want, topics):
                 continue
             bonus = 1.0 if not d.tags else (1.5 if "topic" in d.tags else 1.2)
-            for sent in d.sentences:
+            for line in d.lines:
+                sent = [t for s in line for t in s]
                 toks = [t.lower() for t in sent if t not in END_PUNCT and t not in {",", ";", ":"}]
                 if not toks:
                     continue
@@ -405,12 +414,12 @@ class Generator:
         n_done = 0
         sent_len = 0
         if opening:
-            # a whole sentence of his, picked by smell (pick_sentence); the walk adds to it only if
-            # he has more than one sentence in him
+            # a whole thought of his, picked by smell (pick_sentence); the walk adds to it only if
+            # he has more sentences in him than the thought has
             out = tokenize(opening)
             if out and out[-1] not in END_PUNCT:
                 out.append(".")
-            n_done = 1
+            n_done = sum(1 for t in out if t in END_PUNCT)
             prime = False
             if n_done >= n_sent:
                 return detokenize(out)

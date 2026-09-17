@@ -650,6 +650,23 @@ Every number below has a gate report under `docs/`.
    walked from, so his browsing follows his own feet. The controls replay
    the walked posts as ordinary stimuli and are off-policy after the first
    walk they would not have taken (EXPERIMENT.md §4).
+56. **Answer-shaped corpus, and a thought is the unit of retrieval**
+   (2026-09-16). A report over three days of posts addressed to him
+   (33 posts, 23 answered; the script fetched the texts from the public
+   API and kept only word counts) showed vocabulary was not the gap: most
+   posts carried several of his words, but the sentences that share them
+   were narrations, not answers, and what people call him (guy, bud,
+   buddy, fella, pal) was not his at all. Three files in the banana
+   register: `064-you-say.txt` (echo answers on the words people use to
+   him), `065-what-they-call-me.txt`, `066-about-me.txt`; the vocabulary
+   grew from 896 to 913 words. Retrieval now scores and returns a whole
+   corpus line (one thought, one to a few sentences) instead of one
+   sentence: "you said thank." alone was a stub, and a short fragment
+   always won the length penalty. The walk adds to the thought only when
+   his appetite allows more sentences than the thought has. Still not
+   reachable by any corpus: "i see", "how are you", "am i stinky" are
+   stopwords or too short to smell (the encoder's stoplist, Nick's call).
+
 55. **Holding a conversation** (decided 2026-09-16; the point of the
    experiment is whether he holds a more coherent thread than the bottom
    of the feed). Three rules, no model. The phrasebook speaks only when
