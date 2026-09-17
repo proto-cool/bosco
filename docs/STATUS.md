@@ -1,4 +1,4 @@
-# Build status (2026-09-13)
+# Build status (2026-09-17)
 
 | Phase | Gate | Status | Report |
 |---|---|---|---|
@@ -7,41 +7,60 @@
 | 2 Prune + port | ~5% KCs, stable | PASS (2.5–5%, eLN fix) | `phase2-stability.md`, `phase2-wsyn-calibration.md` |
 | 3 Plasticity | learn / forget | PASS; two timescales (STM hours, LTM spaced, a month) | `phase3-plasticity-gate.md` |
 | 3b Learning → behaviour | spaced rewards change action | PASS (follow after 3 rewards; ignore after 3 punishments; persists 10 days) | `scripts/phase3_mbon_out_gain.py`, README §12 |
-| 4 Encoder + readout | unit tests | done (22 tests) | `encoder.md`, `config/readout_populations.yaml` |
-| 4b Generator | tests | done; minimal fly-world corpus (~1600 words, tagged) | `src/bosco/textgen.py`, `corpus/`, `docs/corpus-audit.md` |
+| 4 Encoder + readout | unit tests | done | `encoder.md`, `config/readout_populations.yaml` |
+| 4b Generator | tests | done; retrieval first since 2026-09-16, the phrasebook only when nothing of his fits | `src/bosco/textgen.py`, `corpus/`, `docs/corpus-audit.md` |
 | 4d Timing + caps | tests | dust drive (no timer), per-kind caps with thread/account guards, episode budget | `config/caps_v1.yaml`, `config/encoder_v1.yaml` |
-| 4e Remote management | tests | sleep/wake/delete/ignore/unfollow/reload/restart/status/people/memory/forget by mention | `src/bosco/control.py` |
+| 4e Remote management | tests | sleep/wake/delete/ignore/unfollow/reload/restart/status/people/memory/forget/primer by mention | `src/bosco/control.py` |
 | 4f Topics as smells | tests | keyword map → glomeruli mixtures; logged as names | `config/topics_v1.yaml` |
-| 4g What-to-say learning | tests | per-document preferences from outcomes, decaying | `Agent.voice_update`, `state/voice.json` |
 | 4h Habituation | tests | STD on sensory afferents; same smell fades, recovers in minutes | `config/model_v1.yaml` |
 | 4i Outcomes | | likes/reposts/follows from anyone, kind replies, known-account returns, blocks | `src/bosco/bsky.py` |
+| 4g What-to-say learning | tests | per-document preferences from outcomes, decaying | `Agent.voice_update`, `state/voice.json` |
 | 4j Questions, memory told back, topic corpus | tests | `?` is a stronger touch and a reply; "what do you think of me"; `topic=` corpus files | `docs/CORPUS-PLAN.md` |
 | 4c Moderation | tests | labels → bitter, no approach, no reward; ignore → unfollow | `config/moderation_v1.yaml`, `src/bosco/moderation.py` |
-| 5 Bluesky loop | dry-run, snapshots, nightly | code done, **not yet run against a live account** | `src/bosco/bsky.py`, `ops/` |
-| 6 Calibration + tag | thresholds from dev activity | provisional synthetic thresholds written; re-run on real dev activity before tag | `scripts/calibrate_thresholds.py` |
-| 7 dunce + monthly note | | tools ready | `scripts/make_dunce.py`, `scripts/replay_controls.py`, `scripts/monthly_report.py` |
+| 8 Senses (2026-09-15) | gates | taste while browsing, α'3 familiarity, retina, open nose, associations, walk | `phase8-taste.md`, `phase8-retina.md` |
+| 5 Bluesky loop | dry-run, snapshots, nightly | **live since 2026-09-13**, on the dedicated box since 2026-09-16 | `src/bosco/bsky.py`, `ops/`, `docs/MIGRATE.md` |
+| 6 Calibration + tag | thresholds from dev activity | engage/like/leave/reply/walk from the 09-14 dev ledger; **groom still synthetic**; not yet re-run on the full dev period | `scripts/calibrate_thresholds.py` |
+| 7 dunce + monthly note | | offline tools ready; live-beside-him path added 2026-09-17 (`BOSCO_BRAIN`, `ops/bosco-dunce.container`); no account, no `dunce_v1.npz` built, no identity file | `scripts/make_dunce.py`, `scripts/replay_controls.py`, `scripts/monthly_report.py` |
 
-## Parked
+## Before `freeze-v1`
 
-- ~~A Bosco panel page at `bosco.proto.cool`~~ built 2026-09-14 (`panel/`, DEPLOY.md §E)
-  (episodes, actions, people, integrity), in ARC UI v4.2.2. After he flies.
+1. **Re-calibrate thresholds on the full dev period.** `ops/fetch_ledger.sh`, then
+   `scripts/calibrate_thresholds.py --ledger <dump> --allow-partial --write`. `groom` needs 30
+   `landing_peak` rows and `mentioned` 15; until it has them the groom threshold is the synthetic
+   battery's. Never from outcomes.
+2. **Phrasebook.** 58 lines: `reply` covers all 27 (valence × arousal × familiarity) twice over,
+   `groom` has 4 (neutral, low and mid, new). Nick's to extend or leave; under the 2026-09-16
+   utterance policy the phrasebook is the fallback, not the voice.
+3. **Pin the artifacts.** `scripts/freeze.py --write` writes `config/frozen_digests.json` (the
+   test suite then holds corpus, phrasebook, topics and identity to it) and prints the
+   EXPERIMENT.md §3 table with sha256s to paste in.
+4. **Snapshot the freeze**: `snapshots/freeze-v1/` (ledger + `brain_state.npz`), a clean integrity
+   report beside it, EXPERIMENT.md out of DRAFT, and "in development" out of the bio.
+5. **Confirm the nightly publishes.** The repo has no snapshot commit since 2026-09-14: the
+   nightly aborted under `set -e` on a stale rate-cap check that called legal activity a
+   violation (fixed 2026-09-17; the check now reads `config/caps_v1.yaml`, and a failing night
+   still commits its report and alerts). Check `systemctl --user list-timers` on the box.
+
+## Before dunce goes live (weeks 3–4 after the tag)
+
+- Account, app password, bot self-label, `~/bosco/.env.dunce` (`ops/env.dunce.example`).
+- `scripts/make_dunce.py` on the box → `data/cache/dunce_v1.npz`; `podman` quadlet
+  `ops/bosco-dunce.container`, its own `state-dunce/`. `BOSCO_BRAIN` refuses to start if the
+  matrix is missing rather than falling back to his wiring.
+- `config/identity_v1_dunce.yaml`: hand-authored, Nick's. dunce must not answer that he is Bosco.
+- Undecided: whether the panel shows one fly or two, and dunce's own nightly snapshot.
 
 ## Deploy
 
-`docs/DEPLOY.md`. His first post is the introduction in `config/identity_v1.yaml`.
+`docs/DEPLOY.md`, `docs/MIGRATE.md`. His first post is the introduction in
+`config/identity_v1.yaml`; the pinned primer thread is `primer`.
 
 ## What only Nick can do
 
-1. **Corpus and phrasebook.** `corpus/` holds a minimal fly-world corpus in
-   the curious register; extend it under the rules in `docs/corpus-audit.md`.
-   `phrasebook.yaml` has zero lines.  Decided 2026-09-13: closed vocabulary
-   for the dev period; revisit word-learning from liked accounts before the
-   tag, with `bosco people` data in hand.
-2. **Account.** Create `bosco.proto.cool`, an app password, the bot
-   self-label, "in development" in the bio, and a list named `bosco-ignore`
-   on `@proto.cool`.  Fill `ops/env.example` → `.env`.
-3. **Box.** A dedicated server (`docs/DEPLOY.md` B1, `docs/MIGRATE.md`), `podman build`, quadlet, timers (`ops/README.md`).
-   Feathers go in `data/raw/` (1.1 GB; `scripts/` has the URLs in `paths.py`).
+1. **Corpus and phrasebook.** Extend under the rules in `docs/corpus-audit.md`.
+2. **Accounts.** `bosco.proto.cool` exists; dunce's does not. The `bosco-ignore` list lives on
+   `@proto.cool`.
+3. **Box.** Dedicated server since 2026-09-16 (`docs/MIGRATE.md`), rootless under `nick`.
 
 ## Try it now
 
@@ -54,19 +73,22 @@ uv run python scripts/integrity_checks.py --ledger /tmp/dev.sqlite --state-dir /
 
 ## Known limits to state at tag
 
-- Thresholds are provisional (synthetic battery); ~46% of synthetic episodes
-  cross some threshold, so the rate caps, not the thresholds, bound activity.
-- The song-DN population (`reply`) has no sensory input in the model; since
-  2026-09-14 being addressed drives pC1 in proportion to appetite (README 26),
-  and engage maps to reply when he was addressed.
-- Bitter taste does not reach the escape DNs, so an insult makes Bosco
-  approach (follow) rather than leave; aversion arrives only via learning.
-- Accounts generalise: two accounts share ~4 of 12 glomeruli, so learning
-  about one leaks a little onto the other. This is the fly's olfactory
-  code, not a bug.
-- The valence key (reward-vs-punishment MBON balance) is crude and untested
-  against behaviour; it only selects phrasebook lines.
-- Some odors leave a small persistent population after input off; episodes
-  start from rest, so it never carries over.
-- Being blocked is detected via `getRelationships` for accounts Bosco acted
-  toward in the last 7 days, not for the whole network.
+- The groom threshold is still the synthetic battery's (item 1 above); the rest are his own
+  activity. The rate caps, not the thresholds, bound how much he does.
+- The song-DN population (`reply`) has no sensory input in the model; since 2026-09-14 being
+  addressed drives pC1 in proportion to appetite (README §26), and engage maps to reply when he
+  was addressed.
+- Bitter taste does not reach the escape DNs, so an insult makes Bosco approach (follow) rather
+  than leave; aversion arrives only through learning, now from outcomes and from the taste of
+  what he reads (2026-09-15).
+- Accounts generalise: two accounts share ~4 of 12 glomeruli, so learning about one leaks a
+  little onto the other. This is the fly's olfactory code, not a bug.
+- The valence key (reward-vs-punishment MBON balance) is crude and untested against behaviour;
+  since 2026-09-16 it selects the corpus subset and the fallback phrasebook line, not the
+  sentence, which is retrieval by smell.
+- Some odors leave a small persistent population after input off; episodes start from rest, so
+  it never carries over.
+- Being blocked is detected via `getRelationships` for accounts Bosco acted toward in the last
+  7 days, not for the whole network.
+- Opening a ledger normally runs the schema migrations, which rewrites the file; tools that read
+  a published dump open it read-only (2026-09-17), so an audit cannot alter the evidence.
