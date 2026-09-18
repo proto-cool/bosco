@@ -31,9 +31,16 @@ OPEN_MIN_TOKENS = 3  # but not when the word was handed to him: an answer has to
 SEEN_WEIGHT = 20  # asked about a smell, his yes or his no (seen=met|fresh) is at least this, and at least half the pool
 SEEN_PICK = 3.0  # and in retrieval a line from that file counts three times over (2026-09-16, with a bigger corpus)
 # He may borrow a phrase, not a paragraph (decided 2026-09-18).  Once the tail of what he is
-# saying has run this many tokens alongside one line of his, the continuations that would keep
-# that line going are struck out and he has to find his own way on.  Ending is always allowed.
-COPY_RUN_MAX = 6
+# saying has run this many tokens alongside one line of his, he is pushed off it: first towards
+# the end of the sentence, which always reads, and only then towards another line of his, which
+# is where a splice can turn clumsy.  Nine tokens is a short sentence of his, so a whole small
+# thought still comes out in one piece.
+COPY_RUN_MAX = 9
+GUARD_EOS_BIAS = 6.0  # at the cap he would rather stop than splice: a full stop is always his
+# And inside a sentence he stays on the line he is on.  A splice mid-clause is where he turns
+# clumsy ("a sweet part in it is far in the dark"), so the words that keep his own clause going
+# are weighted up, and he changes his mind between sentences instead, where it always reads.
+STAY_BIAS = 4.0
 # a sentence may not end on one of these (function words, dangling pronouns)
 NO_END = {
     "the",
@@ -266,6 +273,14 @@ class Generator:
         lines, _ = self._copy_index()
         return {lines[i][j + 1] for i, j in matches if j + 1 < len(lines[i])}
 
+    def _copy_at_stop(self, matches: set[tuple[int, int]]) -> bool:
+        """Whether he is standing where one of his own sentences stops.  A word that dangles in
+        general ("it", "for") does not dangle there: "today has a sweet part in it" is a line of
+        his, and left to end on its own it reads, while carrying it on into another line's clause
+        ("...in it is far in the dark") does not."""
+        lines, _ = self._copy_index()
+        return any(j + 1 >= len(lines[i]) or lines[i][j + 1] in END_PUNCT for i, j in matches)
+
     @property
     def empty(self) -> bool:
         return not any(d.sentences for d in self.docs)
@@ -488,20 +503,23 @@ class Generator:
                     if u <= acc:
                         k0 = k
                         break
-            sb = 0  # the top of the sentence their word sits in, for his context
+            sb = 0  # the top of the sentence their word sits in
             for k in range(k0 - 1, -1, -1):
                 if toks[k] in END_PUNCT:
                     sb = k + 1
                     break
-            if k0 < len(toks):
-                # his context is what came before that word in its own sentence, padded with the
-                # start of a sentence: the walk goes on from after it, the way priming does
-                prev = [t for t in toks[sb:k0]]
-                z, a = ([BOS, BOS] + prev)[-2:]
-                b = toks[k0].lower()
-                out.append(toks[k0])
-                sent_len = 1
-                matches, run = self._copy_step(toks[k0], matches, run)
+            # He takes the run-up to their word with him when it is short enough to be a phrase
+            # rather than a paragraph: "some kind of wind came" reads, "kind of wind came" is a
+            # fragment.  Deeper into a sentence than the run guard would let him carry anyway, he
+            # opens on the word itself.  Either way the borrowed part is his own clause, it ends
+            # on their word, and the guard counts it, so the walk takes over within a few words.
+            head = list(toks[sb : k0 + 1]) if k0 - sb < COPY_RUN_MAX else [toks[k0]]
+            if head:
+                for t in head:
+                    out.append(t)
+                    matches, run = self._copy_step(t, matches, run)
+                sent_len = len(head)
+                z, a, b = ([BOS, BOS, BOS] + [t.lower() for t in head])[-3:]
                 prime = False
                 opened = True
         if prime and in_air:
@@ -528,15 +546,16 @@ class Generator:
         for _ in range(120):
             cands = m.candidates(z, a, b)
             content = sum(1 for t in out[len(out) - sent_len :] if t not in END_PUNCT and t not in {",", ";", ":"})
-            dangling = bool(out) and out[-1].lower() in NO_END
+            dangling = bool(out) and out[-1].lower() in NO_END and not self._copy_at_stop(matches)
             # a sentence of one word is his register; a sentence of one word he was handed is a
             # stub ("today."), so a started sentence has to get somewhere before it may end
             floor = OPEN_MIN_TOKENS if (opened and n_done == 0) else MIN_SENT_TOKENS
             if (content < floor or dangling) and sent_len < MAX_SENT_TOKENS:
                 filtered = [c for c in cands if c != EOS and c not in END_PUNCT]
-                if not filtered:
-                    # he was handed a word that his own line ended on: he keeps less of that
-                    # line's context and finds somewhere else of his to take it
+                if not filtered and content < floor:
+                    # he was started on a word that his own line ended on, and one word is not an
+                    # answer: he keeps less of that line's context and finds somewhere else of
+                    # his to take it.  Only for a stub -- a finished clause is allowed to finish.
                     for zz, aa in ((BOS, a), (BOS, BOS)):
                         alt = [c for c in m.candidates(zz, aa, b) if c != EOS and c not in END_PUNCT]
                         if alt:
@@ -547,16 +566,23 @@ class Generator:
             fresh = [c for c in cands if (z, a, b, c) not in used or c == EOS]
             if fresh:
                 cands = fresh
-            if run >= COPY_RUN_MAX:
-                carry_on = self._copy_next(matches)
+            at_cap = run >= COPY_RUN_MAX and content >= floor
+            carry_on = self._copy_next(matches) if matches else set()
+            if at_cap:
+                # he has said as much of that line as he is allowed to: the rest is his, and the
+                # heavy bias on ending (GUARD_EOS_BIAS) means he stops here where he can
                 own = [c for c in cands if c == EOS or c.lower() not in carry_on]
                 if own:
-                    cands = own  # he has said enough of that one; the rest is his
+                    cands = own
+                carry_on = set()
             ws = [
                 m.p4(z, a, b, w) ** (1.0 / temp)
                 * max(0.1, 1.0 + beta * wv.get(w, 0.0))
                 * (1.0 + gamma * in_air.get(w, 0.0))
-                * (EOS_BIAS if w == EOS else 1.0)  # he ends where his sentences end more often than he splices
+                * (STAY_BIAS if w.lower() in carry_on else 1.0)  # finish the clause he is in
+                # he ends where his sentences end more often than he splices, and at the cap he
+                # would rather end than be pushed into somebody else's clause
+                * ((EOS_BIAS * (GUARD_EOS_BIAS if at_cap else 1.0)) if w == EOS else 1.0)
                 for w in cands
             ]
             tot = sum(ws)

@@ -20,6 +20,7 @@ not stored.
 
 from __future__ import annotations
 
+import re
 import sqlite3
 import statistics
 import sys
@@ -71,6 +72,8 @@ def main(argv: list[str]) -> int:
     runs: list[int] = []
     fracs: list[float] = []
     verbatim = 0
+    sentences_n = 0
+    spliced = 0
     samples: list[str] = []
     for r in rows:
         words = tuple(w for w in (r["words"] or "").split(",") if w and not w.startswith("h:"))
@@ -103,6 +106,15 @@ def main(argv: list[str]) -> int:
         fracs.append(run / len(toks))
         if text.strip().lower() in whole:
             verbatim += 1
+        # a sentence he spliced in the middle: its words are not one unbroken run of any line of
+        # his.  Those are where he reads clumsy, so they are counted, not only the quotations.
+        for sent in re.split(r"(?<=[.!?])\s+", text.strip()):
+            st = [t.lower() for t in tokenize(sent) if t not in {".", "!", "?"}]
+            if not st:
+                continue
+            sentences_n += 1
+            if longest_run(st, lines) < len(st):
+                spliced += 1
         if len(samples) < 10:
             samples.append(f"  [run {run} of {len(toks)}] {text}")
 
@@ -118,6 +130,7 @@ def main(argv: list[str]) -> int:
     long_ones = sum(1 for r in runs if r >= LONG_RUN)
     print(f"utterances quoting {LONG_RUN}+ tokens: {long_ones} ({long_ones / n:.0%})")
     print(f"quoted share of an utterance: mean {statistics.mean(fracs):.2f}")
+    print(f"sentences spliced in the middle: {spliced} of {sentences_n} ({spliced / sentences_n:.0%})")
     print("\n".join(["", "a few of them:", *samples]))
     return 0
 

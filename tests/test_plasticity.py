@@ -105,3 +105,86 @@ def test_taste_pairs_at_a_scaled_strength(fly):
     v, _ = mb.learned_valence(kc)
     assert v > 0
     mb.reset()
+
+
+@needs_data
+def test_unreinforced_activity_relieves_depression(fly):
+    """Extinction (decided 2026-09-18): a compartment whose DANs did not fire while its KCs did
+    relaxes towards baseline, so depression is no longer one-way.  The paired compartment is
+    spared, LTM gives way more slowly than STM, and a memory still survives a few unpaired
+    presentations -- it fades, it is not erased."""
+    from bosco.encoder import Encoder, Features
+    from bosco.plasticity import MushroomBody
+
+    mb = MushroomBody(fly)
+    mb.reset()
+    stim = Encoder(fly.brain).encode(Features("did:plc:ext", 0.0, False))
+    res = mb.fly.run_episode(stim, seed=5)
+    counts = res.counts[fly.kc].astype(np.float64)
+    assert (counts > 0).any()
+
+    mb.pair_counts(counts, "punishment", t_hours=0.0)
+    mb.pair_counts(counts, "punishment", t_hours=2.0)  # spaced, so LTM carries some of it too
+    bitter, sweet = mb.target_edges("punishment"), mb.target_edges("reward")
+    active = counts[fly.kc_pos_of_edge] > 0
+    learned = bitter & active & (mb.stm < 1.0)
+    assert learned.any() and (mb.ltm[learned] < 1.0).any()
+    stm0, ltm0 = mb.stm[learned].copy(), mb.ltm[learned].copy()
+    sweet0 = mb.stm[sweet & active].copy()
+
+    # the same smell again with nothing on his tongue: his verdict on it relaxes
+    mb.extinguish_counts(counts, t_hours=2.0)
+    assert np.all(mb.stm[learned] > stm0) and np.all(mb.ltm[learned] >= ltm0)
+    assert np.all(mb.stm[learned] < 1.0)  # a few presentations fade a memory, they do not erase it
+    assert np.all(mb.stm[learned] - stm0 > (mb.ltm[learned] - ltm0))  # LTM gives way slower
+
+    # and a window that did taste of something spares the compartment that got the dopamine
+    before = mb.stm[learned].copy()
+    mb.extinguish_counts(counts, t_hours=2.0, spare="punishment")
+    assert np.allclose(mb.stm[learned], before)
+    assert np.all(mb.stm[sweet & active] >= sweet0)
+
+
+@needs_data
+def test_extinction_holds_down_the_ratchet(fly):
+    """The point of the rule (EXPERIMENT.md 2d).  On a diet of four sweet accounts to every sour
+    one, the reward compartments take most of the depression; under v1 nothing but the clock
+    relieves it, so it accumulates over the whole Kenyon cell population and every odor inherits
+    the offset.  Extinction relaxes what each window did not reinforce, so the reward side
+    carries less standing depression and the sour account sits lower.
+
+    This is the mechanism, not the size of the effect: a handful of odors cannot show what
+    thousands of his real windows do, which is what scripts/plasticity_v2_gate.py measures."""
+    from dataclasses import replace
+
+    from bosco.encoder import Encoder, Features
+    from bosco.plasticity import MushroomBody, load_plasticity_params
+
+    enc = Encoder(fly.brain)
+    sour = enc.encode(Features("did:plc:sour", -0.8, False))
+    sweets = [enc.encode(Features(f"did:plc:sweet{i}", 0.8, False)) for i in range(4)]
+
+    def run(ext_eta: float) -> tuple[float, float, float]:
+        mb = MushroomBody(fly, replace(load_plasticity_params(), ext_eta=ext_eta))
+        mb.reset()
+        t = 0.0
+        for _ in range(6):  # his diet: four sweet accounts for every sour one
+            for k, stim in enumerate(sweets):
+                c = mb.fly.run_episode(stim, seed=100 + k).counts[fly.kc].astype(np.float64)
+                mb.pair_counts(c, "reward", t, scale=mb.taste_scale("reward", 1.0))
+                mb.extinguish_counts(c, t, spare="reward")
+                t += 0.25
+            c = mb.fly.run_episode(sour, seed=7).counts[fly.kc].astype(np.float64)
+            mb.pair_counts(c, "punishment", t, scale=mb.taste_scale("punishment", 1.0))
+            mb.extinguish_counts(c, t, spare="punishment")
+            t += 0.25
+        v_sour, _ = mb.learned_valence(mb.fly.run_episode(sour, seed=11).counts[fly.kc])
+        v_sweet, _ = mb.learned_valence(mb.fly.run_episode(sweets[0], seed=12).counts[fly.kc])
+        standing = float((1.0 - mb.fly.multiplier[mb.target_edges("reward")]).mean())
+        return v_sour, v_sweet, standing
+
+    s1, w1, d1 = run(0.0)
+    s2, w2, d2 = run(load_plasticity_params().ext_eta)
+    assert d2 < d1, f"extinction left as much standing depression as v1: {d1:.4f} -> {d2:.4f}"
+    assert s2 < s1, f"the sour account did not fall: {s1:+.3f} -> {s2:+.3f}"
+    assert s2 < 0.0 < w2, f"sour {s2:+.3f} and sweet {w2:+.3f} do not straddle zero"

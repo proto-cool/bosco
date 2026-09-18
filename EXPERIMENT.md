@@ -25,7 +25,7 @@ genuinely the one acting, and that anyone can check.
   from where a lexical retrieval over the same corpus -- by the words on his
   antennae -- starts him off, seeded by the episode and conditioned on the
   fly's state. Since `freeze-v1.1` (section 2d) the retrieved thought is a
-  starting place and not the utterance, and no more than six of his tokens
+  starting place and not the utterance, and no more than nine of his tokens
   in a row come from one line of his where he has anywhere else to go. **Closed mouth, open nose** (decided
   2026-09-15, replacing the closed vocabulary of 2026-09-13 as that
   decision said it might be, before the tag): nothing Bosco reads ever
@@ -222,6 +222,7 @@ changes is code, and it is named, dated and measured.
 | Tag | Date | Change | Row |
 |---|---|---|---|
 | `freeze-v1.1` | 2026-09-18 | How he composes an utterance (`Agent.UTTERANCE_VERSION` 1 → 2) | `utterance` |
+| `freeze-v1.2` | 2026-09-18 | The same, made coherent (`Agent.UTTERANCE_VERSION` 2 → 3) | `utterance` |
 
 **`freeze-v1.1` — retrieval steers, it does not speak.** Under v1 the thought
 that smelled most like the moment was said whole, and the walk only added to
@@ -248,6 +249,24 @@ gate reads features and prints numbers.
 What did not change: the corpus, the phrasebook, the encoder, the readout,
 the thresholds, the action set, the learning rule, the caps. He has the same
 mouth and the same nose. He puts the words together differently.
+
+**`freeze-v1.2` — and coherent while he does it.** v1.1 stopped the quoting
+and left him rougher: a quarter of his sentences were spliced in the middle,
+where the walk crosses from one line of his to another mid-clause and the
+grammar goes with it ("today has a sweet part in it is far in the dark").
+That rate was not new — v1 spliced 26% of sentences the same way — but v1
+hid it behind a verbatim opening. Three fixes, all about where a clause may
+begin and end: he carries the run-up to their word with him when it is short
+enough to be a phrase, so an answer opens on a whole clause of his rather
+than mid-phrase; inside a sentence the words that finish the clause he is in
+are weighted up, so he changes line between sentences and not inside one;
+and where one of his own sentences stops he is allowed to stop, even on a
+word that would dangle anywhere else ("in it"). Sentences spliced in the
+middle: 26% at v1, 25% at v1.1, **9%** now. The quoting stayed where v1.1
+put it: 0.3% of utterances exactly a line of his (1 of 293), longest run 6.1
+tokens on average, 22% carrying a run of eight or more. The leash went from
+six tokens to nine, a short sentence of his, so a small thought comes out in
+one piece.
 
 ## 3. Frozen artifacts (binding)
 

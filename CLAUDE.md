@@ -133,6 +133,17 @@ Do not download the EM volume. `neuprint-python` against
 
 - Three-factor rule: KC activity coincident with dopaminergic (DAN) firing
   in a compartment depresses KC→MBON synapses in that compartment.
+- **Extinction** (decided 2026-09-18, `config/plasticity_v2.yaml`
+  `extinction`, `Agent.PLASTICITY_VERSION` 3): a compartment whose DANs did
+  *not* fire while its KCs did relaxes back toward baseline, by the same
+  rate fraction, LTM slower by `ltm.eta / stm.eta`. Depression alone is
+  one-way, and under a diet 2.7:1 sweet it ratcheted: every odor inherited
+  the same positive offset, no account could read bitter, and the verdicts
+  converged (+0.259 → +0.332 in a day). The fly's own counterweight
+  (Berry et al. 2012, 2015; Felsenberg et al. 2018; Cohn et al. 2015).
+  Measure with `scripts/plasticity_v2_gate.py`; `eta` comes from the
+  behavioural extinction protocol, never from his feed and never from
+  outcomes.
 - **Replay pairing**: outcomes arrive hours late. When an outcome lands for a
   past action, re-present the stored stimulus encoding and fire the
   appropriate DANs. This is the lab protocol; do not invent delayed credit
@@ -162,7 +173,7 @@ Do not download the EM volume. `neuprint-python` against
   channel carries most aversion. Do not "fix" the sparsity by adding a model.
 - **Taste while browsing** (decided 2026-09-15): the sugar or bitter of a
   post he reads pairs that window's mixture with reward or punishment at a
-  small published strength (`config/plasticity_v1.yaml` `taste`), in the
+  small published strength (`config/plasticity_v2.yaml` `taste`), in the
   window, as sugar drives PAM and bitter drives PPL1 in the fly. Not a
   social reward: no appetite bite, no outcomes row. Sizes come from the
   gate (`scripts/phase8_taste_gate.py`), never from outcomes.
@@ -255,11 +266,15 @@ Retrieval still finds the thought of his that smells most like the moment
 (lexical, over his corpus, weighted by freshness and learned word valence),
 but he does not say it: he opens on the word of theirs that lit it up, with
 that thought as his context, and walks on in his own words. He may run
-`COPY_RUN_MAX` (6) tokens alongside one line of his; past that, the words
+`COPY_RUN_MAX` (9) tokens alongside one line of his; past that, the words
 that would carry that line on are struck out wherever he has anywhere else
-to go, so a page never comes back whole. The phrasebook is his last resort,
-not a coin: it speaks only when the walk comes back with nothing. Measure
-it with `scripts/quotation_gate.py`, never tune it on outcomes. When he grooms, the register is his day:
+to go, so a page never comes back whole. He stays coherent inside a sentence
+(`UTTERANCE_VERSION` 3): he carries the clause up to their word rather than
+opening mid-phrase, finishes the clause he is in before changing lines
+(`STAY_BIAS`), and may stop where one of his own sentences stops. The
+phrasebook is his last resort, not a coin: it speaks only when the walk comes
+back with nothing. Measure both with `scripts/quotation_gate.py` — what he
+quotes and what he splices — and never tune either on outcomes. When he grooms, the register is his day:
 the balance of his own verdicts on what he read, a `mood=` tag from the
 ledger, and the day's words as faint air. Corpus and phrasebook digests are
 frozen artifacts.

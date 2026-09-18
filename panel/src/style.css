@@ -555,6 +555,24 @@ a:hover {
   display: grid;
   gap: var(--space-xs);
 }
+.today-people {
+  display: grid;
+  gap: var(--space-xs);
+}
+.today-people h3 {
+  font-family: var(--font-mono);
+  font-size: var(--annot-size);
+  font-weight: 400;
+  color: var(--text-muted);
+  margin: var(--space-sm) 0 0;
+}
+.today-people h3:first-child {
+  margin-top: 0;
+}
+.today-people .empty {
+  font-family: var(--font-mono);
+  font-size: var(--annot-size);
+}
 .person {
   display: grid;
   /* the handle column is capped so the row stays one thing to read on a wide rail, instead of a

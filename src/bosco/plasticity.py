@@ -18,7 +18,12 @@ valence.  For KC k firing c_k spikes in that replay, for every plastic edge
 
 The effective multiplier is stm * ltm * exp.  Forgetting is lazy and deterministic
 from timestamps: stm relaxes to 1 with tau_stm (hours), ltm with tau_ltm (days).
-Parameters: config/plasticity_v1.yaml.  Not fit to outcomes.
+Extinction (decided 2026-09-18, `MushroomBody.extinguish_counts`): a compartment whose DANs
+did not fire while its KCs did relaxes towards baseline in proportion to the firing.  Without
+it depression is one-way and a skewed diet ratchets every odor the same way.
+
+Parameters: config/plasticity_v2.yaml (v1, the rule as it ran to freeze-v1.2, is kept beside
+it for the record).  Not fit to outcomes.
 
 Exposure (decided 2026-09-15; Hattori et al. 2017): the a'3 compartment's DAN fires on mere
 exposure and depresses the a'3 terminals of the KCs that fired, so a familiar odor drives
@@ -64,12 +69,14 @@ class PlasticityParams:
     taste_reward_gain: float = 0.15
     taste_punishment_gain: float = 0.1
     taste_labeled_gain: float = 0.3
+    # extinction: unreinforced activity relieves depression (0 = the v1 rule, one-way)
+    ext_eta: float = 0.0
 
 
-def load_plasticity_params(path=paths.CONFIG / "plasticity_v1.yaml") -> PlasticityParams:
+def load_plasticity_params(path=paths.CONFIG / "plasticity_v2.yaml") -> PlasticityParams:
     c = yaml.safe_load(open(path))
     s, lt = c["stm"], c["ltm"]
-    ex, ta = c.get("exposure", {}), c.get("taste", {})
+    ex, ta, xt = c.get("exposure", {}), c.get("taste", {}), c.get("extinction", {})
     return PlasticityParams(
         stm_eta=s["eta"],
         stm_c_sat=s["c_sat"],
@@ -87,6 +94,7 @@ def load_plasticity_params(path=paths.CONFIG / "plasticity_v1.yaml") -> Plastici
         taste_reward_gain=float(ta.get("reward_gain", 0.0)),
         taste_punishment_gain=float(ta.get("punishment_gain", 0.0)),
         taste_labeled_gain=float(ta.get("labeled_gain", 0.0)),
+        ext_eta=float(xt.get("eta", 0.0)),
     )
 
 
@@ -240,9 +248,51 @@ class MushroomBody:
         c = kc_counts_per_s[self.fly.kc_pos_of_edge].astype(np.float64)
         return self._depress(c, valence, t_hours, scale)
 
+    def extinguish_counts(self, kc_counts_per_s: np.ndarray, t_hours: float, spare: str | None = None) -> None:
+        """Unreinforced activity relieves depression (decided 2026-09-18, `extinction`).
+
+        A compartment whose DANs did not fire while its KCs did has those synapses relax towards
+        baseline, in proportion to how hard the cells fired: what he smells without consequence
+        stops meaning anything.  `spare` is the compartment that did get its dopamine this window
+        and so is left alone.  Depression in v1 was one-way -- only time relieved it -- so any
+        sustained skew in what he read ratcheted every odor the same way and the verdicts
+        converged; this is the fly's own counterweight to that, and it is activity-gated, so it
+        acts on the smells he is actually meeting rather than on the clock.
+
+        Berry et al. 2012, 2015: forgetting in the mushroom body is active and dopamine-driven,
+        not passive decay.  Felsenberg et al. 2018: re-exposure to an odor without reinforcement
+        updates the memory.  Aso & Rubin 2016, Cohn et al. 2015, Handler et al. 2019: KC->MBON
+        plasticity is bidirectional, its sign set by the pairing and its timing.  LTM relaxes at
+        the same rate scaled by ltm_eta / stm_eta, so consolidated memory gives way more slowly
+        than fresh memory and no new number is invented for it."""
+        if self.p.ext_eta <= 0.0:
+            return
+        self.forget(t_hours)
+        c = kc_counts_per_s[self.fly.kc_pos_of_edge].astype(np.float64)
+        strength = np.minimum(1.0, c / self.p.stm_c_sat)
+        active = strength > 0
+        if not active.any():
+            return
+        ltm_rate = self.p.ext_eta * (self.p.ltm_eta / self.p.stm_eta)
+        # 1,639 of his plastic edges sit in a compartment reached by both a reward and a
+        # punishment DAN, so sparing a *valence* would still have relaxed an edge whose own
+        # compartment had just had its dopamine.  The spared set is the edges, not the name.
+        spared = self.target_edges(spare) if spare and spare in self.valence else None
+        for valence in ("reward", "punishment"):
+            if valence not in self.valence:
+                continue
+            m = active & self.target_edges(valence)
+            if spared is not None:
+                m &= ~spared
+            if not m.any():
+                continue
+            self.stm[m] += self.p.ext_eta * strength[m] * (1.0 - self.stm[m])
+            self.ltm[m] += ltm_rate * strength[m] * (1.0 - self.ltm[m])
+        self._push()
+
     def taste_scale(self, valence: str, rate_frac: float, labeled: bool = False) -> float:
         """Pairing strength for the taste of a post he read: gain x the gustatory rate fraction
-        (config/plasticity_v1.yaml `taste`).  A labeled post is bitter at full rate at its own gain."""
+        (config/plasticity_v2.yaml `taste`).  A labeled post is bitter at full rate at its own gain."""
         if labeled:
             return float(self.p.taste_labeled_gain)
         g = self.p.taste_reward_gain if valence == "reward" else self.p.taste_punishment_gain

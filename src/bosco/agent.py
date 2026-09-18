@@ -202,14 +202,17 @@ class Agent:
         if "idle_kc" in st and len(st["idle_kc"]) == len(self._idle_kc):
             self._idle_kc = np.asarray(st["idle_kc"], dtype=bool).copy()
 
-    # The learning rule's version.  A change to what a window teaches (config/plasticity_v1.yaml,
+    # The learning rule's version.  A change to what a window teaches (config/plasticity_v2.yaml,
     # config/mb_compartments.yaml, MushroomBody) is legitimate before freeze-v1, but it means
     # the spans logged before it no longer replay under the new rule.  So the boundary is
     # written down: a `plasticity` control row and a snapshot at the moment the new rule first
     # runs, so an auditor reads a change of fly, not a broken replay.
     #   1  two timescales, outcomes only (2026-09-13)
     #   2  exposure trace and taste while browsing (2026-09-15)
-    PLASTICITY_VERSION = 2
+    #   3  extinction: a compartment whose DANs did not fire while its KCs did relaxes towards
+    #      baseline, so depression is no longer one-way and a skewed diet stops ratcheting
+    #      (2026-09-18, config/plasticity_v2.yaml)
+    PLASTICITY_VERSION = 3
 
     # The kernel's version.  Same reason as the learning rule: a fix that changes his dynamics
     # is a boundary, not a continuation, and the record has to say where it falls.
@@ -230,7 +233,10 @@ class Agent:
     #   2  retrieval steers, it does not speak: he opens on their word inside that thought and
     #      walks on in his own, may run only COPY_RUN_MAX tokens alongside one line of his, and
     #      the phrasebook is the last resort rather than a coin (2026-09-18)
-    UTTERANCE_VERSION = 2
+    #   3  and he stays coherent while he does it (2026-09-18): he carries the clause up to their
+    #      word rather than opening mid-phrase, finishes a clause of his before changing lines,
+    #      and is allowed to stop where one of his own sentences stops
+    UTTERANCE_VERSION = 3
 
     def _load_state(self) -> None:
         if self.state_path.exists():
@@ -1061,7 +1067,7 @@ class Agent:
         """What a stimulus window teaches by itself (decided 2026-09-15).  Exposure: the a'3
         synapses of the KCs that fired are depressed, so the smell is more familiar next time.
         Taste: the sugar or bitter he tasted in the post pairs the mixture with reward or
-        punishment at a small strength (config/plasticity_v1.yaml `taste`), as sugar drives the
+        punishment at a small strength (config/plasticity_v2.yaml `taste`), as sugar drives the
         PAM and bitter the PPL1 dopamine neurons in the fly.  Not a social reward: no appetite
         bite.  Returns the `taste:` note for the row, or None.  A pure function of the features,
         so replay does the same."""
@@ -1069,17 +1075,20 @@ class Agent:
         t = self.sim_hours()
         self.mb.expose_counts(per_s, t)
         g = self.enc.cfg["gustatory"]
+        valence: str | None = None
         if f.labeled:
             valence, frac = "punishment", 1.0
-        elif abs(f.vader) <= float(g["dead_zone"]):
-            return None
-        else:
+        elif abs(f.vader) > float(g["dead_zone"]):
             valence = "reward" if f.vader > 0 else "punishment"
             frac = min(1.0, abs(float(f.vader)) / float(g["c_sat"]))
-        scale = self.mb.taste_scale(valence, frac, labeled=f.labeled)
-        if scale <= 0.0:
+        scale = self.mb.taste_scale(valence, frac, labeled=f.labeled) if valence else 0.0
+        if valence is None or scale <= 0.0:
+            # nothing on his tongue: the compartments his cells just fired into get no dopamine,
+            # and what he meets without consequence relaxes (plasticity_v2 `extinction`)
+            self.mb.extinguish_counts(per_s, t)
             return None
         self.mb.pair_counts(per_s, valence, t, scale=scale)
+        self.mb.extinguish_counts(per_s, t, spare=valence)  # the other side got no dopamine
         return f"taste:{valence}"
 
     @staticmethod
@@ -1130,6 +1139,7 @@ class Agent:
         self._tick(self.sim_hours())
         w = self.live.present(list(self.enc.encode(f, self.appetite).drives), PRESENT_MS)
         self.mb.pair_counts(w.counts[self.fly.kc] * (1000.0 / w.ms), valence, self.sim_hours())
+        self.mb.extinguish_counts(w.counts[self.fly.kc] * (1000.0 / w.ms), self.sim_hours(), spare=valence)
         if valence == "reward":
             self.appetite_bite()
         v, info = self.mb.learned_valence(w.counts[self.fly.kc])
@@ -1265,6 +1275,7 @@ class Agent:
                 self._tick(self.sim_hours())
                 w = self.live.present(list(self.enc.encode(f, self.appetite).drives) if f else [], PRESENT_MS)
                 self.mb.pair_counts(w.counts[self.fly.kc] * (1000.0 / w.ms), r["valence"], self.sim_hours())
+                self.mb.extinguish_counts(w.counts[self.fly.kc] * (1000.0 / w.ms), self.sim_hours(), spare=r["valence"])
                 if r["valence"] == "reward":
                     self.appetite_bite()
             else:

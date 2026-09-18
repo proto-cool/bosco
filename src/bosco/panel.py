@@ -712,6 +712,21 @@ class Panel:
                 }
             )
         people.sort(key=lambda p: (-abs(p["learned"]), -p["familiarity"]))
+        # who he met today, sweetest and most bitter: the same verdicts, over the accounts whose
+        # posts he actually read today, so the page says how the day went and not only how his
+        # life has gone.  An account he has no verdict on is not an opinion and is left out.
+        today_dids = {
+            r[0] for r in db.execute("SELECT DISTINCT did FROM episodes WHERE ts>=? AND did IS NOT NULL", (day0,))
+        }
+        # the two ends of the day, five and five: not "everyone he dislikes", which on most days is
+        # nobody, but the five he thinks best of and the five he thinks worst of.  Each row says
+        # what it is in his own words, so a worst-five that is still faintly sweet reads as one.
+        seen_today = sorted(
+            (p for p in people if p["did"] in today_dids and p["learned"]), key=lambda p: -p["learned"]
+        )
+        half = min(5, len(seen_today) // 2)
+        sweet_today = seen_today[:5] if len(seen_today) >= 10 else seen_today[:half]
+        bitter_today = list(reversed(seen_today[-5:] if len(seen_today) >= 10 else seen_today[half:]))
         topics_today: dict[str, int] = {}
         for (t,) in db.execute("SELECT topics FROM episodes WHERE ts>=? AND topics IS NOT NULL", (day0,)):
             for name in t.split(","):
@@ -750,6 +765,7 @@ class Panel:
             "total": counts(0.0),
             "topics_today": topics_today,
             "people": people[:40],
+            "people_today": {"sweet": sweet_today, "bitter": bitter_today},
             "recent": recent,
             "posts": posts,
             "voice": dict(sorted(ag.voice.items(), key=lambda kv: -abs(kv[1] - 1.0))[:12]),

@@ -1,0 +1,64 @@
+# Mushroom-body plasticity parameters, v2 (see src/bosco/plasticity.py).
+#
+# v2 (2026-09-18, EXPERIMENT.md 2d) adds `extinction` to v1 and changes nothing else; v1 is kept
+# beside this file as the record of the rule that ran to freeze-v1.2.
+#
+# Two timescales, both KC->MBON depression gated by DAN compartment:
+#   short-term (STM): one pairing is enough; relaxes to baseline, e-fold tau_stm_h.
+#   long-term  (LTM): forms only by spaced repetition (a pairing on a synapse that
+#                     already carries STM from a pairing >= spacing_h earlier);
+#                     relaxes to baseline, e-fold tau_ltm_d.  (Tully et al. 1994:
+#                     spaced training -> protein-synthesis-dependent LTM.)
+stm:
+  eta: 0.5            # depression per pairing for a saturating KC
+  c_sat: 3.0          # KC spikes/s at which depression saturates (3 under adaptation; was 5)
+  m_min: 0.1
+  tau_h: 4.0
+ltm:
+  eta: 0.3            # LTM depression per consolidating pairing
+  spacing_h: 1.0      # minimum gap since the previous pairing on that synapse
+  stm_floor: 0.9      # the synapse must still carry STM (m_stm below this)
+  m_min: 0.2
+  tau_d: 30.0
+# Taste while browsing (decided 2026-09-15).  In the fly, sugar sensory neurons drive the PAM
+# reward DANs and bitter ones the PPL1 punishment DANs; that is how odor-taste conditioning
+# works at all.  So the taste of a post he reads (VADER -> sugar/bitter GRNs, config/encoder_v1.yaml
+# `gustatory`) pairs the mixture in that window (account, place, topics, words) with reward or
+# punishment, at strength = gain x the gustatory rate fraction min(1, |c| / c_sat).  A labeled post
+# (bitter at full rate, EXPERIMENT.md 2b) pairs punishment at labeled_gain.  Small, so a day of
+# reading moves a verdict a little; spaced repetition consolidates it like any pairing.  Not a
+# social reward: no appetite bite, no outcomes row; the episode row carries the weight digests and
+# a `taste:` note.  Never set from outcomes.
+taste:
+  reward_gain: 0.15
+  punishment_gain: 0.1
+  labeled_gain: 0.3
+# Exposure (decided 2026-09-15): the novelty compartment a'3 (config/mb_compartments.yaml
+# `exposure`).  Every stimulus window depresses the a'3 synapses of the KCs that fired, on its own
+# multiplier with its own decay, so the same smell later drives MBON-a'3 less: that depression,
+# read on the active KCs, is his familiarity with the smell (0 novel .. 1 well met).  tau_h about
+# a day, so "today" is familiar and last week is not.  Hattori et al. 2017.
+exposure:
+  eta: 0.3
+  c_sat: 3.0
+  m_min: 0.3
+  tau_h: 24.0
+# Extinction (decided 2026-09-18).  Depression in v1 was one-way: only the clock relieved it.
+# Under a diet that is 2.7:1 sweet to bitter, the reward compartments therefore accumulated
+# depression across the whole Kenyon cell population, every odor inherited the same positive
+# offset (mean verdict +0.259 at freeze-v1, +0.332 a day later, spread narrowing), and no account
+# could ever read bitter.  In the fly, forgetting is active and dopamine-driven rather than
+# passive (Berry et al. 2012, 2015), re-exposure without reinforcement updates a memory
+# (Felsenberg et al. 2018), and KC->MBON plasticity is bidirectional with its sign set by the
+# pairing (Cohn et al. 2015; Aso & Rubin 2016; Handler et al. 2019).  So: a compartment whose
+# DANs did not fire while its KCs did relaxes towards baseline by eta x the same rate fraction
+# the depression rule uses, and LTM relaxes at eta x (ltm.eta / stm.eta) -- slower, by the ratio
+# already in this file, so consolidated memory gives way last and no new number is invented.
+#
+# eta is set from the behavioural protocol, not from his feed and never from outcomes: a handful
+# of unreinforced presentations should visibly relax a fresh memory, as two one-minute
+# re-exposures do in Felsenberg et al. 2018.  At 0.1 each full-strength unpaired presentation
+# closes a tenth of the remaining gap, so seven of them halve it.  scripts/plasticity_v2_gate.py
+# replays his logged stimulus stream under v1 and v2 and prints what it did to him.
+extinction:
+  eta: 0.1

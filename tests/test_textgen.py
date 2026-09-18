@@ -119,7 +119,9 @@ def test_pick_sentence_by_smell_then_stitch(tmp_path):
         assert g2.pick_sentence("reply", "neutral", "mid", seed, air={"banana": 1.0, "leaf": 0.5}, top_k=1) == (
             "the banana is on the leaf."
         )
-    more = [g.generate("reply", "neutral", "mid", k, max_sentences=3, air={"banana": 1.0}, opening=s) for k in range(20)]
+    more = [
+        g.generate("reply", "neutral", "mid", k, max_sentences=3, air={"banana": 1.0}, opening=s) for k in range(20)
+    ]
     assert all(t is not None for t in more) and len({t for t in more}) > 1  # the seed still moves him
 
 
@@ -182,3 +184,21 @@ def test_the_walk_gets_off_a_line_that_ends_on_their_word(tmp_path):
     for seed in range(20):
         t = g.generate("reply", "neutral", "mid", seed, air={"today": 1.0}, opening="nobody came today")
         assert t is not None and len(t.split()) >= 3, t
+
+
+def test_he_may_stop_where_his_own_sentence_stops(tmp_path):
+    """A word that dangles in general does not dangle at the end of one of his own sentences
+    (decided 2026-09-18).  "today has a sweet part in it" is a line of his; pushing him off the
+    end of it, because "it" is on the no-ending list, is what produced "...in it is far in the
+    dark" -- his clause carried on into another line's."""
+    from bosco.textgen import Generator
+
+    (tmp_path / "a.txt").write_text(
+        "today has a sweet part in it\ni keep going back to the part\nit is far in the dark\n"
+    )
+    g = Generator(tmp_path)
+    said = [g.generate("groom", "neutral", "mid", seed, air={"today": 1.0}) or "" for seed in range(30)]
+    opened = [t for t in said if t.startswith("today has a sweet part in it")]
+    assert opened, said
+    assert any(t.startswith("today has a sweet part in it.") for t in opened)  # allowed to stop there
+    assert not any("in it is far" in t for t in said)  # and not pushed into the other line's clause

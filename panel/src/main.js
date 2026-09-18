@@ -182,6 +182,20 @@ async function pollStatus() {
   }
 }
 
+// Where a verdict came from.  Almost every account he has ever read has done nothing to him:
+// the only thing that moved his weights was the taste of their posts, which is the VADER
+// lexicon's score, and the row says so rather than letting a bar imply he knows them.
+function provenance(p) {
+  const acts = (p.rewards || 0) + (p.punishments || 0);
+  if (!acts) return 'from their posts';
+  return acts === 1 ? 'from 1 thing they did' : `from ${acts} things they did`;
+}
+
+function fillPeople(node, rows, empty) {
+  const list = rows || [];
+  node.replaceChildren(...(list.length ? list.map((p) => personRow(p, provenance(p))) : [el('li', 'empty', empty)]));
+}
+
 async function renderStatus(st) {
   thresholds = st.readout?.thresholds || {};
   caps = st.caps || null;
@@ -242,9 +256,11 @@ async function renderStatus(st) {
     if (air.length) ws.push('on his antennae right now: ', b(air.join(', ')), '.');
     sentence($('words-sentence'), ws);
   }
-  const plist = $('people');
-  plist.replaceChildren(...people.slice(0, 6).map((p) => personRow(p)));
-  if (!people.length) plist.replaceChildren(el('li', 'empty', 'nobody yet. he has not met anyone he remembers.'));
+  // how today went: his verdicts over the accounts he read today, both ends.  Not a second copy
+  // of the strongest verdicts of his life, which is what a single sorted list was.
+  const day = st.people_today || {};
+  fillPeople($('people-sweet'), day.sweet, people.length ? 'nobody yet today.' : 'nobody yet.');
+  fillPeople($('people-bitter'), day.bitter, 'nobody has soured on him today.');
 
   // his posts
   await renderPosts($('posts'), st.posts || [], 4);

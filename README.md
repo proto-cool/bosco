@@ -681,11 +681,30 @@ Every number below has a gate report under `docs/`.
 
    Same windows, same seeds, after: 0% exactly a line of his, longest run
    5.5 tokens (max 11), 13% carrying a run of eight or more, 72% of the
-   average utterance. He splices more, and a splice reads rougher — "today
-   has a sweet part in it is far in the dark" is his now, in a way the
-   quotation never was. The corpus, the phrasebook, the encoder, the
-   readout, the thresholds and the caps are untouched: same mouth, same
-   nose, different hands.
+   average utterance. The corpus, the phrasebook, the encoder, the readout,
+   the thresholds and the caps are untouched: same mouth, same nose,
+   different hands.
+
+   **And coherent while he does it** (`freeze-v1.2`, `UTTERANCE_VERSION` 3,
+   the same day, after Nick read the first batch: too rough). The quoting was
+   gone and the seams showed — "today has a sweet part in it is far in the
+   dark", where the walk crosses from one of his lines to another mid-clause.
+   The gate learned to count those: a sentence whose words are not one
+   unbroken run of any line of his. It was 26% of sentences before any of
+   this work and 25% after v1.1, so the splicing was never new; v1 had hidden
+   it behind a verbatim opening. Three fixes, all about where a clause may
+   start and stop. He carries the run-up to their word with him when it is
+   short enough to be a phrase, so he opens on "some kind of wind came" and
+   not "kind of wind came". Inside a sentence the words that finish the
+   clause he is in are weighted up (`STAY_BIAS`), so he changes line between
+   sentences, where it always reads. And where one of his own sentences stops
+   he may stop, even on a word that dangles anywhere else: "today has a sweet
+   part in it." is a line of his, and the anti-dangling rule had been pushing
+   him off the end of it into somebody else's clause — which is exactly the
+   garble above, and my own regression from the first pass. Nine tokens of
+   leash instead of six, since a short sentence of his is about that long.
+   Spliced sentences: 26% → 9%. Quoting stayed where v1.1 left it (0.3%
+   exactly a line, 6.1 tokens, 22% at eight or more).
 
 57. **Small talk reaches him** (decided 2026-09-16). The stoplist in
    `config/words_v1.yaml` is function words only now. Until then the
