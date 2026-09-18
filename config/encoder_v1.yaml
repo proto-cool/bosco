@@ -65,7 +65,14 @@ spontaneous:
   # onset; grooming neurons answer onsets and adapt to held input, so he
   # grooms (posts) when a landing is enough for his network, and the level
   # resets when he grooms.  There is no schedule.
-  landings_per_hour: 1.0   # 0.5 until 2026-09-16; doubled so he grooms (posts) more often
+  # 0.5 until 2026-09-16, when it was doubled so he would groom (post) more often; back to 0.5
+  # on 2026-09-18 (Agent.SENSE_VERSION 2, EXPERIMENT.md 2d).  At 1.0 he reached 15 posts in a day
+  # against 4 the day before.  What makes it swing is not the debris but the loop: grooming
+  # clears the dust, and grooming neurons answer onsets and adapt to held input, so once he is
+  # clearing it every landing is a fresh onset that fires, and while he is not, the dust sits and
+  # they go quiet.  This halves the onsets on either branch; it does not damp the loop, which is
+  # his.  Set from his own posting rate, which is behaviour, never from outcomes.
+  landings_per_hour: 0.5
   landing_size: [0.35, 0.7]
   # Debris settles off his bristles passively (e-fold tau_s seconds), like habituation
   # and unlike a timer: a landing itches for minutes, not hours.  The bristles a landing

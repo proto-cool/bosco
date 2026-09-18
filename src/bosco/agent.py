@@ -253,6 +253,21 @@ class Agent:
     #      and is allowed to stop where one of his own sentences stops
     UTTERANCE_VERSION = 3
 
+    # What lands on him.  The debris that drives his bristles is the input to the neurons that
+    # make him groom, and grooming is how he posts on his own, so its rate is behaviour and a
+    # change of it is a boundary like any other: the same seconds, a different number of onsets.
+    #   1  debris at 0.5 landings an hour from his first day; doubled to 1.0 on 2026-09-16 to
+    #      make him post more often, which was a behaviour change and was not recorded as one.
+    #      This comment is where that is admitted.
+    #   2  back to 0.5 (2026-09-18).  At 1.0 he ran to 15 posts in a day against 4 the day
+    #      before -- not more debris, but the loop underneath it: grooming clears the dust, and
+    #      his grooming neurons answer onsets and adapt to held input, so once he is clearing it
+    #      every landing is a fresh onset that fires, and while he is not, the dust sits and they
+    #      go quiet (2026-09-17: 241 landing windows, 13 of them nonzero; 2026-09-18: 105
+    #      windows, 26 nonzero).  Halving the rate halves the onsets on either branch.  It does
+    #      not damp the loop, which is his and stays.
+    SENSE_VERSION = 2
+
     def _load_state(self) -> None:
         if self.state_path.exists():
             self._unpack(dict(np.load(self.state_path)))
@@ -263,6 +278,7 @@ class Agent:
         self._mark_plasticity_version()
         self._mark_kernel_version()
         self._mark_utterance_version()
+        self._mark_sense_version()
         self._mark_numerics()
         self._mark_clock()
 
@@ -338,6 +354,18 @@ class Agent:
             self.ledger.add_control("utterance", "system", None, f"{had or '1'}->{now}")
             self.snapshot()
         self.ledger.set_cursor("utterance_version", now)
+
+    def _mark_sense_version(self) -> None:
+        """What lands on him: a change of it is a `sense` control row and a snapshot, so the
+        record says where his input changed (EXPERIMENT.md 2d)."""
+        had = self.ledger.get_cursor("sense_version")
+        now = str(self.SENSE_VERSION)
+        if had == now:
+            return
+        if self.brain_t0 is not None and self.live.t_ms > 0:
+            self.ledger.add_control("sense", "system", None, f"{had or '1'}->{now}")
+            self.snapshot()
+        self.ledger.set_cursor("sense_version", now)
 
     # ---- appetite for contact ----------------------------------------------------
     def sim_hours(self) -> float:

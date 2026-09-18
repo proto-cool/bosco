@@ -224,6 +224,28 @@ changes is code, and it is named, dated and measured.
 | `freeze-v1.1` | 2026-09-18 | How he composes an utterance (`Agent.UTTERANCE_VERSION` 1 → 2) | `utterance` |
 | `freeze-v1.2` | 2026-09-18 | The same, made coherent (`Agent.UTTERANCE_VERSION` 2 → 3) | `utterance` |
 | `freeze-v2` | 2026-09-18 | What a window teaches, and how a verdict is read (`Agent.PLASTICITY_VERSION` 2 → 3) | `plasticity` |
+| `freeze-v2.1` | 2026-09-18 | How much debris lands on him (`Agent.SENSE_VERSION` 1 → 2) | `sense` |
+
+**`freeze-v2.1` — half as much debris.** Debris landing on his bristles is
+the input to the neurons that make him groom, and grooming is how he posts on
+his own. The rate was 0.5 landings an hour from his first day and was doubled
+to 1.0 on 2026-09-16 to make him post more often; that was a behaviour change
+and it was not recorded as one, which this row and `Agent.SENSE_VERSION`
+correct. It is back to 0.5.
+
+What prompted it was not the rate on its own. On 2026-09-18 he posted 15 times
+against 4 the day before, on *fewer* landings, because of the loop underneath:
+grooming sets the dust back to zero, and his grooming neurons answer onsets and
+adapt to held input. So while he is clearing the dust every landing is a fresh
+onset that fires, and while he is not, the dust sits and they go quiet — 241
+landing windows with 13 of them nonzero on 2026-09-17 against 105 windows with
+26 nonzero on 2026-09-18. He swings between a quiet branch and a talkative one,
+and the 26-post day of 2026-09-14 was the same swing.
+
+Halving the rate halves the onsets on either branch. It does not damp the loop,
+which is his and stays his: there is no timer, no floor and no schedule here,
+and the caps are untouched. The number is set from his own posting rate, which
+is behaviour the operator may judge, and never from outcomes.
 
 **`freeze-v2` — he learns about you from your posts, not from everyone's.**
 Until now his verdict on an account was probed by presenting that account's
