@@ -106,8 +106,12 @@ def test_pick_sentence_by_smell_then_stitch(tmp_path):
     assert g.pick_sentence("reply", "neutral", "mid", 1, air={"spoon": 1.0}) is None  # nothing of his smells of it
     assert g.pick_sentence("reply", "neutral", "mid", 1, air={}) is None
     assert g.pick_sentence("reply", "neutral", "mid", 1, air={"banana": 1.0}, avoid={s}) != s  # not twice running
-    one = g.generate("reply", "neutral", "mid", 0, max_sentences=2, opening=s)
-    assert one == s + "."  # the thought has two sentences already: nothing stitched on
+    # the thought is where he starts, not what he says (2026-09-18): he opens on their word and
+    # walks on in his own, and never hands the line back whole
+    for seed in range(20):
+        t = g.generate("reply", "neutral", "mid", seed, max_sentences=2, air={"banana": 1.0}, opening=s)
+        assert t is not None and t.rstrip(".") != s.rstrip(".")
+        assert "banana" in t
     # coverage (decided 2026-09-16): a sentence sharing two of their words beats one loud word
     (tmp_path / "b.txt").write_text("the banana is on the leaf.\n")
     g2 = Generator(tmp_path)
@@ -115,8 +119,8 @@ def test_pick_sentence_by_smell_then_stitch(tmp_path):
         assert g2.pick_sentence("reply", "neutral", "mid", seed, air={"banana": 1.0, "leaf": 0.5}, top_k=1) == (
             "the banana is on the leaf."
         )
-    more = [g.generate("reply", "neutral", "mid", k, max_sentences=3, opening=s) for k in range(20)]
-    assert all(t.startswith(s) for t in more) and any(len(t) > len(s) for t in more)
+    more = [g.generate("reply", "neutral", "mid", k, max_sentences=3, air={"banana": 1.0}, opening=s) for k in range(20)]
+    assert all(t is not None for t in more) and len({t for t in more}) > 1  # the seed still moves him
 
 
 def test_every_sentence_ends_with_a_period_even_from_a_line_end(tmp_path):
@@ -149,3 +153,32 @@ def test_seen_register_is_most_of_the_answer():
     m_asked = g.model_for("reply", "neutral", "mid", (), "known", state)
     m_plain = g.model_for("reply", "neutral", "mid", (), "known", {"time": "day", "appetite": "", "mood": ""})
     assert m_asked.c1["came"] > 3 * m_plain.c1["came"]
+
+
+def test_he_borrows_a_phrase_not_a_paragraph(tmp_path):
+    """The run guard (decided 2026-09-18): once he has run COPY_RUN_MAX tokens alongside one line
+    of his, the words that would carry that line on are struck out where he has anywhere else to
+    go, so he leaves it in the middle instead of reciting it to the end."""
+    from bosco.textgen import Generator
+
+    a = "the big one put a bowl of fruit on the table by the window"
+    b = "a bowl of fruit on the table is a good thing for me"
+    (tmp_path / "a.txt").write_text(f"{a}\n{b}\n")
+    g = Generator(tmp_path)
+    said = [g.generate("groom", "neutral", "mid", seed) or "" for seed in range(30)]
+    # the two lines share "a bowl of fruit on the table"; past the guard he crosses to the other
+    assert any("the big one put" in t and "a good thing for me" in t for t in said)
+    # and he is not simply reciting one of them
+    assert not any(t.rstrip(".") == a or t.rstrip(".") == b for t in said)
+
+
+def test_the_walk_gets_off_a_line_that_ends_on_their_word(tmp_path):
+    """Opened on a word his own line ended on, he does not stop there ("today."): he keeps less of
+    that line's context and finds somewhere else of his to take it."""
+    from bosco.textgen import Generator
+
+    (tmp_path / "a.txt").write_text("nobody came today\ntoday the light is almost gone\ntoday i am on the wall\n")
+    g = Generator(tmp_path)
+    for seed in range(20):
+        t = g.generate("reply", "neutral", "mid", seed, air={"today": 1.0}, opening="nobody came today")
+        assert t is not None and len(t.split()) >= 3, t

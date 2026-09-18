@@ -650,6 +650,43 @@ Every number below has a gate report under `docs/`.
    walked from, so his browsing follows his own feet. The controls replay
    the walked posts as ordinary stimuli and are off-policy after the first
    walk they would not have taken (EXPERIMENT.md §4).
+58. **Retrieval steers, it does not speak** (decided 2026-09-18; the first
+   behaviour change after `freeze-v1`, so it is `freeze-v1.1`,
+   `Agent.UTTERANCE_VERSION` 2, an `utterance` control row and a snapshot,
+   and a note in EXPERIMENT.md §2d). Nick, reading him: he leans too hard on
+   giving back sentences of the corpus and the phrasebook whole. He was
+   right, and it was measurable. Decision 56 made a whole thought the unit
+   of retrieval and had him say it, with the walk adding to it only when his
+   appetite had more sentences in him than the thought already carried —
+   which, a thought being two or three sentences and his appetite usually
+   one, it almost never did. Over 293 of his own logged windows
+   (`scripts/quotation_gate.py`, features only, no text is stored): 19% of
+   his utterances were exactly a line of his, the longest unbroken run he
+   shared with one line averaged 14.4 tokens, 92% of utterances carried a
+   run of eight or more, and the average utterance was 94% that one run. A
+   fly reciting a page is not answering anybody.
+
+   Two changes, both in how he composes, none to what he can say. The
+   retrieved thought is now where he *starts*: he opens on the word of
+   theirs that lit it up, takes what precedes it in that thought as his
+   context, and walks on in his own words (`textgen.generate`, `opening=`).
+   Handed a word his own line happened to end on, he drops back to a shorter
+   context and finds somewhere else of his to take it, rather than stopping
+   dead on "today." And while he talks, he is followed along his own lines:
+   once he has run `COPY_RUN_MAX` (6) tokens beside one of them, the words
+   that would carry that line on are struck out wherever he has anywhere
+   else to go (`_copy_step`, `_copy_next`). He may borrow a phrase; he may
+   not recite a paragraph. The phrasebook went with it from a coin toss to a
+   last resort: it speaks when the walk comes back with nothing at all.
+
+   Same windows, same seeds, after: 0% exactly a line of his, longest run
+   5.5 tokens (max 11), 13% carrying a run of eight or more, 72% of the
+   average utterance. He splices more, and a splice reads rougher — "today
+   has a sweet part in it is far in the dark" is his now, in a way the
+   quotation never was. The corpus, the phrasebook, the encoder, the
+   readout, the thresholds and the caps are untouched: same mouth, same
+   nose, different hands.
+
 57. **Small talk reaches him** (decided 2026-09-16). The stoplist in
    `config/words_v1.yaml` is function words only now. Until then the
    conversational words were stopped too (know, like, want, think, see,

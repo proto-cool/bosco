@@ -222,6 +222,16 @@ class Agent:
     #      his.
     KERNEL_VERSION = 2
 
+    # How he composes what he says.  The corpus and the phrasebook are frozen artifacts, but how
+    # much of one he hands over at a time is behaviour, and a change of it is a boundary in the
+    # record for the same reason: the same window, the same seed, a different sentence.
+    #   1  retrieval first: the thought that smelled most like the moment, said whole, and a coin
+    #      between the phrasebook line and the walk when nothing smelled of it (2026-09-16)
+    #   2  retrieval steers, it does not speak: he opens on their word inside that thought and
+    #      walks on in his own, may run only COPY_RUN_MAX tokens alongside one line of his, and
+    #      the phrasebook is the last resort rather than a coin (2026-09-18)
+    UTTERANCE_VERSION = 2
+
     def _load_state(self) -> None:
         if self.state_path.exists():
             self._unpack(dict(np.load(self.state_path)))
@@ -231,6 +241,7 @@ class Agent:
             self._init_appetite()
         self._mark_plasticity_version()
         self._mark_kernel_version()
+        self._mark_utterance_version()
         self._mark_numerics()
         self._mark_clock()
 
@@ -294,6 +305,18 @@ class Agent:
             self.ledger.add_control("kernel", "system", None, f"{had or '1'}->{now}")
             self.snapshot()
         self.ledger.set_cursor("kernel_version", now)
+
+    def _mark_utterance_version(self) -> None:
+        """How he composes: a change of it is an `utterance` control row and a snapshot, so the
+        record says where his voice changed (EXPERIMENT.md 2, behaviour changes)."""
+        had = self.ledger.get_cursor("utterance_version")
+        now = str(self.UTTERANCE_VERSION)
+        if had == now:
+            return
+        if self.brain_t0 is not None and self.live.t_ms > 0:
+            self.ledger.add_control("utterance", "system", None, f"{had or '1'}->{now}")
+            self.snapshot()
+        self.ledger.set_cursor("utterance_version", now)
 
     # ---- appetite for contact ----------------------------------------------------
     def sim_hours(self) -> float:
@@ -863,7 +886,6 @@ class Agent:
             fb = familiarity_bin(fam)
             line_key = f"{speak_as}/{dec.valence}/{dec.arousal}/{fb}"
             line = self.phrasebook.pick(speak_as, dec.valence, dec.arousal, fb, seed)
-            coin = (seed >> 7) & 1
             recent = self.recent_said()  # not the same words twice running
             cands = tuple(f.words) + tuple(x for x in f.context if x not in f.words) if f else None
             air = self.air(w.t0_ms, cands) if f is not None else self.day_air(ts, w.t0_ms)
@@ -895,43 +917,41 @@ class Agent:
             if opening:
                 self._recent_openings.append(opening)
                 del self._recent_openings[:-30]
-            # the phrasebook speaks only when nothing of his smells of the moment (decided
-            # 2026-09-16: a line said whatever was asked read as a non sequitur); then the coin
-            if opening is None and line is not None and coin == 0 and self.said_hash(line.text) not in recent:
+            # the phrasebook is his last resort, not his first (decided 2026-09-18): a hand-written
+            # line said whole is a quotation too, and he has his own words for the moment.  It
+            # speaks below, when the walk comes back with nothing.
+            text = None
+            for attempt in range(4):
+                # the same seed walks the same way, and at low arousal the walk is nearly
+                # greedy: something he said lately is drawn again with a fresh seed, a few times
+                s2 = (
+                    seed
+                    if attempt == 0
+                    else int.from_bytes(
+                        hashlib.blake2b(f"{seed}|again|{attempt}".encode(), digest_size=8).digest(), "little"
+                    )
+                )
+                text = self.generator.generate(
+                    speak_as,
+                    dec.valence,
+                    dec.arousal,
+                    s2,
+                    max_sentences=self.verbosity(self.appetite, dec.learned),
+                    topics=topics,
+                    familiarity=fb,
+                    state=state,
+                    word_valence=wv,
+                    air=air,
+                    beta=float(c.get("valence_beta", 1.0)),
+                    gamma=float(c.get("echo_gamma", 0.5)),
+                    prime=bool(f is not None and f.mentioned),
+                    opening=opening if attempt == 0 else None,
+                )
+                if text is None or self.said_hash(text) not in recent:
+                    break
+            text_source = "generated" if text else None
+            if text is None and line is not None:
                 text, text_source = line.text, "phrasebook"
-            else:
-                text = None
-                for attempt in range(4):
-                    # the same seed walks the same way, and at low arousal the walk is nearly
-                    # greedy: something he said lately is drawn again with a fresh seed, a few times
-                    s2 = (
-                        seed
-                        if attempt == 0
-                        else int.from_bytes(
-                            hashlib.blake2b(f"{seed}|again|{attempt}".encode(), digest_size=8).digest(), "little"
-                        )
-                    )
-                    text = self.generator.generate(
-                        speak_as,
-                        dec.valence,
-                        dec.arousal,
-                        s2,
-                        max_sentences=self.verbosity(self.appetite, dec.learned),
-                        topics=topics,
-                        familiarity=fb,
-                        state=state,
-                        word_valence=wv,
-                        air=air,
-                        beta=float(c.get("valence_beta", 1.0)),
-                        gamma=float(c.get("echo_gamma", 0.5)),
-                        prime=bool(f is not None and f.mentioned),
-                        opening=opening if attempt == 0 else None,
-                    )
-                    if text is None or self.said_hash(text) not in recent:
-                        break
-                text_source = "generated" if text else None
-                if text is None and line is not None:
-                    text, text_source = line.text, "phrasebook"
             if text:
                 note = (note + ";" if note else "") + "said:" + self.said_hash(text)
         mbon = {t: r for t, r in self.fly.mbon_rates_from_counts(w.counts, w.ms).items()}

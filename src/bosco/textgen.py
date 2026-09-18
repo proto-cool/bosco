@@ -27,8 +27,13 @@ MAX_CHARS = 280
 MAX_SENT_TOKENS = 22
 EOS_BIAS = 2.5  # weight on ending a sentence where a corpus sentence ended, against splicing on
 MIN_SENT_TOKENS = 1  # a one-word sentence is his register ("banana", "rude", "warm")
+OPEN_MIN_TOKENS = 3  # but not when the word was handed to him: an answer has to say something
 SEEN_WEIGHT = 20  # asked about a smell, his yes or his no (seen=met|fresh) is at least this, and at least half the pool
 SEEN_PICK = 3.0  # and in retrieval a line from that file counts three times over (2026-09-16, with a bigger corpus)
+# He may borrow a phrase, not a paragraph (decided 2026-09-18).  Once the tail of what he is
+# saying has run this many tokens alongside one line of his, the continuations that would keep
+# that line going are struck out and he has to find his own way on.  Ending is always allowed.
+COPY_RUN_MAX = 6
 # a sentence may not end on one of these (function words, dangling pronouns)
 NO_END = {
     "the",
@@ -225,6 +230,41 @@ class Generator:
         if phrasebook_lines:
             self.docs.append(Document("\n".join(phrasebook_lines), {}, "phrasebook"))
         self._models: dict[tuple, NGram] = {}
+        self._lines: list[list[str]] | None = None
+        self._starts: dict[str, list[tuple[int, int]]] | None = None
+
+    def _copy_index(self) -> tuple[list[list[str]], dict[str, list[tuple[int, int]]]]:
+        """Every line of his as one token list, and where each token occurs in them: enough to
+        know, while he is talking, how long he has been running alongside one of his own lines."""
+        if self._lines is None:
+            lines: list[list[str]] = []
+            starts: dict[str, list[tuple[int, int]]] = defaultdict(list)
+            for d in self.docs:
+                for line in d.lines:
+                    toks = [t.lower() for sent in line for t in sent]
+                    if not toks:
+                        continue
+                    i = len(lines)
+                    lines.append(toks)
+                    for j, t in enumerate(toks):
+                        starts[t].append((i, j))
+            self._lines, self._starts = lines, dict(starts)
+        return self._lines, self._starts
+
+    def _copy_step(self, w: str, matches: set[tuple[int, int]], run: int) -> tuple[set[tuple[int, int]], int]:
+        """Where he now stands in his own lines, after saying `w`, and how many tokens he has
+        said alongside one of them without a break."""
+        lines, starts = self._copy_index()
+        w = w.lower()
+        grown = {(i, j + 1) for i, j in matches if j + 1 < len(lines[i]) and lines[i][j + 1] == w}
+        if grown:
+            return grown, run + 1
+        return set(starts.get(w, ())), 1
+
+    def _copy_next(self, matches: set[tuple[int, int]]) -> set[str]:
+        """The words that would carry one of his lines on from here."""
+        lines, _ = self._copy_index()
+        return {lines[i][j + 1] for i, j in matches if j + 1 < len(lines[i])}
 
     @property
     def empty(self) -> bool:
@@ -423,16 +463,47 @@ class Generator:
         z, a, b = BOS, BOS, BOS
         n_done = 0
         sent_len = 0
+        matches: set[tuple[int, int]] = set()  # where he stands in his own lines
+        run = 0  # how long he has been running alongside one of them
+        opened = False  # he was started on a word, and a word alone is not an answer
         if opening:
-            # a whole thought of his, picked by smell (pick_sentence); the walk adds to it only if
-            # he has more sentences in him than the thought has
-            out = tokenize(opening)
-            if out and out[-1] not in END_PUNCT:
-                out.append(".")
-            n_done = sum(1 for t in out if t in END_PUNCT)
-            prime = False
-            if n_done >= n_sent:
-                return detokenize(out)
+            # The thought retrieval found is where he starts, not what he says (decided
+            # 2026-09-18: said whole, it was a quotation, and nine words in ten of an utterance
+            # were one lifted run).  He opens on the word of theirs that lit that thought up,
+            # with the words before it in it as his context, and walks on from there himself.
+            toks = tokenize(opening)
+            spots = [
+                (k, in_air.get(t.lower(), 0.0))
+                for k, t in enumerate(toks)
+                if t not in END_PUNCT and in_air.get(t.lower(), 0.0) > 0
+            ]
+            k0 = 0
+            if spots:
+                tot = sum(d for _, d in spots)
+                u = rng.unit() * tot
+                acc = 0.0
+                k0 = spots[-1][0]
+                for k, d in spots:
+                    acc += d
+                    if u <= acc:
+                        k0 = k
+                        break
+            sb = 0  # the top of the sentence their word sits in, for his context
+            for k in range(k0 - 1, -1, -1):
+                if toks[k] in END_PUNCT:
+                    sb = k + 1
+                    break
+            if k0 < len(toks):
+                # his context is what came before that word in its own sentence, padded with the
+                # start of a sentence: the walk goes on from after it, the way priming does
+                prev = [t for t in toks[sb:k0]]
+                z, a = ([BOS, BOS] + prev)[-2:]
+                b = toks[k0].lower()
+                out.append(toks[k0])
+                sent_len = 1
+                matches, run = self._copy_step(toks[k0], matches, run)
+                prime = False
+                opened = True
         if prime and in_air:
             # open on one of their words: a context of his that ends in it, chosen by freshness
             options = [(w, d) for w, d in in_air.items() if m.pred.get(w)]
@@ -451,18 +522,36 @@ class Generator:
                 z = BOS
                 out.append(m.surface_form(w0))
                 sent_len = 1
+                opened = True
+                matches, run = self._copy_step(w0, matches, run)
         used: set[tuple[str, str, str, str]] = set()  # no four-gram twice in one utterance (loop guard)
         for _ in range(120):
             cands = m.candidates(z, a, b)
             content = sum(1 for t in out[len(out) - sent_len :] if t not in END_PUNCT and t not in {",", ";", ":"})
             dangling = bool(out) and out[-1].lower() in NO_END
-            if (content < MIN_SENT_TOKENS or dangling) and sent_len < MAX_SENT_TOKENS:
+            # a sentence of one word is his register; a sentence of one word he was handed is a
+            # stub ("today."), so a started sentence has to get somewhere before it may end
+            floor = OPEN_MIN_TOKENS if (opened and n_done == 0) else MIN_SENT_TOKENS
+            if (content < floor or dangling) and sent_len < MAX_SENT_TOKENS:
                 filtered = [c for c in cands if c != EOS and c not in END_PUNCT]
+                if not filtered:
+                    # he was handed a word that his own line ended on: he keeps less of that
+                    # line's context and finds somewhere else of his to take it
+                    for zz, aa in ((BOS, a), (BOS, BOS)):
+                        alt = [c for c in m.candidates(zz, aa, b) if c != EOS and c not in END_PUNCT]
+                        if alt:
+                            filtered, z, a = alt, zz, aa
+                            break
                 if filtered:
                     cands = filtered
             fresh = [c for c in cands if (z, a, b, c) not in used or c == EOS]
             if fresh:
                 cands = fresh
+            if run >= COPY_RUN_MAX:
+                carry_on = self._copy_next(matches)
+                own = [c for c in cands if c == EOS or c.lower() not in carry_on]
+                if own:
+                    cands = own  # he has said enough of that one; the rest is his
             ws = [
                 m.p4(z, a, b, w) ** (1.0 / temp)
                 * max(0.1, 1.0 + beta * wv.get(w, 0.0))
@@ -484,6 +573,7 @@ class Generator:
             if w == EOS or sent_len >= MAX_SENT_TOKENS:
                 if out and out[-1] not in END_PUNCT:
                     out.append(".")  # a corpus line ends without a period; his sentences still do
+                    matches, run = self._copy_step(".", matches, run)
                 n_done += 1
                 sent_len = 0
                 if n_done >= n_sent or len(detokenize(out)) > MAX_CHARS * 0.7:
@@ -496,6 +586,7 @@ class Generator:
                 continue
             out.append(w)
             used.add((z, a, b, w))
+            matches, run = self._copy_step(w, matches, run)
             sent_len += 1
             z, a, b = a, b, w
         # drop a trailing dangling fragment left by the token cap

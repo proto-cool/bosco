@@ -8,7 +8,7 @@
 | 3 Plasticity | learn / forget | PASS; two timescales (STM hours, LTM spaced, a month) | `phase3-plasticity-gate.md` |
 | 3b Learning → behaviour | spaced rewards change action | PASS (follow after 3 rewards; ignore after 3 punishments; persists 10 days) | `scripts/phase3_mbon_out_gain.py`, README §12 |
 | 4 Encoder + readout | unit tests | done | `encoder.md`, `config/readout_populations.yaml` |
-| 4b Generator | tests | done; retrieval first since 2026-09-16, the phrasebook only when nothing of his fits | `src/bosco/textgen.py`, `corpus/`, `docs/corpus-audit.md` |
+| 4b Generator | tests | done; retrieval steers and the walk speaks since 2026-09-18 (`scripts/quotation_gate.py`), the phrasebook a last resort | `src/bosco/textgen.py`, `corpus/`, `docs/corpus-audit.md` |
 | 4d Timing + caps | tests | dust drive (no timer), per-kind caps with thread/account guards, episode budget | `config/caps_v1.yaml`, `config/encoder_v1.yaml` |
 | 4e Remote management | tests | sleep/wake/delete/ignore/unfollow/reload/restart/status/people/memory/forget/primer by mention | `src/bosco/control.py` |
 | 4f Topics as smells | tests | keyword map → glomeruli mixtures; logged as names | `config/topics_v1.yaml` |

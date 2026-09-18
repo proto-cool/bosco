@@ -248,14 +248,18 @@ Frozen and published at tag. Claude does not write phrasebook lines.
 a person's wants, flat declaratives, no jokes (`docs/corpus-audit.md`). `textgen.py` is a word n-gram (four words of context, backing off) with
 absolute-discount backoff: the fly picks the corpus subset (tags), the
 temperature (arousal) and the seed; the corpus never contains other
-people's posts. Utterance policy (revised 2026-09-16): retrieval first; a phrasebook
-line is used only when nothing of his smells of the moment, and then a
-seeded coin picks between the line and the generator. He reads a thread through before answering in it (the posts above,
-oldest first, as context). His first sentence is retrieval: the sentence of
-his that smells most like the moment (lexical, over his corpus, weighted by
-freshness and learned word valence), then the n-gram adds if his appetite
-allows; when nothing of his smells of it, the utterance opens on one of
-their words. When he grooms, the register is his day:
+people's posts. Utterance policy (revised 2026-09-18, `Agent.UTTERANCE_VERSION`
+2): **retrieval steers, it does not speak.** He reads a thread through
+before answering in it (the posts above, oldest first, as context).
+Retrieval still finds the thought of his that smells most like the moment
+(lexical, over his corpus, weighted by freshness and learned word valence),
+but he does not say it: he opens on the word of theirs that lit it up, with
+that thought as his context, and walks on in his own words. He may run
+`COPY_RUN_MAX` (6) tokens alongside one line of his; past that, the words
+that would carry that line on are struck out wherever he has anywhere else
+to go, so a page never comes back whole. The phrasebook is his last resort,
+not a coin: it speaks only when the walk comes back with nothing. Measure
+it with `scripts/quotation_gate.py`, never tune it on outcomes. When he grooms, the register is his day:
 the balance of his own verdicts on what he read, a `mood=` tag from the
 ledger, and the day's words as faint air. Corpus and phrasebook digests are
 frozen artifacts.

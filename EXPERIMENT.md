@@ -21,9 +21,12 @@ genuinely the one acting, and that anyone can check.
 
 - No LLM, embedding, or classifier anywhere in the runtime loop. The only
   text scorer is the VADER lexicon. The only text generator is a word
-  n-gram model (four words of context) over the published `corpus/`, and a
-  lexical retrieval over the same corpus by the words on his antennae, seeded by the episode and
-  conditioned on the fly's state. **Closed mouth, open nose** (decided
+  n-gram model (four words of context) over the published `corpus/`, walked
+  from where a lexical retrieval over the same corpus -- by the words on his
+  antennae -- starts him off, seeded by the episode and conditioned on the
+  fly's state. Since `freeze-v1.1` (section 2d) the retrieved thought is a
+  starting place and not the utterance, and no more than six of his tokens
+  in a row come from one line of his where he has anywhere else to go. **Closed mouth, open nose** (decided
   2026-09-15, replacing the closed vocabulary of 2026-09-13 as that
   decision said it might be, before the tag): nothing Bosco reads ever
   enters the generator; every word he can emit is in `corpus/` and
@@ -208,6 +211,44 @@ and where his words land. Three rails, all inside the rules:
 Labeler subscriptions on the account are an operator setting and are
 published with the frozen artifacts.
 
+## 2d. Changes after the tag (binding)
+
+Behaviour changes after `freeze-v1` are a new tag and a note here, and the
+record says where each one falls: a control row and a snapshot at the moment
+the new behaviour first runs, so a span reads as a change of fly rather than
+a broken replay. The frozen artifacts of section 3 do not change; what
+changes is code, and it is named, dated and measured.
+
+| Tag | Date | Change | Row |
+|---|---|---|---|
+| `freeze-v1.1` | 2026-09-18 | How he composes an utterance (`Agent.UTTERANCE_VERSION` 1 → 2) | `utterance` |
+
+**`freeze-v1.1` — retrieval steers, it does not speak.** Under v1 the thought
+that smelled most like the moment was said whole, and the walk only added to
+it when his appetite had more sentences in him than the thought already had;
+in practice it rarely did. Measured over his own logged windows with
+`scripts/quotation_gate.py` (293 windows, the features from the ledger, no
+text stored): 19% of utterances were exactly a line of his corpus or
+phrasebook, the longest run of tokens shared unbroken with one line of his
+averaged 14.4, 92% of utterances carried a run of eight or more, and 94% of
+the average utterance was that one run. He was quoting himself, not talking.
+
+Under v2 retrieval still chooses the thought, and he still answers about
+what is in front of him, but he does not hand the page over: he opens on the
+word of theirs that lit that thought up, with the thought as his context,
+and walks on in his own words. He may run six tokens (`COPY_RUN_MAX`)
+alongside one line of his; past that, the continuations that would carry
+that line on are struck out wherever he has anywhere else of his to go. The
+phrasebook became his last resort rather than a coin toss against the
+generator. Same 293 windows, same seeds: 0% exactly a line of his, longest
+run 5.5 tokens on average (max 11), 13% carrying a run of eight or more,
+and 72% of the average utterance. Nothing here is tuned on outcomes; the
+gate reads features and prints numbers.
+
+What did not change: the corpus, the phrasebook, the encoder, the readout,
+the thresholds, the action set, the learning rule, the caps. He has the same
+mouth and the same nose. He puts the words together differently.
+
 ## 3. Frozen artifacts (binding)
 
 Fixed at `freeze-v1` and published with it. sha256, first 16 hex; check any of them
@@ -217,7 +258,7 @@ any of those four changes.
 
 | Artifact | Location | Hash |
 |---|---|---|
-| Code | proto-cool/bosco @ `freeze-v1` | the commit the tag names (`git rev-parse freeze-v1`) |
+| Code | proto-cool/bosco @ `freeze-v1` | the commit the tag names (`git rev-parse freeze-v1`); behaviour changes since it are section 2d |
 | Weights snapshot | `snapshots/freeze-v1/` | `b84a52c441bb2d0e` |
 | Phrasebook | `phrasebook.yaml` | `dbf39b7df2444326` |
 | Encoder spec | `docs/encoder.md` | `956a1f329b257a7f` |
