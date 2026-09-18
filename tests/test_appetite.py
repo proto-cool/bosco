@@ -217,7 +217,11 @@ def test_walking_short_of_its_threshold_is_a_walk_while_browsing(fly):
     assert ro.decide(counts, 1000.0, familiarity=1.0).action == "follow"
     counts[ro.pops["engage"]] = 0
     assert ro.decide(counts, 1000.0).action == "nothing"
-    # a novel smell alerts: the same rate walks sooner when it is new than when it is familiar
-    counts[ro.pops["engage"]] = int(ro.thresholds["walk"] * 0.8)
-    assert ro.decide(counts, 1000.0, familiarity=1.0).action == "nothing"
-    assert ro.decide(counts, 1000.0, familiarity=0.0).action == "walk"
+    # a novel smell alerts: the same rate walks sooner when it is new than when it is familiar.
+    # Over a one-second window a rate is a whole number of spikes, and the rungs now sit close
+    # enough together (walk 2.05 Hz) that whole numbers cannot express four fifths of one; the
+    # window is ten seconds here so the rate under test is the rate meant.
+    ms = 10_000.0
+    counts[ro.pops["engage"]] = round(ro.thresholds["walk"] * 0.8 * ms / 1000.0)
+    assert ro.decide(counts, ms, familiarity=1.0).action == "nothing"
+    assert ro.decide(counts, ms, familiarity=0.0).action == "walk"

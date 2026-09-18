@@ -69,7 +69,12 @@ def _load() -> C.CDLL:
     global _lib
     if _lib is not None:
         return _lib
-    if not _LIB_PATH.exists():
+    # A stale build is worse than a missing one: it runs dynamics the source no longer describes,
+    # and nothing says so (a day was lost to one in 2026-09-18).  Rebuild when the sources are
+    # newer; make is idempotent, and the container builds it once at image time anyway.
+    src = [paths.KERNEL_DIR / "lif.c", paths.KERNEL_DIR / "lif.h"]
+    stale = not _LIB_PATH.exists() or any(f.exists() and f.stat().st_mtime > _LIB_PATH.stat().st_mtime for f in src)
+    if stale and not os.environ.get("BOSCO_LIF_SO"):
         subprocess.run(["make", "-C", str(paths.KERNEL_DIR)], check=True)
     lib = C.CDLL(str(_LIB_PATH))
     i64p = np.ctypeslib.ndpointer(np.int64, flags="C_CONTIGUOUS")
