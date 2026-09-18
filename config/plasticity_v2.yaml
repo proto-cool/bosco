@@ -1,7 +1,13 @@
-# Mushroom-body plasticity parameters, v2 (see src/bosco/plasticity.py).
+# PROPOSED AND REFUSED.  Nothing loads this file: he runs config/plasticity_v1.yaml.
 #
-# v2 (2026-09-18, EXPERIMENT.md 2d) adds `extinction` to v1 and changes nothing else; v1 is kept
-# beside this file as the record of the rule that ran to freeze-v1.2.
+# This is v1 plus `extinction`, proposed on 2026-09-18 against the one-way ratchet in his
+# verdicts and refused by its own gate the same day -- replayed from his live weights it raised
+# the verdicts (+0.310 -> +0.392, against +0.345 for the rule he runs) rather than levelling
+# them, because on a diet that is mostly sweet the compartment extinction keeps relaxing is the
+# punishment one, and the verdict is reward-side depression minus punishment-side.  Kept so the
+# next attempt starts from something runnable: docs/plasticity-v2.md, scripts/plasticity_v2_gate.py.
+#
+# Mushroom-body plasticity parameters (see src/bosco/plasticity.py).
 #
 # Two timescales, both KC->MBON depression gated by DAN compartment:
 #   short-term (STM): one pairing is enough; relaxes to baseline, e-fold tau_stm_h.

@@ -18,12 +18,15 @@ valence.  For KC k firing c_k spikes in that replay, for every plastic edge
 
 The effective multiplier is stm * ltm * exp.  Forgetting is lazy and deterministic
 from timestamps: stm relaxes to 1 with tau_stm (hours), ltm with tau_ltm (days).
-Extinction (decided 2026-09-18, `MushroomBody.extinguish_counts`): a compartment whose DANs
-did not fire while its KCs did relaxes towards baseline in proportion to the firing.  Without
-it depression is one-way and a skewed diet ratchets every odor the same way.
+Extinction (`MushroomBody.extinguish_counts`, proposed 2026-09-18, NOT IN USE): a compartment
+whose DANs did not fire while its KCs did relaxes towards baseline.  It was meant to stop the
+one-way ratchet and it does not -- on a sweet-skewed diet the side that keeps getting relaxed
+is the punishment side, which raises the verdict rather than lowering it.  Kept, disabled
+(`extinction.eta` is absent from plasticity_v1.yaml, so ext_eta is 0 and the calls return at
+once), because the machinery is sound and the gate that refused it is worth keeping runnable:
+docs/plasticity-v2.md, scripts/plasticity_v2_gate.py.
 
-Parameters: config/plasticity_v2.yaml (v1, the rule as it ran to freeze-v1.2, is kept beside
-it for the record).  Not fit to outcomes.
+Parameters: config/plasticity_v1.yaml.  Not fit to outcomes.
 
 Exposure (decided 2026-09-15; Hattori et al. 2017): the a'3 compartment's DAN fires on mere
 exposure and depresses the a'3 terminals of the KCs that fired, so a familiar odor drives
@@ -73,7 +76,7 @@ class PlasticityParams:
     ext_eta: float = 0.0
 
 
-def load_plasticity_params(path=paths.CONFIG / "plasticity_v2.yaml") -> PlasticityParams:
+def load_plasticity_params(path=paths.CONFIG / "plasticity_v1.yaml") -> PlasticityParams:
     c = yaml.safe_load(open(path))
     s, lt = c["stm"], c["ltm"]
     ex, ta, xt = c.get("exposure", {}), c.get("taste", {}), c.get("extinction", {})
@@ -292,7 +295,7 @@ class MushroomBody:
 
     def taste_scale(self, valence: str, rate_frac: float, labeled: bool = False) -> float:
         """Pairing strength for the taste of a post he read: gain x the gustatory rate fraction
-        (config/plasticity_v2.yaml `taste`).  A labeled post is bitter at full rate at its own gain."""
+        (config/plasticity_v1.yaml `taste`).  A labeled post is bitter at full rate at its own gain."""
         if labeled:
             return float(self.p.taste_labeled_gain)
         g = self.p.taste_reward_gain if valence == "reward" else self.p.taste_punishment_gain

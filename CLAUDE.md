@@ -133,17 +133,17 @@ Do not download the EM volume. `neuprint-python` against
 
 - Three-factor rule: KC activity coincident with dopaminergic (DAN) firing
   in a compartment depresses KC→MBON synapses in that compartment.
-- **Extinction** (decided 2026-09-18, `config/plasticity_v2.yaml`
-  `extinction`, `Agent.PLASTICITY_VERSION` 3): a compartment whose DANs did
-  *not* fire while its KCs did relaxes back toward baseline, by the same
-  rate fraction, LTM slower by `ltm.eta / stm.eta`. Depression alone is
-  one-way, and under a diet 2.7:1 sweet it ratcheted: every odor inherited
-  the same positive offset, no account could read bitter, and the verdicts
-  converged (+0.259 → +0.332 in a day). The fly's own counterweight
-  (Berry et al. 2012, 2015; Felsenberg et al. 2018; Cohn et al. 2015).
-  Measure with `scripts/plasticity_v2_gate.py`; `eta` comes from the
-  behavioural extinction protocol, never from his feed and never from
-  outcomes.
+- **The verdict ratchets, and extinction did not fix it** (2026-09-18,
+  `docs/plasticity-v2.md`). Depression is one-way, so on a diet 2.7:1 sweet
+  the reward compartments accumulate it population-wide: every odor inherits
+  the same positive offset, no account can read bitter (40 probed: +0.218 to
+  +0.423, r = +0.17 against what he read from them), and it climbs (+0.259 →
+  +0.332 in a day). Activity-gated extinction was proposed and **refused by
+  its own gate**: replayed from his live weights, it raised the verdicts
+  (+0.310 → +0.392 against v1's +0.345), because on a sweet diet the side it
+  keeps relaxing is the punishment side. The code is kept, disabled. This is
+  open; do not patch the taste gains to hide it, and do not tune anything
+  here on his feed or on outcomes.
 - **Replay pairing**: outcomes arrive hours late. When an outcome lands for a
   past action, re-present the stored stimulus encoding and fire the
   appropriate DANs. This is the lab protocol; do not invent delayed credit

@@ -202,17 +202,18 @@ class Agent:
         if "idle_kc" in st and len(st["idle_kc"]) == len(self._idle_kc):
             self._idle_kc = np.asarray(st["idle_kc"], dtype=bool).copy()
 
-    # The learning rule's version.  A change to what a window teaches (config/plasticity_v2.yaml,
+    # The learning rule's version.  A change to what a window teaches (config/plasticity_v1.yaml,
     # config/mb_compartments.yaml, MushroomBody) is legitimate before freeze-v1, but it means
     # the spans logged before it no longer replay under the new rule.  So the boundary is
     # written down: a `plasticity` control row and a snapshot at the moment the new rule first
     # runs, so an auditor reads a change of fly, not a broken replay.
     #   1  two timescales, outcomes only (2026-09-13)
     #   2  exposure trace and taste while browsing (2026-09-15)
-    #   3  extinction: a compartment whose DANs did not fire while its KCs did relaxes towards
-    #      baseline, so depression is no longer one-way and a skewed diet stops ratcheting
-    #      (2026-09-18, config/plasticity_v2.yaml)
-    PLASTICITY_VERSION = 3
+    #   (3) extinction was proposed on 2026-09-18 and refused by its own gate: it raises the
+    #      verdicts instead of levelling them (docs/plasticity-v2.md).  The calls to
+    #      `extinguish_counts` below are no-ops while `extinction.eta` is absent from the
+    #      config, and the version stays 2 because his behaviour is unchanged.
+    PLASTICITY_VERSION = 2
 
     # The kernel's version.  Same reason as the learning rule: a fix that changes his dynamics
     # is a boundary, not a continuation, and the record has to say where it falls.
@@ -1067,7 +1068,7 @@ class Agent:
         """What a stimulus window teaches by itself (decided 2026-09-15).  Exposure: the a'3
         synapses of the KCs that fired are depressed, so the smell is more familiar next time.
         Taste: the sugar or bitter he tasted in the post pairs the mixture with reward or
-        punishment at a small strength (config/plasticity_v2.yaml `taste`), as sugar drives the
+        punishment at a small strength (config/plasticity_v1.yaml `taste`), as sugar drives the
         PAM and bitter the PPL1 dopamine neurons in the fly.  Not a social reward: no appetite
         bite.  Returns the `taste:` note for the row, or None.  A pure function of the features,
         so replay does the same."""

@@ -2,6 +2,10 @@ import numpy as np
 
 from tests.conftest import needs_data
 
+# config/plasticity_v2.yaml's eta.  Nothing loads that file -- the rule was refused -- so the two
+# extinction tests pass it in by hand rather than pretending it is what he runs.
+PROPOSED_ETA = 0.1
+
 
 @needs_data
 def test_pairing_depresses_only_compartment_edges_and_forgets(fly):
@@ -109,14 +113,17 @@ def test_taste_pairs_at_a_scaled_strength(fly):
 
 @needs_data
 def test_unreinforced_activity_relieves_depression(fly):
-    """Extinction (decided 2026-09-18): a compartment whose DANs did not fire while its KCs did
-    relaxes towards baseline, so depression is no longer one-way.  The paired compartment is
+    """Extinction (proposed 2026-09-18, refused: docs/plasticity-v2.md; these two tests pin the
+    mechanism, which works, not the policy, which did not).  A compartment whose DANs did not
+    fire while its KCs did relaxes towards baseline, so depression is no longer one-way.  The paired compartment is
     spared, LTM gives way more slowly than STM, and a memory still survives a few unpaired
     presentations -- it fades, it is not erased."""
-    from bosco.encoder import Encoder, Features
-    from bosco.plasticity import MushroomBody
+    from dataclasses import replace
 
-    mb = MushroomBody(fly)
+    from bosco.encoder import Encoder, Features
+    from bosco.plasticity import MushroomBody, load_plasticity_params
+
+    mb = MushroomBody(fly, replace(load_plasticity_params(), ext_eta=PROPOSED_ETA))
     mb.reset()
     stim = Encoder(fly.brain).encode(Features("did:plc:ext", 0.0, False))
     res = mb.fly.run_episode(stim, seed=5)
@@ -153,8 +160,10 @@ def test_extinction_holds_down_the_ratchet(fly):
     the offset.  Extinction relaxes what each window did not reinforce, so the reward side
     carries less standing depression and the sour account sits lower.
 
-    This is the mechanism, not the size of the effect: a handful of odors cannot show what
-    thousands of his real windows do, which is what scripts/plasticity_v2_gate.py measures."""
+    This is the mechanism, not the policy.  A handful of synthetic odors is exactly what made
+    the rule look right; replayed on his own windows from his own weights it raised his verdicts
+    instead of levelling them, and was refused (docs/plasticity-v2.md).  The test stays as the
+    record of what the mechanism does do, and of why a synthetic protocol was not enough."""
     from dataclasses import replace
 
     from bosco.encoder import Encoder, Features
@@ -184,7 +193,7 @@ def test_extinction_holds_down_the_ratchet(fly):
         return v_sour, v_sweet, standing
 
     s1, w1, d1 = run(0.0)
-    s2, w2, d2 = run(load_plasticity_params().ext_eta)
+    s2, w2, d2 = run(PROPOSED_ETA)
     assert d2 < d1, f"extinction left as much standing depression as v1: {d1:.4f} -> {d2:.4f}"
     assert s2 < s1, f"the sour account did not fall: {s1:+.3f} -> {s2:+.3f}"
     assert s2 < 0.0 < w2, f"sour {s2:+.3f} and sweet {w2:+.3f} do not straddle zero"
