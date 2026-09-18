@@ -624,7 +624,8 @@ class Panel:
     # ---- per poll -----------------------------------------------------------------
     def status(self, ts: float, extra: dict | None = None) -> dict:
         L, ag = self.L, self.agent
-        day0 = dt.datetime.fromtimestamp(ts, dt.UTC).replace(hour=0, minute=0, second=0, microsecond=0).timestamp()
+        # his day, not UTC's, so the front page and the day page count the same window
+        day0, _ = self.day_bounds(dt.datetime.fromtimestamp(ts, self._tz()).date())
         db = L.db
 
         counts = self._counts

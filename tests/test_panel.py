@@ -111,3 +111,44 @@ def test_day_reports_from_the_ledger(fly, tmp_path):
     panel.write_days(now + 5)
     assert panel.writer.drain(), "panel writer did not finish"
     assert (tmp_path / "panel" / "days" / f"{d_yest.isoformat()}.json").stat().st_mtime_ns == before
+
+
+@needs_data
+def test_today_on_the_front_page_is_his_day(fly, tmp_path):
+    """The front page's today and the day page's today count the same window: his local day, not
+    UTC's.  Late in his evening the two dates differ, and the counts must not."""
+    import datetime as dt
+    import json
+
+    from bosco.agent import Agent
+    from bosco.encoder import Features
+    from bosco.ledger import Ledger
+    from bosco.panel import Panel
+
+    L = Ledger(tmp_path / "l.sqlite")
+    ag = Agent(L, fly, state_dir=tmp_path)
+    ag.mb.reset()
+    ag.live.net.reset(0)
+    ag.live.t_ms = 0
+    tz = ag.clock.tz
+    # his evening, when UTC has already turned the page
+    now = dt.datetime(2027, 3, 4, 21, 30, tzinfo=tz).timestamp()
+    assert dt.datetime.fromtimestamp(now, dt.UTC).date() != dt.datetime.fromtimestamp(now, tz).date()
+    # one this morning, before UTC's day began, and two this evening
+    morning = dt.datetime(2027, 3, 4, 10, 0, tzinfo=tz).timestamp()
+    for k, when in enumerate((morning, now - 7200, now - 3600)):
+        ag.run(
+            Features(f"did:plc:{k}", 0.2, False, 0, False, ("fruit",), False, ("banana",)),
+            when,
+            f"at://x/{k}",
+            fast=True,
+        )
+    panel = Panel(ag, L, tmp_path / "panel", min_interval=0.0)
+    st = panel.status(now)
+    panel.write_days(now)
+    assert panel.writer.drain(), "panel writer did not finish"
+    day = dt.datetime.fromtimestamp(now, tz).date().isoformat()
+    rep = json.loads((tmp_path / "panel" / "days" / f"{day}.json").read_text())
+    assert st["today"]["episodes"] == rep["counts"]["episodes"] == 3
+    assert st["today"]["actions"] == rep["counts"]["actions"]
+    assert st["topics_today"] == rep["topics"]
