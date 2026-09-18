@@ -87,6 +87,11 @@ def standing(ag: Agent) -> dict[str, float]:
 
 
 def stats(pairs: list[tuple[float, float]]) -> dict:
+    if not pairs:  # too short a span to have read anyone five times
+        return dict.fromkeys(("n", "min", "max", "mean", "sd", "r", "n_sour", "n_sweet", "below_zero"), 0) | {
+            "sour_mean": None,
+            "sweet_mean": None,
+        }
     xs = [x for x, _ in pairs]
     ys = [y for _, y in pairs]
     mx, my = statistics.mean(xs), statistics.mean(ys)
@@ -108,7 +113,7 @@ def stats(pairs: list[tuple[float, float]]) -> dict:
     }
 
 
-def run_arm(ledger: str, limit: int, eta: float, out: Path, from_state: Path | None = None) -> int:
+def run_arm(ledger: str, limit: int, eta: float, out: Path, from_state: Path | None = None, homeo: float = 0.0) -> int:
     db = sqlite3.connect(ledger)
     db.row_factory = sqlite3.Row
     rows = list(
@@ -122,7 +127,8 @@ def run_arm(ledger: str, limit: int, eta: float, out: Path, from_state: Path | N
     )
     accounts = accounts_of(rows)
     ends = accounts[:PROBE] + accounts[-PROBE:]  # the sourest and the sweetest, for the checkpoints
-    print(f"eta {eta}: {len(rows)} windows, {len(accounts)} accounts read {MIN_READS}+ times", flush=True)
+    tag = f"eta {eta} homeo {homeo}"
+    print(f"{tag}: {len(rows)} windows, {len(accounts)} accounts read {MIN_READS}+ times", flush=True)
 
     d = Path(tempfile.mkdtemp())
     if from_state is not None:
@@ -131,7 +137,7 @@ def run_arm(ledger: str, limit: int, eta: float, out: Path, from_state: Path | N
         # him -- but what each rule does to the fly as he actually is, carrying the drift
         shutil.copy(from_state / "brain_state.npz", d / "brain_state.npz")
     ag = Agent(Ledger(d / "l.sqlite"), Fly(), state_dir=d)
-    ag.mb.p = replace(load_plasticity_params(), ext_eta=eta)
+    ag.mb.p = replace(load_plasticity_params(), ext_eta=eta, homeo_tau_h=homeo)
     if from_state is None:
         ag.mb.reset()
     ag.live.net.reset(0)
@@ -140,13 +146,25 @@ def run_arm(ledger: str, limit: int, eta: float, out: Path, from_state: Path | N
 
     start = {"standing": standing(ag), "ends": stats(probe(ag, ends))}
     print(
-        f"  eta {eta}  before a single window: standing floor {start['standing']['floor']:+.3f}, "
+        f"  {tag}  before a single window: standing floor {start['standing']['floor']:+.3f}, "
         f"ends mean {start['ends']['mean']:+.3f}",
         flush=True,
     )
+    # His own clock, not the replay's.  Presenting 800 windows back to back advances his brain by
+    # 800 seconds, while the windows themselves span eight hours of his life; under that
+    # compression nothing decays and nothing scales, and depression piles up as it never does in
+    # him.  So the mushroom body is given the logged hours.  What this does not do is simulate the
+    # idle time between windows -- that costs a wall hour per hour of him, which is the whole
+    # design -- so his network carries over between windows while his synapses keep real time.
+    clock = {"h": 0.0}
+    t0 = float(rows[0]["ts"])
+    ag.sim_hours = lambda: clock["h"]  # noqa: ARG005
+    ag.mb.t_last = 0.0
+
     every = max(1, len(rows) // CHECKPOINTS)
     marks = []
     for i, r in enumerate(rows, 1):
+        clock["h"] = (float(r["ts"]) - t0) / 3600.0
         f = ag.features_of_row(r)
         w = ag.live.present(list(ag.enc.encode(f, ag.appetite).drives), 1000.0)
         ag.learn_from_window(f, w.counts[ag.fly.kc], w.ms)
@@ -169,12 +187,27 @@ def run_arm(ledger: str, limit: int, eta: float, out: Path, from_state: Path | N
                 )
             )
             print(
-                f"  eta {eta}  {i:5d} windows: standing floor {mark['standing']['floor']:+.3f}, "
+                f"  {tag}  {i:5d} windows: standing floor {mark['standing']['floor']:+.3f}, "
                 f"ends mean {mark['ends']['mean']:+.3f} (sour {mark['ends']['sour_mean']}, "
                 f"sweet {mark['ends']['sweet_mean']})",
                 flush=True,
             )
+    print(f"  {tag}  {clock['h']:.1f} h of his life", flush=True)
+    settled = None
+    if homeo:
+        for v in ag.mb.gain:
+            ag.mb.gain[v] = ag.mb.homeostatic_target(v)
+        ag.mb._push()
+        settled = {"gain": dict(ag.mb.gain), "standing": standing(ag), "final": stats(probe(ag, accounts))}
+        print(
+            f"  {tag}  at homeostatic equilibrium: floor {settled['standing']['floor']:+.3f}, "
+            f"verdicts mean {settled['final']['mean']:+.3f}, below zero "
+            f"{settled['final']['below_zero']} of {settled['final']['n']}",
+            flush=True,
+        )
     result = {
+        "settled": settled,
+        "homeo": homeo,
         "from_state": str(from_state) if from_state else None,
         "start": start,
         "eta": eta,
@@ -189,9 +222,15 @@ def run_arm(ledger: str, limit: int, eta: float, out: Path, from_state: Path | N
     return 0
 
 
+def arm_name(a: dict) -> str:
+    if a.get("homeo"):
+        return f"v2 (homeostasis, tau {a['homeo']} h)"
+    return "v1 (one-way)" if not a["eta"] else f"extinction (eta {a['eta']})"
+
+
 def report(paths_in: list[str]) -> int:
     arms = [json.loads(Path(p).read_text()) for p in paths_in]
-    arms.sort(key=lambda a: a["eta"])
+    arms.sort(key=lambda a: (a.get("homeo", 0.0), a["eta"]))
     lines = [
         "# The v2 learning rule: extinction",
         "",
@@ -210,7 +249,7 @@ def report(paths_in: list[str]) -> int:
         "|---|---|---|---|",
     ]
     for a in arms:
-        name = "v1 (one-way)" if a["eta"] == 0 else f"v2 (extinction, eta {a['eta']})"
+        name = arm_name(a)
         s = a["standing"]
         lines.append(f"| {name} | {s['reward']:.4f} | {s['punishment']:.4f} | {s['floor']:+.3f} |")
     if arms[0].get("start"):
@@ -232,7 +271,7 @@ def report(paths_in: list[str]) -> int:
         "|---|---|---|---|---|",
     ]
     for a in arms:
-        name = "v1" if a["eta"] == 0 else "v2"
+        name = arm_name(a)
         for m in a["marks"]:
             sour = f"{m['ends']['sour_mean']:+.3f}" if m["ends"]["sour_mean"] is not None else "--"
             sweet = f"{m['ends']['sweet_mean']:+.3f}" if m["ends"]["sweet_mean"] is not None else "--"
@@ -245,7 +284,7 @@ def report(paths_in: list[str]) -> int:
         "|---|---|---|---|---|---|---|---|",
     ]
     for a in arms:
-        name = "v1 (one-way)" if a["eta"] == 0 else f"v2 (extinction, eta {a['eta']})"
+        name = arm_name(a)
         f = a["final"]
         sour = f"{f['sour_mean']:+.3f} (n={f['n_sour']})" if f["sour_mean"] is not None else "--"
         sweet = f"{f['sweet_mean']:+.3f} (n={f['n_sweet']})" if f["sweet_mean"] is not None else "--"
@@ -253,6 +292,26 @@ def report(paths_in: list[str]) -> int:
             f"| {name} | {f['min']:+.3f} .. {f['max']:+.3f} | {f['mean']:+.3f} | {f['sd']:.3f} | "
             f"{sour} | {sweet} | {f['r']:+.2f} | {f['below_zero']} of {f['n']} |"
         )
+    settled = [a for a in arms if a.get("settled")]
+    if settled:
+        lines += [
+            "",
+            "## Where homeostasis settles",
+            "",
+            "The gains move over tau, and a replay is shorter than tau, so this is the same state with",
+            "each compartment's gain put at the value it is heading for.  It is a projection, and it is",
+            "labelled as one.",
+            "",
+            "| rule | gains | floor | verdicts | mean | r | below zero |",
+            "|---|---|---|---|---|---|---|",
+        ]
+        for a in settled:
+            st, f = a["settled"]["standing"], a["settled"]["final"]
+            g = ", ".join(f"{k} x{v:.3f}" for k, v in sorted(a["settled"]["gain"].items()))
+            lines.append(
+                f"| {arm_name(a)} | {g} | {st['floor']:+.3f} | {f['min']:+.3f} .. {f['max']:+.3f} | "
+                f"{f['mean']:+.3f} | {f['r']:+.2f} | {f['below_zero']} of {f['n']} |"
+            )
     lines.append("")
     (paths.DOCS / "plasticity-v2.md").write_text("\n".join(lines) + "\n")
     print("\n".join(lines))
@@ -264,7 +323,8 @@ def main(argv: list[str]) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("ledger", nargs="?")
     ap.add_argument("--limit", type=int, default=800, help="windows to replay (a window is a second of brain)")
-    ap.add_argument("--eta", type=float, help="extinction.eta for this arm; 0 is the v1 rule")
+    ap.add_argument("--eta", type=float, help="extinction.eta for this arm")
+    ap.add_argument("--homeo", type=float, default=0.0, help="homeostasis tau in hours; 0 is the v1 rule")
     ap.add_argument("--out", type=Path, help="where this arm's numbers go")
     ap.add_argument("--report", nargs="+", help="arm files to write docs/plasticity-v2.md from")
     ap.add_argument("--from-state", type=Path, help="start from this state dir's brain_state.npz (his live weights)")
@@ -274,7 +334,7 @@ def main(argv: list[str]) -> int:
     if not a.ledger or a.eta is None or a.out is None:
         ap.print_help()
         return 2
-    return run_arm(a.ledger, a.limit, a.eta, a.out, a.from_state)
+    return run_arm(a.ledger, a.limit, a.eta, a.out, a.from_state, a.homeo)
 
 
 if __name__ == "__main__":

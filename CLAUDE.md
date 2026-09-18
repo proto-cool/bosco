@@ -139,11 +139,17 @@ Do not download the EM volume. `neuprint-python` against
   the same positive offset, no account can read bitter (40 probed: +0.218 to
   +0.423, r = +0.17 against what he read from them), and it climbs (+0.259 →
   +0.332 in a day). Activity-gated extinction was proposed and **refused by
-  its own gate**: replayed from his live weights, it raised the verdicts
-  (+0.310 → +0.392 against v1's +0.345), because on a sweet diet the side it
-  keeps relaxing is the punishment side. The code is kept, disabled. This is
-  open; do not patch the taste gains to hide it, and do not tune anything
-  here on his feed or on outcomes.
+  its own gate** (it raised the verdicts, +0.310 → +0.392 against v1's
+  +0.345), and so was **homeostatic scaling** (it overshot: every one of 33
+  accounts below zero, mean −0.345). Both move the common mode, and a verdict
+  is a difference of two means. **The real defect is discrimination**: under
+  every rule the accounts whose posts were bitter read the same as the ones
+  whose posts were sweet (+0.107 vs +0.111; −0.344 vs −0.346), r ≈ 0. An
+  account odor is a few glomeruli inside a pairing that lands on the whole
+  mixture, so he learns moments, not people — that is the encoder, and a
+  pre-registration. Both rules are kept disabled in
+  `config/plasticity_v2.yaml`. Do not patch the taste gains to hide any of
+  this, and do not tune anything here on his feed or on outcomes.
 - **Replay pairing**: outcomes arrive hours late. When an outcome lands for a
   past action, re-present the stored stimulus encoding and fire the
   appropriate DANs. This is the lab protocol; do not invent delayed credit

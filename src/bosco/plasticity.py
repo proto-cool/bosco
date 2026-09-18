@@ -74,12 +74,16 @@ class PlasticityParams:
     taste_labeled_gain: float = 0.3
     # extinction: unreinforced activity relieves depression (0 = the v1 rule, one-way)
     ext_eta: float = 0.0
+    # homeostasis: per-compartment scaling that holds its mean drive (0 = off)
+    homeo_tau_h: float = 0.0
+    homeo_max: float = 2.0
 
 
 def load_plasticity_params(path=paths.CONFIG / "plasticity_v1.yaml") -> PlasticityParams:
     c = yaml.safe_load(open(path))
     s, lt = c["stm"], c["ltm"]
     ex, ta, xt = c.get("exposure", {}), c.get("taste", {}), c.get("extinction", {})
+    hm = c.get("homeostasis", {})
     return PlasticityParams(
         stm_eta=s["eta"],
         stm_c_sat=s["c_sat"],
@@ -98,6 +102,8 @@ def load_plasticity_params(path=paths.CONFIG / "plasticity_v1.yaml") -> Plastici
         taste_punishment_gain=float(ta.get("punishment_gain", 0.0)),
         taste_labeled_gain=float(ta.get("labeled_gain", 0.0)),
         ext_eta=float(xt.get("eta", 0.0)),
+        homeo_tau_h=float(hm.get("tau_h", 0.0)),
+        homeo_max=float(hm.get("max", 2.0)),
     )
 
 
@@ -124,6 +130,14 @@ class MushroomBody:
         self.t_pair = np.full(n, -np.inf, dtype=np.float64)  # hours
         self.t_last = 0.0  # hours
         self._exposure_mask = self.target_edges("exposure") if "exposure" in self.valence else np.zeros(n, bool)
+        # the valence compartments' edge masks, and how many of them each edge belongs to (3.2% of
+        # his plastic edges sit under both a reward and a punishment DAN)
+        self._vmask = {v: self.target_edges(v) for v in ("reward", "punishment") if v in self.valence}
+        self._vshare = np.maximum(1, sum(m.astype(np.int64) for m in self._vmask.values()))
+        # homeostatic gain per compartment: one number each, slow, never below 1, and the running
+        # activity per Kenyon cell that tells it what the compartment's drive actually is
+        self.gain = dict.fromkeys(self._vmask, 1.0)
+        self.kc_act = np.zeros(len(fly.kc), dtype=np.float64)
         self._push()
 
     # ---- state ----------------------------------------------------------------
@@ -131,8 +145,21 @@ class MushroomBody:
         """The exposure multiplier on each plastic edge: the presynaptic KC's trace on its a'3 edges, 1 elsewhere."""
         return np.where(self._exposure_mask, self.kc_exp[self.fly.kc_pos_of_edge], 1.0)
 
+    def gain_edges(self) -> np.ndarray:
+        """The homeostatic gain on each plastic edge: its compartment's, and the geometric mean of
+        both where an edge belongs to two.  Uniform within a compartment, so it cannot touch what
+        he has learned about one smell against another -- only the level the whole compartment
+        sits at."""
+        if not self.p.homeo_tau_h:
+            return np.ones_like(self.stm)
+        g = np.ones_like(self.stm)
+        for v, m in self._vmask.items():
+            g[m] *= self.gain[v] ** (1.0 / self._vshare[m])
+        return g
+
     def _push(self) -> None:
-        self.fly.set_multiplier(self.stm * self.ltm * self.exp_edges())
+        m = self.stm * self.ltm * self.exp_edges() * self.gain_edges()
+        self.fly.set_multiplier(np.minimum(m, self.p.homeo_max) if self.p.homeo_tau_h else m)
 
     def digest(self) -> str:
         import hashlib
@@ -140,6 +167,9 @@ class MushroomBody:
         h = hashlib.blake2b(digest_size=16)
         for a in (self.stm, self.ltm, self.kc_exp, self.t_pair):
             h.update(np.ascontiguousarray(a).tobytes())
+        for v in sorted(self.gain):
+            h.update(np.float64(self.gain[v]).tobytes())
+        h.update(np.ascontiguousarray(self.kc_act).tobytes())
         return h.hexdigest()
 
     def naive_twin(self, stim: Stimulus, seed: int):
@@ -157,6 +187,8 @@ class MushroomBody:
             "kc_exp": self.kc_exp,
             "t_pair": self.t_pair,
             "t_last": np.array([self.t_last]),
+            "gain": np.array([self.gain[v] for v in sorted(self.gain)]),
+            "kc_act": self.kc_act,
         }
 
     def load_state(self, st: dict[str, np.ndarray]) -> None:
@@ -166,6 +198,18 @@ class MushroomBody:
         self.kc_exp = np.asarray(st["kc_exp"], dtype=np.float64).copy() if "kc_exp" in st else np.ones(len(self.fly.kc))
         self.t_pair = np.asarray(st["t_pair"], dtype=np.float64).copy()
         self.t_last = float(np.asarray(st["t_last"]).ravel()[0])
+        # a state saved before homeostasis existed sits at no correction, and takes tau to find
+        # its level, which is what a fly's own scaling would do at such a boundary
+        if "gain" in st and len(np.asarray(st["gain"]).ravel()) == len(self.gain):
+            for v, g in zip(sorted(self.gain), np.asarray(st["gain"]).ravel(), strict=True):
+                self.gain[v] = float(g)
+        else:
+            self.gain = dict.fromkeys(self.gain, 1.0)
+        self.kc_act = (
+            np.asarray(st["kc_act"], dtype=np.float64).copy()
+            if "kc_act" in st and len(np.asarray(st["kc_act"]).ravel()) == len(self.kc_act)
+            else np.zeros(len(self.fly.kc))
+        )
         self._push()
 
     def reset(self) -> None:
@@ -174,6 +218,8 @@ class MushroomBody:
         self.kc_exp[:] = 1.0
         self.t_pair[:] = -np.inf
         self.t_last = 0.0
+        self.gain = dict.fromkeys(self.gain, 1.0)
+        self.kc_act[:] = 0.0
         self._push()
 
     def forget_edges(self, edge_mask: np.ndarray) -> int:
@@ -189,6 +235,9 @@ class MushroomBody:
 
     # ---- compartments ---------------------------------------------------------
     def target_edges(self, valence: str) -> np.ndarray:
+        cached = getattr(self, "_vmask", None)
+        if cached and valence in cached:
+            return cached[valence]
         """Boolean mask over plastic edges whose postsynaptic MBON lies in a compartment of the valence DANs."""
         mbon_types: set[str] = set()
         for d in self.valence[valence]:
@@ -196,12 +245,48 @@ class MushroomBody:
         return np.isin(self.fly.plastic_post_type, list(mbon_types))
 
     # ---- forgetting -----------------------------------------------------------
+    def homeostatic_target(self, valence: str) -> float:
+        """The gain that would put this compartment's drive back where it started.
+
+        Drive, not the flat average of its synapses: a synapse whose Kenyon cell never fires
+        contributes nothing to an MBON, and only 608 of his 4,064 KCs carry any of his traffic at
+        all.  Averaging over the silent ones said the compartments had barely moved (gain 1.14)
+        while the ones doing the work had halved.  So the mean is weighted by how much each cell
+        has actually been firing lately, which is what a neuron scaling itself to its own drive
+        would see."""
+        m = self._vmask[valence]
+        w = self.kc_act[self.fly.kc_pos_of_edge][m]
+        base = self.stm[m] * self.ltm[m]
+        tot = float(w.sum())
+        mean = float((base * w).sum() / tot) if tot > 0 else float(base.mean())
+        return float(np.clip(1.0 / mean if mean > 0 else 1.0, 1.0, self.p.homeo_max))
+
+    def homeostasis(self, dt_hours: float) -> None:
+        """Each compartment scales itself back towards the mean drive it had (homeostatic synaptic
+        scaling: Turrigiano & Nelson 2004; Davis 2013 for Drosophila), over `homeo_tau_h`.
+
+        Depression is one-way, so without this the level of a compartment is the running total of
+        everything he has ever tasted: on a diet 2.7:1 sweet the reward compartments sink for
+        every odor alike, the difference the readout takes is a standing offset that grows, and
+        nobody can come out bitter however sour their posts (docs/plasticity-v2.md).  The gain is
+        one number per compartment and uniform inside it, so it cannot touch one smell against
+        another -- what a particular odor has learned survives whole, measured against the level
+        of the compartment rather than against nothing.  Slower than short-term memory (4 h), so
+        a fresh memory is not scaled away before it is used, and far faster than long-term (30 d),
+        so drift cannot accumulate: the parameter is set by that separation, never from his feed."""
+        if not self.p.homeo_tau_h or dt_hours <= 0:
+            return
+        a = 1.0 - float(np.exp(-dt_hours / self.p.homeo_tau_h))
+        for v in self._vmask:
+            self.gain[v] += a * (self.homeostatic_target(v) - self.gain[v])
+
     def forget(self, t_hours: float) -> None:
         dt = t_hours - self.t_last
         if dt > 0:
             self.stm = 1.0 - (1.0 - self.stm) * np.exp(-dt / self.p.stm_tau_h)
             self.ltm = 1.0 - (1.0 - self.ltm) * np.exp(-dt / (24.0 * self.p.ltm_tau_d))
             self.kc_exp = 1.0 - (1.0 - self.kc_exp) * np.exp(-dt / self.p.exp_tau_h)
+            self.homeostasis(dt)
             self._push()
         self.t_last = t_hours
 
@@ -218,9 +303,18 @@ class MushroomBody:
     def expose_counts(self, kc_counts_per_s: np.ndarray, t_hours: float) -> None:
         """Mere exposure: the a'3 terminals of the KCs that fired are depressed on the per-cell
         trace (Hattori et al. 2017).  Called for every stimulus window."""
+        dt = max(0.0, t_hours - self.t_last)  # before forget(), which moves the clock
         self.forget(t_hours)
-        strength = np.minimum(1.0, kc_counts_per_s.astype(np.float64) / self.p.exp_c_sat)
+        c = kc_counts_per_s.astype(np.float64)
+        strength = np.minimum(1.0, c / self.p.exp_c_sat)
         self.kc_exp = np.maximum(self.p.exp_m_min, self.kc_exp * (1.0 - self.p.exp_eta * strength))
+        if self.p.homeo_tau_h:
+            # How much each cell is carrying, over the same hours as the scaling that reads it.
+            # On his clock, not per window: windows arrive every half minute or so, and a trace
+            # smoothed per call would follow the last dozen posts he happened to read rather than
+            # his standing traffic -- which over-scales, because the last dozen are exactly the
+            # ones just depressed.
+            self.kc_act += (1.0 - float(np.exp(-dt / self.p.homeo_tau_h))) * (c - self.kc_act)
         self._push()
 
     # ---- learned valence (from the weights themselves) ------------------------------

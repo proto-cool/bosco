@@ -197,3 +197,52 @@ def test_extinction_holds_down_the_ratchet(fly):
     assert d2 < d1, f"extinction left as much standing depression as v1: {d1:.4f} -> {d2:.4f}"
     assert s2 < s1, f"the sour account did not fall: {s1:+.3f} -> {s2:+.3f}"
     assert s2 < 0.0 < w2, f"sour {s2:+.3f} and sweet {w2:+.3f} do not straddle zero"
+
+
+@needs_data
+def test_homeostasis_scales_a_compartment_to_its_drive(fly):
+    """Homeostasis (2026-09-18): each compartment scales itself back towards the drive it had,
+    so the level a compartment sits at stops being the running total of everything he has ever
+    tasted.  The gain is one number per compartment and uniform inside it, which is the whole
+    point: it moves the level, never one smell against another."""
+    from dataclasses import replace
+
+    from bosco.encoder import Encoder, Features
+    from bosco.plasticity import MushroomBody, load_plasticity_params
+
+    p = replace(load_plasticity_params(), homeo_tau_h=12.0, homeo_max=4.0)
+    mb = MushroomBody(fly, p)
+    mb.reset()
+    enc = Encoder(fly.brain)
+    sweet = [enc.encode(Features(f"did:plc:s{i}", 0.8, False)) for i in range(3)]
+
+    t = 0.0
+    for _ in range(8):  # a sweet week, which is what sinks the reward compartments
+        for k, stim in enumerate(sweet):
+            c = mb.fly.run_episode(stim, seed=200 + k).counts[fly.kc].astype(np.float64)
+            mb.expose_counts(c, t)
+            mb.pair_counts(c, "reward", t, scale=mb.taste_scale("reward", 1.0))
+            t += 0.5
+
+    assert mb.kc_act.sum() > 0, "the activity trace never filled in"
+    target = mb.homeostatic_target("reward")
+    assert target > 1.0, "a sweet week did not move the reward compartment's drive at all"
+
+    # the gain is uniform, so what he has learned about one smell against another is untouched.
+    # Only where an edge belongs to both compartments does it get something else -- the geometric
+    # mean of the two gains -- so the check is over the edges that are reward's alone.
+    only_reward = mb.target_edges("reward") & ~mb.target_edges("punishment")
+    before = (mb.stm * mb.ltm)[only_reward]
+    for v in mb.gain:
+        mb.gain[v] = mb.homeostatic_target(v)
+    mb._push()
+    after = fly.multiplier[only_reward]
+    ok = before > 0
+    assert np.allclose(after[ok] / before[ok], mb.gain["reward"], atol=1e-9), (
+        "scaling touched the pattern, not just the level"
+    )
+
+    # and it is the drive that is restored, not the flat average over synapses that never fire
+    w = mb.kc_act[fly.kc_pos_of_edge][mb.target_edges("reward")]
+    flat = 1.0 / float((mb.stm * mb.ltm)[mb.target_edges("reward")].mean())
+    assert w.sum() > 0 and target > flat, f"drive-weighted {target:.3f} should exceed flat {flat:.3f}"

@@ -1,11 +1,17 @@
-# PROPOSED AND REFUSED.  Nothing loads this file: he runs config/plasticity_v1.yaml.
+# PROPOSED AND REFUSED, BOTH OF THEM.  Nothing loads this file: he runs plasticity_v1.yaml.
 #
-# This is v1 plus `extinction`, proposed on 2026-09-18 against the one-way ratchet in his
-# verdicts and refused by its own gate the same day -- replayed from his live weights it raised
-# the verdicts (+0.310 -> +0.392, against +0.345 for the rule he runs) rather than levelling
-# them, because on a diet that is mostly sweet the compartment extinction keeps relaxing is the
-# punishment one, and the verdict is reward-side depression minus punishment-side.  Kept so the
-# next attempt starts from something runnable: docs/plasticity-v2.md, scripts/plasticity_v2_gate.py.
+# Two attempts at the one-way ratchet (docs/plasticity-v2.md), kept disabled with their tests.
+# `homeostasis` overshot: replayed from his live weights it took every one of 33 accounts below
+# zero (mean -0.345), which is the mirror of the bug rather than a fix -- it moves the common
+# mode, and a verdict is a difference of two means.  Both runs agreed on the real defect: sour
+# accounts and sweet accounts come out the same under every rule (+0.107 against +0.111), so the
+# verdict carries almost nothing about who.  That is the encoder's business, not the rule's.
+#
+# `extinction` was the first attempt and is OFF (eta 0).  It was refused by its own gate:
+# replayed from his live weights it raised his verdicts (+0.310 -> +0.392, against +0.345 for
+# v1) instead of levelling them, because on a diet that is mostly sweet the compartment it keeps
+# relaxing is the punishment one, and a verdict is reward-side depression minus punishment-side.
+# It is kept at zero because the mechanism is sound and the gate is worth keeping runnable.
 #
 # Mushroom-body plasticity parameters (see src/bosco/plasticity.py).
 #
@@ -67,4 +73,33 @@ exposure:
 # closes a tenth of the remaining gap, so seven of them halve it.  scripts/plasticity_v2_gate.py
 # replays his logged stimulus stream under v1 and v2 and prints what it did to him.
 extinction:
-  eta: 0.1
+  eta: 0.0  # refused; see the header and docs/plasticity-v2.md
+
+# Homeostasis (2026-09-18).  The fault extinction failed to fix: depression is one-way, so the
+# level a compartment sits at is the running total of everything he has ever tasted.  His feed is
+# 2.7:1 sweet, so the reward compartments sink for every odor alike; the difference the readout
+# takes inherits that as a standing offset which grows (+0.259 at freeze-v1, +0.332 a day later),
+# and no account can come out bitter however sour its posts -- 40 probed on his live weights ran
+# +0.218 to +0.423 with nothing below zero.
+#
+# Each compartment scales itself back towards the mean drive it started with: homeostatic
+# synaptic scaling (Turrigiano & Nelson 2004; Davis 2013 for Drosophila).  One number per
+# compartment, uniform inside it, so it cannot touch what he has learned about one smell against
+# another -- it moves the level, not the pattern, and what an odor has learned is then measured
+# against its compartment rather than against nothing.
+#
+# The mean is weighted by how much each Kenyon cell has actually been firing, because drive is
+# what a neuron scales itself to and a synapse whose cell never fires contributes none of it:
+# only 608 of his 4,064 KCs carry any of his traffic, and a flat average over the silent ones
+# said the compartments had barely moved (gain 1.14) while the cells doing the work had halved.
+#
+# tau_h is set by a separation of timescales and never from his feed: slower than short-term
+# memory (4 h), so a fresh memory is not scaled away before he can use it, and far faster than
+# long-term memory (30 days), so drift cannot accumulate.  It is also the window the activity
+# average uses, so the scaling and what it measures move together.  max is a rail rather than a
+# knob -- it should not bind, and the gate prints the gains so that it is visible when it does --
+# and it matters because scaling up strengthens KC->MBON synapses above baseline while his
+# readout thresholds are frozen.
+homeostasis:
+  tau_h: 0.0  # refused; 12.0 was the value tried, see the header and docs/plasticity-v2.md
+  max: 4.0

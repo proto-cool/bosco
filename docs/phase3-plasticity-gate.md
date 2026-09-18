@@ -3,7 +3,7 @@
 ## punishment
 
 - KCs active for A: 90 / 4064 (0.022)
-- plastic edges depressed in pairing: 512 / 61210; multiplier digest after pairing 0e8b889e9c9aaed5e48dda3e55f56527
+- plastic edges depressed in pairing: 512 / 61210; multiplier digest after pairing 6ee99dd6b9e501220cd0a8891bc4393b
 - compartment MBON types: ['MBON04', 'MBON11', 'MBON12', 'MBON13', 'MBON14', 'MBON18', 'MBON19', 'MBON23', 'MBON31', 'MBON32', 'MBON35']
 - median after/before ratio over responsive compartment MBON types (n=6): one pairing A 0.49, B (n=3) 0.97; three spaced pairings A 0.41, B 0.92; A after 3 STM tau 0.43; after 20 STM tau 0.45 (LTM only); after 3 LTM tau 1.29
 - learned once (A < 0.8): True; learned spaced (A < 0.6): True; specific: True; LTM holds then fades (A >= trained-0.05 at 20 STM tau, > 0.8 at 3 LTM tau): True; LTM formed: True
@@ -20,7 +20,7 @@
 ## reward
 
 - KCs active for A: 90 / 4064 (0.022)
-- plastic edges depressed in pairing: 772 / 61210; multiplier digest after pairing 446b00bfe3d56f8a7037291e3e27296f
+- plastic edges depressed in pairing: 772 / 61210; multiplier digest after pairing b03269d033ee51082b252c1fd938f07c
 - compartment MBON types: ['MBON01', 'MBON02', 'MBON03', 'MBON04', 'MBON05', 'MBON06', 'MBON07', 'MBON09', 'MBON10', 'MBON21', 'MBON24', 'MBON26', 'MBON27', 'MBON29', 'MBON30', 'MBON33']
 - median after/before ratio over responsive compartment MBON types (n=5): one pairing A 0.61, B (n=5) 0.94; three spaced pairings A 0.12, B 0.90; A after 3 STM tau 0.81; after 20 STM tau 0.69 (LTM only); after 3 LTM tau 1.17
 - learned once (A < 0.8): True; learned spaced (A < 0.6): True; specific: True; LTM holds then fades (A >= trained-0.05 at 20 STM tau, > 0.8 at 3 LTM tau): True; LTM formed: True
