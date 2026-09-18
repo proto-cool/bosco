@@ -133,23 +133,28 @@ Do not download the EM volume. `neuprint-python` against
 
 - Three-factor rule: KC activity coincident with dopaminergic (DAN) firing
   in a compartment depresses KC→MBON synapses in that compartment.
-- **The verdict ratchets, and extinction did not fix it** (2026-09-18,
-  `docs/plasticity-v2.md`). Depression is one-way, so on a diet 2.7:1 sweet
-  the reward compartments accumulate it population-wide: every odor inherits
-  the same positive offset, no account can read bitter (40 probed: +0.218 to
-  +0.423, r = +0.17 against what he read from them), and it climbs (+0.259 →
-  +0.332 in a day). Activity-gated extinction was proposed and **refused by
-  its own gate** (it raised the verdicts, +0.310 → +0.392 against v1's
-  +0.345), and so was **homeostatic scaling** (it overshot: every one of 33
-  accounts below zero, mean −0.345). Both move the common mode, and a verdict
-  is a difference of two means. **The real defect is discrimination**: under
-  every rule the accounts whose posts were bitter read the same as the ones
-  whose posts were sweet (+0.107 vs +0.111; −0.344 vs −0.346), r ≈ 0. An
-  account odor is a few glomeruli inside a pairing that lands on the whole
-  mixture, so he learns moments, not people — that is the encoder, and a
-  pre-registration. Both rules are kept disabled in
-  `config/plasticity_v2.yaml`. Do not patch the taste gains to hide any of
-  this, and do not tune anything here on his feed or on outcomes.
+- **He learns about you from your posts** (2026-09-18, `docs/plasticity-v3.md`,
+  `freeze-v2`). The defect was never the sign of the rule. A verdict was
+  probed on the account's odor alone while every pairing landed on the whole
+  mixture it arrived in, so 88% of an account's probe cells fired in its own
+  windows but 47% fired in anyone else's: over 6,199 windows an account read
+  23 times supplied 0.7% of the depression its own verdict was read from.
+  Nothing read bitter (r +0.08, none of 51 sour accounts below zero) because
+  the quantity was 99.3% other people. **Extinction and homeostatic scaling
+  both failed** on that, being rescalings of the common mode, and both stay
+  disabled in `config/plasticity_v2.yaml`; their gate was also running at 2%
+  of his real KC activity (windows presented back to back never let the
+  sensory afferents recover), so **those two refusals are not safe and want
+  re-running**. What ships instead (`config/plasticity_v1.yaml` `credit:`): a
+  pairing about an account teaches the cells its odor owns, weighted by one
+  over how many accounts' odors light each cell; the verdict is read through
+  the same weights, against the compartment's own level. Sour accounts +0.160
+  against sweet +0.207, r +0.36, where the control reproduces him at +0.283 /
+  +0.278, r 0.00. Still open and written down rather than tuned away: only 4
+  of 51 sour accounts fall below zero — the ordering is right, zero sits high.
+  Do not tune the taste gains to move it, and do not tune anything here on his
+  feed or on outcomes. `ownership()` depends on who he has met, so
+  `account_kcs.json` is snapshotted beside the weights or replay diverges.
 - **Replay pairing**: outcomes arrive hours late. When an outcome lands for a
   past action, re-present the stored stimulus encoding and fire the
   appropriate DANs. This is the lab protocol; do not invent delayed credit

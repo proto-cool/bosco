@@ -246,3 +246,71 @@ def test_homeostasis_scales_a_compartment_to_its_drive(fly):
     w = mb.kc_act[fly.kc_pos_of_edge][mb.target_edges("reward")]
     flat = 1.0 / float((mb.stm * mb.ltm)[mb.target_edges("reward")].mean())
     assert w.sum() > 0 and target > flat, f"drive-weighted {target:.3f} should exceed flat {flat:.3f}"
+
+
+@needs_data
+def test_credit_confinement_lets_a_sour_account_read_sour(fly):
+    """Credit confinement (2026-09-18): a pairing about an account teaches only the cells that
+    account's odor owns.
+
+    The defect it fixes is arithmetic, not sign.  The verdict is probed on the account odor
+    alone, but a pairing lands on the whole mixture -- the account plus its words, topics and
+    feed -- and those shared components are most of the cells.  So an account's own synapses
+    are taught mostly by other accounts' posts, and every verdict converges on the diet's
+    average however sour that one account was.  On his live weights the ratio was about 140:1
+    against the account's own evidence (scripts/kc_overlap.py, docs/plasticity-v2.md).
+
+    Here: one sour account and four sweet ones, all posting through the same topics and words,
+    which is what makes their mixtures overlap.  Under the v1 rule the sour account cannot come
+    out sour.  Confined, it can."""
+    from dataclasses import replace
+
+    from bosco.encoder import Encoder, Features
+    from bosco.plasticity import MushroomBody, load_plasticity_params
+    from bosco.sim import Stimulus
+
+    enc = Encoder(fly.brain)
+    shared = dict(topics=("weather", "food"), words=("rain", "bread"), feed="feed:home")
+    sour_f = Features("did:plc:sour", -0.8, False, 0, False, shared["topics"], False, shared["words"], (), shared["feed"])
+    sweet_f = [
+        Features(f"did:plc:sweet{i}", 0.8, False, 0, False, shared["topics"], False, shared["words"], (), shared["feed"])
+        for i in range(4)
+    ]
+
+    sigs = {f.did: fly.run_episode(Stimulus([enc.odor_drive(f.did)]), seed=3).counts[fly.kc] > 0
+            for f in [sour_f, *sweet_f]}
+    owners = sum(s.astype(float) for s in sigs.values())
+
+    def credit(did: str) -> np.ndarray:
+        """the cells that account owns, weighted by how much of each is its own"""
+        return sigs[did].astype(float) / np.maximum(1.0, owners)
+
+    def run(mode: str) -> tuple[float, float]:
+        mb = MushroomBody(fly, replace(load_plasticity_params(), credit_mode=mode))
+        mb.reset()
+        t = 0.0
+        for _ in range(6):  # his diet: four sweet accounts for every sour one
+            for k, f in enumerate(sweet_f):
+                c = mb.fly.run_episode(enc.encode(f), seed=100 + k).counts[fly.kc].astype(np.float64)
+                r = credit(f.did) if mode != "mixture" else None
+                mb.pair_counts(c, "reward", t, scale=mb.taste_scale("reward", 1.0), restrict=r)
+                t += 0.25
+            c = mb.fly.run_episode(enc.encode(sour_f), seed=7).counts[fly.kc].astype(np.float64)
+            r = credit(sour_f.did) if mode != "mixture" else None
+            mb.pair_counts(c, "punishment", t, scale=mb.taste_scale("punishment", 1.0), restrict=r)
+            t += 0.25
+        # probed the way memory_report probes: the account odor by itself
+        w = (1.0 / np.maximum(1.0, owners)) if mode == "share" else None
+        v_sour, _ = mb.learned_valence(
+            fly.run_episode(Stimulus([enc.odor_drive(sour_f.did)]), seed=11).counts[fly.kc], weights=w, contrast=True
+        )
+        v_sweet, _ = mb.learned_valence(
+            fly.run_episode(Stimulus([enc.odor_drive(sweet_f[0].did)]), seed=12).counts[fly.kc], weights=w, contrast=True
+        )
+        return v_sour, v_sweet
+
+    s1, w1 = run("mixture")
+    s2, w2 = run("share")
+    assert s2 < s1, f"confinement did not lower the sour account: {s1:+.3f} -> {s2:+.3f}"
+    assert s2 < 0.0 < w2, f"confined, sour {s2:+.3f} and sweet {w2:+.3f} do not straddle zero"
+    assert (w2 - s2) > (w1 - s1), f"confinement did not separate them: {w1 - s1:+.3f} -> {w2 - s2:+.3f}"

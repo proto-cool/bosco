@@ -223,6 +223,43 @@ changes is code, and it is named, dated and measured.
 |---|---|---|---|
 | `freeze-v1.1` | 2026-09-18 | How he composes an utterance (`Agent.UTTERANCE_VERSION` 1 → 2) | `utterance` |
 | `freeze-v1.2` | 2026-09-18 | The same, made coherent (`Agent.UTTERANCE_VERSION` 2 → 3) | `utterance` |
+| `freeze-v2` | 2026-09-18 | What a window teaches, and how a verdict is read (`Agent.PLASTICITY_VERSION` 2 → 3) | `plasticity` |
+
+**`freeze-v2` — he learns about you from your posts, not from everyone's.**
+Until now his verdict on an account was probed by presenting that account's
+odor alone, while every pairing landed on the whole mixture the account
+arrived in: its words, its topics, the feed, its pictures. Measured on his
+live weights over his own logged windows (`scripts/kc_overlap.py`), 88% of an
+account's probe cells fire in that account's own windows and 47% of them fire
+in any other window as well — so across 6,199 windows an account he had read
+23 times supplied about 0.7% of the depression its own verdict was read from,
+and the rest was everybody else. His verdicts carried almost nothing about
+who: net-bitter accounts read +0.318 against net-sweet ones at +0.318,
+r = +0.08, and not one of 51 sour accounts came out below zero. Two earlier
+proposals (`docs/plasticity-v2.md`) tried to rescale one compartment against
+the other and only moved where everyone sat together; they were aimed at the
+wrong defect and both stay disabled.
+
+Under v3 a pairing about an account teaches the cells that account's odor
+owns, weighted by one over the number of accounts whose odor lights each cell
+— a cell twenty accounts drive is nobody's — the verdict is read through the
+same weights, and it is read against the compartment's own level rather than
+against nothing. Replayed over the same 6,199 windows on his own clock
+(`scripts/credit_gate.py`, both arms, naive start, 103 accounts): net-bitter
+accounts fall to +0.160 against net-sweet at +0.207 with r = +0.36, where the
+control arm reproduces his live state at +0.283 against +0.278 with r = 0.00.
+The account whose posts were sourest (23 read, net VADER −8.79) goes from
++0.221 to −0.016; the sweetest (155 read, net +102.55) from +0.313 to +0.557,
+the highest of the 103. Still not true: only 4 of those 51 land below zero —
+the ordering is right, but zero sits high, and where it falls is a readout
+calibration left open and written down rather than tuned away.
+
+Nothing here was set from his feed or from outcomes. The taste gains are
+untouched, the weighting has no parameter, and the contrast has nothing in it
+to set. `docs/plasticity-v3.md` carries the measurements. One more thing
+this changes: what a cell is worth depends on who he has met, so
+`account_kcs.json` is now part of the state a replay needs and is snapshotted
+beside the weights.
 
 **`freeze-v1.1` — retrieval steers, it does not speak.** Under v1 the thought
 that smelled most like the moment was said whole, and the walk only added to

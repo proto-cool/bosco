@@ -39,3 +39,32 @@ exposure:
   c_sat: 3.0
   m_min: 0.3
   tau_h: 24.0
+
+# Credit (freeze-v2, 2026-09-18; docs/plasticity-v3.md).  What a pairing about an account is
+# allowed to teach, and how the verdict on it is read.
+#
+# Until now the verdict was probed on the account's odor alone while every pairing landed on the
+# whole mixture it arrived in.  Measured on his live weights (scripts/kc_overlap.py): 88% of an
+# account's probe cells fire in its own windows, and 47% of them fire in any other window too, so
+# over 6,199 logged windows an account read 23 times supplied about 0.7% of the depression its
+# own verdict was read from.  His verdicts said almost nothing about who -- sour accounts +0.318
+# against sweet ones +0.318, r +0.08, none of 51 below zero -- and no rescaling of a quantity
+# that is 99.3% other people's posts could change that.
+#
+#   mode: mixture -- the old rule: the window teaches every cell it lit
+#         own     -- the cells the account's odor owns, flat
+#         share   -- those cells weighted by 1 / (accounts whose odor lights the cell).  A cell
+#                    twenty accounts drive is nobody's.  The verdict is read through the same
+#                    weights, so what taught a cell and what reads it agree.
+#   contrast     -- read the verdict against the compartment's own level instead of against
+#                    nothing.  The standing offset was never in the weights; it was in reading a
+#                    difference against zero.  The level is flat, not weighted like the read: it
+#                    is a property of the compartment that every odor inherits, and weighting it
+#                    was measured to move verdicts +0.065 the wrong way.
+#
+# Replayed over his own 6,199 windows on his own clock: sour accounts +0.160 against sweet +0.207,
+# r +0.36, against the control arm's +0.283 / +0.278, r 0.00.  Nothing here is set from his feed
+# or from outcomes; `share` has no parameter and the contrast has nothing in it to tune.
+credit:
+  mode: share
+  contrast: true

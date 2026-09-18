@@ -77,6 +77,13 @@ class PlasticityParams:
     # homeostasis: per-compartment scaling that holds its mean drive (0 = off)
     homeo_tau_h: float = 0.0
     homeo_max: float = 2.0
+    # credit confinement: what a pairing about an account is allowed to teach.
+    #   mixture -- v1: every cell the window lit, so an account's own posts are drowned out
+    #   own     -- the cells the account's odor owns, flat
+    #   share   -- those cells in proportion to how much of each the account owns
+    credit_mode: str = "mixture"
+    # read the verdict against the compartment's own level rather than against nothing
+    credit_contrast: bool = False
 
 
 def load_plasticity_params(path=paths.CONFIG / "plasticity_v1.yaml") -> PlasticityParams:
@@ -104,6 +111,8 @@ def load_plasticity_params(path=paths.CONFIG / "plasticity_v1.yaml") -> Plastici
         ext_eta=float(xt.get("eta", 0.0)),
         homeo_tau_h=float(hm.get("tau_h", 0.0)),
         homeo_max=float(hm.get("max", 2.0)),
+        credit_mode=str(c.get("credit", {}).get("mode", "mixture")),
+        credit_contrast=bool(c.get("credit", {}).get("contrast", False)),
     )
 
 
@@ -318,7 +327,40 @@ class MushroomBody:
         self._push()
 
     # ---- learned valence (from the weights themselves) ------------------------------
-    def learned_valence(self, kc_counts: np.ndarray) -> tuple[float, dict[str, float]]:
+    def compartment_levels(
+        self, live: np.ndarray | None = None, weights: np.ndarray | None = None
+    ) -> tuple[float, float]:
+        """How depressed each side sits across the cells that carry his traffic.
+
+        This is the level every odor inherits: depression is one-way, so a compartment's level is
+        the running total of everything he has ever tasted, and on a diet 2.7:1 sweet the reward
+        side sinks for every smell alike.  Extinction and homeostasis both tried to remove it by
+        changing the weights and only moved the whole population (docs/plasticity-v2.md); it is
+        not in the weights, it is in reading a difference against nothing.  Cells that have never
+        fired for him are left out: they have been taught nothing and are not part of any level."""
+        m = self.fly.multiplier
+        touched = self.kc_exp < 1.0 if live is None else live
+        if not touched.any():
+            touched = np.ones(len(self.fly.kc), bool)
+        e = touched[self.fly.kc_pos_of_edge]
+        rw, pn = self.target_edges("reward") & e, self.target_edges("punishment") & e
+        # the level must be measured the same way the account is, or the subtraction leaves a
+        # residue: an ownership-weighted read against a flat level is not a difference at all
+        w = None if weights is None else np.asarray(weights, dtype=np.float64)[self.fly.kc_pos_of_edge]
+
+        def level(mask: np.ndarray) -> float:
+            if not mask.any():
+                return 0.0
+            if w is None:
+                return float((1.0 - m[mask]).mean())
+            tot = float(w[mask].sum())
+            return float(((1.0 - m[mask]) * w[mask]).sum() / tot) if tot > 0 else float((1.0 - m[mask]).mean())
+
+        return level(rw), level(pn)
+
+    def learned_valence(
+        self, kc_counts: np.ndarray, weights: np.ndarray | None = None, contrast: bool | None = None
+    ) -> tuple[float, dict[str, float]]:
         """What the mushroom body has learned about the odor whose KCs just fired.
 
         Over plastic edges whose presynaptic KC fired: mean depression (1 - stm*ltm) on
@@ -331,18 +373,58 @@ class MushroomBody:
         m = self.fly.multiplier
         rew = pre & self.target_edges("reward")
         pun = pre & self.target_edges("punishment")
-        dr = float((1.0 - m[rew]).mean()) if rew.any() else 0.0
-        dp = float((1.0 - m[pun]).mean()) if pun.any() else 0.0
+        # `weights` (credit.mode 'share') reads each cell in proportion to how much of it belongs
+        # to this odor: a cell twenty accounts drive says little about any one of them, and
+        # weighting the read the way the credit was weighted keeps the two consistent.
+        w = None if weights is None else np.asarray(weights, dtype=np.float64)[self.fly.kc_pos_of_edge]
+
+        def mean(mask: np.ndarray) -> float:
+            if not mask.any():
+                return 0.0
+            if w is None:
+                return float((1.0 - m[mask]).mean())
+            tot = float(w[mask].sum())
+            return float(((1.0 - m[mask]) * w[mask]).sum() / tot) if tot > 0 else float((1.0 - m[mask]).mean())
+
+        dr, dp = mean(rew), mean(pun)
+        if contrast if contrast is not None else self.p.credit_contrast:
+            # Flat, deliberately, and not weighted the way the read above is.  The level is what
+            # every odor inherits -- a property of the compartment, not of this account -- so it
+            # is measured over the cells that carry his traffic, each counted once.  Weighting it
+            # by this account's ownership was tried and measured: it moves the verdicts up by
+            # about +0.065, the wrong way, and it is not the same quantity.  This is the form the
+            # gate passed with (scripts/credit_gate.py, docs/plasticity-v3.md).
+            lr, lp = self.compartment_levels()
+            dr, dp = dr - lr, dp - lp
         v = float(np.clip(2.0 * (dr - dp), -1.0, 1.0))
         return v, {"reward_depression": dr, "punishment_depression": dp, "n_active_kc": int(pre.sum())}
 
     # ---- pairing --------------------------------------------------------------
-    def pair_counts(self, kc_counts_per_s: np.ndarray, valence: str, t_hours: float, scale: float = 1.0) -> np.ndarray:
+    def pair_counts(
+        self,
+        kc_counts_per_s: np.ndarray,
+        valence: str,
+        t_hours: float,
+        scale: float = 1.0,
+        restrict: np.ndarray | None = None,
+    ) -> np.ndarray:
         """Three-factor rule from KC spike counts (per second of presentation) already observed.
         `scale` (0..1] scales the pairing's strength: 1 for an outcome, the taste gain x the
-        gustatory rate fraction for a post he merely read."""
+        gustatory rate fraction for a post he merely read.
+
+        `restrict` (a boolean over Kenyon cells, `credit` in the config) confines the pairing to
+        the cells of the odor it is *about*.  Without it a window teaches every cell in the
+        mixture, and since the mixture is the account plus its words, topics, feed and pictures,
+        an account's own synapses are taught by everyone else's posts too: measured on his live
+        state, 88% of an account's probe cells fire in its own windows but 47% of them fire in
+        any other window as well, so across 6,199 logged windows an account with 23 reads
+        contributed 0.7% of the depression its own verdict was read from.  That is why the
+        verdicts carried no information about who (r about 0) and why rescaling the compartments
+        could not put it there."""
         self.forget(t_hours)
         c = kc_counts_per_s[self.fly.kc_pos_of_edge].astype(np.float64)
+        if restrict is not None:
+            c = c * np.asarray(restrict, dtype=bool)[self.fly.kc_pos_of_edge]
         return self._depress(c, valence, t_hours, scale)
 
     def extinguish_counts(self, kc_counts_per_s: np.ndarray, t_hours: float, spare: str | None = None) -> None:

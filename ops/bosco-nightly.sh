@@ -26,6 +26,9 @@ done
 
 sqlite3 state/ledger.sqlite ".backup '$dst/ledger.sqlite'"
 cp state/brain_state.npz "$dst/brain_state.npz"
+# freeze-v2: the ownership shares a verdict is read through are derived from the signature cache,
+# so a span replayed without it computes different shares and will not reproduce.
+cp state/account_kcs.json "$dst/account_kcs.json" 2>/dev/null || true
 
 rc=0
 {

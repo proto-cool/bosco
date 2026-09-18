@@ -186,6 +186,12 @@ class Agent:
         st["threads"] = np.array(json.dumps(self.threads, sort_keys=True))
         st["assoc"] = np.array(self.assoc.to_json())
         st["idle_kc"] = self._idle_kc
+        # Since freeze-v2 what a Kenyon cell is worth to an account depends on how many accounts'
+        # odors light it (`ownership`), so who he has met is part of the state a replay needs: the
+        # same span against a later signature cache computes different shares and diverges.
+        st["signatures"] = np.array(
+            json.dumps({d: np.flatnonzero(v).tolist() for d, v in self._signatures.items()}, sort_keys=True)
+        )
         return st
 
     def _unpack(self, st: dict) -> None:
@@ -201,6 +207,14 @@ class Agent:
         self.assoc.load_json(str(np.asarray(st["assoc"]).ravel()[0]) if "assoc" in st else None)
         if "idle_kc" in st and len(st["idle_kc"]) == len(self._idle_kc):
             self._idle_kc = np.asarray(st["idle_kc"], dtype=bool).copy()
+        if "signatures" in st:
+            self._signatures = {}
+            for d, idx in json.loads(str(np.asarray(st["signatures"]).ravel()[0])).items():
+                sig = np.zeros(len(self.fly.kc), dtype=np.int64)
+                if idx:
+                    sig[np.asarray(idx, dtype=np.int64)] = 1
+                self._signatures[d] = sig
+            self._own_n = None  # the ownership shares are derived from these; recompute them
 
     # The learning rule's version.  A change to what a window teaches (config/plasticity_v1.yaml,
     # config/mb_compartments.yaml, MushroomBody) is legitimate before freeze-v1, but it means
@@ -213,7 +227,7 @@ class Agent:
     #      verdicts instead of levelling them (docs/plasticity-v2.md).  The calls to
     #      `extinguish_counts` below are no-ops while `extinction.eta` is absent from the
     #      config, and the version stays 2 because his behaviour is unchanged.
-    PLASTICITY_VERSION = 2
+    PLASTICITY_VERSION = 3  # 3: credit is confined to the odor it is about (docs/plasticity-v3.md)
 
     # The kernel's version.  Same reason as the learning rule: a fix that changes his dynamics
     # is a boundary, not a continuation, and the record has to say where it falls.
@@ -1088,7 +1102,7 @@ class Agent:
             # and what he meets without consequence relaxes (plasticity_v2 `extinction`)
             self.mb.extinguish_counts(per_s, t)
             return None
-        self.mb.pair_counts(per_s, valence, t, scale=scale)
+        self.mb.pair_counts(per_s, valence, t, scale=scale, restrict=self.credit_mask(f.did))
         self.mb.extinguish_counts(per_s, t, spare=valence)  # the other side got no dopamine
         return f"taste:{valence}"
 
@@ -1139,7 +1153,9 @@ class Agent:
         d_before = self.mb.digest()
         self._tick(self.sim_hours())
         w = self.live.present(list(self.enc.encode(f, self.appetite).drives), PRESENT_MS)
-        self.mb.pair_counts(w.counts[self.fly.kc] * (1000.0 / w.ms), valence, self.sim_hours())
+        self.mb.pair_counts(
+            w.counts[self.fly.kc] * (1000.0 / w.ms), valence, self.sim_hours(), restrict=self.credit_mask(f.did)
+        )
         self.mb.extinguish_counts(w.counts[self.fly.kc] * (1000.0 / w.ms), self.sim_hours(), spare=valence)
         if valence == "reward":
             self.appetite_bite()
@@ -1169,6 +1185,44 @@ class Agent:
         )
 
     SIGNATURE_MS = 500.0
+
+    def ownership(self) -> np.ndarray:
+        """How much of each Kenyon cell belongs to any one account: 1 / (number of accounts whose
+        odor lights it).  A cell only one account drives is that account's; a cell twenty of them
+        share tells you about none of them.
+
+        Read from the cached signatures, so it is a function of who he has met.  That makes the
+        signature cache part of his state for replay: a span replayed with a later cache computes
+        different shares.  `snapshots/` must carry `account_kcs.json` beside `brain_state.npz`."""
+        n = len(self._signatures)
+        if getattr(self, "_own_n", None) != n:
+            counts = np.zeros(len(self.fly.kc), dtype=np.float64)
+            for s in self._signatures.values():
+                counts += (s > 0).astype(np.float64)
+            self._own = 1.0 / np.maximum(1.0, counts)
+            self._own_n = n
+        return self._own
+
+    def credit_mask(self, did: str | None) -> np.ndarray | None:
+        """What a pairing about this account is allowed to teach (`credit.mode`).
+
+        The verdict is probed on the account odor alone, so it must be taught on the account odor
+        alone; otherwise the account's own posts are a rounding error against everyone else's
+        traffic through the same cells -- measured on his live weights, about 140:1 against
+        (scripts/kc_overlap.py).  None means the v1 rule: teach the whole mixture."""
+        mode = self.mb.p.credit_mode
+        if mode == "mixture" or not did:
+            return None
+        sig = self.account_signature(did)
+        if sig is None or not sig.any():
+            return None
+        own = (sig > 0).astype(np.float64)
+        return own if mode == "own" else own * self.ownership()
+
+    def read_weights(self, did: str | None) -> np.ndarray | None:
+        """The weights the verdict on this account is read through: the same ownership shares that
+        taught it, so the read and the credit agree."""
+        return self.ownership() if (self.mb.p.credit_mode == "share" and did) else None
 
     def account_signature(self, did: str) -> np.ndarray | None:
         """The Kenyon cells that fire for this account's odor alone: presented by itself to a copy of
@@ -1226,7 +1280,11 @@ class Agent:
         f = Features(did, 0.0, False, self.ledger.familiarity(did))
         kc_hits = self.account_signature(did)
         empty = {"reward_depression": 0.0, "punishment_depression": 0.0, "n_active_kc": 0}
-        v, info = self.mb.learned_valence(kc_hits) if kc_hits is not None and kc_hits.any() else (0.0, empty)
+        v, info = (
+            self.mb.learned_valence(kc_hits, weights=self.read_weights(did))
+            if kc_hits is not None and kc_hits.any()
+            else (0.0, empty)
+        )
         why = self.ledger.db.execute(
             "SELECT valence, source, COUNT(*) AS n FROM outcomes WHERE did=? GROUP BY valence, source", (did,)
         ).fetchall()
@@ -1275,7 +1333,12 @@ class Agent:
             if r["kind"] == "pairing":
                 self._tick(self.sim_hours())
                 w = self.live.present(list(self.enc.encode(f, self.appetite).drives) if f else [], PRESENT_MS)
-                self.mb.pair_counts(w.counts[self.fly.kc] * (1000.0 / w.ms), r["valence"], self.sim_hours())
+                self.mb.pair_counts(
+                    w.counts[self.fly.kc] * (1000.0 / w.ms),
+                    r["valence"],
+                    self.sim_hours(),
+                    restrict=self.credit_mask(f.did if f else None),
+                )
                 self.mb.extinguish_counts(w.counts[self.fly.kc] * (1000.0 / w.ms), self.sim_hours(), spare=r["valence"])
                 if r["valence"] == "reward":
                     self.appetite_bite()

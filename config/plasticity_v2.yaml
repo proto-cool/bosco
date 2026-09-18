@@ -103,3 +103,36 @@ extinction:
 homeostasis:
   tau_h: 0.0  # refused; 12.0 was the value tried, see the header and docs/plasticity-v2.md
   max: 4.0
+
+# Credit confinement (2026-09-18).  What extinction and homeostasis both missed: the defect is
+# not the sign of the rule or the balance of the compartments, it is that an account's verdict is
+# almost entirely other people's posts.
+#
+# The verdict is probed on the account odor alone (Agent.account_signature), while a pairing
+# lands on the whole mixture the account arrived in -- its words, its topics, the feed, the
+# pictures.  Measured on his live weights (scripts/kc_overlap.py, 12 accounts, his own logged
+# windows): 88% of an account's probe cells fire in that account's own windows, and 47% of them
+# fire in any other window as well.  Over 6,199 logged windows that leaves an account with 23
+# reads responsible for roughly 0.7% of the depression its own verdict is read from.  That is
+# the r ~ 0, and no rescaling of a quantity that is 99.3% background can put information into it.
+#
+# So: a pairing about an account teaches only the cells that account's odor owns.  Probed on the
+# odor alone, taught on the odor alone.  The cost is that a window no longer teaches the whole
+# mixture -- what he learns about a topic or a feed comes only through the windows where it is
+# the thing being judged -- and that is the trade this is making deliberately.
+#
+# This is a behaviour change after freeze-v1: it needs its own tag and an EXPERIMENT.md 2d note.
+# scripts/credit_gate.py replays his real logged windows under both rules and probes every
+# account; the requirement it has to pass is that a net-bitter account reads below zero and a
+# net-sweet one above it.
+# mode:
+#   mixture -- v1: the window teaches every cell it lit
+#   own     -- the cells the account's odor owns, flat
+#   share   -- those cells weighted by 1 / (accounts whose odor lights the cell): a cell twenty
+#              accounts drive is nobody's, so it neither learns much about one of them nor
+#              reports much about one of them.  `contrast` then reads the verdict against the
+#              compartment's own level instead of against nothing -- the level is shared by every
+#              odor, and what is an account's own is how far its cells sit from it.
+credit:
+  mode: share
+  contrast: true
