@@ -198,6 +198,13 @@ async function renderStatus(st) {
   $('bio-time').textContent =
     `${alive(br.t_ms)} of life · ${br.lag_s > 120 ? `running ${Math.round(br.lag_s / 60)} min behind the clock` : 'keeping up with the clock'}`;
 
+  // what moves two of the bars: the dust on him, and how long since anything went well
+  sentence($('body-sentence'), [
+    ...(br.dust ? ['he is carrying ', b(pct(br.dust)), ' of a load of dust.'] : ['no dust on him just now.']),
+    br.appetite == null ? '' : br.appetite > 0.7 ? ' he is hungry for company.'
+      : br.appetite < 0.3 ? ' he has had his fill of company for now.' : ' he could take some company.',
+  ]);
+
   // today: one figure, one sentence
   const t = st.today;
   $('silence').textContent = t.silence == null ? '–' : pct(t.silence);
@@ -216,17 +223,12 @@ async function renderStatus(st) {
   // memory: one figure, one sentence, a short list
   const people = st.people || [];
   $('people-count').textContent = fmt(people.length);
-  const hunger =
-    br.appetite == null ? '' : br.appetite > 0.7 ? ' he is hungry for company.' : br.appetite < 0.3 ? ' he has had his fill of company for now.' : ' he could take some company.';
-  const dust = br.dust
-    ? [' he is carrying ', b(pct(br.dust)), ' of a load of dust; when enough lands he cleans himself off, and that is a post.']
-    : [' no dust on him just now; when enough lands he cleans himself off, and that is a post.'];
   sentence(
     $('memory-sentence'),
     br.stm_depressed || br.ltm_depressed
       ? [b(fmt(br.stm_depressed)), ' synapses hold a short-term memory and ', b(fmt(br.ltm_depressed)),
-        ' a long-term one, of ', b(fmt(br.plastic_synapses)), ' that can learn.', ...dust, hunger]
-      : ['nothing learned yet, across ', b(fmt(br.plastic_synapses)), ' synapses that can.', ...dust, hunger],
+        ' a long-term one, of ', b(fmt(br.plastic_synapses)), ' that can learn.']
+      : ['nothing learned yet, across ', b(fmt(br.plastic_synapses)), ' synapses that can.'],
   );
   const wd = st.words || {};
   const sweet = (wd.sweet || []).map(([w]) => w).slice(0, 6);

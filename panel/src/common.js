@@ -308,7 +308,8 @@ export function personRow(p, extra) {
   const v = Math.abs(p.learned);
   const which = p.learned > 0 ? 'sweet' : 'bitter';
   const val = el('span', 'val', v < 0.02 ? 'no verdict' : v < 0.12 ? `barely ${which}` : v < 0.35 ? which : `very ${which}`);
-  li.append(who, bar, val, el('span', 'fam', extra ?? (p.familiarity ? `met ${fmt(p.familiarity)}×` : 'not met yet')));
+  // only a real meeting is worth a word here; six rows of "not met yet" is noise
+  li.append(who, bar, val, el('span', 'fam', extra ?? (p.familiarity ? `met ${fmt(p.familiarity)}×` : '')));
   return li;
 }
 

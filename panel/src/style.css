@@ -557,7 +557,10 @@ a:hover {
 }
 .person {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 6rem 7.5rem max-content;
+  /* the handle column is capped so the row stays one thing to read on a wide rail, instead of a
+     name at one edge and a verdict at the other */
+  grid-template-columns: minmax(0, 16rem) 6rem 7.5rem max-content;
+  justify-content: start;
   align-items: center;
   gap: var(--space-sm);
   min-height: 24px;
@@ -1015,7 +1018,7 @@ a:hover {
     gap: var(--space-sm) var(--space-lg);
   }
   .person {
-    grid-template-columns: minmax(0, 1fr) 3rem 7.5rem max-content;
+    grid-template-columns: minmax(0, 14rem) 3rem 7.5rem max-content;
   }
 }
 
