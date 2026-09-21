@@ -28,6 +28,20 @@ populations:
 # is his own activity, not the synthetic battery's.  The quantile is unchanged.
 min_rows: {event: 200, mentioned: 15, landing_peak: 30, tasted: 200}
 
+# Spans in which the kernel is known to have been broken, named by the fault's own boundaries and
+# never by what his activity looked like: every window set above leaves them out, and so does the
+# KC sparseness band below.  A window from a broken kernel is not his activity.
+#   kernel_int32_wrap (added 2026-09-21): from step 2^31 (59.7 h of his biological time, 13:00 UTC
+#   on 2026-09-16) the run loop read elapsed steps from an int32, no sensory synapse recovered
+#   again, and his afferents faded out over four hours -- he was deaf until the fixed kernel first
+#   ran, which is the `kernel 1->2` control row (16:26 UTC on 2026-09-17; commit ea71402,
+#   Agent.KERNEL_VERSION).  The calibration of 2026-09-17 took 2,000 of its 5,301 event windows
+#   from inside it, which pulled every threshold down.
+exclude:
+  - name: kernel_int32_wrap
+    from_t_ms: 214748364.8          # step 2^31 at dt 0.1 ms
+    until_control: {kind: kernel, target: "1->2"}
+
 # KC sparseness (EXPERIMENT.md 5), pre-registered with the thresholds and frozen with them.
 # The check is on the distribution, not on each window: 436 of the dev period's 5282 event
 # windows had no KC active at all (2026-09-17), so a per-window floor called his ordinary

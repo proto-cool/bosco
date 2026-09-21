@@ -57,3 +57,30 @@ def test_every_population_in_the_policy_names_a_set_the_script_knows(tmp_path):
     for pop, rule in policy["populations"].items():
         rows_for(L, rule["over"])  # raises on an unknown selector
         assert rule["over"] in policy["min_rows"], pop
+
+
+def test_the_exclude_spans_leave_out_a_broken_kernel(tmp_path):
+    """A window from a kernel known to be broken is not his activity (policy `exclude`): the span
+    runs from the fault's biological time to the control row of the fix, and nothing else moves."""
+    L = Ledger(tmp_path / "l.sqlite")
+    rows = [(100.0, 10.0, 1.0), (200.0, 60.0, 2.0), (300.0, 70.0, 3.0), (400.0, 80.0, 4.0)]
+    for ts, t_ms, engage in rows:
+        L.db.execute(
+            EPISODE.replace("vader,mentioned)", "vader,mentioned,t_ms)").replace("?,?)", "?,?,?)"),
+            (ts, "event", json.dumps({"engage": engage}), 0.0, 0, t_ms),
+        )
+    L.db.execute("INSERT INTO control (ts, kind, by_did, target_uri) VALUES (350.0, 'kernel', 'system', '1->2')")
+    L.db.commit()
+    rule = [{"name": "wrap", "from_t_ms": 50.0, "until_control": {"kind": "kernel", "target": "1->2"}}]
+    assert [r["engage"] for r in rows_for(L, "event", rule)] == [1.0, 4.0]
+    assert len(rows_for(L, "event")) == 4
+    # no fix in this ledger: the fault runs to its end
+    rule[0]["until_control"]["target"] = "2->3"
+    assert [r["engage"] for r in rows_for(L, "event", rule)] == [1.0]
+
+
+def test_the_policy_excludes_the_int32_wrap():
+    policy = yaml.safe_load(open(paths.CONFIG / "thresholds_policy.yaml"))
+    wrap = {r["name"]: r for r in policy["exclude"]}["kernel_int32_wrap"]
+    assert wrap["from_t_ms"] == 2**31 * 0.1
+    assert wrap["until_control"] == {"kind": "kernel", "target": "1->2"}

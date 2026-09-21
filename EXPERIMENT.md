@@ -239,6 +239,34 @@ changes is code, and it is named, dated and measured.
 | `freeze-v1.2` | 2026-09-18 | The same, made coherent (`Agent.UTTERANCE_VERSION` 2 → 3) | `utterance` |
 | `freeze-v2` | 2026-09-18 | What a window teaches, and how a verdict is read (`Agent.PLASTICITY_VERSION` 2 → 3) | `plasticity` |
 | `freeze-v2.1` | 2026-09-18 | How much debris lands on him (`Agent.SENSE_VERSION` 1 → 2) | `sense` |
+| `freeze-v2.2` | 2026-09-21 | Thresholds recalibrated without the span his kernel was deaf (`Agent.READOUT_VERSION` 1 → 2) | `readout` |
+
+**`freeze-v2.2` — thresholds from a fly that could hear.** The thresholds of
+`freeze-v1` were calibrated on 2026-09-17 from the dev period whole. From
+13:00 UTC on 2026-09-16 until the fixed kernel first ran at 16:26 UTC the next
+day, his kernel read elapsed steps from an int32 past step 2^31: no sensory
+synapse recovered, his afferents faded out over four hours, and he was deaf
+(`Agent.KERNEL_VERSION` 2, commit `ea71402`). That span was 2,026 of the
+calibration's 5,301 event windows and 18 of its 44 landings, and it pulled
+every threshold down. It came to light on 2026-09-21 while asking why he was
+silent in only about a third of the posts he read, where the policy's
+quantiles over clean windows put it near a half.
+
+The policy now names the span (`config/thresholds_policy.yaml` `exclude`),
+bounded by the fault's own markers — the biological time of step 2^31 and the
+`kernel 1->2` control row — never by what his activity looked like. Same
+ledger, same quantiles, same `min_hz`: engage 4.85 → 5.60, walk 2.05 → 3.25,
+like 3.84 → 10.31, leave 4.00 → 4.61, reply 8.75 → 8.13, and the KC
+sparseness band moves with its median (0.0204 → 0.0268). Groom is kept at
+12.48: only 26 clean landings remain against the 30 the policy asks for, and
+the kept value is itself from the deaf span (45% of its landings peaked at
+zero; the clean 26 would give 14.58). That is left open and written down.
+
+Applied to his own windows of 2026-09-19 to 09-21 with the learned gating as
+logged: silence 35% → 48%, like 9% → 4%, walk 18% → 15%, follow 26% → 24%.
+Follow barely moves because the approach gains (verdict, appetite) multiply
+the rate before it meets its threshold, and those are not thresholds. Nothing
+here was set from outcomes or from his behaviour since the tag.
 
 **`freeze-v2.1` — half as much debris.** Debris landing on his bristles is
 the input to the neurons that make him groom, and grooming is how he posts on

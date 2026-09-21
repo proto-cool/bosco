@@ -268,6 +268,18 @@ class Agent:
     #      not damp the loop, which is his and stays.
     SENSE_VERSION = 2
 
+    # The thresholds his readout compares against (config/thresholds.json).  They are set by a
+    # pre-registered policy from his own dev-period activity, so they do not move by hand, but when
+    # they are recalibrated the same window can be a different act, and the record has to say
+    # where that falls.
+    #   1  calibrated 2026-09-17 off snapshots/2026-09-17/, the dev period whole
+    #   2  the same ledger less the span his kernel was deaf (2026-09-21, thresholds_policy.yaml
+    #      `exclude`): 2,026 of the 5,301 event windows and 18 of the 44 landings were a fly whose
+    #      afferents had faded out, which pulled every threshold down.  engage 4.85 -> 5.60, walk
+    #      2.05 -> 3.25, like 3.84 -> 10.31, leave 4.00 -> 4.61, reply 8.75 -> 8.13; groom kept
+    #      at 12.48 for want of clean landings (26 of the 30 the policy asks for)
+    READOUT_VERSION = 2
+
     def _load_state(self) -> None:
         if self.state_path.exists():
             self._unpack(dict(np.load(self.state_path)))
@@ -279,6 +291,7 @@ class Agent:
         self._mark_kernel_version()
         self._mark_utterance_version()
         self._mark_sense_version()
+        self._mark_readout_version()
         self._mark_numerics()
         self._mark_clock()
 
@@ -366,6 +379,18 @@ class Agent:
             self.ledger.add_control("sense", "system", None, f"{had or '1'}->{now}")
             self.snapshot()
         self.ledger.set_cursor("sense_version", now)
+
+    def _mark_readout_version(self) -> None:
+        """What his readout compares against: a recalibration is a `readout` control row and a
+        snapshot, so the record says where the same activity began to mean a different act."""
+        had = self.ledger.get_cursor("readout_version")
+        now = str(self.READOUT_VERSION)
+        if had == now:
+            return
+        if self.brain_t0 is not None and self.live.t_ms > 0:
+            self.ledger.add_control("readout", "system", None, f"{had or '1'}->{now}")
+            self.snapshot()
+        self.ledger.set_cursor("readout_version", now)
 
     # ---- appetite for contact ----------------------------------------------------
     def sim_hours(self) -> float:

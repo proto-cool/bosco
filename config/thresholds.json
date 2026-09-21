@@ -1,13 +1,13 @@
 {
- "_note": "Per-population rate thresholds (Hz), set by scripts/calibrate_thresholds.py from the pre-registered policy in config/thresholds_policy.yaml: each is a quantile of that population's rate over the named set of real windows, floored at min_hz. Never from outcomes, never hand-set. `_calibration.source` names the ledger each came from; `_calibration.kept` lists any left at their previous value for want of windows. `kc_range` is the recorded spread of KC sparseness over the dev period and `kc_band` the band around its median: the nightly tests the day's tail against kc_range's top and the day's median against kc_band (a single window where nothing fires is ordinary), while scripts/phase8_retina_gate.py uses kc_range whole, as the window a picture's own activity must land in.",
- "engage": 4.85,
- "reply": 8.75,
- "like": 3.838461538461528,
- "leave": 4.0,
+ "_note": "Per-population rate thresholds (Hz), set by scripts/calibrate_thresholds.py from the pre-registered policy in config/thresholds_policy.yaml: each is a quantile of that population's rate over the named set of real windows, floored at min_hz. Never from outcomes, never hand-set. `_calibration.source` names the ledger each came from; `_calibration.kept` lists any left at their previous value for want of windows, and `_calibration.excluded` the policy's spans of known-broken kernel left out of every set. `kc_range` is the recorded spread of KC sparseness over the dev period and `kc_band` the band around its median: the nightly tests the day's tail against kc_range's top and the day's median against kc_band (a single window where nothing fires is ordinary), while scripts/phase8_retina_gate.py uses kc_range whole, as the window a picture's own activity must land in.",
+ "engage": 5.595000000000004,
+ "reply": 8.125000000000002,
+ "like": 10.307692307692308,
+ "leave": 4.611111111111111,
  "groom": 12.481578947368419,
  "kc_range": [
-  0.0,
-  0.1363804133858268
+  0.00012303149606299212,
+  0.14136318897637795
  ],
  "_calibration": {
   "policy": "config/thresholds_policy.yaml",
@@ -19,12 +19,17 @@
    "groom": "snapshots/2026-09-17/ledger.sqlite",
    "walk": "snapshots/2026-09-17/ledger.sqlite"
   },
-  "kept": []
+  "kept": [
+   "groom"
+  ],
+  "excluded": [
+   "kernel_int32_wrap"
+  ]
  },
- "walk": 2.05,
- "kc_median": 0.02042322834645669,
+ "walk": 3.25,
+ "kc_median": 0.026820866141732284,
  "kc_band": [
-  0.008169291338582676,
-  0.051058070866141725
+  0.010728346456692914,
+  0.06705216535433071
  ]
 }

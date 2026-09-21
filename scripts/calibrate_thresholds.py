@@ -71,13 +71,33 @@ def synthetic_ledger(n_events: int, n_landings: int, seed: int) -> Ledger:
     return L
 
 
-def rows_for(L: Ledger, selector: str) -> list[dict]:
-    """Windows named by the policy, as {pop: rate} dicts."""
+def excluded(L: Ledger, rules: list[dict] | None) -> tuple[str, list]:
+    """SQL that leaves out the policy's `exclude` spans: windows from a kernel known to be broken,
+    bounded by the fault's own markers (a biological time it began at, the control row of the fix),
+    never by what the activity looked like.  A fault with no fix row in this ledger runs to its end."""
+    sql, params = "", []
+    for r in rules or ():
+        until = float("inf")
+        uc = r.get("until_control")
+        if uc:
+            row = L.db.execute(
+                "SELECT MIN(ts) AS ts FROM control WHERE kind=? AND target_uri=?", (uc["kind"], uc["target"])
+            ).fetchone()
+            if row and row["ts"] is not None:
+                until = float(row["ts"])
+        sql += " AND NOT (COALESCE(t_ms, -1) >= ? AND ts < ?)"
+        params += [float(r["from_t_ms"]), until]
+    return sql, params
+
+
+def rows_for(L: Ledger, selector: str, exclude: list[dict] | None = None) -> list[dict]:
+    """Windows named by the policy, as {pop: rate} dicts, less the policy's `exclude` spans."""
+    ex, ep = excluded(L, exclude)
     if selector == "event":
-        rows = L.db.execute("SELECT scores FROM episodes WHERE kind='event'").fetchall()
+        rows = L.db.execute("SELECT scores FROM episodes WHERE kind='event'" + ex, ep).fetchall()
         return [json.loads(r["scores"]) for r in rows]
     if selector == "mentioned":
-        rows = L.db.execute("SELECT scores FROM episodes WHERE kind='event' AND mentioned=1").fetchall()
+        rows = L.db.execute("SELECT scores FROM episodes WHERE kind='event' AND mentioned=1" + ex, ep).fetchall()
         return [json.loads(r["scores"]) for r in rows]
     if selector == "tasted":
         # Windows in which there was something to taste: the post's VADER compound cleared the
@@ -87,11 +107,12 @@ def rows_for(L: Ledger, selector: str) -> list[dict]:
         # he wanted to taste something, and over every window `like` is 75% exact zeros.  The
         # cutoff is the encoder's, not a new number (config/encoder_v1.yaml gustatory.dead_zone).
         dz = float(yaml.safe_load(open(paths.CONFIG / "encoder_v1.yaml"))["gustatory"]["dead_zone"])
-        rows = L.db.execute("SELECT scores FROM episodes WHERE kind='event' AND vader > ?", (dz,)).fetchall()
+        rows = L.db.execute("SELECT scores FROM episodes WHERE kind='event' AND vader > ?" + ex, [dz, *ep]).fetchall()
         return [json.loads(r["scores"]) for r in rows]
     if selector == "landing_peak":
         rows = L.db.execute(
-            "SELECT note, scores FROM episodes WHERE kind IN ('landing','spontaneous') AND note LIKE 'landing:%'"
+            "SELECT note, scores FROM episodes WHERE kind IN ('landing','spontaneous') AND note LIKE 'landing:%'" + ex,
+            ep,
         ).fetchall()
         peaks: dict[str, dict] = {}
         for r in rows:
@@ -132,7 +153,7 @@ def main(argv=None) -> int:
             continue
         sel = rule["over"]
         pop = rule.get("population", p)  # a rung on another population's rate (walk on engage)
-        rows = cache.setdefault(sel, rows_for(L, sel))
+        rows = cache.setdefault(sel, rows_for(L, sel, policy.get("exclude")))
         need = int(policy["min_rows"].get(sel, 0))
         v = np.array([s.get(pop, 0.0) for s in rows]) if rows else np.zeros(0)
         if len(v) < need:
@@ -148,7 +169,8 @@ def main(argv=None) -> int:
             f"{p:7s} over {sel:12s} n={len(v):4d} quantiles 50/85/95/99: "
             f"{np.quantile(v, [0.5, 0.85, 0.95, 0.99]).round(2).tolist()} -> q{rule['q']} threshold {th[p]:.2f}"
         )
-    ev = L.db.execute("SELECT kc_active FROM episodes WHERE kind='event'").fetchall()
+    ex, ep = excluded(L, policy.get("exclude"))
+    ev = L.db.execute("SELECT kc_active FROM episodes WHERE kind='event'" + ex, ep).fetchall()
     kcs, med, band = {}, None, None
     if ev:
         kc = np.array([r["kc_active"] for r in ev]) / 4064.0
@@ -175,7 +197,8 @@ def main(argv=None) -> int:
             "pre-registered policy in config/thresholds_policy.yaml: each is a quantile of that "
             "population's rate over the named set of real windows, floored at min_hz. Never from "
             "outcomes, never hand-set. `_calibration.source` names the ledger each came from; "
-            "`_calibration.kept` lists any left at their previous value for want of windows. "
+            "`_calibration.kept` lists any left at their previous value for want of windows, and "
+            "`_calibration.excluded` the policy's spans of known-broken kernel left out of every set. "
             "`kc_range` is the recorded spread of KC sparseness over the dev period and "
             "`kc_band` the band around its median: the nightly tests the day's tail against "
             "kc_range's top and the day's median against kc_band (a single window where "
@@ -195,6 +218,7 @@ def main(argv=None) -> int:
                 **{p: source for p in th},
             },
             "kept": skipped,
+            "excluded": [r["name"] for r in policy.get("exclude") or ()],
         }
         json.dump(cfg, open(paths.CONFIG / "thresholds.json", "w"), indent=1)
         print("wrote config/thresholds.json")
