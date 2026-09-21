@@ -323,7 +323,11 @@ systemctl --user daemon-reload && systemctl --user enable --now bosco-weekly.tim
   his commands (`bosco status`, `bosco replay`, `bosco memory --did`).
 - The box's checkout stays **on `main`**, not on a detached commit: the nightly commits
   `snapshots/<date>` and pushes it, and a detached HEAD has nothing to push (2026-09-17). Deploy
-  a specific commit by landing it on main first.
+  a specific commit by landing it on main first; never `git checkout <sha>` on the box. That
+  rule was written on 09-17 and broken the next day, and four nights (09-18 to 09-21) were
+  committed onto detached heads and orphaned until recovered from the reflog. Since 09-21 the
+  nightly puts a detached HEAD back on main itself when origin/main differs from it only by
+  snapshots, and otherwise keeps the snapshot on disk and alerts that the box is off main.
 - After a code change: `cd ~/bosco && git pull --ff-only && podman build -t bosco -f ops/Containerfile . && systemctl --user restart bosco`,
   and the same with `Containerfile.panel` and `bosco-panel` for the site.
 - The panel's peer bench line (idle 0.138 / event 1.91 wall seconds on the

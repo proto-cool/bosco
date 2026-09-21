@@ -57,11 +57,43 @@ if [ -n "${BOSCO_RSYNC_TARGET:-}" ]; then
   rsync -a state/ "$BOSCO_RSYNC_TARGET" || { rc=1; alert "bosco: nightly rsync off-box failed"; }
 fi
 
-git add "$dst"
-if ! git diff --cached --quiet; then
-  git commit -q -m "snapshot $day"
-  git push -q || { rc=1; alert "bosco: snapshot $day committed but did not push"; }
-fi
-
 if [ "$rc" -ne 0 ]; then alert "bosco: integrity FAIL, see $dst/integrity.md"; fi
-exit "$rc"
+
+# Publishing is its own failure, with its own alert.  From 2026-09-18 to 09-21 deploys left the
+# checkout detached (`git checkout <sha>`); each night committed onto the detached HEAD, the push
+# had no branch to send, the next deploy walked away from the commits, and the alert said
+# "integrity FAIL" over a report that was all PASS.  So: a detached HEAD at origin/main, or behind
+# it by nothing but snapshots, is put back on main (the working tree is only the host's copy; the
+# running image does not move).  Any other detached HEAD is left alone and the snapshot stays on
+# disk, untracked, which survives checkouts, and is picked up by the first night that can publish.
+pub=0
+publish() {
+  git fetch -q origin main || { alert "bosco: nightly cannot fetch origin; snapshot $day kept on disk"; return 1; }
+  if ! git symbolic-ref -q HEAD >/dev/null; then
+    local head; head=$(git rev-parse HEAD)
+    if git merge-base --is-ancestor "$head" origin/main \
+       && [ -z "$(git diff --name-only "$head" origin/main -- . ':(exclude)snapshots/')" ]; then
+      git checkout -q -B main origin/main && git branch -q -u origin/main \
+        || { alert "bosco: could not put the box back on main; snapshot $day kept on disk"; return 1; }
+      alert "bosco: the box was detached at ${head:0:7}; put back on main"
+    else
+      alert "bosco: the box is detached at ${head:0:7}, not on main; snapshot $day kept on disk, not published"
+      return 1
+    fi
+  elif [ "$(git symbolic-ref --short HEAD)" != main ]; then
+    alert "bosco: the box is on $(git symbolic-ref --short HEAD), not main; snapshot $day kept on disk, not published"
+    return 1
+  else
+    git merge -q --ff-only origin/main \
+      || { alert "bosco: main on the box has diverged from origin; snapshot $day kept on disk"; return 1; }
+  fi
+  # every dated snapshot, so a night that could not publish is carried by the next one that can
+  git add snapshots/20[0-9][0-9]-*
+  if ! git diff --cached --quiet; then
+    git commit -q -m "snapshot $day"
+    git push -q origin main || { alert "bosco: snapshot $day committed but did not push"; return 1; }
+  fi
+}
+publish || pub=1
+
+[ "$rc" -eq 0 ] && [ "$pub" -eq 0 ]
