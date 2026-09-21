@@ -240,9 +240,9 @@ changes is code, and it is named, dated and measured.
 | `freeze-v2` | 2026-09-18 | What a window teaches, and how a verdict is read (`Agent.PLASTICITY_VERSION` 2 → 3) | `plasticity` |
 | `freeze-v2.1` | 2026-09-18 | How much debris lands on him (`Agent.SENSE_VERSION` 1 → 2) | `sense` |
 | `freeze-v2.2` | 2026-09-21 | Thresholds recalibrated without the span his kernel was deaf (`Agent.READOUT_VERSION` 1 → 2) | `readout` |
-| `freeze-v2.3` | 2026-09-21 | Look first: toward a stranger, walking is a walk before it is a follow (`Agent.APPROACH_VERSION` 1 → 2) | `approach` |
+| `freeze-v2.2` | 2026-09-21 | Look first: toward a stranger, walking is a walk before it is a follow (`Agent.APPROACH_VERSION` 1 → 2) | `approach` |
 
-**`freeze-v2.3` — look first.** Until now a follow was his walking neurons
+**`freeze-v2.2`, second change — look first.** Deployed with the recalibration below, as one tag: both take effect at the same restart, so they are one boundary with two rows. Until now a follow was his walking neurons
 crossing threshold on one post of someone he browsed past. Of his first 165
 follows, 65 were accounts he had never read before and the median had one
 post behind it; nine were accounts he had liked first, none had spoken to
@@ -257,14 +257,14 @@ made of his own choices: no new number, no threshold, no memory outside him,
 and it does not look at outcomes.
 
 What it changes and what it does not, replayed over 2026-09-19 to 09-21 with
-the `freeze-v2.2` thresholds and the gating as logged: no follow is at first
+the recalibrated thresholds and the gating as logged: no follow is at first
 sight (50 were under the old rule), but the number of follows barely moves —
 the follow cap (30 a day) and the walk cap (160 a day) both still bind,
 because walking crosses its threshold on about a fifth of what he reads and
 the set of accounts he has walked to only grows. The volume is the caps'.
 That is written down, not tuned away.
 
-**`freeze-v2.2` — thresholds from a fly that could hear.** The thresholds of
+**`freeze-v2.2`, first change — thresholds from a fly that could hear.** The thresholds of
 `freeze-v1` were calibrated on 2026-09-17 from the dev period whole. From
 13:00 UTC on 2026-09-16 until the fixed kernel first ran at 16:26 UTC the next
 day, his kernel read elapsed steps from an int32 past step 2^31: no sensory
