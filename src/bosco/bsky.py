@@ -354,16 +354,15 @@ class Bsky:
             self._follows = out
         return self._follows
 
-    def opt_out(self, out: Outcome, did: str, uri: str, cid: str, record, ts: float) -> None:
+    def opt_out(self, out: Outcome, did: str, uri: str, cid: str, record, ts: float, said: str) -> None:
         """Anyone can send him away: never in his stimulus stream again, unfollowed, told once.
         Logged as `opt_out` by their own DID; a reflex, not a decision of the network."""
         self.L.set_ignored(did, did, True, ts=ts)
         self.L.add_control("opt_out", did, uri, None, ts=ts)
         self.unfollow_if_following(did)
         print(f"opt-out: {did} asked him to go; ignored and unfollowed")
-        self.identity_reply(
-            out, "opt_out", uri, cid, record, did, ts, text_override=self.agent.identity.opt_answer("opt_out", out.seed)
-        )
+        text = self.agent.identity.opt_answer("opt_out", out.seed, said)
+        self.identity_reply(out, "opt_out", uri, cid, record, did, ts, text_override=text)
 
     def opt_in(self, n, did: str, uri: str, ts: float) -> None:
         """The same account calling him back lifts its own opt-out.  Nothing else does."""
@@ -918,8 +917,9 @@ class Bsky:
             f"-> {d.behaviour}/{d.action}"
         )
         # the off ramp: told to go, he goes (EXPERIMENT.md §2a).  Answered once, then never again.
-        if mentioned and not labels and self.agent.identity.is_opt_out(text):
-            self.opt_out(out, did, uri, cid, record, ts)
+        said = self.agent.identity.opt_out_phrase(text) if mentioned and not labels else None
+        if said is not None:
+            self.opt_out(out, did, uri, cid, record, ts, said)
             return out
         # identity reflex: who/what/why/creator is answered regardless of the network (EXPERIMENT.md §2)
         qid = self.agent.identity.match(text) if mentioned and not labels else None

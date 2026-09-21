@@ -46,18 +46,28 @@ class IdentityReflex:
             for k in ("opt_out", "opt_in")
         }
 
+    def opt_out_phrase(self, text: str) -> str | None:
+        """The words that sent him off, as the pattern caught them (never the rest of the post),
+        so his answer can say what he heard.  None if nothing did."""
+        t = " ".join(text.replace("\u2019", "'").split())
+        for p in self.opt["opt_out"][0]:
+            m = p.search(t)
+            if m:
+                said = re.sub(r"^(\s*[.!?,;:]|\s*@\S+)*\s*", "", m.group(0)).rstrip(" .!?,;:")
+                return said[:40] or t[:40]
+        return None
+
     def is_opt_out(self, text: str) -> bool:
-        t = " ".join(text.split())
-        return any(p.search(t) for p in self.opt["opt_out"][0])
+        return self.opt_out_phrase(text) is not None
 
     def is_opt_in(self, text: str) -> bool:
         t = " ".join(text.split())
         return any(p.search(t) for p in self.opt["opt_in"][0])
 
-    def opt_answer(self, kind: str, seed: int) -> str:
+    def opt_answer(self, kind: str, seed: int, said: str = "") -> str:
         answers = self.opt[kind][1]
         h = int.from_bytes(hashlib.blake2b(f"{seed}|{kind}".encode(), digest_size=8).digest(), "little")
-        return answers[h % len(answers)]
+        return answers[h % len(answers)].replace("{said}", said)
 
     def match(self, text: str) -> str | None:
         t = " ".join(text.split())

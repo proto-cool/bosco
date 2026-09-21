@@ -185,6 +185,17 @@ account saying "come back" lifts it (`opt_in`); nothing else does, and an
 operator ignore is not theirs to lift. A block does the same without words
 and is also the punishment signal; a mute needs nothing from him. This is a
 reflex on the same footing as the identity answers, outside the network.
+The phrases count only when said *to him* (2026-09-20): each must open a
+clause, with nothing before it but a mention or a "please", "ok" and the
+like, so a sentence that merely contains the words is not an off ramp. That
+day an account that played along with his "you go away from soap" by
+answering "ok, i'll go away from soap" was sent off by the reflex. A bare
+"no" or "go" is an answer, not an off ramp; a bare "stop" still is. A bug in
+the reflex, fixed in code; the network is untouched. The answers are plain
+words, not his register: he says back the phrase he heard (only the words
+the pattern caught, never the rest of the post), that he will not reply,
+like or follow, and that "come back" undoes it; coming back is answered with
+how to send him off again.
 
 Bosco's text comes from an n-gram model (four words of context) over a published corpus and from
 phrasebook lines; every word he can emit is in those files. The exposure
@@ -351,7 +362,7 @@ any of those four changes.
 | Innate smells | `config/innate_v1.yaml` | `f341b785e71a4327` |
 | Topics | `config/topics_v1.yaml` | `e5a9a046d1f5d465` |
 | Feeds | `config/feeds_v1.yaml` | `9697ed7615000840` |
-| Identity | `config/identity_v1.yaml` | `4be8620e37b2169c` |
+| Identity | `config/identity_v1.yaml` | `932daef7f4da8ddd` |
 | Caps | `config/caps_v1.yaml` | `d2e502688e2962d4` |
 | Model | `config/model_v1.yaml` | `f5faa07357e612d5` |
 | Encoder config | `config/encoder_v1.yaml` | `783c40f376d2dc62` |

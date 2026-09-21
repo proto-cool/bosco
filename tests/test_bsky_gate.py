@@ -157,9 +157,9 @@ def test_opt_out_ignores_unfollows_and_answers_once():
         (qid, text_override)
     )
     out = _out(L, "nothing", 0.0, True)
-    b.opt_out(out, "did:plc:x", "at://x/9", "cid", SimpleNamespace(text="go away"), 1.0)
+    b.opt_out(out, "did:plc:x", "at://x/9", "cid", SimpleNamespace(text="go away"), 1.0, "go away")
     assert "did:plc:x" in L.ignored() and L.ignored_by("did:plc:x") == "did:plc:x"
-    assert unfollowed == ["did:plc:x"] and replied[0][0] == "opt_out" and "go" in replied[0][1]
+    assert unfollowed == ["did:plc:x"] and replied[0][0] == "opt_out" and '"go away"' in replied[0][1]
     assert [r[0] for r in L.db.execute("SELECT kind FROM control")] == ["opt_out"]
     # the same account calling him back lifts it; the operator's ignore is not theirs to lift
     n = SimpleNamespace(record=SimpleNamespace(text="come back", reply=None), cid="c")
