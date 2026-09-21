@@ -73,7 +73,9 @@ def test_browsing_may_like_and_follow_but_never_reply():
     b.act(_out(L, "like", 0.0, False), "did:plc:x", "at://x/1", "cid", None, None, 1.0)
     assert _kinds(L)[-1][0] == "like"  # a like on someone he browsed past: his call, under the caps
     b.act(_out(L, "follow", 0.0, False), "did:plc:y", "at://y/1", "cid", None, None, 2.0)
-    assert _kinds(L)[-1][0] == "follow"  # a follow too
+    assert _kinds(L)[-1] == ("walk", 0)  # a stranger: look first (APPROACH_VERSION 2)
+    b.act(_out(L, "follow", 0.0, False), "did:plc:y", "at://y/1b", "cid", None, None, 2.5)
+    assert _kinds(L)[-1][0] == "follow"  # moved again after walking to them: a follow
     b._follows = {"did:plc:y": "at://me/follow/1"}
     b.act(_out(L, "follow", 0.0, False), "did:plc:y", "at://y/2", "cid", None, None, 3.0)
     assert _kinds(L)[-1] == ("walk", 0)  # already followed: engage while browsing is a walk, never a reply
@@ -461,3 +463,18 @@ def test_primer_thread_is_posted_once_pinned_and_not_a_conversation():
     assert b.poll_notifications() == 3
     # oldest first, as the poll reads them
     assert seen == [("at://x/3", True, None), ("at://x/2", True, None), ("at://x/1", False, "primer")]
+
+
+def test_look_first_a_capped_walk_is_not_a_look():
+    """A walk the caps stopped never read anything, so the next time he is moved it is a walk again,
+    not a follow; and an account he walked to, even long ago, may be followed."""
+    L = Ledger(f"{tempfile.mkdtemp()}/l.sqlite")
+    b = _bsky(L)
+    b.agent.caps_allow = lambda *a, **k: (False, "walk/hour")
+    b.act(_out(L, "follow", 0.0, False), "did:plc:s", "at://s/1", "cid", None, None, 1.0)
+    assert _kinds(L)[-1] == ("leave", 1) and _why(L) == "walk:cap:walk/hour"
+    b.agent.caps_allow = lambda *a, **k: (True, "ok")
+    b.act(_out(L, "follow", 0.0, False), "did:plc:s", "at://s/2", "cid", None, None, 2.0)
+    assert _kinds(L)[-1] == ("walk", 0)  # still a stranger: this is the look
+    b.act(_out(L, "follow", 0.0, False), "did:plc:s", "at://s/3", "cid", None, None, 99999.0)
+    assert _kinds(L)[-1][0] == "follow"

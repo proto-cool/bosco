@@ -447,6 +447,12 @@ class Ledger:
             note=f"{what}:{why}",
         )
 
+    def walked_to(self, did: str) -> bool:
+        """Has he ever walked toward this account (read more of its posts)?  A walk the caps stopped
+        is a withheld row, not a walk, so it does not count."""
+        q = "SELECT 1 FROM actions WHERE kind='walk' AND target_did=? LIMIT 1"
+        return self.db.execute(q, (did,)).fetchone() is not None
+
     def replied_to(self, target_uri: str, real_only: bool = True) -> bool:
         """Has he already answered this post (by the network or by reflex)?  Once is the rule."""
         q = "SELECT 1 FROM actions WHERE target_uri=? AND kind IN ('reply','answer','identity') AND deleted_ts IS NULL"

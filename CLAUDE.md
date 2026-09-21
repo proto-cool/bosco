@@ -249,7 +249,8 @@ Do not download the EM volume. `neuprint-python` against
   (provisional synthetic-battery thresholds until then).
 - Action set: `reply`, `like`, `follow`, `walk`, `leave`,
   `spontaneous_post`, `nothing`. engage → follow while browsing (a walk if
-  already followed), reply when addressed; a walking rate over the lower
+  already followed, and a walk toward anyone he has never walked to: he
+  looks first, decided 2026-09-21), reply when addressed; a walking rate over the lower
   `walk` rung but under engage's threshold → walk (read a few more of the
   account's posts; not outward; capped; decided 2026-09-15); leave →
   unfollow. A reply is only ever an answer, and it embeds nothing: a quote

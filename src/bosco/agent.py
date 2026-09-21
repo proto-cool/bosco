@@ -280,6 +280,13 @@ class Agent:
     #      at 12.48 for want of clean landings (26 of the 30 the policy asks for)
     READOUT_VERSION = 2
 
+    # What walking toward an account he browsed past becomes (Bsky.act).  Outward policy is
+    # behaviour, so a change of it is a boundary like any other.
+    #   1  a follow, on the first post that moved him, unless he already followed them (a walk)
+    #   2  look first (2026-09-21): toward someone he has never walked to it is a walk; he follows
+    #      only when a post of theirs moves him again after he has read more of them
+    APPROACH_VERSION = 2
+
     def _load_state(self) -> None:
         if self.state_path.exists():
             self._unpack(dict(np.load(self.state_path)))
@@ -292,6 +299,7 @@ class Agent:
         self._mark_utterance_version()
         self._mark_sense_version()
         self._mark_readout_version()
+        self._mark_approach_version()
         self._mark_numerics()
         self._mark_clock()
 
@@ -391,6 +399,18 @@ class Agent:
             self.ledger.add_control("readout", "system", None, f"{had or '1'}->{now}")
             self.snapshot()
         self.ledger.set_cursor("readout_version", now)
+
+    def _mark_approach_version(self) -> None:
+        """What walking toward a stranger becomes: a change of it is an `approach` control row and a
+        snapshot, so the record says where a follow began to need a second look."""
+        had = self.ledger.get_cursor("approach_version")
+        now = str(self.APPROACH_VERSION)
+        if had == now:
+            return
+        if self.brain_t0 is not None and self.live.t_ms > 0:
+            self.ledger.add_control("approach", "system", None, f"{had or '1'}->{now}")
+            self.snapshot()
+        self.ledger.set_cursor("approach_version", now)
 
     # ---- appetite for contact ----------------------------------------------------
     def sim_hours(self) -> float:

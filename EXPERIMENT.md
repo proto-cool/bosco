@@ -240,6 +240,29 @@ changes is code, and it is named, dated and measured.
 | `freeze-v2` | 2026-09-18 | What a window teaches, and how a verdict is read (`Agent.PLASTICITY_VERSION` 2 → 3) | `plasticity` |
 | `freeze-v2.1` | 2026-09-18 | How much debris lands on him (`Agent.SENSE_VERSION` 1 → 2) | `sense` |
 | `freeze-v2.2` | 2026-09-21 | Thresholds recalibrated without the span his kernel was deaf (`Agent.READOUT_VERSION` 1 → 2) | `readout` |
+| `freeze-v2.3` | 2026-09-21 | Look first: toward a stranger, walking is a walk before it is a follow (`Agent.APPROACH_VERSION` 1 → 2) | `approach` |
+
+**`freeze-v2.3` — look first.** Until now a follow was his walking neurons
+crossing threshold on one post of someone he browsed past. Of his first 165
+follows, 65 were accounts he had never read before and the median had one
+post behind it; nine were accounts he had liked first, none had spoken to
+him. A follow is a standing commitment, and every other outward act of his
+already waits for contact: he replies only to someone who spoke to him.
+
+Now, toward an account he has never walked to, walking is a walk: he reads a
+few more of their posts (`walk_posts`), an ordinary stimulus each, reaching
+nobody. He follows only when one of those posts, or a later one, moves him
+again. A walk the caps stopped read nothing and does not count. The rule is
+made of his own choices: no new number, no threshold, no memory outside him,
+and it does not look at outcomes.
+
+What it changes and what it does not, replayed over 2026-09-19 to 09-21 with
+the `freeze-v2.2` thresholds and the gating as logged: no follow is at first
+sight (50 were under the old rule), but the number of follows barely moves —
+the follow cap (30 a day) and the walk cap (160 a day) both still bind,
+because walking crosses its threshold on about a fifth of what he reads and
+the set of accounts he has walked to only grows. The volume is the caps'.
+That is written down, not tuned away.
 
 **`freeze-v2.2` — thresholds from a fly that could hear.** The thresholds of
 `freeze-v1` were calibrated on 2026-09-17 from the dev period whole. From

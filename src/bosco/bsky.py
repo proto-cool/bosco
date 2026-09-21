@@ -425,6 +425,11 @@ class Bsky:
         # once per post of theirs; his own posts are grooming.  Nothing else goes out.  Walking
         # toward whoever spoke to him is answering; toward someone he browsed past, following;
         # toward someone he already follows, nothing.
+        #   Look first (decided 2026-09-21, Agent.APPROACH_VERSION 2): toward someone he has never
+        # walked to, walking is a walk, not a follow.  He reads a few more of their posts, and only
+        # if one of those, or a later one, moves him again does he follow.  A follow is a standing
+        # commitment; until now one post was enough, and 65 of his first 165 follows were accounts
+        # he had never read before.  Built from his own choices: no new number, no memory outside him.
         if action == "follow":
             if addressed:
                 action = "reply" if did is not None and out.text else "nothing"
@@ -432,6 +437,8 @@ class Bsky:
                 action = "nothing"
             elif did in following:
                 action = "walk"  # already his: walking toward someone he follows is reading more of them
+            elif not self.L.walked_to(did):
+                action = "walk"  # a stranger: look first
         if action == "walk":
             if addressed or did is None:
                 return
