@@ -425,6 +425,34 @@ def main(argv=None) -> int:
 
     s.set_defaults(fn=_primer)
 
+    for kind in ("ignore", "unignore"):
+        s = sub.add_parser(kind, help=f"the operator's {kind}, without a post: same ledger rows as @bosco {kind}")
+        s.add_argument("who", help="handle or did")
+        s.add_argument("--at")
+
+    def _ignore(a):
+        """What `@bosco ignore|unignore @handle` does to the ledger, from the box and silently: the
+        ignore row and a `control` row by the operator's DID, so the record reads the same.  He is
+        not told and nobody is answered.  Unfollowing an ignored account happens in the loop, the
+        next time they reach him."""
+        import os
+
+        from atproto import Client
+
+        c = Client()
+        resolve = lambda h: h if h.startswith("did:") else c.resolve_handle(h.lstrip("@")).did  # noqa: E731
+        op, did = resolve(os.environ.get("BOSCO_OPERATOR", "proto.cool")), resolve(a.who)
+        L = Ledger(a.ledger)
+        ts = _ts(a.at)
+        was = L.ignored_by(did)
+        L.set_ignored(did, op, a.cmd == "ignore", ts=ts)
+        L.add_control(a.cmd, op, None, did, ts=ts)
+        print(f"{a.cmd}d {did} (was ignored by {was or 'nobody'}); control row by {op}")
+        return 0
+
+    for kind in ("ignore", "unignore"):
+        sub.choices[kind].set_defaults(fn=_ignore)
+
     s = sub.add_parser("feeds", help="where he reads, and how his browsing is split by his own approaches")
 
     def _feeds(a):

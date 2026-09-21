@@ -152,6 +152,9 @@ posted as a reply and logged.
 - **ignore @handle / unignore @handle.** Never enters the stimulus stream
   again; unfollowed if followed. Also honoured: a Bluesky list named
   `bosco-ignore` on `@proto.cool`. Not a punishment signal; silence.
+  The same from the box, without a post (`bosco ignore|unignore <handle>`),
+  so undoing a misfire never tags the person it misfired on; it writes the
+  same ignore and `control` rows by the operator's DID (2026-09-20).
 - **unfollow @handle.**
 - **reload.** Re-reads `corpus/`, `phrasebook.yaml`, thresholds and caps
   from disk ("start learning your corpus again"). **restart** exits the
