@@ -23,6 +23,29 @@ If the real wiring does not beat (1) and (2), the connectome is not earning
 its place in a decision model under the biological rule, and phase A starts
 from that fact.
 
+## Amendment 1 (2026-09-22, before any run)
+
+The arms table below says the rule runs with credit `share` and contrast on,
+"as at `freeze-v2`". `share` cannot apply here and is replaced by `mixture`
+(the rule as at `freeze-v1`), contrast still on. Reason: `share` confines a
+pairing to the cells an *account's* odor owns, weighted by how many accounts
+share each cell — it exists to stop one account's posts teaching another's
+verdict. In this gate there are no accounts; every item is its own odor and
+the pairing already lands only on the item's own cells, so there is nothing
+to confine credit from. Worse, `share` down-weights exactly the cells many
+items share, which are the cells a *new* sentence is scored through: it would
+suppress generalisation by construction. Contrast (reading against the
+compartment's own level) is kept, as it addresses the one-way ratchet, which
+does apply. Nothing else changes. Made before the first run, on reading the
+code, not on any result.
+
+Two smaller readings, stated so they are not choices made later: all 53
+glomeruli in the model receive the projection (v1 excluded innately valenced
+ones to keep *account* odors neutral, which has no counterpart here); and
+each item's exposure trace is recorded on presentation as v1 did for every
+window, since the contrast level is measured over the cells that have
+carried traffic.
+
 ## Arms
 
 | arm | wiring | learning |
