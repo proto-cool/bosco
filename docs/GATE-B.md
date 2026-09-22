@@ -88,12 +88,25 @@ mushroom body's native decision is *sweet or bitter*, so that is the task.
   900 images with human valence ratings on 1–7). The top and bottom thirds
   by mean valence, ~600 items, sweet and bitter; the middle third is not
   used. Same protocol as T1. Whether a picture can be a taste at all.
-- **T4 bouba / kiki (cross-modal transfer)** — train on T1's sentences
+- **T4 sweet / bitter (cross-modal transfer)** — train on T1's sentences
   exactly as in T1; then present the T3 images **with no rewards** and
-  score the verdict against human valence. The fly's bouba/kiki: does a
+  score the verdict against human valence. The output is still sweet or
+  bitter; what is being recreated is the bouba/kiki *kind* of effect — a
+  correspondence learned in one modality showing up in another. Does a
   taste learned from words carry to things seen? The logistic arm does the
   same transfer, so the shared CLIP space is controlled for, and what is
   measured is what each decision layer keeps of it.
+- **T5 sweet / bitter (mixtures; optional, reported not judged)** — after
+  T1 training, present a sentence and a picture **together**, no rewards:
+  congruent pairs (sweet with sweet, bitter with bitter) and incongruent
+  ones. Which modality wins, and by how much, per arm.
+
+### Inputs
+
+Text, image, or both. Each becomes a glomerular drive through the same
+frozen CLIP encoder and the same fixed projection; a text+image input is the
+two drives **summed at the nose** — a mixture, as a fly meets a smell with a
+taste — not a fused embedding and not a second model.
 
 Dropped: spam, topic pairs, urgency. Not fly-shaped; they can be phase A's.
 
