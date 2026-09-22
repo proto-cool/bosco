@@ -41,14 +41,11 @@ def drive_for(arm_name: str, e_calib: np.ndarray | None) -> G.Drive | None:
         return None
     from bosco.sim import Fly
 
-    f = G.CACHE / "drive.json"
+    f = G.DRIVE_FILE
     if not f.exists():
         assert e_calib is not None
         return G.calibrate_drive(Fly(), e_calib)
-    fly = Fly()
-    gl, _ = G.orn_index(fly)
-    d = json.load(open(f))
-    return G.Drive(gl, G.projection(gl), d["norm"], d["scale_hz"])
+    return G.Drive.from_json(json.load(open(f)))
 
 
 def learn(a) -> int:
@@ -78,6 +75,7 @@ def learn(a) -> int:
     run.log(f"{len(items)} items, {int(proto.rewarded.sum())} rewards, drive {drive.to_json() if drive else None}")
     G.run_learning(run, arm)
     summary = G.summarize(run)
+    summary["recall"] = G.recall(run, arm)
     if a.task == "t2" and isinstance(arm, G.FlyArm):
         summary["retention"] = G.retention(run, arm)
     G.save_run(run, summary, arm)
@@ -176,7 +174,11 @@ def report(a) -> int:
     for p in runs:
         s = json.load(open(p / "summary.json"))
         by.setdefault((s["task"], s["arm"]), []).append(s)
-    lines = ["# Gate B results\n", f"{len(runs)} runs under `runs/gate-b/`. Pre-registration: `GATE-B.md`.\n"]
+    gate = G.GATE.upper()
+    lines = [
+        f"# Gate {gate} results\n",
+        f"{len(runs)} runs under `runs/gate-{G.GATE}/`. Pre-registration: `GATE-{gate}.md`.\n",
+    ]
     for task in sorted({t for t, _ in by}):
         lines.append(f"\n## {task}\n")
         keys = sorted(
@@ -202,6 +204,17 @@ def report(a) -> int:
                 if er
                 else f"| {arm} | {len(ss)} | " + " | ".join(cells) + " | — | — |"
             )
+        rec = []
+        for arm in ("real", "shuffle", "hash", "logistic"):
+            rs = [s["recall"] for s in by.get((task, arm), []) if s.get("recall")]
+            if rs:
+                rec.append(
+                    f"{arm} sweet-trained {np.nanmean([r['sweet_trained'] for r in rs]):.3f} / "
+                    f"bitter-trained {np.nanmean([r['bitter_trained'] for r in rs]):.3f} "
+                    f"(gap {np.nanmean([r['gap'] for r in rs]):+.3f})"
+                )
+        if rec:
+            lines.append("\nRecall of the last 30 rewarded items of each taste, at the end: " + "; ".join(rec))
         ret = [(arm, s["retention"]) for (t, arm), ss in by.items() if t == task for s in ss if s.get("retention")]
         if ret:
             lines.append(
@@ -209,7 +222,7 @@ def report(a) -> int:
                 + "; ".join(f"{arm} {r['accuracy_24h']:.3f}" for arm, r in ret)
             )
     # the decision rule, applied
-    lines.append("\n## Decision rule (GATE-B.md)\n")
+    lines.append(f"\n## Decision rule (GATE-{gate}.md)\n")
     verdicts = []
     for task in ("t1", "t2"):
         for k in ("k50", "k200") if task == "t1" else ("flip-k50", "flip-k200"):
@@ -234,14 +247,15 @@ def report(a) -> int:
         lines.append(
             f"\n**Real wiring earns its place: {'YES' if all(verdicts) else 'NO'}** ({sum(verdicts)} of {len(verdicts)} comparisons)."
         )
-    drv = G.CACHE / "drive.json"
+    drv = G.DRIVE_FILE
     if drv.exists():
         d = json.load(open(drv))
         lines.append(
-            f"\nDrive: scale {d['scale_hz']:.1f} Hz, KC fraction over {d['n']} calibration sentences mean {d['kc_mean']:.4f} (target {d['target']})."
+            f"\nDrive: scale {d['scale_hz']:.1f} Hz, {'centred, ' if d.get('mu') else ''}KC fraction over {d['n']} "
+            f"calibration sentences mean {d['kc_mean']:.4f} (target {d['target']})."
         )
     txt = "\n".join(lines) + "\n"
-    (paths.DOCS / "gate-b-results.md").write_text(txt)
+    (paths.DOCS / f"gate-{G.GATE}-results.md").write_text(txt)
     print(txt)
     return 0
 

@@ -47,9 +47,11 @@ EVAL_K_IMAGE = (25, 50, 100)
 EVAL_WINDOW_IMAGE = 100
 CALIB_HOLDOUT = 0.2  # of rewarded items: scored before their pairing, for isotonic calibration
 RETENTION_H = 24.0
-LOGISTIC_ETA = 0.05  # fixed here, never tuned: the logistic arm is context, not a bar
-CACHE = paths.CACHE / "gate-b"
-RUNS = paths.ROOT / "runs" / "gate-b"
+GATE = "b2"  # docs/GATE-B2.md: B as run is tag gate-b-run; B2 centres the embedding and refits the logistic arm
+CACHE = paths.CACHE / "gate-b"  # embeddings, shared by every gate: the encoder did not change
+DRIVE_FILE = paths.CACHE / f"gate-{GATE}" / "drive.json"
+RUNS = paths.ROOT / "runs" / f"gate-{GATE}"
+N_RECALL = 30  # the last N rewarded sweet and the last N rewarded bitter items, rescored at the end
 
 
 def h32(*parts) -> int:
@@ -204,15 +206,35 @@ class Drive:
     P: np.ndarray  # (n_glomeruli, EMBED_DIM)
     norm: float
     scale_hz: float
+    mu: np.ndarray | None = None  # B2: the calibration-mean embedding, subtracted before projecting
+
+    def centred(self, e: np.ndarray) -> np.ndarray:
+        if self.mu is None:
+            return e
+        c = e - self.mu
+        return c / max(1e-9, float(np.linalg.norm(c)))
 
     def z(self, e: np.ndarray) -> np.ndarray:
-        return np.clip(np.maximum(0.0, self.P @ e) / self.norm, 0.0, 1.0)
+        return np.clip(np.maximum(0.0, self.P @ self.centred(e)) / self.norm, 0.0, 1.0)
 
     def rates(self, e: np.ndarray) -> np.ndarray:
         return self.scale_hz * self.z(e)
 
     def to_json(self) -> dict:
-        return {"glomeruli": self.glomeruli, "norm": self.norm, "scale_hz": self.scale_hz, "seed": PROJECTION_SEED}
+        return {
+            "glomeruli": self.glomeruli,
+            "norm": self.norm,
+            "scale_hz": self.scale_hz,
+            "seed": PROJECTION_SEED,
+            "mu": None if self.mu is None else self.mu.tolist(),
+        }
+
+    @classmethod
+    def from_json(cls, d: dict) -> Drive:
+        mu = d.get("mu")
+        return cls(
+            d["glomeruli"], projection(d["glomeruli"]), d["norm"], d["scale_hz"], None if mu is None else np.asarray(mu)
+        )
 
 
 def projection(glomeruli: list[str]) -> np.ndarray:
@@ -246,19 +268,23 @@ def calibrate_drive(fly, e_calib: np.ndarray, log=print) -> Drive:
     """Set the one scalar so the mean KC active fraction over the calibration sentences lands on
     KC_TARGET: bisection on 50 of them, then the whole 500 measured once and reported.  Cached,
     because every arm must use exactly this drive."""
-    CACHE.mkdir(parents=True, exist_ok=True)
-    f = CACHE / "drive.json"
+    f = DRIVE_FILE
+    f.parent.mkdir(parents=True, exist_ok=True)
     gl, orn_idx = orn_index(fly)
     P = projection(gl)
     if f.exists():
         d = json.load(open(f))
         if d["glomeruli"] == gl:
-            return Drive(gl, P, d["norm"], d["scale_hz"])
-    raw = np.maximum(0.0, e_calib @ P.T)
+            return Drive.from_json(d)
+    # B2: centre on the calibration mean (label-free, fixed once), then the 99th percentile as before
+    mu = e_calib.mean(0)
+    ec = e_calib - mu
+    ec = ec / np.linalg.norm(ec, axis=1, keepdims=True)
+    raw = np.maximum(0.0, ec @ P.T)
     norm = float(np.percentile(raw, 99))
-    drv = Drive(gl, P, norm, 100.0)
+    drv = Drive(gl, P, norm, 100.0, mu)
     sub = e_calib[:50]
-    lo, hi = 5.0, 400.0
+    lo, hi = 5.0, 600.0
     for _ in range(9):
         drv.scale_hz = float(np.sqrt(lo * hi))
         frac = float(np.mean([kc_fraction(fly, drv, x, orn_idx, h32("calib", i)) for i, x in enumerate(sub)]))
@@ -364,23 +390,30 @@ class FlyArm:
 
 
 class LogisticArm:
-    def __init__(self, seed: int) -> None:
-        from sklearn.linear_model import SGDClassifier
+    """B2: refit a plain logistic regression on every reward received so far, at every reward.
+    No step size; the ceiling of the encoder under the same rewards."""
 
-        self.clf = SGDClassifier(
-            loss="log_loss", penalty=None, learning_rate="constant", eta0=LOGISTIC_ETA, random_state=seed
-        )
-        self.fitted = False
+    def __init__(self, seed: int) -> None:
+        self.seed = seed
+        self.X: list[np.ndarray] = []
+        self.y: list[int] = []
+        self.w: list[float] = []
+        self.clf = None
 
     def pair(self, e: np.ndarray, valence: str, magnitude: float) -> None:
-        y = 1 if valence == "reward" else 0
-        self.clf.partial_fit(e[None, :], [y], classes=[0, 1], sample_weight=[max(1e-3, magnitude)])
-        self.fitted = True
+        from sklearn.linear_model import LogisticRegression
+
+        self.X.append(np.asarray(e, dtype=np.float64))
+        self.y.append(1 if valence == "reward" else 0)
+        self.w.append(max(1e-3, magnitude))
+        if len(set(self.y)) < 2:
+            return
+        self.clf = LogisticRegression(C=1.0, max_iter=2000).fit(np.array(self.X), self.y, sample_weight=self.w)
 
     def score(self, e: np.ndarray) -> tuple[float, float]:
-        if not self.fitted:
+        if self.clf is None:
             return 0.5, 0.5
-        p = float(self.clf.predict_proba(e[None, :])[0, 1])
+        p = float(self.clf.predict_proba(np.asarray(e, dtype=np.float64)[None, :])[0, 1])
         return p, 0.5 + abs(p - 0.5)
 
 
@@ -521,6 +554,28 @@ def run_learning(run: Run, arm) -> None:
         else:
             arm.pair(run.e[run.proto.order[p0]], valence, mag)
     run.rows_meta = {"wall_s": time.time() - t_wall0, "score_wall_s": t_score, "n_scored": n_scored}
+
+
+def recall(run: Run, arm) -> dict:
+    """B2: the last N_RECALL rewarded sweet and bitter items (as trained), rescored at the end of the
+    run, before any further forgetting.  Separates cannot-remember from cannot-generalise."""
+    rewarded = [r for r in run.rows if r["rewarded"]]
+    sweet = [r for r in rewarded if r["label"] > 0.5][-N_RECALL:]
+    bitter = [r for r in rewarded if r["label"] < 0.5][-N_RECALL:]
+
+    def sc(r):
+        x = run.e[int(run.proto.order[r["pos"]])]
+        return arm.score(x, h32(run.seed, r["pos"], "recall"))[0] if isinstance(arm, FlyArm) else arm.score(x)[0]
+
+    s = [sc(r) for r in sweet]
+    b = [sc(r) for r in bitter]
+    return {
+        "n_sweet": len(s),
+        "n_bitter": len(b),
+        "sweet_trained": float(np.mean(s)) if s else float("nan"),
+        "bitter_trained": float(np.mean(b)) if b else float("nan"),
+        "gap": float(np.mean(s) - np.mean(b)) if s and b else float("nan"),
+    }
 
 
 def retention(run: Run, arm: FlyArm) -> dict:
