@@ -33,9 +33,12 @@ the published v1 ones.
 
 ## Encoder and drive
 
-- Encoder: `sentence-transformers/all-MiniLM-L6-v2` (384-d), frozen, CPU,
-  deterministic. Fixed by name and revision here before running.
-- Embedding → glomerular drive: one fixed random projection 384 → the
+- Encoder: CLIP ViT-B/32 (`sentence-transformers/clip-ViT-B-32`, 512-d),
+  frozen, CPU, deterministic; it embeds **text and images into one space**,
+  so a sentence and a picture reach the glomeruli the same way. Fixed by
+  name and revision here before running. It is the fly's eye and ear and
+  nothing else: it never sees a label, a reward, or a decision.
+- Embedding → glomerular drive: one fixed random projection 512 → the
   glomeruli v1 drove (`model.py` `v1_weights_mv`, ORN classes), rectified,
   scaled by a single scalar. **The scalar is set once, on 500 unlabelled
   items, so that mean KC active fraction lands in v1's recorded band
@@ -61,19 +64,38 @@ or not*, and the tasks are chosen to be that shape.
 - The logistic arm's probability is its sigmoid output, calibrated the same
   way.
 
-## Tasks (candidates; Nick picks two before FINAL)
+## Tasks (T1 and the text-or-image framing are Nick's, 2026-09-22; T2–T4 proposed, FINAL when confirmed)
 
-Binary, text, public, small enough to run in hours. Deliberately **not**
-sentiment: v1 already showed what VADER-shaped reward does.
+Binary, text, public, small enough to run in hours, and **fly-shaped**: the
+mushroom body's native decision is *sweet or bitter*, so that is the task.
 
-- **T1 spam / not** — SMS Spam Collection (5,574 items). *Is this thing worth
-  approaching.*
-- **T2 topic pair with drift** — AG News, `World` vs `Sports`, 4,000 items;
-  at item 2,000 the reward mapping flips (what was rewarded is punished).
-  Measures forgetting and relearning, which is what the two-timescale rule is
-  for.
-- **T3 urgency** — a support-ticket urgency set if a clean public one exists;
-  otherwise dropped. Closest to the Jev use case.
+- **T1 sweet / bitter (acquisition)** — SST-2 (GLUE), 4,000 sentences in a
+  fixed seeded order, balanced. `positive` is sweet (reward), `negative` is
+  bitter (punishment). Labels are **human**, never VADER: the question is
+  whether the circuit can learn a taste from an encoder, not whether it can
+  learn a lexicon. This is the comparison v1 could not make: v1 gave the
+  same rule ~6,000 VADER pairings through a hash encoder and its verdict
+  predicted nothing (r = −0.007 with the window's VADER, `main:
+  docs/CLOSING-v1.md`). If the rule learns here, v1's failure was the
+  encoder; if it does not, it is the rule.
+- **T2 sweet / bitter (reversal)** — the same 4,000 sentences; at item 2,000
+  the reward mapping flips (sweet is punished, bitter rewarded). Reversal
+  learning is the standard Drosophila paradigm for the two memory
+  timescales; it measures forgetting and relearning, which is what the rule's
+  short- and long-term traces are for.
+
+- **T3 sweet / bitter (pictures)** — OASIS (Kurdi, Lozano & Banaji 2017:
+  900 images with human valence ratings on 1–7). The top and bottom thirds
+  by mean valence, ~600 items, sweet and bitter; the middle third is not
+  used. Same protocol as T1. Whether a picture can be a taste at all.
+- **T4 bouba / kiki (cross-modal transfer)** — train on T1's sentences
+  exactly as in T1; then present the T3 images **with no rewards** and
+  score the verdict against human valence. The fly's bouba/kiki: does a
+  taste learned from words carry to things seen? The logistic arm does the
+  same transfer, so the shared CLIP space is controlled for, and what is
+  measured is what each decision layer keeps of it.
+
+Dropped: spam, topic pairs, urgency. Not fly-shaped; they can be phase A's.
 
 ## Reward protocol (identical across arms)
 
@@ -100,12 +122,14 @@ sentiment: v1 already showed what VADER-shaped reward does.
 
 ## Decision rule (fixed here)
 
-The real wiring **earns its place** if, on both chosen tasks, its mean
-accuracy at k = 50 and at k = 200 exceeds *both* `shuffle` and `hash` by more
-than the pooled standard deviation across the five seeds. Anything less is
-reported as "does not," with the numbers. The logistic arm is context, not a
-bar: if it beats every fly arm by a wide margin, that is written down as
-what the biological rule costs.
+The real wiring **earns its place** if, on **T1 and T2**, its mean accuracy
+at k = 50 and at k = 200 exceeds *both* `shuffle` and `hash` by more than
+the pooled standard deviation across the five seeds. Anything less is
+reported as "does not," with the numbers. T3 and T4 are reported, not judged:
+they say whether a picture can be a taste and whether taste crosses
+modalities, for every arm, and are context for phase A. The logistic arm is
+context, not a bar: if it beats every fly arm by a wide margin, that is
+written down as what the biological rule costs.
 
 ## What is not done
 
