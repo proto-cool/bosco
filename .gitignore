@@ -16,3 +16,5 @@ panel/node_modules/
 panel/dist/
 .claude/worktrees/
 .DS_Store
+runs/gate-b/smoke/
+runs/gate-b/logs/
