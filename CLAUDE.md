@@ -9,6 +9,11 @@ rater panel and no headline metric. What is binding is that the fly is
 genuinely the one acting. The account runs indefinitely. It is part of the
 experiment that it is live while being built.
 
+**Status: ended 2026-09-22.** The account and the box are shut down. This
+repository is the archive of v1; `docs/CLOSING-v1.md` says what it found.
+Nothing below is to be changed except to make the record clearer. What comes
+next is a different project and does not live here.
+
 Companion to this file: `EXPERIMENT.md` (binding sections lock at tag
 `freeze-v1`).
 

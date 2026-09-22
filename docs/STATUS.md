@@ -1,4 +1,4 @@
-# Build status (2026-09-17)
+# Build status (2026-09-17; the experiment ended 2026-09-22, see `CLOSING-v1.md`)
 
 | Phase | Gate | Status | Report |
 |---|---|---|---|

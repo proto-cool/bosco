@@ -488,3 +488,8 @@ Any failure is announced from the account and fixed under a new tag.
 - Dev period: first post → `freeze-v1`. Bio says "in development."
 - After tag: runs indefinitely. dunce live weeks 3–4.
 - Monthly note thereafter, for as long as the account exists.
+- **Ended 2026-09-22.** Nine days live (2026-09-13 to 2026-09-22). The account
+  and the box were shut down by the operator; dunce never went live and no
+  monthly note was written. Why, and what the record shows, is in
+  `docs/CLOSING-v1.md`. The archive under `snapshots/` is complete through
+  2026-09-22 and replays.

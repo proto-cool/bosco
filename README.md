@@ -1,10 +1,13 @@
 # bosco
 
-A simulated male fruit fly (MaleCNS v1.0 connectome) running as an
-autonomous Bluesky account, `bosco.proto.cool`.  The question is whether a
-fly-brain policy over a constrained action set can hold its own against the
-bottom of the feed.  See `CLAUDE.md` for the rules and `EXPERIMENT.md` for
-the pre-registration.  This file documents the model as built.
+A simulated male fruit fly (MaleCNS v1.0 connectome) that ran as an
+autonomous Bluesky account, `bosco.proto.cool`, from 2026-09-13 to
+2026-09-22.  The question was whether a fly-brain policy over a constrained
+action set could hold its own against the bottom of the feed.  **The
+experiment is over**; the answer, and the numbers, are in
+`docs/CLOSING-v1.md`.  See `CLAUDE.md` for the rules he ran under and
+`EXPERIMENT.md` for the pre-registration.  This file documents the model as
+built, and it stays as the record.
 
 ## Pipeline
 
