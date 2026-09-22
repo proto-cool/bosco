@@ -1,0 +1,40 @@
+# Mushroom-body compartment membership for DAN and MBON cell types.
+# Source: Aso et al. 2014 (eLife 3:e04577) nomenclature, as carried into the
+# hemibrain / MaleCNS type names.  Verified against MaleCNS DAN->MBON direct
+# synapse counts in docs/phase0-coverage.md; disagreements are noted inline.
+#
+# valence: which DAN population signals it.  PAM = reward, PPL1 = punishment, PPL1-a'3 = exposure
+# (novelty/familiarity; no valence).
+# Compartment keys are free-form strings; what matters is that a DAN type and
+# the MBON types listed under the same compartment share it.
+compartments:
+  g1pedc:   {dans: [PPL101],        mbons: [MBON11]}
+  g1:       {dans: [PPL102],        mbons: [MBON35, MBON32]}       # data: PPL102 -> MBON35, MBON11, MBON32
+  g2a'1:    {dans: [PPL103],        mbons: [MBON12, MBON32, MBON31, MBON35]}
+  a'3:      {dans: [PPL104],        mbons: [MBON16, MBON17, MBON28, MBON17-like]}  # data: PPL104 -> MBON17-like 49 syn; the novelty compartment (Hattori et al. 2017)
+  a'2a2:    {dans: [PPL105],        mbons: [MBON13, MBON18, MBON19, MBON23]}
+  a3:       {dans: [PPL106],        mbons: [MBON14]}
+  b'2mp_x:  {dans: [PPL107],        mbons: [MBON04]}               # data: PPL107 -> MBON04 (b'2mp bilateral)
+  g1_2:     {dans: [PPL108],        mbons: [MBON35]}
+  g5:       {dans: [PAM01, PAM15],  mbons: [MBON01, MBON27, MBON21]}
+  b'2a:     {dans: [PAM02],         mbons: [MBON01, MBON02]}
+  b2b'2a:   {dans: [PAM03],         mbons: [MBON02]}
+  b2:       {dans: [PAM04],         mbons: [MBON02, MBON24]}
+  b'2p:     {dans: [PAM05],         mbons: [MBON03, MBON04]}
+  b'2m:     {dans: [PAM06],         mbons: [MBON03, MBON04, MBON26]}
+  g4_g1g2:  {dans: [PAM07],         mbons: [MBON05]}
+  g4:       {dans: [PAM08],         mbons: [MBON05, MBON21, MBON29]}
+  b1ped:    {dans: [PAM09],         mbons: [MBON06]}
+  b1:       {dans: [PAM10],         mbons: [MBON06]}
+  a1:       {dans: [PAM11],         mbons: [MBON07]}
+  g3:       {dans: [PAM12],         mbons: [MBON09, MBON30, MBON33]}
+  b'1ap:    {dans: [PAM13],         mbons: [MBON09, MBON10]}
+  b'1m:     {dans: [PAM14],         mbons: [MBON09, MBON10]}
+valence:
+  reward: [PAM01, PAM02, PAM03, PAM04, PAM05, PAM06, PAM07, PAM08, PAM09, PAM10, PAM11, PAM12, PAM13, PAM14, PAM15]
+  punishment: [PPL101, PPL102, PPL103, PPL105, PPL106, PPL107, PPL108]
+  # exposure (decided 2026-09-15): PPL1-a'3 fires on mere exposure to an odor and depresses the
+  # KC->MBON-a'3 synapses of the cells that fired, so a familiar smell drives MBON-a'3 less than a
+  # novel one (Hattori et al. 2017, Cell 169:956).  It carries familiarity, not valence, so it is
+  # out of the punishment set: learned valence reads reward vs punishment compartments only.
+  exposure: [PPL104]

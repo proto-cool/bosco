@@ -1,0 +1,70 @@
+# Mushroom-body plasticity parameters (see src/bosco/plasticity.py).
+# Two timescales, both KC->MBON depression gated by DAN compartment:
+#   short-term (STM): one pairing is enough; relaxes to baseline, e-fold tau_stm_h.
+#   long-term  (LTM): forms only by spaced repetition (a pairing on a synapse that
+#                     already carries STM from a pairing >= spacing_h earlier);
+#                     relaxes to baseline, e-fold tau_ltm_d.  (Tully et al. 1994:
+#                     spaced training -> protein-synthesis-dependent LTM.)
+stm:
+  eta: 0.5            # depression per pairing for a saturating KC
+  c_sat: 3.0          # KC spikes/s at which depression saturates (3 under adaptation; was 5)
+  m_min: 0.1
+  tau_h: 4.0
+ltm:
+  eta: 0.3            # LTM depression per consolidating pairing
+  spacing_h: 1.0      # minimum gap since the previous pairing on that synapse
+  stm_floor: 0.9      # the synapse must still carry STM (m_stm below this)
+  m_min: 0.2
+  tau_d: 30.0
+# Taste while browsing (decided 2026-09-15).  In the fly, sugar sensory neurons drive the PAM
+# reward DANs and bitter ones the PPL1 punishment DANs; that is how odor-taste conditioning
+# works at all.  So the taste of a post he reads (VADER -> sugar/bitter GRNs, config/encoder_v1.yaml
+# `gustatory`) pairs the mixture in that window (account, place, topics, words) with reward or
+# punishment, at strength = gain x the gustatory rate fraction min(1, |c| / c_sat).  A labeled post
+# (bitter at full rate, EXPERIMENT.md 2b) pairs punishment at labeled_gain.  Small, so a day of
+# reading moves a verdict a little; spaced repetition consolidates it like any pairing.  Not a
+# social reward: no appetite bite, no outcomes row; the episode row carries the weight digests and
+# a `taste:` note.  Never set from outcomes.
+taste:
+  reward_gain: 0.15
+  punishment_gain: 0.1
+  labeled_gain: 0.3
+# Exposure (decided 2026-09-15): the novelty compartment a'3 (config/mb_compartments.yaml
+# `exposure`).  Every stimulus window depresses the a'3 synapses of the KCs that fired, on its own
+# multiplier with its own decay, so the same smell later drives MBON-a'3 less: that depression,
+# read on the active KCs, is his familiarity with the smell (0 novel .. 1 well met).  tau_h about
+# a day, so "today" is familiar and last week is not.  Hattori et al. 2017.
+exposure:
+  eta: 0.3
+  c_sat: 3.0
+  m_min: 0.3
+  tau_h: 24.0
+
+# Credit (freeze-v2, 2026-09-18; docs/plasticity-v3.md).  What a pairing about an account is
+# allowed to teach, and how the verdict on it is read.
+#
+# Until now the verdict was probed on the account's odor alone while every pairing landed on the
+# whole mixture it arrived in.  Measured on his live weights (scripts/kc_overlap.py): 88% of an
+# account's probe cells fire in its own windows, and 47% of them fire in any other window too, so
+# over 6,199 logged windows an account read 23 times supplied about 0.7% of the depression its
+# own verdict was read from.  His verdicts said almost nothing about who -- sour accounts +0.318
+# against sweet ones +0.318, r +0.08, none of 51 below zero -- and no rescaling of a quantity
+# that is 99.3% other people's posts could change that.
+#
+#   mode: mixture -- the old rule: the window teaches every cell it lit
+#         own     -- the cells the account's odor owns, flat
+#         share   -- those cells weighted by 1 / (accounts whose odor lights the cell).  A cell
+#                    twenty accounts drive is nobody's.  The verdict is read through the same
+#                    weights, so what taught a cell and what reads it agree.
+#   contrast     -- read the verdict against the compartment's own level instead of against
+#                    nothing.  The standing offset was never in the weights; it was in reading a
+#                    difference against zero.  The level is flat, not weighted like the read: it
+#                    is a property of the compartment that every odor inherits, and weighting it
+#                    was measured to move verdicts +0.065 the wrong way.
+#
+# Replayed over his own 6,199 windows on his own clock: sour accounts +0.160 against sweet +0.207,
+# r +0.36, against the control arm's +0.283 / +0.278, r 0.00.  Nothing here is set from his feed
+# or from outcomes; `share` has no parameter and the contrast has nothing in it to tune.
+credit:
+  mode: share
+  contrast: true

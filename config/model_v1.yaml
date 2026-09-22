@@ -1,0 +1,45 @@
+# Bosco v1 network configuration.  Frozen at freeze-v1.
+#
+# LIF parameters are Shiu et al. 2024 (Nature 634:210) verbatim except w_syn,
+# which they calibrate per connectome ("W_syn such that activation of sugar
+# GRNs at 100 Hz resulted in roughly 80% of maximal MN9 firing").  Same
+# criterion applied here on MaleCNS: docs/phase2-wsyn-calibration.md.
+lif:
+  dt_ms: 0.1
+  tau_m: 20.0
+  tau_s: 5.0
+  v0: -52.0
+  v_rst: -52.0
+  v_th: -45.0
+  t_rfc: 2.2
+  t_dly: 1.8
+  w_syn: 0.16
+  f_poi: 250.0
+  # Short-term depression = habituation, on sensory afferents only (superclass
+  # *sensory*: ORNs, GRNs, Johnston's organ, bristles).  Each spike uses u of
+  # the synapse's resources; recovery e-fold std_tau_rec ms.  The same smell
+  # arriving again within minutes registers less; a new one is fresh.
+  # Central synapses are not depressed (global STD killed the reflex; see
+  # docs/phase2-stability.md).  Fly.__init__ applies the per-neuron mask.
+  std_u: 0.004
+  std_tau_rec: 180000.0
+  # Spike-frequency adaptation (adaptive threshold): needed for continuous
+  # running so that activity settles after input instead of smouldering.
+  # b=0.1 mV per spike, tau 1 s: everything is silent 2 s after input; sugar
+  # reflex 25 Hz (was 69), MBON odor response 6 Hz (was 22), KC 3%, odor-pair
+  # Jaccard 0.02.  Scan: scripts/phase2_sfa_scan.py.
+  sfa_b: 0.1
+  sfa_tau: 1000.0
+wiring:
+  neuron_set: "superclass in cb_* + descending + ascending, status Traced (model.CB_SUPERCLASSES)"
+  min_synapses_per_edge: 1
+  nt_sign: "acetylcholine/dopamine/serotonin/octopamine +1; gaba/glutamate/histamine -1; unclear/unknown +1 (Shiu convention)"
+  al_eln_chemical_output: 0.0   # cholinergic antennal-lobe LNs: fast chemical output removed
+  habituation_scope: sensory     # STD applies to presynaptic neurons whose superclass contains 'sensory'
+  # ...and to the visual Kenyon cells (decided 2026-09-15): the retina drives them in place of their
+  # pruned afferents, so they habituate like afferents; the same picture again fades (retina_v1.yaml).
+  habituation_extra_types: [KCg-d, KCab-p]
+  apl_kc_gain: 1.0              # connectome value; not tuned
+  kc_mbon_gain: 5.0             # smallest gain at which MBON odor responses are >=80% KC-driven
+                                # (docs/phase3-plasticity-gate.md); the plastic pathway
+episode_ms: 1000
