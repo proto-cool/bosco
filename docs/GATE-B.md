@@ -1,4 +1,8 @@
-# Gate B — pre-registration (DRAFT 2026-09-22; binding once marked FINAL)
+# Gate B — pre-registration (FINAL 2026-09-22; binding)
+
+Locked by Nick on 2026-09-22 before any run. Nothing below changes except to
+fix a typo or a reference; a change of substance is a new gate with a new
+file.
 
 ## Question
 
@@ -72,7 +76,7 @@ photograph of a sweet should read sweet.
   neutral); its probability is that output's distance from 0.5, calibrated
   the same way.
 
-## Tasks (T1 and the text-or-image framing are Nick's, 2026-09-22; T2–T4 proposed, FINAL when confirmed)
+## Tasks (T1 and the text-or-image framing are Nick's; T2–T6 confirmed by him 2026-09-22)
 
 Binary, text, public, small enough to run in hours, and **fly-shaped**: the
 mushroom body's native decision is *sweet or bitter*, so that is the task.
@@ -99,8 +103,11 @@ mushroom body's native decision is *sweet or bitter*, so that is the task.
 - **T3 sweet / bitter (pictures)** — OASIS (Kurdi, Lozano & Banaji 2017:
   900 images with human valence ratings on 1–7). All 900, valence rescaled
   to 0–1 about the scale midpoint; sweet above, bitter below, reward
-  magnitude by distance from the midpoint as in T1. Same protocol as T1.
-  Whether a picture can be a taste at all, and how much.
+  magnitude by distance from the midpoint as in T1. Same protocol as T1,
+  except that 900 items at p = 0.2 yield about 180 rewards, so sample
+  efficiency and gradedness are read at k = 25, 50, 100 only, on the next
+  100 unrewarded items. Whether a picture can be a taste at all, and how
+  much.
 - **T4 sweet / bitter (cross-modal transfer)** — train on T1's sentences
   exactly as in T1; then present the T3 images **with no rewards** and
   score the verdict against human valence. The output is still sweet or

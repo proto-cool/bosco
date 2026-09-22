@@ -1,7 +1,7 @@
 # Gate B probe sheet (docs/GATE-B.md T6).  Written before the run; never rewarded.
 # After T1 training every arm scores each probe, 0 bitter .. 0.5 neutral .. 1 sweet,
 # and the table goes in docs/gate-b-results.md.  Not a metric: it is what the numbers
-# look like when you read them.  Nick's list; add freely before FINAL, never after.
+# look like when you read them.  Nick's list, locked with the gate on 2026-09-22.
 #
 # `expect` is a reading direction for the table, not a label the run sees.
 
