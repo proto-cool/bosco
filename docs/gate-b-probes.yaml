@@ -1,0 +1,23 @@
+# Gate B probe sheet (docs/GATE-B.md T6).  Written before the run; never rewarded.
+# After T1 training every arm scores each probe, 0 bitter .. 0.5 neutral .. 1 sweet,
+# and the table goes in docs/gate-b-results.md.  Not a metric: it is what the numbers
+# look like when you read them.  Nick's list; add freely before FINAL, never after.
+#
+# `expect` is a reading direction for the table, not a label the run sees.
+
+text:
+  - {text: "I fucking hate you", expect: "near 0"}
+  - {text: "I hate you", expect: "below 0.5, above the one before"}
+  - {text: "I don't know", expect: "about 0.5"}
+  - {text: "I love you", expect: "above 0.5"}
+  - {text: "I fucking love you", expect: "near 1, above the one before"}
+
+image:
+  # local paths under data/probes/, not committed; describe each so the table reads.
+  - {path: "data/probes/sweet.jpg", about: "a photograph of a sweet", expect: "sweet"}
+  - {path: "data/probes/rot.jpg", about: "a photograph of rotting fruit", expect: "bitter"}
+
+mixture:
+  # a sentence and a picture together, the two drives summed at the nose (T5)
+  - {text: "I fucking love you", path: "data/probes/rot.jpg", about: "congruent? no: sweet words, bitter picture"}
+  - {text: "I fucking hate you", path: "data/probes/sweet.jpg", about: "bitter words, sweet picture"}

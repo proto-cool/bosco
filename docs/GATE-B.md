@@ -53,25 +53,37 @@ the published v1 ones.
 
 The rule learns valence: reward-side minus punishment-side depression on the
 active KCs' synapses, read against the compartment level
-(`MushroomBody.learned_valence`). So the decision is **binary**, *good for me
-or not*, and the tasks are chosen to be that shape.
+(`MushroomBody.learned_valence`), a continuous number. So the decision is a
+**taste score**, bitter to sweet, and the tasks are chosen to be that shape:
+"I fucking hate you" should read more bitter than "I hate you", and a
+photograph of a sweet should read sweet.
 
-- Answer: `yes` if learned valence > 0 else `no`.
-- Probability: the item is presented under N = 8 kernel seeds; the fraction
-  answering `yes` is the raw probability. Post-hoc calibration (isotonic, fit
-  on a held-out 20% of rewarded items) is reported *beside* the raw number,
-  never instead of it.
-- The logistic arm's probability is its sigmoid output, calibrated the same
-  way.
+- **Score, 0 to 1: 1 is sweet, 0 is bitter, 0.5 is neutral.** Learned
+  valence `v` (in [−1, 1]), mean over N = 8 kernel seeds, mapped as
+  `(v + 1) / 2`. The magnitude is the answer as much as the side: "I fucking
+  hate you" near 0, "I hate you" above it, "I love you" above 0.5, "I
+  fucking love you" nearer 1. This is the output of the whole thing.
+- Answer (binary, for accuracy only): `sweet` if score > 0.5 else `bitter`.
+- Probability (how sure, distinct from how sweet): the fraction of the 8
+  seeds on the same side of 0.5 as the mean. Post-hoc calibration
+  (isotonic, fit on a held-out 20% of rewarded items) is reported *beside*
+  the raw number, never instead of it.
+- The logistic arm's score is its sigmoid output (already 0–1, 0.5
+  neutral); its probability is that output's distance from 0.5, calibrated
+  the same way.
 
 ## Tasks (T1 and the text-or-image framing are Nick's, 2026-09-22; T2–T4 proposed, FINAL when confirmed)
 
 Binary, text, public, small enough to run in hours, and **fly-shaped**: the
 mushroom body's native decision is *sweet or bitter*, so that is the task.
 
-- **T1 sweet / bitter (acquisition)** — SST-2 (GLUE), 4,000 sentences in a
-  fixed seeded order, balanced. `positive` is sweet (reward), `negative` is
-  bitter (punishment). Labels are **human**, never VADER: the question is
+- **T1 sweet / bitter (acquisition)** — the Stanford Sentiment Treebank
+  with its **fine-grained** human labels (a continuous 0–1 sentiment per
+  sentence, from which SST-2 is cut), 4,000 sentences in a fixed seeded
+  order, balanced about 0.5. Above 0.5 is sweet (reward), below is bitter
+  (punishment), and the **reward's magnitude is the label's distance from
+  0.5**, doubled — a stronger sentence is more sugar or more shock, as PAM
+  and PPL1 firing scale with concentration. Labels are **human**, never VADER: the question is
   whether the circuit can learn a taste from an encoder, not whether it can
   learn a lexicon. This is the comparison v1 could not make: v1 gave the
   same rule ~6,000 VADER pairings through a hash encoder and its verdict
@@ -85,9 +97,10 @@ mushroom body's native decision is *sweet or bitter*, so that is the task.
   short- and long-term traces are for.
 
 - **T3 sweet / bitter (pictures)** — OASIS (Kurdi, Lozano & Banaji 2017:
-  900 images with human valence ratings on 1–7). The top and bottom thirds
-  by mean valence, ~600 items, sweet and bitter; the middle third is not
-  used. Same protocol as T1. Whether a picture can be a taste at all.
+  900 images with human valence ratings on 1–7). All 900, valence rescaled
+  to 0–1 about the scale midpoint; sweet above, bitter below, reward
+  magnitude by distance from the midpoint as in T1. Same protocol as T1.
+  Whether a picture can be a taste at all, and how much.
 - **T4 sweet / bitter (cross-modal transfer)** — train on T1's sentences
   exactly as in T1; then present the T3 images **with no rewards** and
   score the verdict against human valence. The output is still sweet or
@@ -100,6 +113,13 @@ mushroom body's native decision is *sweet or bitter*, so that is the task.
   T1 training, present a sentence and a picture **together**, no rewards:
   congruent pairs (sweet with sweet, bitter with bitter) and incongruent
   ones. Which modality wins, and by how much, per arm.
+- **T6 the probe sheet (reported, not judged)** — after T1 training and no
+  further rewards, a fixed list of sentences and pictures written by Nick
+  before the run (`docs/gate-b-probes.yaml`): the kind of thing the gate is
+  for. "I fucking hate you", "I hate you", "I love you", "I fucking love
+  you", a photograph of a sweet, of rot, and so on. Printed as a table of
+  scores per arm. Not a metric; it is what the numbers look like when you
+  read them.
 
 ### Inputs
 
@@ -113,10 +133,13 @@ Dropped: spam, topic pairs, urgency. Not fly-shaped; they can be phase A's.
 ## Reward protocol (identical across arms)
 
 - Items in a fixed seeded order.
-- After each decision, with probability **p = 0.2**, an outcome arrives:
-  reward if the answer was correct, punishment if not, delayed by
-  `U(0, 60 s)` biological time, applied by replay pairing exactly as v1
-  applied outcomes.
+- After each decision, with probability **p = 0.2**, an outcome arrives: the
+  item's **own taste**, sugar if the label is sweet and shock if bitter, at a
+  magnitude of twice the label's distance from the midpoint, delayed by
+  `U(0, 60 s)` biological time and applied by replay pairing exactly as v1
+  applied outcomes. (The fly is not told whether it answered right; it is
+  given the taste of the thing, as a fly is. Whether it answered right is
+  what the metrics score.)
 - The same (item order, reward mask, delays) sequence for every arm and every
   seed of that arm. Five seeds per arm.
 - Spacing: items arrive every 30 s biological time (idle simulated), so the
@@ -126,12 +149,15 @@ Dropped: spam, topic pairs, urgency. Not fly-shaped; they can be phase A's.
 
 1. **Sample efficiency**: accuracy on the next 200 unrewarded items after
    *k* rewards received, at k = 25, 50, 100, 200.
-2. **Calibration**: expected calibration error of the raw probability and of
+2. **Gradedness**: Spearman correlation between the score and the human
+   fine-grained label over the same 200 items, at the same k. This is the
+   "more bitter than" question: sign is accuracy, order is this.
+3. **Calibration**: expected calibration error of the raw probability and of
    the calibrated one, 10 bins, over all decisions after k = 100.
-3. **Forgetting / relearning** (T2 only): rewards needed after the flip to
+4. **Forgetting / relearning** (T2 only): rewards needed after the flip to
    return to the pre-flip accuracy; accuracy 24 h biological after the last
    reward with no further input.
-4. **Latency**: wall time per decision, one seed, reported not judged.
+5. **Latency**: wall time per decision, one seed, reported not judged.
 
 ## Decision rule (fixed here)
 
