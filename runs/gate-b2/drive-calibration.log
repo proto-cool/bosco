@@ -1,0 +1,10 @@
+calibrate: scale 54.8 Hz -> KC 0.0025
+calibrate: scale 181.3 Hz -> KC 0.0268
+calibrate: scale 329.8 Hz -> KC 0.0551
+calibrate: scale 244.5 Hz -> KC 0.0391
+calibrate: scale 210.5 Hz -> KC 0.0327
+calibrate: scale 195.4 Hz -> KC 0.0294
+calibrate: scale 188.2 Hz -> KC 0.0273
+calibrate: scale 184.7 Hz -> KC 0.0273
+calibrate: scale 183.0 Hz -> KC 0.0268
+calibrate: final scale 183.8 Hz; KC fraction over 500: mean 0.0271 median 0.0228 p10 0.0052 p90 0.0569; band (0.011, 0.067): in

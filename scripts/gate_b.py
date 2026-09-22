@@ -63,7 +63,9 @@ def learn(a) -> int:
     else:
         raise SystemExit("learn takes t1, t2 or t3")
     if a.smoke:
-        items, e = items[: a.smoke], e[: a.smoke]
+        # a seeded random subset, so both tastes are present (the pool is sweet-first); never a result
+        keep = np.random.default_rng(0).permutation(len(items))[: a.smoke]
+        items, e = [items[i] for i in keep], e[keep]
         eval_k, window = (2, 4), 5
     proto = G.Protocol.make(len(items), a.seed, flip_at=(G.FLIP_AT if a.task == "t2" else None))
     if a.smoke and a.task == "t2":
