@@ -18,3 +18,4 @@ panel/dist/
 .DS_Store
 runs/gate-b/smoke/
 runs/gate-b/logs/
+runs/gate-b/*/state.npz
