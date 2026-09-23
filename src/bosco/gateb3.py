@@ -40,7 +40,7 @@ KNN_K = 10
 BAR_CEILING_FRACTION = 0.9
 BAR_RECALL_GAP = 0.30
 OASIS_SIDE = 300  # top and bottom by valence, split alternately into train and held-out
-IMAGE_PROBES = {"a photograph of a sweet": "Cake 1", "a photograph of rotting food": "Garbage dump 1"}
+IMAGE_PROBES = {"a photograph of a sweet": "Dessert 1", "a photograph of rotting food": "Garbage dump 1"}
 
 
 def h32(*parts) -> int:
@@ -195,11 +195,12 @@ def cache_path(arm: str) -> Path:
     return CACHE_DIR / f"kc-{arm}.npz"
 
 
-def build_cache(arm: str, brain_path: str | None, sets: ItemSets, ant: Antenna, log=print) -> None:
+def build_cache(arm: str, brain_path: str | None, sets: ItemSets, ant: Antenna, log=None) -> None:
     """Kenyon-cell spike counts for every item x N_SEEDS, from the naive brain.  uint8 counts."""
     from bosco.model import Brain
     from bosco.sim import Fly
 
+    log = log or (lambda m: print(m, flush=True))
     fly = Fly(Brain.load(brain_path)) if brain_path else Fly()
     _, orn_all = G.orn_index(fly)
     orn_idx = orn_all[: 2 * N_PC]
