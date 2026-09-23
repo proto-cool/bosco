@@ -1,0 +1,169 @@
+{
+ "task": "t1",
+ "arm": "hash",
+ "seed": 4,
+ "epochs": [
+  {
+   "phase": "acq",
+   "epoch": 1,
+   "t_h": 3.325,
+   "heldout": {
+    "n": 400,
+    "accuracy": 0.55,
+    "spearman": 0.3750171966489543,
+    "ece": 0.42312500000000003,
+    "score_mean": 0.4667831975840178
+   },
+   "recall": {
+    "sweet_trained": 0.49843221783260216,
+    "bitter_trained": 0.433397430089202,
+    "gap": 0.06503478774340016
+   }
+  },
+  {
+   "phase": "acq",
+   "epoch": 2,
+   "t_h": 6.658333333333333,
+   "heldout": {
+    "n": 400,
+    "accuracy": 0.5375,
+    "spearman": 0.3029357242228892,
+    "ece": 0.45375000000000004,
+    "score_mean": 0.4599412274427773
+   },
+   "recall": {
+    "sweet_trained": 0.4791580144878086,
+    "bitter_trained": 0.44190489858907755,
+    "gap": 0.03725311589873104
+   }
+  },
+  {
+   "phase": "acq",
+   "epoch": 3,
+   "t_h": 9.991666666666667,
+   "heldout": {
+    "n": 400,
+    "accuracy": 0.525,
+    "spearman": 0.2983186129315219,
+    "ece": 0.458125,
+    "score_mean": 0.4583834395311061
+   },
+   "recall": {
+    "sweet_trained": 0.48371137775052464,
+    "bitter_trained": 0.4413948219098581,
+    "gap": 0.042316555840666514
+   }
+  },
+  {
+   "phase": "acq",
+   "epoch": 4,
+   "t_h": 13.325,
+   "heldout": {
+    "n": 400,
+    "accuracy": 0.5325,
+    "spearman": 0.2949063446098082,
+    "ece": 0.45875,
+    "score_mean": 0.45993496990470467
+   },
+   "recall": {
+    "sweet_trained": 0.4836364863729798,
+    "bitter_trained": 0.44431936982853626,
+    "gap": 0.03931711654444353
+   }
+  },
+  {
+   "phase": "acq",
+   "epoch": 5,
+   "t_h": 16.658333333333335,
+   "heldout": {
+    "n": 400,
+    "accuracy": 0.53,
+    "spearman": 0.3200334483571191,
+    "ece": 0.4534375,
+    "score_mean": 0.4653343920971007
+   },
+   "recall": {
+    "sweet_trained": 0.4815759370613925,
+    "bitter_trained": 0.45121728313329995,
+    "gap": 0.03035865392809256
+   }
+  },
+  {
+   "phase": "acq",
+   "epoch": 6,
+   "t_h": 19.991666666666667,
+   "heldout": {
+    "n": 400,
+    "accuracy": 0.5325,
+    "spearman": 0.3334102153178881,
+    "ece": 0.4440625,
+    "score_mean": 0.4677869682481726
+   },
+   "recall": {
+    "sweet_trained": 0.486675290835751,
+    "bitter_trained": 0.45411130195813815,
+    "gap": 0.03256398887761286
+   }
+  }
+ ],
+ "baselines": {
+  "lr_raw": 0.7025,
+  "knn_raw": 0.565,
+  "lr_antenna": 0.6975,
+  "knn_antenna": 0.6425,
+  "lr_kc_code": 0.62,
+  "knn_kc_code": 0.6075
+ },
+ "t4_transfer": {
+  "n": 900,
+  "accuracy": 0.7711111111111111,
+  "spearman": 0.6553312898766511,
+  "ece": 0.09027777777777776,
+  "score_mean": 0.5078400404194872
+ },
+ "t6_probes": [
+  {
+   "kind": "text",
+   "text": "I fucking hate you",
+   "score": 0.46454649951147325
+  },
+  {
+   "kind": "text",
+   "text": "I hate you",
+   "score": 0.4659370108842974
+  },
+  {
+   "kind": "text",
+   "text": "I don't know",
+   "score": 0.46861071776330837
+  },
+  {
+   "kind": "text",
+   "text": "I love you",
+   "score": 0.47367356169722374
+  },
+  {
+   "kind": "text",
+   "text": "I fucking love you",
+   "score": 0.4734606374169881
+  },
+  {
+   "kind": "image",
+   "text": "oasis-Dessert 1",
+   "score": 0.5286544963741816
+  },
+  {
+   "kind": "image",
+   "text": "oasis-Garbage dump 1",
+   "score": 0.482278127647308
+  }
+ ],
+ "retention_24h": {
+  "n": 400,
+  "accuracy": 0.53,
+  "spearman": 0.28341715559122377,
+  "ece": 0.45687500000000003,
+  "score_mean": 0.4701594329182837
+ },
+ "wall_s": 11.84238576889038
+}
