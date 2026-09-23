@@ -32,7 +32,8 @@ select = ["E", "F", "I", "B", "UP"]
 ignore = ["B008"]  # frozen-dataclass defaults in signatures are intentional
 
 [tool.ruff.lint.per-file-ignores]
-"scripts/*" = ["E501", "B023"]  # scan/report scripts print wide tables; per-gain closures are intentional
+"scripts/*" = ["E501", "B023"]
+"src/bosco/gateb3.py" = ["E501"]  # report strings  # scan/report scripts print wide tables; per-gain closures are intentional
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -407,6 +407,7 @@ class MushroomBody:
         t_hours: float,
         scale: float = 1.0,
         restrict: np.ndarray | None = None,
+        consolidate: bool | None = None,
     ) -> np.ndarray:
         """Three-factor rule from KC spike counts (per second of presentation) already observed.
         `scale` (0..1] scales the pairing's strength: 1 for an outcome, the taste gain x the
@@ -425,7 +426,7 @@ class MushroomBody:
         c = kc_counts_per_s[self.fly.kc_pos_of_edge].astype(np.float64)
         if restrict is not None:
             c = c * np.asarray(restrict, dtype=bool)[self.fly.kc_pos_of_edge]
-        return self._depress(c, valence, t_hours, scale)
+        return self._depress(c, valence, t_hours, scale, consolidate)
 
     def extinguish_counts(self, kc_counts_per_s: np.ndarray, t_hours: float, spare: str | None = None) -> None:
         """Unreinforced activity relieves depression (decided 2026-09-18, `extinction`).
@@ -484,11 +485,22 @@ class MushroomBody:
         c = res.counts[self.fly.plastic_pre].astype(np.float64)
         return self._depress(c, valence, t_hours)
 
-    def _depress(self, c: np.ndarray, valence: str, t_hours: float, scale: float = 1.0) -> np.ndarray:
+    def _depress(
+        self, c: np.ndarray, valence: str, t_hours: float, scale: float = 1.0, consolidate: bool | None = None
+    ) -> np.ndarray:
         strength = np.minimum(1.0, c / self.p.stm_c_sat) * float(np.clip(scale, 0.0, 1.0))
         mask = self.target_edges(valence) & (strength > 0)
-        # consolidation: spaced repetition on a synapse that still carries STM
-        consolidate = mask & (self.stm < self.p.ltm_stm_floor) & (t_hours - self.t_pair >= self.p.ltm_spacing_h)
+        # consolidation: spaced repetition on a synapse that still carries STM.  `consolidate`
+        # (B3, 2026-09-23) lets the caller say whether this pairing IS a spaced repetition of the
+        # same stimulus: with it False, two different smells sharing a cell an hour apart no longer
+        # count as one smell trained twice, which is what consolidated the population average in
+        # v1 and B2 (docs/GATE-B3.md).  None keeps the per-synapse rule.
+        if consolidate is None:
+            consolidate = mask & (self.stm < self.p.ltm_stm_floor) & (t_hours - self.t_pair >= self.p.ltm_spacing_h)
+        elif consolidate:
+            consolidate = mask & (self.stm < self.p.ltm_stm_floor)
+        else:
+            consolidate = np.zeros_like(mask)
         factor = np.where(mask, 1.0 - self.p.stm_eta * strength, 1.0)
         self.stm = np.maximum(self.p.stm_m_min, self.stm * factor)
         self.ltm = np.where(

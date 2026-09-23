@@ -68,7 +68,11 @@ class Fly:
         self.episode_ms = float(self.cfg.get("episode_ms", 1000))
         wiring = self.cfg["wiring"]
         self.base_w = v1_weights_mv(
-            self.brain, self.params, wiring.get("apl_kc_gain", 1.0), wiring.get("kc_mbon_gain", 1.0)
+            self.brain,
+            self.params,
+            wiring.get("apl_kc_gain", 1.0),
+            wiring.get("kc_mbon_gain", 1.0),
+            wiring.get("dan_kc_gain", 1.0),
         )
         self.net = Net(self.brain.indptr, self.brain.indices, self.base_w, self.params)
         b = self.brain

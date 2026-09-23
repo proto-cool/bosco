@@ -338,12 +338,13 @@ def taste_of(label: float) -> tuple[str, float]:
 
 # ---- arms -------------------------------------------------------------------------------------
 class FlyArm:
-    def __init__(self, brain_path: str | None, drive: Drive) -> None:
+    def __init__(self, brain_path: str | None, drive: Drive, model_config=None) -> None:
         from bosco.model import Brain
         from bosco.plasticity import MushroomBody, load_plasticity_params
         from bosco.sim import Fly
 
-        self.fly = Fly(Brain.load(brain_path)) if brain_path else Fly()
+        kw = {} if model_config is None else {"config_path": model_config}
+        self.fly = Fly(Brain.load(brain_path), **kw) if brain_path else Fly(**kw)
         # Amendment 1: mixture (nothing to confine credit from), contrast on
         self.mb = MushroomBody(self.fly, replace(load_plasticity_params(), credit_mode="mixture", credit_contrast=True))
         self.drive = drive

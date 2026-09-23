@@ -85,6 +85,27 @@ cost 0.70 → 0.63 on text; the estimate here is 0.66–0.68.)
 Already implied by 1–2: no reward probability, no delay distribution, no
 magnitude scaling. The protocol is a training schedule.
 
+### 6. Run offline, on cached Kenyon-cell codes (found 2026-09-23)
+The plastic synapses are KC→MBON, so the Kenyon-cell code *should* be
+independent of what the fly has learned — and in the full model it is not.
+Same sentence, same seed, naive brain versus a B2-trained state: 117 active
+cells become 81, Jaccard overlap 0.77, the same as the spread between two
+random seeds. Not chaos (a 0.1% weight nudge leaves the code identical) but
+a loop: the plastic synapses change MBON firing, and MBONs feed back onto
+Kenyon cells directly (11,000 synapses) and through APL and the dopamine
+neurons. Removing the 225,000 DAN→KC fast synapses (dopamine is modulatory;
+the Shiu sign convention runs it as excitatory drive) did **not** remove the
+dependence, so it is MBON feedback, which is real biology.
+
+Consequence for B2: a trained item stopped smelling like it did when it was
+trained — a plausible part of why recall was so weak. Consequence for B3:
+the codes are computed **once per item and seed from the naive brain and
+cached**, and training, scoring and every control run over the cache with
+the same rule. That is the feedforward mushroom body every standard model
+uses (Hige, Aso, Dasgupta), it makes every run take seconds instead of a
+night, and it is a stated simplification, not a fix: the loop is real and B3
+does not model it.
+
 ## What does not change
 Encoder (CLIP ViT-B/32, centred), presentation (500 ms from rest), scoring
 (8 seeds, mean valence mapped to 0–1, sureness beside it), contrast read,

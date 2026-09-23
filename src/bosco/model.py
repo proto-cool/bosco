@@ -154,13 +154,26 @@ def al_excitatory_lns(b: Brain) -> np.ndarray:
     return np.nonzero(is_alln & (b.nt_sign > 0))[0].astype(np.int32)
 
 
-def v1_weights_mv(b: Brain, params: LifParams, apl_kc_gain: float = 1.0, kc_mbon_gain: float = 1.0) -> np.ndarray:
+def v1_weights_mv(
+    b: Brain,
+    params: LifParams,
+    apl_kc_gain: float = 1.0,
+    kc_mbon_gain: float = 1.0,
+    dan_kc_gain: float = 1.0,
+) -> np.ndarray:
     """The v1 weight vector: base weights, eLN chemical output zeroed, pathway gains.
 
     kc_mbon_gain: KC->MBON synapses are the plastic, learning-relevant pathway.
     At connectome weight x w_syn they contribute nothing to MBON odor responses
     (docs/phase3-plasticity-gate.md); the gain is chosen so that MBON odor
     responses are KC-driven, by a stated criterion, not by outcomes.
+
+    dan_kc_gain (B3, 2026-09-23): the 225,000 DAN->KC synapses are dopaminergic release
+    sites, neuromodulatory in the fly; under the Shiu sign convention they run as fast
+    excitatory drive, which closes a loop KC->MBON->DAN->KC through the plastic synapses:
+    a trained fly's Kenyon-cell code for the same input shrinks by a third (117 -> 81 active
+    cells, Jaccard 0.77 to its own naive code).  What dopamine does to the Kenyon cells --
+    gate plasticity -- the learning rule already does explicitly.  0 removes the fast drive.
     """
     from bosco import populations as pop
 
@@ -174,6 +187,9 @@ def v1_weights_mv(b: Brain, params: LifParams, apl_kc_gain: float = 1.0, kc_mbon
     if kc_mbon_gain != 1.0:
         mbon = b.index_of_present(pop.mbons()["bodyId"])
         w[b.edges_between(kc, mbon)] *= kc_mbon_gain
+    if dan_kc_gain != 1.0:
+        dan = b.index_of_present(pop.dans()["bodyId"])
+        w[b.edges_between(dan, kc)] *= dan_kc_gain
     return w
 
 
