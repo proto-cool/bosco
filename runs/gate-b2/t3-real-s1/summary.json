@@ -1,0 +1,40 @@
+{
+ "task": "t3",
+ "arm": "real",
+ "seed": 1,
+ "n_items": 900,
+ "windows": {
+  "k25": {
+   "n": 100,
+   "accuracy": 0.61,
+   "spearman": 0.3455727041677508,
+   "ece": 0.35625
+  },
+  "k50": {
+   "n": 100,
+   "accuracy": 0.66,
+   "spearman": 0.381642744014811,
+   "ece": 0.29625
+  },
+  "k100": {
+   "n": 100,
+   "accuracy": 0.69,
+   "spearman": 0.2439647878844973,
+   "ece": 0.31
+  }
+ },
+ "ece_raw_k100plus": 0.31,
+ "ece_isotonic_k100plus": 0.14090909090909104,
+ "n_calib": 46,
+ "one_seed_accuracy_all": 0.6311111111111111,
+ "wall_s": 2195.5701501369476,
+ "score_wall_s": 1503.0784895420074,
+ "n_scored": 340,
+ "recall": {
+  "n_sweet": 30,
+  "n_bitter": 30,
+  "sweet_trained": 0.5070954091009053,
+  "bitter_trained": 0.43813101667014054,
+  "gap": 0.0689643924307648
+ }
+}

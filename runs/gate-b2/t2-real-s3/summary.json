@@ -1,0 +1,75 @@
+{
+ "task": "t2",
+ "arm": "real",
+ "seed": 3,
+ "n_items": 4000,
+ "windows": {
+  "k25": {
+   "n": 200,
+   "accuracy": 0.525,
+   "spearman": 0.1752722075621268,
+   "ece": 0.44625
+  },
+  "k50": {
+   "n": 200,
+   "accuracy": 0.5,
+   "spearman": 0.09514478478660385,
+   "ece": 0.459375
+  },
+  "k100": {
+   "n": 200,
+   "accuracy": 0.52,
+   "spearman": 0.01725648859858484,
+   "ece": 0.435
+  },
+  "k200": {
+   "n": 200,
+   "accuracy": 0.585,
+   "spearman": 0.16213877069708627,
+   "ece": 0.390625
+  },
+  "flip-k25": {
+   "n": 200,
+   "accuracy": 0.495,
+   "spearman": 0.027079258040870843,
+   "ece": 0.45125
+  },
+  "flip-k50": {
+   "n": 200,
+   "accuracy": 0.485,
+   "spearman": 0.021242430661402315,
+   "ece": 0.46125000000000005
+  },
+  "flip-k100": {
+   "n": 200,
+   "accuracy": 0.515,
+   "spearman": 0.06553987634810195,
+   "ece": 0.4325
+  },
+  "flip-k200": {
+   "n": 200,
+   "accuracy": 0.505,
+   "spearman": 0.05780892711667651,
+   "ece": 0.4537500000000001
+  }
+ },
+ "ece_raw_k100plus": 0.42296874999999995,
+ "ece_isotonic_k100plus": 0.0,
+ "n_calib": 154,
+ "one_seed_accuracy_all": 0.52025,
+ "wall_s": 9238.053750038147,
+ "score_wall_s": 6270.889155626297,
+ "n_scored": 1464,
+ "recall": {
+  "n_sweet": 30,
+  "n_bitter": 30,
+  "sweet_trained": 0.5258183479945223,
+  "bitter_trained": 0.4770990377880447,
+  "gap": 0.04871931020647763
+ },
+ "retention": {
+  "window": "flip-k200",
+  "accuracy_24h": 0.485,
+  "spearman_24h": -0.06538213590456676
+ }
+}

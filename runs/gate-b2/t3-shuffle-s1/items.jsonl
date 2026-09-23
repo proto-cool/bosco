@@ -1,0 +1,900 @@
+{"pos": 0, "id": "oasis-Mother 2", "label": 0.8209876543209883, "rewarded": false, "t_s": 0.0, "v1": 0.0}
+{"pos": 1, "id": "oasis-Storage 2", "label": 0.5016501650165016, "rewarded": false, "t_s": 30.0, "v1": 0.0}
+{"pos": 2, "id": "oasis-War 2", "label": 0.23267326732673332, "rewarded": false, "t_s": 60.0, "v1": 0.0}
+{"pos": 3, "id": "oasis-Crow 2", "label": 0.5679012345679016, "rewarded": false, "t_s": 90.0, "v1": 0.0}
+{"pos": 4, "id": "oasis-Miserable pose 3", "label": 0.017973856209150003, "rewarded": false, "t_s": 120.0, "v1": 0.0}
+{"pos": 5, "id": "oasis-Child labor 4", "label": 0.5030864197530867, "rewarded": false, "t_s": 150.0, "v1": 0.0}
+{"pos": 6, "id": "oasis-Fireworks 2", "label": 0.8790849673202618, "rewarded": true, "t_s": 180.0, "v1": 0.0}
+{"pos": 7, "id": "oasis-Rock climbing 2", "label": 0.612745098039215, "rewarded": false, "t_s": 210.0, "v1": 0.0}
+{"pos": 8, "id": "oasis-Spider 2", "label": 0.3169934640522883, "rewarded": false, "t_s": 240.0, "v1": 0.26630553835423787}
+{"pos": 9, "id": "oasis-Sunset 1", "label": 0.844771241830065, "rewarded": true, "t_s": 270.0, "v1": 0.29030386703256095, "score": 0.6389227121132381, "sure": 1.0}
+{"pos": 10, "id": "oasis-Bored pose 3", "label": 0.348039215686275, "rewarded": false, "t_s": 300.0, "v1": 0.3231819251316165}
+{"pos": 11, "id": "oasis-Animal carcass 5", "label": 0.10294117647058836, "rewarded": false, "t_s": 330.0, "v1": 0.47757763261276504}
+{"pos": 12, "id": "oasis-Frustrated pose 4", "label": 0.40359477124182996, "rewarded": false, "t_s": 360.0, "v1": 0.2425306951016629}
+{"pos": 13, "id": "oasis-Gun 4", "label": 0.31045751633987, "rewarded": false, "t_s": 390.0, "v1": 0.33608237454827833}
+{"pos": 14, "id": "oasis-Picnic 1", "label": 0.8432343234323434, "rewarded": false, "t_s": 420.0, "v1": 0.40783335953626965}
+{"pos": 15, "id": "oasis-Hang gliding 2", "label": 0.6960784313725483, "rewarded": false, "t_s": 450.0, "v1": 0.2347045981793668}
+{"pos": 16, "id": "oasis-Dancing 8", "label": 0.7189542483660133, "rewarded": false, "t_s": 480.0, "v1": 0.17194036074561217}
+{"pos": 17, "id": "oasis-Ornament 1", "label": 0.7075163398692816, "rewarded": false, "t_s": 510.0, "v1": 0.0551751275282772}
+{"pos": 18, "id": "oasis-Dirt 4", "label": 0.5, "rewarded": false, "t_s": 540.0, "v1": 0.38868771563395965}
+{"pos": 19, "id": "oasis-Fire 9", "label": 0.07843137254902, "rewarded": false, "t_s": 570.0, "v1": 0.6121938979491137}
+{"pos": 20, "id": "oasis-Research 1", "label": 0.5808580858085817, "rewarded": false, "t_s": 600.0, "v1": 0.35513791910771847}
+{"pos": 21, "id": "oasis-Depressed pose 4", "label": 0.3758169934640517, "rewarded": true, "t_s": 630.0, "v1": 0.3547750186959362, "score": 0.6793341540310591, "sure": 1.0}
+{"pos": 22, "id": "oasis-Nude woman 18", "label": 0.6651234567901233, "rewarded": false, "t_s": 660.0, "v1": 0.30833244805505633}
+{"pos": 23, "id": "oasis-Car crash 1", "label": 0.14215686274509834, "rewarded": false, "t_s": 690.0, "v1": 0.35129364116348166}
+{"pos": 24, "id": "oasis-Sad pose 1", "label": 0.31372549019607837, "rewarded": true, "t_s": 720.0, "v1": 0.2358015671480389, "score": 0.6249626952730719, "sure": 1.0}
+{"pos": 25, "id": "oasis-Miserable pose 2", "label": 0.2993827160493833, "rewarded": true, "t_s": 750.0, "v1": 0.2922956029286799, "score": 0.6452817014182156, "sure": 1.0}
+{"pos": 26, "id": "oasis-Sad face 1", "label": 0.28104575163398665, "rewarded": true, "t_s": 780.0, "v1": 0.07855402606980127}
+{"pos": 27, "id": "oasis-School 6", "label": 0.7679738562091499, "rewarded": false, "t_s": 810.0, "v1": -0.07366584516590069}
+{"pos": 28, "id": "oasis-Flowers 2", "label": 0.8251633986928101, "rewarded": false, "t_s": 840.0, "v1": -0.003660899041903587}
+{"pos": 29, "id": "oasis-Barrels 1", "label": 0.534653465346535, "rewarded": false, "t_s": 870.0, "v1": -0.01402250775172853}
+{"pos": 30, "id": "oasis-Nude couple 13", "label": 0.7990196078431366, "rewarded": false, "t_s": 900.0, "v1": -0.03013105344584055}
+{"pos": 31, "id": "oasis-BDSM 2", "label": 0.48844884488448836, "rewarded": false, "t_s": 930.0, "v1": 0.023292883833317457}
+{"pos": 32, "id": "oasis-Fireworks 5", "label": 0.8006535947712417, "rewarded": false, "t_s": 960.0, "v1": 0.028767096403650272}
+{"pos": 33, "id": "oasis-Car 1", "label": 0.7042483660130716, "rewarded": false, "t_s": 990.0, "v1": 0.017173123605605023}
+{"pos": 34, "id": "oasis-Dog 2", "label": 0.8168316831683167, "rewarded": false, "t_s": 1020.0, "v1": -0.02385806021157233}
+{"pos": 35, "id": "oasis-Car crash 3", "label": 0.17156862745098, "rewarded": true, "t_s": 1050.0, "v1": 0.02846416705849697}
+{"pos": 36, "id": "oasis-Pig 2", "label": 0.61574074074074, "rewarded": false, "t_s": 1080.0, "v1": -0.05210775667132789}
+{"pos": 37, "id": "oasis-Food 3", "label": 0.7173202614379083, "rewarded": false, "t_s": 1110.0, "v1": -0.07444095265796047}
+{"pos": 38, "id": "oasis-Cotton swabs 3", "label": 0.52124183006536, "rewarded": true, "t_s": 1140.0, "v1": -0.05120041044718604}
+{"pos": 39, "id": "oasis-War 6", "label": 0.06535947712418333, "rewarded": false, "t_s": 1170.0, "v1": -0.08183931702938918}
+{"pos": 40, "id": "oasis-Feces 2", "label": 0.16830065359477167, "rewarded": false, "t_s": 1200.0, "v1": -0.11047960900521825}
+{"pos": 41, "id": "oasis-Fence 1", "label": 0.455445544554455, "rewarded": false, "t_s": 1230.0, "v1": -0.09178809895811402}
+{"pos": 42, "id": "oasis-Hangover 1", "label": 0.2359735973597367, "rewarded": true, "t_s": 1260.0, "v1": -0.06834988399090924}
+{"pos": 43, "id": "oasis-Sad pose 2", "label": 0.4330065359477117, "rewarded": false, "t_s": 1290.0, "v1": -0.21751488440522848}
+{"pos": 44, "id": "oasis-Camping 6", "label": 0.48019801980198, "rewarded": true, "t_s": 1320.0, "v1": -0.18671489069776315}
+{"pos": 45, "id": "oasis-Fire 7", "label": 0.12376237623762332, "rewarded": true, "t_s": 1350.0, "v1": -0.1933703893087304}
+{"pos": 46, "id": "oasis-Lion 1", "label": 0.66996699669967, "rewarded": true, "t_s": 1380.0, "v1": -0.17136401890815556}
+{"pos": 47, "id": "oasis-Nude couple 11", "label": 0.6078431372549017, "rewarded": false, "t_s": 1410.0, "v1": -0.15914653883517693}
+{"pos": 48, "id": "oasis-Sidewalk 5", "label": 0.5767973856209151, "rewarded": false, "t_s": 1440.0, "v1": -0.1748751106803923}
+{"pos": 49, "id": "oasis-Miserable pose 4", "label": 0.26388888888888834, "rewarded": false, "t_s": 1470.0, "v1": -0.19425090977675208}
+{"pos": 50, "id": "oasis-Injury 1", "label": 0.16176470588235334, "rewarded": true, "t_s": 1500.0, "v1": -0.1831917176181172}
+{"pos": 51, "id": "oasis-Fire hydrant 1", "label": 0.5326797385620917, "rewarded": false, "t_s": 1530.0, "v1": -0.25633548441219156}
+{"pos": 52, "id": "oasis-Nude woman 5", "label": 0.7254901960784316, "rewarded": false, "t_s": 1560.0, "v1": -0.1836342392148801}
+{"pos": 53, "id": "oasis-Mother 6", "label": 0.84640522875817, "rewarded": false, "t_s": 1590.0, "v1": -0.13563589796697528}
+{"pos": 54, "id": "oasis-Shot 5", "label": 0.3382352941176467, "rewarded": false, "t_s": 1620.0, "v1": -0.22933925326799254}
+{"pos": 55, "id": "oasis-Shark 7", "label": 0.4686468646864683, "rewarded": true, "t_s": 1650.0, "v1": -0.1276474727399612}
+{"pos": 56, "id": "oasis-Miserable face 2", "label": 0.2647058823529416, "rewarded": false, "t_s": 1680.0, "v1": -0.19682320899697764}
+{"pos": 57, "id": "oasis-Snake 5", "label": 0.31683168316831667, "rewarded": false, "t_s": 1710.0, "v1": -0.13646888193723117}
+{"pos": 58, "id": "oasis-Alcohol 6", "label": 0.5895061728395067, "rewarded": false, "t_s": 1740.0, "v1": -0.19565494698471125}
+{"pos": 59, "id": "oasis-Fire 5", "label": 0.12254901960784333, "rewarded": false, "t_s": 1770.0, "v1": -0.20115696156710416}
+{"pos": 60, "id": "oasis-Dog 6", "label": 0.9150326797385616, "rewarded": true, "t_s": 1800.0, "v1": -0.12446031327105489, "score": 0.4315651052910925, "sure": 1.0}
+{"pos": 61, "id": "oasis-Wedding 2", "label": 0.7973856209150334, "rewarded": false, "t_s": 1830.0, "v1": -0.023081899926438942}
+{"pos": 62, "id": "oasis-Sidewalk 6", "label": 0.30555555555555497, "rewarded": false, "t_s": 1860.0, "v1": -0.13425721241571098}
+{"pos": 63, "id": "oasis-Stingray 2", "label": 0.6258169934640517, "rewarded": true, "t_s": 1890.0, "v1": -0.08921022008134472}
+{"pos": 64, "id": "oasis-Dog 25", "label": 0.40895061728395005, "rewarded": false, "t_s": 1920.0, "v1": -0.07251904232788686}
+{"pos": 65, "id": "oasis-War 4", "label": 0.32843137254902, "rewarded": true, "t_s": 1950.0, "v1": -0.002236869180903711}
+{"pos": 66, "id": "oasis-Explosion 3", "label": 0.2746913580246917, "rewarded": false, "t_s": 1980.0, "v1": 0.03091456620075106}
+{"pos": 67, "id": "oasis-Galaxy 3", "label": 0.7418300653594767, "rewarded": false, "t_s": 2010.0, "v1": -0.0483711609409847}
+{"pos": 68, "id": "oasis-Pinecone 2", "label": 0.5702614379084966, "rewarded": false, "t_s": 2040.0, "v1": -0.016645306913230573}
+{"pos": 69, "id": "oasis-Surgery 3", "label": 0.44598765432098836, "rewarded": false, "t_s": 2070.0, "v1": -0.05424296215670543}
+{"pos": 70, "id": "oasis-Fire 1", "label": 0.5679012345679016, "rewarded": false, "t_s": 2100.0, "v1": -0.06862389590357543}
+{"pos": 71, "id": "oasis-BDSM 3", "label": 0.49228395061728336, "rewarded": false, "t_s": 2130.0, "v1": -0.11017047636674748}
+{"pos": 72, "id": "oasis-Parachuting 3", "label": 0.7310231023102317, "rewarded": false, "t_s": 2160.0, "v1": 0.011808709118778404}
+{"pos": 73, "id": "oasis-Alcohol 7", "label": 0.57920792079208, "rewarded": true, "t_s": 2190.0, "v1": -0.015478331868785777}
+{"pos": 74, "id": "oasis-Office supplies 3", "label": 0.53960396039604, "rewarded": false, "t_s": 2220.0, "v1": -0.11070197855212249}
+{"pos": 75, "id": "oasis-Flood 2", "label": 0.22607260726072664, "rewarded": false, "t_s": 2250.0, "v1": -0.1014798492696356}
+{"pos": 76, "id": "oasis-Neutral face 3", "label": 0.5841584158415833, "rewarded": false, "t_s": 2280.0, "v1": -0.035851033195811954}
+{"pos": 77, "id": "oasis-Bark 2", "label": 0.5432098765432101, "rewarded": false, "t_s": 2310.0, "v1": -0.08962666777258244}
+{"pos": 78, "id": "oasis-Keyboard 2", "label": 0.5181518151815183, "rewarded": false, "t_s": 2340.0, "v1": -0.07047754819533603}
+{"pos": 79, "id": "oasis-Lake 6", "label": 0.5800653594771249, "rewarded": false, "t_s": 2370.0, "v1": -0.030439376422037756}
+{"pos": 80, "id": "oasis-Bloody knife 2", "label": 0.20957095709570997, "rewarded": false, "t_s": 2400.0, "v1": -0.106116939892974}
+{"pos": 81, "id": "oasis-Shot 3", "label": 0.15277777777777835, "rewarded": false, "t_s": 2430.0, "v1": 0.014855480819986555}
+{"pos": 82, "id": "oasis-Neutral face 5", "label": 0.6633986928104583, "rewarded": true, "t_s": 2460.0, "v1": -0.07719252057848147}
+{"pos": 83, "id": "oasis-Cold 7", "label": 0.7156862745098033, "rewarded": false, "t_s": 2490.0, "v1": -0.038373628063621934}
+{"pos": 84, "id": "oasis-Orangutan 1", "label": 0.65686274509804, "rewarded": false, "t_s": 2520.0, "v1": -0.03275915961772202}
+{"pos": 85, "id": "oasis-Couple 7", "label": 0.819444444444445, "rewarded": false, "t_s": 2550.0, "v1": -0.0005460187384552784}
+{"pos": 86, "id": "oasis-Spider 1", "label": 0.344771241830065, "rewarded": false, "t_s": 2580.0, "v1": -0.00954414230324585}
+{"pos": 87, "id": "oasis-Horse 1", "label": 0.8225308641975316, "rewarded": false, "t_s": 2610.0, "v1": -0.0062907099940954225}
+{"pos": 88, "id": "oasis-Dessert 4", "label": 0.7314814814814817, "rewarded": false, "t_s": 2640.0, "v1": -0.056348066455214285}
+{"pos": 89, "id": "oasis-Toilet 2", "label": 0.4413580246913584, "rewarded": false, "t_s": 2670.0, "v1": -0.04126985877366263}
+{"pos": 90, "id": "oasis-Scared face 1", "label": 0.4818481848184817, "rewarded": false, "t_s": 2700.0, "v1": -0.059317088567163556}
+{"pos": 91, "id": "oasis-Police 4", "label": 0.38071895424836666, "rewarded": false, "t_s": 2730.0, "v1": -0.026541257588604927}
+{"pos": 92, "id": "oasis-Lake 2", "label": 0.8986928104575167, "rewarded": true, "t_s": 2760.0, "v1": -0.042488310341442626}
+{"pos": 93, "id": "oasis-Camping 8", "label": 0.4264705882352933, "rewarded": false, "t_s": 2790.0, "v1": -0.03968076564887191}
+{"pos": 94, "id": "oasis-Intensity 1", "label": 0.30228758169934666, "rewarded": false, "t_s": 2820.0, "v1": -0.04598984726493027}
+{"pos": 95, "id": "oasis-Nude woman 10", "label": 0.6743827160493834, "rewarded": false, "t_s": 2850.0, "v1": 0.04631342586707887}
+{"pos": 96, "id": "oasis-Present 1", "label": 0.751633986928105, "rewarded": false, "t_s": 2880.0, "v1": 0.12687528082938504}
+{"pos": 97, "id": "oasis-Paper 4", "label": 0.514851485148515, "rewarded": true, "t_s": 2910.0, "v1": 0.057905256605462196, "score": 0.5263398592761116, "sure": 1.0}
+{"pos": 98, "id": "oasis-Sad face 9", "label": 0.219135802469135, "rewarded": false, "t_s": 2940.0, "v1": 0.0008769075675050253}
+{"pos": 99, "id": "oasis-Sunflower 1", "label": 0.8118811881188117, "rewarded": false, "t_s": 2970.0, "v1": 0.12325695825908223}
+{"pos": 100, "id": "oasis-Beach 8", "label": 0.8088235294117649, "rewarded": false, "t_s": 3000.0, "v1": 0.1297673372686423}
+{"pos": 101, "id": "oasis-Parasailing 2", "label": 0.6881188118811883, "rewarded": false, "t_s": 3030.0, "v1": 0.04529530290372119}
+{"pos": 102, "id": "oasis-Doctor 1", "label": 0.6111111111111116, "rewarded": false, "t_s": 3060.0, "v1": 0.061485498251928394}
+{"pos": 103, "id": "oasis-Tumor 1", "label": 0.06699346405228834, "rewarded": false, "t_s": 3090.0, "v1": -0.04779983829529222}
+{"pos": 104, "id": "oasis-Wall 5", "label": 0.49834983498349833, "rewarded": false, "t_s": 3120.0, "v1": 0.06319573745774654}
+{"pos": 105, "id": "oasis-Police 1", "label": 0.2647058823529416, "rewarded": false, "t_s": 3150.0, "v1": 0.08112872544074201}
+{"pos": 106, "id": "oasis-Toilet 3", "label": 0.47222222222222165, "rewarded": false, "t_s": 3180.0, "v1": 0.05605789368800451}
+{"pos": 107, "id": "oasis-Bored pose 6", "label": 0.59313725490196, "rewarded": false, "t_s": 3210.0, "v1": 0.052564946290042824}
+{"pos": 108, "id": "oasis-Fire 10", "label": 0.24509803921568665, "rewarded": false, "t_s": 3240.0, "v1": 0.028542627474453908}
+{"pos": 109, "id": "oasis-Barbeque 2", "label": 0.6914191419141917, "rewarded": true, "t_s": 3270.0, "v1": 0.0257588398530062}
+{"pos": 110, "id": "oasis-Scared face 2", "label": 0.46241830065359496, "rewarded": false, "t_s": 3300.0, "v1": -0.023102869018415073}
+{"pos": 111, "id": "oasis-Wall 2", "label": 0.5049019607843133, "rewarded": true, "t_s": 3330.0, "v1": 0.09049793456923227}
+{"pos": 112, "id": "oasis-Destruction 9", "label": 0.42592592592592665, "rewarded": false, "t_s": 3360.0, "v1": -0.026471174308610013}
+{"pos": 113, "id": "oasis-Billiards 1", "label": 0.5866013071895417, "rewarded": false, "t_s": 3390.0, "v1": 0.09401741359223603}
+{"pos": 114, "id": "oasis-Explosion 6", "label": 0.20957095709570997, "rewarded": true, "t_s": 3420.0, "v1": -0.03870135460755042}
+{"pos": 115, "id": "oasis-Gun 6", "label": 0.3069306930693067, "rewarded": false, "t_s": 3450.0, "v1": -0.06499311751551606}
+{"pos": 116, "id": "oasis-Galaxy 4", "label": 0.7385620915032683, "rewarded": false, "t_s": 3480.0, "v1": 0.09135299005095321}
+{"pos": 117, "id": "oasis-Bark 4", "label": 0.53960396039604, "rewarded": true, "t_s": 3510.0, "v1": 0.035942903002001536}
+{"pos": 118, "id": "oasis-Alcohol 8", "label": 0.7458745874587467, "rewarded": false, "t_s": 3540.0, "v1": 0.11603874476138476}
+{"pos": 119, "id": "oasis-School 5", "label": 0.5898692810457516, "rewarded": false, "t_s": 3570.0, "v1": -0.026549288949337946, "score": 0.4851918550938597, "sure": 0.875}
+{"pos": 120, "id": "oasis-Gargoyle 2", "label": 0.37808641975308666, "rewarded": false, "t_s": 3600.0, "v1": -0.09869806950976745, "score": 0.45388009918472194, "sure": 1.0}
+{"pos": 121, "id": "oasis-Nude woman 16", "label": 0.61574074074074, "rewarded": false, "t_s": 3630.0, "v1": 0.001902123233164188, "score": 0.5008007613926532, "sure": 0.5}
+{"pos": 122, "id": "oasis-Street 4", "label": 0.6470588235294117, "rewarded": false, "t_s": 3660.0, "v1": 0.0857402875259462, "score": 0.5315713966863306, "sure": 1.0}
+{"pos": 123, "id": "oasis-Flowers 4", "label": 0.7838283828382834, "rewarded": true, "t_s": 3690.0, "v1": 0.06788463493566554}
+{"pos": 124, "id": "oasis-Party 1", "label": 0.5866013071895417, "rewarded": false, "t_s": 3720.0, "v1": 0.0673602904114432, "score": 0.5241491033175637, "sure": 1.0}
+{"pos": 125, "id": "oasis-Neutral pose 2", "label": 0.709150326797385, "rewarded": true, "t_s": 3750.0, "v1": 0.08406490716048898}
+{"pos": 126, "id": "oasis-Mother 4", "label": 0.8415032679738567, "rewarded": false, "t_s": 3780.0, "v1": 0.14377263705418664, "score": 0.5577289267577312, "sure": 1.0}
+{"pos": 127, "id": "oasis-Plane crash 3", "label": 0.2058823529411767, "rewarded": true, "t_s": 3810.0, "v1": 0.03786936067626234}
+{"pos": 128, "id": "oasis-Penguins 1", "label": 0.7772277227722767, "rewarded": false, "t_s": 3840.0, "v1": 0.057314714643550424, "score": 0.5348835743351018, "sure": 1.0}
+{"pos": 129, "id": "oasis-Baby 7", "label": 0.32843137254902, "rewarded": false, "t_s": 3870.0, "v1": -0.056924685384690865, "score": 0.48815654749150333, "sure": 0.75}
+{"pos": 130, "id": "oasis-Monkey 1", "label": 0.6452145214521451, "rewarded": false, "t_s": 3900.0, "v1": -0.04301144944829527, "score": 0.4793779276641741, "sure": 0.875}
+{"pos": 131, "id": "oasis-Dog 15", "label": 0.405228758169935, "rewarded": false, "t_s": 3930.0, "v1": -0.04401578467922751, "score": 0.46065986296589145, "sure": 1.0}
+{"pos": 132, "id": "oasis-Wedding 3", "label": 0.7973856209150334, "rewarded": false, "t_s": 3960.0, "v1": 0.005966890274835879, "score": 0.499989307871228, "sure": 0.625}
+{"pos": 133, "id": "oasis-Parasailing 3", "label": 0.6897689768976899, "rewarded": true, "t_s": 3990.0, "v1": 0.10446862084957831}
+{"pos": 134, "id": "oasis-Monkey 3", "label": 0.4367283950617283, "rewarded": false, "t_s": 4020.0, "v1": -0.03025260612523084, "score": 0.48304236914471066, "sure": 1.0}
+{"pos": 135, "id": "oasis-Dancing 1", "label": 0.7173202614379083, "rewarded": false, "t_s": 4050.0, "v1": 0.03338073110770734, "score": 0.5183518687192071, "sure": 1.0}
+{"pos": 136, "id": "oasis-Snow 3", "label": 0.5941358024691351, "rewarded": false, "t_s": 4080.0, "v1": 0.04629735059519757, "score": 0.5247111125729891, "sure": 1.0}
+{"pos": 137, "id": "oasis-Child labor 2", "label": 0.3036303630363033, "rewarded": false, "t_s": 4110.0, "v1": 0.08440955060646049, "score": 0.5301008017687534, "sure": 1.0}
+{"pos": 138, "id": "oasis-Scared cat 1", "label": 0.6013071895424833, "rewarded": false, "t_s": 4140.0, "v1": -0.032946504554706046, "score": 0.47167275016554167, "sure": 1.0}
+{"pos": 139, "id": "oasis-Frustrated pose 2", "label": 0.2728758169934633, "rewarded": false, "t_s": 4170.0, "v1": -0.09666554391195847, "score": 0.44685126557176613, "sure": 1.0}
+{"pos": 140, "id": "oasis-Cat 10", "label": 0.7418300653594767, "rewarded": true, "t_s": 4200.0, "v1": 0.017522482379043525, "score": 0.4947852163364731, "sure": 0.5}
+{"pos": 141, "id": "oasis-Lake 4", "label": 0.7978395061728399, "rewarded": false, "t_s": 4230.0, "v1": 0.11152931345012773, "score": 0.5513221309669193, "sure": 1.0}
+{"pos": 142, "id": "oasis-Prison 2", "label": 0.27006172839506165, "rewarded": false, "t_s": 4260.0, "v1": -0.024939894052914968, "score": 0.479554118379832, "sure": 0.875}
+{"pos": 143, "id": "oasis-Sidewalk 2", "label": 0.594771241830065, "rewarded": false, "t_s": 4290.0, "v1": 0.14418657852728256, "score": 0.5677222004218351, "sure": 1.0}
+{"pos": 144, "id": "oasis-Beach 4", "label": 0.8209876543209883, "rewarded": false, "t_s": 4320.0, "v1": -0.12390656231704389, "score": 0.46494843619561976, "sure": 1.0}
+{"pos": 145, "id": "oasis-Hallway 1", "label": 0.2685185185185183, "rewarded": false, "t_s": 4350.0, "v1": -0.04749620980585034, "score": 0.4864950724053984, "sure": 0.875}
+{"pos": 146, "id": "oasis-Depressed face 1", "label": 0.46078431372548995, "rewarded": true, "t_s": 4380.0, "v1": -0.0697293680001353}
+{"pos": 147, "id": "oasis-Nude woman 17", "label": 0.6882716049382717, "rewarded": false, "t_s": 4410.0, "v1": -0.19843773593051628, "score": 0.42714597035517354, "sure": 1.0}
+{"pos": 148, "id": "oasis-Lake 3", "label": 0.8271604938271601, "rewarded": false, "t_s": 4440.0, "v1": 0.10826355543635835, "score": 0.5593544498799495, "sure": 1.0}
+{"pos": 149, "id": "oasis-Miserable face 1", "label": 0.42079207920792, "rewarded": false, "t_s": 4470.0, "v1": 0.003155771741492619, "score": 0.4952236568777212, "sure": 0.75}
+{"pos": 150, "id": "oasis-Garbage dump 5", "label": 0.18954248366012996, "rewarded": false, "t_s": 4500.0, "v1": 0.0508805632121232, "score": 0.5212804716925558, "sure": 0.875}
+{"pos": 151, "id": "oasis-Cockroach 2", "label": 0.21078431372548997, "rewarded": false, "t_s": 4530.0, "v1": 0.002083914957556665, "score": 0.5152906326116219, "sure": 0.875}
+{"pos": 152, "id": "oasis-Fireworks 3", "label": 0.848039215686275, "rewarded": true, "t_s": 4560.0, "v1": -0.04437882558943507}
+{"pos": 153, "id": "oasis-Tornado 5", "label": 0.375, "rewarded": false, "t_s": 4590.0, "v1": -0.11659122299594649, "score": 0.443330506299155, "sure": 1.0}
+{"pos": 154, "id": "oasis-Lake 15", "label": 0.8745874587458751, "rewarded": false, "t_s": 4620.0, "v1": 0.17911510085744486, "score": 0.5814195469830723, "sure": 1.0}
+{"pos": 155, "id": "oasis-Car race 3", "label": 0.5660066006600667, "rewarded": false, "t_s": 4650.0, "v1": 0.0998647986417942, "score": 0.5542083243116253, "sure": 1.0}
+{"pos": 156, "id": "oasis-Dirt 2", "label": 0.7663398692810449, "rewarded": false, "t_s": 4680.0, "v1": 0.1442655366366976, "score": 0.5673852279577074, "sure": 1.0}
+{"pos": 157, "id": "oasis-Depressed face 2", "label": 0.4706790123456783, "rewarded": false, "t_s": 4710.0, "v1": -0.07708095110310687, "score": 0.46147431782793497, "sure": 1.0}
+{"pos": 158, "id": "oasis-Injury 3", "label": 0.16176470588235334, "rewarded": true, "t_s": 4740.0, "v1": 0.019141033412288233}
+{"pos": 159, "id": "oasis-Dancing 5", "label": 0.7826797385620917, "rewarded": false, "t_s": 4770.0, "v1": 0.06609848309725253, "score": 0.538447723228895, "sure": 1.0}
+{"pos": 160, "id": "oasis-Alcohol 5", "label": 0.7222222222222218, "rewarded": false, "t_s": 4800.0, "v1": 0.11425101921629499, "score": 0.562278653082806, "sure": 1.0}
+{"pos": 161, "id": "oasis-Frustrated pose 6", "label": 0.6138613861386134, "rewarded": false, "t_s": 4830.0, "v1": -0.007755514858560075, "score": 0.4808646785723879, "sure": 1.0}
+{"pos": 162, "id": "oasis-Cold 3", "label": 0.6470588235294117, "rewarded": false, "t_s": 4860.0, "v1": 0.07087479318023182, "score": 0.5452236565200129, "sure": 1.0}
+{"pos": 163, "id": "oasis-Bubble 1", "label": 0.6320132013201317, "rewarded": false, "t_s": 4890.0, "v1": 0.10216965294732405, "score": 0.559786995272518, "sure": 1.0}
+{"pos": 164, "id": "oasis-Bear 1", "label": 0.6913580246913583, "rewarded": true, "t_s": 4920.0, "v1": -0.04756157570894859}
+{"pos": 165, "id": "oasis-Severed finger 1", "label": 0.11221122112211168, "rewarded": false, "t_s": 4950.0, "v1": -0.01589537165483068, "score": 0.49118775339241083, "sure": 0.875}
+{"pos": 166, "id": "oasis-Nude couple 1", "label": 0.7369281045751633, "rewarded": false, "t_s": 4980.0, "v1": -0.035185931236420775, "score": 0.48832635185723283, "sure": 1.0}
+{"pos": 167, "id": "oasis-Shooting 1", "label": 0.39052287581699335, "rewarded": true, "t_s": 5010.0, "v1": 0.015368307946393767}
+{"pos": 168, "id": "oasis-Dog 8", "label": 0.7385620915032683, "rewarded": false, "t_s": 5040.0, "v1": 0.08091065772079353, "score": 0.5317834506951445, "sure": 1.0}
+{"pos": 169, "id": "oasis-Alcohol 4", "label": 0.6280864197530867, "rewarded": true, "t_s": 5070.0, "v1": 0.0122916222848517, "score": 0.508261424747711, "sure": 0.875}
+{"pos": 170, "id": "oasis-Biking 1", "label": 0.6813725490196084, "rewarded": false, "t_s": 5100.0, "v1": 0.03324591319115666, "score": 0.5203192052864056, "sure": 1.0}
+{"pos": 171, "id": "oasis-Baby 6", "label": 0.84104938271605, "rewarded": false, "t_s": 5130.0, "v1": 0.030729229616813014, "score": 0.5311095397285802, "sure": 1.0}
+{"pos": 172, "id": "oasis-Food 5", "label": 0.7450980392156867, "rewarded": true, "t_s": 5160.0, "v1": 0.07842456485454363}
+{"pos": 173, "id": "oasis-Snow 5", "label": 0.637254901960785, "rewarded": false, "t_s": 5190.0, "v1": 0.030689627808627273, "score": 0.5186520194184173, "sure": 1.0}
+{"pos": 174, "id": "oasis-Clean 1", "label": 0.6743827160493834, "rewarded": true, "t_s": 5220.0, "v1": 0.09359051688731745}
+{"pos": 175, "id": "oasis-Coffee 1", "label": 0.7581699346405233, "rewarded": false, "t_s": 5250.0, "v1": 0.05834968633601123, "score": 0.5250331658640892, "sure": 1.0}
+{"pos": 176, "id": "oasis-Heart 1", "label": 0.6111111111111116, "rewarded": false, "t_s": 5280.0, "v1": 0.1124934857878156, "score": 0.5555930206460936, "sure": 1.0}
+{"pos": 177, "id": "oasis-Camping 7", "label": 0.7026143790849666, "rewarded": false, "t_s": 5310.0, "v1": 0.10726446685230073, "score": 0.5646161317822345, "sure": 1.0}
+{"pos": 178, "id": "oasis-Destruction 6", "label": 0.16831683168316833, "rewarded": true, "t_s": 5340.0, "v1": 0.02113369401865528, "score": 0.5036617088434171, "sure": 0.625}
+{"pos": 179, "id": "oasis-Street 5", "label": 0.5081699346405233, "rewarded": false, "t_s": 5370.0, "v1": -0.10747729328234135, "score": 0.4414047079078718, "sure": 1.0}
+{"pos": 180, "id": "oasis-Car race 2", "label": 0.5610561056105617, "rewarded": false, "t_s": 5400.0, "v1": -0.015106627674504103, "score": 0.498758064407831, "sure": 0.5}
+{"pos": 181, "id": "oasis-Shark 6", "label": 0.483024691358025, "rewarded": false, "t_s": 5430.0, "v1": -0.016555308338872976, "score": 0.4925294673483805, "sure": 0.75}
+{"pos": 182, "id": "oasis-Eating 3", "label": 0.6913580246913583, "rewarded": false, "t_s": 5460.0, "v1": 0.10555188184796471, "score": 0.5453055092009966, "sure": 1.0}
+{"pos": 183, "id": "oasis-Flowers 1", "label": 0.7937293729372934, "rewarded": false, "t_s": 5490.0, "v1": 0.11868741814401507, "score": 0.5481184146331484, "sure": 1.0}
+{"pos": 184, "id": "oasis-Sleepy pose 4", "label": 0.49346405228758167, "rewarded": false, "t_s": 5520.0, "v1": -0.11968854996670775, "score": 0.4378060960340516, "sure": 1.0}
+{"pos": 185, "id": "oasis-Sad face 8", "label": 0.27160493827160503, "rewarded": false, "t_s": 5550.0, "v1": -0.15758561690189787, "score": 0.4287974272566011, "sure": 1.0}
+{"pos": 186, "id": "oasis-Performance 1", "label": 0.7623762376237617, "rewarded": true, "t_s": 5580.0, "v1": 0.1049278444736883}
+{"pos": 187, "id": "oasis-Alcohol 3", "label": 0.5277777777777782, "rewarded": false, "t_s": 5610.0, "v1": 0.0923400484840613, "score": 0.5392720401604462, "sure": 1.0}
+{"pos": 188, "id": "oasis-Soldiers 5", "label": 0.6567656765676566, "rewarded": false, "t_s": 5640.0, "v1": -0.03233532461034727, "score": 0.5020106227226615, "sure": 0.5}
+{"pos": 189, "id": "oasis-Performance 2", "label": 0.6172839506172833, "rewarded": false, "t_s": 5670.0, "v1": -0.01891291681898799, "score": 0.4968422236007618, "sure": 0.625}
+{"pos": 190, "id": "oasis-Surprise 1", "label": 0.61437908496732, "rewarded": false, "t_s": 5700.0, "v1": -0.11672220770723118, "score": 0.45352694952070327, "sure": 1.0}
+{"pos": 191, "id": "oasis-Cockroach 4", "label": 0.2140522875817, "rewarded": false, "t_s": 5730.0, "v1": 0.07078013846363207, "score": 0.5432936880284085, "sure": 1.0}
+{"pos": 192, "id": "oasis-Soldiers 2", "label": 0.5016501650165016, "rewarded": false, "t_s": 5760.0, "v1": -0.14158251580744463, "score": 0.43848375282029356, "sure": 1.0}
+{"pos": 193, "id": "oasis-Nude man 17", "label": 0.4537953795379533, "rewarded": true, "t_s": 5790.0, "v1": -0.09335461103157416}
+{"pos": 194, "id": "oasis-Nude woman 12", "label": 0.7013201320132016, "rewarded": false, "t_s": 5820.0, "v1": -0.027692920436480528, "score": 0.5107047711893125, "sure": 0.875}
+{"pos": 195, "id": "oasis-Nude woman 1", "label": 0.6666666666666666, "rewarded": true, "t_s": 5850.0, "v1": -0.05715374182941546, "score": 0.46123517047857454, "sure": 1.0}
+{"pos": 196, "id": "oasis-Rollercoaster 2", "label": 0.72875816993464, "rewarded": true, "t_s": 5880.0, "v1": 0.04946772345460282}
+{"pos": 197, "id": "oasis-Dock 1", "label": 0.7607260726072601, "rewarded": true, "t_s": 5910.0, "v1": 0.13186894406136618}
+{"pos": 198, "id": "oasis-Children 1", "label": 0.7871287128712866, "rewarded": false, "t_s": 5940.0, "v1": 0.07375344500478953, "score": 0.5473509894291665, "sure": 1.0}
+{"pos": 199, "id": "oasis-Present 2", "label": 0.748366013071895, "rewarded": false, "t_s": 5970.0, "v1": 0.11860860715263077, "score": 0.5662365631742435, "sure": 1.0}
+{"pos": 200, "id": "oasis-Lake 11", "label": 0.7859477124183, "rewarded": false, "t_s": 6000.0, "v1": 0.15659255143179718, "score": 0.5693176050654284, "sure": 1.0}
+{"pos": 201, "id": "oasis-Garbage dump 8", "label": 0.17647058823529335, "rewarded": false, "t_s": 6030.0, "v1": 0.012090126028892478, "score": 0.5213096166800444, "sure": 0.875}
+{"pos": 202, "id": "oasis-Sunset 6", "label": 0.8024691358024684, "rewarded": true, "t_s": 6060.0, "v1": -0.008484167410171328}
+{"pos": 203, "id": "oasis-Fence 2", "label": 0.5363036303630366, "rewarded": false, "t_s": 6090.0, "v1": 0.0015846513516469818, "score": 0.4919702897033473, "sure": 0.75}
+{"pos": 204, "id": "oasis-Nude woman 19", "label": 0.651960784313725, "rewarded": false, "t_s": 6120.0, "v1": -0.02121957932777263, "score": 0.48354958228001826, "sure": 0.875}
+{"pos": 205, "id": "oasis-Paperclips 3", "label": 0.5081699346405233, "rewarded": false, "t_s": 6150.0, "v1": -0.05554854675697107, "score": 0.48828067463614294, "sure": 0.875}
+{"pos": 206, "id": "oasis-Soldiers 1", "label": 0.526234567901235, "rewarded": false, "t_s": 6180.0, "v1": -0.08629827348354635, "score": 0.4422786217730543, "sure": 1.0}
+{"pos": 207, "id": "oasis-Swingset 1", "label": 0.5522875816993467, "rewarded": true, "t_s": 6210.0, "v1": 0.07442847704746536}
+{"pos": 208, "id": "oasis-Shark 1", "label": 0.45987654320987664, "rewarded": false, "t_s": 6240.0, "v1": 0.08100406720566633, "score": 0.5585984733221275, "sure": 1.0}
+{"pos": 209, "id": "oasis-Lake 12", "label": 0.8960396039603967, "rewarded": false, "t_s": 6270.0, "v1": 0.17801234903442298, "score": 0.5770000795684486, "sure": 1.0}
+{"pos": 210, "id": "oasis-Destruction 4", "label": 0.14043209876543164, "rewarded": false, "t_s": 6300.0, "v1": -0.097875093201655, "score": 0.4567090865265639, "sure": 1.0}
+{"pos": 211, "id": "oasis-War 5", "label": 0.24257425742574332, "rewarded": false, "t_s": 6330.0, "v1": -0.15327295175765732, "score": 0.4277254711216971, "sure": 1.0}
+{"pos": 212, "id": "oasis-Jail 5", "label": 0.344771241830065, "rewarded": false, "t_s": 6360.0, "v1": -0.12104120567079324, "score": 0.4351978626054497, "sure": 1.0}
+{"pos": 213, "id": "oasis-Grass 6", "label": 0.6930693069306934, "rewarded": false, "t_s": 6390.0, "v1": 0.1002586020643842, "score": 0.524228019602269, "sure": 1.0}
+{"pos": 214, "id": "oasis-Moon 1", "label": 0.712418300653595, "rewarded": false, "t_s": 6420.0, "v1": -0.014670263259522254, "score": 0.48057185379986017, "sure": 1.0}
+{"pos": 215, "id": "oasis-Drink 2", "label": 0.56045751633987, "rewarded": false, "t_s": 6450.0, "v1": 0.035359692424022815, "score": 0.531793724018493, "sure": 1.0}
+{"pos": 216, "id": "oasis-Rooster 1", "label": 0.5539215686274517, "rewarded": false, "t_s": 6480.0, "v1": -0.04706081363256687, "score": 0.4583309765519036, "sure": 1.0}
+{"pos": 217, "id": "oasis-Gun 1", "label": 0.2887788778877884, "rewarded": true, "t_s": 6510.0, "v1": -0.04438348952418125}
+{"pos": 218, "id": "oasis-Lake 7", "label": 0.848765432098765, "rewarded": false, "t_s": 6540.0, "v1": 0.15130666699213857, "score": 0.5690948622017998, "sure": 1.0}
+{"pos": 219, "id": "oasis-Sailing 2", "label": 0.7173202614379083, "rewarded": false, "t_s": 6570.0, "v1": 0.06725824716963347, "score": 0.5406649707661684, "sure": 1.0}
+{"pos": 220, "id": "oasis-Dead bodies 2", "label": 0.04125412541254166, "rewarded": false, "t_s": 6600.0, "v1": -0.18106581403976796, "score": 0.43206090001586683, "sure": 1.0}
+{"pos": 221, "id": "oasis-Bloody knife 1", "label": 0.14052287581699333, "rewarded": false, "t_s": 6630.0, "v1": -0.10092427319190256, "score": 0.4473674200114657, "sure": 1.0}
+{"pos": 222, "id": "oasis-Soup 1", "label": 0.674917491749175, "rewarded": false, "t_s": 6660.0, "v1": 0.07050340856699644, "score": 0.5318593048504359, "sure": 1.0}
+{"pos": 223, "id": "oasis-Angry face 3", "label": 0.25, "rewarded": true, "t_s": 6690.0, "v1": -0.13822872455532653}
+{"pos": 224, "id": "oasis-Eating 1", "label": 0.78052805280528, "rewarded": false, "t_s": 6720.0, "v1": 0.07292501177301469, "score": 0.5473604356433606, "sure": 1.0}
+{"pos": 225, "id": "oasis-Dirt 5", "label": 0.42409240924092334, "rewarded": false, "t_s": 6750.0, "v1": -0.10547656093100144, "score": 0.4415363229906738, "sure": 1.0}
+{"pos": 226, "id": "oasis-Nude man 9", "label": 0.3996913580246917, "rewarded": false, "t_s": 6780.0, "v1": -0.15791022327358573, "score": 0.4271695321611809, "sure": 1.0}
+{"pos": 227, "id": "oasis-Police 5", "label": 0.23856209150326832, "rewarded": false, "t_s": 6810.0, "v1": -0.15745204007892355, "score": 0.4241006641212452, "sure": 1.0}
+{"pos": 228, "id": "oasis-Cat 14", "label": 0.7843137254901967, "rewarded": false, "t_s": 6840.0, "v1": -0.08337352748829041, "score": 0.46712110244008964, "sure": 1.0}
+{"pos": 229, "id": "oasis-Bear 2", "label": 0.569444444444445, "rewarded": false, "t_s": 6870.0, "v1": -0.16422858205269975, "score": 0.41950094061069704, "sure": 1.0}
+{"pos": 230, "id": "oasis-Wolf 1", "label": 0.7425742574257433, "rewarded": false, "t_s": 6900.0, "v1": -0.03315416767544754, "score": 0.4838282278686932, "sure": 0.875}
+{"pos": 231, "id": "oasis-Lightning 4", "label": 0.5767973856209151, "rewarded": false, "t_s": 6930.0, "v1": -0.15493571252882066, "score": 0.43628179324270056, "sure": 1.0}
+{"pos": 232, "id": "oasis-Nude man 22", "label": 0.633986928104575, "rewarded": true, "t_s": 6960.0, "v1": -0.14714409907974169}
+{"pos": 233, "id": "oasis-Building 1", "label": 0.6728395061728399, "rewarded": false, "t_s": 6990.0, "v1": 0.07047519592281826, "score": 0.5371000591248482, "sure": 1.0}
+{"pos": 234, "id": "oasis-Wedding 12", "label": 0.6496913580246916, "rewarded": false, "t_s": 7020.0, "v1": -0.01143223102315094, "score": 0.4763477578858285, "sure": 1.0}
+{"pos": 235, "id": "oasis-Thunderstorm 5", "label": 0.6254125412541249, "rewarded": false, "t_s": 7050.0, "v1": -0.08055904424023241, "score": 0.4778310825134303, "sure": 1.0}
+{"pos": 236, "id": "oasis-Hang gliding 1", "label": 0.6759259259259266, "rewarded": false, "t_s": 7080.0, "v1": 0.02477015557453499, "score": 0.5316137398594136, "sure": 1.0}
+{"pos": 237, "id": "oasis-Nude man 7", "label": 0.585808580858085, "rewarded": true, "t_s": 7110.0, "v1": -0.0725993851075134}
+{"pos": 238, "id": "oasis-Seal 1", "label": 0.6062091503267967, "rewarded": false, "t_s": 7140.0, "v1": 0.13580784645370614, "score": 0.5596255560915027, "sure": 1.0}
+{"pos": 239, "id": "oasis-Zebra 1", "label": 0.8009259259259266, "rewarded": true, "t_s": 7170.0, "v1": -0.07557054902112492}
+{"pos": 240, "id": "oasis-Picnic 3", "label": 0.59104938271605, "rewarded": false, "t_s": 7200.0, "v1": 0.060513688843457536, "score": 0.5346416876012411, "sure": 1.0}
+{"pos": 241, "id": "oasis-Bored pose 1", "label": 0.4264705882352933, "rewarded": false, "t_s": 7230.0, "v1": -0.005969410283455545, "score": 0.49020410548213433, "sure": 0.875}
+{"pos": 242, "id": "oasis-Car accident 2", "label": 0.16203703703703667, "rewarded": false, "t_s": 7260.0, "v1": -0.14328582347409768, "score": 0.429129559560469, "sure": 1.0}
+{"pos": 243, "id": "oasis-Camping 9", "label": 0.498366013071895, "rewarded": false, "t_s": 7290.0, "v1": -0.05120673757990901, "score": 0.47841751599891535, "sure": 0.875}
+{"pos": 244, "id": "oasis-Flowers 7", "label": 0.78052805280528, "rewarded": false, "t_s": 7320.0, "v1": 0.10827879193051693, "score": 0.556198145269607, "sure": 1.0}
+{"pos": 245, "id": "oasis-Scary face 1", "label": 0.12962962962962998, "rewarded": true, "t_s": 7350.0, "v1": -0.16552483184069644, "score": 0.43254486538054526, "sure": 1.0}
+{"pos": 246, "id": "oasis-Hang gliding 3", "label": 0.655228758169935, "rewarded": false, "t_s": 7380.0, "v1": -0.015130546631453967, "score": 0.5052881019199466, "sure": 0.875}
+{"pos": 247, "id": "oasis-Animal carcass 1", "label": 0.2870370370370367, "rewarded": false, "t_s": 7410.0, "v1": -0.04907263487830027, "score": 0.4885367395306738, "sure": 0.875}
+{"pos": 248, "id": "oasis-Alcohol 2", "label": 0.5416666666666666, "rewarded": false, "t_s": 7440.0, "v1": -0.21132249383423884, "score": 0.4069160725976148, "sure": 1.0}
+{"pos": 249, "id": "oasis-Snow 1", "label": 0.6045751633986933, "rewarded": true, "t_s": 7470.0, "v1": 0.043673837786627256}
+{"pos": 250, "id": "oasis-Timber 4", "label": 0.5506535947712417, "rewarded": false, "t_s": 7500.0, "v1": -0.0689313311565577, "score": 0.4638656644599317, "sure": 1.0}
+{"pos": 251, "id": "oasis-Tickling 1", "label": 0.7271241830065366, "rewarded": false, "t_s": 7530.0, "v1": -0.1149808538843885, "score": 0.4325623514661766, "sure": 1.0}
+{"pos": 252, "id": "oasis-Tornado 2", "label": 0.419934640522875, "rewarded": false, "t_s": 7560.0, "v1": 0.03437172532486221, "score": 0.5069054571660189, "sure": 0.875}
+{"pos": 253, "id": "oasis-Neutral face 1", "label": 0.49346405228758167, "rewarded": false, "t_s": 7590.0, "v1": -0.09126890765454454, "score": 0.46515112333561237, "sure": 1.0}
+{"pos": 254, "id": "oasis-Sad pose 5", "label": 0.3529411764705883, "rewarded": false, "t_s": 7620.0, "v1": -0.0255632055995213, "score": 0.4881868555165313, "sure": 0.75}
+{"pos": 255, "id": "oasis-Parachuting 1", "label": 0.6879084967320267, "rewarded": true, "t_s": 7650.0, "v1": -0.006685611558582827}
+{"pos": 256, "id": "oasis-Nude couple 8", "label": 0.7129629629629634, "rewarded": false, "t_s": 7680.0, "v1": -0.08476443119272048, "score": 0.4619816584428287, "sure": 1.0}
+{"pos": 257, "id": "oasis-Paper 3", "label": 0.53921568627451, "rewarded": false, "t_s": 7710.0, "v1": 0.005367571639299795, "score": 0.4981687049666764, "sure": 0.5}
+{"pos": 258, "id": "oasis-Dancing 4", "label": 0.7565359477124183, "rewarded": false, "t_s": 7740.0, "v1": 0.15540026063230628, "score": 0.5624325958126108, "sure": 1.0}
+{"pos": 259, "id": "oasis-Collaboration 1", "label": 0.7385620915032683, "rewarded": true, "t_s": 7770.0, "v1": 0.0714825168731732}
+{"pos": 260, "id": "oasis-Skydiving 5", "label": 0.6486928104575167, "rewarded": false, "t_s": 7800.0, "v1": 0.07877711744707006, "score": 0.5370396140197141, "sure": 1.0}
+{"pos": 261, "id": "oasis-Fireworks 4", "label": 0.8256172839506166, "rewarded": false, "t_s": 7830.0, "v1": -0.08450098306874565, "score": 0.45096773214411234, "sure": 1.0}
+{"pos": 262, "id": "oasis-Fence 4", "label": 0.31372549019607837, "rewarded": false, "t_s": 7860.0, "v1": -0.005569212572998583, "score": 0.48752594795857357, "sure": 0.875}
+{"pos": 263, "id": "oasis-Nude woman 9", "label": 0.7009803921568634, "rewarded": false, "t_s": 7890.0, "v1": -0.06357834956541775, "score": 0.4556759318410348, "sure": 1.0}
+{"pos": 264, "id": "oasis-Nude couple 12", "label": 0.6781045751633984, "rewarded": false, "t_s": 7920.0, "v1": -0.04362517543163602, "score": 0.48887075219940324, "sure": 1.0}
+{"pos": 265, "id": "oasis-School 3", "label": 0.6815181518151817, "rewarded": true, "t_s": 7950.0, "v1": 0.037281597415168566}
+{"pos": 266, "id": "oasis-Injury 2", "label": 0.18209876543209833, "rewarded": false, "t_s": 7980.0, "v1": -0.08750508292511372, "score": 0.44502584788368876, "sure": 1.0}
+{"pos": 267, "id": "oasis-Dead bodies 3", "label": 0.05392156862745168, "rewarded": false, "t_s": 8010.0, "v1": -0.14645364351196855, "score": 0.4380613399666414, "sure": 1.0}
+{"pos": 268, "id": "oasis-Heart 3", "label": 0.6241830065359483, "rewarded": false, "t_s": 8040.0, "v1": 0.03499378231150785, "score": 0.5085278121187312, "sure": 0.875}
+{"pos": 269, "id": "oasis-Grass 2", "label": 0.65686274509804, "rewarded": false, "t_s": 8070.0, "v1": 0.12647801140348192, "score": 0.5691792365347937, "sure": 1.0}
+{"pos": 270, "id": "oasis-Lake 9", "label": 0.901960784313725, "rewarded": false, "t_s": 8100.0, "v1": 0.07777964756845324, "score": 0.5321366358454811, "sure": 1.0}
+{"pos": 271, "id": "oasis-Sleepy pose 2", "label": 0.43954248366013, "rewarded": false, "t_s": 8130.0, "v1": -0.21446020519679654, "score": 0.3903521183915981, "sure": 1.0}
+{"pos": 272, "id": "oasis-Street 3", "label": 0.6764705882352934, "rewarded": false, "t_s": 8160.0, "v1": 0.06439105990343341, "score": 0.5198616027568653, "sure": 0.875}
+{"pos": 273, "id": "oasis-Depressed pose 1", "label": 0.2824074074074067, "rewarded": false, "t_s": 8190.0, "v1": -0.08726243876639062, "score": 0.46081405181200796, "sure": 1.0}
+{"pos": 274, "id": "oasis-Sad face 2", "label": 0.34158415841584167, "rewarded": true, "t_s": 8220.0, "v1": -0.08520296782859682, "score": 0.4489770625997106, "sure": 1.0}
+{"pos": 275, "id": "oasis-Dog 24", "label": 0.14869281045751667, "rewarded": false, "t_s": 8250.0, "v1": -0.18922355791231338, "score": 0.38963286938731473, "sure": 1.0}
+{"pos": 276, "id": "oasis-Stingray 1", "label": 0.5907590759075899, "rewarded": false, "t_s": 8280.0, "v1": -0.10059473684968157, "score": 0.441767250747593, "sure": 1.0}
+{"pos": 277, "id": "oasis-Neutral face 2", "label": 0.612654320987655, "rewarded": true, "t_s": 8310.0, "v1": -0.061589436304401834}
+{"pos": 278, "id": "oasis-Nude couple 10", "label": 0.75, "rewarded": true, "t_s": 8340.0, "v1": -0.14211461884414}
+{"pos": 279, "id": "oasis-Cat 3", "label": 0.8333333333333334, "rewarded": false, "t_s": 8370.0, "v1": -0.023281236808492922, "score": 0.47130470768622135, "sure": 1.0}
+{"pos": 280, "id": "oasis-Lightning 5", "label": 0.5686274509803916, "rewarded": false, "t_s": 8400.0, "v1": -0.031411100215389176, "score": 0.4853227663728932, "sure": 0.875}
+{"pos": 281, "id": "oasis-Destruction 10", "label": 0.18316831683168333, "rewarded": true, "t_s": 8430.0, "v1": -0.1210468724246494, "score": 0.44398334245459015, "sure": 1.0}
+{"pos": 282, "id": "oasis-Rollercoaster 1", "label": 0.7409240924092417, "rewarded": false, "t_s": 8460.0, "v1": 0.10523031013979989, "score": 0.5522507747982207, "sure": 1.0}
+{"pos": 283, "id": "oasis-Paperclips 2", "label": 0.59640522875817, "rewarded": false, "t_s": 8490.0, "v1": 0.004416457631214232, "score": 0.507618628807327, "sure": 0.625}
+{"pos": 284, "id": "oasis-Shot 2", "label": 0.44934640522875835, "rewarded": false, "t_s": 8520.0, "v1": -0.13124034302843746, "score": 0.42650185643193894, "sure": 1.0}
+{"pos": 285, "id": "oasis-Cemetery 3", "label": 0.32407407407407335, "rewarded": true, "t_s": 8550.0, "v1": -0.23267236336101693, "score": 0.3890563334585352, "sure": 1.0}
+{"pos": 286, "id": "oasis-Bear 3", "label": 0.7442244224422451, "rewarded": false, "t_s": 8580.0, "v1": -0.1267352648557234, "score": 0.43224714264886455, "sure": 1.0}
+{"pos": 287, "id": "oasis-Flowers 6", "label": 0.8240740740740734, "rewarded": false, "t_s": 8610.0, "v1": 0.116661005424474, "score": 0.5523813028446795, "sure": 1.0}
+{"pos": 288, "id": "oasis-Sun 1", "label": 0.5693069306930699, "rewarded": false, "t_s": 8640.0, "v1": -0.06582002936509779, "score": 0.47194413153650633, "sure": 1.0}
+{"pos": 289, "id": "oasis-Surgery 1", "label": 0.3186274509803917, "rewarded": true, "t_s": 8670.0, "v1": -0.22440224459150526}
+{"pos": 290, "id": "oasis-Dog 9", "label": 0.52124183006536, "rewarded": false, "t_s": 8700.0, "v1": -0.13043387522797067, "score": 0.4418720701683195, "sure": 1.0}
+{"pos": 291, "id": "oasis-Skyscraper 1", "label": 0.5216049382716049, "rewarded": false, "t_s": 8730.0, "v1": -0.1828979476208007, "score": 0.4081772879665727, "sure": 1.0}
+{"pos": 292, "id": "oasis-Dog 29", "label": 0.7271241830065366, "rewarded": false, "t_s": 8760.0, "v1": -0.10302254974029745, "score": 0.4703372379852827, "sure": 1.0}
+{"pos": 293, "id": "oasis-Pig 1", "label": 0.5898692810457516, "rewarded": false, "t_s": 8790.0, "v1": -0.14917822404733172, "score": 0.420046887562524, "sure": 1.0}
+{"pos": 294, "id": "oasis-Paper 2", "label": 0.514851485148515, "rewarded": false, "t_s": 8820.0, "v1": -0.03484610850005565, "score": 0.4800879899412107, "sure": 1.0}
+{"pos": 295, "id": "oasis-Cemetery 4", "label": 0.29901960784313664, "rewarded": true, "t_s": 8850.0, "v1": -0.26039004701319646, "score": 0.3742569999984792, "sure": 1.0}
+{"pos": 296, "id": "oasis-Snake 3", "label": 0.3186274509803917, "rewarded": false, "t_s": 8880.0, "v1": -0.08215114141999835, "score": 0.4607665322385082, "sure": 1.0}
+{"pos": 297, "id": "oasis-Chipmunk 3", "label": 0.7549019607843133, "rewarded": false, "t_s": 8910.0, "v1": 0.03380126787734461, "score": 0.5191817354893138, "sure": 0.875}
+{"pos": 298, "id": "oasis-Rock climbing 1", "label": 0.5898692810457516, "rewarded": false, "t_s": 8940.0, "v1": 0.0012575042251038449, "score": 0.4950998375269232, "sure": 0.625}
+{"pos": 299, "id": "oasis-Bed 1", "label": 0.5033003300330033, "rewarded": false, "t_s": 8970.0, "v1": -0.15583276720754347, "score": 0.42957507623692287, "sure": 1.0}
+{"pos": 300, "id": "oasis-Dog 12", "label": 0.8811881188118816, "rewarded": true, "t_s": 9000.0, "v1": -0.0808791315568933}
+{"pos": 301, "id": "oasis-Birthday 1", "label": 0.7973856209150334, "rewarded": false, "t_s": 9030.0, "v1": -0.11015469468144956, "score": 0.46472292824053407, "sure": 0.875}
+{"pos": 302, "id": "oasis-Keys 1", "label": 0.504950495049505, "rewarded": true, "t_s": 9060.0, "v1": 0.08121173774288948}
+{"pos": 303, "id": "oasis-Frustrated pose 5", "label": 0.24346405228758164, "rewarded": false, "t_s": 9090.0, "v1": -0.06362626454482001, "score": 0.4732680657816403, "sure": 1.0}
+{"pos": 304, "id": "oasis-Fireworks 6", "label": 0.8513071895424833, "rewarded": false, "t_s": 9120.0, "v1": 0.12769046130448003, "score": 0.5273487829942326, "sure": 1.0}
+{"pos": 305, "id": "oasis-Celebration 2", "label": 0.6486928104575167, "rewarded": false, "t_s": 9150.0, "v1": -0.07815003477308835, "score": 0.4563671283259192, "sure": 1.0}
+{"pos": 306, "id": "oasis-Cold 4", "label": 0.6781045751633984, "rewarded": false, "t_s": 9180.0, "v1": 0.11232412713393869, "score": 0.5550129350668674, "sure": 1.0}
+{"pos": 307, "id": "oasis-Lake 5", "label": 0.825082508250825, "rewarded": false, "t_s": 9210.0, "v1": 0.1257202921525712, "score": 0.5583459038241205, "sure": 1.0}
+{"pos": 308, "id": "oasis-Astronaut 2", "label": 0.68954248366013, "rewarded": false, "t_s": 9240.0, "v1": 0.04872075077938176, "score": 0.549902996768436, "sure": 1.0}
+{"pos": 309, "id": "oasis-Beach 5", "label": 0.7654320987654316, "rewarded": true, "t_s": 9270.0, "v1": -0.020042857711810025}
+{"pos": 310, "id": "oasis-Dog 19", "label": 0.8234323432343232, "rewarded": false, "t_s": 9300.0, "v1": -0.08514106460740178, "score": 0.47654430614374194, "sure": 0.875}
+{"pos": 311, "id": "oasis-Graveyard 1", "label": 0.36728395061728336, "rewarded": false, "t_s": 9330.0, "v1": -0.13529460668564486, "score": 0.45467948691286475, "sure": 1.0}
+{"pos": 312, "id": "oasis-Raccoon 1", "label": 0.43399339933993336, "rewarded": false, "t_s": 9360.0, "v1": -0.005509059325025878, "score": 0.48470375740534116, "sure": 1.0}
+{"pos": 313, "id": "oasis-Garbage dump 4", "label": 0.10648148148148166, "rewarded": false, "t_s": 9390.0, "v1": -0.04245334662708977, "score": 0.48154901903062763, "sure": 1.0}
+{"pos": 314, "id": "oasis-Statue 1", "label": 0.7222222222222218, "rewarded": false, "t_s": 9420.0, "v1": 0.13853561127986302, "score": 0.5415688823145507, "sure": 1.0}
+{"pos": 315, "id": "oasis-Excited face 7", "label": 0.6254125412541249, "rewarded": false, "t_s": 9450.0, "v1": 0.07943710663790482, "score": 0.5436109949923783, "sure": 1.0}
+{"pos": 316, "id": "oasis-Plane crash 4", "label": 0.174917491749175, "rewarded": false, "t_s": 9480.0, "v1": -0.0567102894049355, "score": 0.45053493130089317, "sure": 1.0}
+{"pos": 317, "id": "oasis-Garbage dump 3", "label": 0.16666666666666666, "rewarded": false, "t_s": 9510.0, "v1": -0.017967865399509453, "score": 0.482400568102152, "sure": 0.875}
+{"pos": 318, "id": "oasis-Yarn 4", "label": 0.53395061728395, "rewarded": false, "t_s": 9540.0, "v1": 0.08492451975613591, "score": 0.5507718773300678, "sure": 1.0}
+{"pos": 319, "id": "oasis-Lightning 3", "label": 0.598039215686275, "rewarded": true, "t_s": 9570.0, "v1": -0.05183673121550125}
+{"pos": 320, "id": "oasis-Destruction 5", "label": 0.19141914191419165, "rewarded": false, "t_s": 9600.0, "v1": -0.1432799834392634, "score": 0.4259039579085489, "sure": 1.0}
+{"pos": 321, "id": "oasis-Plane crash 1", "label": 0.266339869281045, "rewarded": false, "t_s": 9630.0, "v1": -0.028012314840689778, "score": 0.47315115004600666, "sure": 1.0}
+{"pos": 322, "id": "oasis-Path 1", "label": 0.63562091503268, "rewarded": false, "t_s": 9660.0, "v1": 0.049338342704706495, "score": 0.5144569613488417, "sure": 1.0}
+{"pos": 323, "id": "oasis-School 7", "label": 0.7745098039215684, "rewarded": false, "t_s": 9690.0, "v1": 0.06943342228336724, "score": 0.5447224135784922, "sure": 1.0}
+{"pos": 324, "id": "oasis-Explosion 2", "label": 0.22937293729373, "rewarded": false, "t_s": 9720.0, "v1": -0.07330758594057352, "score": 0.46342747017975233, "sure": 1.0}
+{"pos": 325, "id": "oasis-Wedding 8", "label": 0.77124183006536, "rewarded": true, "t_s": 9750.0, "v1": 0.09792536683337416}
+{"pos": 326, "id": "oasis-Plane crash 2", "label": 0.30228758169934666, "rewarded": false, "t_s": 9780.0, "v1": -0.0600767220162467, "score": 0.49221863587942527, "sure": 0.75}
+{"pos": 327, "id": "oasis-Jail 1", "label": 0.2042483660130717, "rewarded": false, "t_s": 9810.0, "v1": -0.1768012756802705, "score": 0.4233679196881685, "sure": 1.0}
+{"pos": 328, "id": "oasis-Waterfall 1", "label": 0.7385620915032683, "rewarded": false, "t_s": 9840.0, "v1": -0.03039801872141079, "score": 0.4772308737514324, "sure": 1.0}
+{"pos": 329, "id": "oasis-Gorrila 1", "label": 0.48456790123456833, "rewarded": false, "t_s": 9870.0, "v1": -0.09727774455330829, "score": 0.44563634047350187, "sure": 1.0}
+{"pos": 330, "id": "oasis-Snow 2", "label": 0.5915032679738567, "rewarded": false, "t_s": 9900.0, "v1": 0.017185772329284865, "score": 0.49920438549568097, "sure": 0.375}
+{"pos": 331, "id": "oasis-Thunderstorm 9", "label": 0.6013071895424833, "rewarded": false, "t_s": 9930.0, "v1": -0.04387285039858402, "score": 0.48285716771997667, "sure": 1.0}
+{"pos": 332, "id": "oasis-Cat 1", "label": 0.7369281045751633, "rewarded": false, "t_s": 9960.0, "v1": -0.09018531402942986, "score": 0.45406101340010435, "sure": 1.0}
+{"pos": 333, "id": "oasis-Nude man 21", "label": 0.42483660130719003, "rewarded": false, "t_s": 9990.0, "v1": -0.11861171172445495, "score": 0.4437677523337358, "sure": 1.0}
+{"pos": 334, "id": "oasis-Jail 4", "label": 0.18518518518518498, "rewarded": true, "t_s": 10020.0, "v1": -0.1256630742210253}
+{"pos": 335, "id": "oasis-Yoga 2", "label": 0.348765432098765, "rewarded": true, "t_s": 10050.0, "v1": -0.05211451786589605, "score": 0.4811655279467673, "sure": 1.0}
+{"pos": 336, "id": "oasis-Baby 9", "label": 0.8088235294117649, "rewarded": false, "t_s": 10080.0, "v1": -0.04623800652150001, "score": 0.4836736804616788, "sure": 0.875}
+{"pos": 337, "id": "oasis-Shark 4", "label": 0.3465346534653467, "rewarded": true, "t_s": 10110.0, "v1": -0.05666137893571366}
+{"pos": 338, "id": "oasis-Dog 5", "label": 0.8234323432343232, "rewarded": true, "t_s": 10140.0, "v1": -0.07002532174623721}
+{"pos": 339, "id": "oasis-Jail 2", "label": 0.16996699669966997, "rewarded": false, "t_s": 10170.0, "v1": -0.1549470408009983, "score": 0.4157696287901328, "sure": 1.0}
+{"pos": 340, "id": "oasis-Explosion 1", "label": 0.2745098039215683, "rewarded": false, "t_s": 10200.0, "v1": -0.13472218003984304, "score": 0.4282450873763127, "sure": 1.0}
+{"pos": 341, "id": "oasis-Tornado 4", "label": 0.28267973856209166, "rewarded": true, "t_s": 10230.0, "v1": -0.10676235569941073}
+{"pos": 342, "id": "oasis-Paper 1", "label": 0.5264026402640267, "rewarded": false, "t_s": 10260.0, "v1": 0.03899831813660082, "score": 0.5286762126509776, "sure": 1.0}
+{"pos": 343, "id": "oasis-Bird 4", "label": 0.7581699346405233, "rewarded": false, "t_s": 10290.0, "v1": -0.08000745346558413, "score": 0.4681521079481845, "sure": 1.0}
+{"pos": 344, "id": "oasis-Nude man 23", "label": 0.4967320261437917, "rewarded": false, "t_s": 10320.0, "v1": 0.016068520532286357, "score": 0.48954465444842066, "sure": 0.75}
+{"pos": 345, "id": "oasis-Cat 7", "label": 0.387254901960785, "rewarded": false, "t_s": 10350.0, "v1": -0.07157869129817729, "score": 0.4643228114747423, "sure": 1.0}
+{"pos": 346, "id": "oasis-Knife 1", "label": 0.3741830065359483, "rewarded": false, "t_s": 10380.0, "v1": -0.0047477692540296434, "score": 0.5044961752613017, "sure": 0.5}
+{"pos": 347, "id": "oasis-Lion 2", "label": 0.44281045751634, "rewarded": false, "t_s": 10410.0, "v1": -0.16096425058922137, "score": 0.40551524900734764, "sure": 1.0}
+{"pos": 348, "id": "oasis-Cat 13", "label": 0.7425742574257433, "rewarded": false, "t_s": 10440.0, "v1": -0.14503202215354494, "score": 0.44915137558185403, "sure": 1.0}
+{"pos": 349, "id": "oasis-Cold 2", "label": 0.6221122112211216, "rewarded": false, "t_s": 10470.0, "v1": 0.06470538589030961, "score": 0.5367132052618471, "sure": 1.0}
+{"pos": 350, "id": "oasis-Rugby 2", "label": 0.7254901960784316, "rewarded": false, "t_s": 10500.0, "v1": 0.07788557954521291, "score": 0.5206096593965744, "sure": 1.0}
+{"pos": 351, "id": "oasis-Mother 8", "label": 0.8218954248366016, "rewarded": true, "t_s": 10530.0, "v1": 0.061686998533975634, "score": 0.5334341702735971, "sure": 1.0}
+{"pos": 352, "id": "oasis-Frustrated pose 3", "label": 0.2253086419753083, "rewarded": true, "t_s": 10560.0, "v1": -0.0896102218461261}
+{"pos": 353, "id": "oasis-Railroad 1", "label": 0.5441176470588234, "rewarded": true, "t_s": 10590.0, "v1": -0.014039607843881474, "score": 0.48323041929159066, "sure": 1.0}
+{"pos": 354, "id": "oasis-Thunderstorm 3", "label": 0.4933993399339933, "rewarded": false, "t_s": 10620.0, "v1": -0.165957765117564, "score": 0.4246323497377789, "sure": 1.0}
+{"pos": 355, "id": "oasis-Cardboard 1", "label": 0.5030864197530867, "rewarded": true, "t_s": 10650.0, "v1": -0.00843248748331804}
+{"pos": 356, "id": "oasis-Wedding ring 1", "label": 0.7924836601307184, "rewarded": false, "t_s": 10680.0, "v1": 0.1191428022451223, "score": 0.5518282171119775, "sure": 1.0}
+{"pos": 357, "id": "oasis-Bark 1", "label": 0.5061728395061733, "rewarded": false, "t_s": 10710.0, "v1": -0.11680083875447989, "score": 0.4529270569489148, "sure": 1.0}
+{"pos": 358, "id": "oasis-Dog 3", "label": 0.790849673202615, "rewarded": false, "t_s": 10740.0, "v1": 0.004613076811539996, "score": 0.4975892396302235, "sure": 0.5}
+{"pos": 359, "id": "oasis-Guitar 1", "label": 0.7546296296296301, "rewarded": false, "t_s": 10770.0, "v1": 0.06951111708036706, "score": 0.5434333941759961, "sure": 1.0}
+{"pos": 360, "id": "oasis-Cheerleader 1", "label": 0.7156862745098033, "rewarded": false, "t_s": 10800.0, "v1": -0.1182439138988457, "score": 0.4484218428355228, "sure": 1.0}
+{"pos": 361, "id": "oasis-Gun 8", "label": 0.3465346534653467, "rewarded": false, "t_s": 10830.0, "v1": 0.017207270449519307, "score": 0.5345285495433452, "sure": 1.0}
+{"pos": 362, "id": "oasis-Dog attack 1", "label": 0.3086419753086416, "rewarded": false, "t_s": 10860.0, "v1": -0.05977310749629061, "score": 0.46586019694111647, "sure": 1.0}
+{"pos": 363, "id": "oasis-Bored face 1", "label": 0.4413580246913584, "rewarded": false, "t_s": 10890.0, "v1": -0.18019490752562495, "score": 0.4179621167811725, "sure": 1.0}
+{"pos": 364, "id": "oasis-Feces 1", "label": 0.18954248366012996, "rewarded": true, "t_s": 10920.0, "v1": -0.139753494082831}
+{"pos": 365, "id": "oasis-Tornado 3", "label": 0.27722772277227664, "rewarded": false, "t_s": 10950.0, "v1": -0.16244456892845516, "score": 0.4256866263619721, "sure": 1.0}
+{"pos": 366, "id": "oasis-Destruction 1", "label": 0.362745098039215, "rewarded": true, "t_s": 10980.0, "v1": -0.1054896992425628, "score": 0.43720580262701375, "sure": 1.0}
+{"pos": 367, "id": "oasis-Pigeon 4", "label": 0.6864686468646867, "rewarded": false, "t_s": 11010.0, "v1": -0.10467020532563254}
+{"pos": 368, "id": "oasis-Cardboard 2", "label": 0.5015432098765434, "rewarded": false, "t_s": 11040.0, "v1": 0.04887956817888439}
+{"pos": 369, "id": "oasis-Miserable pose 5", "label": 0.32516339869280997, "rewarded": false, "t_s": 11070.0, "v1": -0.08384845823543419}
+{"pos": 370, "id": "oasis-Bottle 1", "label": 0.5294117647058817, "rewarded": false, "t_s": 11100.0, "v1": -0.038274501078649714}
+{"pos": 371, "id": "oasis-Grass 1", "label": 0.6604938271604933, "rewarded": false, "t_s": 11130.0, "v1": -0.06405378699000353}
+{"pos": 372, "id": "oasis-Camping 10", "label": 0.65686274509804, "rewarded": false, "t_s": 11160.0, "v1": -0.06437120916709815}
+{"pos": 373, "id": "oasis-Parachuting 4", "label": 0.633986928104575, "rewarded": false, "t_s": 11190.0, "v1": -0.15726280971837803}
+{"pos": 374, "id": "oasis-Shark 5", "label": 0.4330065359477117, "rewarded": false, "t_s": 11220.0, "v1": -0.1261314143508213}
+{"pos": 375, "id": "oasis-Sunset 4", "label": 0.8513071895424833, "rewarded": false, "t_s": 11250.0, "v1": -0.12272143349000819}
+{"pos": 376, "id": "oasis-House 1", "label": 0.61764705882353, "rewarded": false, "t_s": 11280.0, "v1": 0.04576837396166922}
+{"pos": 377, "id": "oasis-Nude man 19", "label": 0.6280864197530867, "rewarded": false, "t_s": 11310.0, "v1": -0.11955809544946439}
+{"pos": 378, "id": "oasis-Band 1", "label": 0.6452145214521451, "rewarded": false, "t_s": 11340.0, "v1": -0.187821598790756}
+{"pos": 379, "id": "oasis-Cardboard 3", "label": 0.45751633986928164, "rewarded": false, "t_s": 11370.0, "v1": -0.10802863055515977}
+{"pos": 380, "id": "oasis-Gazing 5", "label": 0.74074074074074, "rewarded": true, "t_s": 11400.0, "v1": -0.17602733061676434}
+{"pos": 381, "id": "oasis-Dessert 7", "label": 0.7422839506172833, "rewarded": true, "t_s": 11430.0, "v1": 0.007903291195915929}
+{"pos": 382, "id": "oasis-Excited face 3", "label": 0.7932098765432101, "rewarded": false, "t_s": 11460.0, "v1": 0.09838740868571072}
+{"pos": 383, "id": "oasis-Dog 7", "label": 0.7761437908496734, "rewarded": true, "t_s": 11490.0, "v1": -0.07705190751249635}
+{"pos": 384, "id": "oasis-Skier 1", "label": 0.7453703703703699, "rewarded": false, "t_s": 11520.0, "v1": -0.012837022124513542}
+{"pos": 385, "id": "oasis-Cliff diver 1", "label": 0.6388888888888884, "rewarded": true, "t_s": 11550.0, "v1": -0.07647823400386933}
+{"pos": 386, "id": "oasis-Pumpkin 1", "label": 0.6421568627450983, "rewarded": false, "t_s": 11580.0, "v1": 0.09301934392490041}
+{"pos": 387, "id": "oasis-Rock climbing 4", "label": 0.5401234567901233, "rewarded": true, "t_s": 11610.0, "v1": -0.01859235828271133, "score": 0.4979473241658988, "sure": 0.625}
+{"pos": 388, "id": "oasis-Dog 31", "label": 0.180555555555555, "rewarded": false, "t_s": 11640.0, "v1": -0.11615050568997587}
+{"pos": 389, "id": "oasis-Soldiers 7", "label": 0.26897689768976835, "rewarded": true, "t_s": 11670.0, "v1": -0.044192890459160306}
+{"pos": 390, "id": "oasis-Cat 5", "label": 0.8692810457516332, "rewarded": false, "t_s": 11700.0, "v1": -0.11327433925902741}
+{"pos": 391, "id": "oasis-Birthday 2", "label": 0.7211221122112216, "rewarded": true, "t_s": 11730.0, "v1": -0.12363085538518481}
+{"pos": 392, "id": "oasis-Cemetery 5", "label": 0.251633986928105, "rewarded": false, "t_s": 11760.0, "v1": -0.19257996732501903}
+{"pos": 393, "id": "oasis-Couple 9", "label": 0.8024691358024684, "rewarded": false, "t_s": 11790.0, "v1": 0.11166606786499944}
+{"pos": 394, "id": "oasis-Dessert 1", "label": 0.7222222222222218, "rewarded": false, "t_s": 11820.0, "v1": 0.11324753081012795}
+{"pos": 395, "id": "oasis-Galaxy 2", "label": 0.795379537953795, "rewarded": false, "t_s": 11850.0, "v1": -0.009123366184606962}
+{"pos": 396, "id": "oasis-Galaxy 5", "label": 0.7689768976897683, "rewarded": false, "t_s": 11880.0, "v1": 0.044028534826285104}
+{"pos": 397, "id": "oasis-Ferret 1", "label": 0.30065359477124165, "rewarded": false, "t_s": 11910.0, "v1": -0.07931045911605172}
+{"pos": 398, "id": "oasis-Couple 5", "label": 0.6651234567901233, "rewarded": false, "t_s": 11940.0, "v1": -0.04465356424207301}
+{"pos": 399, "id": "oasis-Siblings 1", "label": 0.8672839506172833, "rewarded": false, "t_s": 11970.0, "v1": 0.09706831187788612}
+{"pos": 400, "id": "oasis-Rocks 4", "label": 0.5866013071895417, "rewarded": true, "t_s": 12000.0, "v1": -0.13053953175555477}
+{"pos": 401, "id": "oasis-Surprise 2", "label": 0.7156862745098033, "rewarded": false, "t_s": 12030.0, "v1": 0.12089735228088905}
+{"pos": 402, "id": "oasis-Ambulance 1", "label": 0.22222222222222165, "rewarded": true, "t_s": 12060.0, "v1": -0.006516487702573404}
+{"pos": 403, "id": "oasis-Nature 2", "label": 0.7777777777777782, "rewarded": false, "t_s": 12090.0, "v1": -0.06527840201073631}
+{"pos": 404, "id": "oasis-Flowers 8", "label": 0.8186274509803916, "rewarded": false, "t_s": 12120.0, "v1": 0.10446108271817134}
+{"pos": 405, "id": "oasis-Nude woman 8", "label": 0.72875816993464, "rewarded": false, "t_s": 12150.0, "v1": -0.03076322974629364}
+{"pos": 406, "id": "oasis-Angry face 4", "label": 0.248366013071895, "rewarded": false, "t_s": 12180.0, "v1": -0.1568670869815555}
+{"pos": 407, "id": "oasis-Thunderstorm 11", "label": 0.49074074074074003, "rewarded": false, "t_s": 12210.0, "v1": -0.07719965714370813}
+{"pos": 408, "id": "oasis-Prison 1", "label": 0.5049019607843133, "rewarded": true, "t_s": 12240.0, "v1": -0.1491767857258448}
+{"pos": 409, "id": "oasis-Dancing 7", "label": 0.8117283950617283, "rewarded": false, "t_s": 12270.0, "v1": 0.04659258179826509}
+{"pos": 410, "id": "oasis-Nature 1", "label": 0.8531353135313533, "rewarded": false, "t_s": 12300.0, "v1": 0.09269687479185085}
+{"pos": 411, "id": "oasis-Sailing 3", "label": 0.7418300653594767, "rewarded": false, "t_s": 12330.0, "v1": 0.04237768289448307}
+{"pos": 412, "id": "oasis-Storage 3", "label": 0.45098039215686336, "rewarded": false, "t_s": 12360.0, "v1": -0.11641956946769594}
+{"pos": 413, "id": "oasis-Swimming 1", "label": 0.6765676567656768, "rewarded": false, "t_s": 12390.0, "v1": -0.07338411793913191}
+{"pos": 414, "id": "oasis-Yoga 5", "label": 0.4084967320261433, "rewarded": true, "t_s": 12420.0, "v1": 0.06272808036737632}
+{"pos": 415, "id": "oasis-Yarn 1", "label": 0.266339869281045, "rewarded": false, "t_s": 12450.0, "v1": 0.023280416520204406}
+{"pos": 416, "id": "oasis-Lightning 2", "label": 0.5429042904290434, "rewarded": true, "t_s": 12480.0, "v1": -0.0842464399365409}
+{"pos": 417, "id": "oasis-Nude woman 13", "label": 0.71604938271605, "rewarded": false, "t_s": 12510.0, "v1": -0.1017720260612136}
+{"pos": 418, "id": "oasis-Office supplies 2", "label": 0.514851485148515, "rewarded": false, "t_s": 12540.0, "v1": -0.011984222314307624}
+{"pos": 419, "id": "oasis-Thunderstorm 1", "label": 0.36111111111111166, "rewarded": false, "t_s": 12570.0, "v1": -0.13977472234869326}
+{"pos": 420, "id": "oasis-Pinecone 4", "label": 0.5915032679738567, "rewarded": false, "t_s": 12600.0, "v1": -0.03588846450275729}
+{"pos": 421, "id": "oasis-Excited face 5", "label": 0.775577557755775, "rewarded": false, "t_s": 12630.0, "v1": 0.03980566253310802}
+{"pos": 422, "id": "oasis-Nude man 20", "label": 0.41358024691358003, "rewarded": false, "t_s": 12660.0, "v1": -0.1546272277884302}
+{"pos": 423, "id": "oasis-Sunset 2", "label": 0.8349673202614384, "rewarded": false, "t_s": 12690.0, "v1": -0.0481192911363153}
+{"pos": 424, "id": "oasis-Skydiving 1", "label": 0.7052469135802467, "rewarded": false, "t_s": 12720.0, "v1": -0.04873302288147319}
+{"pos": 425, "id": "oasis-Office supplies 4", "label": 0.5462046204620467, "rewarded": false, "t_s": 12750.0, "v1": 0.04591787966449046}
+{"pos": 426, "id": "oasis-Wedding 9", "label": 0.7941176470588234, "rewarded": false, "t_s": 12780.0, "v1": 0.07054737860157456}
+{"pos": 427, "id": "oasis-Soccer 1", "label": 0.56045751633987, "rewarded": false, "t_s": 12810.0, "v1": -0.04281427642812219}
+{"pos": 428, "id": "oasis-Surgery 4", "label": 0.414191419141915, "rewarded": false, "t_s": 12840.0, "v1": -0.1131189198113377}
+{"pos": 429, "id": "oasis-Sad face 4", "label": 0.4117647058823533, "rewarded": false, "t_s": 12870.0, "v1": -0.03780454851274018}
+{"pos": 430, "id": "oasis-Soldiers 8", "label": 0.2515432098765433, "rewarded": true, "t_s": 12900.0, "v1": -0.08950948873132025, "score": 0.4333522454954686, "sure": 1.0}
+{"pos": 431, "id": "oasis-KKK rally 2", "label": 0.042483660130718325, "rewarded": false, "t_s": 12930.0, "v1": -0.19986235848559852}
+{"pos": 432, "id": "oasis-Keyboard 1", "label": 0.5277777777777782, "rewarded": false, "t_s": 12960.0, "v1": -0.10166545598577159}
+{"pos": 433, "id": "oasis-Miserable pose 1", "label": 0.2598039215686267, "rewarded": false, "t_s": 12990.0, "v1": -0.12589391356004975}
+{"pos": 434, "id": "oasis-Gun 10", "label": 0.27392739273927336, "rewarded": false, "t_s": 13020.0, "v1": -0.18343178741716648}
+{"pos": 435, "id": "oasis-Nude woman 20", "label": 0.6486928104575167, "rewarded": false, "t_s": 13050.0, "v1": -0.19480880432909287}
+{"pos": 436, "id": "oasis-Mother 1", "label": 0.8513071895424833, "rewarded": false, "t_s": 13080.0, "v1": -0.04101959349662798}
+{"pos": 437, "id": "oasis-Garbage dump 2", "label": 0.10030864197530835, "rewarded": false, "t_s": 13110.0, "v1": -0.0858812124143935}
+{"pos": 438, "id": "oasis-Galaxy 8", "label": 0.7532679738562084, "rewarded": false, "t_s": 13140.0, "v1": -0.12931021754890315}
+{"pos": 439, "id": "oasis-Car crash 2", "label": 0.16501650165016502, "rewarded": false, "t_s": 13170.0, "v1": -0.1705455825573441}
+{"pos": 440, "id": "oasis-Bored pose 4", "label": 0.3545751633986933, "rewarded": true, "t_s": 13200.0, "v1": -0.15385298207010778}
+{"pos": 441, "id": "oasis-Happy face 1", "label": 0.7453703703703699, "rewarded": false, "t_s": 13230.0, "v1": 0.010146528734075289}
+{"pos": 442, "id": "oasis-Mother 5", "label": 0.8225308641975316, "rewarded": false, "t_s": 13260.0, "v1": -0.1258123920802744}
+{"pos": 443, "id": "oasis-Bark 3", "label": 0.6045751633986933, "rewarded": true, "t_s": 13290.0, "v1": -0.12598675469907283}
+{"pos": 444, "id": "oasis-Pigeon 3", "label": 0.6045751633986933, "rewarded": false, "t_s": 13320.0, "v1": -0.04013995178549212}
+{"pos": 445, "id": "oasis-Excited face 1", "label": 0.7623762376237617, "rewarded": false, "t_s": 13350.0, "v1": -0.018544251244288823}
+{"pos": 446, "id": "oasis-Meerkat 1", "label": 0.65895061728395, "rewarded": false, "t_s": 13380.0, "v1": 0.019973645545884322}
+{"pos": 447, "id": "oasis-Sleepy pose 1", "label": 0.2647058823529416, "rewarded": false, "t_s": 13410.0, "v1": 0.005183711038853955}
+{"pos": 448, "id": "oasis-Nude couple 4", "label": 0.7271241830065366, "rewarded": false, "t_s": 13440.0, "v1": -0.15072927773260691}
+{"pos": 449, "id": "oasis-Scared face 5", "label": 0.3382838283828384, "rewarded": false, "t_s": 13470.0, "v1": -0.13763375045106552}
+{"pos": 450, "id": "oasis-Wedding 4", "label": 0.8024691358024684, "rewarded": false, "t_s": 13500.0, "v1": 0.002714036291247668}
+{"pos": 451, "id": "oasis-Keyboard 3", "label": 0.555555555555555, "rewarded": false, "t_s": 13530.0, "v1": -0.07105501584558638}
+{"pos": 452, "id": "oasis-Barbeque 1", "label": 0.6192810457516332, "rewarded": false, "t_s": 13560.0, "v1": 0.06058648884551743}
+{"pos": 453, "id": "oasis-Timber 2", "label": 0.555555555555555, "rewarded": false, "t_s": 13590.0, "v1": -0.09519684661471906}
+{"pos": 454, "id": "oasis-Goat 1", "label": 0.7222222222222218, "rewarded": false, "t_s": 13620.0, "v1": -0.05347705487582499}
+{"pos": 455, "id": "oasis-Destruction 8", "label": 0.2058823529411767, "rewarded": true, "t_s": 13650.0, "v1": -0.12712893223785093}
+{"pos": 456, "id": "oasis-BDSM 1", "label": 0.555555555555555, "rewarded": true, "t_s": 13680.0, "v1": -0.1268556603176797}
+{"pos": 457, "id": "oasis-Yoga 1", "label": 0.7608024691358017, "rewarded": false, "t_s": 13710.0, "v1": 0.03266883914501573}
+{"pos": 458, "id": "oasis-Grass 4", "label": 0.7042483660130716, "rewarded": false, "t_s": 13740.0, "v1": -0.143210736343777}
+{"pos": 459, "id": "oasis-Excited face 6", "label": 0.78858024691358, "rewarded": false, "t_s": 13770.0, "v1": 0.03519888883756628}
+{"pos": 460, "id": "oasis-Cold 5", "label": 0.7484567901234566, "rewarded": false, "t_s": 13800.0, "v1": -0.07355757648712835}
+{"pos": 461, "id": "oasis-Cups 3", "label": 0.6209150326797382, "rewarded": false, "t_s": 13830.0, "v1": 0.03518056157816618}
+{"pos": 462, "id": "oasis-Rocks 1", "label": 0.612745098039215, "rewarded": true, "t_s": 13860.0, "v1": -0.10842888238276616}
+{"pos": 463, "id": "oasis-Rafting 3", "label": 0.6830065359477117, "rewarded": false, "t_s": 13890.0, "v1": -0.005784661014670123}
+{"pos": 464, "id": "oasis-Dancing 9", "label": 0.7640264026402633, "rewarded": true, "t_s": 13920.0, "v1": 0.014290129461166035, "score": 0.5053924327739576, "sure": 0.625}
+{"pos": 465, "id": "oasis-Rafting 4", "label": 0.7638888888888884, "rewarded": false, "t_s": 13950.0, "v1": 0.05494774117448609}
+{"pos": 466, "id": "oasis-Snake 1", "label": 0.3333333333333333, "rewarded": true, "t_s": 13980.0, "v1": -0.08910847285605661}
+{"pos": 467, "id": "oasis-Toast 1", "label": 0.6336633663366333, "rewarded": false, "t_s": 14010.0, "v1": 6.275076268580371e-05}
+{"pos": 468, "id": "oasis-Baby 3", "label": 0.8069306930693066, "rewarded": false, "t_s": 14040.0, "v1": -0.09412329327012225}
+{"pos": 469, "id": "oasis-Traffic 1", "label": 0.6039603960396033, "rewarded": false, "t_s": 14070.0, "v1": -0.06493618863311679}
+{"pos": 470, "id": "oasis-Bar 3", "label": 0.5816993464052284, "rewarded": false, "t_s": 14100.0, "v1": -0.13323126768797933}
+{"pos": 471, "id": "oasis-Dessert 2", "label": 0.78921568627451, "rewarded": false, "t_s": 14130.0, "v1": -0.04409738078302783}
+{"pos": 472, "id": "oasis-Stingray 3", "label": 0.5891089108910883, "rewarded": false, "t_s": 14160.0, "v1": -0.124567017132872}
+{"pos": 473, "id": "oasis-Bird 1", "label": 0.8179012345679016, "rewarded": false, "t_s": 14190.0, "v1": -0.023514435769977915}
+{"pos": 474, "id": "oasis-Excited face 4", "label": 0.5412541254125417, "rewarded": false, "t_s": 14220.0, "v1": -0.16655187683620376}
+{"pos": 475, "id": "oasis-Archery 1", "label": 0.5490196078431366, "rewarded": false, "t_s": 14250.0, "v1": -0.0710896344822346}
+{"pos": 476, "id": "oasis-Fire hydrant 3", "label": 0.540849673202615, "rewarded": false, "t_s": 14280.0, "v1": -0.0304181933143558}
+{"pos": 477, "id": "oasis-Fire 6", "label": 0.20462046204620501, "rewarded": false, "t_s": 14310.0, "v1": -0.13892170557665529}
+{"pos": 478, "id": "oasis-Nude man 11", "label": 0.362745098039215, "rewarded": true, "t_s": 14340.0, "v1": -0.11307983173432068}
+{"pos": 479, "id": "oasis-Power lines 1", "label": 0.4950980392156867, "rewarded": false, "t_s": 14370.0, "v1": 0.023031884624173493}
+{"pos": 480, "id": "oasis-Thunderstorm 10", "label": 0.5610561056105617, "rewarded": true, "t_s": 14400.0, "v1": -0.13055335971956405, "score": 0.4478280414412831, "sure": 1.0}
+{"pos": 481, "id": "oasis-Graveyard 4", "label": 0.3688271604938267, "rewarded": false, "t_s": 14430.0, "v1": -0.1207992321791922, "score": 0.44102250127346976, "sure": 1.0}
+{"pos": 482, "id": "oasis-Dog 4", "label": 0.8672839506172833, "rewarded": false, "t_s": 14460.0, "v1": 0.049495735330359225, "score": 0.5197870211724925, "sure": 1.0}
+{"pos": 483, "id": "oasis-Bridge 1", "label": 0.815181518151815, "rewarded": false, "t_s": 14490.0, "v1": 0.016324017221329368, "score": 0.5103325896616762, "sure": 0.75}
+{"pos": 484, "id": "oasis-Motocross 1", "label": 0.6296296296296301, "rewarded": false, "t_s": 14520.0, "v1": -0.08491737459671189, "score": 0.46391885931179777, "sure": 1.0}
+{"pos": 485, "id": "oasis-Food 1", "label": 0.6405228758169933, "rewarded": true, "t_s": 14550.0, "v1": 0.034291855546662364}
+{"pos": 486, "id": "oasis-Paperclips 4", "label": 0.5115511551155117, "rewarded": false, "t_s": 14580.0, "v1": -0.058068651417826134, "score": 0.468806245159782, "sure": 1.0}
+{"pos": 487, "id": "oasis-Nude couple 9", "label": 0.694444444444445, "rewarded": false, "t_s": 14610.0, "v1": -0.044929868510705906, "score": 0.48214244264286266, "sure": 0.875}
+{"pos": 488, "id": "oasis-Nude man 3", "label": 0.5506535947712417, "rewarded": true, "t_s": 14640.0, "v1": -0.030942194765309017}
+{"pos": 489, "id": "oasis-Smiling face 1", "label": 0.7731481481481484, "rewarded": true, "t_s": 14670.0, "v1": -0.036829654511205456}
+{"pos": 490, "id": "oasis-Sad face 7", "label": 0.3564356435643567, "rewarded": false, "t_s": 14700.0, "v1": 0.03356778283382311, "score": 0.5264404071760078, "sure": 1.0}
+{"pos": 491, "id": "oasis-Sunset 3", "label": 0.8533950617283951, "rewarded": false, "t_s": 14730.0, "v1": 0.06611618302483069, "score": 0.5258289758762605, "sure": 1.0}
+{"pos": 492, "id": "oasis-Dog 10", "label": 0.7745098039215684, "rewarded": false, "t_s": 14760.0, "v1": -0.06232567614013462, "score": 0.48443058828282853, "sure": 0.875}
+{"pos": 493, "id": "oasis-Dog attack 3", "label": 0.2745098039215683, "rewarded": false, "t_s": 14790.0, "v1": -0.04331551778050391, "score": 0.4756155031736885, "sure": 1.0}
+{"pos": 494, "id": "oasis-Happy pose 3", "label": 0.79042904290429, "rewarded": false, "t_s": 14820.0, "v1": 0.07270618581331312, "score": 0.5345572232663, "sure": 1.0}
+{"pos": 495, "id": "oasis-Nude couple 14", "label": 0.6402640264026399, "rewarded": false, "t_s": 14850.0, "v1": -0.07332119843032503, "score": 0.4658282877962729, "sure": 1.0}
+{"pos": 496, "id": "oasis-Wedding 1", "label": 0.7788778877887784, "rewarded": false, "t_s": 14880.0, "v1": 0.08912423514920587, "score": 0.5441594166142287, "sure": 1.0}
+{"pos": 497, "id": "oasis-Nude woman 2", "label": 0.6039603960396033, "rewarded": true, "t_s": 14910.0, "v1": -0.09895829326393646, "score": 0.45832508110593184, "sure": 1.0}
+{"pos": 498, "id": "oasis-Animal carcass 3", "label": 0.2916666666666667, "rewarded": false, "t_s": 14940.0, "v1": -0.166265104602227, "score": 0.4387089538229755, "sure": 1.0}
+{"pos": 499, "id": "oasis-Heart 2", "label": 0.6543209876543217, "rewarded": false, "t_s": 14970.0, "v1": 0.039642114461906686, "score": 0.5224479893580284, "sure": 1.0}
+{"pos": 500, "id": "oasis-Dog 11", "label": 0.776234567901235, "rewarded": true, "t_s": 15000.0, "v1": -0.04904391566010502, "score": 0.48312645752949046, "sure": 0.875}
+{"pos": 501, "id": "oasis-Shot 1", "label": 0.2941176470588233, "rewarded": false, "t_s": 15030.0, "v1": -0.013421037705089067, "score": 0.4947843817162106, "sure": 0.75}
+{"pos": 502, "id": "oasis-Boat 1", "label": 0.5956790123456783, "rewarded": false, "t_s": 15060.0, "v1": 0.07128560624304725, "score": 0.5412163950866477, "sure": 1.0}
+{"pos": 503, "id": "oasis-Nude man 14", "label": 0.5570987654320984, "rewarded": false, "t_s": 15090.0, "v1": 0.0014003386927030625, "score": 0.4855322547262427, "sure": 0.875}
+{"pos": 504, "id": "oasis-Dog 21", "label": 0.8316993464052284, "rewarded": false, "t_s": 15120.0, "v1": 0.026639601657852063, "score": 0.5139041193762672, "sure": 0.875}
+{"pos": 505, "id": "oasis-Couple 8", "label": 0.7932098765432101, "rewarded": true, "t_s": 15150.0, "v1": -0.03573672734248923}
+{"pos": 506, "id": "oasis-Grass 3", "label": 0.6683006535947716, "rewarded": false, "t_s": 15180.0, "v1": -0.004226999081588412, "score": 0.5020551701654943, "sure": 0.375}
+{"pos": 507, "id": "oasis-Happy pose 1", "label": 0.6481481481481484, "rewarded": false, "t_s": 15210.0, "v1": 0.11260149133274078, "score": 0.5482944043579954, "sure": 1.0}
+{"pos": 508, "id": "oasis-Drink 1", "label": 0.59313725490196, "rewarded": false, "t_s": 15240.0, "v1": 0.10337776494206319, "score": 0.5356302403308277, "sure": 1.0}
+{"pos": 509, "id": "oasis-Mother 9", "label": 0.8302469135802467, "rewarded": false, "t_s": 15270.0, "v1": 0.08081063569378089, "score": 0.5489966561283915, "sure": 1.0}
+{"pos": 510, "id": "oasis-Dog 16", "label": 0.7320261437908501, "rewarded": false, "t_s": 15300.0, "v1": -0.032260406548650034, "score": 0.4908643496383658, "sure": 0.875}
+{"pos": 511, "id": "oasis-Funeral 1", "label": 0.32026143790849665, "rewarded": true, "t_s": 15330.0, "v1": -0.08263503823440366}
+{"pos": 512, "id": "oasis-Pigeon 6", "label": 0.22067901234567833, "rewarded": false, "t_s": 15360.0, "v1": 0.0031006087528123727, "score": 0.48950508315779284, "sure": 0.75}
+{"pos": 513, "id": "oasis-Flood 1", "label": 0.2271241830065367, "rewarded": false, "t_s": 15390.0, "v1": -0.0799592051654161, "score": 0.48264421499008553, "sure": 0.875}
+{"pos": 514, "id": "oasis-Couple 6", "label": 0.7679738562091499, "rewarded": false, "t_s": 15420.0, "v1": 0.11467529001114041, "score": 0.5489985591666092, "sure": 1.0}
+{"pos": 515, "id": "oasis-Surgery 2", "label": 0.5, "rewarded": true, "t_s": 15450.0, "v1": -0.09158201870685478}
+{"pos": 516, "id": "oasis-Nude man 12", "label": 0.6105610561056101, "rewarded": false, "t_s": 15480.0, "v1": -0.01600761593344069, "score": 0.4975027915613328, "sure": 0.625}
+{"pos": 517, "id": "oasis-Father 1", "label": 0.8382838283828383, "rewarded": false, "t_s": 15510.0, "v1": 0.02462532829689046, "score": 0.5180829871319402, "sure": 1.0}
+{"pos": 518, "id": "oasis-Picnic 4", "label": 0.6716171617161716, "rewarded": true, "t_s": 15540.0, "v1": 0.04589138222715938}
+{"pos": 519, "id": "oasis-Fire 8", "label": 0.5330033003300333, "rewarded": false, "t_s": 15570.0, "v1": -0.04461110572646532, "score": 0.4768106661729052, "sure": 1.0}
+{"pos": 520, "id": "oasis-Bungee jumping 2", "label": 0.6274509803921567, "rewarded": false, "t_s": 15600.0, "v1": 0.10549376424998103, "score": 0.5508936192575373, "sure": 1.0}
+{"pos": 521, "id": "oasis-Nude man 4", "label": 0.598039215686275, "rewarded": false, "t_s": 15630.0, "v1": -0.025718378689642774, "score": 0.4935283841639846, "sure": 0.625}
+{"pos": 522, "id": "oasis-Destruction 2", "label": 0.19771241830065334, "rewarded": false, "t_s": 15660.0, "v1": -0.038028277246453746, "score": 0.4780186043912811, "sure": 1.0}
+{"pos": 523, "id": "oasis-Bricks 1", "label": 0.5261437908496734, "rewarded": false, "t_s": 15690.0, "v1": 0.01097382971993699, "score": 0.503695691757998, "sure": 0.75}
+{"pos": 524, "id": "oasis-Toilet 4", "label": 0.255775577557755, "rewarded": false, "t_s": 15720.0, "v1": 0.06898473512904679, "score": 0.5426950948845164, "sure": 1.0}
+{"pos": 525, "id": "oasis-Paperclips 1", "label": 0.498366013071895, "rewarded": false, "t_s": 15750.0, "v1": -0.0017096831629230813, "score": 0.4996469833273257, "sure": 0.625}
+{"pos": 526, "id": "oasis-Horse racing 1", "label": 0.5359477124183, "rewarded": false, "t_s": 15780.0, "v1": 0.07625325136223082, "score": 0.5455346716245959, "sure": 1.0}
+{"pos": 527, "id": "oasis-City 1", "label": 0.5726072607260733, "rewarded": false, "t_s": 15810.0, "v1": 0.05275027713764391, "score": 0.5073406116329828, "sure": 0.875}
+{"pos": 528, "id": "oasis-Neutral face 4", "label": 0.4818481848184817, "rewarded": false, "t_s": 15840.0, "v1": -0.04414144108298301, "score": 0.4822695411256358, "sure": 1.0}
+{"pos": 529, "id": "oasis-Happy pose 2", "label": 0.7679738562091499, "rewarded": false, "t_s": 15870.0, "v1": -0.004353083731782892, "score": 0.4885603296950856, "sure": 1.0}
+{"pos": 530, "id": "oasis-Frisbee 1", "label": 0.7647058823529417, "rewarded": true, "t_s": 15900.0, "v1": 0.07234478303505887}
+{"pos": 531, "id": "oasis-Frustrated pose 7", "label": 0.28267973856209166, "rewarded": false, "t_s": 15930.0, "v1": 0.010525272537170172, "score": 0.4963760671608202, "sure": 0.75}
+{"pos": 532, "id": "oasis-Nude woman 4", "label": 0.4785478547854783, "rewarded": true, "t_s": 15960.0, "v1": -0.0320232727079629, "score": 0.49537976899110325, "sure": 0.625}
+{"pos": 533, "id": "oasis-Parasailing 1", "label": 0.7761437908496734, "rewarded": true, "t_s": 15990.0, "v1": 0.15237813157662372}
+{"pos": 534, "id": "oasis-Sidewalk 4", "label": 0.7434640522875817, "rewarded": false, "t_s": 16020.0, "v1": 0.099552860117616, "score": 0.5534880544050251, "sure": 1.0}
+{"pos": 535, "id": "oasis-Mother 7", "label": 0.8399339933993399, "rewarded": false, "t_s": 16050.0, "v1": 0.10188253757683108, "score": 0.5646186793930769, "sure": 1.0}
+{"pos": 536, "id": "oasis-Cotton swabs 1", "label": 0.5163398692810449, "rewarded": false, "t_s": 16080.0, "v1": 0.007582984792991354, "score": 0.5015296304222847, "sure": 0.625}
+{"pos": 537, "id": "oasis-Volcano 1", "label": 0.45874587458745836, "rewarded": false, "t_s": 16110.0, "v1": 0.05935282302019429, "score": 0.5347260356937533, "sure": 1.0}
+{"pos": 538, "id": "oasis-Massage 2", "label": 0.7924836601307184, "rewarded": true, "t_s": 16140.0, "v1": 0.04686664420358022}
+{"pos": 539, "id": "oasis-Destruction 7", "label": 0.16831683168316833, "rewarded": false, "t_s": 16170.0, "v1": -0.07521688086043521, "score": 0.46601400247691777, "sure": 1.0}
+{"pos": 540, "id": "oasis-Car race 4", "label": 0.5245098039215684, "rewarded": false, "t_s": 16200.0, "v1": 0.1185024333437481, "score": 0.5644137256067837, "sure": 1.0}
+{"pos": 541, "id": "oasis-Celebration 1", "label": 0.7205882352941183, "rewarded": false, "t_s": 16230.0, "v1": 0.0262768922712866, "score": 0.5227831823113962, "sure": 1.0}
+{"pos": 542, "id": "oasis-Exercise 3", "label": 0.6388888888888884, "rewarded": false, "t_s": 16260.0, "v1": -0.00621551576173085, "score": 0.5074108336780538, "sure": 0.75}
+{"pos": 543, "id": "oasis-Lightning 7", "label": 0.5726072607260733, "rewarded": false, "t_s": 16290.0, "v1": -0.020713496347807614, "score": 0.4920332930593504, "sure": 0.75}
+{"pos": 544, "id": "oasis-Skyscraper 2", "label": 0.5816993464052284, "rewarded": false, "t_s": 16320.0, "v1": -0.01157113667962284, "score": 0.4966243874406224, "sure": 0.625}
+{"pos": 545, "id": "oasis-Exercise 2", "label": 0.6141975308641983, "rewarded": false, "t_s": 16350.0, "v1": -0.034579601310911645, "score": 0.46947668271554355, "sure": 1.0}
+{"pos": 546, "id": "oasis-Nude couple 3", "label": 0.7418300653594767, "rewarded": false, "t_s": 16380.0, "v1": 0.0431422408765707, "score": 0.5205783766683044, "sure": 1.0}
+{"pos": 547, "id": "oasis-Happy face 2", "label": 0.6990740740740734, "rewarded": false, "t_s": 16410.0, "v1": -0.0008165368655035365, "score": 0.49750159086378803, "sure": 0.75}
+{"pos": 548, "id": "oasis-Beach 3", "label": 0.7524752475247517, "rewarded": false, "t_s": 16440.0, "v1": 0.0642159154776063, "score": 0.5442655216677939, "sure": 1.0}
+{"pos": 549, "id": "oasis-Beach 6", "label": 0.8425925925925933, "rewarded": false, "t_s": 16470.0, "v1": 0.0005614797110462533, "score": 0.5102722850034637, "sure": 1.0}
+{"pos": 550, "id": "oasis-Solar panel 1", "label": 0.6683006535947716, "rewarded": false, "t_s": 16500.0, "v1": -0.017101468986162716, "score": 0.4927658182027621, "sure": 0.625}
+{"pos": 551, "id": "oasis-Cold 6", "label": 0.6601307189542484, "rewarded": false, "t_s": 16530.0, "v1": 0.15653542637524576, "score": 0.5758046307901311, "sure": 1.0}
+{"pos": 552, "id": "oasis-Sad pose 4", "label": 0.3070987654320983, "rewarded": true, "t_s": 16560.0, "v1": 0.009432698532856998}
+{"pos": 553, "id": "oasis-Nude couple 2", "label": 0.7401960784313734, "rewarded": false, "t_s": 16590.0, "v1": 0.14624348467343906, "score": 0.5820884941820466, "sure": 1.0}
+{"pos": 554, "id": "oasis-Astronaut 1", "label": 0.7854938271604933, "rewarded": false, "t_s": 16620.0, "v1": -0.017876615495562742, "score": 0.5029353973319036, "sure": 0.75}
+{"pos": 555, "id": "oasis-Lion 4", "label": 0.6045751633986933, "rewarded": true, "t_s": 16650.0, "v1": -0.09252539344850719}
+{"pos": 556, "id": "oasis-Skydiving 2", "label": 0.7222222222222218, "rewarded": true, "t_s": 16680.0, "v1": -0.04528099914224826}
+{"pos": 557, "id": "oasis-Rocks 2", "label": 0.5511551155115516, "rewarded": false, "t_s": 16710.0, "v1": -0.05465550801392016, "score": 0.4851524740825856, "sure": 1.0}
+{"pos": 558, "id": "oasis-Candle 1", "label": 0.6748366013071899, "rewarded": false, "t_s": 16740.0, "v1": -0.052564148211021844, "score": 0.46755938943878494, "sure": 1.0}
+{"pos": 559, "id": "oasis-Thunderstorm 4", "label": 0.4075907590759083, "rewarded": false, "t_s": 16770.0, "v1": 0.03800466901955679, "score": 0.5158931009591312, "sure": 0.875}
+{"pos": 560, "id": "oasis-Roofing 4", "label": 0.42810457516339834, "rewarded": true, "t_s": 16800.0, "v1": -0.009616858317775145}
+{"pos": 561, "id": "oasis-Crow 1", "label": 0.61764705882353, "rewarded": true, "t_s": 16830.0, "v1": 0.02909913304077738}
+{"pos": 562, "id": "oasis-Cold 8", "label": 0.7541254125412533, "rewarded": false, "t_s": 16860.0, "v1": 0.14389934087161405, "score": 0.5759345527063717, "sure": 1.0}
+{"pos": 563, "id": "oasis-Bark 5", "label": 0.5330033003300333, "rewarded": false, "t_s": 16890.0, "v1": -0.05103773710277815, "score": 0.4747141705977964, "sure": 1.0}
+{"pos": 564, "id": "oasis-Toilet 1", "label": 0.46732026143790834, "rewarded": false, "t_s": 16920.0, "v1": -0.05226647477630353, "score": 0.48011846993454854, "sure": 1.0}
+{"pos": 565, "id": "oasis-Explosion 4", "label": 0.25, "rewarded": false, "t_s": 16950.0, "v1": -0.09915776744604732, "score": 0.4636883831703369, "sure": 1.0}
+{"pos": 566, "id": "oasis-Nude woman 22", "label": 0.625, "rewarded": false, "t_s": 16980.0, "v1": 0.002136587433493653, "score": 0.49099032060610537, "sure": 0.875}
+{"pos": 567, "id": "oasis-Pigeon 1", "label": 0.59313725490196, "rewarded": false, "t_s": 17010.0, "v1": 0.1183711870935541, "score": 0.5449741818267851, "sure": 1.0}
+{"pos": 568, "id": "oasis-Rocks 6", "label": 0.5343137254901967, "rewarded": false, "t_s": 17040.0, "v1": -0.06185348444857586, "score": 0.4685457515694021, "sure": 1.0}
+{"pos": 569, "id": "oasis-Nude man 10", "label": 0.42409240924092334, "rewarded": false, "t_s": 17070.0, "v1": -0.04939275487006589, "score": 0.4761692843668586, "sure": 1.0}
+{"pos": 570, "id": "oasis-Gun 7", "label": 0.3135313531353134, "rewarded": false, "t_s": 17100.0, "v1": -0.10705664492015798, "score": 0.4490649342709336, "sure": 1.0}
+{"pos": 571, "id": "oasis-Soldiers 10", "label": 0.2673267326732667, "rewarded": false, "t_s": 17130.0, "v1": -0.07084055269082656, "score": 0.45965669591791813, "sure": 1.0}
+{"pos": 572, "id": "oasis-Dog 1", "label": 0.6897689768976899, "rewarded": false, "t_s": 17160.0, "v1": 0.10128391069612852, "score": 0.5580785317386144, "sure": 1.0}
+{"pos": 573, "id": "oasis-Graveyard 3", "label": 0.42973856209150335, "rewarded": false, "t_s": 17190.0, "v1": -0.08641190484311434, "score": 0.454133868548551, "sure": 1.0}
+{"pos": 574, "id": "oasis-Picnic 2", "label": 0.8179012345679016, "rewarded": false, "t_s": 17220.0, "v1": 0.15979950980378044, "score": 0.5817183745261428, "sure": 1.0}
+{"pos": 575, "id": "oasis-Nude couple 7", "label": 0.7821782178217817, "rewarded": false, "t_s": 17250.0, "v1": 0.06416507838570162, "score": 0.5018320092116371, "sure": 0.375}
+{"pos": 576, "id": "oasis-Yoga 3", "label": 0.748366013071895, "rewarded": true, "t_s": 17280.0, "v1": -0.00440412361350051}
+{"pos": 577, "id": "oasis-Lake 16", "label": 0.8514851485148517, "rewarded": false, "t_s": 17310.0, "v1": 0.15222670141314898, "score": 0.572044610887949, "sure": 1.0}
+{"pos": 578, "id": "oasis-Dessert 6", "label": 0.7647058823529417, "rewarded": true, "t_s": 17340.0, "v1": 0.13444211048042343}
+{"pos": 579, "id": "oasis-Nude man 8", "label": 0.36138613861386165, "rewarded": false, "t_s": 17370.0, "v1": -0.013950013082798751, "score": 0.49050373000257746, "sure": 1.0}
+{"pos": 580, "id": "oasis-Garbage dump 7", "label": 0.28921568627451005, "rewarded": false, "t_s": 17400.0, "v1": -0.07497850176486542, "score": 0.46994756031796264, "sure": 1.0}
+{"pos": 581, "id": "oasis-Car race 1", "label": 0.564814814814815, "rewarded": false, "t_s": 17430.0, "v1": 0.02382106282252472, "score": 0.522904090426397, "sure": 1.0}
+{"pos": 582, "id": "oasis-Birthday 3", "label": 0.7614379084967317, "rewarded": true, "t_s": 17460.0, "v1": 0.047276996663855764}
+{"pos": 583, "id": "oasis-Gun 9", "label": 0.31372549019607837, "rewarded": false, "t_s": 17490.0, "v1": -0.1090715455190081, "score": 0.4524032642536062, "sure": 1.0}
+{"pos": 584, "id": "oasis-Rocks 3", "label": 0.5522875816993467, "rewarded": false, "t_s": 17520.0, "v1": 0.023833453399558002, "score": 0.5159562347015638, "sure": 1.0}
+{"pos": 585, "id": "oasis-Neutral pose 1", "label": 0.6764705882352934, "rewarded": false, "t_s": 17550.0, "v1": -0.07823643068375818, "score": 0.4630817645320492, "sure": 1.0}
+{"pos": 586, "id": "oasis-Soldiers 3", "label": 0.564356435643565, "rewarded": false, "t_s": 17580.0, "v1": 0.06665987621236036, "score": 0.526623260002543, "sure": 1.0}
+{"pos": 587, "id": "oasis-Fence 3", "label": 0.4754901960784317, "rewarded": true, "t_s": 17610.0, "v1": -0.02682518289991742, "score": 0.4983564235416904, "sure": 0.75}
+{"pos": 588, "id": "oasis-Volcano 2", "label": 0.2728758169934633, "rewarded": true, "t_s": 17640.0, "v1": 0.051850506981967914}
+{"pos": 589, "id": "oasis-Couple 4", "label": 0.8284313725490201, "rewarded": false, "t_s": 17670.0, "v1": 0.030436677412949198, "score": 0.5436541742154839, "sure": 1.0}
+{"pos": 590, "id": "oasis-Doctor 5", "label": 0.4471947194719466, "rewarded": false, "t_s": 17700.0, "v1": -0.11997374248011983, "score": 0.44067987860356217, "sure": 1.0}
+{"pos": 591, "id": "oasis-Baby 2", "label": 0.8379629629629634, "rewarded": false, "t_s": 17730.0, "v1": 0.032973464348802994, "score": 0.5303820417203424, "sure": 1.0}
+{"pos": 592, "id": "oasis-Gazing 4", "label": 0.5816993464052284, "rewarded": false, "t_s": 17760.0, "v1": 0.011043775334585892, "score": 0.5106427273424967, "sure": 1.0}
+{"pos": 593, "id": "oasis-Wedding 7", "label": 0.7140522875817, "rewarded": false, "t_s": 17790.0, "v1": 0.08034212966355503, "score": 0.5302978965684493, "sure": 1.0}
+{"pos": 594, "id": "oasis-Dog 28", "label": 0.7654320987654316, "rewarded": false, "t_s": 17820.0, "v1": -0.045258352249871625, "score": 0.46148188667091417, "sure": 1.0}
+{"pos": 595, "id": "oasis-Beach 7", "label": 0.844771241830065, "rewarded": false, "t_s": 17850.0, "v1": -0.11680178151198739, "score": 0.4479758232159789, "sure": 1.0}
+{"pos": 596, "id": "oasis-Dancing 6", "label": 0.8009259259259266, "rewarded": true, "t_s": 17880.0, "v1": 0.012587917590196507}
+{"pos": 597, "id": "oasis-Camping 1", "label": 0.7673267326732667, "rewarded": false, "t_s": 17910.0, "v1": -0.017747915342885667, "score": 0.4984276153200463, "sure": 0.625}
+{"pos": 598, "id": "oasis-Nude man 13", "label": 0.54950495049505, "rewarded": false, "t_s": 17940.0, "v1": 0.0016658888857603582, "score": 0.49720594133085116, "sure": 0.5}
+{"pos": 599, "id": "oasis-Roofing 1", "label": 0.5033003300330033, "rewarded": false, "t_s": 17970.0, "v1": 0.01768262434959167, "score": 0.5167129327493316, "sure": 1.0}
+{"pos": 600, "id": "oasis-Beach 1", "label": 0.894389438943895, "rewarded": false, "t_s": 18000.0, "v1": -0.01332060255215406, "score": 0.49087197632501334, "sure": 0.75}
+{"pos": 601, "id": "oasis-Fire hydrant 2", "label": 0.5370370370370366, "rewarded": true, "t_s": 18030.0, "v1": -0.039103684220311075, "score": 0.47936761885641416, "sure": 1.0}
+{"pos": 602, "id": "oasis-Dog 22", "label": 0.6830065359477117, "rewarded": false, "t_s": 18060.0, "v1": -0.08852930749132171, "score": 0.46662247533720874, "sure": 1.0}
+{"pos": 603, "id": "oasis-Gun 2", "label": 0.29084967320261496, "rewarded": false, "t_s": 18090.0, "v1": -0.06211759816479223, "score": 0.4833952211802439, "sure": 1.0}
+{"pos": 604, "id": "oasis-Angry face 5", "label": 0.308823529411765, "rewarded": false, "t_s": 18120.0, "v1": -0.05201866644293118, "score": 0.4786700507257106, "sure": 1.0}
+{"pos": 605, "id": "oasis-Gun 5", "label": 0.32026143790849665, "rewarded": false, "t_s": 18150.0, "v1": -0.06388609248406929, "score": 0.4737757515576775, "sure": 1.0}
+{"pos": 606, "id": "oasis-Bird 2", "label": 0.7458745874587467, "rewarded": true, "t_s": 18180.0, "v1": 0.07812208369887674}
+{"pos": 607, "id": "oasis-Nude woman 7", "label": 0.6963696369636967, "rewarded": false, "t_s": 18210.0, "v1": 0.128935288170401}
+{"pos": 608, "id": "oasis-Acorns 1", "label": 0.61437908496732, "rewarded": false, "t_s": 18240.0, "v1": 0.1212678475708121}
+{"pos": 609, "id": "oasis-Couple 2", "label": 0.77124183006536, "rewarded": false, "t_s": 18270.0, "v1": 0.12868752139038553}
+{"pos": 610, "id": "oasis-Acorns 2", "label": 0.5866013071895417, "rewarded": false, "t_s": 18300.0, "v1": -0.03354287487836938}
+{"pos": 611, "id": "oasis-Soccer 2", "label": 0.5990099009900983, "rewarded": false, "t_s": 18330.0, "v1": -0.0056228481010880405}
+{"pos": 612, "id": "oasis-Tornado 1", "label": 0.18300653594771168, "rewarded": false, "t_s": 18360.0, "v1": -0.0971213099630529}
+{"pos": 613, "id": "oasis-Gun 3", "label": 0.32843137254902, "rewarded": true, "t_s": 18390.0, "v1": -0.12319464821553161}
+{"pos": 614, "id": "oasis-School 2", "label": 0.805555555555555, "rewarded": false, "t_s": 18420.0, "v1": 0.0871387151950167}
+{"pos": 615, "id": "oasis-Gazing 6", "label": 0.8071895424836599, "rewarded": true, "t_s": 18450.0, "v1": 0.12781329595347635, "score": 0.5482481746076889, "sure": 1.0}
+{"pos": 616, "id": "oasis-Flowers 5", "label": 0.7722772277227716, "rewarded": false, "t_s": 18480.0, "v1": 0.11654465533371527}
+{"pos": 617, "id": "oasis-Phone 1", "label": 0.5849673202614384, "rewarded": false, "t_s": 18510.0, "v1": 0.1225555048662651}
+{"pos": 618, "id": "oasis-Boxing 2", "label": 0.44934640522875835, "rewarded": true, "t_s": 18540.0, "v1": -0.14529996913699128}
+{"pos": 619, "id": "oasis-Nude woman 11", "label": 0.6975308641975316, "rewarded": true, "t_s": 18570.0, "v1": -0.05665261531013821}
+{"pos": 620, "id": "oasis-Galaxy 6", "label": 0.7238562091503266, "rewarded": true, "t_s": 18600.0, "v1": 0.0816809699785167, "score": 0.5514511956619261, "sure": 1.0}
+{"pos": 621, "id": "oasis-Rollercoaster 3", "label": 0.684818481848185, "rewarded": false, "t_s": 18630.0, "v1": 0.05062822560641733}
+{"pos": 622, "id": "oasis-Angry pose 2", "label": 0.30092592592592665, "rewarded": false, "t_s": 18660.0, "v1": -0.05254761657973639}
+{"pos": 623, "id": "oasis-Shark 11", "label": 0.4521452145214517, "rewarded": false, "t_s": 18690.0, "v1": -0.06236751840089916}
+{"pos": 624, "id": "oasis-Skydiving 4", "label": 0.7320261437908501, "rewarded": true, "t_s": 18720.0, "v1": -0.09170578661529627}
+{"pos": 625, "id": "oasis-Fireman 1", "label": 0.34967320261437834, "rewarded": false, "t_s": 18750.0, "v1": -0.1446415832330079}
+{"pos": 626, "id": "oasis-Skijump 1", "label": 0.5833333333333334, "rewarded": false, "t_s": 18780.0, "v1": 0.016782508230287374}
+{"pos": 627, "id": "oasis-Dancing 3", "label": 0.6470588235294117, "rewarded": false, "t_s": 18810.0, "v1": -0.10658536886938441}
+{"pos": 628, "id": "oasis-Goat 2", "label": 0.7006172839506166, "rewarded": false, "t_s": 18840.0, "v1": -0.13588964772325607}
+{"pos": 629, "id": "oasis-Fire hydrant 4", "label": 0.5725308641975316, "rewarded": false, "t_s": 18870.0, "v1": 0.11756801025334951}
+{"pos": 630, "id": "oasis-Soldiers 4", "label": 0.6111111111111116, "rewarded": false, "t_s": 18900.0, "v1": -0.21269653957592982}
+{"pos": 631, "id": "oasis-Satellite 1", "label": 0.6781045751633984, "rewarded": false, "t_s": 18930.0, "v1": -0.13899211247455678}
+{"pos": 632, "id": "oasis-Chipmunk 1", "label": 0.7352941176470583, "rewarded": false, "t_s": 18960.0, "v1": 0.08071644138702494}
+{"pos": 633, "id": "oasis-Angry face 1", "label": 0.3970588235294117, "rewarded": false, "t_s": 18990.0, "v1": -0.13250848365659096}
+{"pos": 634, "id": "oasis-Dead bodies 1", "label": 0.033003300330033326, "rewarded": true, "t_s": 19020.0, "v1": -0.15824349907121094, "score": 0.4243273480246704, "sure": 1.0}
+{"pos": 635, "id": "oasis-Cliff diver 2", "label": 0.684818481848185, "rewarded": true, "t_s": 19050.0, "v1": -0.011346188029185078}
+{"pos": 636, "id": "oasis-War 8", "label": 0.11928104575163334, "rewarded": false, "t_s": 19080.0, "v1": -0.186089751239354}
+{"pos": 637, "id": "oasis-Lightning 1", "label": 0.6421568627450983, "rewarded": false, "t_s": 19110.0, "v1": -0.02515995161392437}
+{"pos": 638, "id": "oasis-Band 2", "label": 0.6928104575163401, "rewarded": true, "t_s": 19140.0, "v1": -0.18347989105539464, "score": 0.40630738544804934, "sure": 1.0}
+{"pos": 639, "id": "oasis-Nude woman 21", "label": 0.6274509803921567, "rewarded": true, "t_s": 19170.0, "v1": -0.15000319913919846}
+{"pos": 640, "id": "oasis-School 1", "label": 0.6911764705882351, "rewarded": true, "t_s": 19200.0, "v1": -0.1756574799792393}
+{"pos": 641, "id": "oasis-Frustrated pose 8", "label": 0.45679012345679, "rewarded": true, "t_s": 19230.0, "v1": -0.09341711778646833}
+{"pos": 642, "id": "oasis-Food 2", "label": 0.723765432098765, "rewarded": false, "t_s": 19260.0, "v1": -0.09900187943698935}
+{"pos": 643, "id": "oasis-Tiger 2", "label": 0.7320261437908501, "rewarded": false, "t_s": 19290.0, "v1": -0.12100992427300539}
+{"pos": 644, "id": "oasis-Sad face 6", "label": 0.44059405940594004, "rewarded": false, "t_s": 19320.0, "v1": -0.17056666604045867}
+{"pos": 645, "id": "oasis-Building 2", "label": 0.6327160493827167, "rewarded": false, "t_s": 19350.0, "v1": -0.051893435083053885}
+{"pos": 646, "id": "oasis-Musician 1", "label": 0.7345679012345684, "rewarded": false, "t_s": 19380.0, "v1": 0.09816450624077577}
+{"pos": 647, "id": "oasis-Pinecone 1", "label": 0.6062091503267967, "rewarded": true, "t_s": 19410.0, "v1": 0.12493290702017945}
+{"pos": 648, "id": "oasis-Bar 1", "label": 0.6503267973856217, "rewarded": false, "t_s": 19440.0, "v1": -0.12947031556785527}
+{"pos": 649, "id": "oasis-Depressed pose 3", "label": 0.27614379084967333, "rewarded": false, "t_s": 19470.0, "v1": -0.14799875570515508}
+{"pos": 650, "id": "oasis-Rock climbing 3", "label": 0.5915032679738567, "rewarded": false, "t_s": 19500.0, "v1": 0.02980202794971487}
+{"pos": 651, "id": "oasis-Nude man 5", "label": 0.6188118811881184, "rewarded": false, "t_s": 19530.0, "v1": -0.2105485399131216}
+{"pos": 652, "id": "oasis-Cat 11", "label": 0.7277227722772284, "rewarded": true, "t_s": 19560.0, "v1": -0.19842692539091844}
+{"pos": 653, "id": "oasis-Bungee jumping 1", "label": 0.53395061728395, "rewarded": false, "t_s": 19590.0, "v1": -0.12314732543885964}
+{"pos": 654, "id": "oasis-Shark 8", "label": 0.5114379084967317, "rewarded": true, "t_s": 19620.0, "v1": -0.13693638385719986}
+{"pos": 655, "id": "oasis-Baby 4", "label": 0.82013201320132, "rewarded": false, "t_s": 19650.0, "v1": -0.07445773118567356}
+{"pos": 656, "id": "oasis-Rafting 2", "label": 0.637254901960785, "rewarded": false, "t_s": 19680.0, "v1": -0.07747358070749344}
+{"pos": 657, "id": "oasis-Rafting 5", "label": 0.6977124183006533, "rewarded": false, "t_s": 19710.0, "v1": 0.04681667921670163}
+{"pos": 658, "id": "oasis-Rocks 5", "label": 0.5800653594771249, "rewarded": true, "t_s": 19740.0, "v1": -0.13095083785208428}
+{"pos": 659, "id": "oasis-Wedding 6", "label": 0.8333333333333334, "rewarded": false, "t_s": 19770.0, "v1": 0.14660672175609712}
+{"pos": 660, "id": "oasis-Flood 3", "label": 0.2156862745098033, "rewarded": false, "t_s": 19800.0, "v1": -0.10676818990423997}
+{"pos": 661, "id": "oasis-Memorial 1", "label": 0.6111111111111116, "rewarded": false, "t_s": 19830.0, "v1": -0.2926995384287041}
+{"pos": 662, "id": "oasis-Excited face 2", "label": 0.8039215686274517, "rewarded": false, "t_s": 19860.0, "v1": -0.04502398173733202}
+{"pos": 663, "id": "oasis-Dog 18", "label": 0.866013071895425, "rewarded": false, "t_s": 19890.0, "v1": -0.12301337704956117}
+{"pos": 664, "id": "oasis-Cotton swabs 2", "label": 0.5098039215686266, "rewarded": false, "t_s": 19920.0, "v1": -0.08128349861886952}
+{"pos": 665, "id": "oasis-Car 2", "label": 0.48679867986798664, "rewarded": false, "t_s": 19950.0, "v1": -0.03472321342730189}
+{"pos": 666, "id": "oasis-Baby 5", "label": 0.8564814814814817, "rewarded": false, "t_s": 19980.0, "v1": 0.003957093215380736}
+{"pos": 667, "id": "oasis-Alcohol 1", "label": 0.6141975308641983, "rewarded": false, "t_s": 20010.0, "v1": 0.07142287752659848}
+{"pos": 668, "id": "oasis-Lake 8", "label": 0.86764705882353, "rewarded": false, "t_s": 20040.0, "v1": 0.09641634722267811}
+{"pos": 669, "id": "oasis-Sad face 5", "label": 0.555555555555555, "rewarded": false, "t_s": 20070.0, "v1": -0.04950498687138072}
+{"pos": 670, "id": "oasis-Pigeon 2", "label": 0.5898692810457516, "rewarded": false, "t_s": 20100.0, "v1": -0.13188445536027293}
+{"pos": 671, "id": "oasis-Nude man 2", "label": 0.5735294117647066, "rewarded": false, "t_s": 20130.0, "v1": -0.13818499561081066}
+{"pos": 672, "id": "oasis-Acorns 3", "label": 0.6258169934640517, "rewarded": false, "t_s": 20160.0, "v1": 0.11291659499535867}
+{"pos": 673, "id": "oasis-Dirt 3", "label": 0.5231023102310233, "rewarded": false, "t_s": 20190.0, "v1": -0.16860305920282848}
+{"pos": 674, "id": "oasis-Cockroach 3", "label": 0.24183006535947663, "rewarded": false, "t_s": 20220.0, "v1": 0.10695532817328468}
+{"pos": 675, "id": "oasis-Sidewalk 3", "label": 0.54950495049505, "rewarded": false, "t_s": 20250.0, "v1": -0.19185529601410656}
+{"pos": 676, "id": "oasis-Explosion 5", "label": 0.13725490196078502, "rewarded": false, "t_s": 20280.0, "v1": -0.18204920609543285}
+{"pos": 677, "id": "oasis-Nude man 1", "label": 0.5637254901960783, "rewarded": false, "t_s": 20310.0, "v1": 0.01437359656132653}
+{"pos": 678, "id": "oasis-Parade 1", "label": 0.7746913580246916, "rewarded": true, "t_s": 20340.0, "v1": -0.2366042101490714, "score": 0.39657388066370725, "sure": 1.0}
+{"pos": 679, "id": "oasis-Boxing 1", "label": 0.4558823529411767, "rewarded": false, "t_s": 20370.0, "v1": -0.1676035715896944}
+{"pos": 680, "id": "oasis-Doctor 7", "label": 0.39052287581699335, "rewarded": false, "t_s": 20400.0, "v1": -0.17595510487466048}
+{"pos": 681, "id": "oasis-Camping 3", "label": 0.6697530864197533, "rewarded": false, "t_s": 20430.0, "v1": -0.014518183586667455}
+{"pos": 682, "id": "oasis-Eating 2", "label": 0.7222222222222218, "rewarded": false, "t_s": 20460.0, "v1": 0.052837963849771796}
+{"pos": 683, "id": "oasis-Dessert 5", "label": 0.7557755775577549, "rewarded": true, "t_s": 20490.0, "v1": 0.08649625459684573}
+{"pos": 684, "id": "oasis-Ambulance 2", "label": 0.3630363036303634, "rewarded": false, "t_s": 20520.0, "v1": -0.1613379486667117}
+{"pos": 685, "id": "oasis-Running away 1", "label": 0.59640522875817, "rewarded": false, "t_s": 20550.0, "v1": -0.10644357014503092}
+{"pos": 686, "id": "oasis-Nude man 18", "label": 0.42283950617284, "rewarded": false, "t_s": 20580.0, "v1": -0.1526568793046441}
+{"pos": 687, "id": "oasis-Doctor 3", "label": 0.5586419753086417, "rewarded": false, "t_s": 20610.0, "v1": -0.008696842092071444}
+{"pos": 688, "id": "oasis-Animal carcass 6", "label": 0.23302469135802503, "rewarded": false, "t_s": 20640.0, "v1": -0.20059743454545553}
+{"pos": 689, "id": "oasis-Doctor 4", "label": 0.4686468646864683, "rewarded": false, "t_s": 20670.0, "v1": -0.11179310412570653}
+{"pos": 690, "id": "oasis-Dog 27", "label": 0.7211221122112216, "rewarded": false, "t_s": 20700.0, "v1": -0.062430832148380744}
+{"pos": 691, "id": "oasis-Sunset 5", "label": 0.8132716049382717, "rewarded": true, "t_s": 20730.0, "v1": -0.12256349526316479, "score": 0.4363399018171997, "sure": 1.0}
+{"pos": 692, "id": "oasis-Lake 10", "label": 0.8578431372549017, "rewarded": false, "t_s": 20760.0, "v1": 0.12399343719700773}
+{"pos": 693, "id": "oasis-Lake 1", "label": 0.8758169934640517, "rewarded": false, "t_s": 20790.0, "v1": 0.07101584986984544}
+{"pos": 694, "id": "oasis-Torture chamber 1", "label": 0.3937908496732034, "rewarded": false, "t_s": 20820.0, "v1": -0.017143753681978957}
+{"pos": 695, "id": "oasis-Parachuting 2", "label": 0.7385620915032683, "rewarded": false, "t_s": 20850.0, "v1": -0.1262246424343214}
+{"pos": 696, "id": "oasis-Angry face 2", "label": 0.34640522875817004, "rewarded": false, "t_s": 20880.0, "v1": -0.15004800032695154}
+{"pos": 697, "id": "oasis-Neonazi 1", "label": 0.17320261437908502, "rewarded": false, "t_s": 20910.0, "v1": -0.20808425888187165}
+{"pos": 698, "id": "oasis-Roofing 3", "label": 0.487654320987655, "rewarded": false, "t_s": 20940.0, "v1": -0.01496233635112687}
+{"pos": 699, "id": "oasis-Dessert 8", "label": 0.7947530864197533, "rewarded": false, "t_s": 20970.0, "v1": 0.12676216368233895}
+{"pos": 700, "id": "oasis-Rainbow 1", "label": 0.8719135802469133, "rewarded": true, "t_s": 21000.0, "v1": -0.04042973159410557}
+{"pos": 701, "id": "oasis-Fireworks 7", "label": 0.7920792079207916, "rewarded": false, "t_s": 21030.0, "v1": -0.025950621064244728}
+{"pos": 702, "id": "oasis-Destruction 3", "label": 0.14969135802469166, "rewarded": false, "t_s": 21060.0, "v1": -0.11302491248884372}
+{"pos": 703, "id": "oasis-Soldiers 6", "label": 0.5154320987654316, "rewarded": true, "t_s": 21090.0, "v1": -0.12512604700673302}
+{"pos": 704, "id": "oasis-Roofing 2", "label": 0.50990099009901, "rewarded": false, "t_s": 21120.0, "v1": -0.05327796237519322}
+{"pos": 705, "id": "oasis-Dancing 2", "label": 0.7026143790849666, "rewarded": true, "t_s": 21150.0, "v1": 0.06858094244027158, "score": 0.5492543723014492, "sure": 1.0}
+{"pos": 706, "id": "oasis-Baby 10", "label": 0.7369281045751633, "rewarded": false, "t_s": 21180.0, "v1": 0.1873098025345824}
+{"pos": 707, "id": "oasis-Weapon 1", "label": 0.3070987654320983, "rewarded": false, "t_s": 21210.0, "v1": -0.19608212638300604}
+{"pos": 708, "id": "oasis-Massage 1", "label": 0.7843137254901967, "rewarded": true, "t_s": 21240.0, "v1": 0.13584532720800635}
+{"pos": 709, "id": "oasis-Gazing 3", "label": 0.737654320987655, "rewarded": false, "t_s": 21270.0, "v1": -0.043558044722662004}
+{"pos": 710, "id": "oasis-Doctor 9", "label": 0.4460784313725483, "rewarded": true, "t_s": 21300.0, "v1": -0.16262015962252663}
+{"pos": 711, "id": "oasis-Timber 3", "label": 0.5200617283950617, "rewarded": false, "t_s": 21330.0, "v1": -0.10897487774146508}
+{"pos": 712, "id": "oasis-Bubble 2", "label": 0.6666666666666666, "rewarded": false, "t_s": 21360.0, "v1": 0.04526125652365265}
+{"pos": 713, "id": "oasis-Lion 3", "label": 0.6574074074074067, "rewarded": false, "t_s": 21390.0, "v1": -0.19354416892968695}
+{"pos": 714, "id": "oasis-Dog 14", "label": 0.815181518151815, "rewarded": true, "t_s": 21420.0, "v1": 0.015239750006396768, "score": 0.5235041714438872, "sure": 1.0}
+{"pos": 715, "id": "oasis-Grass 5", "label": 0.65686274509804, "rewarded": true, "t_s": 21450.0, "v1": -0.11127871850382931}
+{"pos": 716, "id": "oasis-Scared face 4", "label": 0.3283828382838283, "rewarded": false, "t_s": 21480.0, "v1": -0.1633061599801523}
+{"pos": 717, "id": "oasis-Cat 8", "label": 0.6274509803921567, "rewarded": false, "t_s": 21510.0, "v1": -0.11816213198157965}
+{"pos": 718, "id": "oasis-Car accident 4", "label": 0.17129629629629664, "rewarded": false, "t_s": 21540.0, "v1": -0.20130965221456798}
+{"pos": 719, "id": "oasis-Elephant 1", "label": 0.81045751633987, "rewarded": false, "t_s": 21570.0, "v1": -0.10579462136450457}
+{"pos": 720, "id": "oasis-Wedding 5", "label": 0.78921568627451, "rewarded": false, "t_s": 21600.0, "v1": 0.07510678270909188}
+{"pos": 721, "id": "oasis-Car accident 3", "label": 0.27941176470588164, "rewarded": false, "t_s": 21630.0, "v1": -0.1553487183995803}
+{"pos": 722, "id": "oasis-Shark 10", "label": 0.37293729372937334, "rewarded": false, "t_s": 21660.0, "v1": -0.11945345770654303}
+{"pos": 723, "id": "oasis-Nude woman 6", "label": 0.633986928104575, "rewarded": false, "t_s": 21690.0, "v1": -0.06703571920526963}
+{"pos": 724, "id": "oasis-Dog attack 2", "label": 0.404290429042905, "rewarded": false, "t_s": 21720.0, "v1": -0.06353273497338874}
+{"pos": 725, "id": "oasis-Shark 2", "label": 0.44281045751634, "rewarded": false, "t_s": 21750.0, "v1": -0.08624734673743428}
+{"pos": 726, "id": "oasis-Lake 13", "label": 0.8611111111111116, "rewarded": false, "t_s": 21780.0, "v1": 0.14340956748034406}
+{"pos": 727, "id": "oasis-Nude woman 15", "label": 0.7140522875817, "rewarded": false, "t_s": 21810.0, "v1": -0.10971111107358045}
+{"pos": 728, "id": "oasis-Bee 1", "label": 0.4413580246913584, "rewarded": false, "t_s": 21840.0, "v1": -0.00343931754637139}
+{"pos": 729, "id": "oasis-Pinecone 3", "label": 0.7006172839506166, "rewarded": true, "t_s": 21870.0, "v1": 0.1504092961596042}
+{"pos": 730, "id": "oasis-Skydiving 3", "label": 0.67986798679868, "rewarded": false, "t_s": 21900.0, "v1": -0.011820931917551292}
+{"pos": 731, "id": "oasis-Street 1", "label": 0.5915032679738567, "rewarded": false, "t_s": 21930.0, "v1": -0.12047552507250203}
+{"pos": 732, "id": "oasis-Sad pose 6", "label": 0.3861386138613867, "rewarded": false, "t_s": 21960.0, "v1": -0.18082571887510712}
+{"pos": 733, "id": "oasis-Scared face 3", "label": 0.34104938271604995, "rewarded": false, "t_s": 21990.0, "v1": 0.0057062962564451425}
+{"pos": 734, "id": "oasis-Thunderstorm 2", "label": 0.6759259259259266, "rewarded": true, "t_s": 22020.0, "v1": -0.13111368572914817}
+{"pos": 735, "id": "oasis-Cockroach 1", "label": 0.17647058823529335, "rewarded": false, "t_s": 22050.0, "v1": -0.13026076429846412}
+{"pos": 736, "id": "oasis-Dog 20", "label": 0.8168316831683167, "rewarded": false, "t_s": 22080.0, "v1": -0.03628190939537812}
+{"pos": 737, "id": "oasis-Rainbow 2", "label": 0.8762376237623767, "rewarded": false, "t_s": 22110.0, "v1": 0.014046094258108766}
+{"pos": 738, "id": "oasis-Car accident 1", "label": 0.19117647058823498, "rewarded": false, "t_s": 22140.0, "v1": -0.14265544056846902}
+{"pos": 739, "id": "oasis-Bored pose 5", "label": 0.46699669966996665, "rewarded": false, "t_s": 22170.0, "v1": 0.15118448808171736}
+{"pos": 740, "id": "oasis-Desert 1", "label": 0.5, "rewarded": false, "t_s": 22200.0, "v1": -0.013522764656870967}
+{"pos": 741, "id": "oasis-Child labor 3", "label": 0.5147058823529417, "rewarded": false, "t_s": 22230.0, "v1": -0.05159510700392711}
+{"pos": 742, "id": "oasis-Rugby 1", "label": 0.5370370370370366, "rewarded": false, "t_s": 22260.0, "v1": 0.16459511863417287}
+{"pos": 743, "id": "oasis-Cat 6", "label": 0.6192810457516332, "rewarded": false, "t_s": 22290.0, "v1": -0.06454711400858004}
+{"pos": 744, "id": "oasis-Fire 2", "label": 0.16049382716049332, "rewarded": true, "t_s": 22320.0, "v1": -0.14241058407892448, "score": 0.4295218917534829, "sure": 1.0}
+{"pos": 745, "id": "oasis-Animal carcass 4", "label": 0.4656862745098033, "rewarded": false, "t_s": 22350.0, "v1": -0.06873594829902008}
+{"pos": 746, "id": "oasis-War 1", "label": 0.12654320987654333, "rewarded": false, "t_s": 22380.0, "v1": -0.1322477405690048}
+{"pos": 747, "id": "oasis-Gazing 1", "label": 0.6437908496732033, "rewarded": false, "t_s": 22410.0, "v1": 0.010083471248612641}
+{"pos": 748, "id": "oasis-Nude couple 5", "label": 0.7808641975308649, "rewarded": false, "t_s": 22440.0, "v1": -0.14523983209676006}
+{"pos": 749, "id": "oasis-Sleepy pose 3", "label": 0.45098039215686336, "rewarded": false, "t_s": 22470.0, "v1": -0.16599741707288285}
+{"pos": 750, "id": "oasis-Nude man 15", "label": 0.4768976897689767, "rewarded": true, "t_s": 22500.0, "v1": -0.22033308260163265}
+{"pos": 751, "id": "oasis-Animal carcass 2", "label": 0.3758169934640517, "rewarded": true, "t_s": 22530.0, "v1": -0.18683452825848412, "score": 0.4053829494992258, "sure": 1.0}
+{"pos": 752, "id": "oasis-Chipmunk 2", "label": 0.78921568627451, "rewarded": false, "t_s": 22560.0, "v1": -0.09568993412360449}
+{"pos": 753, "id": "oasis-Dirt 1", "label": 0.10130718954248334, "rewarded": false, "t_s": 22590.0, "v1": -0.16259104266286073}
+{"pos": 754, "id": "oasis-Lake 17", "label": 0.7647058823529417, "rewarded": false, "t_s": 22620.0, "v1": -0.1861709769722919}
+{"pos": 755, "id": "oasis-Cold 1", "label": 0.49834983498349833, "rewarded": false, "t_s": 22650.0, "v1": -0.15080850363058396}
+{"pos": 756, "id": "oasis-Wedding 10", "label": 0.7990196078431366, "rewarded": false, "t_s": 22680.0, "v1": 0.025175899210662878}
+{"pos": 757, "id": "oasis-Road 1", "label": 0.6764705882352934, "rewarded": true, "t_s": 22710.0, "v1": -0.2081951004215853, "score": 0.39769765582403604, "sure": 1.0}
+{"pos": 758, "id": "oasis-Monkey 2", "label": 0.5049019607843133, "rewarded": false, "t_s": 22740.0, "v1": -0.14815154743221326}
+{"pos": 759, "id": "oasis-Sky 1", "label": 0.6078431372549017, "rewarded": false, "t_s": 22770.0, "v1": -0.25074747902443606}
+{"pos": 760, "id": "oasis-Fence 6", "label": 0.5522875816993467, "rewarded": false, "t_s": 22800.0, "v1": -0.10077838640509196}
+{"pos": 761, "id": "oasis-Shot 4", "label": 0.25816993464052335, "rewarded": false, "t_s": 22830.0, "v1": -0.16538810129912507}
+{"pos": 762, "id": "oasis-Baby 8", "label": 0.8503086419753084, "rewarded": false, "t_s": 22860.0, "v1": -0.10237767555932276}
+{"pos": 763, "id": "oasis-Nude man 16", "label": 0.5709876543209883, "rewarded": false, "t_s": 22890.0, "v1": -0.09957980891413243}
+{"pos": 764, "id": "oasis-Lava 1", "label": 0.50925925925926, "rewarded": false, "t_s": 22920.0, "v1": -0.13331981052315733}
+{"pos": 765, "id": "oasis-Flowers 9", "label": 0.815181518151815, "rewarded": false, "t_s": 22950.0, "v1": 0.14012737336886905}
+{"pos": 766, "id": "oasis-Lamb 1", "label": 0.7924836601307184, "rewarded": false, "t_s": 22980.0, "v1": -0.1770727752129141}
+{"pos": 767, "id": "oasis-Fire 11", "label": 0.12581699346405165, "rewarded": false, "t_s": 23010.0, "v1": -0.22203514407174796}
+{"pos": 768, "id": "oasis-Monkey 4", "label": 0.31018518518518495, "rewarded": false, "t_s": 23040.0, "v1": -0.13550756278366582}
+{"pos": 769, "id": "oasis-Dessert 3", "label": 0.7722772277227716, "rewarded": false, "t_s": 23070.0, "v1": 0.12080495271471337}
+{"pos": 770, "id": "oasis-Thunderstorm 6", "label": 0.5848765432098767, "rewarded": true, "t_s": 23100.0, "v1": -0.15723100388760114}
+{"pos": 771, "id": "oasis-Dog 13", "label": 0.8088235294117649, "rewarded": false, "t_s": 23130.0, "v1": -0.18580715424586103}
+{"pos": 772, "id": "oasis-KKK rally 1", "label": 0.057189542483660004, "rewarded": false, "t_s": 23160.0, "v1": -0.2508917627791981}
+{"pos": 773, "id": "oasis-Camping 4", "label": 0.7761437908496734, "rewarded": true, "t_s": 23190.0, "v1": -0.1248802169190899, "score": 0.4584039067197494, "sure": 1.0}
+{"pos": 774, "id": "oasis-Jail 3", "label": 0.2532679738562083, "rewarded": false, "t_s": 23220.0, "v1": 0.07285540147413416}
+{"pos": 775, "id": "oasis-Galaxy 7", "label": 0.8441358024691351, "rewarded": false, "t_s": 23250.0, "v1": -0.0943240571691506}
+{"pos": 776, "id": "oasis-Shark 3", "label": 0.4686468646864683, "rewarded": true, "t_s": 23280.0, "v1": -0.0698905398500701}
+{"pos": 777, "id": "oasis-Wall 4", "label": 0.49834983498349833, "rewarded": true, "t_s": 23310.0, "v1": -0.12358276283060299}
+{"pos": 778, "id": "oasis-Food 6", "label": 0.7761437908496734, "rewarded": false, "t_s": 23340.0, "v1": -0.1980221648386319}
+{"pos": 779, "id": "oasis-Rafting 6", "label": 0.6651234567901233, "rewarded": false, "t_s": 23370.0, "v1": -0.06511884758276054}
+{"pos": 780, "id": "oasis-Police 2", "label": 0.2314814814814817, "rewarded": true, "t_s": 23400.0, "v1": -0.042312800365227554}
+{"pos": 781, "id": "oasis-Fireworks 1", "label": 0.8595679012345684, "rewarded": false, "t_s": 23430.0, "v1": -0.03548401059457085}
+{"pos": 782, "id": "oasis-War 7", "label": 0.3630363036303634, "rewarded": true, "t_s": 23460.0, "v1": -0.2579095512241545}
+{"pos": 783, "id": "oasis-Nude woman 3", "label": 0.6029411764705883, "rewarded": false, "t_s": 23490.0, "v1": -0.306570165728976}
+{"pos": 784, "id": "oasis-Crosswalk 1", "label": 0.4938271604938267, "rewarded": false, "t_s": 23520.0, "v1": -0.18504524637645647}
+{"pos": 785, "id": "oasis-Snake 6", "label": 0.35148514851485163, "rewarded": false, "t_s": 23550.0, "v1": -0.12374298186355859}
+{"pos": 786, "id": "oasis-Snow 4", "label": 0.4074074074074067, "rewarded": false, "t_s": 23580.0, "v1": -0.18286369803982738}
+{"pos": 787, "id": "oasis-Rubber duck 1", "label": 0.7352941176470583, "rewarded": true, "t_s": 23610.0, "v1": -0.15204368083187114}
+{"pos": 788, "id": "oasis-Food 4", "label": 0.7685185185185183, "rewarded": false, "t_s": 23640.0, "v1": -0.10326040734441844}
+{"pos": 789, "id": "oasis-Woods 1", "label": 0.4640522875817, "rewarded": false, "t_s": 23670.0, "v1": -0.05869791897313903}
+{"pos": 790, "id": "oasis-Cliff diver 3", "label": 0.6867283950617283, "rewarded": false, "t_s": 23700.0, "v1": -0.06396682395542208}
+{"pos": 791, "id": "oasis-Statue 2", "label": 0.6732026143790849, "rewarded": false, "t_s": 23730.0, "v1": -0.09846220457803478}
+{"pos": 792, "id": "oasis-Football player 1", "label": 0.6280864197530867, "rewarded": false, "t_s": 23760.0, "v1": -0.22032865586406325}
+{"pos": 793, "id": "oasis-Pollution 1", "label": 0.24587458745874669, "rewarded": true, "t_s": 23790.0, "v1": -0.16135150475925508}
+{"pos": 794, "id": "oasis-Memorial 3", "label": 0.3425925925925933, "rewarded": true, "t_s": 23820.0, "v1": -0.21172057073681416}
+{"pos": 795, "id": "oasis-Ambulance 3", "label": 0.3811881188118817, "rewarded": false, "t_s": 23850.0, "v1": -0.2865867222141597}
+{"pos": 796, "id": "oasis-Gazing 2", "label": 0.6846405228758167, "rewarded": false, "t_s": 23880.0, "v1": -0.21955649813594602}
+{"pos": 797, "id": "oasis-School 4", "label": 0.5941358024691351, "rewarded": true, "t_s": 23910.0, "v1": 0.03417965835893133}
+{"pos": 798, "id": "oasis-Cat 2", "label": 0.74917491749175, "rewarded": true, "t_s": 23940.0, "v1": -0.18455234874995752}
+{"pos": 799, "id": "oasis-Sailing 1", "label": 0.5990099009900983, "rewarded": true, "t_s": 23970.0, "v1": 0.035750461344609574}
+{"pos": 800, "id": "oasis-Cups 2", "label": 0.5247524752475251, "rewarded": false, "t_s": 24000.0, "v1": 0.016297723697372812}
+{"pos": 801, "id": "oasis-War 3", "label": 0.4104938271604934, "rewarded": true, "t_s": 24030.0, "v1": -0.2818473806563423}
+{"pos": 802, "id": "oasis-Storage 1", "label": 0.5032679738562084, "rewarded": true, "t_s": 24060.0, "v1": -0.266532538991586, "score": 0.37145285144636875, "sure": 1.0}
+{"pos": 803, "id": "oasis-Street 2", "label": 0.6018518518518516, "rewarded": false, "t_s": 24090.0, "v1": -0.09527570181223788}
+{"pos": 804, "id": "oasis-Beach 2", "label": 0.887254901960785, "rewarded": false, "t_s": 24120.0, "v1": -0.15932362762489471}
+{"pos": 805, "id": "oasis-Penguins 2", "label": 0.8679867986798683, "rewarded": true, "t_s": 24150.0, "v1": -0.23116285273128323}
+{"pos": 806, "id": "oasis-Garbage dump 6", "label": 0.16049382716049332, "rewarded": false, "t_s": 24180.0, "v1": -0.14402890082380682}
+{"pos": 807, "id": "oasis-Bird 3", "label": 0.8395061728395067, "rewarded": false, "t_s": 24210.0, "v1": -0.07423539142497704}
+{"pos": 808, "id": "oasis-Shark 9", "label": 0.480392156862745, "rewarded": true, "t_s": 24240.0, "v1": -0.06527431508193926}
+{"pos": 809, "id": "oasis-Pigeon 5", "label": 0.5879629629629634, "rewarded": false, "t_s": 24270.0, "v1": -0.08059584751186377}
+{"pos": 810, "id": "oasis-Bark 6", "label": 0.5429042904290434, "rewarded": false, "t_s": 24300.0, "v1": -0.1661548665382846}
+{"pos": 811, "id": "oasis-School 8", "label": 0.714521452145215, "rewarded": false, "t_s": 24330.0, "v1": -0.049023058455941015}
+{"pos": 812, "id": "oasis-Couple 1", "label": 0.7565359477124183, "rewarded": true, "t_s": 24360.0, "v1": -0.14812138165432787, "score": 0.4527540166301928, "sure": 1.0}
+{"pos": 813, "id": "oasis-Bird 5", "label": 0.5784313725490201, "rewarded": false, "t_s": 24390.0, "v1": -0.05978693925587919}
+{"pos": 814, "id": "oasis-Money 1", "label": 0.6600660066006601, "rewarded": false, "t_s": 24420.0, "v1": -0.26539249850073743}
+{"pos": 815, "id": "oasis-Office supplies 5", "label": 0.50925925925926, "rewarded": false, "t_s": 24450.0, "v1": 0.00954880720692719}
+{"pos": 816, "id": "oasis-Wedding 11", "label": 0.6699346405228751, "rewarded": true, "t_s": 24480.0, "v1": 0.10035054901473928}
+{"pos": 817, "id": "oasis-Wall 1", "label": 0.5130718954248367, "rewarded": false, "t_s": 24510.0, "v1": -0.07599746519219386}
+{"pos": 818, "id": "oasis-Fire 4", "label": 0.5539215686274517, "rewarded": false, "t_s": 24540.0, "v1": -0.17069036643804858}
+{"pos": 819, "id": "oasis-Mother 3", "label": 0.6815181518151817, "rewarded": false, "t_s": 24570.0, "v1": -0.07185443092568167}
+{"pos": 820, "id": "oasis-Sidewalk 1", "label": 0.5522875816993467, "rewarded": false, "t_s": 24600.0, "v1": -0.203716826741706}
+{"pos": 821, "id": "oasis-Snake 2", "label": 0.34640522875817004, "rewarded": false, "t_s": 24630.0, "v1": -0.1796833386949498}
+{"pos": 822, "id": "oasis-Thunderstorm 8", "label": 0.5620915032679733, "rewarded": false, "t_s": 24660.0, "v1": -0.20676891366739203}
+{"pos": 823, "id": "oasis-Cat 4", "label": 0.8071895424836599, "rewarded": false, "t_s": 24690.0, "v1": -0.19079970408614222}
+{"pos": 824, "id": "oasis-Snake 4", "label": 0.22875816993464002, "rewarded": true, "t_s": 24720.0, "v1": -0.2549482656350428}
+{"pos": 825, "id": "oasis-Cat 9", "label": 0.7222222222222218, "rewarded": false, "t_s": 24750.0, "v1": -0.15562394395173407}
+{"pos": 826, "id": "oasis-Galaxy 1", "label": 0.7663398692810449, "rewarded": false, "t_s": 24780.0, "v1": -0.11787480342020118}
+{"pos": 827, "id": "oasis-Grass 7", "label": 0.6486928104575167, "rewarded": false, "t_s": 24810.0, "v1": -0.16699554245005954}
+{"pos": 828, "id": "oasis-Camping 2", "label": 0.6600660066006601, "rewarded": true, "t_s": 24840.0, "v1": -0.025199818298821786, "score": 0.4945570641635688, "sure": 0.625}
+{"pos": 829, "id": "oasis-Injury 4", "label": 0.06535947712418333, "rewarded": false, "t_s": 24870.0, "v1": -0.36183461318862964}
+{"pos": 830, "id": "oasis-Wall 3", "label": 0.5098039215686266, "rewarded": false, "t_s": 24900.0, "v1": -0.19555706870299205}
+{"pos": 831, "id": "oasis-Lightning 6", "label": 0.5816993464052284, "rewarded": false, "t_s": 24930.0, "v1": -0.20909005943840986}
+{"pos": 832, "id": "oasis-Windmill 1", "label": 0.36111111111111166, "rewarded": true, "t_s": 24960.0, "v1": -0.19767025290179208, "score": 0.3926818889088062, "sure": 1.0}
+{"pos": 833, "id": "oasis-Socks 1", "label": 0.53395061728395, "rewarded": false, "t_s": 24990.0, "v1": -0.1427177145468118}
+{"pos": 834, "id": "oasis-Parasailing 4", "label": 0.7175925925925933, "rewarded": true, "t_s": 25020.0, "v1": -0.15825107145867912}
+{"pos": 835, "id": "oasis-Cups 1", "label": 0.5462046204620467, "rewarded": true, "t_s": 25050.0, "v1": 0.10557514582130034}
+{"pos": 836, "id": "oasis-Memorial 2", "label": 0.32673267326732663, "rewarded": false, "t_s": 25080.0, "v1": -0.32742508132770354}
+{"pos": 837, "id": "oasis-Bored pose 2", "label": 0.36437908496732, "rewarded": false, "t_s": 25110.0, "v1": -0.14364464347294803}
+{"pos": 838, "id": "oasis-Police 3", "label": 0.5478395061728399, "rewarded": false, "t_s": 25140.0, "v1": -0.29018302175790867}
+{"pos": 839, "id": "oasis-Dog 26", "label": 0.049382716049383345, "rewarded": false, "t_s": 25170.0, "v1": -0.23471531659743372}
+{"pos": 840, "id": "oasis-Nude man 6", "label": 0.5, "rewarded": false, "t_s": 25200.0, "v1": -0.2722109398245042}
+{"pos": 841, "id": "oasis-Cemetery 2", "label": 0.49834983498349833, "rewarded": false, "t_s": 25230.0, "v1": -0.08685508723607827}
+{"pos": 842, "id": "oasis-Flowers 3", "label": 0.7986798679867984, "rewarded": false, "t_s": 25260.0, "v1": -0.051940538750870235}
+{"pos": 843, "id": "oasis-Doctor 8", "label": 0.455445544554455, "rewarded": false, "t_s": 25290.0, "v1": -0.2784950507387528}
+{"pos": 844, "id": "oasis-Roofing 5", "label": 0.5082508250825084, "rewarded": false, "t_s": 25320.0, "v1": -0.1533284862381612}
+{"pos": 845, "id": "oasis-Dog 17", "label": 0.704620462046205, "rewarded": true, "t_s": 25350.0, "v1": -0.2008999018323554, "score": 0.3996704728992499, "sure": 1.0}
+{"pos": 846, "id": "oasis-Tiger 1", "label": 0.6237623762376233, "rewarded": false, "t_s": 25380.0, "v1": -0.07218812791858753}
+{"pos": 847, "id": "oasis-Gazing 7", "label": 0.6633986928104583, "rewarded": false, "t_s": 25410.0, "v1": 0.013960733492873967}
+{"pos": 848, "id": "oasis-Skijump 2", "label": 0.6435643564356434, "rewarded": false, "t_s": 25440.0, "v1": -0.045608019605606565}
+{"pos": 849, "id": "oasis-Frustrated pose 1", "label": 0.22549019607843168, "rewarded": false, "t_s": 25470.0, "v1": 0.004719200088552533}
+{"pos": 850, "id": "oasis-Lion 5", "label": 0.45424836601307167, "rewarded": false, "t_s": 25500.0, "v1": -0.20354075334044797}
+{"pos": 851, "id": "oasis-Paintbrush 1", "label": 0.5108024691358017, "rewarded": false, "t_s": 25530.0, "v1": 0.10426660859015113}
+{"pos": 852, "id": "oasis-Cheerleader 2", "label": 0.6996699669967, "rewarded": false, "t_s": 25560.0, "v1": -0.13318279184340076}
+{"pos": 853, "id": "oasis-Doctor 6", "label": 0.5637254901960783, "rewarded": false, "t_s": 25590.0, "v1": -0.13378046696940182}
+{"pos": 854, "id": "oasis-Doctor 2", "label": 0.50925925925926, "rewarded": false, "t_s": 25620.0, "v1": -0.2759590718521935}
+{"pos": 855, "id": "oasis-Soldiers 9", "label": 0.4117647058823533, "rewarded": false, "t_s": 25650.0, "v1": -0.19637763267701835}
+{"pos": 856, "id": "oasis-Depressed pose 2", "label": 0.414191419141915, "rewarded": false, "t_s": 25680.0, "v1": -0.10813427982080726}
+{"pos": 857, "id": "oasis-Garbage dump 1", "label": 0.19934640522875835, "rewarded": false, "t_s": 25710.0, "v1": -0.10100284067884047}
+{"pos": 858, "id": "oasis-Sad face 3", "label": 0.3564356435643567, "rewarded": true, "t_s": 25740.0, "v1": -0.26552870230113135}
+{"pos": 859, "id": "oasis-Dog 30", "label": 0.5972222222222218, "rewarded": false, "t_s": 25770.0, "v1": -0.05295026708928785}
+{"pos": 860, "id": "oasis-Thunderstorm 7", "label": 0.5808580858085817, "rewarded": true, "t_s": 25800.0, "v1": -0.21098851788002604}
+{"pos": 861, "id": "oasis-Rocks 7", "label": 0.5522875816993467, "rewarded": false, "t_s": 25830.0, "v1": -0.10969454307673876}
+{"pos": 862, "id": "oasis-Cups 4", "label": 0.5231481481481484, "rewarded": false, "t_s": 25860.0, "v1": -0.12899887528347498}
+{"pos": 863, "id": "oasis-Fence 5", "label": 0.46241830065359496, "rewarded": true, "t_s": 25890.0, "v1": -0.21351477970932053}
+{"pos": 864, "id": "oasis-Child labor 1", "label": 0.5432098765432101, "rewarded": false, "t_s": 25920.0, "v1": -0.16413086237089058}
+{"pos": 865, "id": "oasis-Opossum 1", "label": 0.38071895424836666, "rewarded": false, "t_s": 25950.0, "v1": -0.26454563823323063}
+{"pos": 866, "id": "oasis-Surgery 5", "label": 0.498366013071895, "rewarded": false, "t_s": 25980.0, "v1": -0.2341184326591743}
+{"pos": 867, "id": "oasis-Wolf 2", "label": 0.348039215686275, "rewarded": true, "t_s": 26010.0, "v1": -0.21273982044861472}
+{"pos": 868, "id": "oasis-Fire 3", "label": 0.17592592592592662, "rewarded": false, "t_s": 26040.0, "v1": -0.2600881324960982}
+{"pos": 869, "id": "oasis-Flowers 10", "label": 0.7098765432098767, "rewarded": false, "t_s": 26070.0, "v1": -0.1608021735298526}
+{"pos": 870, "id": "oasis-Yoga 4", "label": 0.787581699346405, "rewarded": false, "t_s": 26100.0, "v1": -0.04458370039969772}
+{"pos": 871, "id": "oasis-Sad pose 3", "label": 0.3117283950617283, "rewarded": false, "t_s": 26130.0, "v1": -0.21003502094891469}
+{"pos": 872, "id": "oasis-Sad pose 7", "label": 0.29012345679012336, "rewarded": false, "t_s": 26160.0, "v1": -0.038580800337458476}
+{"pos": 873, "id": "oasis-Gargoyle 1", "label": 0.483660130718955, "rewarded": false, "t_s": 26190.0, "v1": -0.24750331859734176}
+{"pos": 874, "id": "oasis-Graveyard 2", "label": 0.37953795379538, "rewarded": true, "t_s": 26220.0, "v1": -0.28145346304073127, "score": 0.3617809579953263, "sure": 1.0}
+{"pos": 875, "id": "oasis-Cemetery 1", "label": 0.5179738562091499, "rewarded": false, "t_s": 26250.0, "v1": -0.3066178810764326}
+{"pos": 876, "id": "oasis-Lake 14", "label": 0.88562091503268, "rewarded": true, "t_s": 26280.0, "v1": 0.03142020249650479}
+{"pos": 877, "id": "oasis-Paper 5", "label": 0.56045751633987, "rewarded": false, "t_s": 26310.0, "v1": 0.06591190440214745}
+{"pos": 878, "id": "oasis-Bar 2", "label": 0.6254125412541249, "rewarded": true, "t_s": 26340.0, "v1": -0.12222211122934756}
+{"pos": 879, "id": "oasis-Office supplies 1", "label": 0.5061728395061733, "rewarded": false, "t_s": 26370.0, "v1": -0.1018593643765694}
+{"pos": 880, "id": "oasis-Timber 1", "label": 0.4719471947194717, "rewarded": true, "t_s": 26400.0, "v1": -0.19929376368036866}
+{"pos": 881, "id": "oasis-Volcano 3", "label": 0.564814814814815, "rewarded": false, "t_s": 26430.0, "v1": -0.0657775823636001}
+{"pos": 882, "id": "oasis-Exercise 1", "label": 0.61764705882353, "rewarded": true, "t_s": 26460.0, "v1": -0.23564502264401532}
+{"pos": 883, "id": "oasis-Nude couple 6", "label": 0.7161716171617166, "rewarded": false, "t_s": 26490.0, "v1": -0.1375884671421339}
+{"pos": 884, "id": "oasis-Archery 2", "label": 0.63562091503268, "rewarded": false, "t_s": 26520.0, "v1": -0.10466778319555481}
+{"pos": 885, "id": "oasis-Skinhead 1", "label": 0.3425925925925933, "rewarded": false, "t_s": 26550.0, "v1": -0.2473082008673405}
+{"pos": 886, "id": "oasis-Baby 1", "label": 0.862654320987655, "rewarded": false, "t_s": 26580.0, "v1": -0.13843309065901}
+{"pos": 887, "id": "oasis-Yarn 2", "label": 0.5181518151815183, "rewarded": false, "t_s": 26610.0, "v1": 0.07854904964931442}
+{"pos": 888, "id": "oasis-Bungee jumping 3", "label": 0.685185185185185, "rewarded": false, "t_s": 26640.0, "v1": 0.03419254519839643}
+{"pos": 889, "id": "oasis-Neutral pose 3", "label": 0.4686468646864683, "rewarded": true, "t_s": 26670.0, "v1": -0.2182034538940647}
+{"pos": 890, "id": "oasis-Angry pose 1", "label": 0.3024691358024683, "rewarded": false, "t_s": 26700.0, "v1": -0.2551368606475698}
+{"pos": 891, "id": "oasis-Dog 23", "label": 0.27941176470588164, "rewarded": true, "t_s": 26730.0, "v1": -0.23424820600045837}
+{"pos": 892, "id": "oasis-Scary face 2", "label": 0.33993399339934, "rewarded": false, "t_s": 26760.0, "v1": -0.14377088604925692}
+{"pos": 893, "id": "oasis-Rafting 1", "label": 0.5972222222222218, "rewarded": true, "t_s": 26790.0, "v1": 0.044932431527506034}
+{"pos": 894, "id": "oasis-Knife 2", "label": 0.39052287581699335, "rewarded": false, "t_s": 26820.0, "v1": -0.25458718288532456}
+{"pos": 895, "id": "oasis-Dummy 1", "label": 0.026234567901235017, "rewarded": true, "t_s": 26850.0, "v1": -0.32934267483530855}
+{"pos": 896, "id": "oasis-Nude woman 14", "label": 0.6813725490196084, "rewarded": false, "t_s": 26880.0, "v1": -0.17363374579112323}
+{"pos": 897, "id": "oasis-Couple 3", "label": 0.5015432098765434, "rewarded": false, "t_s": 26910.0, "v1": 0.08294296567795512}
+{"pos": 898, "id": "oasis-Cat 12", "label": 0.6975308641975316, "rewarded": false, "t_s": 26940.0, "v1": -0.1772539247300351}
+{"pos": 899, "id": "oasis-Yarn 3", "label": 0.5506535947712417, "rewarded": false, "t_s": 26970.0, "v1": -0.17786375134271026}

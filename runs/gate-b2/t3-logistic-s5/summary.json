@@ -1,0 +1,40 @@
+{
+ "task": "t3",
+ "arm": "logistic",
+ "seed": 5,
+ "n_items": 900,
+ "windows": {
+  "k25": {
+   "n": 100,
+   "accuracy": 0.7,
+   "spearman": 0.6610160846596947,
+   "ece": 0.1657034825061558
+  },
+  "k50": {
+   "n": 100,
+   "accuracy": 0.69,
+   "spearman": 0.7550577709538063,
+   "ece": 0.236801171909381
+  },
+  "k100": {
+   "n": 100,
+   "accuracy": 0.63,
+   "spearman": 0.8135642044822406,
+   "ece": 0.20850804263548678
+  }
+ },
+ "ece_raw_k100plus": 0.20850804263548678,
+ "ece_isotonic_k100plus": 0.10148701454751186,
+ "n_calib": 39,
+ "one_seed_accuracy_all": 0.6666666666666666,
+ "wall_s": 0.3121910095214844,
+ "score_wall_s": 0.0,
+ "n_scored": 0,
+ "recall": {
+  "n_sweet": 30,
+  "n_bitter": 30,
+  "sweet_trained": 0.7235509599129775,
+  "bitter_trained": 0.5683807557356475,
+  "gap": 0.15517020417732996
+ }
+}

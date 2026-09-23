@@ -1,0 +1,40 @@
+{
+ "task": "t3",
+ "arm": "hash",
+ "seed": 4,
+ "n_items": 900,
+ "windows": {
+  "k25": {
+   "n": 100,
+   "accuracy": 0.6,
+   "spearman": 0.1319079608923572,
+   "ece": 0.39124999999999993
+  },
+  "k50": {
+   "n": 100,
+   "accuracy": 0.54,
+   "spearman": 0.30377620028269847,
+   "ece": 0.42375
+  },
+  "k100": {
+   "n": 100,
+   "accuracy": 0.4,
+   "spearman": 0.15126630325605225,
+   "ece": 0.5825
+  }
+ },
+ "ece_raw_k100plus": 0.5825,
+ "ece_isotonic_k100plus": 0.2973529411764706,
+ "n_calib": 40,
+ "one_seed_accuracy_all": 0.5822222222222222,
+ "wall_s": 2106.3424661159515,
+ "score_wall_s": 1446.6973519325256,
+ "n_scored": 340,
+ "recall": {
+  "n_sweet": 30,
+  "n_bitter": 30,
+  "sweet_trained": 0.5243831732088248,
+  "bitter_trained": 0.48024345818455766,
+  "gap": 0.04413971502426711
+ }
+}
