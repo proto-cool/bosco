@@ -1,5 +1,7 @@
 # Plan (written 2026-09-22)
 
+> Superseded as the statement of intent by `BRIEF.md` (2026-09-23): a Jev-style decider in which one fly decides; the phases below are the history of how it got there.
+
 v1 is over and answered: a fly connectome cannot carry a social account. What
 ran was VADER, an n-gram, a clock and rate caps, with the brain deciding only
 *when*. Its closing note is on `main`. This plan is for what is novel about the
