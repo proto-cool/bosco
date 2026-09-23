@@ -245,14 +245,22 @@ def load_cache(arm: str, sets: ItemSets) -> np.ndarray:
 class OfflineFly:
     """The mushroom body of an arm, driven from cached Kenyon-cell codes.  No kernel."""
 
-    def __init__(self, arm: str, brain_path: str | None, kc: np.ndarray, ltm_by_item: bool = True) -> None:
+    def __init__(
+        self, arm: str, brain_path: str | None, kc: np.ndarray, ltm_by_item: bool = True, ext_eta: float = 0.0
+    ) -> None:
         from bosco.model import Brain
         from bosco.plasticity import MushroomBody, load_plasticity_params
         from bosco.sim import Fly
 
         self.arm = arm
         self.fly = Fly(Brain.load(brain_path)) if brain_path else Fly()
-        self.mb = MushroomBody(self.fly, replace(load_plasticity_params(), credit_mode="mixture", credit_contrast=True))
+        # ext_eta > 0 (product tuning, docs/PRODUCT-TUNING.md): unreinforced activity relieves
+        # depression in the compartment that did not get its dopamine -- the bidirectional rule
+        # kept disabled in config/plasticity_v2.yaml.  0 is the rule every gate ran.
+        self.mb = MushroomBody(
+            self.fly,
+            replace(load_plasticity_params(), credit_mode="mixture", credit_contrast=True, ext_eta=float(ext_eta)),
+        )
         self.kc = kc
         self.ltm_by_item = ltm_by_item
         self.last_pair: dict[int, float] = {}
@@ -272,9 +280,10 @@ class OfflineFly:
         if self.ltm_by_item:
             last = self.last_pair.get(item)
             consolidate = last is not None and (t_h - last) >= SPACING_H
-        self.mb.pair_counts(
-            self.counts(item, seed) * (1000.0 / PRESENT_MS), valence, t_h, scale=scale, consolidate=consolidate
-        )
+        c = self.counts(item, seed) * (1000.0 / PRESENT_MS)
+        self.mb.pair_counts(c, valence, t_h, scale=scale, consolidate=consolidate)
+        if self.mb.p.ext_eta > 0:
+            self.mb.extinguish_counts(c, t_h, spare=valence)
         self.last_pair[item] = t_h
 
     def score(self, item: int) -> tuple[float, float]:
