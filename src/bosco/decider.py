@@ -40,6 +40,7 @@ N_FLIES = 5
 N_RECALL = 30  # trained items per side that define the neutral
 MIN_CALIB = 20  # pre-pairing predictions before the isotonic map is trusted
 CALIB_SHARE = 0.2  # of a bootstrap set: scored by the swarm before they are paired, for calibration
+REHEARSE_H = (1.0, 3.0, 24.0)  # a rewarded item is paired again at these delays: spaced training -> long-term memory
 PRESENT_MS = G.PRESENT_MS
 BRAINS = {"real": None, "shuffle": str(paths.CACHE / "dunce_v1.npz"), "hash": str(paths.CACHE / "hash_v1.npz")}
 
@@ -90,6 +91,7 @@ class Decider:
         self.decisions: dict[str, dict] = {}
         self.mod: dict[str, Modality] = {m: Modality(m) for m in ("text", "image", "mixed")}
         self.last_pair: dict[str, float] = {}
+        self.rehearsals: list[list] = []  # [t_h, cid, side, magnitude], due when the clock passes t_h
         self.t0 = time.time()
         self.clock_offset_h = 0.0
         self.state_dir = Path(state_dir) if state_dir else None
@@ -175,8 +177,20 @@ class Decider:
         iso = IsotonicRegression(out_of_bounds="clip", y_min=0.5, y_max=1.0).fit(d, c)
         return float(np.clip(iso.predict([dist])[0], 0.5, 1.0))
 
+    def _tick(self) -> None:
+        """Rehearsals that have come due are paired now, in clock order (docs/PRODUCT-TUNING.md)."""
+        now = self.now_h()
+        due = sorted(r for r in self.rehearsals if r[0] <= now)
+        self.rehearsals = [r for r in self.rehearsals if r[0] > now]
+        for t_h, cid, side, mag in due:
+            if cid in self.kc:
+                self._pair(cid, side, mag, t_h)
+                for m in self.mod.values():
+                    m.stale = True
+
     # ---- the API -----------------------------------------------------------------------------
     def decide(self, text: str | None = None, image: str | None = None) -> dict:
+        self._tick()
         t_h = self.now_h()
         for mb in self.mbs:
             mb.forget(t_h)
@@ -237,8 +251,10 @@ class Decider:
         correct = 1.0 if (d["raw"] > m.neutral) == (side > 0.5) else 0.0
         if len(m.trained) >= 10:  # what it predicted before this pairing, for calibration
             m.pre.append((d["distance"], correct))
+        self._tick()
         t_h = self.now_h()
         self._pair(decision_id, side, mag, t_h)
+        self.rehearsals += [[t_h + dt, decision_id, side, mag] for dt in REHEARSE_H]
         m.trained.append((decision_id, side))
         m.stale = True
         return {
@@ -250,12 +266,14 @@ class Decider:
         }
 
     def state(self) -> dict:
+        self._tick()
         out = {
             "arm": self.arm,
             "flies": len(self.mbs),
             "t_h": self.now_h(),
             "digest": hashlib.blake2b("".join(mb.digest() for mb in self.mbs).encode(), digest_size=8).hexdigest(),
             "items_seen": len(self.kc),
+            "rehearsals_pending": len(self.rehearsals),
             "modalities": {},
         }
         for name, m in self.mod.items():
@@ -322,7 +340,9 @@ class Decider:
             for i in {int(orders[k][n]) for k in range(len(self.mbs))}:
                 self.last_pair[cid_of(i)] = t_h
         for i in train:
-            m.trained.append((cid_of(i), 1.0 if labels[i] > 0.5 else 0.0))
+            side = 1.0 if labels[i] > 0.5 else 0.0
+            m.trained.append((cid_of(i), side))
+            self.rehearsals += [[self.last_pair[cid_of(i)] + dt, cid_of(i), side, 1.0] for dt in REHEARSE_H]
         # calibration: the swarm's predictions on items it has not been paired with, then pair them
         m.stale = True
         self.refresh_neutral(m)
@@ -333,6 +353,7 @@ class Decider:
             m.pre.append((abs(raw - m.neutral) / m.spread, 1.0 if (raw > m.neutral) == (side > 0.5) else 0.0))
             self.clock_offset_h += B.ITEM_SPACING_S / 3600.0
             self._pair(cid, side, 1.0, self.now_h())
+            self.rehearsals += [[self.now_h() + dt, cid, side, 1.0] for dt in REHEARSE_H]
             m.trained.append((cid, side))
         m.stale = True
         log(
@@ -356,6 +377,7 @@ class Decider:
             "clock_h": self.now_h(),
             "decisions": self.decisions,
             "last_pair": self.last_pair,
+            "rehearsals": self.rehearsals,
             "mod": {
                 k: {"trained": m.trained, "shown": m.shown, "pre": m.pre, "neutral": m.neutral, "spread": m.spread}
                 for k, m in self.mod.items()
@@ -376,6 +398,7 @@ class Decider:
             self.kc[cid] = row
         self.decisions = meta["decisions"]
         self.last_pair = meta["last_pair"]
+        self.rehearsals = [list(r) for r in meta.get("rehearsals", [])]
         for k, m in meta["mod"].items():
             self.mod[k] = Modality(
                 k,

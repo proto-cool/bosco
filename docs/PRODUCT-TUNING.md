@@ -59,3 +59,29 @@ Expected, on sentences it has never tasted: **about 0.66 balanced, rho
 0.44**; on pictures from text alone, **about 0.76**; the encoder's own
 ceiling on this text is 0.70–0.72. That is where the tweaking stops: what is
 left is the learning rule, and changing it is a gate, not a tweak.
+
+## Live use: a one-shot memory is gone by evening (2026-09-23, evening)
+
+Nick asked whether the saturation seen in training would be a problem as the
+decider lives and sees more rewards. Simulated: 60 biological days of live
+rewards, each a new sentence paired once, scored on the 400 held-out sentences
+every 10 days (single fly, real wiring, product cache).
+
+| rewards/day | | d10 | d20 | d30 | d40 | d50 | d60 |
+|---|---|---|---|---|---|---|---|
+| 20 | as the rule stands | 0.51 | 0.43 | 0.60 | 0.52 | 0.50 | — |
+| 20 | **rehearsal +1 h, +3 h, +24 h** | 0.57 | 0.55 | 0.59 | 0.61 | 0.58 | **0.63** |
+| 100 | as the rule stands | 0.60 | 0.58 | 0.52 | 0.60 | 0.57 | — |
+| 100 | **rehearsal +1 h, +3 h, +24 h** | 0.62 | 0.61 | 0.62 | 0.62 | 0.62 | **0.64** |
+
+The live problem is the opposite of saturation: short-term memory fades in
+~4 h and long-term memory forms only from a spaced repetition of the *same*
+item, so a fly rewarded once per item knows only its last few hours. The
+bootstrap's 0.66 was 400 pairings inside 3.3 hours, all still fresh.
+
+**Rehearsal** is what a fly gets in training and what the decider now does
+on its own: every rewarded item is paired again from its cached code at +1 h,
++3 h and +24 h (`REHEARSE_H`), applied when the clock passes, at zero kernel
+cost. Long-term memory then forms (half the plastic synapses by day 60), the
+score holds at 0.62–0.64 for two months with no drift, and no saturation
+appears at these rates. It is scheduling inside the rule, not a change to it.
