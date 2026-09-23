@@ -1,0 +1,90 @@
+{
+ "real": {
+  "t4": {
+   "rho": 0.6518089620281871,
+   "balanced_at_text_neutral": 0.5277941248723926,
+   "balanced_at_picture_median": 0.7650685941074032,
+   "balanced_at_05": 0.7146894567608733,
+   "text_neutral": 0.45729132549018053,
+   "picture_median": 0.505329852835272,
+   "picture_trained_neutral": 0.5506417555952801,
+   "t3_balanced_at_own": 0.7450544008828648,
+   "t3_balanced_at_median": 0.7432122695567283
+  },
+  "confidence": {
+   "agreement": {
+    "auroc": 0.5339063602694217,
+    "ece_raw": 0.3121875,
+    "ece_isotonic": 0.14729177633288176,
+    "mean_conf_isotonic": 0.7631001185788711,
+    "accuracy": 0.632,
+    "top_quarter_accuracy": 0.653122398310844,
+    "bottom_quarter_accuracy": 0.5982297106563161
+   },
+   "distance": {
+    "auroc": 0.5706997425890848,
+    "ece_raw": 0.13194689756726458,
+    "ece_isotonic": 0.14683537653514683,
+    "mean_conf_isotonic": 0.7569382319662229,
+    "accuracy": 0.632,
+    "top_quarter_accuracy": 0.714,
+    "bottom_quarter_accuracy": 0.584
+   },
+   "distance_prepairing": {
+    "auroc": 0.5706997425890848,
+    "ece_isotonic": 0.05727015083006494,
+    "mean_conf_isotonic": 0.5907718235171132,
+    "accuracy": 0.632,
+    "top_quarter_accuracy": 0.714,
+    "bottom_quarter_accuracy": 0.584,
+    "fraction_p_ge_0.7": 0.05550000000000001,
+    "accuracy_when_p_ge_0.7": 0.7948717948717949,
+    "n_prepairing": 300.0
+   }
+  }
+ },
+ "hash": {
+  "t4": {
+   "rho": 0.6195490926473177,
+   "balanced_at_text_neutral": 0.5197555396633893,
+   "balanced_at_picture_median": 0.752785526725225,
+   "balanced_at_05": 0.673130653622959,
+   "text_neutral": 0.46960399786327417,
+   "picture_median": 0.5265437102072204,
+   "picture_trained_neutral": 0.5683958373663522,
+   "t3_balanced_at_own": 0.7246805981974844,
+   "t3_balanced_at_median": 0.7330253682140381
+  },
+  "confidence": {
+   "agreement": {
+    "auroc": 0.564698916966009,
+    "ece_raw": 0.3141875,
+    "ece_isotonic": 0.15646306109713248,
+    "mean_conf_isotonic": 0.7717317178135504,
+    "accuracy": 0.6170000000000001,
+    "top_quarter_accuracy": 0.6554925703198037,
+    "bottom_quarter_accuracy": 0.5482830318515722
+   },
+   "distance": {
+    "auroc": 0.586073454230515,
+    "ece_raw": 0.13394971790722884,
+    "ece_isotonic": 0.14543837349729555,
+    "mean_conf_isotonic": 0.7612614491338865,
+    "accuracy": 0.6170000000000001,
+    "top_quarter_accuracy": 0.688,
+    "bottom_quarter_accuracy": 0.52
+   },
+   "distance_prepairing": {
+    "auroc": 0.586073454230515,
+    "ece_isotonic": 0.05977741821571127,
+    "mean_conf_isotonic": 0.5751065299401608,
+    "accuracy": 0.6170000000000001,
+    "top_quarter_accuracy": 0.688,
+    "bottom_quarter_accuracy": 0.52,
+    "fraction_p_ge_0.7": 0.1365,
+    "accuracy_when_p_ge_0.7": 0.7017317025820229,
+    "n_prepairing": 300.0
+   }
+  }
+ }
+}
