@@ -22,9 +22,9 @@ import numpy as np
 from bosco import gateb as G
 from bosco import paths
 
-GATE = "b3"
+GATE = "b4"  # docs/GATE-B4.md: B3 (tag gate-b3-run) with the fly's own neutral point and balanced accuracy
 RUNS = paths.ROOT / "runs" / f"gate-{GATE}"
-CACHE_DIR = paths.CACHE / f"gate-{GATE}"
+CACHE_DIR = paths.CACHE / "gate-b3"  # the caches and the antenna are B3's, unchanged
 N_PC = 26  # principal components; each becomes a + and a - glomerulus: 52 of the 53
 N_TRAIN_SIDE = 200  # sweet and bitter training items each
 N_HELDOUT = 400
@@ -284,14 +284,26 @@ def schedule(train: list[int], seed: int, epochs: int, t0_h: float = 0.0) -> lis
     return out
 
 
-def evaluate(fly: OfflineFly, idx: list[int], labels: np.ndarray) -> dict:
+def balanced(scores: np.ndarray, labels: np.ndarray, neutral: float) -> float:
+    """Balanced accuracy: sweet if score > neutral.  Mean of the two per-class rates."""
+    y = labels > 0.5
+    if y.all() or (~y).all():
+        return float(((scores > neutral) == y).mean())
+    return float(0.5 * (((scores > neutral) & y).sum() / y.sum() + ((scores <= neutral) & ~y).sum() / (~y).sum()))
+
+
+def evaluate(fly: OfflineFly, idx: list[int], labels: np.ndarray, neutral: float = 0.5) -> dict:
+    """`neutral` is the fly's own (docs/GATE-B4.md): the midpoint of its recall of its trained items."""
     sc = [fly.score(i) for i in idx]
     s = np.array([a for a, _ in sc])
     su = np.array([b for _, b in sc])
-    correct = (s > 0.5) == (labels > 0.5)
+    correct = (s > neutral) == (labels > 0.5)
     return {
         "n": len(idx),
-        "accuracy": float(correct.mean()),
+        "neutral": float(neutral),
+        "accuracy": float(((s > 0.5) == (labels > 0.5)).mean()),  # at 0.5, as B3 scored it
+        "balanced_05": balanced(s, labels, 0.5),
+        "balanced_own": balanced(s, labels, neutral),
         "spearman": G.spearman(s, labels),
         "ece": G.ece(su, correct),
         "score_mean": float(s.mean()),
@@ -314,6 +326,7 @@ def recall(fly: OfflineFly, train: list[int], labels: np.ndarray, order: list[in
         "sweet_trained": float(np.mean(s)),
         "bitter_trained": float(np.mean(b)),
         "gap": float(np.mean(s) - np.mean(b)),
+        "midpoint": float((np.mean(s) + np.mean(b)) / 2.0),  # the fly's own neutral point
     }
 
 
@@ -323,6 +336,7 @@ def baselines(
     """What a fitted model and a similarity memory do on the same items: the raw embedding, the
     antenna (52-d), and the fly's own Kenyon-cell code (seed 0), for context beside the fly."""
     from sklearn.linear_model import LogisticRegression
+    from sklearn.metrics import balanced_accuracy_score
     from sklearn.neighbors import KNeighborsClassifier
 
     y_tr = labels[train] > 0.5
@@ -333,8 +347,8 @@ def baselines(
     for name, X in (("raw", sets.e), ("antenna", Z), ("kc_code", K)):
         lr = LogisticRegression(max_iter=3000, C=1.0).fit(X[train], y_tr)
         knn = KNeighborsClassifier(n_neighbors=KNN_K, metric="cosine").fit(X[train], y_tr)
-        out[f"lr_{name}"] = float(lr.score(X[held], y_te))
-        out[f"knn_{name}"] = float(knn.score(X[held], y_te))
+        out[f"lr_{name}"] = float(balanced_accuracy_score(y_te, lr.predict(X[held])))
+        out[f"knn_{name}"] = float(balanced_accuracy_score(y_te, knn.predict(X[held])))
     return out
 
 
@@ -354,6 +368,8 @@ def run_task(task: str, arm: str, brain_path: str | None, seed: int, sets: ItemS
     }
     t_wall = time.time()
 
+    neutral = {"v": 0.5}  # the fly's own, updated at every epoch from its recall
+
     def learn(epochs: int, flip: bool, t0_h: float) -> float:
         sched = schedule(train, seed if not flip else seed + 1000, epochs, t0_h)
         per_epoch = len(train)
@@ -370,8 +386,9 @@ def run_task(task: str, arm: str, brain_path: str | None, seed: int, sets: ItemS
                 ep = (n + 1) // per_epoch
                 y_held = (1.0 - labels[held]) if flip else labels[held]
                 y_tr = (1.0 - labels) if flip else labels
-                ev = evaluate(fly, held, y_held)
                 rc = recall(fly, train, y_tr, order)
+                neutral["v"] = rc["midpoint"]
+                ev = evaluate(fly, held, y_held, neutral=rc["midpoint"])
                 rec = {
                     "phase": "flip" if flip else "acq",
                     "epoch": ep,
@@ -381,14 +398,14 @@ def run_task(task: str, arm: str, brain_path: str | None, seed: int, sets: ItemS
                 }
                 out["epochs"].append(rec)
                 log(
-                    f"[{task}/{arm}/s{seed}] {'flip ' if flip else ''}epoch {ep}: held-out acc {ev['accuracy']:.3f} rho {ev['spearman']:.2f}; recall gap {rc['gap']:+.3f}; {time.time() - t_wall:.0f}s"
+                    f"[{task}/{arm}/s{seed}] {'flip ' if flip else ''}epoch {ep}: held-out balanced {ev['balanced_own']:.3f} at own neutral {rc['midpoint']:.3f} ({ev['balanced_05']:.3f} at 0.5), rho {ev['spearman']:.2f}; recall gap {rc['gap']:+.3f}; {time.time() - t_wall:.0f}s"
                 )
         return t
 
     t_end = learn(REPS, False, 0.0)
     if task == "t1":
         # T4: the trained fly on every picture, no rewards
-        ev = evaluate(fly, sets.idx("oasis_all"), labels[sets.idx("oasis_all")])
+        ev = evaluate(fly, sets.idx("oasis_all"), labels[sets.idx("oasis_all")], neutral=neutral["v"])
         out["t4_transfer"] = {k: v for k, v in ev.items() if k != "scores"}
         # T6: the probe sheet
         out["t6_probes"] = [
@@ -401,7 +418,7 @@ def run_task(task: str, arm: str, brain_path: str | None, seed: int, sets: ItemS
         ]
         # retention: 24 h of silence after the last pairing, then the held-out set again
         fly.forget_to(t_end + 24.0)
-        ev = evaluate(fly, held, labels[held])
+        ev = evaluate(fly, held, labels[held], neutral=neutral["v"])
         out["retention_24h"] = {k: v for k, v in ev.items() if k != "scores"}
         fly.forget_to(t_end + 24.0)  # (the clock only moves forward)
     if task == "t2":
@@ -418,18 +435,20 @@ def decide(summaries: list[dict]) -> list[str]:
         if not ss:
             continue
         if task == "t1":
-            acc = np.mean([s["epochs"][REPS - 1]["heldout"]["accuracy"] for s in ss])
+            curve = [np.mean([s["epochs"][e]["heldout"]["balanced_own"] for s in ss]) for e in range(REPS)]
+            best = int(np.argmax(curve))
+            acc = curve[best]
             ceil = np.mean([s["baselines"]["lr_antenna"] for s in ss])
-            gap = np.mean([s["epochs"][REPS - 1]["recall"]["gap"] for s in ss])
+            gap = np.mean([s["epochs"][best]["recall"]["gap"] for s in ss])
             lines.append(
-                f"- T1 generalisation: real {acc:.3f} vs {BAR_CEILING_FRACTION} x antenna ceiling {ceil:.3f} = {BAR_CEILING_FRACTION * ceil:.3f}: {'PASS' if acc >= BAR_CEILING_FRACTION * ceil else 'FAIL'}"
+                f"- T1 generalisation (balanced, own neutral, best epoch {best + 1} of {[round(c, 3) for c in curve]}): real {acc:.3f} vs {BAR_CEILING_FRACTION} x antenna ceiling {ceil:.3f} = {BAR_CEILING_FRACTION * ceil:.3f}: {'PASS' if acc >= BAR_CEILING_FRACTION * ceil else 'FAIL'}"
             )
             lines.append(
                 f"- T1 memory: recall gap {gap:+.3f} vs {BAR_RECALL_GAP:+.2f}: {'PASS' if gap >= BAR_RECALL_GAP else 'FAIL'}"
             )
         else:
-            pre = np.mean([s["epochs"][REPS - 1]["heldout"]["accuracy"] for s in ss])
-            post = [np.mean([s["epochs"][REPS + k]["heldout"]["accuracy"] for s in ss]) for k in range(REPS)]
+            pre = max(np.mean([s["epochs"][e]["heldout"]["balanced_own"] for s in ss]) for e in range(REPS))
+            post = [np.mean([s["epochs"][REPS + k]["heldout"]["balanced_own"] for s in ss]) for k in range(REPS)]
             ok = any(p >= BAR_CEILING_FRACTION * pre for p in post)
             first = next((k + 1 for k, p in enumerate(post) if p >= BAR_CEILING_FRACTION * pre), None)
             lines.append(

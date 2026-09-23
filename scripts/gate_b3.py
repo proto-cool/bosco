@@ -77,7 +77,11 @@ def cmd_all(a) -> int:
 
 def cmd_report(a) -> int:
     runs = [json.load(open(f)) for f in sorted(B.RUNS.glob("t*-*-s*.json"))]
-    lines = ["# Gate B3 results\n", f"{len(runs)} runs under `runs/gate-b3/`. Pre-registration: `GATE-B3.md`.\n"]
+    g = B.GATE.upper()
+    lines = [
+        f"# Gate {g} results\n",
+        f"{len(runs)} runs under `runs/gate-{B.GATE}/`. Pre-registration: `GATE-{g}.md`.\n",
+    ]
     for task in ("t1", "t2", "t3"):
         ss = [s for s in runs if s["task"] == task]
         if not ss:
@@ -87,39 +91,40 @@ def cmd_report(a) -> int:
         lines.append(
             "| arm | seeds | "
             + " | ".join(f"ep{e + 1} acc" for e in range(n_ep))
-            + " | final rho | recall gap | lr antenna | lr raw | knn antenna | knn kc |"
+            + " | final at 0.5 | final rho | recall gap | lr antenna | lr raw | knn antenna | knn kc |"
         )
-        lines.append("|---|---|" + "---|" * n_ep + "---|---|---|---|---|---|")
+        lines.append("|---|---|" + "---|" * n_ep + "---|---|---|---|---|---|---|")
         for arm in ("real", "shuffle", "hash"):
             aa = [s for s in ss if s["arm"] == arm]
             if not aa:
                 continue
             cells = []
             for e in range(n_ep):
-                v = [s["epochs"][e]["heldout"]["accuracy"] for s in aa if len(s["epochs"]) > e]
+                v = [s["epochs"][e]["heldout"]["balanced_own"] for s in aa if len(s["epochs"]) > e]
                 cells.append(f"{np.mean(v):.3f}±{np.std(v):.3f}" if v else "—")
+            at05 = np.mean([s["epochs"][-1]["heldout"]["balanced_05"] for s in aa])
             rho = np.mean([s["epochs"][-1]["heldout"]["spearman"] for s in aa])
             gap = np.mean([s["epochs"][-1]["recall"]["gap"] for s in aa])
             b = {k: np.mean([s["baselines"][k] for s in aa]) for k in aa[0]["baselines"]}
             lines.append(
                 f"| {arm} | {len(aa)} | "
                 + " | ".join(cells)
-                + f" | {rho:.2f} | {gap:+.3f} | {b['lr_antenna']:.3f} | {b['lr_raw']:.3f} | {b['knn_antenna']:.3f} | {b['knn_kc_code']:.3f} |"
+                + f" | {at05:.3f} | {rho:.2f} | {gap:+.3f} | {b['lr_antenna']:.3f} | {b['lr_raw']:.3f} | {b['knn_antenna']:.3f} | {b['knn_kc_code']:.3f} |"
             )
         if task == "t1":
             for arm in ("real", "shuffle", "hash"):
                 aa = [s for s in ss if s["arm"] == arm]
                 if aa and "t4_transfer" in aa[0]:
                     lines.append(
-                        f"\n{arm}: T4 transfer to 900 pictures rho {np.mean([s['t4_transfer']['spearman'] for s in aa]):+.3f}, acc {np.mean([s['t4_transfer']['accuracy'] for s in aa]):.3f}; "
-                        f"retention 24 h: held-out acc {np.mean([s['retention_24h']['accuracy'] for s in aa]):.3f}"
+                        f"\n{arm}: T4 transfer to 900 pictures rho {np.mean([s['t4_transfer']['spearman'] for s in aa]):+.3f}, balanced {np.mean([s['t4_transfer']['balanced_own'] for s in aa]):.3f} at own neutral; "
+                        f"retention 24 h: held-out balanced {np.mean([s['retention_24h']['balanced_own'] for s in aa]):.3f}"
                     )
             real = [s for s in ss if s["arm"] == "real"]
             if real and "t6_probes" in real[0]:
                 lines.append("\nProbe sheet, real wiring, mean over seeds (0 bitter .. 1 sweet):\n")
                 for j, p in enumerate(real[0]["t6_probes"]):
                     lines.append(f"- {p['text']}: {np.mean([s['t6_probes'][j]['score'] for s in real]):.3f}")
-    lines.append("\n## The bar (GATE-B3.md)\n")
+    lines.append(f"\n## The bar (GATE-{g}.md)\n")
     lines += B.decide(runs)
     f = B.CACHE_DIR / "antenna.json"
     if f.exists():
@@ -128,7 +133,7 @@ def cmd_report(a) -> int:
             f"\nAntenna: {B.N_PC} PCs x (+,-), scale {d['scale_hz']:.1f} Hz, KC fraction over {d['n']} calibration sentences mean {d['kc_mean']:.4f}."
         )
     txt = "\n".join(lines) + "\n"
-    (paths.DOCS / "gate-b3-results.md").write_text(txt)
+    (paths.DOCS / f"gate-{B.GATE}-results.md").write_text(txt)
     print(txt)
     return 0
 
