@@ -55,11 +55,14 @@ class Antenna:
     W: np.ndarray  # (N_PC, 512)
     norm: float
     scale_hz: float
+    scales: np.ndarray | None = None  # product antenna: per-component divisor (whitening), label-free
 
     def z(self, e: np.ndarray) -> np.ndarray:
         c = e - self.mu
         c = c / max(1e-9, float(np.linalg.norm(c)))
         p = self.W @ c
+        if self.scales is not None:
+            p = p / self.scales
         return np.clip(np.concatenate([np.maximum(0.0, p), np.maximum(0.0, -p)]) / self.norm, 0.0, 1.0)
 
     def rates(self, e: np.ndarray) -> np.ndarray:
@@ -72,11 +75,20 @@ class Antenna:
             "W": self.W.tolist(),
             "norm": self.norm,
             "scale_hz": self.scale_hz,
+            "scales": None if self.scales is None else self.scales.tolist(),
         }
 
     @classmethod
     def from_json(cls, d: dict) -> Antenna:
-        return cls(d["glomeruli"], np.asarray(d["mu"]), np.asarray(d["W"]), d["norm"], d["scale_hz"])
+        sc = d.get("scales")
+        return cls(
+            d["glomeruli"],
+            np.asarray(d["mu"]),
+            np.asarray(d["W"]),
+            d["norm"],
+            d["scale_hz"],
+            None if sc is None else np.asarray(sc),
+        )
 
 
 def pca_components(e_calib: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
@@ -91,11 +103,12 @@ def stimulus(fly, ant: Antenna, rates: np.ndarray, orn_idx):
     return G.stimulus_of(fly, ant, rates, orn_idx)
 
 
-def calibrate_antenna(fly, e_calib: np.ndarray, log=print) -> Antenna:
+def calibrate_antenna(fly, e_calib: np.ndarray, log=print, white: bool = False, path: Path | None = None) -> Antenna:
     """PCA on the calibration embeddings, then the one scalar by bisection on 50 of them and
-    verification on all 500, as in B/B2.  Cached: every arm reads this file."""
-    CACHE_DIR.mkdir(parents=True, exist_ok=True)
-    f = CACHE_DIR / "antenna.json"
+    verification on all 500, as in B/B2.  Cached: every arm reads this file.  `white` (the product
+    antenna) scales each component to unit variance over the calibration set before the sign split."""
+    f = path or (CACHE_DIR / "antenna.json")
+    f.parent.mkdir(parents=True, exist_ok=True)
     gl_all, orn_all = G.orn_index(fly)
     gl = gl_all[: 2 * N_PC]
     if f.exists():
@@ -104,8 +117,11 @@ def calibrate_antenna(fly, e_calib: np.ndarray, log=print) -> Antenna:
     c = e_calib - mu
     c = c / np.linalg.norm(c, axis=1, keepdims=True)
     p = c @ W.T
+    scales = p.std(0) if white else None
+    if scales is not None:
+        p = p / scales
     norm = float(np.percentile(np.abs(p), 99))
-    ant = Antenna(gl, mu, W, norm, 100.0)
+    ant = Antenna(gl, mu, W, norm, 100.0, scales)
     orn_idx = orn_all[: 2 * N_PC]
 
     def frac(x, seed):

@@ -20,3 +20,4 @@ runs/gate-b/smoke/
 runs/gate-b/logs/
 runs/gate-b/*/state.npz
 runs/gate-b3/logs/
+runs/product/logs/
