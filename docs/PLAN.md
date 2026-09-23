@@ -49,7 +49,7 @@ populations, a few thousand neurons — not the whole central brain.
   trained model's internal activity resembles anything known about the real
   circuit (MBON valence, KC sparseness).
 
-## Phase C — the service, if earned
+## Phase C — the service (built 2026-09-23: `src/bosco/decider.py`, `scripts/decider.py`; earned by B4)
 
 `decide(state, questions) → {answer, probability}`, `reward(decision_id,
 value)`, `state()`. Stateful by default (habituation, appetite, clock,
