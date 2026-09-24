@@ -209,7 +209,9 @@ def preflight(m, data, seed: int = 0) -> dict:
         "kc_after": float(kc.mean()),
         "grads": grads,
         "checks": checks,
-        "pass": all(checks.values()),
+        # revision 2: AUROC marks a slow arm, not a broken one (docs/A5-PREFLIGHT.md)
+        "pass": all(v for k, v in checks.items() if k != "answers_carry_information"),
+        "slow": not checks["answers_carry_information"],
     }
 
 

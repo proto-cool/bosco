@@ -51,3 +51,18 @@ preflighted again. It is never dropped.
 
 Runner: `scripts/a5_preflight.py`. Results: `runs/a5-preflight/`,
 `docs/a5-preflight-results.md`.
+
+## Revision 2 (2026-09-24, written before any cut-brain control result was seen)
+
+The preflight exists to catch **broken** arms, not slow ones. Fixing a
+control until it learns as fast as the real brain would rig the comparison.
+So:
+- **Broken, must be fixed before it runs:** a KC start outside the band, a
+  dead output (spread < 0.02), a loss that does not fall, or gradients that do
+  not reach the brain.
+- **Slow, reported and run as is:** the loss falls, but AUROC after 30
+  batches is under 0.6.
+
+Seen before writing this: `layered-type-full` fell 0.676 → 0.634 with AUROC
+0.571, which is slow, not broken. It is not used (decision 4: the cut brain).
+The cut configurations were still running when this was written.
