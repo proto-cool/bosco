@@ -14,11 +14,13 @@ import warnings
 
 import numpy as np
 
+sys.path.insert(0, str(__import__("pathlib").Path(__file__).parent))
+
 from bosco import a5, paths
 from bosco import model2 as M2
 
 warnings.filterwarnings("ignore")
-RUNS = paths.ROOT / "runs" / "a5-cutoff"
+RUNS = paths.ROOT / "runs" / "a5-cutoff2"  # the rerun after the preflight (amendment 2)
 PER_PART = 1500
 EPOCHS = 2
 BAR = 0.02
@@ -28,10 +30,15 @@ def cmd_run(a) -> int:
     b2 = M2.load_or_build()
     t0 = time.time()
     log = lambda s: print(f"[{a.arm}/s{a.seed}] {s} ({time.time() - t0:.0f}s)", flush=True)  # noqa: E731
+    import a5_preflight as PF
+
+    if not PF.passed("real", "type", a.arm):
+        raise SystemExit(f"refusing to run: real-type-{a.arm} has not passed preflight (scripts/a5_preflight.py)")
     m = a5.build(b2, "real", "type", a5.MIN_SYNAPSES if a.arm == "cut" else None, seed=a.seed)
     data = a5.load(m.nose.n)
-    g0, th, sd = a5.choose_init(m, *data["_calib"])
-    log(f"edges {m.W._nnz() + m.kp_logm.numel():,}; init gain {g0} threshold {th} (spread {sd:.3f})")
+    init = a5.fly_init(m, *data["_calib"])
+    g0, th, sd = init["gain"], init["threshold"], init["spread"]
+    log(f"edges {m.W._nnz() + m.kp_logm.numel():,}; init {init}")
     hist = a5.train(m, data, EPOCHS, a.seed, per_part=PER_PART, log=log)
     RUNS.mkdir(parents=True, exist_ok=True)
     json.dump(
@@ -80,7 +87,7 @@ def cmd_report(a) -> int:
         )
         L.append(f"- **{verdict}**")
     txt = "\n".join(L) + "\n"
-    (paths.DOCS / "a5-cutoff-pilot-results.md").write_text(txt)
+    (paths.DOCS / "a5-cutoff-pilot2-results.md").write_text(txt)
     print(txt)
     return 0
 

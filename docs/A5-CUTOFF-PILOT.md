@@ -44,3 +44,16 @@ runs were in progress, with no log or result read:
 - **0.02–0.05 below** → Nick decides, shown accuracy lost against training
   time and server answer time saved;
 - **more than 0.05 below** → keep every synapse.
+
+## Amendment 2 (2026-09-24): the first run was invalid; rerun after preflight
+
+The first run (`runs/a5-cutoff/`, `a5-cutoff-pilot-results.md`) is **void**.
+The full brain never learned: it started with 70% of its KCs active and near-
+silent MBONs, spent its two epochs fighting the sparseness penalty, and sat at
+chance (0.50–0.54). The comparison measured that, not the synapse cut.
+
+Rerun, unchanged except for the start: both arms start with `a5.fly_init`
+(KCs 5% active, read MBONs at a resting rate of 0.2, label-free), and each arm
+must have passed the preflight (`A5-PREFLIGHT.md`) before it may run. Both did
+(`a5-preflight-results.md`). Results: `runs/a5-cutoff2/`,
+`a5-cutoff-pilot2-results.md`. The decision rule is amendment 1's.

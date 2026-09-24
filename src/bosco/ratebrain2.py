@@ -118,6 +118,16 @@ class RateBrain2(torch.nn.Module):
             self.log_g.fill_(float(np.log(gain)))
             self.b.fill_(-threshold)
 
+    def set_kc_threshold(self, threshold: float) -> None:
+        """Threshold of every Kenyon-cell unit (a fly's KCs fire sparsely: high threshold plus APL)."""
+        with torch.no_grad():
+            self.b[torch.unique(self.unit[self.kc])] = -threshold
+
+    def set_mbon_threshold(self, threshold: float) -> None:
+        """Threshold of the read MBON units (approach and avoid groups): their resting operating point."""
+        with torch.no_grad():
+            self.b[torch.unique(self.unit[torch.cat([self.ap, self.av])])] = -threshold
+
     def run(self, smell: torch.Tensor, sight: torch.Tensor | None = None, record: bool = False):
         """smell (B, nose.n), sight (B, eyes.n) in 0..1 -> (logit (B,), rates at the end (n, B), trace)."""
         bsz = smell.shape[0]

@@ -104,19 +104,113 @@ def build(b2: M2.Brain2, arm: str, mode: str, min_syn: int | None, seed: int = 1
     return R.RateBrain2(b2, mode=mode, device=device, wiring=w)
 
 
-def choose_init(m, cs, cv) -> tuple[float, float, float]:
-    """Label-free (as A1/A2): the (gain, threshold) giving the widest output spread on unlabelled inputs."""
-    best = None
+KC_BAND = (0.02, 0.15)  # Kenyon cells active at the start: the fly's range is about 2-10%
+KC_INIT_TARGET = 0.05
+MBON_INIT_TARGET = 0.2  # read MBONs at a resting operating point, neither silent nor saturated
+
+
+def _probe_init(m, s, v) -> dict:
+    with torch.no_grad():
+        logit, r, _ = m.run(s, v)
+    return {
+        "spread": float(logit.std()),
+        "kc": float((r[m.kc] > 0.01).float().mean()),
+        "approach": float(r[m.ap].mean()),
+        "avoid": float(r[m.av].mean()),
+        "mbon": float(r[torch.cat([m.ap, m.av])].mean()),
+    }
+
+
+def fly_init(m, cs, cv) -> dict:
+    """Label-free start, fly-like (docs/A5-PREFLIGHT.md). (1) From the (gain, threshold) grid, the point
+    with the widest output spread among those where both read MBON groups are neither silent nor
+    saturated. (2) The Kenyon-cell threshold alone set by bisection so KC activity on unlabelled inputs is
+    KC_INIT_TARGET. Raises if no grid point qualifies."""
     s, v = torch.tensor(cs, device=m.device), torch.tensor(cv, device=m.device)
+    best = None
     for g0, th in INIT_GRID:
         m.set_init(g0, th)
-        with torch.no_grad():
-            logit, _, _ = m.run(s, v)
-            sd = float(logit.std())
-        if best is None or sd > best[2]:
-            best = (g0, th, sd)
-    m.set_init(best[0], best[1])
-    return best
+        st = _probe_init(m, s, v)
+        ok = all(1e-3 < st[k] < 0.95 for k in ("approach", "avoid"))  # the MBON threshold is set below
+        if ok and (best is None or st["spread"] > best[2]["spread"]):
+            best = (g0, th, st)
+    if best is None:
+        raise RuntimeError("fly_init: no (gain, threshold) leaves both MBON groups neither silent nor saturated")
+    g0, th, _ = best
+    m.set_init(g0, th)
+    kc_th = _bisect(m, s, v, m.set_kc_threshold, "kc", KC_INIT_TARGET)
+    mb_th = _bisect(m, s, v, m.set_mbon_threshold, "mbon", MBON_INIT_TARGET)
+    kc_th = _bisect(m, s, v, m.set_kc_threshold, "kc", KC_INIT_TARGET)  # again: MBONs feed back onto KCs
+    st = _probe_init(m, s, v)
+    return {"gain": g0, "threshold": th, "kc_threshold": kc_th, "mbon_threshold": mb_th, **st}
+
+
+def _bisect(m, s, v, setter, key: str, target: float, lo: float = -3.0, hi: float = 3.0) -> float:
+    """Activity falls as the threshold rises: find the threshold that puts `key` at `target`."""
+    for _ in range(16):
+        mid = 0.5 * (lo + hi)
+        setter(mid)
+        val = _probe_init(m, s, v)[key]
+        lo, hi = (mid, hi) if val > target else (lo, mid)
+    setter(0.5 * (lo + hi))
+    return 0.5 * (lo + hi)
+
+
+def choose_init(m, cs, cv):
+    """Kept for the record: the A1/A2 rule (widest spread only), which started the full v2 brain with
+    70% of KCs active and stalled it (docs/a5-cutoff-pilot-results.md). Not used."""
+    raise RuntimeError("use fly_init")
+
+
+# ---- preflight: every arm must pass before any run (docs/A5-PREFLIGHT.md) ------------------------------
+PREFLIGHT_BATCHES = 30
+
+
+def preflight(m, data, seed: int = 0) -> dict:
+    """Training data only. Checks the start (fly_init), then 30 batches of training."""
+    init = fly_init(m, *data["_calib"])
+    S_, V_, A_ = train_arrays(data, 600, 1, seed)
+    rng = np.random.default_rng(seed)
+    perm = rng.permutation(len(A_))
+    opt = torch.optim.Adam(m.parameters(), lr=LR)
+    bce, grads = [], {}
+    for i in range(PREFLIGHT_BATCHES):
+        bi = perm[i * BATCH : (i + 1) * BATCH]
+        logit, r, _ = m.run(torch.tensor(S_[bi], device=m.device), torch.tensor(V_[bi], device=m.device))
+        l_bce = torch.nn.functional.binary_cross_entropy_with_logits(logit, torch.tensor(A_[bi], device=m.device))
+        loss = l_bce + KC_PENALTY * torch.relu(r[m.kc].mean() - KC_RATE_TARGET) ** 2
+        opt.zero_grad()
+        loss.backward()
+        if i == 0:
+            grads = {n: float(p.grad.norm()) for n, p in m.named_parameters() if p.grad is not None}
+        opt.step()
+        bce.append(float(l_bce))
+    held = perm[PREFLIGHT_BATCHES * BATCH : PREFLIGHT_BATCHES * BATCH + 256]
+    pr, kc = predict(m, S_[held], V_[held])
+    side = float((pr > 0.5).mean())
+    from sklearn.metrics import roc_auc_score
+
+    auroc = float(roc_auc_score(A_[held], pr))
+    checks = {
+        "kc_at_start_in_band": KC_BAND[0] <= init["kc"] <= KC_BAND[1],
+        "output_spread_at_start": init["spread"] >= 0.02,
+        "loss_falls": float(np.mean(bce[-10:])) <= float(np.mean(bce[:10])) - 0.02,
+        "gradients_reach_brain": all(np.isfinite(g) and g > 0 for g in grads.values())
+        and {"log_g", "b", "kp_logm"} <= set(grads),
+        "answers_carry_information": auroc >= 0.6,
+    }
+    return {
+        "init": init,
+        "bce_first10": float(np.mean(bce[:10])),
+        "bce_last10": float(np.mean(bce[-10:])),
+        "p_std": float(pr.std()),
+        "p_side": side,
+        "auroc": auroc,
+        "kc_after": float(kc.mean()),
+        "grads": grads,
+        "checks": checks,
+        "pass": all(checks.values()),
+    }
 
 
 # ---- training and evaluation ---------------------------------------------------------------------
