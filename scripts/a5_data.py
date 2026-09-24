@@ -148,6 +148,36 @@ def cmd_pictures(a) -> int:
     return 0
 
 
+def cmd_resplit_junk(a) -> int:
+    """SMS is full of templates: messages with an embedding cosine > 0.95 are one family, and a family
+    goes wholly to one split (hash of its first member), so no test message has a near-twin in train."""
+    parts = [np.load(OUT / f"junk-{s}.npz") for s in ("train", "val", "test")]
+    X = np.concatenate([p["X"] for p in parts])
+    y = np.concatenate([p["y"] for p in parts])
+    t = np.concatenate([p["text"] for p in parts])
+    parent = np.arange(len(y))
+
+    def find(i):
+        while parent[i] != i:
+            parent[i] = parent[parent[i]]
+            i = parent[i]
+        return i
+
+    for i in range(len(y)):
+        for j in np.nonzero(X[i + 1 :] @ X[i] > 0.95)[0] + i + 1:
+            ri, rj = find(i), find(j)
+            if ri != rj:
+                parent[max(ri, rj)] = min(ri, rj)
+    root = np.array([find(i) for i in range(len(y))])
+    sp = np.array([split_of("sms-family|" + norm(t[r])) for r in root])
+    for s in ("train", "val", "test"):
+        m = sp == s
+        np.savez(OUT / f"junk-{s}.npz", X=X[m], y=y[m], text=t[m])
+        print(f"junk {s}: {m.sum()} ({y[m].mean():.2f} spam)")
+    print(f"families: {len(set(root))} for {len(y)} messages")
+    return 0
+
+
 def cmd_report(a) -> int:
     L = [
         "# A5 data: the cleaned sets",
@@ -181,7 +211,12 @@ def main(argv=None) -> int:
 
     ap = argparse.ArgumentParser()
     sub = ap.add_subparsers(dest="cmd", required=True)
-    for name, fn in (("text", cmd_text), ("pictures", cmd_pictures), ("report", cmd_report)):
+    for name, fn in (
+        ("text", cmd_text),
+        ("pictures", cmd_pictures),
+        ("resplit-junk", cmd_resplit_junk),
+        ("report", cmd_report),
+    ):
         sub.add_parser(name).set_defaults(fn=fn)
     a = ap.parse_args(argv)
     return a.fn(a)
