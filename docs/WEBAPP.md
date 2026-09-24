@@ -35,8 +35,11 @@ slim brain panel.
 
 ## Open
 
-- Saved question sets as records in the user's own atproto repo (opt-in,
-  public by nature, templates only): later.
+- Saved question sets: **never in the user's atproto repo.** Repository
+  contents are "entirely public and verifiable" (atproto.com/specs/repository),
+  so saving there would publish them. If the feature comes, they live in the
+  browser or on our server, keyed by DID. Login itself writes nothing to
+  anyone's repo.
 - The per-DID caps (questions per minute and per day), set once the server
   speed is measured.
 - A DID blocklist, if abuse needs it.
