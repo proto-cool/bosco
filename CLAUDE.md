@@ -24,8 +24,10 @@ reports. Nothing here is a fix to v1; v1 is answered.
   and compare with shuffled and free wiring of the same size on sample
   efficiency, calibration and forgetting (cf. Lappalainen et al. 2024 for the
   visual system). Pre-registration to be written after B.
-- **Deliverable:** a writeup with numbers. A decision service (`decide`,
-  `reward`, `state`) only if the connectome beats the shuffle.
+- **Deliverable:** a writeup with numbers, and the decision service.
+  Amended 2026-09-24 (Nick, after A2): the service no longer waits on the
+  connectome beating the shuffle. The controls still run, and their numbers
+  are published beside his (`docs/GATE-A2b.md`).
 
 ## Non-negotiables
 

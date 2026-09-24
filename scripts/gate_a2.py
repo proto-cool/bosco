@@ -26,6 +26,7 @@ warnings.filterwarnings("ignore")
 
 CACHE = paths.CACHE / "a2"
 RUNS = paths.ROOT / "runs" / "gate-a2"
+RUNS_B = paths.ROOT / "runs" / "gate-a2b"  # docs/GATE-A2b.md: broader eyes
 BRAINS = {"real": None, "shuffle": paths.CACHE / "dunce_v1.npz", "hash": paths.CACHE / "hash_v1.npz", "free": "free"}
 QUESTIONS = ("sweet", "dangerous", "junk")
 PARTS = ("sweet", "pictures", "dangerous", "junk")  # what is scored; pictures are asked the sweet question
@@ -59,7 +60,7 @@ def pca_antenna(X_fit: np.ndarray):
     return z
 
 
-def load_data() -> dict:
+def load_data(eyes_mode: str = "visual") -> dict:
     """Per part: train / val / test arrays of (smell 52, eyes 52, approach label); plus probes."""
     rng = np.random.default_rng(G.h32("a2-antenna"))
     txt = {q: {s: np.load(CACHE / "e5-large" / f"{q}-{s}.npz") for s in ("train", "test")} for q in QUESTIONS}
@@ -81,7 +82,9 @@ def load_data() -> dict:
         for split in ("train", "test"):
             X, y = src[split]["X"], src[split]["y"]
             a = (y == 1).astype(np.float32) if APPROACH_IS[part] else (y == 0).astype(np.float32)
-            if part == "pictures":
+            if part == "pictures" and eyes_mode == "antenna":  # A2b: pictures through the smell channels
+                s, v = np.clip(qz[q][None] + eyes(X), 0, 1), np.zeros((len(X), 52), np.float32)
+            elif part == "pictures":
                 s, v = np.repeat(qz[q][None], len(X), 0), eyes(X)
             else:
                 s, v = smell(X, q), np.zeros((len(X), 52), np.float32)
@@ -99,7 +102,10 @@ def load_data() -> dict:
         for name, x in zip(pt["names"], smell(pt["X"], q), strict=True):
             probes.append((f"{q}: {name}", x, np.zeros(52, np.float32)))
     for name, v in zip(pim["names"], eyes(pim["X"]), strict=True):
-        probes.append((f"sweet: {name}", qz["sweet"], v))
+        if eyes_mode == "antenna":
+            probes.append((f"sweet: {name}", np.clip(qz["sweet"] + v, 0, 1), np.zeros(52, np.float32)))
+        else:
+            probes.append((f"sweet: {name}", qz["sweet"], v))
     out["_probes"] = probes
     out["_calib"] = (
         np.concatenate([out[p]["train"][0][:16] for p in PARTS]),
@@ -166,12 +172,12 @@ def score_part(p, a, part):
 # ---- run ---------------------------------------------------------------------------------------
 def cmd_run(a) -> int:
     torch.manual_seed(a.seed)
-    data = load_data()
+    data = load_data(a.eyes)
     parts = [p for p in PARTS if a.only is None or p == a.only or (a.only == "sweet" and p == "pictures")]
-    tag = f"{a.arm}-s{a.seed}-{a.only or 'joint'}"
+    tag = f"{a.arm}-s{a.seed}-{a.only or 'joint'}" + ("" if a.eyes == "visual" else f"-eyes_{a.eyes}")
     wall = time.time()
     log = lambda s: print(f"[{tag}] {s} ({time.time() - wall:.0f}s)", flush=True)  # noqa: E731
-    m = R.RateBrain(brain_of(a.arm), n_vis=52)
+    m = R.RateBrain(brain_of(a.arm), n_vis=52, vis_scope="all" if a.eyes == "all_kc" else "visual")
     cs, cv = data["_calib"]
     g0, th, sd = choose_init(m, torch.tensor(cs, device=m.device), torch.tensor(cv, device=m.device))
     log(f"parts {parts}; init gain {g0} threshold {th} (spread {sd:.4f})")
@@ -218,9 +224,18 @@ def cmd_run(a) -> int:
             f"epoch {ep + 1}: loss {rec['train_loss']:.4f} KC {rec['kc_active_train']:.3f} val mean {rec['val_mean']:.3f} | "
             + " ".join(f"{p} {rec['val'][p]['balanced']:.3f}" for p in parts)
         )
-    out = {"arm": a.arm, "seed": a.seed, "only": a.only, "parts": parts, "init": [g0, th, sd], "epochs": epochs}
+    out = {
+        "arm": a.arm,
+        "seed": a.seed,
+        "only": a.only,
+        "eyes": a.eyes,
+        "parts": parts,
+        "init": [g0, th, sd],
+        "epochs": epochs,
+    }
     out["wall_s"] = time.time() - wall
-    d = RUNS / "smoke" if a.smoke else RUNS
+    base = RUNS if a.eyes == "visual" else RUNS_B
+    d = base / "smoke" if a.smoke else base
     d.mkdir(parents=True, exist_ok=True)
     json.dump(out, open(d / f"{tag}.json", "w"))
     if not a.smoke:
@@ -319,12 +334,73 @@ def main(argv=None) -> int:
     p.add_argument("--arm", default="real", choices=list(BRAINS))
     p.add_argument("--seed", type=int, default=1)
     p.add_argument("--only", choices=list(QUESTIONS), default=None)
+    p.add_argument("--eyes", choices=["visual", "all_kc", "antenna"], default="visual")
     p.add_argument("--smoke", action="store_true")
     p.add_argument("--smoke-batches", type=int, default=20)
     p.set_defaults(fn=cmd_run)
     sub.add_parser("report").set_defaults(fn=cmd_report)
+    sub.add_parser("report-b").set_defaults(fn=lambda a: cmd_report_b(a))
     a = ap.parse_args(argv)
     return a.fn(a)
+
+
+# ---- A2b: broader eyes (docs/GATE-A2b.md) --------------------------------------------------------
+A2_REAL = {"sweet": 0.874, "dangerous": 0.777, "junk": 0.935}  # docs/gate-a2-results.md, real joint
+BAR_PICTURES = 0.88
+
+
+def cmd_report_b(a) -> int:
+    runs = [json.load(open(p)) for p in sorted(RUNS_B.glob("*.json"))]
+
+    def m(rs, part, split="test"):
+        return float(np.mean([best(r)[split][part]["balanced"] for r in rs]))
+
+    L = ["# Gate A2b results", "", "Pre-registration: `docs/GATE-A2b.md`. Test balanced accuracy, mean over seeds.", ""]
+    L += [
+        "| eyes | arm | seeds | sweet | pictures | dangerous | junk | KC active | val pictures |",
+        "|---|---|---|---|---|---|---|---|---|",
+    ]
+    real = {}
+    for eyes in ("all_kc", "antenna"):
+        for arm in ("real", "shuffle"):
+            rs = [r for r in runs if r.get("eyes") == eyes and r["arm"] == arm]
+            if not rs:
+                continue
+            if arm == "real":
+                real[eyes] = rs
+            kc = np.mean([np.mean([best(r)["test"][p]["kc_active"] for p in PARTS]) for r in rs])
+            L.append(
+                f"| {eyes} | {arm} | {len(rs)} | "
+                + " | ".join(f"{m(rs, p):.3f}" for p in PARTS)
+                + f" | {kc:.3f} | {m(rs, 'pictures', 'val'):.3f} |"
+            )
+    L += [
+        "",
+        "A2 (the fly's own visual Kenyon cells), real: sweet 0.874, pictures 0.780, dangerous 0.777, junk 0.935.",
+        "",
+    ]
+    if real:
+        pick = max(real, key=lambda e: m(real[e], "pictures", "val"))
+        rs = real[pick]
+        pic = m(rs, "pictures")
+        text_ok = all(m(rs, p) >= A2_REAL[p] - 0.03 for p in A2_REAL)
+        L += ["## Decision", ""]
+        L.append(f"- chosen on validation pictures: **{pick}** ({m(rs, 'pictures', 'val'):.3f})")
+        L.append(f"- test pictures {pic:.3f} vs bar {BAR_PICTURES}: **{'PASS' if pic >= BAR_PICTURES else 'FAIL'}**")
+        L.append(
+            "- text held (each ≥ A2 − 0.03): **"
+            + ("PASS" if text_ok else "FAIL")
+            + "** — "
+            + ", ".join(f"{p} {m(rs, p):.3f} vs {A2_REAL[p] - 0.03:.3f}" for p in A2_REAL)
+        )
+        L.append(f"- **Adopted as Bosco's decider: {'yes' if pic >= BAR_PICTURES and text_ok else 'no'}**")
+        L += ["", "## Probes (chosen eyes, real, per seed)", ""]
+        for n in best(rs[0])["probes"]:
+            L.append(f"- {n}: " + ", ".join(f"{best(r)['probes'][n]:.2f}" for r in rs))
+    txt = "\n".join(L) + "\n"
+    (paths.DOCS / "gate-a2b-results.md").write_text(txt)
+    print(txt)
+    return 0
 
 
 if __name__ == "__main__":

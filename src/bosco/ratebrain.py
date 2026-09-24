@@ -61,7 +61,15 @@ def free_brain(brain: Brain, seed: int) -> Brain:
 
 
 class RateBrain(torch.nn.Module):
-    def __init__(self, brain: Brain, n_glom: int = 52, g0: float = 1.0, device: str = "mps", n_vis: int = 0):
+    def __init__(
+        self,
+        brain: Brain,
+        n_glom: int = 52,
+        g0: float = 1.0,
+        device: str = "mps",
+        n_vis: int = 0,
+        vis_scope: str = "visual",
+    ):
         super().__init__()
         self.n = brain.n
         self.device = device
@@ -92,7 +100,8 @@ class RateBrain(torch.nn.Module):
         # cell the mean of VIS_FAN channels chosen at random once (label-free, the same for every arm)
         self.n_vis = n_vis
         if n_vis:
-            vk = brain.index_of_present(pop.visual_kcs())
+            # "visual": the fly's own visual Kenyon cells (A2); "all": every Kenyon cell (A2b, not fly anatomy)
+            vk = brain.index_of_present(pop.visual_kcs() if vis_scope == "visual" else pop.kenyon_cells())
             rng = np.random.default_rng(20260924)
             M = np.zeros((len(vk), n_vis), np.float32)
             for i in range(len(vk)):
