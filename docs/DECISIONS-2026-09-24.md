@@ -40,3 +40,11 @@ for and against each laid out first. They govern the next training leg.
   checks in every pre-registration; no v1 setting without a v2 reason.
 - `BRIEF.md` amended: trained offline per version, never taught through the
   API.
+
+## 4. Synapse cutoff: ≥5 synapses, every KC→MBON synapse kept (Nick, after the pilot)
+
+The pilot rerun (`a5-cutoff-pilot2-results.md`): cut 0.737 vs full 0.745 on
+validation, 2.6× faster end to end. Cut vs full disagree on 10.6–20.3% of
+items, no more than the full brain disagrees with itself across seeds
+(18.8%). The cut brain is steadier (9.3% across seeds), and on disputed items
+neither brain is right more often. Nick: "keep the cut brain for speed."
