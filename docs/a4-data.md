@@ -1,0 +1,19 @@
+# A4 data (built 2026-09-23)
+
+`scripts/a4_data.py`. Data prep only; nothing embedded or trained.
+
+## Training questions (tasksource-instruct-v0)
+
+- source: 5,607,620 rows, 510 tasks
+- **kept: 429 tasks, 4,773,653 rows** (median 5,434 rows per task, min 23, max 31,000)
+- options per task: median 3, max 243; binary tasks 203
+- dropped as held-out by name: 17
+- dropped as held-out by text overlap: 3
+- dropped as not a fixed label set: 61
+- held-out texts checked against: 166,738 (BTZSC, Jev bench, A2's sets)
+
+## Cold test (BTZSC, never trained on)
+
+- 22 tasks, 177,130 items; options per task agnews 4, amazonpolarity 2, appreviews 2, banking77 77, biasframes_intent 2, biasframes_offensive 2, biasframes_sex 2, capsotu 21, emotiondair 6, empathetic 32, financialphrasebank 3, imdb 2, manifesto 56, massive 59, rottentomatoes 2, trueteacher 2, wikitoxic_insult 2, wikitoxic_obscene 2, wikitoxic_threat 2, wikitoxic_toxicaggregated 2, yahootopics 10, yelpreviews 2
+
+Super-NaturalInstructions: its Hugging Face parquet conversion was still processing on the build date; tasksource already harmonises many of the same sources. Revisit if more questions are wanted.
