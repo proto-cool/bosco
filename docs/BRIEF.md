@@ -64,3 +64,21 @@ not the whole of it.
 
 No LLM, no model deciding, no tuning the circuit on labels, no swarm, no
 text out, not on a feed.
+
+## Later: Doom (added 2026-09-24)
+
+Jev plays Doom in real time and beats E1M1 (per Nick). The same bar for
+Bosco, once A2 has said whether one brain carries several questions:
+
+- **Each frame is a one-of-N question:** forward, turn left, turn right,
+  shoot. He smells each option and goes to the one he approaches most.
+- **His eyes see the screen.** The first version uses the picture path from
+  A2. The strong version gives him back the fly's own visual system (optic
+  lobes, pruned from the model since v1): steering by sight is what that
+  circuit evolved for.
+- **He learns by playing** (reward for progress and kills, cost for damage),
+  not from labels. That is reinforcement learning, days of runs, and it is
+  pre-registered like every gate.
+- **Real time:** one decision is tens of milliseconds on the Mac's GPU.
+- **Controls:** the scrambled brains play too. "A fly brain beats E1M1"
+  means something only if they do worse.
