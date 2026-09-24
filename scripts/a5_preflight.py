@@ -29,9 +29,20 @@ def name(arm, mode, cut) -> str:
     return f"{arm}-{mode}-{cut}"
 
 
+BROKEN_CHECKS = ("kc_at_start_in_band", "output_spread_at_start", "loss_falls", "gradients_reach_brain")
+
+
+def verdict(r: dict) -> str:
+    """Revision 2 (docs/A5-PREFLIGHT.md), recomputed from the stored checks: 'pass', 'slow' or 'broken'."""
+    ck = r.get("checks", {})
+    if not ck or not all(ck.get(k, False) for k in BROKEN_CHECKS):
+        return "broken"
+    return "pass" if ck.get("answers_carry_information", False) else "slow"
+
+
 def passed(arm: str, mode: str, cut: str) -> bool:
     f = OUT / f"{name(arm, mode, cut)}.json"
-    return f.exists() and json.load(open(f))["pass"]
+    return f.exists() and verdict(json.load(open(f))) != "broken"
 
 
 def main(argv=None) -> int:
@@ -89,7 +100,7 @@ def report() -> None:
             L.append(f"| {r['config']} | **FAIL** ({r.get('error', '')}) | | | | | | |")
             continue
         L.append(
-            f"| {r['config']} | {'pass' if r['pass'] else '**FAIL**: ' + ', '.join(k for k, v in r['checks'].items() if not v)} | "
+            f"| {r['config']} | {verdict(r) if verdict(r) == 'pass' else '**' + verdict(r) + '**: ' + ', '.join(k for k, v in r['checks'].items() if not v)} | "
             f"{r['init']['kc']:.3f} | {r['init'].get('mbon', float('nan')):.3f} | {r['init']['spread']:.3f} | {r['bce_first10']:.3f} → {r['bce_last10']:.3f} | {r.get('auroc', float('nan')):.3f} | {r['kc_after']:.3f} |"
         )
     (paths.DOCS / "a5-preflight-results.md").write_text("\n".join(L) + "\n")
