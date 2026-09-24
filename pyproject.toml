@@ -14,7 +14,13 @@ dependencies = [
 [dependency-groups]
 dev = ["pytest>=8", "ruff>=0.6"]
 # gate B: the frozen encoder and the logistic baseline (docs/GATE-B.md)
-gate = ["sentence-transformers>=3", "scikit-learn>=1.5", "pillow>=10"]
+gate = [
+    "sentence-transformers>=3",
+    "scikit-learn>=1.5",
+    "pillow>=10",
+    "einops>=0.8.2",
+    "timm>=1.0.30",
+]
 
 [build-system]
 requires = ["hatchling"]
