@@ -24,6 +24,7 @@ from bosco.model import Brain
 
 T_STEPS = 12
 ALPHA = 0.5
+VIS_FAN = 6  # visual channels per visual Kenyon cell (a KC takes about six inputs), drawn once, seeded
 
 
 def mbon_sides(brain: Brain) -> tuple[np.ndarray, np.ndarray]:
@@ -60,7 +61,7 @@ def free_brain(brain: Brain, seed: int) -> Brain:
 
 
 class RateBrain(torch.nn.Module):
-    def __init__(self, brain: Brain, n_glom: int = 52, g0: float = 1.0, device: str = "mps"):
+    def __init__(self, brain: Brain, n_glom: int = 52, g0: float = 1.0, device: str = "mps", n_vis: int = 0):
         super().__init__()
         self.n = brain.n
         self.device = device
@@ -84,12 +85,29 @@ class RateBrain(torch.nn.Module):
         self.b = torch.nn.Parameter(torch.zeros(self.n, 1, device=device))
         self.k = torch.nn.Parameter(torch.tensor(1.0, device=device))
         self.c = torch.nn.Parameter(torch.tensor(0.0, device=device))
+        from bosco import populations as pop
 
-    def activity(self, z: torch.Tensor) -> torch.Tensor:
-        """z: (batch, n_glom) antenna values in 0..1 -> rates (n, batch) after T_STEPS from rest."""
+        self.kc = torch.tensor(brain.index_of_present(pop.kenyon_cells()).astype(np.int64), device=device)
+        # eyes (A2): picture channels drive the visual Kenyon cells directly, as v1's retina did, each
+        # cell the mean of VIS_FAN channels chosen at random once (label-free, the same for every arm)
+        self.n_vis = n_vis
+        if n_vis:
+            vk = brain.index_of_present(pop.visual_kcs())
+            rng = np.random.default_rng(20260924)
+            M = np.zeros((len(vk), n_vis), np.float32)
+            for i in range(len(vk)):
+                M[i, rng.choice(n_vis, VIS_FAN, replace=False)] = 1.0 / VIS_FAN
+            self.vis_kc = torch.tensor(vk.astype(np.int64), device=device)
+            self.vis_M = torch.tensor(M, device=device)
+
+    def activity(self, z: torch.Tensor, zv: torch.Tensor | None = None) -> torch.Tensor:
+        """z: (batch, n_glom) antenna values in 0..1; zv: (batch, n_vis) picture channels or None
+        -> rates (n, batch) after T_STEPS from rest."""
         bsz = z.shape[0]
         inp = torch.zeros(self.n, bsz, device=self.device)
         inp[self.orn_idx] = z.T[self.orn_glom]
+        if zv is not None and self.n_vis:
+            inp[self.vis_kc] += self.vis_M @ zv.T
         g = torch.exp(self.log_g)
         r = torch.zeros(self.n, bsz, device=self.device)
         for _ in range(T_STEPS):
@@ -97,7 +115,8 @@ class RateBrain(torch.nn.Module):
             r = r + ALPHA * (-r + torch.tanh(torch.relu(x)))
         return r
 
-    def forward(self, z: torch.Tensor) -> torch.Tensor:
-        r = self.activity(z)
+    def forward(self, z: torch.Tensor, zv: torch.Tensor | None = None, with_rates: bool = False):
+        r = self.activity(z, zv)
         d = r[self.ap].mean(0) - r[self.av].mean(0)
-        return self.k * d * 10.0 + self.c
+        logit = self.k * d * 10.0 + self.c
+        return (logit, r) if with_rates else logit
