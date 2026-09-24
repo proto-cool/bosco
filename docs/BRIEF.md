@@ -67,18 +67,23 @@ text out, not on a feed.
 
 ## Later: Doom (added 2026-09-24)
 
-Jev plays Doom in real time and beats E1M1 (per Nick). The same bar for
-Bosco, once A2 has said whether one brain carries several questions:
+Jev plays Doom in real time (TypeSafe's launch demo): the game state goes
+in as a **text description, not frames**, and Jev picks the next action from
+a fixed set about ten times a second (madewithjev.com/builds/jev-plays-doom).
+Nick reports it beats E1M1. The same bar for Bosco, once A2 has said whether
+one brain carries several questions. Parity first: the same text state
+through his nose. Frames through his eyes come after (Jev cannot take images).
 
 - **Each frame is a one-of-N question:** forward, turn left, turn right,
   shoot. He smells each option and goes to the one he approaches most.
-- **His eyes see the screen.** The first version uses the picture path from
-  A2. The strong version gives him back the fly's own visual system (optic
+- **Then his eyes see the screen.** The picture path from A2 first; the strong
+  version gives him back the fly's own visual system (optic
   lobes, pruned from the model since v1): steering by sight is what that
   circuit evolved for.
 - **He learns by playing** (reward for progress and kills, cost for damage),
   not from labels. That is reinforcement learning, days of runs, and it is
   pre-registered like every gate.
-- **Real time:** one decision is tens of milliseconds on the Mac's GPU.
+- **Real time:** ten decisions a second, as Jev; one forward pass is tens of
+  milliseconds on the Mac's GPU.
 - **Controls:** the scrambled brains play too. "A fly brain beats E1M1"
   means something only if they do worse.
