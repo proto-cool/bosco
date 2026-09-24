@@ -16,10 +16,10 @@ not the whole of it.
   mushroom-body output neurons (MBONs) in the live simulated brain, with the
   MBON→DAN feedback left on. Not arithmetic on his synapse weights, not an
   average of several flies, not a cached feedforward shortcut.
-- **Taught, not pretrained.** Unlike Jev he knows nothing on arrival. A
-  question means something once it has been rewarded (`reward(id, answer)`),
-  and the API says so: an untaught question comes back with a probability
-  near chance.
+- **Trained offline, per version; never taught through the API**
+  (revised 2026-09-24, `API.md`). Like Jev he arrives trained; unlike Jev he
+  knows only the kinds of questions he was trained on, and says so
+  (`taught: false`).
 
 ## Every answer type from approach/avoid
 
@@ -62,8 +62,8 @@ not the whole of it.
 
 ## Won't do
 
-No LLM, no model deciding, no tuning the circuit on labels, no swarm, no
-text out, not on a feed.
+No LLM, no model deciding, no training beyond per-cell-type parameters and
+the KC→MBON synapses (`CLAUDE.md`), no swarm, no text out, not on a feed.
 
 ## Later: Doom (added 2026-09-24)
 

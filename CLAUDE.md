@@ -35,9 +35,18 @@ reports. Nothing here is a fix to v1; v1 is answered.
   embedding model turns the state into a vector, and that is the whole of
   ML in the loop for B. No LLM anywhere. Nothing generates text, ever.
 - **Every gate is pre-registered** in `docs/` before it runs: arms, tasks,
-  reward protocol, metrics, decision rule, seeds. The fly circuit is never
-  tuned on the task; the one free scale (embedding → PN drive) is set once,
-  on unlabelled data, so KC activity lands in the band v1 recorded (2–7%).
+  reward protocol, metrics, decision rule, seeds. Every pre-registration
+  opens with an **anatomy check** (which real circuits carry the task, are
+  they in the model, what stands in for what is missing) and a **leakage
+  check** (train/test and probe overlap, exact and near).
+- **Training on task labels (amended 2026-09-24, Nick, `docs/DECISIONS-2026-09-24.md`).**
+  The graph and the signs are the connectome's and are never trained. What
+  may be trained on task labels, by gradient: parameters **per cell type**
+  (gain, threshold, time constant) and the **KC→MBON synapses**, where a fly
+  stores what it learns. Per-neuron training runs only as a stated
+  comparison arm. Until 2026-09-24 this file said the circuit is never tuned
+  on the task; gates A1 and A2 broke that without amending it (see
+  `docs/AUDIT-2026-09-24.md`).
 - **Controls run first, not later.** v1's dunce never ran; here the shuffle
   and the random projection are arms of the same script as the real wiring,
   and a result without them is not a result.
@@ -80,7 +89,8 @@ only a C compiler; everything else needs `ops/fetch_data.sh` (~1.1 GB).
 ## Things Claude Code must not do
 
 - Put a model anywhere but the encoder. No LLM, no classifier deciding.
-- Tune the fly circuit, the projection, or the rule on task labels or rewards.
+- Train the graph, the signs, or anything on task labels beyond what the amendment above allows.
+- Carry a setting over from v1 without a v2 reason written next to it.
 - Run a gate that is not written down first, or change its decision rule after.
 - Drop a control arm to save time.
 - Touch `main`: it is the v1 archive.
