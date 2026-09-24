@@ -70,7 +70,15 @@ def cmd_report(a) -> int:
         L += ["", "## Decision", ""]
         L.append(f"- full {f:.3f}, cut {c:.3f}: difference {c - f:+.3f} (bar: within {BAR})")
         L.append(f"- same side on the same item: {np.mean(agree):.1%}")
-        L.append(f"- **{'use the cut (≥5 synapses, KC→MBON all kept)' if c >= f - BAR else 'keep every synapse'}**")
+        gap = f - c
+        verdict = (
+            "use the cut (≥5 synapses, KC→MBON all kept)"
+            if gap <= BAR
+            else "Nick decides: accuracy lost vs time saved (amendment 1)"
+            if gap <= 0.05
+            else "keep every synapse"
+        )
+        L.append(f"- **{verdict}**")
     txt = "\n".join(L) + "\n"
     (paths.DOCS / "a5-cutoff-pilot-results.md").write_text(txt)
     print(txt)

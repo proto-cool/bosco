@@ -35,3 +35,12 @@ Also reported: time per batch for each arm, and how often the two arms give
 the same side on the same validation item.
 
 Runner: `scripts/a5_cutoff_pilot.py`. Results: `docs/a5-cutoff-pilot-results.md`.
+
+## Amendment 1 (2026-09-24, before any result was seen)
+
+Nick: "0.02 might be too strict given the time savings." Amended while the
+runs were in progress, with no log or result read:
+- the cut is **within 0.02** of the full brain → use the cut;
+- **0.02–0.05 below** → Nick decides, shown accuracy lost against training
+  time and server answer time saved;
+- **more than 0.05 below** → keep every synapse.
