@@ -58,3 +58,16 @@ enters training. Checked by dataset name and by text overlap.
 
 A2 (running) → A3 phase 1 (running) → the A4 data build (collect, convert to
 primitives, de-duplicate against held-out sets) → A4 pre-registration → run.
+
+## Before A4: can his nose read passages? (added 2026-09-24)
+
+Jev scores 94% on passage yes/no (BoolQ). Bosco's one-fingerprint nose tops
+out at 0.66 (A3 phase 1), and two separate fingerprints do not help. Before
+A4 fixes his nose, a ceiling check with rules written first:
+1. **sentence-by-sentence sniffing:** the question with each sentence, the
+   fly finding and judging (the most fly-like; no new encoder);
+2. **a question-aware embedder:** an instruction-conditioned fingerprint (it
+   still only perceives);
+3. **an LLM-backbone embedder,** measured only as a reference for how much
+   reading the translator would be doing. Not a candidate.
+Nick, 2026-09-24: "fair and honest".
