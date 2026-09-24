@@ -1,0 +1,38 @@
+{
+ "init": {
+  "gain": 8.0,
+  "threshold": 0.05,
+  "kc_threshold": 0.2306671142578125,
+  "mbon_threshold": -0.2144622802734375,
+  "spread": 0.06296244263648987,
+  "kc": 0.04998154565691948,
+  "approach": 0.19421271979808807,
+  "avoid": 0.20729024708271027,
+  "mbon": 0.2002371847629547
+ },
+ "bce_first10": 0.6813100516796112,
+ "bce_last10": 0.6084661602973938,
+ "p_std": 0.04800805449485779,
+ "p_side": 1.0,
+ "auroc": 0.7822817914351095,
+ "kc_after": 0.07966770231723785,
+ "grads": {
+  "kp_logm": 0.0056012095883488655,
+  "log_g": 0.09041948616504669,
+  "b": 0.506812572479248,
+  "log_tau": 0.011025849729776382,
+  "k": 0.023832865059375763,
+  "c": 0.20284384489059448
+ },
+ "checks": {
+  "kc_at_start_in_band": true,
+  "output_spread_at_start": true,
+  "loss_falls": true,
+  "gradients_reach_brain": true,
+  "answers_carry_information": true
+ },
+ "pass": true,
+ "slow": false,
+ "config": "layered-neuron-cut",
+ "wall_s": 110.39562511444092
+}

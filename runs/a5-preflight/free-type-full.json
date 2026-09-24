@@ -1,0 +1,37 @@
+{
+ "init": {
+  "gain": 8.0,
+  "threshold": 0.3,
+  "kc_threshold": 2.1319427490234375,
+  "mbon_threshold": -0.0954437255859375,
+  "spread": 0.3345378041267395,
+  "kc": 0.04999307915568352,
+  "approach": 0.22389157116413116,
+  "avoid": 0.17167921364307404,
+  "mbon": 0.19983869791030884
+ },
+ "bce_first10": 0.6649997234344482,
+ "bce_last10": 0.6097067534923554,
+ "p_std": 0.07155480235815048,
+ "p_side": 1.0,
+ "auroc": 0.726969597907813,
+ "kc_after": 0.044849786907434464,
+ "grads": {
+  "kp_logm": 0.00012814626097679138,
+  "log_g": 0.038495518267154694,
+  "b": 0.34534311294555664,
+  "log_tau": 0.013575151562690735,
+  "k": 0.019101589918136597,
+  "c": 0.06846392154693604
+ },
+ "checks": {
+  "kc_at_start_in_band": true,
+  "output_spread_at_start": true,
+  "loss_falls": true,
+  "gradients_reach_brain": true,
+  "answers_carry_information": true
+ },
+ "pass": true,
+ "config": "free-type-full",
+ "wall_s": 159.34561395645142
+}

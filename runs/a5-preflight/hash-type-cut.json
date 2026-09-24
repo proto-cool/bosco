@@ -1,0 +1,38 @@
+{
+ "init": {
+  "gain": 8.0,
+  "threshold": 0.3,
+  "kc_threshold": 0.7697296142578125,
+  "mbon_threshold": -0.1533966064453125,
+  "spread": 0.12246289849281311,
+  "kc": 0.05000076815485954,
+  "approach": 0.20878303050994873,
+  "avoid": 0.19047975540161133,
+  "mbon": 0.20035119354724884
+ },
+ "bce_first10": 0.6675197064876557,
+ "bce_last10": 0.6215284883975982,
+ "p_std": 0.0398089624941349,
+ "p_side": 1.0,
+ "auroc": 0.6407976462896371,
+ "kc_after": 0.06395138800144196,
+ "grads": {
+  "kp_logm": 0.006856211926788092,
+  "log_g": 0.04412392899394035,
+  "b": 0.5752655267715454,
+  "log_tau": 0.007773219607770443,
+  "k": 0.003204186912626028,
+  "c": 0.12158777564764023
+ },
+ "checks": {
+  "kc_at_start_in_band": true,
+  "output_spread_at_start": true,
+  "loss_falls": true,
+  "gradients_reach_brain": true,
+  "answers_carry_information": true
+ },
+ "pass": true,
+ "slow": false,
+ "config": "hash-type-cut",
+ "wall_s": 125.62882995605469
+}

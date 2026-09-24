@@ -1,0 +1,37 @@
+{
+ "init": {
+  "gain": 4.0,
+  "threshold": 0.05,
+  "kc_threshold": 0.1424102783203125,
+  "mbon_threshold": -0.2284698486328125,
+  "spread": 0.038296397775411606,
+  "kc": 0.04997001215815544,
+  "approach": 0.20159916579723358,
+  "avoid": 0.1994989514350891,
+  "mbon": 0.20063164830207825
+ },
+ "bce_first10": 0.67597536444664,
+ "bce_last10": 0.6343167066574097,
+ "p_std": 0.022118080407381058,
+ "p_side": 1.0,
+ "auroc": 0.5714939522719843,
+ "kc_after": 0.02217450551688671,
+ "grads": {
+  "kp_logm": 0.0009568268433213234,
+  "log_g": 0.022049428895115852,
+  "b": 0.6215753555297852,
+  "log_tau": 0.000931253656744957,
+  "k": 0.0022533682640641928,
+  "c": 0.16558244824409485
+ },
+ "checks": {
+  "kc_at_start_in_band": true,
+  "output_spread_at_start": true,
+  "loss_falls": true,
+  "gradients_reach_brain": true,
+  "answers_carry_information": false
+ },
+ "pass": false,
+ "config": "layered-type-full",
+ "wall_s": 165.06792283058167
+}
