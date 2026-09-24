@@ -1,0 +1,114 @@
+{
+ "route": {
+  "single raw": {
+   "held": {
+    "acc": 0.8198019801980198
+   },
+   "bench": {
+    "acc": 0.8
+   }
+  },
+  "single antenna": {
+   "held": {
+    "acc": 0.865016501650165
+   },
+   "bench": {
+    "acc": 0.82
+   }
+  }
+ },
+ "yesno": {
+  "single raw": {
+   "held": {
+    "acc": 0.683193015279077
+   },
+   "bench": {
+    "acc": 0.64
+   }
+  },
+  "single antenna": {
+   "held": {
+    "acc": 0.6557530402245089
+   },
+   "bench": {
+    "acc": 0.68
+   }
+  },
+  "pair raw": {
+   "held": {
+    "acc": 0.6919239164328033
+   },
+   "bench": {
+    "acc": 0.7
+   }
+  },
+  "pair antenna": {
+   "held": {
+    "acc": 0.6523230433426879
+   },
+   "bench": {
+    "acc": 0.58
+   }
+  }
+ },
+ "rate": {
+  "single raw": {
+   "held": {
+    "acc": 0.6715,
+    "mae": 0.363
+   },
+   "bench": {
+    "acc": 0.64,
+    "mae": 0.38
+   }
+  },
+  "single antenna": {
+   "held": {
+    "acc": 0.6665,
+    "mae": 0.3695
+   },
+   "bench": {
+    "acc": 0.6,
+    "mae": 0.42
+   }
+  }
+ },
+ "ambig": {
+  "single raw": {
+   "held": {
+    "acc": 0.6575
+   },
+   "bench": {
+    "acc": 0.48,
+    "jsd": 0.06392455839270361
+   }
+  },
+  "single antenna": {
+   "held": {
+    "acc": 0.6345
+   },
+   "bench": {
+    "acc": 0.52,
+    "jsd": 0.07268345365498224
+   }
+  },
+  "pair raw": {
+   "held": {
+    "acc": 0.677
+   },
+   "bench": {
+    "acc": 0.48,
+    "jsd": 0.06793894358047459
+   }
+  },
+  "pair antenna": {
+   "held": {
+    "acc": 0.661
+   },
+   "bench": {
+    "acc": 0.52,
+    "jsd": 0.07230653919073142
+   }
+  }
+ }
+}
