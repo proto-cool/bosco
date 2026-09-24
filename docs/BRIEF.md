@@ -85,5 +85,5 @@ through his nose. Frames through his eyes come after (Jev cannot take images).
   pre-registered like every gate.
 - **Real time:** ten decisions a second, as Jev; one forward pass is tens of
   milliseconds on the Mac's GPU.
-- **Controls:** the scrambled brains play too. "A fly brain beats E1M1"
+- **Controls:** the scrambled brains play too. "A fly brain plays Doom"
   means something only if they do worse.
