@@ -70,7 +70,7 @@ text out, not on a feed.
 Jev plays Doom in real time (TypeSafe's launch demo): the game state goes
 in as a **text description, not frames**, and Jev picks the next action from
 a fixed set about ten times a second (madewithjev.com/builds/jev-plays-doom).
-Nick reports it beats E1M1. The same bar for Bosco, once A2 has said whether
+No source says it finishes a level. The same bar for Bosco, once A2 has said whether
 one brain carries several questions. Parity first: the same text state
 through his nose. Frames through his eyes come after (Jev cannot take images).
 
