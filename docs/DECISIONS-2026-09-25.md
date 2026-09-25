@@ -42,6 +42,10 @@ power it, and it needs the fly to make honest decisions."
     roughly 2–3× the neurons now simulated, the largest speed risk, measured in the
     audit. The stand-in alone (b) is acceptable as a fallback ("the eye stand-in is
     fine").
+12. **Our own encoders are allowed** ("if we have to make our own encoders, that's cool
+    too"). This is the route to provenance all the way down: trained only on clean sources.
+    Trade-off: at first a weaker translation than e5. Decided per sense after the
+    provenance audit.
 
 ## Open (Nick to decide)
 
