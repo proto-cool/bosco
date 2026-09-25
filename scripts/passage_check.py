@@ -99,11 +99,11 @@ def cmd_embed(a) -> int:
 def features(cond: str):
     d = {s: np.load(OUT / f"{cond}-{s}.npz") for s in ("train", "val", "bench")}
     rng = np.random.default_rng(SEED)
-    fit = d["train"]["X"][rng.permutation(len(d["train"]["X"]))[:2000]]
+    fit = d["train"]["X"].astype(np.float32)[rng.permutation(len(d["train"]["X"]))[:2000]]
     z = S.pca(fit, 23)
     out = {}
     for s, x in d.items():
-        Z = z(x["X"])
+        Z = z(x["X"].astype(np.float32))
         if cond == "sniff":
             n = len(x["y"])
             mean = np.zeros((n, Z.shape[1]))

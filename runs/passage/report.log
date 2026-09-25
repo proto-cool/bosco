@@ -1,0 +1,22 @@
+Traceback (most recent call last):
+  File "/Users/nickd/projects/bosco/scripts/passage_check.py", line 171, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/Users/nickd/projects/bosco/scripts/passage_check.py", line 167, in main
+    return a.fn(a)
+           ^^^^^^^
+  File "/Users/nickd/projects/bosco/scripts/passage_check.py", line 128, in cmd_report
+    f = features(cond)
+        ^^^^^^^^^^^^^^
+  File "/Users/nickd/projects/bosco/scripts/passage_check.py", line 103, in features
+    z = S.pca(fit, 23)
+        ^^^^^^^^^^^^^^
+  File "/Users/nickd/projects/bosco/src/bosco/senses.py", line 36, in pca
+    _, _, vt = np.linalg.svd(c, full_matrices=False)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/linalg/_linalg.py", line 1827, in svd
+    t, result_t = _commonType(a)
+                  ^^^^^^^^^^^^^^
+  File "/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/linalg/_linalg.py", line 215, in _commonType
+    raise TypeError(f"array type {a.dtype.name} is unsupported in linalg")
+TypeError: array type float16 is unsupported in linalg

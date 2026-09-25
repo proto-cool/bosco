@@ -1,0 +1,72 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] A new version of the following files was downloaded from https://huggingface.co/Alibaba-NLP/gte-Qwen2-1.5B-instruct:
+- modeling_qwen.py
+. Make sure to double-check they do not contain any added malicious code. To avoid downloading new versions of the code file, you can pin a revision.
+Fetching 2 files:   0%|          | 0/2 [00:00<?, ?it/s]Fetching 2 files:  50%|█████     | 1/2 [00:46<00:46, 46.23s/it]Fetching 2 files: 100%|██████████| 2/2 [00:50<00:00, 21.75s/it]Fetching 2 files: 100%|██████████| 2/2 [00:50<00:00, 25.42s/it]
+Traceback (most recent call last):
+  File "/Users/nickd/projects/bosco/scripts/passage_check.py", line 171, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/Users/nickd/projects/bosco/scripts/passage_check.py", line 167, in main
+    return a.fn(a)
+           ^^^^^^^
+  File "/Users/nickd/projects/bosco/scripts/passage_check.py", line 67, in cmd_embed
+    m = SentenceTransformer(MODELS[a.cond], device="mps", trust_remote_code=True)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sentence_transformers/util/decorators.py", line 46, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sentence_transformers/sentence_transformer/model.py", line 194, in __init__
+    super().__init__(
+  File "/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sentence_transformers/base/model.py", line 236, in __init__
+    modules, self.module_kwargs = self._load_modules(
+                                  ^^^^^^^^^^^^^^^^^^^
+  File "/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sentence_transformers/base/model.py", line 1081, in _load_modules
+    return self._load_config_modules(model_name_or_path, **load_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sentence_transformers/base/model.py", line 1298, in _load_config_modules
+    module = module_class.load(
+             ^^^^^^^^^^^^^^^^^^
+  File "/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sentence_transformers/base/modules/transformer.py", line 2635, in load
+    return cls(model_name_or_path=model_name_or_path, **init_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sentence_transformers/util/decorators.py", line 92, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sentence_transformers/base/modules/transformer.py", line 847, in __init__
+    self.model = self._load_model(
+                 ^^^^^^^^^^^^^^^^^
+  File "/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sentence_transformers/base/modules/transformer.py", line 2337, in _load_model
+    return model_cls.from_pretrained(model_name_or_path, config=config, **model_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py", line 385, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4267, in from_pretrained
+    model = cls(config, *model_args, **model_kwargs)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/nickd/.cache/huggingface/modules/transformers_modules/Alibaba_hyphen_NLP/gte_hyphen_Qwen2_hyphen_1_dot_5B_hyphen_instruct/a9af15a6372d7d6b25e9fb07c2ccb9e1fe645644/modeling_qwen.py", line 940, in __init__
+    [Qwen2DecoderLayer(config, layer_idx) for layer_idx in range(config.num_hidden_layers)]
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/nickd/.cache/huggingface/modules/transformers_modules/Alibaba_hyphen_NLP/gte_hyphen_Qwen2_hyphen_1_dot_5B_hyphen_instruct/a9af15a6372d7d6b25e9fb07c2ccb9e1fe645644/modeling_qwen.py", line 739, in __init__
+    self.self_attn = QWEN2_ATTENTION_CLASSES[config._attn_implementation](config, layer_idx)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/nickd/.cache/huggingface/modules/transformers_modules/Alibaba_hyphen_NLP/gte_hyphen_Qwen2_hyphen_1_dot_5B_hyphen_instruct/a9af15a6372d7d6b25e9fb07c2ccb9e1fe645644/modeling_qwen.py", line 225, in __init__
+    self.rope_theta = config.rope_theta
+                      ^^^^^^^^^^^^^^^^^
+  File "/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/transformers/configuration_utils.py", line 484, in __getattribute__
+    return super().__getattribute__(key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/transformers/integrations/heterogeneity/configuration_utils.py", line 312, in __getattribute__
+    return super().__getattribute__(key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Qwen2Config' object has no attribute 'rope_theta'
+[llm-ref] retry in isolated env
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:00<00:00,  4.50it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:00<00:00,  6.17it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:00<00:00,  5.84it/s]
+A new version of the following files was downloaded from https://huggingface.co/Alibaba-NLP/gte-Qwen2-1.5B-instruct:
+- tokenization_qwen.py
+. Make sure to double-check they do not contain any added malicious code. To avoid downloading new versions of the code file, you can pin a revision.
+[llm-ref] train (987s)
+[llm-ref] val (1229s)
+[llm-ref] bench (1238s)
+[llm-ref] done (1238s)
