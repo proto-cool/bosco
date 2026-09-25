@@ -1,13 +1,21 @@
 # Effort pilot: does thinking longer help him? (DRAFT, 2026-09-25)
 
-**Status: draft.** It becomes a pre-registration once A4 broad has reported, because
-which brain and which question kinds it runs on depend on that result. The numbers
-below are proposals until then. Nick: "what if we added a high/medium/low effort, à la
-you."
+**Status: draft.** It becomes a pre-registration on the v1 "The Model" brain
+(`docs/DECISIONS-2026-09-25.md`), once that brain exists. The numbers below are
+proposals until then. Nick: "what if we added a high/medium/low effort, à la you", then
+"let's plan for two effort levels as well: fast and accurate. If there's room for a
+third, cool, but that seems a natural tradeoff."
+
+**Changes since the first draft (2026-09-25, after the claims audit):**
+- **Two levels, fast and accurate.** A middle level only if it earns it.
+- **The lean is read from his descending neurons** (decision 4), not the MBONs.
+- **Evaluation runs on the CPU,** as served (decision 7). This makes replays exact, so
+  the rule's margin is not eaten by GPU replay wobble.
 
 ## The idea
 
-An **effort** setting on every question: low, medium or high. At higher effort he keeps
+An **effort** setting on every question: **fast** or **accurate** (a middle level only
+if it earns it; see the rules). At higher effort he keeps
 sniffing and adds up the evidence until he is sure enough, or his budget runs out.
 - **The fly behind it:** flies trade speed for accuracy. On harder smell
   discriminations they take longer to decide, accumulating evidence before they commit
@@ -32,20 +40,20 @@ encouraging:
   Here: independent noise on each glomerulus's input, per sniff, around the item's
   smell. It stays inside the nose; the brain and the read are untouched.
 - **Where the adding up happens:** across sniffs, outside the brain. His lean per
-  option is summed over sniffs. A fly's accumulator is thought to sit downstream of the
+  option, read from his descending neurons, is summed over sniffs. A fly's accumulator is thought to sit downstream of the
   mushroom body, in circuits this model does not simulate; the sum stands in for it,
   and the docs will say so.
 - **Out of this pilot:** a longer settling time (400 or 800 ms per sniff). It needs
   retraining at the new length, so it gets its own gate if this pilot shows effort
   helps at all.
 
-## Arms (on the brain that A4 broad ships, frozen; nothing is retrained)
+## Arms (on the v1 brain, frozen; nothing is retrained)
 
 | level | sniffs | stops when |
 |---|---|---|
-| **low** | 1, clean (no noise) | at once (today's answer) |
-| **medium** | up to 4, noisy | the top option's probability from the summed lean ≥ 0.80 |
-| **high** | up to 16, noisy | ≥ 0.90 |
+| **fast** | 1, clean (no noise) | at once |
+| **accurate** | up to 16, noisy | the top option's probability from the summed lean ≥ 0.90 |
+| middle (optional) | up to 4, noisy | ≥ 0.80 |
 | fixed-N (reference) | exactly 4 and exactly 16, noisy, no early stop | never early; separates "more sniffs" from "stopping when sure" |
 
 Beside them, the layered brain under the same levels (does effort help any brain, or
@@ -79,21 +87,25 @@ BTZSC cold tiers are reported for every level, not gating. No new data.
 
 ## Rules (proposed; fixed when this becomes a pre-registration)
 
-- **E1, effort helps:** on the test set, high ≥ low + 0.02 macro balanced accuracy,
-  **or** high improves ECE by ≥ 0.02 while its accuracy is no worse than low − 0.005.
-- **E2, it is affordable:** high's mean server time ≤ 8× low's.
+- **E1, accurate is better:** on the test set, evaluated on the CPU, accurate ≥ fast +
+  0.02 macro balanced accuracy, **or** accurate improves ECE by ≥ 0.02 while its
+  accuracy is no worse than fast − 0.005.
+- **E2, accurate is affordable:** its mean server time is ≤ 8× fast's, on the Kimsufi
+  CPU.
 - **What ships:**
-  - If E1 and E2 pass, low, medium and high ship. Medium ships only if it sits between
-    them on the E1 measure.
-  - If E1 fails, there is no effort setting; the report says plainly that more sniffs
-    did not help this brain.
-  - If E1 passes and E2 fails, only low and medium ship, with medium's own E1 checked.
-- **Reported beside, not gating:** real vs layered; fixed-N vs early-stop; the cold
+  - E1 and E2 pass: fast and accurate ship.
+  - The middle level ships only if it sits between them on the E1 measure and costs
+    clearly less than accurate.
+  - E1 fails: there is no effort setting, and the report says plainly that more sniffs
+    did not help.
+  - E1 passes and E2 fails: accurate's budget is cut until E2 holds, then E1 is
+    re-checked on the cut budget.
+- **Reported beside, not gating:** real vs layered; fixed-N vs early stop; the cold
   tiers.
 
 ## Open until pre-registration
 
-- The brain and kinds, from A4 broad's result.
+- The brain and kinds: the v1 brain and its catalogue.
 - The server-time measurement (task #6, CPU speed) has to exist first for E2.
 - Whether `approach` (two sides) and `choose` (many options) share one stopping rule.
   Proposed: yes, via the top option's probability.
