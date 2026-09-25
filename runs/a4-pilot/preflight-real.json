@@ -1,0 +1,27 @@
+{
+ "arm": "real",
+ "init": {
+  "gain": 8.0,
+  "threshold": 0.05,
+  "kc_threshold": 0.6567535400390625,
+  "mbon_threshold": -0.2235260009765625,
+  "spread": 0.04360794648528099,
+  "kc": 0.05000076815485954,
+  "approach": 0.1989094614982605,
+  "avoid": 0.20018821954727173,
+  "mbon": 0.19949854910373688,
+  "raw_read_spread": 0.004453352186828852
+ },
+ "loss_first10": 1.1315905928611756,
+ "loss_last10": 1.0671603679656982,
+ "pick_acc": 0.4533333333333333,
+ "chance": 0.38355026455026453,
+ "checks": {
+  "kc_at_start_in_band": true,
+  "read_not_dead_at_start": true,
+  "loss_falls": true,
+  "gradients_reach_brain": true
+ },
+ "broken": false,
+ "slow": false
+}

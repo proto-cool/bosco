@@ -394,7 +394,7 @@ def cmd_report(a) -> int:
     chance = {k: 1 / len(next(it for it in meta["cold"] if it["kind"] == k)["options"]) for k in kinds_cold}
     base = json.load(open(RUNS / "baselines.json"))
     arms = {x: json.load(open(RUNS / f"{x}.json")) for x in ("real", "layered") if (RUNS / f"{x}.json").exists()}
-    macro = lambda d: float(np.mean([d[k] for k in kinds_cold]))  # noqa: E731
+    macro = lambda d: float(np.mean([d.get(k, np.nan) for k in kinds_cold]))  # noqa: E731
     rows = {
         "chance": chance,
         "nose alone (words)": base["nose_words"],
