@@ -218,9 +218,26 @@ def build_brain(arm):
 
 
 def calib(sets, zo):
-    b = sets["train"][:32]
-    smell, _, _ = sniffs(b, zo)
-    return smell[:64], np.zeros((min(64, len(smell)), 52), np.float32)
+    """64 sniffs from items drawn at random across kinds (amendment 1)."""
+    idx = np.random.default_rng(SEED).permutation(len(sets["train"]))[:32]
+    smell, _, _ = sniffs([sets["train"][i] for i in idx], zo)
+    smell = smell[:64]
+    return smell, np.zeros((len(smell), 52), np.float32)
+
+
+def start(m, sets, zo) -> dict:
+    """fly_init, then the read's starting scale set so the logit's std over the calibration sniffs is 1
+    (amendment 1; label-free; k stays trainable)."""
+    cs, cv = calib(sets, zo)
+    init = a5.fly_init(m, cs, cv)
+    with torch.no_grad():
+        s, v = torch.tensor(cs, device=m.device), torch.tensor(cv, device=m.device)
+        _, r, _ = m.run(s, v)
+        d = r[m.ap].mean(0) - r[m.av].mean(0)
+        raw = float(d.std())
+        m.k.fill_(1.0 / (10.0 * max(raw, 1e-8)))
+        m.c.fill_(0.0)
+    return init | {"raw_read_spread": raw}
 
 
 def train_steps(m, opt, items, zo, rng, n_max=None):
@@ -243,20 +260,22 @@ def train_steps(m, opt, items, zo, rng, n_max=None):
 def cmd_preflight(a) -> int:
     meta, e, sets, zo = load()
     m = build_brain(a.arm)
-    init = a5.fly_init(m, *calib(sets, zo))
+    init = start(m, sets, zo)
+    perm = np.random.default_rng(0).permutation(len(sets["train"]))
+    used, rest = [sets["train"][i] for i in perm[:3000]], [sets["train"][i] for i in perm[3000:]]
     opt = torch.optim.Adam(m.parameters(), lr=a5.LR)
-    ls = train_steps(m, opt, sets["train"], zo, np.random.default_rng(0), n_max=30)
+    ls = train_steps(m, opt, used, zo, np.random.default_rng(0), n_max=30)
     grads_ok = all(
         p.grad is not None and torch.isfinite(p.grad).all() and p.grad.abs().sum() > 0
         for n, p in m.named_parameters()
         if n in ("log_g", "b", "kp_logm")
     )
-    held = sets["train"][-300:]
+    held = rest[:300]  # random across kinds, not trained on in the preflight
     acc = accuracy(m, held, zo)
     chance = float(np.mean([1 / len(it["opts"]) for it in held]))
     checks = {
         "kc_at_start_in_band": a5.KC_BAND[0] <= init["kc"] <= a5.KC_BAND[1],
-        "output_spread_at_start": init["spread"] >= 0.02,
+        "read_not_dead_at_start": init["raw_read_spread"] >= 1e-4,
         "loss_falls": float(np.mean(ls[-10:])) <= float(np.mean(ls[:10])) - 0.02,
         "gradients_reach_brain": bool(grads_ok),
     }
@@ -287,7 +306,7 @@ def cmd_train(a) -> int:
     log = lambda s: print(f"[{a.arm}] {s} ({time.time() - t0:.0f}s)", flush=True)  # noqa: E731
     meta, e, sets, zo = load()
     m = build_brain(a.arm)
-    init = a5.fly_init(m, *calib(sets, zo))
+    init = start(m, sets, zo)
     log(f"init {init}")
     opt = torch.optim.Adam(m.parameters(), lr=a5.LR)
     hist, best, best_state = [], -1.0, None

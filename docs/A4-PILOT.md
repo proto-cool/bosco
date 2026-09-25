@@ -60,3 +60,20 @@ loss falls, gradients reach the brain).
   plainly that Bosco answers only the kinds of question he is trained on.
 
 Runner: `scripts/a4_pilot.py`. Results: `docs/a4-pilot-results.md`.
+
+## Amendment 1 (2026-09-24, from the preflight; no validation or cold result seen)
+
+The maze preflight marked both brains **broken**: output spread at the
+start 0.014, and a loss that rose over 30 batches. Diagnosed:
+1. **The read starts too flat.** The item and option smells are fainter
+   than A5's, so approach − avoid varies by only about 0.0014 across sniffs.
+   The softmax over options is then almost uniform, and learning starves.
+   **Fix (label-free):** after `fly_init`, the read's starting scale `k` is set
+   so the logit's standard deviation over the calibration sniffs is 1. `k`
+   stays trainable. The dead-output check now tests the raw approach − avoid
+   spread (≥ 1e-4).
+2. **The calibration and held-back sets were each a single question kind**
+   (the first 32 and last 300 training items, sorted by kind). Now both are
+   drawn at random across kinds, and the held-back items are ones the
+   preflight did not train on.
+Other brains' checks and all rules are unchanged.
