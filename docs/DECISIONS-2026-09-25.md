@@ -35,17 +35,16 @@ power it, and it needs the fly to make honest decisions."
 10. **Data is ethically sourced, with provenance all the way through:** a ledger per
     dataset and per encoder before training.
 
+11. **Eyes: option (c), tried first.** Real eyes (the picture at about 800 facets per
+    eye, then photoreceptors, optic lobes and visual projection neurons, all his own)
+    **plus** the encoder feeding in at the optic-lobe handoff, as a translator. Nick:
+    "encoders for translation is the perfect analogy". Cost: the optic lobes are
+    roughly 2–3× the neurons now simulated, the largest speed risk, measured in the
+    audit. The stand-in alone (b) is acceptable as a fallback ("the eye stand-in is
+    fine").
+
 ## Open (Nick to decide)
 
-- **Eyes:**
-  - (a) real eyes: the picture goes to about 800 facets per eye, then photoreceptors,
-    optic lobes and visual projection neurons, all his own; faithful, and much lower
-    picture accuracy;
-  - (b) the stand-in as now;
-  - (c) both: real eyes, plus the encoder at the optic-lobe handoff.
-
-  Claude recommends (c). Cost: the optic lobes are roughly 2–3× the neurons now
-  simulated, the largest speed risk.
 - **Where the question enters,** given the eyes decision. It is decided from the
   anatomy check in the audit: which senses reach his Kenyon cells and descending
   neurons, and how strongly.
