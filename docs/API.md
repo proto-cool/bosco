@@ -14,7 +14,7 @@ committed).
   typed questions) is the natural one and stays.
 - **Answering never changes him.** Teaching is separate, offline and
   versioned. The public site runs a frozen version.
-- Public at bosco.proto.cool on the Kimsufi (Xeon E-2274G, 4 cores, 32 GB,
+- Public at bosco.systems on the Kimsufi (Xeon E-2274G, 4 cores, 32 GB,
   no GPU). Measured CPU cost: about 1 s of brain per answer before
   optimisation.
 

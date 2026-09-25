@@ -1,6 +1,6 @@
 # The Bosco web app (plan, 2026-09-24)
 
-The public front end at bosco.proto.cool, on the Kimsufi (Xeon E-2274G,
+The public front end at bosco.systems, on the Kimsufi (Xeon E-2274G,
 4 cores, 32 GB, no GPU). It is the only public consumer of the API
 (`API.md`). The UI design is Nick's, in Claude Design: two-panel chat plus a
 slim brain panel.
@@ -18,11 +18,11 @@ slim brain panel.
 
 ## Shape
 
-- **Caddy**: HTTPS for bosco.proto.cool.
+- **Caddy**: HTTPS for bosco.systems.
 - **Web app** (TypeScript, the official atproto OAuth client library, as a
   confidential client): login, sessions, per-DID rate limits, one queue with
   a maximum length, input caps, the UI. Publishes its client metadata at
-  `https://bosco.proto.cool/oauth/client-metadata.json`.
+  `https://bosco.systems/oauth/client-metadata.json`.
 - **Bosco service** (Python, listening only on the box): runs the frozen
   published version, returns answers and slimmed replay traces.
 
