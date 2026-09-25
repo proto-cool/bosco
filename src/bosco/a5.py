@@ -145,6 +145,69 @@ def fly_init(m, cs, cv) -> dict:
     return {"gain": g0, "threshold": th, "kc_threshold": kc_th, "mbon_threshold": mb_th, **st}
 
 
+KEEP_GRID = [(g, t) for g in (0.5, 1.0, 2.0, 4.0, 8.0) for t in (0.05, 0.2)]
+
+
+def _similarity_kept(m, singles) -> float:
+    """How well the KC code keeps the input's similarity structure: Pearson correlation, over pairs of
+    unlabelled smells, between the cosine of their inputs (from rest) and of their KC codes."""
+    s = torch.tensor(singles, device=m.device)
+    with torch.no_grad():
+        _, r, _ = m.run(s, torch.zeros(len(s), 52, device=m.device))
+    k = r[m.kc].T.cpu().numpy()
+    k = k - k.mean(0)
+    x = singles - 0.5
+    iu = np.triu_indices(len(x), 1)
+
+    def cos(a):
+        a = a / (np.linalg.norm(a, axis=1, keepdims=True) + 1e-9)
+        return (a @ a.T)[iu]
+
+    ck = cos(k)
+    if not np.isfinite(ck).all() or ck.std() == 0:
+        return float("nan")
+    return float(np.corrcoef(ck, cos(x))[0, 1])
+
+
+def fly_init_keep(m, cs, cv, singles) -> dict:
+    """Label-free start that keeps what he smells (docs/A4-BROAD.md). Over KEEP_GRID, after the KC and
+    MBON bisections on the calibration sniffs, keep points where both read MBON groups are neither silent
+    nor saturated and the raw read spread is >= 1e-4; take the one whose KC code best tracks input
+    similarity over the unlabelled single smells."""
+    s, v = torch.tensor(cs, device=m.device), torch.tensor(cv, device=m.device)
+    scan, best = [], None
+    for g0, th in KEEP_GRID:
+        m.set_init(g0, th)
+        kc_th = _bisect(m, s, v, m.set_kc_threshold, "kc", KC_INIT_TARGET)
+        mb_th = _bisect(m, s, v, m.set_mbon_threshold, "mbon", MBON_INIT_TARGET)
+        kc_th = _bisect(m, s, v, m.set_kc_threshold, "kc", KC_INIT_TARGET)
+        st = _probe_init(m, s, v)
+        with torch.no_grad():
+            _, r, _ = m.run(s, v)
+            raw = float((r[m.ap].mean(0) - r[m.av].mean(0)).std())
+        kept = _similarity_kept(m, singles)
+        ok = all(1e-3 < st[k] < 0.95 for k in ("approach", "avoid")) and raw >= 1e-4 and np.isfinite(kept)
+        row = {
+            "gain": g0,
+            "threshold": th,
+            "kc_threshold": kc_th,
+            "mbon_threshold": mb_th,
+            "raw_spread": raw,
+            "similarity_kept": kept,
+            "ok": bool(ok),
+            **st,
+        }
+        scan.append(row)
+        if ok and (best is None or kept > best["similarity_kept"]):
+            best = row
+    if best is None:
+        raise RuntimeError("fly_init_keep: no grid point qualifies")
+    m.set_init(best["gain"], best["threshold"])
+    m.set_kc_threshold(best["kc_threshold"])
+    m.set_mbon_threshold(best["mbon_threshold"])
+    return best | {"scan": scan}
+
+
 def _bisect(m, s, v, setter, key: str, target: float, lo: float = -3.0, hi: float = 3.0) -> float:
     """Activity falls as the threshold rises: find the threshold that puts `key` at `target`."""
     for _ in range(16):
