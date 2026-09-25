@@ -106,3 +106,18 @@ rerun the preflight.
 The A4 pilot used the uncentred loss with a read scale of about 70. Its loss fell over
 all 8 epochs, so it was not dead, but it may have been partly clamped; noted in
 `docs/ERRATA-2026-09-24.md`.
+
+## Amendment 2 (2026-09-25, from the preflight; no validation, test or cold result seen; Nick agreed)
+
+With amendment 1, the real brain's preflight is no longer broken but still **slow** at
+30 batches (0.347 picks right vs chance 0.329; the bar is chance + 0.05). On training
+data only: the A5 start rule (gain 8) is just as slow at 30 batches (0.343), and the new
+start clears the bar by 150 batches (0.350 at 75, **0.397** at 150). The check came too
+early for this task (44 kinds, up to 93 options), not a fault of the start. **Change:**
+the preflight trains 150 batches (drawn from 8,000 training items; the 300 held-back
+items are from the rest) before "slow" and "loss falls" are judged. Both brains. All
+other checks and every decision rule are unchanged.
+
+**Machines:** the real brain trains on the Mac (MPS), the layered brain on the 3080
+(CUDA), baselines on the Mac. Each run stays on one machine, so it can be replayed there;
+the two GPUs agree to about 0.01 on the same preflight, not bit for bit.

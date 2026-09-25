@@ -34,6 +34,7 @@ SEED = 20260925
 KINDS = D.PRACTICE + D.TRAIN_POOL
 N_TRAIN, N_VAL, N_TEST = 1000, 100, 200
 EPOCHS, NET_EPOCHS = 8, 20
+PREFLIGHT_BATCHES, PREFLIGHT_ITEMS = 150, 8000  # amendment 2: judged at 150 batches, not 30
 RELABEL = {("glue/cola", "acceptable"): "grammatical", ("glue/cola", "unacceptable"): "ungrammatical"}
 TIERS = {
     1: [
@@ -222,11 +223,11 @@ def cmd_preflight(a) -> int:
         flush=True,
     )
     perm = np.random.default_rng(0).permutation(len(sets["train"]))
-    used, rest = [sets["train"][i] for i in perm[:3000]], [sets["train"][i] for i in perm[3000:]]
+    used, rest = [sets["train"][i] for i in perm[:PREFLIGHT_ITEMS]], [sets["train"][i] for i in perm[PREFLIGHT_ITEMS:]]
     opt = torch.optim.Adam(m.parameters(), lr=a5.LR)
     ls = []
     for i, b in enumerate(P.batches(used, np.random.default_rng(0))):
-        if i >= a5.PREFLIGHT_BATCHES:
+        if i >= PREFLIGHT_BATCHES:
             break
         ls.append(step(m, opt, b, zl)[0])
     grads_ok = all(
