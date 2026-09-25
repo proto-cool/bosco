@@ -1,0 +1,17 @@
+[layered] start: gain 8.0 threshold 0.2 kept 0.388 kc 0.050 raw spread 2.79e-03 (58s)
+{
+ "arm": "layered",
+ "loss_first10": 1.86927227973938,
+ "loss_last10": 1.4468719840049744,
+ "pick_acc": 0.44666666666666666,
+ "chance": 0.34312134056820964,
+ "checks": {
+  "kc_at_start_in_band": true,
+  "read_not_dead_at_start": true,
+  "loss_falls": true,
+  "gradients_reach_brain": true
+ },
+ "broken": false,
+ "slow": false
+}
+exit 0
