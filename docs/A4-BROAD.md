@@ -120,4 +120,6 @@ other checks and every decision rule are unchanged.
 
 **Machines:** the real brain trains on the Mac (MPS), the layered brain on the 3080
 (CUDA), baselines on the Mac. Each run stays on one machine, so it can be replayed there;
-the two GPUs agree to about 0.01 on the same preflight, not bit for bit.
+the two GPUs agree to about 0.01 on the same preflight, not bit for bit. (A first start of
+the real brain was stopped after 5 minutes, at batch 200 of epoch 1, before any
+validation, and restarted from scratch.)
