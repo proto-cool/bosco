@@ -1,0 +1,89 @@
+sst: 427 train sentences had no exact dictionary match and were left out
+[t2/logistic/s5] 4000 items, 790 rewards, drive None
+[t2/logistic/s5] item 0/4000, rewards 0, open [], 0s
+[t2/logistic/s5] item 250/4000, rewards 42, open ['k25'], 2s
+[t2/logistic/s5] item 500/4000, rewards 101, open ['k50', 'k100'], 2s
+[t2/logistic/s5] item 750/4000, rewards 151, open [], 2s
+[t2/logistic/s5] item 1000/4000, rewards 197, open [], 2s
+[t2/logistic/s5] item 1250/4000, rewards 248, open ['k200'], 2s
+[t2/logistic/s5] item 1500/4000, rewards 297, open [], 2s
+[t2/logistic/s5] item 1750/4000, rewards 341, open [], 2s
+[t2/logistic/s5] flip at item 2000
+[t2/logistic/s5] item 2000/4000, rewards 1, open [], 2s
+[t2/logistic/s5] item 2250/4000, rewards 56, open ['flip-k25', 'flip-k50'], 2s
+[t2/logistic/s5] item 2500/4000, rewards 105, open ['flip-k100'], 2s
+[t2/logistic/s5] item 2750/4000, rewards 161, open [], 2s
+[t2/logistic/s5] item 3000/4000, rewards 208, open ['flip-k200'], 2s
+[t2/logistic/s5] item 3250/4000, rewards 261, open [], 3s
+[t2/logistic/s5] item 3500/4000, rewards 324, open [], 3s
+[t2/logistic/s5] item 3750/4000, rewards 367, open [], 3s
+[t2/logistic/s5] {
+ "task": "t2",
+ "arm": "logistic",
+ "seed": 5,
+ "n_items": 4000,
+ "windows": {
+  "k25": {
+   "n": 200,
+   "accuracy": 0.635,
+   "spearman": 0.22946426140888507,
+   "ece": 0.11366514899772336
+  },
+  "k50": {
+   "n": 200,
+   "accuracy": 0.65,
+   "spearman": 0.22149895435775457,
+   "ece": 0.12314443348541551
+  },
+  "k100": {
+   "n": 200,
+   "accuracy": 0.6,
+   "spearman": 0.2859254271637064,
+   "ece": 0.0598202381281611
+  },
+  "k200": {
+   "n": 200,
+   "accuracy": 0.575,
+   "spearman": 0.2545623916472818,
+   "ece": 0.03203126048905704
+  },
+  "flip-k25": {
+   "n": 200,
+   "accuracy": 0.33,
+   "spearman": -0.5185393623581203,
+   "ece": 0.21425562114179136
+  },
+  "flip-k50": {
+   "n": 200,
+   "accuracy": 0.31,
+   "spearman": -0.5381226899140682,
+   "ece": 0.22956973537307684
+  },
+  "flip-k100": {
+   "n": 200,
+   "accuracy": 0.33,
+   "spearman": -0.4565291341861236,
+   "ece": 0.20136939176885804
+  },
+  "flip-k200": {
+   "n": 200,
+   "accuracy": 0.38,
+   "spearman": -0.3560795083239303,
+   "ece": 0.1486245955728427
+  }
+ },
+ "ece_raw_k100plus": 0.07653821949609924,
+ "ece_isotonic_k100plus": 0.08312892398338645,
+ "n_calib": 168,
+ "one_seed_accuracy_all": 0.516,
+ "wall_s": 2.9383320808410645,
+ "score_wall_s": 0.0,
+ "n_scored": 0,
+ "recall": {
+  "n_sweet": 30,
+  "n_bitter": 30,
+  "sweet_trained": 0.48299521983235644,
+  "bitter_trained": 0.4592251382846192,
+  "gap": 0.023770081547737243
+ }
+}

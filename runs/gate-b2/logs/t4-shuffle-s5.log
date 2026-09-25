@@ -1,0 +1,80 @@
+{
+ "n": 900,
+ "accuracy": 0.6455555555555555,
+ "spearman": 0.1618669125915837,
+ "rows": [
+  {
+   "id": "oasis-Acorns 1",
+   "label": 0.61437908496732,
+   "score": 0.525120601623358,
+   "sure": 1.0
+  },
+  {
+   "id": "oasis-Acorns 2",
+   "label": 0.5866013071895417,
+   "score": 0.5173559941540473,
+   "sure": 1.0
+  },
+  {
+   "id": "oasis-Acorns 3",
+   "label": 0.6258169934640517,
+   "score": 0.5011682833493595,
+   "sure": 0.625
+  },
+  {
+   "id": "oasis-Alcohol 1",
+   "label": 0.6141975308641983,
+   "score": 0.5207133883965565,
+   "sure": 1.0
+  },
+  {
+   "id": "oasis-Alcohol 2",
+   "label": 0.5416666666666666,
+   "score": 0.5363618266787775,
+   "sure": 1.0
+  },
+  {
+   "id": "oasis-Alcohol 3",
+   "label": 0.5277777777777782,
+   "score": 0.5305059380654878,
+   "sure": 1.0
+  },
+  {
+   "id": "oasis-Alcohol 4",
+   "label": 0.6280864197530867,
+   "score": 0.5314006061618234,
+   "sure": 1.0
+  },
+  {
+   "id": "oasis-Alcohol 5",
+   "label": 0.7222222222222218,
+   "score": 0.5238873530428441,
+   "sure": 1.0
+  },
+  {
+   "id": "oasis-Alcohol 6",
+   "label": 0.5895061728395067,
+   "score": 0.5425304780735513,
+   "sure": 1.0
+  },
+  {
+   "id": "oasis-Alcohol 7",
+   "label": 0.57920792079208,
+   "score": 0.5312208052806536,
+   "sure": 1.0
+  },
+  {
+   "id": "oasis-Alcohol 8",
+   "label": 0.7458745874587467,
+   "score": 0.5281295352640929,
+   "sure": 1.0
+  },
+  {
+   "id": "oasis-Ambulance 1",
+   "label": 0.22222222222222165,
+   "score": 0.5373551280851282,
+   "sure": 1.0
+  }
+ ]
+}
+wrote /Users/nickd/projects/bosco/runs/gate-b2/t1-shuffle-s5/t4.json

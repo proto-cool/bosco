@@ -1,0 +1,50 @@
+{
+ "rows": [
+  {
+   "kind": "text",
+   "text": "I fucking hate you",
+   "expect": "near 0",
+   "score": 0.4554114354450438,
+   "sure": 1.0
+  },
+  {
+   "kind": "text",
+   "text": "I hate you",
+   "expect": "below 0.5, above the one before",
+   "score": 0.4198316246592881,
+   "sure": 1.0
+  },
+  {
+   "kind": "text",
+   "text": "I don't know",
+   "expect": "about 0.5",
+   "score": 0.4380435627539726,
+   "sure": 1.0
+  },
+  {
+   "kind": "text",
+   "text": "I love you",
+   "expect": "above 0.5",
+   "score": 0.5417720850821328,
+   "sure": 1.0
+  },
+  {
+   "kind": "text",
+   "text": "I fucking love you",
+   "expect": "near 1, above the one before",
+   "score": 0.4680521905539974,
+   "sure": 1.0
+  },
+  {
+   "kind": "image",
+   "about": "a photograph of a sweet",
+   "missing": "/Users/nickd/projects/bosco/data/probes/sweet.jpg"
+  },
+  {
+   "kind": "image",
+   "about": "a photograph of rotting fruit",
+   "missing": "/Users/nickd/projects/bosco/data/probes/rot.jpg"
+  }
+ ]
+}
+wrote /Users/nickd/projects/bosco/runs/gate-b2/t1-hash-s2/t6.json

@@ -1,0 +1,64 @@
+sst: 427 train sentences had no exact dictionary match and were left out
+[t1/logistic/s5] 4000 items, 790 rewards, drive None
+[t1/logistic/s5] item 0/4000, rewards 0, open [], 0s
+[t1/logistic/s5] item 250/4000, rewards 42, open ['k25'], 1s
+[t1/logistic/s5] item 500/4000, rewards 101, open ['k50', 'k100'], 1s
+[t1/logistic/s5] item 750/4000, rewards 151, open [], 1s
+[t1/logistic/s5] item 1000/4000, rewards 197, open [], 1s
+[t1/logistic/s5] item 1250/4000, rewards 248, open ['k200'], 1s
+[t1/logistic/s5] item 1500/4000, rewards 297, open [], 1s
+[t1/logistic/s5] item 1750/4000, rewards 341, open [], 1s
+[t1/logistic/s5] item 2000/4000, rewards 381, open [], 1s
+[t1/logistic/s5] item 2250/4000, rewards 436, open [], 1s
+[t1/logistic/s5] item 2500/4000, rewards 485, open [], 1s
+[t1/logistic/s5] item 2750/4000, rewards 541, open [], 2s
+[t1/logistic/s5] item 3000/4000, rewards 588, open [], 2s
+[t1/logistic/s5] item 3250/4000, rewards 641, open [], 2s
+[t1/logistic/s5] item 3500/4000, rewards 704, open [], 2s
+[t1/logistic/s5] item 3750/4000, rewards 747, open [], 2s
+[t1/logistic/s5] {
+ "task": "t1",
+ "arm": "logistic",
+ "seed": 5,
+ "n_items": 4000,
+ "windows": {
+  "k25": {
+   "n": 200,
+   "accuracy": 0.635,
+   "spearman": 0.22946426140888507,
+   "ece": 0.11366514899772336
+  },
+  "k50": {
+   "n": 200,
+   "accuracy": 0.65,
+   "spearman": 0.22149895435775457,
+   "ece": 0.12314443348541551
+  },
+  "k100": {
+   "n": 200,
+   "accuracy": 0.6,
+   "spearman": 0.2859254271637064,
+   "ece": 0.0598202381281611
+  },
+  "k200": {
+   "n": 200,
+   "accuracy": 0.575,
+   "spearman": 0.2545623916472818,
+   "ece": 0.03203126048905704
+  }
+ },
+ "ece_raw_k100plus": 0.040836204764341355,
+ "ece_isotonic_k100plus": 0.06467417612641192,
+ "n_calib": 168,
+ "one_seed_accuracy_all": 0.643,
+ "wall_s": 1.9267950057983398,
+ "score_wall_s": 0.0,
+ "n_scored": 0,
+ "recall": {
+  "n_sweet": 30,
+  "n_bitter": 30,
+  "sweet_trained": 0.5500805965798641,
+  "bitter_trained": 0.48776137623328203,
+  "gap": 0.06231922034658205
+ }
+}

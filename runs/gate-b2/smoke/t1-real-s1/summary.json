@@ -1,0 +1,25 @@
+{
+ "task": "t1",
+ "arm": "real",
+ "seed": 1,
+ "n_items": 30,
+ "windows": {
+  "k2": {
+   "n": 5,
+   "accuracy": 0.8,
+   "spearman": 0.0,
+   "ece": 0.275
+  }
+ },
+ "one_seed_accuracy_all": 0.36666666666666664,
+ "wall_s": 35.63762617111206,
+ "score_wall_s": 19.963262796401978,
+ "n_scored": 6,
+ "recall": {
+  "n_sweet": 3,
+  "n_bitter": 0,
+  "sweet_trained": 0.7017080572493049,
+  "bitter_trained": NaN,
+  "gap": NaN
+ }
+}

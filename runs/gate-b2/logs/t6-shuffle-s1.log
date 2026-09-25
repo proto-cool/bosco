@@ -1,0 +1,50 @@
+{
+ "rows": [
+  {
+   "kind": "text",
+   "text": "I fucking hate you",
+   "expect": "near 0",
+   "score": 0.5164553563438691,
+   "sure": 1.0
+  },
+  {
+   "kind": "text",
+   "text": "I hate you",
+   "expect": "below 0.5, above the one before",
+   "score": 0.5177537230509328,
+   "sure": 1.0
+  },
+  {
+   "kind": "text",
+   "text": "I don't know",
+   "expect": "about 0.5",
+   "score": 0.5113526570211322,
+   "sure": 0.875
+  },
+  {
+   "kind": "text",
+   "text": "I love you",
+   "expect": "above 0.5",
+   "score": 0.5189222924953889,
+   "sure": 1.0
+  },
+  {
+   "kind": "text",
+   "text": "I fucking love you",
+   "expect": "near 1, above the one before",
+   "score": 0.5079183499016954,
+   "sure": 0.875
+  },
+  {
+   "kind": "image",
+   "about": "a photograph of a sweet",
+   "missing": "/Users/nickd/projects/bosco/data/probes/sweet.jpg"
+  },
+  {
+   "kind": "image",
+   "about": "a photograph of rotting fruit",
+   "missing": "/Users/nickd/projects/bosco/data/probes/rot.jpg"
+  }
+ ]
+}
+wrote /Users/nickd/projects/bosco/runs/gate-b2/t1-shuffle-s1/t6.json

@@ -1,0 +1,4 @@
+[cut/s1] edges 2,355,727; init {'gain': 8.0, 'threshold': 0.05, 'kc_threshold': 0.7491302490234375, 'mbon_threshold': -0.2251739501953125, 'spread': 0.048504382371902466, 'kc': 0.05000845715403557, 'approach': 0.2005087286233902, 'avoid': 0.19863998889923096, 'mbon': 0.19964784383773804} (29s)
+[cut/s1] epoch 1: loss 0.5880 val mean 0.686 | sweet 0.790 pictures 0.852 dangerous 0.601 junk 0.500 | 163s (192s)
+[cut/s1] epoch 2: loss 0.4173 val mean 0.734 | sweet 0.839 pictures 0.861 dangerous 0.668 junk 0.568 | 323s (353s)
+[cut/s1] done (353s)

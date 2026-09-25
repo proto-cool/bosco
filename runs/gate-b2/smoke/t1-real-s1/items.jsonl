@@ -1,0 +1,30 @@
+{"pos": 0, "id": "sst-4348", "label": 0.77778, "rewarded": false, "t_s": 0.0, "v1": 0.0}
+{"pos": 1, "id": "sst-5517", "label": 0.72222, "rewarded": false, "t_s": 30.0, "v1": 0.0}
+{"pos": 2, "id": "sst-7040", "label": 0.55556, "rewarded": false, "t_s": 60.0, "v1": 0.0}
+{"pos": 3, "id": "sst-3224", "label": 0.65278, "rewarded": false, "t_s": 90.0, "v1": 0.0}
+{"pos": 4, "id": "sst-2838", "label": 0.72222, "rewarded": false, "t_s": 120.0, "v1": 0.0}
+{"pos": 5, "id": "sst-4625", "label": 0.80556, "rewarded": false, "t_s": 150.0, "v1": 0.0}
+{"pos": 6, "id": "sst-1929", "label": 0.76389, "rewarded": false, "t_s": 180.0, "v1": 0.0}
+{"pos": 7, "id": "sst-10060", "label": 0.65278, "rewarded": false, "t_s": 210.0, "v1": 0.0}
+{"pos": 8, "id": "sst-1681", "label": 0.70833, "rewarded": false, "t_s": 240.0, "v1": 0.0}
+{"pos": 9, "id": "sst-2646", "label": 0.59722, "rewarded": false, "t_s": 270.0, "v1": 0.0}
+{"pos": 10, "id": "sst-2701", "label": 0.63889, "rewarded": false, "t_s": 300.0, "v1": 0.0}
+{"pos": 11, "id": "sst-11324", "label": 0.76389, "rewarded": false, "t_s": 330.0, "v1": 0.0}
+{"pos": 12, "id": "sst-5191", "label": 0.69444, "rewarded": false, "t_s": 360.0, "v1": 0.0}
+{"pos": 13, "id": "sst-3985", "label": 0.76389, "rewarded": false, "t_s": 390.0, "v1": 0.0}
+{"pos": 14, "id": "sst-1721", "label": 0.72222, "rewarded": true, "t_s": 420.0, "v1": 0.0}
+{"pos": 15, "id": "sst-3564", "label": 0.83333, "rewarded": false, "t_s": 450.0, "v1": -0.010655934019720493}
+{"pos": 16, "id": "sst-4199", "label": 0.83333, "rewarded": false, "t_s": 480.0, "v1": -0.005921035774705642}
+{"pos": 17, "id": "sst-3706", "label": 0.81944, "rewarded": false, "t_s": 510.0, "v1": 0.0019402640233221248}
+{"pos": 18, "id": "sst-4882", "label": 0.91667, "rewarded": false, "t_s": 540.0, "v1": 0.002378992914482467}
+{"pos": 19, "id": "sst-2677", "label": 0.68056, "rewarded": true, "t_s": 570.0, "v1": 0.002534302435595059}
+{"pos": 20, "id": "sst-11566", "label": 0.66667, "rewarded": false, "t_s": 600.0, "v1": 0.036401760345470255, "score": 0.5184125810809412, "sure": 1.0}
+{"pos": 21, "id": "sst-4588", "label": 0.91667, "rewarded": false, "t_s": 630.0, "v1": 0.02754005215013131, "score": 0.511563425514911, "sure": 0.875}
+{"pos": 22, "id": "sst-4184", "label": 0.77778, "rewarded": false, "t_s": 660.0, "v1": -0.0007301981521434695, "score": 0.5030475604074266, "sure": 0.75}
+{"pos": 23, "id": "sst-3322", "label": 0.66667, "rewarded": false, "t_s": 690.0, "v1": -0.01315531961760407, "score": 0.49301656534737115, "sure": 1.0}
+{"pos": 24, "id": "sst-2709", "label": 0.76389, "rewarded": true, "t_s": 720.0, "v1": 0.2535278012711765, "score": 0.6096893288908203, "sure": 1.0}
+{"pos": 25, "id": "sst-5168", "label": 0.77778, "rewarded": false, "t_s": 750.0, "v1": 0.020988657275987605, "score": 0.5140917159998326, "sure": 1.0}
+{"pos": 26, "id": "sst-4411", "label": 0.76389, "rewarded": false, "t_s": 780.0, "v1": 0.07175594633846001}
+{"pos": 27, "id": "sst-5398", "label": 0.65278, "rewarded": false, "t_s": 810.0, "v1": 0.2025027750398009}
+{"pos": 28, "id": "sst-2044", "label": 0.55556, "rewarded": false, "t_s": 840.0, "v1": 0.03737435173622632}
+{"pos": 29, "id": "sst-3047", "label": 0.61111, "rewarded": false, "t_s": 870.0, "v1": 0.007552984506978143}

@@ -1,0 +1,22 @@
+[real-type-cut] PASS  KC start 0.050  spread 0.049  bce 0.677->0.622  p_std 0.038  auroc 0.752  | kc_at_start_in_band=ok output_spread_at_start=ok loss_falls=ok gradients_reach_brain=ok answers_carry_information=ok (121s)
+[real-type-cut] exit 0 12:06:13 free_mem_pages 903734.
+[layered-type-cut] PASS  KC start 0.050  spread 0.063  bce 0.684->0.619  p_std 0.037  auroc 0.772  | kc_at_start_in_band=ok output_spread_at_start=ok loss_falls=ok gradients_reach_brain=ok answers_carry_information=ok (119s)
+[layered-type-cut] exit 0 12:08:13 free_mem_pages 832470.
+[hash-type-cut] PASS  KC start 0.050  spread 0.122  bce 0.668->0.622  p_std 0.040  auroc 0.641  | kc_at_start_in_band=ok output_spread_at_start=ok loss_falls=ok gradients_reach_brain=ok answers_carry_information=ok (126s)
+[hash-type-cut] exit 0 12:10:21 free_mem_pages 825387.
+[free-type-cut] PASS  KC start 0.050  spread 0.327  bce 0.672->0.619  p_std 0.043  auroc 0.724  | kc_at_start_in_band=ok output_spread_at_start=ok loss_falls=ok gradients_reach_brain=ok answers_carry_information=ok (105s)
+[free-type-cut] exit 0 12:12:08 free_mem_pages 835534.
+[real-neuron-cut] PASS  KC start 0.050  spread 0.049  bce 0.676->0.615  p_std 0.043  auroc 0.783  | kc_at_start_in_band=ok output_spread_at_start=ok loss_falls=ok gradients_reach_brain=ok answers_carry_information=ok (124s)
+[real-neuron-cut] exit 0 12:14:13 free_mem_pages 840224.
+[layered-neuron-cut] PASS  KC start 0.050  spread 0.063  bce 0.681->0.608  p_std 0.048  auroc 0.782  | kc_at_start_in_band=ok output_spread_at_start=ok loss_falls=ok gradients_reach_brain=ok answers_carry_information=ok (110s)
+[layered-neuron-cut] exit 0 12:16:05 free_mem_pages 819654.
+[hash-neuron-cut] exit 143 12:16:32 free_mem_pages 838140.
+[free-neuron-cut] exit 137 12:16:45 free_mem_pages 1148722.
+[real-neuron-full] PASS  KC start 0.050  spread 0.113  bce 0.679->0.623  p_std 0.040  auroc 0.746  | kc_at_start_in_band=ok output_spread_at_start=ok loss_falls=ok gradients_reach_brain=ok answers_carry_information=ok (215s)
+[real-neuron-full] exit 0 12:20:21 free_mem_pages 1006328.
+[layered-neuron-full] PASS  KC start 0.050  spread 0.038  bce 0.680->0.634  p_std 0.018  auroc 0.619  | kc_at_start_in_band=ok output_spread_at_start=ok loss_falls=ok gradients_reach_brain=ok answers_carry_information=ok (212s)
+[layered-neuron-full] exit 0 12:23:54 free_mem_pages 999866.
+[hash-neuron-full] PASS  KC start 0.050  spread 0.127  bce 0.663->0.615  p_std 0.049  auroc 0.666  | kc_at_start_in_band=ok output_spread_at_start=ok loss_falls=ok gradients_reach_brain=ok answers_carry_information=ok (210s)
+[hash-neuron-full] exit 0 12:27:25 free_mem_pages 1001394.
+[free-neuron-full] PASS  KC start 0.050  spread 0.335  bce 0.661->0.582  p_std 0.106  auroc 0.793  | kc_at_start_in_band=ok output_spread_at_start=ok loss_falls=ok gradients_reach_brain=ok answers_carry_information=ok (211s)
+[free-neuron-full] exit 0 12:30:57 free_mem_pages 992445.

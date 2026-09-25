@@ -1,0 +1,60 @@
+{
+ "rows": [
+  {
+   "kind": "text",
+   "text": "I fucking hate you",
+   "expect": "near 0",
+   "score": 0.48641734323767755,
+   "sure": 1.0
+  },
+  {
+   "kind": "text",
+   "text": "I hate you",
+   "expect": "below 0.5, above the one before",
+   "score": 0.46649118021137037,
+   "sure": 1.0
+  },
+  {
+   "kind": "text",
+   "text": "I don't know",
+   "expect": "about 0.5",
+   "score": 0.4770398621919584,
+   "sure": 1.0
+  },
+  {
+   "kind": "text",
+   "text": "I love you",
+   "expect": "above 0.5",
+   "score": 0.48468573344454746,
+   "sure": 1.0
+  },
+  {
+   "kind": "text",
+   "text": "I fucking love you",
+   "expect": "near 1, above the one before",
+   "score": 0.4790456442329521,
+   "sure": 1.0
+  },
+  {
+   "kind": "image",
+   "about": "a photograph of a sweet",
+   "missing": "/Users/nickd/projects/bosco/data/probes/sweet.jpg"
+  },
+  {
+   "kind": "image",
+   "about": "a photograph of rotting fruit",
+   "missing": "/Users/nickd/projects/bosco/data/probes/rot.jpg"
+  },
+  {
+   "kind": "mixture",
+   "about": "congruent? no: sweet words, bitter picture",
+   "missing": "/Users/nickd/projects/bosco/data/probes/rot.jpg"
+  },
+  {
+   "kind": "mixture",
+   "about": "bitter words, sweet picture",
+   "missing": "/Users/nickd/projects/bosco/data/probes/sweet.jpg"
+  }
+ ]
+}
+wrote /Users/nickd/projects/bosco/runs/gate-b2/t1-shuffle-s2/t5.json

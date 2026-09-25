@@ -1,0 +1,36 @@
+{
+ "tag": "real-bi46-mixed",
+ "init": {
+  "gain": 8.0,
+  "threshold": 0.1,
+  "kc_threshold": 0.9488067626953125,
+  "mbon_threshold": -0.2153778076171875,
+  "spread": 0.024639243260025978,
+  "kc": 0.05000076815485954,
+  "approach": 0.20208720862865448,
+  "avoid": 0.19694676995277405,
+  "mbon": 0.1997191458940506
+ },
+ "hist": [
+  {
+   "epoch": 1,
+   "loss": 1.1255401980418425,
+   "val": 0.2833333333333334
+  }
+ ],
+ "val": 0.2833333333333334,
+ "practice": {
+  "citation_intent": 0.255,
+  "crowdflower/political-media-message": 0.11,
+  "dbpedia_14/dbpedia_14": 0.065,
+  "hate_speech_offensive": 0.34,
+  "lex_glue/ledgar": 0.005,
+  "logical-fallacy": 0.125,
+  "poem_sentiment": 0.15,
+  "silicone/dyda_e": 0.17346938775510204,
+  "snips_built_in_intents": 0.05,
+  "tweet_eval/irony": 0.44,
+  "twitter-financial-news-sentiment": 0.41
+ },
+ "wall_s": 151.42881608009338
+}

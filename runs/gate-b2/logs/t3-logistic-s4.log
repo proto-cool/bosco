@@ -1,0 +1,48 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 14298.48it/s]
+sst: 427 train sentences had no exact dictionary match and were left out
+[t3/logistic/s4] 900 items, 182 rewards, drive None
+[t3/logistic/s4] item 0/900, rewards 0, open [], 0s
+[t3/logistic/s4] item 250/900, rewards 48, open [], 0s
+[t3/logistic/s4] item 500/900, rewards 105, open ['k100'], 0s
+[t3/logistic/s4] item 750/900, rewards 151, open [], 0s
+[t3/logistic/s4] {
+ "task": "t3",
+ "arm": "logistic",
+ "seed": 4,
+ "n_items": 900,
+ "windows": {
+  "k25": {
+   "n": 100,
+   "accuracy": 0.63,
+   "spearman": 0.4608317607446758,
+   "ece": 0.13467468914832623
+  },
+  "k50": {
+   "n": 100,
+   "accuracy": 0.66,
+   "spearman": 0.767763382932412,
+   "ece": 0.22783106926664165
+  },
+  "k100": {
+   "n": 100,
+   "accuracy": 0.78,
+   "spearman": 0.8496728105974578,
+   "ece": 0.1798024441293611
+  }
+ },
+ "ece_raw_k100plus": 0.1798024441293611,
+ "ece_isotonic_k100plus": 0.021254048822863955,
+ "n_calib": 40,
+ "one_seed_accuracy_all": 0.6944444444444444,
+ "wall_s": 0.3213181495666504,
+ "score_wall_s": 0.0,
+ "n_scored": 0,
+ "recall": {
+  "n_sweet": 30,
+  "n_bitter": 30,
+  "sweet_trained": 0.7292942160798731,
+  "bitter_trained": 0.4967252242835176,
+  "gap": 0.23256899179635548
+ }
+}

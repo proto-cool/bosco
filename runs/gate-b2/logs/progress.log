@@ -1,0 +1,4538 @@
+== 15:09  running: 17
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  item 0/4000, rewards 0, open [], 4s
+t1-real-s2  item 0/4000, rewards 0, open [], 1s
+t1-real-s3  item 0/4000, rewards 0, open [], 1s
+t1-real-s4  item 0/4000, rewards 0, open [], 1s
+t1-real-s5  item 0/4000, rewards 0, open [], 0s
+t1-shuffle-s1  item 0/4000, rewards 0, open [], 4s
+t1-shuffle-s2  item 0/4000, rewards 0, open [], 0s
+t1-shuffle-s3  item 0/4000, rewards 0, open [], 1s
+
+== 15:14  running: 17
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  item 0/4000, rewards 0, open [], 4s
+t1-real-s2  item 0/4000, rewards 0, open [], 1s
+t1-real-s3  item 0/4000, rewards 0, open [], 1s
+t1-real-s4  item 0/4000, rewards 0, open [], 1s
+t1-real-s5  item 0/4000, rewards 0, open [], 0s
+t1-shuffle-s1  item 0/4000, rewards 0, open [], 4s
+t1-shuffle-s2  item 0/4000, rewards 0, open [], 0s
+t1-shuffle-s3  item 0/4000, rewards 0, open [], 1s
+
+== 15:19  running: 17
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  item 0/4000, rewards 0, open [], 4s
+t1-real-s2  item 0/4000, rewards 0, open [], 1s
+t1-real-s3  item 250/4000, rewards 41, open ['k25'], 516s
+t1-real-s4  item 0/4000, rewards 0, open [], 1s
+t1-real-s5  item 250/4000, rewards 42, open ['k25'], 595s
+t1-shuffle-s1  item 0/4000, rewards 0, open [], 4s
+t1-shuffle-s2  item 0/4000, rewards 0, open [], 0s
+t1-shuffle-s3  item 250/4000, rewards 41, open ['k25'], 509s
+
+== 15:24  running: 17
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  item 250/4000, rewards 58, open ['k25', 'k50'], 707s
+t1-real-s2  item 250/4000, rewards 56, open ['k25', 'k50'], 679s
+t1-real-s3  item 250/4000, rewards 41, open ['k25'], 516s
+t1-real-s4  item 250/4000, rewards 57, open ['k25', 'k50'], 752s
+t1-real-s5  item 250/4000, rewards 42, open ['k25'], 595s
+t1-shuffle-s1  item 250/4000, rewards 58, open ['k25', 'k50'], 697s
+t1-shuffle-s2  item 250/4000, rewards 56, open ['k25', 'k50'], 670s
+t1-shuffle-s3  item 250/4000, rewards 41, open ['k25'], 509s
+
+== 15:29  running: 17
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  item 250/4000, rewards 58, open ['k25', 'k50'], 707s
+t1-real-s2  item 250/4000, rewards 56, open ['k25', 'k50'], 679s
+t1-real-s3  item 250/4000, rewards 41, open ['k25'], 516s
+t1-real-s4  item 250/4000, rewards 57, open ['k25', 'k50'], 752s
+t1-real-s5  item 250/4000, rewards 42, open ['k25'], 595s
+t1-shuffle-s1  item 250/4000, rewards 58, open ['k25', 'k50'], 697s
+t1-shuffle-s2  item 250/4000, rewards 56, open ['k25', 'k50'], 670s
+t1-shuffle-s3  item 250/4000, rewards 41, open ['k25'], 509s
+
+== 15:34  running: 17
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  item 250/4000, rewards 58, open ['k25', 'k50'], 707s
+t1-real-s2  item 250/4000, rewards 56, open ['k25', 'k50'], 679s
+t1-real-s3  item 250/4000, rewards 41, open ['k25'], 516s
+t1-real-s4  item 250/4000, rewards 57, open ['k25', 'k50'], 752s
+t1-real-s5  item 250/4000, rewards 42, open ['k25'], 595s
+t1-shuffle-s1  item 250/4000, rewards 58, open ['k25', 'k50'], 697s
+t1-shuffle-s2  item 250/4000, rewards 56, open ['k25', 'k50'], 670s
+t1-shuffle-s3  item 250/4000, rewards 41, open ['k25'], 509s
+
+== 15:39  running: 17
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  item 500/4000, rewards 110, open ['k100'], 1811s
+t1-real-s2  item 500/4000, rewards 105, open ['k100'], 1802s
+t1-real-s3  item 500/4000, rewards 101, open ['k50', 'k100'], 1610s
+t1-real-s4  item 250/4000, rewards 57, open ['k25', 'k50'], 752s
+t1-real-s5  item 500/4000, rewards 101, open ['k50', 'k100'], 1695s
+t1-shuffle-s1  item 500/4000, rewards 110, open ['k100'], 1786s
+t1-shuffle-s2  item 500/4000, rewards 105, open ['k100'], 1779s
+t1-shuffle-s3  item 500/4000, rewards 101, open ['k50', 'k100'], 1588s
+
+== 15:44  running: 17
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  item 500/4000, rewards 110, open ['k100'], 1811s
+t1-real-s2  item 500/4000, rewards 105, open ['k100'], 1802s
+t1-real-s3  item 500/4000, rewards 101, open ['k50', 'k100'], 1610s
+t1-real-s4  item 500/4000, rewards 107, open ['k100'], 1868s
+t1-real-s5  item 500/4000, rewards 101, open ['k50', 'k100'], 1695s
+t1-shuffle-s1  item 500/4000, rewards 110, open ['k100'], 1786s
+t1-shuffle-s2  item 500/4000, rewards 105, open ['k100'], 1779s
+t1-shuffle-s3  item 500/4000, rewards 101, open ['k50', 'k100'], 1588s
+
+== 15:49  running: 17
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  item 500/4000, rewards 110, open ['k100'], 1811s
+t1-real-s2  item 500/4000, rewards 105, open ['k100'], 1802s
+t1-real-s3  item 500/4000, rewards 101, open ['k50', 'k100'], 1610s
+t1-real-s4  item 500/4000, rewards 107, open ['k100'], 1868s
+t1-real-s5  item 500/4000, rewards 101, open ['k50', 'k100'], 1695s
+t1-shuffle-s1  item 500/4000, rewards 110, open ['k100'], 1786s
+t1-shuffle-s2  item 500/4000, rewards 105, open ['k100'], 1779s
+t1-shuffle-s3  item 500/4000, rewards 101, open ['k50', 'k100'], 1588s
+
+== 15:54  running: 17
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  item 500/4000, rewards 110, open ['k100'], 1811s
+t1-real-s2  item 500/4000, rewards 105, open ['k100'], 1802s
+t1-real-s3  item 750/4000, rewards 155, open [], 2723s
+t1-real-s4  item 500/4000, rewards 107, open ['k100'], 1868s
+t1-real-s5  item 500/4000, rewards 101, open ['k50', 'k100'], 1695s
+t1-shuffle-s1  item 500/4000, rewards 110, open ['k100'], 1786s
+t1-shuffle-s2  item 500/4000, rewards 105, open ['k100'], 1779s
+t1-shuffle-s3  item 750/4000, rewards 155, open [], 2686s
+
+== 15:59  running: 17
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  item 750/4000, rewards 164, open [], 2768s
+t1-real-s2  item 750/4000, rewards 162, open [], 2847s
+t1-real-s3  item 750/4000, rewards 155, open [], 2723s
+t1-real-s4  item 750/4000, rewards 172, open [], 2924s
+t1-real-s5  item 1000/4000, rewards 197, open [], 2972s
+t1-shuffle-s1  item 750/4000, rewards 164, open [], 2729s
+t1-shuffle-s2  item 750/4000, rewards 162, open [], 2810s
+t1-shuffle-s3  item 1000/4000, rewards 208, open ['k200'], 3014s
+
+== 16:04  running: 17
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  item 1000/4000, rewards 212, open ['k200'], 3136s
+t1-real-s2  item 1000/4000, rewards 210, open ['k200'], 3264s
+t1-real-s3  item 1000/4000, rewards 208, open ['k200'], 3055s
+t1-real-s4  item 750/4000, rewards 172, open [], 2924s
+t1-real-s5  item 1000/4000, rewards 197, open [], 2972s
+t1-shuffle-s1  item 1000/4000, rewards 212, open ['k200'], 3092s
+t1-shuffle-s2  item 1000/4000, rewards 210, open ['k200'], 3221s
+t1-shuffle-s3  item 1000/4000, rewards 208, open ['k200'], 3014s
+
+== 16:09  running: 17
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  item 1000/4000, rewards 212, open ['k200'], 3136s
+t1-real-s2  item 1000/4000, rewards 210, open ['k200'], 3264s
+t1-real-s3  item 1000/4000, rewards 208, open ['k200'], 3055s
+t1-real-s4  item 1000/4000, rewards 231, open ['k200'], 3623s
+t1-real-s5  item 1000/4000, rewards 197, open [], 2972s
+t1-shuffle-s1  item 1000/4000, rewards 212, open ['k200'], 3092s
+t1-shuffle-s2  item 1000/4000, rewards 210, open ['k200'], 3221s
+t1-shuffle-s3  item 1000/4000, rewards 208, open ['k200'], 3014s
+
+== 16:14  running: 17
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  item 1000/4000, rewards 212, open ['k200'], 3136s
+t1-real-s2  item 1000/4000, rewards 210, open ['k200'], 3264s
+t1-real-s3  item 1000/4000, rewards 208, open ['k200'], 3055s
+t1-real-s4  item 1000/4000, rewards 231, open ['k200'], 3623s
+t1-real-s5  item 1000/4000, rewards 197, open [], 2972s
+t1-shuffle-s1  item 1000/4000, rewards 212, open ['k200'], 3092s
+t1-shuffle-s2  item 1000/4000, rewards 210, open ['k200'], 3221s
+t1-shuffle-s3  item 1000/4000, rewards 208, open ['k200'], 3014s
+
+== 16:19  running: 17
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  item 1250/4000, rewards 260, open [], 4137s
+t1-real-s2  item 1250/4000, rewards 260, open [], 4222s
+t1-real-s3  item 1250/4000, rewards 263, open [], 4093s
+t1-real-s4  item 1000/4000, rewards 231, open ['k200'], 3623s
+t1-real-s5  item 1250/4000, rewards 248, open ['k200'], 4057s
+t1-shuffle-s1  item 1250/4000, rewards 260, open [], 4079s
+t1-shuffle-s2  item 1250/4000, rewards 260, open [], 4166s
+t1-shuffle-s3  item 1250/4000, rewards 263, open [], 4038s
+
+== 16:24  running: 17
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  item 1500/4000, rewards 312, open [], 4380s
+t1-real-s2  item 1500/4000, rewards 309, open [], 4476s
+t1-real-s3  item 1500/4000, rewards 324, open [], 4341s
+t1-real-s4  item 1500/4000, rewards 333, open [], 4514s
+t1-real-s5  item 1500/4000, rewards 297, open [], 4326s
+t1-shuffle-s1  item 1500/4000, rewards 312, open [], 4319s
+t1-shuffle-s2  item 1500/4000, rewards 309, open [], 4416s
+t1-shuffle-s3  item 1750/4000, rewards 371, open [], 4500s
+
+== 16:29  running: 17
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  item 1750/4000, rewards 348, open [], 4598s
+t1-real-s2  item 1750/4000, rewards 364, open [], 4715s
+t1-real-s3  item 2000/4000, rewards 426, open [], 4806s
+t1-real-s4  item 1750/4000, rewards 379, open [], 4742s
+t1-real-s5  item 2000/4000, rewards 381, open [], 4779s
+t1-shuffle-s1  item 2000/4000, rewards 404, open [], 4783s
+t1-shuffle-s2  item 1750/4000, rewards 364, open [], 4652s
+t1-shuffle-s3  item 2000/4000, rewards 426, open [], 4740s
+
+== 16:34  running: 17
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  item 2250/4000, rewards 458, open [], 5082s
+t1-real-s2  item 2000/4000, rewards 410, open [], 4963s
+t1-real-s3  item 2250/4000, rewards 483, open [], 5051s
+t1-real-s4  item 2000/4000, rewards 425, open [], 4959s
+t1-real-s5  item 2250/4000, rewards 436, open [], 5005s
+t1-shuffle-s1  item 2250/4000, rewards 458, open [], 5010s
+t1-shuffle-s2  item 2250/4000, rewards 463, open [], 5122s
+t1-shuffle-s3  item 2250/4000, rewards 483, open [], 4982s
+
+== 16:39  running: 17
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  item 2500/4000, rewards 505, open [], 5290s
+t1-real-s2  item 2250/4000, rewards 463, open [], 5192s
+t1-real-s3  item 2500/4000, rewards 535, open [], 5281s
+t1-real-s4  item 2250/4000, rewards 482, open [], 5209s
+t1-real-s5  item 2500/4000, rewards 485, open [], 5250s
+t1-shuffle-s1  item 2500/4000, rewards 505, open [], 5215s
+t1-shuffle-s2  item 2500/4000, rewards 512, open [], 5364s
+t1-shuffle-s3  item 2500/4000, rewards 535, open [], 5208s
+
+== 16:44  running: 17
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  item 2750/4000, rewards 553, open [], 5526s
+t1-real-s2  item 2750/4000, rewards 563, open [], 5688s
+t1-real-s3  item 3000/4000, rewards 634, open [], 5722s
+t1-real-s4  item 2750/4000, rewards 590, open [], 5700s
+t1-real-s5  item 3000/4000, rewards 588, open [], 5725s
+t1-shuffle-s1  item 3000/4000, rewards 597, open [], 5663s
+t1-shuffle-s2  item 2750/4000, rewards 563, open [], 5611s
+t1-shuffle-s3  item 3000/4000, rewards 634, open [], 5644s
+
+== 16:49  running: 17
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  item 3250/4000, rewards 650, open [], 5982s
+t1-real-s2  item 3000/4000, rewards 616, open [], 5934s
+t1-real-s3  item 3250/4000, rewards 681, open [], 5929s
+t1-real-s4  item 3000/4000, rewards 650, open [], 5919s
+t1-real-s5  item 3250/4000, rewards 641, open [], 5954s
+t1-shuffle-s1  item 3250/4000, rewards 650, open [], 5897s
+t1-shuffle-s2  item 3000/4000, rewards 616, open [], 5854s
+t1-shuffle-s3  item 3250/4000, rewards 681, open [], 5848s
+
+== 16:54  running: 17
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  item 3500/4000, rewards 694, open [], 6219s
+t1-real-s2  item 3250/4000, rewards 665, open [], 6165s
+t1-real-s3  item 3500/4000, rewards 736, open [], 6182s
+t1-real-s4  item 3250/4000, rewards 701, open [], 6178s
+t1-real-s5  item 3500/4000, rewards 704, open [], 6255s
+t1-shuffle-s1  item 3500/4000, rewards 694, open [], 6131s
+t1-shuffle-s2  item 3500/4000, rewards 715, open [], 6319s
+t1-shuffle-s3  item 3500/4000, rewards 736, open [], 6097s
+
+== 16:59  running: 17
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  item 3750/4000, rewards 742, open [], 6449s
+t1-real-s2  item 3500/4000, rewards 715, open [], 6405s
+t1-real-s3  item 3750/4000, rewards 793, open [], 6422s
+t1-real-s4  item 3500/4000, rewards 758, open [], 6396s
+t1-real-s5  item 3750/4000, rewards 747, open [], 6481s
+t1-shuffle-s1  item 3750/4000, rewards 742, open [], 6357s
+t1-shuffle-s2  item 3750/4000, rewards 769, open [], 6554s
+t1-shuffle-s3  item 3750/4000, rewards 793, open [], 6334s
+
+== 17:04  running: 17
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  item 3750/4000, rewards 742, open [], 6449s
+t1-real-s2  item 3750/4000, rewards 769, open [], 6644s
+t1-real-s3  item 3750/4000, rewards 793, open [], 6422s
+t1-real-s4  item 3750/4000, rewards 806, open [], 6631s
+t1-real-s5  item 3750/4000, rewards 747, open [], 6481s
+t1-shuffle-s1  done
+t1-shuffle-s2  item 3750/4000, rewards 769, open [], 6554s
+t1-shuffle-s3  done
+t1-shuffle-s4  item 0/4000, rewards 0, open [], 1s
+t1-shuffle-s5  item 0/4000, rewards 0, open [], 1s
+
+== 17:09  running: 15
+t1-hash-s1  item 0/4000, rewards 0, open [], 5s
+t1-hash-s2  item 0/4000, rewards 0, open [], 1s
+t1-hash-s3  item 0/4000, rewards 0, open [], 1s
+t1-hash-s4  item 0/4000, rewards 0, open [], 1s
+t1-hash-s5  item 0/4000, rewards 0, open [], 1s
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  item 0/4000, rewards 0, open [], 1s
+t1-shuffle-s5  item 0/4000, rewards 0, open [], 1s
+
+== 17:14  running: 15
+t1-hash-s1  item 0/4000, rewards 0, open [], 5s
+t1-hash-s2  item 0/4000, rewards 0, open [], 1s
+t1-hash-s3  item 0/4000, rewards 0, open [], 1s
+t1-hash-s4  item 0/4000, rewards 0, open [], 1s
+t1-hash-s5  item 0/4000, rewards 0, open [], 1s
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  item 0/4000, rewards 0, open [], 1s
+t1-shuffle-s5  item 250/4000, rewards 42, open ['k25'], 588s
+
+== 17:19  running: 15
+t1-hash-s1  item 250/4000, rewards 58, open ['k25', 'k50'], 706s
+t1-hash-s2  item 250/4000, rewards 56, open ['k25', 'k50'], 677s
+t1-hash-s3  item 250/4000, rewards 41, open ['k25'], 517s
+t1-hash-s4  item 0/4000, rewards 0, open [], 1s
+t1-hash-s5  item 250/4000, rewards 42, open ['k25'], 591s
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  item 250/4000, rewards 57, open ['k25', 'k50'], 740s
+t1-shuffle-s5  item 250/4000, rewards 42, open ['k25'], 588s
+
+== 17:24  running: 15
+t1-hash-s1  item 250/4000, rewards 58, open ['k25', 'k50'], 706s
+t1-hash-s2  item 250/4000, rewards 56, open ['k25', 'k50'], 677s
+t1-hash-s3  item 250/4000, rewards 41, open ['k25'], 517s
+t1-hash-s4  item 250/4000, rewards 57, open ['k25', 'k50'], 749s
+t1-hash-s5  item 250/4000, rewards 42, open ['k25'], 591s
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  item 250/4000, rewards 57, open ['k25', 'k50'], 740s
+t1-shuffle-s5  item 250/4000, rewards 42, open ['k25'], 588s
+
+== 17:29  running: 15
+t1-hash-s1  item 250/4000, rewards 58, open ['k25', 'k50'], 706s
+t1-hash-s2  item 250/4000, rewards 56, open ['k25', 'k50'], 677s
+t1-hash-s3  item 250/4000, rewards 41, open ['k25'], 517s
+t1-hash-s4  item 250/4000, rewards 57, open ['k25', 'k50'], 749s
+t1-hash-s5  item 250/4000, rewards 42, open ['k25'], 591s
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  item 250/4000, rewards 57, open ['k25', 'k50'], 740s
+t1-shuffle-s5  item 250/4000, rewards 42, open ['k25'], 588s
+
+== 17:34  running: 15
+t1-hash-s1  item 250/4000, rewards 58, open ['k25', 'k50'], 706s
+t1-hash-s2  item 250/4000, rewards 56, open ['k25', 'k50'], 677s
+t1-hash-s3  item 500/4000, rewards 101, open ['k50', 'k100'], 1565s
+t1-hash-s4  item 250/4000, rewards 57, open ['k25', 'k50'], 749s
+t1-hash-s5  item 250/4000, rewards 42, open ['k25'], 591s
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  item 500/4000, rewards 107, open ['k100'], 1784s
+t1-shuffle-s5  item 500/4000, rewards 101, open ['k50', 'k100'], 1625s
+
+== 17:39  running: 15
+t1-hash-s1  item 500/4000, rewards 110, open ['k100'], 1754s
+t1-hash-s2  item 500/4000, rewards 105, open ['k100'], 1745s
+t1-hash-s3  item 500/4000, rewards 101, open ['k50', 'k100'], 1565s
+t1-hash-s4  item 500/4000, rewards 107, open ['k100'], 1807s
+t1-hash-s5  item 500/4000, rewards 101, open ['k50', 'k100'], 1640s
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  item 500/4000, rewards 107, open ['k100'], 1784s
+t1-shuffle-s5  item 500/4000, rewards 101, open ['k50', 'k100'], 1625s
+
+== 17:44  running: 15
+t1-hash-s1  item 500/4000, rewards 110, open ['k100'], 1754s
+t1-hash-s2  item 500/4000, rewards 105, open ['k100'], 1745s
+t1-hash-s3  item 500/4000, rewards 101, open ['k50', 'k100'], 1565s
+t1-hash-s4  item 500/4000, rewards 107, open ['k100'], 1807s
+t1-hash-s5  item 500/4000, rewards 101, open ['k50', 'k100'], 1640s
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  item 500/4000, rewards 107, open ['k100'], 1784s
+t1-shuffle-s5  item 500/4000, rewards 101, open ['k50', 'k100'], 1625s
+
+== 17:49  running: 15
+t1-hash-s1  item 500/4000, rewards 110, open ['k100'], 1754s
+t1-hash-s2  item 500/4000, rewards 105, open ['k100'], 1745s
+t1-hash-s3  item 500/4000, rewards 101, open ['k50', 'k100'], 1565s
+t1-hash-s4  item 500/4000, rewards 107, open ['k100'], 1807s
+t1-hash-s5  item 500/4000, rewards 101, open ['k50', 'k100'], 1640s
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  item 500/4000, rewards 107, open ['k100'], 1784s
+t1-shuffle-s5  item 750/4000, rewards 151, open [], 2596s
+
+== 17:54  running: 15
+t1-hash-s1  item 750/4000, rewards 164, open [], 2669s
+t1-hash-s2  item 750/4000, rewards 162, open [], 2744s
+t1-hash-s3  item 750/4000, rewards 155, open [], 2627s
+t1-hash-s4  item 750/4000, rewards 172, open [], 2818s
+t1-hash-s5  item 750/4000, rewards 151, open [], 2627s
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  item 750/4000, rewards 172, open [], 2781s
+t1-shuffle-s5  item 1000/4000, rewards 197, open [], 2826s
+
+== 17:59  running: 15
+t1-hash-s1  item 1000/4000, rewards 212, open ['k200'], 3021s
+t1-hash-s2  item 1000/4000, rewards 210, open ['k200'], 3140s
+t1-hash-s3  item 1000/4000, rewards 208, open ['k200'], 2945s
+t1-hash-s4  item 750/4000, rewards 172, open [], 2818s
+t1-hash-s5  item 1000/4000, rewards 197, open [], 2857s
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  item 750/4000, rewards 172, open [], 2781s
+t1-shuffle-s5  item 1000/4000, rewards 197, open [], 2826s
+
+== 18:04  running: 15
+t1-hash-s1  item 1000/4000, rewards 212, open ['k200'], 3021s
+t1-hash-s2  item 1000/4000, rewards 210, open ['k200'], 3140s
+t1-hash-s3  item 1000/4000, rewards 208, open ['k200'], 2945s
+t1-hash-s4  item 750/4000, rewards 172, open [], 2818s
+t1-hash-s5  item 1000/4000, rewards 197, open [], 2857s
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  item 1000/4000, rewards 231, open ['k200'], 3433s
+t1-shuffle-s5  item 1000/4000, rewards 197, open [], 2826s
+
+== 18:09  running: 15
+t1-hash-s1  item 1000/4000, rewards 212, open ['k200'], 3021s
+t1-hash-s2  item 1000/4000, rewards 210, open ['k200'], 3140s
+t1-hash-s3  item 1000/4000, rewards 208, open ['k200'], 2945s
+t1-hash-s4  item 1000/4000, rewards 231, open ['k200'], 3478s
+t1-hash-s5  item 1000/4000, rewards 197, open [], 2857s
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  item 1000/4000, rewards 231, open ['k200'], 3433s
+t1-shuffle-s5  item 1250/4000, rewards 248, open ['k200'], 3843s
+
+== 18:14  running: 15
+t1-hash-s1  item 1250/4000, rewards 260, open [], 3973s
+t1-hash-s2  item 1250/4000, rewards 260, open [], 4054s
+t1-hash-s3  item 1250/4000, rewards 263, open [], 3933s
+t1-hash-s4  item 1000/4000, rewards 231, open ['k200'], 3478s
+t1-hash-s5  item 1250/4000, rewards 248, open ['k200'], 3893s
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  item 1250/4000, rewards 280, open [], 4048s
+t1-shuffle-s5  item 1500/4000, rewards 297, open [], 4097s
+
+== 18:19  running: 15
+t1-hash-s1  item 1750/4000, rewards 348, open [], 4416s
+t1-hash-s2  item 1500/4000, rewards 309, open [], 4297s
+t1-hash-s3  item 1750/4000, rewards 371, open [], 4384s
+t1-hash-s4  item 1500/4000, rewards 333, open [], 4334s
+t1-hash-s5  item 1500/4000, rewards 297, open [], 4150s
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  item 1750/4000, rewards 379, open [], 4490s
+t1-shuffle-s5  item 1750/4000, rewards 341, open [], 4313s
+
+== 18:24  running: 15
+t1-hash-s1  item 2000/4000, rewards 404, open [], 4659s
+t1-hash-s2  item 1750/4000, rewards 364, open [], 4528s
+t1-hash-s3  item 2000/4000, rewards 426, open [], 4618s
+t1-hash-s4  item 1750/4000, rewards 379, open [], 4554s
+t1-hash-s5  item 1750/4000, rewards 341, open [], 4369s
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  item 2000/4000, rewards 425, open [], 4695s
+t1-shuffle-s5  item 2250/4000, rewards 436, open [], 4741s
+
+== 18:29  running: 15
+t1-hash-s1  item 2250/4000, rewards 458, open [], 4881s
+t1-hash-s2  item 2250/4000, rewards 463, open [], 4987s
+t1-hash-s3  item 2250/4000, rewards 483, open [], 4853s
+t1-hash-s4  item 2000/4000, rewards 425, open [], 4762s
+t1-hash-s5  item 2250/4000, rewards 436, open [], 4804s
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  item 2250/4000, rewards 482, open [], 4931s
+t1-shuffle-s5  item 2500/4000, rewards 485, open [], 4973s
+
+== 18:34  running: 15
+t1-hash-s1  item 2750/4000, rewards 553, open [], 5308s
+t1-hash-s2  item 2500/4000, rewards 512, open [], 5223s
+t1-hash-s3  item 2750/4000, rewards 586, open [], 5299s
+t1-hash-s4  item 2500/4000, rewards 537, open [], 5230s
+t1-hash-s5  item 2500/4000, rewards 485, open [], 5040s
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  item 2750/4000, rewards 590, open [], 5398s
+t1-shuffle-s5  item 2750/4000, rewards 541, open [], 5210s
+
+== 18:39  running: 15
+t1-hash-s1  item 3000/4000, rewards 597, open [], 5519s
+t1-hash-s2  item 2750/4000, rewards 563, open [], 5464s
+t1-hash-s3  item 3000/4000, rewards 634, open [], 5500s
+t1-hash-s4  item 2750/4000, rewards 590, open [], 5477s
+t1-hash-s5  item 2750/4000, rewards 541, open [], 5279s
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  item 3000/4000, rewards 650, open [], 5607s
+t1-shuffle-s5  item 3250/4000, rewards 641, open [], 5643s
+
+== 18:44  running: 15
+t1-hash-s1  item 3250/4000, rewards 650, open [], 5750s
+t1-hash-s2  item 3000/4000, rewards 616, open [], 5703s
+t1-hash-s3  item 3250/4000, rewards 681, open [], 5702s
+t1-hash-s4  item 3000/4000, rewards 650, open [], 5690s
+t1-hash-s5  item 3250/4000, rewards 641, open [], 5719s
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  item 3250/4000, rewards 701, open [], 5854s
+t1-shuffle-s5  item 3500/4000, rewards 704, open [], 5930s
+
+== 18:49  running: 15
+t1-hash-s1  item 3750/4000, rewards 742, open [], 6196s
+t1-hash-s2  item 3500/4000, rewards 715, open [], 6154s
+t1-hash-s3  item 3750/4000, rewards 793, open [], 6172s
+t1-hash-s4  item 3250/4000, rewards 701, open [], 5939s
+t1-hash-s5  item 3500/4000, rewards 704, open [], 6005s
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  item 3750/4000, rewards 806, open [], 6280s
+t1-shuffle-s5  item 3750/4000, rewards 747, open [], 6144s
+
+== 18:54  running: 15
+t1-hash-s1  item 3750/4000, rewards 742, open [], 6196s
+t1-hash-s2  item 3750/4000, rewards 769, open [], 6377s
+t1-hash-s3  item 3750/4000, rewards 793, open [], 6172s
+t1-hash-s4  item 3750/4000, rewards 806, open [], 6364s
+t1-hash-s5  item 3750/4000, rewards 747, open [], 6217s
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  item 3750/4000, rewards 806, open [], 6280s
+t1-shuffle-s5  item 3750/4000, rewards 747, open [], 6144s
+
+== 18:59  running: 7
+t1-hash-s1  done
+t1-hash-s2  item 3750/4000, rewards 769, open [], 6377s
+t1-hash-s3  done
+t1-hash-s4  item 3750/4000, rewards 806, open [], 6364s
+t1-hash-s5  item 3750/4000, rewards 747, open [], 6217s
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+
+== 19:04  all runs finished
+== 20:59  running: 18
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  item 0/4000, rewards 0, open [], 4s
+t2-real-s2  item 0/4000, rewards 0, open [], 1s
+t2-real-s3  item 0/4000, rewards 0, open [], 1s
+t2-real-s4  item 0/4000, rewards 0, open [], 1s
+t2-real-s5  item 0/4000, rewards 0, open [], 1s
+t2-shuffle-s1  item 0/4000, rewards 0, open [], 4s
+t2-shuffle-s2  item 0/4000, rewards 0, open [], 0s
+t2-shuffle-s3  item 0/4000, rewards 0, open [], 1s
+
+== 21:04  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  item 0/4000, rewards 0, open [], 4s
+t2-real-s2  item 0/4000, rewards 0, open [], 1s
+t2-real-s3  item 0/4000, rewards 0, open [], 1s
+t2-real-s4  item 0/4000, rewards 0, open [], 1s
+t2-real-s5  item 0/4000, rewards 0, open [], 1s
+t2-shuffle-s1  item 0/4000, rewards 0, open [], 4s
+t2-shuffle-s2  item 0/4000, rewards 0, open [], 0s
+t2-shuffle-s3  item 0/4000, rewards 0, open [], 1s
+
+== 21:09  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  item 0/4000, rewards 0, open [], 4s
+t2-real-s2  item 0/4000, rewards 0, open [], 1s
+t2-real-s3  item 250/4000, rewards 41, open ['k25'], 481s
+t2-real-s4  item 0/4000, rewards 0, open [], 1s
+t2-real-s5  item 250/4000, rewards 42, open ['k25'], 557s
+t2-shuffle-s1  item 0/4000, rewards 0, open [], 4s
+t2-shuffle-s2  item 0/4000, rewards 0, open [], 0s
+t2-shuffle-s3  item 250/4000, rewards 41, open ['k25'], 474s
+
+== 21:14  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  item 250/4000, rewards 58, open ['k25', 'k50'], 663s
+t2-real-s2  item 250/4000, rewards 56, open ['k25', 'k50'], 636s
+t2-real-s3  item 250/4000, rewards 41, open ['k25'], 481s
+t2-real-s4  item 250/4000, rewards 57, open ['k25', 'k50'], 710s
+t2-real-s5  item 250/4000, rewards 42, open ['k25'], 557s
+t2-shuffle-s1  item 250/4000, rewards 58, open ['k25', 'k50'], 656s
+t2-shuffle-s2  item 250/4000, rewards 56, open ['k25', 'k50'], 630s
+t2-shuffle-s3  item 250/4000, rewards 41, open ['k25'], 474s
+
+== 21:19  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  item 250/4000, rewards 58, open ['k25', 'k50'], 663s
+t2-real-s2  item 250/4000, rewards 56, open ['k25', 'k50'], 636s
+t2-real-s3  item 250/4000, rewards 41, open ['k25'], 481s
+t2-real-s4  item 250/4000, rewards 57, open ['k25', 'k50'], 710s
+t2-real-s5  item 250/4000, rewards 42, open ['k25'], 557s
+t2-shuffle-s1  item 250/4000, rewards 58, open ['k25', 'k50'], 656s
+t2-shuffle-s2  item 250/4000, rewards 56, open ['k25', 'k50'], 630s
+t2-shuffle-s3  item 250/4000, rewards 41, open ['k25'], 474s
+
+== 21:24  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  item 250/4000, rewards 58, open ['k25', 'k50'], 663s
+t2-real-s2  item 250/4000, rewards 56, open ['k25', 'k50'], 636s
+t2-real-s3  item 250/4000, rewards 41, open ['k25'], 481s
+t2-real-s4  item 250/4000, rewards 57, open ['k25', 'k50'], 710s
+t2-real-s5  item 250/4000, rewards 42, open ['k25'], 557s
+t2-shuffle-s1  item 250/4000, rewards 58, open ['k25', 'k50'], 656s
+t2-shuffle-s2  item 250/4000, rewards 56, open ['k25', 'k50'], 630s
+t2-shuffle-s3  item 500/4000, rewards 101, open ['k50', 'k100'], 1505s
+
+== 21:29  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  item 500/4000, rewards 110, open ['k100'], 1713s
+t2-real-s2  item 500/4000, rewards 105, open ['k100'], 1703s
+t2-real-s3  item 500/4000, rewards 101, open ['k50', 'k100'], 1528s
+t2-real-s4  item 500/4000, rewards 107, open ['k100'], 1774s
+t2-real-s5  item 500/4000, rewards 101, open ['k50', 'k100'], 1611s
+t2-shuffle-s1  item 500/4000, rewards 110, open ['k100'], 1694s
+t2-shuffle-s2  item 500/4000, rewards 105, open ['k100'], 1686s
+t2-shuffle-s3  item 500/4000, rewards 101, open ['k50', 'k100'], 1505s
+
+== 21:34  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  item 500/4000, rewards 110, open ['k100'], 1713s
+t2-real-s2  item 500/4000, rewards 105, open ['k100'], 1703s
+t2-real-s3  item 500/4000, rewards 101, open ['k50', 'k100'], 1528s
+t2-real-s4  item 500/4000, rewards 107, open ['k100'], 1774s
+t2-real-s5  item 500/4000, rewards 101, open ['k50', 'k100'], 1611s
+t2-shuffle-s1  item 500/4000, rewards 110, open ['k100'], 1694s
+t2-shuffle-s2  item 500/4000, rewards 105, open ['k100'], 1686s
+t2-shuffle-s3  item 500/4000, rewards 101, open ['k50', 'k100'], 1505s
+
+== 21:39  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  item 500/4000, rewards 110, open ['k100'], 1713s
+t2-real-s2  item 500/4000, rewards 105, open ['k100'], 1703s
+t2-real-s3  item 500/4000, rewards 101, open ['k50', 'k100'], 1528s
+t2-real-s4  item 500/4000, rewards 107, open ['k100'], 1774s
+t2-real-s5  item 500/4000, rewards 101, open ['k50', 'k100'], 1611s
+t2-shuffle-s1  item 500/4000, rewards 110, open ['k100'], 1694s
+t2-shuffle-s2  item 500/4000, rewards 105, open ['k100'], 1686s
+t2-shuffle-s3  item 500/4000, rewards 101, open ['k50', 'k100'], 1505s
+
+== 21:44  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  item 750/4000, rewards 164, open [], 2636s
+t2-real-s2  item 750/4000, rewards 162, open [], 2711s
+t2-real-s3  item 750/4000, rewards 155, open [], 2600s
+t2-real-s4  item 500/4000, rewards 107, open ['k100'], 1774s
+t2-real-s5  item 750/4000, rewards 151, open [], 2608s
+t2-shuffle-s1  item 750/4000, rewards 164, open [], 2606s
+t2-shuffle-s2  item 750/4000, rewards 162, open [], 2681s
+t2-shuffle-s3  item 750/4000, rewards 155, open [], 2561s
+
+== 21:49  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  item 1000/4000, rewards 212, open ['k200'], 2996s
+t2-real-s2  item 750/4000, rewards 162, open [], 2711s
+t2-real-s3  item 1000/4000, rewards 208, open ['k200'], 2924s
+t2-real-s4  item 750/4000, rewards 172, open [], 2797s
+t2-real-s5  item 1000/4000, rewards 197, open [], 2844s
+t2-shuffle-s1  item 1000/4000, rewards 212, open ['k200'], 2960s
+t2-shuffle-s2  item 750/4000, rewards 162, open [], 2681s
+t2-shuffle-s3  item 1000/4000, rewards 208, open ['k200'], 2880s
+
+== 21:54  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  item 1000/4000, rewards 212, open ['k200'], 2996s
+t2-real-s2  item 1000/4000, rewards 210, open ['k200'], 3120s
+t2-real-s3  item 1000/4000, rewards 208, open ['k200'], 2924s
+t2-real-s4  item 750/4000, rewards 172, open [], 2797s
+t2-real-s5  item 1000/4000, rewards 197, open [], 2844s
+t2-shuffle-s1  item 1000/4000, rewards 212, open ['k200'], 2960s
+t2-shuffle-s2  item 1000/4000, rewards 210, open ['k200'], 3084s
+t2-shuffle-s3  item 1000/4000, rewards 208, open ['k200'], 2880s
+
+== 21:59  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  item 1000/4000, rewards 212, open ['k200'], 2996s
+t2-real-s2  item 1000/4000, rewards 210, open ['k200'], 3120s
+t2-real-s3  item 1000/4000, rewards 208, open ['k200'], 2924s
+t2-real-s4  item 1000/4000, rewards 231, open ['k200'], 3479s
+t2-real-s5  item 1000/4000, rewards 197, open [], 2844s
+t2-shuffle-s1  item 1000/4000, rewards 212, open ['k200'], 2960s
+t2-shuffle-s2  item 1000/4000, rewards 210, open ['k200'], 3084s
+t2-shuffle-s3  item 1000/4000, rewards 208, open ['k200'], 2880s
+
+== 22:04  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  item 1000/4000, rewards 212, open ['k200'], 2996s
+t2-real-s2  item 1000/4000, rewards 210, open ['k200'], 3120s
+t2-real-s3  item 1000/4000, rewards 208, open ['k200'], 2924s
+t2-real-s4  item 1000/4000, rewards 231, open ['k200'], 3479s
+t2-real-s5  item 1250/4000, rewards 248, open ['k200'], 3903s
+t2-shuffle-s1  item 1000/4000, rewards 212, open ['k200'], 2960s
+t2-shuffle-s2  item 1000/4000, rewards 210, open ['k200'], 3084s
+t2-shuffle-s3  item 1250/4000, rewards 263, open [], 3877s
+
+== 22:09  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  item 1500/4000, rewards 312, open [], 4203s
+t2-real-s2  item 1250/4000, rewards 260, open [], 4051s
+t2-real-s3  item 1500/4000, rewards 324, open [], 4175s
+t2-real-s4  item 1250/4000, rewards 280, open [], 4112s
+t2-real-s5  item 1500/4000, rewards 297, open [], 4162s
+t2-shuffle-s1  item 1500/4000, rewards 312, open [], 4153s
+t2-shuffle-s2  item 1250/4000, rewards 260, open [], 4003s
+t2-shuffle-s3  item 1500/4000, rewards 324, open [], 4115s
+
+== 22:14  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  item 1750/4000, rewards 348, open [], 4413s
+t2-real-s2  item 1500/4000, rewards 309, open [], 4297s
+t2-real-s3  item 1750/4000, rewards 371, open [], 4389s
+t2-real-s4  item 1500/4000, rewards 333, open [], 4342s
+t2-real-s5  item 1750/4000, rewards 341, open [], 4383s
+t2-shuffle-s1  item 1750/4000, rewards 348, open [], 4361s
+t2-shuffle-s2  item 1750/4000, rewards 364, open [], 4472s
+t2-shuffle-s3  item 1750/4000, rewards 371, open [], 4325s
+
+== 22:19  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  item 2000/4000, rewards 1, open [], 4657s
+t2-real-s2  item 2000/4000, rewards 0, open [], 4766s
+t2-real-s3  item 2000/4000, rewards 0, open [], 4624s
+t2-real-s4  item 2000/4000, rewards 0, open [], 4771s
+t2-real-s5  item 2000/4000, rewards 1, open [], 4601s
+t2-shuffle-s1  item 2000/4000, rewards 1, open [], 4602s
+t2-shuffle-s2  item 2000/4000, rewards 0, open [], 4708s
+t2-shuffle-s3  item 2000/4000, rewards 0, open [], 4557s
+
+== 22:24  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  item 2000/4000, rewards 1, open [], 4657s
+t2-real-s2  item 2000/4000, rewards 0, open [], 4766s
+t2-real-s3  item 2000/4000, rewards 0, open [], 4624s
+t2-real-s4  item 2000/4000, rewards 0, open [], 4771s
+t2-real-s5  item 2000/4000, rewards 1, open [], 4601s
+t2-shuffle-s1  item 2000/4000, rewards 1, open [], 4602s
+t2-shuffle-s2  item 2000/4000, rewards 0, open [], 4708s
+t2-shuffle-s3  item 2000/4000, rewards 0, open [], 4557s
+
+== 22:29  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  item 2250/4000, rewards 55, open ['flip-k25', 'flip-k50'], 5410s
+t2-real-s2  item 2000/4000, rewards 0, open [], 4766s
+t2-real-s3  item 2250/4000, rewards 57, open ['flip-k25', 'flip-k50'], 5297s
+t2-real-s4  item 2000/4000, rewards 0, open [], 4771s
+t2-real-s5  item 2250/4000, rewards 56, open ['flip-k25', 'flip-k50'], 5291s
+t2-shuffle-s1  item 2250/4000, rewards 55, open ['flip-k25', 'flip-k50'], 5347s
+t2-shuffle-s2  item 2250/4000, rewards 53, open ['flip-k25', 'flip-k50'], 5360s
+t2-shuffle-s3  item 2250/4000, rewards 57, open ['flip-k25', 'flip-k50'], 5222s
+
+== 22:34  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  item 2250/4000, rewards 55, open ['flip-k25', 'flip-k50'], 5410s
+t2-real-s2  item 2250/4000, rewards 53, open ['flip-k25', 'flip-k50'], 5428s
+t2-real-s3  item 2250/4000, rewards 57, open ['flip-k25', 'flip-k50'], 5297s
+t2-real-s4  item 2250/4000, rewards 57, open ['flip-k25', 'flip-k50'], 5495s
+t2-real-s5  item 2250/4000, rewards 56, open ['flip-k25', 'flip-k50'], 5291s
+t2-shuffle-s1  item 2250/4000, rewards 55, open ['flip-k25', 'flip-k50'], 5347s
+t2-shuffle-s2  item 2250/4000, rewards 53, open ['flip-k25', 'flip-k50'], 5360s
+t2-shuffle-s3  item 2250/4000, rewards 57, open ['flip-k25', 'flip-k50'], 5222s
+
+== 22:39  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  item 2250/4000, rewards 55, open ['flip-k25', 'flip-k50'], 5410s
+t2-real-s2  item 2250/4000, rewards 53, open ['flip-k25', 'flip-k50'], 5428s
+t2-real-s3  item 2250/4000, rewards 57, open ['flip-k25', 'flip-k50'], 5297s
+t2-real-s4  item 2250/4000, rewards 57, open ['flip-k25', 'flip-k50'], 5495s
+t2-real-s5  item 2250/4000, rewards 56, open ['flip-k25', 'flip-k50'], 5291s
+t2-shuffle-s1  item 2250/4000, rewards 55, open ['flip-k25', 'flip-k50'], 5347s
+t2-shuffle-s2  item 2250/4000, rewards 53, open ['flip-k25', 'flip-k50'], 5360s
+t2-shuffle-s3  item 2250/4000, rewards 57, open ['flip-k25', 'flip-k50'], 5222s
+
+== 22:44  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  item 2250/4000, rewards 55, open ['flip-k25', 'flip-k50'], 5410s
+t2-real-s2  item 2250/4000, rewards 53, open ['flip-k25', 'flip-k50'], 5428s
+t2-real-s3  item 2250/4000, rewards 57, open ['flip-k25', 'flip-k50'], 5297s
+t2-real-s4  item 2250/4000, rewards 57, open ['flip-k25', 'flip-k50'], 5495s
+t2-real-s5  item 2250/4000, rewards 56, open ['flip-k25', 'flip-k50'], 5291s
+t2-shuffle-s1  item 2250/4000, rewards 55, open ['flip-k25', 'flip-k50'], 5347s
+t2-shuffle-s2  item 2250/4000, rewards 53, open ['flip-k25', 'flip-k50'], 5360s
+t2-shuffle-s3  item 2500/4000, rewards 109, open ['flip-k100'], 6277s
+
+== 22:49  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  item 2500/4000, rewards 102, open ['flip-k100'], 6479s
+t2-real-s2  item 2500/4000, rewards 102, open ['flip-k100'], 6531s
+t2-real-s3  item 2500/4000, rewards 109, open ['flip-k100'], 6364s
+t2-real-s4  item 2500/4000, rewards 112, open ['flip-k100'], 6558s
+t2-real-s5  item 2500/4000, rewards 105, open ['flip-k100'], 6388s
+t2-shuffle-s1  item 2500/4000, rewards 102, open ['flip-k100'], 6403s
+t2-shuffle-s2  item 2500/4000, rewards 102, open ['flip-k100'], 6449s
+t2-shuffle-s3  item 2500/4000, rewards 109, open ['flip-k100'], 6277s
+
+== 22:54  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  item 2500/4000, rewards 102, open ['flip-k100'], 6479s
+t2-real-s2  item 2500/4000, rewards 102, open ['flip-k100'], 6531s
+t2-real-s3  item 2500/4000, rewards 109, open ['flip-k100'], 6364s
+t2-real-s4  item 2500/4000, rewards 112, open ['flip-k100'], 6558s
+t2-real-s5  item 2500/4000, rewards 105, open ['flip-k100'], 6388s
+t2-shuffle-s1  item 2500/4000, rewards 102, open ['flip-k100'], 6403s
+t2-shuffle-s2  item 2500/4000, rewards 102, open ['flip-k100'], 6449s
+t2-shuffle-s3  item 2500/4000, rewards 109, open ['flip-k100'], 6277s
+
+== 22:59  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  item 2500/4000, rewards 102, open ['flip-k100'], 6479s
+t2-real-s2  item 2500/4000, rewards 102, open ['flip-k100'], 6531s
+t2-real-s3  item 2500/4000, rewards 109, open ['flip-k100'], 6364s
+t2-real-s4  item 2500/4000, rewards 112, open ['flip-k100'], 6558s
+t2-real-s5  item 2500/4000, rewards 105, open ['flip-k100'], 6388s
+t2-shuffle-s1  item 2500/4000, rewards 102, open ['flip-k100'], 6403s
+t2-shuffle-s2  item 2500/4000, rewards 102, open ['flip-k100'], 6449s
+t2-shuffle-s3  item 2750/4000, rewards 160, open [], 7159s
+
+== 23:04  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  item 2750/4000, rewards 150, open [], 7482s
+t2-real-s2  item 2500/4000, rewards 102, open ['flip-k100'], 6531s
+t2-real-s3  item 2750/4000, rewards 160, open [], 7257s
+t2-real-s4  item 2750/4000, rewards 165, open [], 7499s
+t2-real-s5  item 2750/4000, rewards 161, open [], 7370s
+t2-shuffle-s1  item 2750/4000, rewards 150, open [], 7393s
+t2-shuffle-s2  item 2750/4000, rewards 153, open [], 7517s
+t2-shuffle-s3  item 2750/4000, rewards 160, open [], 7159s
+
+== 23:09  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  item 3000/4000, rewards 194, open [], 7694s
+t2-real-s2  item 2750/4000, rewards 153, open [], 7613s
+t2-real-s3  item 3000/4000, rewards 208, open ['flip-k200'], 7683s
+t2-real-s4  item 2750/4000, rewards 165, open [], 7499s
+t2-real-s5  item 3000/4000, rewards 208, open ['flip-k200'], 7743s
+t2-shuffle-s1  item 3000/4000, rewards 194, open [], 7602s
+t2-shuffle-s2  item 3000/4000, rewards 206, open ['flip-k200'], 7807s
+t2-shuffle-s3  item 3000/4000, rewards 208, open ['flip-k200'], 7579s
+
+== 23:14  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  item 3000/4000, rewards 194, open [], 7694s
+t2-real-s2  item 3000/4000, rewards 206, open ['flip-k200'], 7906s
+t2-real-s3  item 3000/4000, rewards 208, open ['flip-k200'], 7683s
+t2-real-s4  item 3000/4000, rewards 225, open ['flip-k200'], 8080s
+t2-real-s5  item 3000/4000, rewards 208, open ['flip-k200'], 7743s
+t2-shuffle-s1  item 3000/4000, rewards 194, open [], 7602s
+t2-shuffle-s2  item 3000/4000, rewards 206, open ['flip-k200'], 7807s
+t2-shuffle-s3  item 3000/4000, rewards 208, open ['flip-k200'], 7579s
+
+== 23:19  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  item 3000/4000, rewards 194, open [], 7694s
+t2-real-s2  item 3000/4000, rewards 206, open ['flip-k200'], 7906s
+t2-real-s3  item 3000/4000, rewards 208, open ['flip-k200'], 7683s
+t2-real-s4  item 3000/4000, rewards 225, open ['flip-k200'], 8080s
+t2-real-s5  item 3000/4000, rewards 208, open ['flip-k200'], 7743s
+t2-shuffle-s1  item 3000/4000, rewards 194, open [], 7602s
+t2-shuffle-s2  item 3000/4000, rewards 206, open ['flip-k200'], 7807s
+t2-shuffle-s3  item 3250/4000, rewards 255, open [], 8404s
+
+== 23:24  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  item 3250/4000, rewards 247, open ['flip-k200'], 8621s
+t2-real-s2  item 3000/4000, rewards 206, open ['flip-k200'], 7906s
+t2-real-s3  item 3250/4000, rewards 255, open [], 8518s
+t2-real-s4  item 3000/4000, rewards 225, open ['flip-k200'], 8080s
+t2-real-s5  item 3250/4000, rewards 261, open [], 8668s
+t2-shuffle-s1  item 3250/4000, rewards 247, open ['flip-k200'], 8519s
+t2-shuffle-s2  item 3000/4000, rewards 206, open ['flip-k200'], 7807s
+t2-shuffle-s3  item 3500/4000, rewards 310, open [], 8643s
+
+== 23:29  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  item 3500/4000, rewards 291, open [], 9007s
+t2-real-s2  item 3250/4000, rewards 255, open [], 8929s
+t2-real-s3  item 3750/4000, rewards 367, open [], 8992s
+t2-real-s4  item 3250/4000, rewards 276, open [], 8818s
+t2-real-s5  item 3500/4000, rewards 324, open [], 8958s
+t2-shuffle-s1  item 3500/4000, rewards 291, open [], 8900s
+t2-shuffle-s2  item 3250/4000, rewards 255, open [], 8817s
+t2-shuffle-s3  item 3750/4000, rewards 367, open [], 8871s
+
+== 23:34  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  item 3750/4000, rewards 339, open [], 9228s
+t2-real-s2  item 3500/4000, rewards 305, open [], 9160s
+t2-real-s3  item 3750/4000, rewards 367, open [], 8992s
+t2-real-s4  item 3750/4000, rewards 381, open [], 9254s
+t2-real-s5  item 3750/4000, rewards 367, open [], 9177s
+t2-shuffle-s1  item 3750/4000, rewards 339, open [], 9119s
+t2-shuffle-s2  item 3750/4000, rewards 359, open [], 9271s
+t2-shuffle-s3  item 3750/4000, rewards 367, open [], 8871s
+
+== 23:39  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  item 3750/4000, rewards 339, open [], 9228s
+t2-real-s2  item 3750/4000, rewards 359, open [], 9390s
+t2-real-s3  item 3750/4000, rewards 367, open [], 8992s
+t2-real-s4  item 3750/4000, rewards 381, open [], 9254s
+t2-real-s5  item 3750/4000, rewards 367, open [], 9177s
+t2-shuffle-s1  item 3750/4000, rewards 339, open [], 9119s
+t2-shuffle-s2  item 3750/4000, rewards 359, open [], 9271s
+t2-shuffle-s3  item 3750/4000, rewards 367, open [], 8871s
+
+== 23:44  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  item 3750/4000, rewards 339, open [], 9228s
+t2-real-s2  item 3750/4000, rewards 359, open [], 9390s
+t2-real-s3  item 3750/4000, rewards 367, open [], 8992s
+t2-real-s4  item 3750/4000, rewards 381, open [], 9254s
+t2-real-s5  item 3750/4000, rewards 367, open [], 9177s
+t2-shuffle-s1  item 3750/4000, rewards 339, open [], 9119s
+t2-shuffle-s2  item 3750/4000, rewards 359, open [], 9271s
+t2-shuffle-s3  item 3750/4000, rewards 367, open [], 8871s
+
+== 23:49  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  item 3750/4000, rewards 339, open [], 9228s
+t2-real-s2  item 3750/4000, rewards 359, open [], 9390s
+t2-real-s3  item 3750/4000, rewards 367, open [], 8992s
+t2-real-s4  item 3750/4000, rewards 381, open [], 9254s
+t2-real-s5  item 3750/4000, rewards 367, open [], 9177s
+t2-shuffle-s1  item 3750/4000, rewards 339, open [], 9119s
+t2-shuffle-s2  item 3750/4000, rewards 359, open [], 9271s
+t2-shuffle-s3  item 3750/4000, rewards 367, open [], 8871s
+
+== 23:54  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  item 3750/4000, rewards 339, open [], 9228s
+t2-real-s2  item 3750/4000, rewards 359, open [], 9390s
+t2-real-s3  done
+t2-real-s4  item 3750/4000, rewards 381, open [], 9254s
+t2-real-s5  item 3750/4000, rewards 367, open [], 9177s
+t2-shuffle-s1  item 3750/4000, rewards 339, open [], 9119s
+t2-shuffle-s2  item 3750/4000, rewards 359, open [], 9271s
+t2-shuffle-s3  done
+t2-shuffle-s4  item 0/4000, rewards 0, open [], 1s
+t2-shuffle-s5  item 0/4000, rewards 0, open [], 1s
+
+== 23:59  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  item 0/4000, rewards 0, open [], 5s
+t2-hash-s2  item 0/4000, rewards 0, open [], 1s
+t2-hash-s3  item 0/4000, rewards 0, open [], 1s
+t2-hash-s4  item 0/4000, rewards 0, open [], 1s
+t2-hash-s5  item 0/4000, rewards 0, open [], 1s
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  item 3750/4000, rewards 359, open [], 9390s
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  item 0/4000, rewards 0, open [], 1s
+t2-shuffle-s5  item 0/4000, rewards 0, open [], 1s
+
+== 00:04  running: 15
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  item 0/4000, rewards 0, open [], 5s
+t2-hash-s2  item 0/4000, rewards 0, open [], 1s
+t2-hash-s3  item 0/4000, rewards 0, open [], 1s
+t2-hash-s4  item 0/4000, rewards 0, open [], 1s
+t2-hash-s5  item 0/4000, rewards 0, open [], 1s
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  item 250/4000, rewards 57, open ['k25', 'k50'], 741s
+t2-shuffle-s5  item 250/4000, rewards 42, open ['k25'], 587s
+
+== 00:09  running: 15
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  item 250/4000, rewards 58, open ['k25', 'k50'], 698s
+t2-hash-s2  item 250/4000, rewards 56, open ['k25', 'k50'], 669s
+t2-hash-s3  item 250/4000, rewards 41, open ['k25'], 511s
+t2-hash-s4  item 0/4000, rewards 0, open [], 1s
+t2-hash-s5  item 250/4000, rewards 42, open ['k25'], 585s
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  item 250/4000, rewards 57, open ['k25', 'k50'], 741s
+t2-shuffle-s5  item 250/4000, rewards 42, open ['k25'], 587s
+
+== 00:14  running: 15
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  item 250/4000, rewards 58, open ['k25', 'k50'], 698s
+t2-hash-s2  item 250/4000, rewards 56, open ['k25', 'k50'], 669s
+t2-hash-s3  item 250/4000, rewards 41, open ['k25'], 511s
+t2-hash-s4  item 250/4000, rewards 57, open ['k25', 'k50'], 736s
+t2-hash-s5  item 250/4000, rewards 42, open ['k25'], 585s
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  item 250/4000, rewards 57, open ['k25', 'k50'], 741s
+t2-shuffle-s5  item 250/4000, rewards 42, open ['k25'], 587s
+
+== 00:19  running: 15
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  item 250/4000, rewards 58, open ['k25', 'k50'], 698s
+t2-hash-s2  item 250/4000, rewards 56, open ['k25', 'k50'], 669s
+t2-hash-s3  item 250/4000, rewards 41, open ['k25'], 511s
+t2-hash-s4  item 250/4000, rewards 57, open ['k25', 'k50'], 736s
+t2-hash-s5  item 250/4000, rewards 42, open ['k25'], 585s
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  item 250/4000, rewards 57, open ['k25', 'k50'], 741s
+t2-shuffle-s5  item 250/4000, rewards 42, open ['k25'], 587s
+
+== 00:24  running: 15
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  item 250/4000, rewards 58, open ['k25', 'k50'], 698s
+t2-hash-s2  item 250/4000, rewards 56, open ['k25', 'k50'], 669s
+t2-hash-s3  item 500/4000, rewards 101, open ['k50', 'k100'], 1541s
+t2-hash-s4  item 250/4000, rewards 57, open ['k25', 'k50'], 736s
+t2-hash-s5  item 250/4000, rewards 42, open ['k25'], 585s
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  item 500/4000, rewards 107, open ['k100'], 1768s
+t2-shuffle-s5  item 500/4000, rewards 101, open ['k50', 'k100'], 1606s
+
+== 00:29  running: 15
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  item 500/4000, rewards 110, open ['k100'], 1730s
+t2-hash-s2  item 500/4000, rewards 105, open ['k100'], 1719s
+t2-hash-s3  item 500/4000, rewards 101, open ['k50', 'k100'], 1541s
+t2-hash-s4  item 500/4000, rewards 107, open ['k100'], 1776s
+t2-hash-s5  item 500/4000, rewards 101, open ['k50', 'k100'], 1617s
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  item 500/4000, rewards 107, open ['k100'], 1768s
+t2-shuffle-s5  item 500/4000, rewards 101, open ['k50', 'k100'], 1606s
+
+== 00:34  running: 15
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  item 500/4000, rewards 110, open ['k100'], 1730s
+t2-hash-s2  item 500/4000, rewards 105, open ['k100'], 1719s
+t2-hash-s3  item 500/4000, rewards 101, open ['k50', 'k100'], 1541s
+t2-hash-s4  item 500/4000, rewards 107, open ['k100'], 1776s
+t2-hash-s5  item 500/4000, rewards 101, open ['k50', 'k100'], 1617s
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  item 500/4000, rewards 107, open ['k100'], 1768s
+t2-shuffle-s5  item 500/4000, rewards 101, open ['k50', 'k100'], 1606s
+
+== 00:39  running: 15
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  item 500/4000, rewards 110, open ['k100'], 1730s
+t2-hash-s2  item 500/4000, rewards 105, open ['k100'], 1719s
+t2-hash-s3  item 500/4000, rewards 101, open ['k50', 'k100'], 1541s
+t2-hash-s4  item 500/4000, rewards 107, open ['k100'], 1776s
+t2-hash-s5  item 500/4000, rewards 101, open ['k50', 'k100'], 1617s
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  item 750/4000, rewards 172, open [], 2732s
+t2-shuffle-s5  item 750/4000, rewards 151, open [], 2548s
+
+== 00:44  running: 15
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  item 750/4000, rewards 164, open [], 2614s
+t2-hash-s2  item 750/4000, rewards 162, open [], 2685s
+t2-hash-s3  item 750/4000, rewards 155, open [], 2569s
+t2-hash-s4  item 750/4000, rewards 172, open [], 2754s
+t2-hash-s5  item 750/4000, rewards 151, open [], 2571s
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  item 750/4000, rewards 172, open [], 2732s
+t2-shuffle-s5  item 1000/4000, rewards 197, open [], 2770s
+
+== 00:49  running: 15
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  item 1000/4000, rewards 212, open ['k200'], 2958s
+t2-hash-s2  item 1000/4000, rewards 210, open ['k200'], 3074s
+t2-hash-s3  item 1000/4000, rewards 208, open ['k200'], 2878s
+t2-hash-s4  item 750/4000, rewards 172, open [], 2754s
+t2-hash-s5  item 1000/4000, rewards 197, open [], 2797s
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  item 1000/4000, rewards 231, open ['k200'], 3372s
+t2-shuffle-s5  item 1000/4000, rewards 197, open [], 2770s
+
+== 00:54  running: 15
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  item 1000/4000, rewards 212, open ['k200'], 2958s
+t2-hash-s2  item 1000/4000, rewards 210, open ['k200'], 3074s
+t2-hash-s3  item 1000/4000, rewards 208, open ['k200'], 2878s
+t2-hash-s4  item 750/4000, rewards 172, open [], 2754s
+t2-hash-s5  item 1000/4000, rewards 197, open [], 2797s
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  item 1000/4000, rewards 231, open ['k200'], 3372s
+t2-shuffle-s5  item 1000/4000, rewards 197, open [], 2770s
+
+== 00:59  running: 15
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  item 1000/4000, rewards 212, open ['k200'], 2958s
+t2-hash-s2  item 1000/4000, rewards 210, open ['k200'], 3074s
+t2-hash-s3  item 1000/4000, rewards 208, open ['k200'], 2878s
+t2-hash-s4  item 1000/4000, rewards 231, open ['k200'], 3402s
+t2-hash-s5  item 1000/4000, rewards 197, open [], 2797s
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  item 1250/4000, rewards 280, open [], 3967s
+t2-shuffle-s5  item 1250/4000, rewards 248, open ['k200'], 3764s
+
+== 01:04  running: 15
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  item 1250/4000, rewards 260, open [], 3884s
+t2-hash-s2  item 1250/4000, rewards 260, open [], 3961s
+t2-hash-s3  item 1250/4000, rewards 263, open [], 3840s
+t2-hash-s4  item 1000/4000, rewards 231, open ['k200'], 3402s
+t2-hash-s5  item 1250/4000, rewards 248, open ['k200'], 3804s
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  item 1500/4000, rewards 333, open [], 4185s
+t2-shuffle-s5  item 1500/4000, rewards 297, open [], 4008s
+
+== 01:09  running: 15
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  item 1750/4000, rewards 348, open [], 4314s
+t2-hash-s2  item 1500/4000, rewards 309, open [], 4197s
+t2-hash-s3  item 1500/4000, rewards 324, open [], 4072s
+t2-hash-s4  item 1500/4000, rewards 333, open [], 4228s
+t2-hash-s5  item 1500/4000, rewards 297, open [], 4053s
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  item 2000/4000, rewards 0, open [], 4594s
+t2-shuffle-s5  item 2000/4000, rewards 1, open [], 4425s
+
+== 01:14  running: 15
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  item 2000/4000, rewards 1, open [], 4549s
+t2-hash-s2  item 1750/4000, rewards 364, open [], 4419s
+t2-hash-s3  item 2000/4000, rewards 0, open [], 4503s
+t2-hash-s4  item 1750/4000, rewards 379, open [], 4440s
+t2-hash-s5  item 2000/4000, rewards 1, open [], 4475s
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  item 2000/4000, rewards 0, open [], 4594s
+t2-shuffle-s5  item 2000/4000, rewards 1, open [], 4425s
+
+== 01:19  running: 15
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  item 2000/4000, rewards 1, open [], 4549s
+t2-hash-s2  item 2000/4000, rewards 0, open [], 4650s
+t2-hash-s3  item 2000/4000, rewards 0, open [], 4503s
+t2-hash-s4  item 2000/4000, rewards 0, open [], 4641s
+t2-hash-s5  item 2000/4000, rewards 1, open [], 4475s
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  item 2000/4000, rewards 0, open [], 4594s
+t2-shuffle-s5  item 2250/4000, rewards 56, open ['flip-k25', 'flip-k50'], 5081s
+
+== 01:24  running: 15
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  item 2250/4000, rewards 55, open ['flip-k25', 'flip-k50'], 5276s
+t2-hash-s2  item 2000/4000, rewards 0, open [], 4650s
+t2-hash-s3  item 2250/4000, rewards 57, open ['flip-k25', 'flip-k50'], 5152s
+t2-hash-s4  item 2000/4000, rewards 0, open [], 4641s
+t2-hash-s5  item 2250/4000, rewards 56, open ['flip-k25', 'flip-k50'], 5139s
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  item 2250/4000, rewards 57, open ['flip-k25', 'flip-k50'], 5284s
+t2-shuffle-s5  item 2250/4000, rewards 56, open ['flip-k25', 'flip-k50'], 5081s
+
+== 01:29  running: 15
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  item 2250/4000, rewards 55, open ['flip-k25', 'flip-k50'], 5276s
+t2-hash-s2  item 2250/4000, rewards 53, open ['flip-k25', 'flip-k50'], 5287s
+t2-hash-s3  item 2250/4000, rewards 57, open ['flip-k25', 'flip-k50'], 5152s
+t2-hash-s4  item 2250/4000, rewards 57, open ['flip-k25', 'flip-k50'], 5340s
+t2-hash-s5  item 2250/4000, rewards 56, open ['flip-k25', 'flip-k50'], 5139s
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  item 2250/4000, rewards 57, open ['flip-k25', 'flip-k50'], 5284s
+t2-shuffle-s5  item 2250/4000, rewards 56, open ['flip-k25', 'flip-k50'], 5081s
+
+== 01:34  running: 15
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  item 2250/4000, rewards 55, open ['flip-k25', 'flip-k50'], 5276s
+t2-hash-s2  item 2250/4000, rewards 53, open ['flip-k25', 'flip-k50'], 5287s
+t2-hash-s3  item 2250/4000, rewards 57, open ['flip-k25', 'flip-k50'], 5152s
+t2-hash-s4  item 2250/4000, rewards 57, open ['flip-k25', 'flip-k50'], 5340s
+t2-hash-s5  item 2250/4000, rewards 56, open ['flip-k25', 'flip-k50'], 5139s
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  item 2250/4000, rewards 57, open ['flip-k25', 'flip-k50'], 5284s
+t2-shuffle-s5  item 2250/4000, rewards 56, open ['flip-k25', 'flip-k50'], 5081s
+
+== 01:39  running: 15
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  item 2250/4000, rewards 55, open ['flip-k25', 'flip-k50'], 5276s
+t2-hash-s2  item 2250/4000, rewards 53, open ['flip-k25', 'flip-k50'], 5287s
+t2-hash-s3  item 2250/4000, rewards 57, open ['flip-k25', 'flip-k50'], 5152s
+t2-hash-s4  item 2250/4000, rewards 57, open ['flip-k25', 'flip-k50'], 5340s
+t2-hash-s5  item 2250/4000, rewards 56, open ['flip-k25', 'flip-k50'], 5139s
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  item 2500/4000, rewards 112, open ['flip-k100'], 6297s
+t2-shuffle-s5  item 2500/4000, rewards 105, open ['flip-k100'], 6128s
+
+== 01:44  running: 15
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  item 2500/4000, rewards 102, open ['flip-k100'], 6311s
+t2-hash-s2  item 2500/4000, rewards 102, open ['flip-k100'], 6355s
+t2-hash-s3  item 2500/4000, rewards 109, open ['flip-k100'], 6185s
+t2-hash-s4  item 2250/4000, rewards 57, open ['flip-k25', 'flip-k50'], 5340s
+t2-hash-s5  item 2500/4000, rewards 105, open ['flip-k100'], 6200s
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  item 2500/4000, rewards 112, open ['flip-k100'], 6297s
+t2-shuffle-s5  item 2500/4000, rewards 105, open ['flip-k100'], 6128s
+
+== 01:49  running: 15
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  item 2500/4000, rewards 102, open ['flip-k100'], 6311s
+t2-hash-s2  item 2500/4000, rewards 102, open ['flip-k100'], 6355s
+t2-hash-s3  item 2500/4000, rewards 109, open ['flip-k100'], 6185s
+t2-hash-s4  item 2500/4000, rewards 112, open ['flip-k100'], 6367s
+t2-hash-s5  item 2500/4000, rewards 105, open ['flip-k100'], 6200s
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  item 2500/4000, rewards 112, open ['flip-k100'], 6297s
+t2-shuffle-s5  item 2500/4000, rewards 105, open ['flip-k100'], 6128s
+
+== 01:54  running: 15
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  item 2500/4000, rewards 102, open ['flip-k100'], 6311s
+t2-hash-s2  item 2500/4000, rewards 102, open ['flip-k100'], 6355s
+t2-hash-s3  item 2500/4000, rewards 109, open ['flip-k100'], 6185s
+t2-hash-s4  item 2500/4000, rewards 112, open ['flip-k100'], 6367s
+t2-hash-s5  item 2500/4000, rewards 105, open ['flip-k100'], 6200s
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  item 2750/4000, rewards 165, open [], 7193s
+t2-shuffle-s5  item 2750/4000, rewards 161, open [], 7063s
+
+== 01:59  running: 15
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  item 2750/4000, rewards 150, open [], 7278s
+t2-hash-s2  item 2500/4000, rewards 102, open ['flip-k100'], 6355s
+t2-hash-s3  item 2750/4000, rewards 160, open [], 7047s
+t2-hash-s4  item 2500/4000, rewards 112, open ['flip-k100'], 6367s
+t2-hash-s5  item 2750/4000, rewards 161, open [], 7147s
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  item 2750/4000, rewards 165, open [], 7193s
+t2-shuffle-s5  item 3000/4000, rewards 208, open ['flip-k200'], 7416s
+
+== 02:04  running: 15
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  item 3000/4000, rewards 194, open [], 7482s
+t2-hash-s2  item 2750/4000, rewards 153, open [], 7397s
+t2-hash-s3  item 3000/4000, rewards 208, open ['flip-k200'], 7457s
+t2-hash-s4  item 2750/4000, rewards 165, open [], 7274s
+t2-hash-s5  item 3000/4000, rewards 208, open ['flip-k200'], 7506s
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  item 3000/4000, rewards 225, open ['flip-k200'], 7746s
+t2-shuffle-s5  item 3000/4000, rewards 208, open ['flip-k200'], 7416s
+
+== 02:09  running: 15
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  item 3000/4000, rewards 194, open [], 7482s
+t2-hash-s2  item 3000/4000, rewards 206, open ['flip-k200'], 7682s
+t2-hash-s3  item 3000/4000, rewards 208, open ['flip-k200'], 7457s
+t2-hash-s4  item 3000/4000, rewards 225, open ['flip-k200'], 7838s
+t2-hash-s5  item 3000/4000, rewards 208, open ['flip-k200'], 7506s
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  item 3000/4000, rewards 225, open ['flip-k200'], 7746s
+t2-shuffle-s5  item 3000/4000, rewards 208, open ['flip-k200'], 7416s
+
+== 02:14  running: 15
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  item 3000/4000, rewards 194, open [], 7482s
+t2-hash-s2  item 3000/4000, rewards 206, open ['flip-k200'], 7682s
+t2-hash-s3  item 3000/4000, rewards 208, open ['flip-k200'], 7457s
+t2-hash-s4  item 3000/4000, rewards 225, open ['flip-k200'], 7838s
+t2-hash-s5  item 3000/4000, rewards 208, open ['flip-k200'], 7506s
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  item 3250/4000, rewards 276, open [], 8453s
+t2-shuffle-s5  item 3250/4000, rewards 261, open [], 8301s
+
+== 02:19  running: 15
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  item 3250/4000, rewards 247, open ['flip-k200'], 8383s
+t2-hash-s2  item 3000/4000, rewards 206, open ['flip-k200'], 7682s
+t2-hash-s3  item 3250/4000, rewards 255, open [], 8268s
+t2-hash-s4  item 3000/4000, rewards 225, open ['flip-k200'], 7838s
+t2-hash-s5  item 3250/4000, rewards 261, open [], 8402s
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  item 3500/4000, rewards 333, open [], 8654s
+t2-shuffle-s5  item 3500/4000, rewards 324, open [], 8577s
+
+== 02:24  running: 15
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  item 3500/4000, rewards 291, open [], 8756s
+t2-hash-s2  item 3250/4000, rewards 255, open [], 8673s
+t2-hash-s3  item 3750/4000, rewards 367, open [], 8725s
+t2-hash-s4  item 3500/4000, rewards 333, open [], 8753s
+t2-hash-s5  item 3500/4000, rewards 324, open [], 8683s
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  item 3750/4000, rewards 381, open [], 8869s
+t2-shuffle-s5  item 3750/4000, rewards 367, open [], 8785s
+
+== 02:29  running: 15
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  item 3750/4000, rewards 339, open [], 8969s
+t2-hash-s2  item 3750/4000, rewards 359, open [], 9118s
+t2-hash-s3  item 3750/4000, rewards 367, open [], 8725s
+t2-hash-s4  item 3750/4000, rewards 381, open [], 8972s
+t2-hash-s5  item 3750/4000, rewards 367, open [], 8893s
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  item 3750/4000, rewards 381, open [], 8869s
+t2-shuffle-s5  item 3750/4000, rewards 367, open [], 8785s
+
+== 02:34  running: 15
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  item 3750/4000, rewards 339, open [], 8969s
+t2-hash-s2  item 3750/4000, rewards 359, open [], 9118s
+t2-hash-s3  item 3750/4000, rewards 367, open [], 8725s
+t2-hash-s4  item 3750/4000, rewards 381, open [], 8972s
+t2-hash-s5  item 3750/4000, rewards 367, open [], 8893s
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  item 3750/4000, rewards 381, open [], 8869s
+t2-shuffle-s5  item 3750/4000, rewards 367, open [], 8785s
+
+== 02:39  running: 15
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  item 3750/4000, rewards 339, open [], 8969s
+t2-hash-s2  item 3750/4000, rewards 359, open [], 9118s
+t2-hash-s3  item 3750/4000, rewards 367, open [], 8725s
+t2-hash-s4  item 3750/4000, rewards 381, open [], 8972s
+t2-hash-s5  item 3750/4000, rewards 367, open [], 8893s
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  item 3750/4000, rewards 381, open [], 8869s
+t2-shuffle-s5  item 3750/4000, rewards 367, open [], 8785s
+
+== 02:44  running: 11
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  item 3750/4000, rewards 339, open [], 8969s
+t2-hash-s2  item 3750/4000, rewards 359, open [], 9118s
+t2-hash-s3  item 3750/4000, rewards 367, open [], 8725s
+t2-hash-s4  item 3750/4000, rewards 381, open [], 8972s
+t2-hash-s5  item 3750/4000, rewards 367, open [], 8893s
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  done
+t2-shuffle-s5  done
+
+== 02:49  running: 9
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  item 3750/4000, rewards 339, open [], 8969s
+t2-hash-s2  item 3750/4000, rewards 359, open [], 9118s
+t2-hash-s3  done
+t2-hash-s4  item 3750/4000, rewards 381, open [], 8972s
+t2-hash-s5  item 3750/4000, rewards 367, open [], 8893s
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  done
+t2-shuffle-s5  done
+
+== 02:54  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  done
+t2-hash-s2  done
+t2-hash-s3  done
+t2-hash-s4  done
+t2-hash-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  done
+t2-shuffle-s5  done
+t3-logistic-s1  done
+t3-logistic-s2  done
+t3-logistic-s3  done
+t3-logistic-s4  done
+t3-logistic-s5  done
+t3-real-s1  item 0/900, rewards 0, open [], 1s
+t3-real-s2  item 0/900, rewards 0, open [], 1s
+t3-real-s3  item 0/900, rewards 0, open [], 1s
+t3-real-s4  item 0/900, rewards 0, open [], 1s
+t3-real-s5  item 0/900, rewards 0, open [], 1s
+t3-shuffle-s1  item 0/900, rewards 0, open [], 1s
+t3-shuffle-s2  item 0/900, rewards 0, open [], 1s
+t3-shuffle-s3  item 0/900, rewards 0, open [], 1s
+
+== 02:59  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  done
+t2-hash-s2  done
+t2-hash-s3  done
+t2-hash-s4  done
+t2-hash-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  done
+t2-shuffle-s5  done
+t3-logistic-s1  done
+t3-logistic-s2  done
+t3-logistic-s3  done
+t3-logistic-s4  done
+t3-logistic-s5  done
+t3-real-s1  item 0/900, rewards 0, open [], 1s
+t3-real-s2  item 0/900, rewards 0, open [], 1s
+t3-real-s3  item 0/900, rewards 0, open [], 1s
+t3-real-s4  item 0/900, rewards 0, open [], 1s
+t3-real-s5  item 0/900, rewards 0, open [], 1s
+t3-shuffle-s1  item 0/900, rewards 0, open [], 1s
+t3-shuffle-s2  item 0/900, rewards 0, open [], 1s
+t3-shuffle-s3  item 0/900, rewards 0, open [], 1s
+
+== 03:04  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  done
+t2-hash-s2  done
+t2-hash-s3  done
+t2-hash-s4  done
+t2-hash-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  done
+t2-shuffle-s5  done
+t3-logistic-s1  done
+t3-logistic-s2  done
+t3-logistic-s3  done
+t3-logistic-s4  done
+t3-logistic-s5  done
+t3-real-s1  item 250/900, rewards 52, open ['k50'], 699s
+t3-real-s2  item 250/900, rewards 54, open ['k50'], 682s
+t3-real-s3  item 250/900, rewards 48, open ['k25'], 610s
+t3-real-s4  item 250/900, rewards 48, open [], 695s
+t3-real-s5  item 0/900, rewards 0, open [], 1s
+t3-shuffle-s1  item 250/900, rewards 52, open ['k50'], 691s
+t3-shuffle-s2  item 250/900, rewards 54, open ['k50'], 674s
+t3-shuffle-s3  item 250/900, rewards 48, open ['k25'], 603s
+
+== 03:09  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  done
+t2-hash-s2  done
+t2-hash-s3  done
+t2-hash-s4  done
+t2-hash-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  done
+t2-shuffle-s5  done
+t3-logistic-s1  done
+t3-logistic-s2  done
+t3-logistic-s3  done
+t3-logistic-s4  done
+t3-logistic-s5  done
+t3-real-s1  item 250/900, rewards 52, open ['k50'], 699s
+t3-real-s2  item 250/900, rewards 54, open ['k50'], 682s
+t3-real-s3  item 250/900, rewards 48, open ['k25'], 610s
+t3-real-s4  item 250/900, rewards 48, open [], 695s
+t3-real-s5  item 250/900, rewards 59, open ['k50'], 786s
+t3-shuffle-s1  item 250/900, rewards 52, open ['k50'], 691s
+t3-shuffle-s2  item 250/900, rewards 54, open ['k50'], 674s
+t3-shuffle-s3  item 250/900, rewards 48, open ['k25'], 603s
+
+== 03:14  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  done
+t2-hash-s2  done
+t2-hash-s3  done
+t2-hash-s4  done
+t2-hash-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  done
+t2-shuffle-s5  done
+t3-logistic-s1  done
+t3-logistic-s2  done
+t3-logistic-s3  done
+t3-logistic-s4  done
+t3-logistic-s5  done
+t3-real-s1  item 250/900, rewards 52, open ['k50'], 699s
+t3-real-s2  item 500/900, rewards 97, open [], 1247s
+t3-real-s3  item 500/900, rewards 98, open [], 1278s
+t3-real-s4  item 250/900, rewards 48, open [], 695s
+t3-real-s5  item 500/900, rewards 98, open [], 1238s
+t3-shuffle-s1  item 250/900, rewards 52, open ['k50'], 691s
+t3-shuffle-s2  item 500/900, rewards 97, open [], 1233s
+t3-shuffle-s3  item 500/900, rewards 98, open [], 1262s
+
+== 03:19  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  done
+t2-hash-s2  done
+t2-hash-s3  done
+t2-hash-s4  done
+t2-hash-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  done
+t2-shuffle-s5  done
+t3-logistic-s1  done
+t3-logistic-s2  done
+t3-logistic-s3  done
+t3-logistic-s4  done
+t3-logistic-s5  done
+t3-real-s1  item 500/900, rewards 105, open ['k100'], 1415s
+t3-real-s2  item 500/900, rewards 97, open [], 1247s
+t3-real-s3  item 500/900, rewards 98, open [], 1278s
+t3-real-s4  item 500/900, rewards 105, open ['k100'], 1442s
+t3-real-s5  item 500/900, rewards 98, open [], 1238s
+t3-shuffle-s1  item 500/900, rewards 105, open ['k100'], 1399s
+t3-shuffle-s2  item 500/900, rewards 97, open [], 1233s
+t3-shuffle-s3  item 500/900, rewards 98, open [], 1262s
+
+== 03:24  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  done
+t2-hash-s2  done
+t2-hash-s3  done
+t2-hash-s4  done
+t2-hash-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  done
+t2-shuffle-s5  done
+t3-logistic-s1  done
+t3-logistic-s2  done
+t3-logistic-s3  done
+t3-logistic-s4  done
+t3-logistic-s5  done
+t3-real-s1  item 500/900, rewards 105, open ['k100'], 1415s
+t3-real-s2  item 500/900, rewards 97, open [], 1247s
+t3-real-s3  item 500/900, rewards 98, open [], 1278s
+t3-real-s4  item 500/900, rewards 105, open ['k100'], 1442s
+t3-real-s5  item 500/900, rewards 98, open [], 1238s
+t3-shuffle-s1  item 500/900, rewards 105, open ['k100'], 1399s
+t3-shuffle-s2  item 500/900, rewards 97, open [], 1233s
+t3-shuffle-s3  item 500/900, rewards 98, open [], 1262s
+
+== 03:29  running: 17
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  done
+t2-hash-s2  done
+t2-hash-s3  done
+t2-hash-s4  done
+t2-hash-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  done
+t2-shuffle-s5  done
+t3-logistic-s1  done
+t3-logistic-s2  done
+t3-logistic-s3  done
+t3-logistic-s4  done
+t3-logistic-s5  done
+t3-real-s1  item 750/900, rewards 156, open [], 2035s
+t3-real-s2  item 750/900, rewards 158, open [], 1953s
+t3-real-s3  item 750/900, rewards 145, open [], 1955s
+t3-real-s4  item 750/900, rewards 151, open [], 2037s
+t3-real-s5  item 750/900, rewards 157, open [], 1943s
+t3-shuffle-s1  item 750/900, rewards 156, open [], 2013s
+t3-shuffle-s2  item 750/900, rewards 158, open [], 1931s
+t3-shuffle-s3  item 750/900, rewards 145, open [], 1932s
+
+== 03:34  running: 15
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  done
+t2-hash-s2  done
+t2-hash-s3  done
+t2-hash-s4  done
+t2-hash-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  done
+t2-shuffle-s5  done
+t3-hash-s1  item 0/900, rewards 0, open [], 1s
+t3-hash-s2  item 0/900, rewards 0, open [], 1s
+t3-hash-s3  item 0/900, rewards 0, open [], 1s
+t3-hash-s4  item 0/900, rewards 0, open [], 1s
+t3-hash-s5  item 0/900, rewards 0, open [], 1s
+t3-logistic-s1  done
+t3-logistic-s2  done
+t3-logistic-s3  done
+t3-logistic-s4  done
+t3-logistic-s5  done
+t3-real-s1  done
+t3-real-s2  done
+t3-real-s3  done
+t3-real-s4  done
+t3-real-s5  done
+t3-shuffle-s1  done
+t3-shuffle-s2  done
+t3-shuffle-s3  done
+t3-shuffle-s4  item 0/900, rewards 0, open [], 1s
+t3-shuffle-s5  item 0/900, rewards 0, open [], 1s
+
+== 03:39  running: 15
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  done
+t2-hash-s2  done
+t2-hash-s3  done
+t2-hash-s4  done
+t2-hash-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  done
+t2-shuffle-s5  done
+t3-hash-s1  item 0/900, rewards 0, open [], 1s
+t3-hash-s2  item 0/900, rewards 0, open [], 1s
+t3-hash-s3  item 0/900, rewards 0, open [], 1s
+t3-hash-s4  item 0/900, rewards 0, open [], 1s
+t3-hash-s5  item 0/900, rewards 0, open [], 1s
+t3-logistic-s1  done
+t3-logistic-s2  done
+t3-logistic-s3  done
+t3-logistic-s4  done
+t3-logistic-s5  done
+t3-real-s1  done
+t3-real-s2  done
+t3-real-s3  done
+t3-real-s4  done
+t3-real-s5  done
+t3-shuffle-s1  done
+t3-shuffle-s2  done
+t3-shuffle-s3  done
+t3-shuffle-s4  item 0/900, rewards 0, open [], 1s
+t3-shuffle-s5  item 0/900, rewards 0, open [], 1s
+
+== 03:44  running: 15
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  done
+t2-hash-s2  done
+t2-hash-s3  done
+t2-hash-s4  done
+t2-hash-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  done
+t2-shuffle-s5  done
+t3-hash-s1  item 250/900, rewards 52, open ['k50'], 679s
+t3-hash-s2  item 250/900, rewards 54, open ['k50'], 662s
+t3-hash-s3  item 250/900, rewards 48, open ['k25'], 595s
+t3-hash-s4  item 0/900, rewards 0, open [], 1s
+t3-hash-s5  item 0/900, rewards 0, open [], 1s
+t3-logistic-s1  done
+t3-logistic-s2  done
+t3-logistic-s3  done
+t3-logistic-s4  done
+t3-logistic-s5  done
+t3-real-s1  done
+t3-real-s2  done
+t3-real-s3  done
+t3-real-s4  done
+t3-real-s5  done
+t3-shuffle-s1  done
+t3-shuffle-s2  done
+t3-shuffle-s3  done
+t3-shuffle-s4  item 250/900, rewards 48, open [], 670s
+t3-shuffle-s5  item 0/900, rewards 0, open [], 1s
+
+== 03:49  running: 15
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  done
+t2-hash-s2  done
+t2-hash-s3  done
+t2-hash-s4  done
+t2-hash-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  done
+t2-shuffle-s5  done
+t3-hash-s1  item 250/900, rewards 52, open ['k50'], 679s
+t3-hash-s2  item 250/900, rewards 54, open ['k50'], 662s
+t3-hash-s3  item 250/900, rewards 48, open ['k25'], 595s
+t3-hash-s4  item 250/900, rewards 48, open [], 673s
+t3-hash-s5  item 250/900, rewards 59, open ['k50'], 759s
+t3-logistic-s1  done
+t3-logistic-s2  done
+t3-logistic-s3  done
+t3-logistic-s4  done
+t3-logistic-s5  done
+t3-real-s1  done
+t3-real-s2  done
+t3-real-s3  done
+t3-real-s4  done
+t3-real-s5  done
+t3-shuffle-s1  done
+t3-shuffle-s2  done
+t3-shuffle-s3  done
+t3-shuffle-s4  item 250/900, rewards 48, open [], 670s
+t3-shuffle-s5  item 250/900, rewards 59, open ['k50'], 754s
+
+== 03:54  running: 15
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  done
+t2-hash-s2  done
+t2-hash-s3  done
+t2-hash-s4  done
+t2-hash-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  done
+t2-shuffle-s5  done
+t3-hash-s1  item 250/900, rewards 52, open ['k50'], 679s
+t3-hash-s2  item 500/900, rewards 97, open [], 1205s
+t3-hash-s3  item 500/900, rewards 98, open [], 1235s
+t3-hash-s4  item 250/900, rewards 48, open [], 673s
+t3-hash-s5  item 500/900, rewards 98, open [], 1194s
+t3-logistic-s1  done
+t3-logistic-s2  done
+t3-logistic-s3  done
+t3-logistic-s4  done
+t3-logistic-s5  done
+t3-real-s1  done
+t3-real-s2  done
+t3-real-s3  done
+t3-real-s4  done
+t3-real-s5  done
+t3-shuffle-s1  done
+t3-shuffle-s2  done
+t3-shuffle-s3  done
+t3-shuffle-s4  item 250/900, rewards 48, open [], 670s
+t3-shuffle-s5  item 500/900, rewards 98, open [], 1184s
+
+== 03:59  running: 15
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  done
+t2-hash-s2  done
+t2-hash-s3  done
+t2-hash-s4  done
+t2-hash-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  done
+t2-shuffle-s5  done
+t3-hash-s1  item 500/900, rewards 105, open ['k100'], 1368s
+t3-hash-s2  item 500/900, rewards 97, open [], 1205s
+t3-hash-s3  item 500/900, rewards 98, open [], 1235s
+t3-hash-s4  item 500/900, rewards 105, open ['k100'], 1391s
+t3-hash-s5  item 500/900, rewards 98, open [], 1194s
+t3-logistic-s1  done
+t3-logistic-s2  done
+t3-logistic-s3  done
+t3-logistic-s4  done
+t3-logistic-s5  done
+t3-real-s1  done
+t3-real-s2  done
+t3-real-s3  done
+t3-real-s4  done
+t3-real-s5  done
+t3-shuffle-s1  done
+t3-shuffle-s2  done
+t3-shuffle-s3  done
+t3-shuffle-s4  item 500/900, rewards 105, open ['k100'], 1379s
+t3-shuffle-s5  item 500/900, rewards 98, open [], 1184s
+
+== 04:04  running: 15
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  done
+t2-hash-s2  done
+t2-hash-s3  done
+t2-hash-s4  done
+t2-hash-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  done
+t2-shuffle-s5  done
+t3-hash-s1  item 500/900, rewards 105, open ['k100'], 1368s
+t3-hash-s2  item 750/900, rewards 158, open [], 1885s
+t3-hash-s3  item 750/900, rewards 145, open [], 1886s
+t3-hash-s4  item 500/900, rewards 105, open ['k100'], 1391s
+t3-hash-s5  item 500/900, rewards 98, open [], 1194s
+t3-logistic-s1  done
+t3-logistic-s2  done
+t3-logistic-s3  done
+t3-logistic-s4  done
+t3-logistic-s5  done
+t3-real-s1  done
+t3-real-s2  done
+t3-real-s3  done
+t3-real-s4  done
+t3-real-s5  done
+t3-shuffle-s1  done
+t3-shuffle-s2  done
+t3-shuffle-s3  done
+t3-shuffle-s4  item 500/900, rewards 105, open ['k100'], 1379s
+t3-shuffle-s5  item 750/900, rewards 157, open [], 1854s
+
+== 04:09  running: 15
+t1-hash-s1  done
+t1-hash-s2  done
+t1-hash-s3  done
+t1-hash-s4  done
+t1-hash-s5  done
+t1-logistic-s1  done
+t1-logistic-s2  done
+t1-logistic-s3  done
+t1-logistic-s4  done
+t1-logistic-s5  done
+t1-real-s1  done
+t1-real-s2  done
+t1-real-s3  done
+t1-real-s4  done
+t1-real-s5  done
+t1-shuffle-s1  done
+t1-shuffle-s2  done
+t1-shuffle-s3  done
+t1-shuffle-s4  done
+t1-shuffle-s5  done
+t2-hash-s1  done
+t2-hash-s2  done
+t2-hash-s3  done
+t2-hash-s4  done
+t2-hash-s5  done
+t2-logistic-s1  done
+t2-logistic-s2  done
+t2-logistic-s3  done
+t2-logistic-s4  done
+t2-logistic-s5  done
+t2-real-s1  done
+t2-real-s2  done
+t2-real-s3  done
+t2-real-s4  done
+t2-real-s5  done
+t2-shuffle-s1  done
+t2-shuffle-s2  done
+t2-shuffle-s3  done
+t2-shuffle-s4  done
+t2-shuffle-s5  done
+t3-hash-s1  item 750/900, rewards 156, open [], 1965s
+t3-hash-s2  item 750/900, rewards 158, open [], 1885s
+t3-hash-s3  item 750/900, rewards 145, open [], 1886s
+t3-hash-s4  item 750/900, rewards 151, open [], 1963s
+t3-hash-s5  item 750/900, rewards 157, open [], 1872s
+t3-logistic-s1  done
+t3-logistic-s2  done
+t3-logistic-s3  done
+t3-logistic-s4  done
+t3-logistic-s5  done
+t3-real-s1  done
+t3-real-s2  done
+t3-real-s3  done
+t3-real-s4  done
+t3-real-s5  done
+t3-shuffle-s1  done
+t3-shuffle-s2  done
+t3-shuffle-s3  done
+t3-shuffle-s4  item 750/900, rewards 151, open [], 1944s
+t3-shuffle-s5  item 750/900, rewards 157, open [], 1854s
+
+== 04:14  all runs finished

@@ -1,0 +1,29 @@
+<All keys matched successfully>
+No sentence-transformers model found with name nomic-ai/nomic-embed-vision-v1.5. Creating a new one with mean pooling.
+Traceback (most recent call last):
+  File "/Users/nickd/projects/bosco/scripts/a2_phase1.py", line 223, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/Users/nickd/projects/bosco/scripts/a2_phase1.py", line 219, in main
+    return a.fn(a)
+           ^^^^^^^
+  File "/Users/nickd/projects/bosco/scripts/a2_phase1.py", line 115, in cmd_embed
+    m, vis, prefix, sees = load_nose(a.nose)
+                           ^^^^^^^^^^^^^^^^^
+  File "/Users/nickd/projects/bosco/scripts/a2_phase1.py", line 95, in load_nose
+    vis = SentenceTransformer("nomic-ai/nomic-embed-vision-v1.5", device=dev, trust_remote_code=True)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/nickd/.cache/uv/archive-v0/EQ5TGx_pZArJwEYKR6giO/lib/python3.12/site-packages/sentence_transformers/SentenceTransformer.py", line 320, in __init__
+    modules = self._load_auto_model(
+              ^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/nickd/.cache/uv/archive-v0/EQ5TGx_pZArJwEYKR6giO/lib/python3.12/site-packages/sentence_transformers/SentenceTransformer.py", line 1528, in _load_auto_model
+    transformer_model = Transformer(
+                        ^^^^^^^^^^^^
+  File "/Users/nickd/.cache/uv/archive-v0/EQ5TGx_pZArJwEYKR6giO/lib/python3.12/site-packages/sentence_transformers/models/Transformer.py", line 82, in __init__
+    self.tokenizer = AutoTokenizer.from_pretrained(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/nickd/.cache/uv/archive-v0/EQ5TGx_pZArJwEYKR6giO/lib/python3.12/site-packages/transformers/models/auto/tokenization_auto.py", line 949, in from_pretrained
+    raise ValueError(
+ValueError: Unrecognized configuration class <class 'transformers_modules.nomic-ai.nomic-bert-2048.7710840340a098cfb869c4f65e87cf2b1b70caca.configuration_hf_nomic_bert.NomicBertConfig'> to build an AutoTokenizer.
+Model type should be one of AlbertConfig, AlignConfig, BarkConfig, BartConfig, BertConfig, BertGenerationConfig, BigBirdConfig, BigBirdPegasusConfig, BioGptConfig, BlenderbotConfig, BlenderbotSmallConfig, BlipConfig, Blip2Config, BloomConfig, BridgeTowerConfig, BrosConfig, CamembertConfig, CanineConfig, ChameleonConfig, ChineseCLIPConfig, ClapConfig, CLIPConfig, CLIPSegConfig, ClvpConfig, LlamaConfig, CodeGenConfig, CohereConfig, ConvBertConfig, CpmAntConfig, CTRLConfig, Data2VecAudioConfig, Data2VecTextConfig, DbrxConfig, DebertaConfig, DebertaV2Config, DistilBertConfig, DPRConfig, ElectraConfig, ErnieConfig, ErnieMConfig, EsmConfig, FalconConfig, FalconMambaConfig, FastSpeech2ConformerConfig, FlaubertConfig, FNetConfig, FSMTConfig, FunnelConfig, GemmaConfig, Gemma2Config, GitConfig, GlmConfig, GPT2Config, GPT2Config, GPTBigCodeConfig, GPTNeoConfig, GPTNeoXConfig, GPTNeoXJapaneseConfig, GPTJConfig, GPTSanJapaneseConfig, GroundingDinoConfig, GroupViTConfig, HubertConfig, IBertConfig, IdeficsConfig, Idefics2Config, Idefics3Config, InstructBlipConfig, InstructBlipVideoConfig, JambaConfig, JetMoeConfig, JukeboxConfig, Kosmos2Config, LayoutLMConfig, LayoutLMv2Config, LayoutLMv3Config, LEDConfig, LiltConfig, LlamaConfig, LlavaConfig, LlavaNextConfig, LlavaNextVideoConfig, LlavaOnevisionConfig, LongformerConfig, LongT5Config, LukeConfig, LxmertConfig, M2M100Config, MambaConfig, Mamba2Config, MarianConfig, MBartConfig, MegaConfig, MegatronBertConfig, MgpstrConfig, MistralConfig, MixtralConfig, MllamaConfig, MobileBertConfig, MoshiConfig, MPNetConfig, MptConfig, MraConfig, MT5Config, MusicgenConfig, MusicgenMelodyConfig, MvpConfig, NezhaConfig, NllbMoeConfig, NystromformerConfig, OlmoConfig, OlmoeConfig, OmDetTurboConfig, OneFormerConfig, OpenAIGPTConfig, OPTConfig, Owlv2Config, OwlViTConfig, PaliGemmaConfig, PegasusConfig, PegasusXConfig, PerceiverConfig, PersimmonConfig, PhiConfig, Phi3Config, PhimoeConfig, Pix2StructConfig, PixtralVisionConfig, PLBartConfig, ProphetNetConfig, QDQBertConfig, Qwen2Config, Qwen2AudioConfig, Qwen2MoeConfig, Qwen2VLConfig, RagConfig, RealmConfig, RecurrentGemmaConfig, ReformerConfig, RemBertConfig, RetriBertConfig, RobertaConfig, RobertaPreLayerNormConfig, RoCBertConfig, RoFormerConfig, RwkvConfig, SeamlessM4TConfig, SeamlessM4Tv2Config, SiglipConfig, Speech2TextConfig, Speech2Text2Config, SpeechT5Config, SplinterConfig, SqueezeBertConfig, StableLmConfig, Starcoder2Config, SwitchTransformersConfig, T5Config, TapasConfig, TransfoXLConfig, TvpConfig, UdopConfig, UMT5Config, VideoLlavaConfig, ViltConfig, VipLlavaConfig, VisualBertConfig, VitsConfig, Wav2Vec2Config, Wav2Vec2BertConfig, Wav2Vec2ConformerConfig, WhisperConfig, XCLIPConfig, XGLMConfig, XLMConfig, XLMProphetNetConfig, XLMRobertaConfig, XLMRobertaXLConfig, XLNetConfig, XmodConfig, YosoConfig, ZambaConfig.
+fig, XLNetConfig, XmodConfig, YosoConfig, ZambaConfig.

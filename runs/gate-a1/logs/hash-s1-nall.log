@@ -1,0 +1,13 @@
+sst: 427 train sentences had no exact dictionary match and were left out
+sst: 427 train sentences had no exact dictionary match and were left out
+sst: 427 train sentences had no exact dictionary match and were left out
+[hash/s1/all] init gain 8.0 threshold 0.3 (output spread 0.0134) (2s)
+[hash/s1/all] epoch 1: loss 0.6693 val 0.549 test 0.585 pictures 0.720 KC active 0.267 (49s)
+[hash/s1/all] epoch 2: loss 0.6348 val 0.649 test 0.644 pictures 0.592 KC active 0.317 (97s)
+[hash/s1/all] epoch 3: loss 0.6002 val 0.634 test 0.689 pictures 0.617 KC active 0.339 (146s)
+[hash/s1/all] epoch 4: loss 0.5688 val 0.669 test 0.699 pictures 0.651 KC active 0.389 (196s)
+[hash/s1/all] epoch 5: loss 0.5407 val 0.675 test 0.680 pictures 0.681 KC active 0.415 (246s)
+[hash/s1/all] epoch 6: loss 0.5259 val 0.690 test 0.725 pictures 0.676 KC active 0.409 (295s)
+[hash/s1/all] epoch 7: loss 0.5231 val 0.685 test 0.715 pictures 0.695 KC active 0.414 (344s)
+[hash/s1/all] epoch 8: loss 0.5225 val 0.670 test 0.705 pictures 0.688 KC active 0.412 (393s)
+[hash/s1/all] done (393s)

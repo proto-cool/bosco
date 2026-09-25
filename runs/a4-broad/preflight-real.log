@@ -1,0 +1,17 @@
+[real] start: gain 2.0 threshold 0.05 kept 0.557 kc 0.050 raw spread 2.34e-04 (68s)
+{
+ "arm": "real",
+ "loss_first10": 1.7294866681098937,
+ "loss_last10": 1.4867640376091003,
+ "pick_acc": 0.44333333333333336,
+ "chance": 0.34312134056820964,
+ "checks": {
+  "kc_at_start_in_band": true,
+  "read_not_dead_at_start": true,
+  "loss_falls": true,
+  "gradients_reach_brain": true
+ },
+ "broken": false,
+ "slow": false
+}
+exit 

@@ -1,0 +1,31 @@
+{
+ "task": "t1",
+ "arm": "logistic",
+ "seed": 1,
+ "n_items": 600,
+ "windows": {
+  "k2": {
+   "n": 5,
+   "accuracy": 0.0,
+   "spearman": NaN,
+   "ece": 0.5
+  },
+  "k4": {
+   "n": 5,
+   "accuracy": 0.0,
+   "spearman": NaN,
+   "ece": 0.5
+  }
+ },
+ "one_seed_accuracy_all": 0.0,
+ "wall_s": 0.6826131343841553,
+ "score_wall_s": 0.0,
+ "n_scored": 0,
+ "recall": {
+  "n_sweet": 30,
+  "n_bitter": 0,
+  "sweet_trained": 0.5,
+  "bitter_trained": NaN,
+  "gap": NaN
+ }
+}

@@ -1,0 +1,4 @@
+[full/s2] edges 9,557,137; init gain 8.0 threshold 0.3 (spread 0.489) (16s)
+[full/s2] epoch 1: loss 1.7673 val mean 0.491 | sweet 0.450 pictures 0.500 dangerous 0.535 junk 0.478 | 474s (491s)
+[full/s2] epoch 2: loss 0.6448 val mean 0.500 | sweet 0.500 pictures 0.500 dangerous 0.500 junk 0.500 | 938s (955s)
+[full/s2] done (955s)

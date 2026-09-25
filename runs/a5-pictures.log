@@ -1,0 +1,8 @@
+/Users/nickd/.cache/huggingface/modules/transformers_modules/jinaai/jina-clip-implementation/39e6a55ae971b59bea6e44675d237c99762e7ee2/modeling_clip.py:137: UserWarning: Flash attention requires CUDA, disabling
+  warnings.warn('Flash attention requires CUDA, disabling')
+/Users/nickd/.cache/huggingface/modules/transformers_modules/jinaai/jina-clip-implementation/39e6a55ae971b59bea6e44675d237c99762e7ee2/modeling_clip.py:172: UserWarning: xFormers requires CUDA, disabling
+  warnings.warn('xFormers requires CUDA, disabling')
+pictures train: 387 (0.65 positive)
+pictures val: 108 (0.70 positive)
+pictures test: 121 (0.69 positive)
+pictures probe: 16 (0.50 positive)
