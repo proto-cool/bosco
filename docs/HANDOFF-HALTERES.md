@@ -1,5 +1,21 @@
 # Handoff: Bosco, for the session building Halteres (2026-09-25)
 
+> **Update, 2026-09-25 evening: parts of this handoff are out of date.** Read
+> `docs/DECISIONS-2026-09-25.md` and `docs/a4-broad-results.md` first. What changed:
+> - **A4 broad has reported.** It failed G1, so the broad catalogue is not the public v1.
+> - **The model is being rebuilt as v1 "The Model".** The answer will be read from his
+>   descending neurons, not the MBONs. The question and the thing being judged come in
+>   on separate senses. The eyes are real (optic lobes) plus an encoder as a translator.
+>   Serving and evaluation run on the CPU.
+> - **No accuracy or calibration numbers here are final.** Treat v0 (A5) as a placeholder,
+>   not as "well calibrated".
+> - **`taught: true` does not mean reliable yet.**
+> - **Server speed is unmeasured.**
+>
+> An audit is running, and a rewritten handoff follows it. Until then, build Halteres
+> against the mock service and keep every number and claim in the UI as a placeholder.
+
+
 Written by the Claude Code session that built and tested Bosco's brain, for the
 session that will build **Halteres**. Nick will also give you a brief from
 Claude Design.
