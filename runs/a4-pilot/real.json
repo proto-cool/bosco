@@ -1,0 +1,83 @@
+{
+ "arm": "real",
+ "init": {
+  "gain": 8.0,
+  "threshold": 0.05,
+  "kc_threshold": 0.6567535400390625,
+  "mbon_threshold": -0.2235260009765625,
+  "spread": 0.04360794648528099,
+  "kc": 0.05000076815485954,
+  "approach": 0.1989094614982605,
+  "avoid": 0.20018821954727173,
+  "mbon": 0.19949854910373688,
+  "raw_read_spread": 0.00445335591211915
+ },
+ "hist": [
+  {
+   "epoch": 1,
+   "loss": 0.9887274345584053,
+   "val_acc": 0.5136842105263157
+  },
+  {
+   "epoch": 2,
+   "loss": 0.9481718213810741,
+   "val_acc": 0.5342105263157895
+  },
+  {
+   "epoch": 3,
+   "loss": 0.9353409234939773,
+   "val_acc": 0.5213157894736842
+  },
+  {
+   "epoch": 4,
+   "loss": 0.9278807497624332,
+   "val_acc": 0.526578947368421
+  },
+  {
+   "epoch": 5,
+   "loss": 0.9199285288169806,
+   "val_acc": 0.54
+  },
+  {
+   "epoch": 6,
+   "loss": 0.9138761069659057,
+   "val_acc": 0.5326315789473685
+  },
+  {
+   "epoch": 7,
+   "loss": 0.9024499934032667,
+   "val_acc": 0.5334210526315789
+  },
+  {
+   "epoch": 8,
+   "loss": 0.8965696142969697,
+   "val_acc": 0.5247368421052632
+  }
+ ],
+ "best_val": 0.54,
+ "cold": {
+  "agnews": 0.365,
+  "amazonpolarity": 0.89,
+  "appreviews": 0.895,
+  "banking77": 0.02,
+  "biasframes_intent": 0.485,
+  "biasframes_offensive": 0.465,
+  "biasframes_sex": 0.96,
+  "capsotu": 0.07,
+  "emotiondair": 0.365,
+  "empathetic": 0.04,
+  "financialphrasebank": 0.655,
+  "imdb": 0.8,
+  "manifesto": 0.01,
+  "massive": 0.01,
+  "rottentomatoes": 0.77,
+  "trueteacher": 0.54,
+  "wikitoxic_insult": 0.565,
+  "wikitoxic_obscene": 0.57,
+  "wikitoxic_threat": 0.96,
+  "wikitoxic_toxicaggregated": 0.515,
+  "yahootopics": 0.145,
+  "yelpreviews": 0.975
+ },
+ "wall_s": 10339.73172211647
+}
