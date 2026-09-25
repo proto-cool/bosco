@@ -97,7 +97,7 @@ def load(nose_n: int) -> dict:
 
 
 # ---- model -------------------------------------------------------------------------------------
-def build(b2: M2.Brain2, arm: str, mode: str, min_syn: int | None, seed: int = 1, device: str = "mps"):
+def build(b2: M2.Brain2, arm: str, mode: str, min_syn: int | None, seed: int = 1, device: str | None = None):
     w = wiring(arm, b2.brain, seed)
     if min_syn:
         w = cut(w, min_syn)

@@ -20,6 +20,7 @@ import pandas as pd
 import torch
 
 from bosco import a5, paths
+from bosco import device as DV
 
 sys.path.insert(0, str(paths.ROOT / "scripts"))
 import a4_pilot as P  # noqa: E402
@@ -98,7 +99,7 @@ def cmd_build(a) -> int:
         )
     taught = sorted({o for it in items if it["split"] != "cold" for o in it["options"]})
     labels = sorted({o for it in items for o in it["options"]})
-    m = SentenceTransformer("intfloat/e5-large-v2", device="mps")
+    m = SentenceTransformer("intfloat/e5-large-v2", device=DV.default())
 
     def enc(xs, bs=32):
         return m.encode(
@@ -188,10 +189,20 @@ def start(m, sets, zl, taught) -> dict:
     return init | {"raw_read_spread": raw}
 
 
+def maze_loss(logit, seg, gold, n_items):
+    """Amendment 1: as the A4 pilot's, but each item's logits are centred on their mean before the +-30
+    clamp. The softmax over an item's options is unchanged by a shift, so this is the same loss wherever the
+    clamp did not bite; it stops a drift shared by all options from clamping every logit and zeroing every
+    gradient (seen in the preflight)."""
+    cnt = torch.zeros(n_items, device=logit.device).index_add(0, seg, torch.ones_like(logit))
+    mean = torch.zeros(n_items, device=logit.device).index_add(0, seg, logit) / cnt
+    return P.maze_loss(logit - mean[seg], seg, gold, n_items)
+
+
 def step(m, opt, b, zl):
     smell, seg, gold = D.fly_sniffs(b, zl, "bi46")
     logit, r, _ = m.run(torch.tensor(smell, device=m.device), torch.zeros(len(smell), 52, device=m.device))
-    loss, _ = P.maze_loss(logit, torch.tensor(seg, device=m.device), torch.tensor(gold, device=m.device), len(b))
+    loss, _ = maze_loss(logit, torch.tensor(seg, device=m.device), torch.tensor(gold, device=m.device), len(b))
     total = loss + a5.KC_PENALTY * torch.relu(r[m.kc].mean() - a5.KC_RATE_TARGET) ** 2
     opt.zero_grad()
     total.backward()
@@ -305,7 +316,7 @@ def cmd_baselines(a) -> int:
             rows = [(it["kind"], it["gold"], int(np.argmax(B[it["opts"]] @ A[it["i"]]))) for it in sets[split]]
             res[f"{name}_{split}"] = rows
     torch.manual_seed(1)
-    dev = "mps"
+    dev = DV.default()
     net = torch.nn.Sequential(torch.nn.Linear(46 * 3, 256), torch.nn.ReLU(), torch.nn.Linear(256, 1)).to(dev)
     opt = torch.optim.Adam(net.parameters(), lr=1e-3)
 
@@ -327,7 +338,7 @@ def cmd_baselines(a) -> int:
     for ep in range(NET_EPOCHS):
         for b in P.batches(sets["train"], np.random.default_rng(ep)):
             _, seg, gold = D.fly_sniffs(b, zl, "bi46")
-            loss, _ = P.maze_loss(
+            loss, _ = maze_loss(
                 net(feats(b)).squeeze(1), torch.tensor(seg, device=dev), torch.tensor(gold, device=dev), len(b)
             )
             opt.zero_grad()

@@ -90,3 +90,19 @@ on skewed tasks. Chance is 1/(number of labels).
   reported. The A5 start rule is **not** swapped in quietly.
 
 Runner: `scripts/a4_broad.py`. Results: `docs/a4-broad-results.md`.
+
+## Amendment 1 (2026-09-25, from the preflight; no validation, test or cold result seen)
+
+The real brain's preflight came back **broken** (no gradient at the end) and **slow**.
+Diagnosed on training data: the start leaves a faint read (raw spread 2.3e-4), so the
+read scale starts at 427. All of an item's logits then drift down together, cross the
+maze loss's ±30 clamp by batch 6, and from there every gradient is exactly zero. A shared
+shift does not change the choice between options; only the clamp, there to keep exp()
+safe, turned it into a dead brain. **Fix:** each item's logits are centred on their mean
+before the clamp (the same loss wherever the clamp did not bite). The plain net uses the
+same loss. The start rule, the checks and every decision rule are unchanged; both brains
+rerun the preflight.
+
+The A4 pilot used the uncentred loss with a read scale of about 70. Its loss fell over
+all 8 epochs, so it was not dead, but it may have been partly clamped; noted in
+`docs/ERRATA-2026-09-24.md`.

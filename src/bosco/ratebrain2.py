@@ -20,6 +20,7 @@ import numpy as np
 import torch
 
 from bosco import data
+from bosco import device as DV
 from bosco import model2 as M2
 from bosco import populations as pop
 from bosco import senses as S
@@ -59,10 +60,11 @@ def wiring_values(b, in_total: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.n
 
 
 class RateBrain2(torch.nn.Module):
-    def __init__(self, b2: M2.Brain2, mode: str = "type", device: str = "mps", wiring=None):
+    def __init__(self, b2: M2.Brain2, mode: str = "type", device: str | None = None, wiring=None):
         """`wiring`: another Brain with the same neurons (a control), else b2's own."""
         super().__init__()
         b = wiring if wiring is not None else b2.brain
+        device = device or DV.default()
         self.n, self.device, self.mode = b.n, device, mode
         post, pre, w = wiring_values(b, b2.in_total)
         kc = np.zeros(b.n, bool)
