@@ -1,0 +1,262 @@
+{
+ "antenna(split23) own sum": {
+  "val": 0.6645170068027212,
+  "val_hist": [
+   0.6355034013605442,
+   0.6428367346938776,
+   0.6408367346938776,
+   0.6471428571428572,
+   0.6458095238095238,
+   0.6598503401360546,
+   0.6645170068027212,
+   0.6464625850340138
+  ],
+  "practice": {
+   "citation_intent": 0.485,
+   "crowdflower/political-media-message": 0.18,
+   "dbpedia_14/dbpedia_14": 0.06,
+   "hate_speech_offensive": 0.205,
+   "lex_glue/ledgar": 0.015,
+   "logical-fallacy": 0.115,
+   "poem_sentiment": 0.635,
+   "silicone/dyda_e": 0.4846938775510204,
+   "snips_built_in_intents": 0.085,
+   "tweet_eval/irony": 0.56,
+   "twitter-financial-news-sentiment": 0.62
+  }
+ },
+ "antenna(split23) own cat": {
+  "val": 0.6849047619047618,
+  "val_hist": [
+   0.6441428571428572,
+   0.6601428571428571,
+   0.659795918367347,
+   0.667530612244898,
+   0.6708639455782314,
+   0.6849047619047618,
+   0.6815578231292518,
+   0.6558639455782312
+  ],
+  "practice": {
+   "citation_intent": 0.31,
+   "crowdflower/political-media-message": 0.25,
+   "dbpedia_14/dbpedia_14": 0.115,
+   "hate_speech_offensive": 0.195,
+   "lex_glue/ledgar": 0.02,
+   "logical-fallacy": 0.085,
+   "poem_sentiment": 0.71,
+   "silicone/dyda_e": 0.5918367346938775,
+   "snips_built_in_intents": 0.065,
+   "tweet_eval/irony": 0.55,
+   "twitter-financial-news-sentiment": 0.585
+  }
+ },
+ "antenna(split23) mixed sum": {
+  "val": 0.6214489795918368,
+  "val_hist": [
+   0.556687074829932,
+   0.5800204081632653,
+   0.5913673469387756,
+   0.6007551020408163,
+   0.590047619047619,
+   0.6080884353741497,
+   0.6214489795918368,
+   0.6204353741496598
+  ],
+  "practice": {
+   "citation_intent": 0.465,
+   "crowdflower/political-media-message": 0.145,
+   "dbpedia_14/dbpedia_14": 0.11,
+   "hate_speech_offensive": 0.15,
+   "lex_glue/ledgar": 0.005,
+   "logical-fallacy": 0.095,
+   "poem_sentiment": 0.3,
+   "silicone/dyda_e": 0.12755102040816327,
+   "snips_built_in_intents": 0.08,
+   "tweet_eval/irony": 0.53,
+   "twitter-financial-news-sentiment": 0.59
+  }
+ },
+ "antenna(split23) mixed cat": {
+  "val": 0.659156462585034,
+  "val_hist": [
+   0.6020884353741496,
+   0.6221292517006802,
+   0.6411428571428571,
+   0.6358503401360543,
+   0.6424625850340137,
+   0.648156462585034,
+   0.659156462585034,
+   0.658530612244898
+  ],
+  "practice": {
+   "citation_intent": 0.505,
+   "crowdflower/political-media-message": 0.13,
+   "dbpedia_14/dbpedia_14": 0.125,
+   "hate_speech_offensive": 0.135,
+   "lex_glue/ledgar": 0.045,
+   "logical-fallacy": 0.17,
+   "poem_sentiment": 0.355,
+   "silicone/dyda_e": 0.10204081632653061,
+   "snips_built_in_intents": 0.055,
+   "tweet_eval/irony": 0.57,
+   "twitter-financial-news-sentiment": 0.585
+  }
+ },
+ "antenna(bi46) own sum": {
+  "val": 0.5647687074829932,
+  "val_hist": [
+   0.5507551020408162,
+   0.5587687074829932,
+   0.5547551020408165,
+   0.5567823129251701,
+   0.55178231292517,
+   0.5644625850340136,
+   0.5647687074829932,
+   0.5570884353741495
+  ],
+  "practice": {
+   "citation_intent": 0.29,
+   "crowdflower/political-media-message": 0.195,
+   "dbpedia_14/dbpedia_14": 0.065,
+   "hate_speech_offensive": 0.21,
+   "lex_glue/ledgar": 0.01,
+   "logical-fallacy": 0.095,
+   "poem_sentiment": 0.615,
+   "silicone/dyda_e": 0.7959183673469388,
+   "snips_built_in_intents": 0.09,
+   "tweet_eval/irony": 0.49,
+   "twitter-financial-news-sentiment": 0.57
+  }
+ },
+ "antenna(bi46) own cat": {
+  "val": 0.6101156462585033,
+  "val_hist": [
+   0.5931292517006803,
+   0.6047687074829932,
+   0.5813673469387755,
+   0.5947142857142858,
+   0.6101156462585033,
+   0.6071292517006802,
+   0.5997551020408163,
+   0.5967551020408164
+  ],
+  "practice": {
+   "citation_intent": 0.52,
+   "crowdflower/political-media-message": 0.265,
+   "dbpedia_14/dbpedia_14": 0.15,
+   "hate_speech_offensive": 0.19,
+   "lex_glue/ledgar": 0.05,
+   "logical-fallacy": 0.11,
+   "poem_sentiment": 0.64,
+   "silicone/dyda_e": 0.6836734693877551,
+   "snips_built_in_intents": 0.215,
+   "tweet_eval/irony": 0.535,
+   "twitter-financial-news-sentiment": 0.38
+  }
+ },
+ "antenna(bi46) mixed sum": {
+  "val": 0.36081632653061224,
+  "val_hist": [
+   0.3554965986394558,
+   0.3604965986394557,
+   0.3575238095238095,
+   0.3588571428571428,
+   0.35580272108843547,
+   0.35984353741496605,
+   0.36081632653061224,
+   0.35816326530612247
+  ],
+  "practice": {
+   "citation_intent": 0.435,
+   "crowdflower/political-media-message": 0.195,
+   "dbpedia_14/dbpedia_14": 0.11,
+   "hate_speech_offensive": 0.15,
+   "lex_glue/ledgar": 0.01,
+   "logical-fallacy": 0.13,
+   "poem_sentiment": 0.41,
+   "silicone/dyda_e": 0.6275510204081632,
+   "snips_built_in_intents": 0.14,
+   "tweet_eval/irony": 0.435,
+   "twitter-financial-news-sentiment": 0.375
+  }
+ },
+ "antenna(bi46) mixed cat": {
+  "val": 0.5623401360544217,
+  "val_hist": [
+   0.48189795918367345,
+   0.5256462585034014,
+   0.5503809523809523,
+   0.542673469387755,
+   0.5329795918367347,
+   0.546938775510204,
+   0.558687074829932,
+   0.5623401360544217
+  ],
+  "practice": {
+   "citation_intent": 0.515,
+   "crowdflower/political-media-message": 0.145,
+   "dbpedia_14/dbpedia_14": 0.11,
+   "hate_speech_offensive": 0.045,
+   "lex_glue/ledgar": 0.02,
+   "logical-fallacy": 0.135,
+   "poem_sentiment": 0.45,
+   "silicone/dyda_e": 0.8163265306122449,
+   "snips_built_in_intents": 0.375,
+   "tweet_eval/irony": 0.54,
+   "twitter-financial-news-sentiment": 0.585
+  }
+ },
+ "full-1024 own cat": {
+  "val": 0.6104489795918366,
+  "val_hist": [
+   0.5657823129251701,
+   0.6027823129251699,
+   0.5802176870748299,
+   0.5973809523809523,
+   0.6104489795918366,
+   0.6061020408163263,
+   0.6057687074829932,
+   0.5830884353741496
+  ],
+  "practice": {
+   "citation_intent": 0.095,
+   "crowdflower/political-media-message": 0.15,
+   "dbpedia_14/dbpedia_14": 0.27,
+   "hate_speech_offensive": 0.19,
+   "lex_glue/ledgar": 0.035,
+   "logical-fallacy": 0.09,
+   "poem_sentiment": 0.605,
+   "silicone/dyda_e": 0.6836734693877551,
+   "snips_built_in_intents": 0.18,
+   "tweet_eval/irony": 0.54,
+   "twitter-financial-news-sentiment": 0.28
+  }
+ },
+ "full-1024 mixed cat": {
+  "val": 0.5308979591836736,
+  "val_hist": [
+   0.4161224489795919,
+   0.4865238095238095,
+   0.5192312925170068,
+   0.5096190476190476,
+   0.47982993197278917,
+   0.5274693877551021,
+   0.5308979591836736,
+   0.5296734693877552
+  ],
+  "practice": {
+   "citation_intent": 0.52,
+   "crowdflower/political-media-message": 0.16,
+   "dbpedia_14/dbpedia_14": 0.345,
+   "hate_speech_offensive": 0.06,
+   "lex_glue/ledgar": 0.035,
+   "logical-fallacy": 0.1,
+   "poem_sentiment": 0.355,
+   "silicone/dyda_e": 0.8112244897959183,
+   "snips_built_in_intents": 0.38,
+   "tweet_eval/irony": 0.55,
+   "twitter-financial-news-sentiment": 0.585
+  }
+ }
+}

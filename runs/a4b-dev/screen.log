@@ -1,0 +1,11 @@
+antenna(split23) own sum                 val 0.665 practice 0.313
+antenna(split23) own cat                 val 0.685 practice 0.316
+antenna(split23) mixed sum               val 0.621 practice 0.236
+antenna(split23) mixed cat               val 0.659 practice 0.252
+antenna(bi46) own sum                    val 0.565 practice 0.311
+antenna(bi46) own cat                    val 0.610 practice 0.340
+antenna(bi46) mixed sum                  val 0.361 practice 0.274
+antenna(bi46) mixed cat                  val 0.562 practice 0.340
+full-1024 own cat                        val 0.610 practice 0.284
+full-1024 mixed cat                      val 0.531 practice 0.355
+exit 0
