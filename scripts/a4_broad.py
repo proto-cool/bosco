@@ -317,7 +317,9 @@ def cmd_baselines(a) -> int:
             rows = [(it["kind"], it["gold"], int(np.argmax(B[it["opts"]] @ A[it["i"]]))) for it in sets[split]]
             res[f"{name}_{split}"] = rows
     torch.manual_seed(1)
-    dev = DV.default()
+    dev = "cpu"  # amendment 3: the plain net on MPS did not repeat (val 0.462 / 0.444 / 0.443, same seed)
+    torch.use_deterministic_algorithms(True)
+    torch.set_num_threads(4)
     net = torch.nn.Sequential(torch.nn.Linear(46 * 3, 256), torch.nn.ReLU(), torch.nn.Linear(256, 1)).to(dev)
     opt = torch.optim.Adam(net.parameters(), lr=1e-3)
 

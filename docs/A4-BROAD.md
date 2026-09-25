@@ -123,3 +123,16 @@ other checks and every decision rule are unchanged.
 the two GPUs agree to about 0.01 on the same preflight, not bit for bit. (A first start of
 the real brain was stopped after 5 minutes, at batch 200 of epoch 1, before any
 validation, and restarted from scratch.)
+## Amendment 3 (2026-09-25, before any brain's validation, test or cold result was seen)
+
+The plain net on the Mac's GPU (MPS) did not repeat with the same seed: validation
+0.462, 0.444, 0.443; test 0.445, 0.426, 0.427 (the nose-alone scores were identical each
+time). The project requires replayable runs, and a 0.02 wobble matters for G1. **Change:**
+the plain net trains on the CPU with PyTorch's deterministic algorithms (4 threads); two
+runs gave byte-identical results (validation 0.444). Its rule, data and epochs are
+unchanged.
+
+The brains train on GPUs (the layered one on CUDA already), where scatter-adds may also
+not repeat bit for bit. How much a brain's result moves on a replay is measured after the
+runs (a short rerun of the same start and batches on the same machine) and reported
+beside the results. It is not a gate.
