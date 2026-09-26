@@ -46,6 +46,13 @@ power it, and it needs the fly to make honest decisions."
     too"). This is the route to provenance all the way down: trained only on clean sources.
     Trade-off: at first a weaker translation than e5. Decided per sense after the
     provenance audit.
+13. **Self-hosting is allowed** (Nick). It is redistribution, so each package ships:
+    - the MaleCNS attribution, licence link (CC BY 4.0) and a list of changes;
+    - the Shiu MIT notice;
+    - only encoders and weights whose licences allow commercial redistribution.
+
+    That means jina-clip-v2 (CC BY-NC) is replaced or licensed, and every shipped
+    specialist is trained on ledger-clean data only.
 
 ## Open (Nick to decide)
 
