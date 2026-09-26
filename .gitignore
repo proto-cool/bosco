@@ -21,3 +21,6 @@ runs/gate-b/logs/
 runs/gate-b/*/state.npz
 runs/gate-b3/logs/
 runs/product/logs/
+
+# exported families and specialists (regenerate with scripts/export_family.py; weights carry their data licences)
+/service/
