@@ -80,6 +80,16 @@ power it, and it needs the fly to make honest decisions."
 19. **No community specialists.** Nick does not want to moderate a public library.
 20. ~~Browser feasibility test~~ withdrawn: teaching is self-hosted only, so nothing has to run in
     a browser.
+21. **The personality is the playback** (Nick: "that's cool as shit"). The trace names real cell
+    types as they fire: the glomeruli, the sparse KCs, the DANs, the lateral horn, and the
+    answer's descending neurons (for example MDN, "the moonwalker", backing away; the gnathal DNs
+    leaning in). Accuracy ties with a shuffle are a model-card footnote, not the story.
+22. **No more shuffled twins per specialist** after the specialist pilot. The fair real-vs-shuffle
+    answer is taken once for the family, and again only when the brain changes (for example the
+    optic lobes). New specialists are checked against the production bar only.
+23. **The production bar is 0.80** balanced accuracy on the sealed test (CPU) with ECE ≤ 0.10. For
+    a task flagged, before its test is read, as having disputed labels, the bar is 0.9 × its
+    information ceiling, stated on its card (specialist pilot, amendments 1–2).
 
 ## Open (Nick to decide)
 
