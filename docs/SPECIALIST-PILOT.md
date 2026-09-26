@@ -100,3 +100,16 @@ chucked. That's the production bar as well."
 - Nose alone, the plain baseline and the layered shuffle are **reported, not gating** ("I don't
   care if another model can do the task better").
 - The same bar applies to every future specialist before it reaches Ask Bosco or a release.
+
+## Amendment 2 (2026-09-25, Nick; before any test score was read)
+
+**The disputed-labels exception.** Nick: "we accept that lower bar for that case then, if we note it
+it's fair and honest."
+
+- A task may be flagged **disputed labels** before its test is read: a judgement people themselves
+  disagree on. Flagged now: **hate** (DynaHate, built from deliberately borderline examples).
+- **Its bar:** balanced accuracy ≥ 0.90 × its information ceiling. The ceiling is the best balanced
+  accuracy of a logistic readout on all 768 encoder numbers, on validation, C ∈ {0.1, 1, 10}. For
+  hate that is 0.696, so the bar is **0.626**. ECE ≤ 0.10 still applies.
+- Its model card states that the labels are contested, the bar and why.
+- Every other task keeps the 0.80 bar.
