@@ -1,4 +1,9 @@
-# The Bosco web app (plan, 2026-09-24)
+# The Bosco web app (plan, 2026-09-24): SUPERSEDED
+
+> **Superseded 2026-09-25.** The web app is Halteres, a separate repo
+> (`~/projects/arclight/halteres`), and it owns sign-in, UI, storage and limits. This
+> repo owns only the model and the service Halteres calls. This file is kept as
+> history.
 
 The public front end at bosco.systems, on the Kimsufi (Xeon E-2274G,
 4 cores, 32 GB, no GPU). It is the only public consumer of the API
