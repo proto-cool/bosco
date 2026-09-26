@@ -70,11 +70,13 @@ power it, and it needs the fly to make honest decisions."
     mechanism is the fly's own local rule on KC→MBON synapses (forward passes only, cheap on a CPU),
     measured in the specialist pilot against gradient training. The public specialists never learn
     from anyone.
-17. **The server runs only our specialists.** Halteres is the public app for using them.
-18. **Bosco's API is public** (this repo's service; reverses "the API is private to the server",
-    2026-09-24). People get a key and call Bosco's API directly to use our specialists, and can
-    build their own front ends on it. Halteres is one client of Bosco's API, not an API of its own.
-    Keys, caps and billing are to be designed here.
+17. **Nick's server runs only our specialists,** for Halteres.
+18. **Two ways to use Bosco** (Nick: "they self host a Bosco and use the APIs locally. Halteres is a
+    SaaS"):
+    - **Halteres, the SaaS:** the public app, running our specialists on Nick's server. The hosted
+      Bosco API stays private to that server; Halteres is its only client (as decided 2026-09-24).
+    - **A self-hosted Bosco:** anyone can run their own copy and call its API locally, with our
+      specialists and any they teach themselves (decision 16).
 19. **No community specialists.** Nick does not want to moderate a public library.
 20. ~~Browser feasibility test~~ withdrawn: teaching is self-hosted only, so nothing has to run in
     a browser.
