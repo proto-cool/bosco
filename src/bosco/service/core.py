@@ -74,6 +74,7 @@ class Family:
         """Swap a specialist's learned weights into the shared brain (callers hold the lock)."""
         self.m.load_state_dict(self.base_state)
         self.m.load_state_dict(spec.weights, strict=False)
+        self.m.freeze()  # serving fast path: gains and learned synapses folded into one CSR matrix
 
     def rest_of(self, spec) -> np.ndarray:
         """The specialist's own resting state: its brain with every glomerulus at rest (0.5), per step."""

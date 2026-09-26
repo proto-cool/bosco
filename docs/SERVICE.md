@@ -40,3 +40,15 @@ licence (e.g. topic is trained on DBpedia, CC BY-SA), which matters before anyth
 - **The family antenna is fixed from the pilot's data.** Future specialists must train through this
   same antenna (the gap round refits its own; that is fine for development only).
 - The Kimsufi speed is not measured.
+
+## Speed (Mac CPU, 4 threads, 80 steps; the Kimsufi is not measured)
+- The cost is dominated by 80 steps × one sparse product over about 2.4M connections.
+- **The serving fast path (`RateBrain3.freeze`)** folds each neuron's gain and the learned
+  KC→MBON multipliers into one CSR matrix. It is 1.1–1.3× faster, with identical picks (logits
+  within 6e-5) and repeatable.
+- **Measured:** about 1.0 s of brain for a 2-option question and about 1.3 s for 14 options. The
+  whole request, with the encoder, is about 2 s.
+- **Tried and not taken:** SciPy CSR (faster at 2 sniffs, 0.69 s, but single-threaded and slower at
+  14); bfloat16 (2.2× slower on CPU, per the code audit).
+- **Further speed would change the model,** so each option needs its own check against the bar:
+  fewer steps (the DN read settles at about 60–80), or a higher synapse cutoff (fewer connections).

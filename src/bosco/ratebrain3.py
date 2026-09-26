@@ -158,6 +158,24 @@ class RateBrain3(torch.nn.Module):
         )
         self.read, self.steps, self.read_steps = "dn", steps, read_steps
 
+    # ---- serving fast path ----
+    def freeze(self) -> None:
+        """Inference only: fold the learned KC->MBON multipliers and each neuron's gain into one CSR matrix,
+        so a step is a single sparse product (W_all @ r == W @ (g*r) + plastic(g*r)). Call again after
+        loading other weights; `thaw` returns to the training path."""
+        with torch.no_grad():
+            n = self.n
+            g = torch.exp(self.log_g)[self.unit]
+            W = self.W.coalesce()
+            idx, val = W.indices(), W.values() * g[W.indices()[1]]
+            kidx = torch.stack([self.kp_post, self.kp_pre])
+            kval = self.kp_w * torch.exp(self.kp_logm) * g[self.kp_pre]
+            A = torch.sparse_coo_tensor(torch.cat([idx, kidx], 1), torch.cat([val, kval]), (n, n)).coalesce()
+            self._W_all = A.to_sparse_csr()
+
+    def thaw(self) -> None:
+        self._W_all = None
+
     # ---- dynamics ----
     @staticmethod
     def unit_fn(x: torch.Tensor) -> torch.Tensor:
@@ -179,10 +197,15 @@ class RateBrain3(torch.nn.Module):
         r = torch.zeros(self.n, bsz, device=self.device)
         read, trace = [], []
 
+        W_all = getattr(self, "_W_all", None)
+
         def step(r):
-            x = g * r
-            drive = torch.sparse.mm(self.W, x)
-            drive = drive.index_add(0, self.kp_post, x[self.kp_pre] * kp_w)
+            if W_all is not None and not torch.is_grad_enabled():
+                drive = W_all @ r
+            else:
+                x = g * r
+                drive = torch.sparse.mm(self.W, x)
+                drive = drive.index_add(0, self.kp_post, x[self.kp_pre] * kp_w)
             return r + alpha * (-r + self.unit_fn(drive + bias))
 
         # training keeps only every CHECKPOINT-th state and recomputes the rest in the backward pass
