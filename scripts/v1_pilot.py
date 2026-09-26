@@ -32,6 +32,7 @@ EPOCHS, LR, KC_PENALTY, GAIN = 4, 3e-3, 10.0, 4.0
 STEPS, READ_STEPS = 80, 8
 TRAIN_OPTS = 10
 PREFLIGHT_BATCHES = 150
+PRODUCTION_BAR = 0.80  # amendment 1 (Nick): balanced accuracy on the sealed test, or it is not shipped
 
 
 # ---- data --------------------------------------------------------------------------------------
@@ -383,7 +384,7 @@ def cmd_report(a) -> int:
         s1 = None
         if "sr" in vals:
             b_, e_ = vals["sr"]
-            s1 = b_ >= ch + 0.15 and b_ >= nose and b_ >= plain - 0.05 and e_ <= 0.10
+            s1 = b_ >= PRODUCTION_BAR and e_ <= 0.10  # amendment 1: the production bar; baselines report-only
         q[t] = s1
         L_.append(
             f"| {t} | {k} | {ch:.3f} | {nose:.3f} | {plain:.3f} | "

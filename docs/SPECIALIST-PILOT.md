@@ -89,3 +89,14 @@ For every training run, 150 batches on training data only:
 A failing run stops and is reported; it is not tuned and relaunched without an amendment.
 
 Runner: `scripts/v1_pilot.py` (data: `scripts/v1_data.py`). Results: `docs/specialist-pilot-results.md`.
+
+## Amendment 1 (2026-09-25, Nick; before any test score was read, only validation numbers seen)
+
+**The production bar replaces S1.** "If the verdict is not 'works well' aka 0.8 or better it's
+chucked. That's the production bar as well."
+
+- **S1 (a specialist ships):** balanced accuracy on its sealed test set, scored on the CPU,
+  ≥ **0.80**, **and** ECE ≤ 0.10, so the confidence shown is honest.
+- Nose alone, the plain baseline and the layered shuffle are **reported, not gating** ("I don't
+  care if another model can do the task better").
+- The same bar applies to every future specialist before it reaches Ask Bosco or a release.
