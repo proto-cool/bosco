@@ -96,3 +96,11 @@ Every licence was verified at the source, and each matches the ledger. There are
 - the **Civil Comments** CC0 rests on Google's TFDS catalog and HF card, not a Jigsaw-hosted page that could be read.
 
 Nothing is marked UNVERIFIED.
+
+## Added 2026-09-26 (for specialist gate 2; from `docs/free-datasets.md`)
+
+| dataset | source | licence | fetched files (SHA-256) | notes |
+|---|---|---|---|---|
+| SMS Spam Collection v.1 | UCI archive.ics.uci.edu/static/public/228 | CC BY 4.0 (UCI) | `SMSSpamCollection` 7d039a24…c239d; `readme` 8753cd2d…a84e | 5,574 messages (747 spam). **Phone numbers and name-like strings are scrubbed on read, before embedding.** Cite Almeida & Gómez Hidalgo |
+| DynaSent round 2 | github.com/cgpotts/dynasent (v1.1 zip, sha 33001cf3…edfd; zip deleted after extraction) | CC BY 4.0 (README) | r2 train da7fbad5…cc8, dev f9cb7eaa…ca, test 8924060e…32 | **Round 1 (Yelp text) and the bundled SST file were deleted** (non-commercial / no licence). **16,911 of about 18,500 r2 train rows have `has_prompt=true`**: a worker wrote the sentence after seeing a Yelp sentence, and `prompt_data` *contains that Yelp sentence*. prompt_data is never read. Whether prompted rows count as clean is **Nick's call** (see gate 2) |
+| Stack Exchange Politeness corpus | ConvoKit (zissou.infosci.cornell.edu …/stack-exchange-politeness-corpus.zip, sha d5be7586…81a3) | CC BY 4.0 (ConvoKit); SE text CC BY-SA | `utterances.jsonl` 7b21d502…2fa4 | 6,603 requests with a normalised politeness score; usernames in metadata are not read |
