@@ -42,3 +42,14 @@ CLINC are byte-identical to the round above.
 **Honesty:** the prototypes are built from labelled training examples, so "prototype matching alone"
 (0.918 / 0.764 above) is reported beside the fly every time. The fly still decides, between richer
 smells: "he remembers what each option smells like".
+
+## Addendum 2: way B, one learned preference per option (2026-09-26, before running; validation only)
+
+CLINC with prototype option smells (way A) reached 0.548, 0.526 and 0.635 on validation over epochs 1–3,
+well below the 0.918 that prototype matching alone carries. Judging a match from a *mixture* of two smells
+is hard for this brain. **Way B:** the specialist holds one KC→MBON memory per option (the synapses a fly
+learns with; per-type parameters shared). Each option is judged from **the item's smell alone** with that
+option's memory: approach or avoid, and the answer is the option he is drawn to most. Training: the right
+option plus 19 random others per item, softmax over them; validation over all 151. The same brain, start,
+read and data. Nick chose it (2026-09-26): B for many-option specialists, A kept for few-option ones
+(topic 0.933). Runs on the 3080 after the CLINC prototype round, before MASSIVE.

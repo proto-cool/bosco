@@ -123,6 +123,8 @@ def cmd_train(a) -> int:
     m, info = V.make_brain("real")
     op = V.start(m, tr, zl)
     log(f"start kc {op['kc']:.3f}; train {len(tr)} val {len(va)}")
+    if a.prefs:
+        return train_prefs(a, m, tr, va, zl, log, t0, info, op)
     opt = torch.optim.Adam(m.parameters(), lr=V.LR)
     hist, best, state, since = [], -1.0, None, 0
     for ep in range(1 if a.smoke else MAX_EPOCHS[a.task]):
@@ -148,13 +150,89 @@ def cmd_train(a) -> int:
         log("smoke ok")
         return 0
     RUNS.mkdir(parents=True, exist_ok=True)
-    tag = a.task + ("-proto" if a.proto else "")
+    tag = a.task + ("-proto" if a.proto else "") + ("-prefs" if a.prefs else "")
     torch.save({"state": state, "start": op, "dn_groups": info}, RUNS / f"{tag}.pt")
     json.dump(
         {"task": a.task, "proto": a.proto, "hist": hist, "best_val": best, "wall_s": time.time() - t0},
         open(RUNS / f"{tag}.json", "w"),
         indent=1,
     )
+    log(f"done: best val {best:.3f}")
+    return 0
+
+
+def prefs_batches(items, rng, n_opt, neg=19):
+    """Way B: for each item, the right option + `neg` random others; every sniff is the item's smell alone,
+    run with that option's memory. Yields (smell rows, option ids, segment ids, gold positions)."""
+    rows, opts, seg, gold, j = [], [], [], [], 0
+    for k in rng.permutation(len(items)):
+        it = items[k]
+        others = [o for o in range(n_opt) if o != it["gold"]]
+        chosen = [it["gold"]] + list(rng.choice(others, min(neg, len(others)), replace=False))
+        order = rng.permutation(len(chosen))
+        for q in order:
+            rows.append(it["z"])
+            opts.append(chosen[q])
+            seg.append(j)
+        gold.append(len(rows) - len(chosen) + int(np.where(order == 0)[0][0]))
+        j += 1
+        if len(rows) >= 120:
+            yield np.stack(rows), np.array(opts), np.array(seg), np.array(gold), j
+            rows, opts, seg, gold, j = [], [], [], [], 0
+    if rows:
+        yield np.stack(rows), np.array(opts), np.array(seg), np.array(gold), j
+
+
+def prefs_val(m, items, n_opt):
+    right = []
+    with torch.no_grad():
+        for it in items:
+            s = torch.tensor(np.repeat(it["z"][None], n_opt, 0), device=m.device)
+            lo, _, _ = m.run(s, opt=torch.arange(n_opt, device=m.device))
+            right.append((it["kind"], it["gold"], int(lo.argmax())))
+    return V.D.macro(V.B.balanced(right))
+
+
+def train_prefs(a, m, tr, va, zl, log, t0, info, op):
+    n_opt = len(tr[0]["opts"])
+    m.enable_bank(n_opt)
+    m.kp_logm.requires_grad_(False)
+    opt = torch.optim.Adam([p for p in m.parameters() if p.requires_grad], lr=V.LR)
+    if a.smoke:
+        va = va[:5]
+    hist, best, state, since = [], -1.0, None, 0
+    for ep in range(1 if a.smoke else MAX_EPOCHS[a.task]):
+        ls = []
+        for i, (s, o, seg, gold, nb) in enumerate(prefs_batches(tr, np.random.default_rng(ep), n_opt)):
+            if a.smoke and i >= 2:
+                break
+            dev = m.device
+            logit, r, _ = m.run(torch.tensor(s, device=dev), opt=torch.tensor(o, device=dev))
+            loss, _ = V.B.maze_loss(logit, torch.tensor(seg, device=dev), torch.tensor(gold, device=dev), nb)
+            total = loss + V.KC_PENALTY * m.kc_penalty(r)
+            opt.zero_grad()
+            total.backward()
+            opt.step()
+            ls.append(float(loss))
+            if i % 200 == 0:
+                log(f"ep {ep + 1} batch {i} loss {np.mean(ls[-200:]):.3f}")
+        v = prefs_val(m, va, n_opt)
+        hist.append({"epoch": ep + 1, "loss": float(np.mean(ls)), "val": v})
+        log(f"epoch {ep + 1}: loss {np.mean(ls):.3f} val {v:.3f}")
+        if v > best:
+            best, since = v, 0
+            state = {k: x.detach().cpu().clone() for k, x in m.state_dict().items()}
+        else:
+            since += 1
+            if since >= PATIENCE:
+                break
+    if a.smoke:
+        log("smoke ok")
+        return 0
+    RUNS.mkdir(parents=True, exist_ok=True)
+    torch.save({"state": state, "start": op, "dn_groups": info}, RUNS / f"{a.task}-prefs.pt")
+    json.dump({"task": a.task, "prefs": True, "hist": hist, "best_val": best, "wall_s": time.time() - t0},
+              open(RUNS / f"{a.task}-prefs.json", "w"), indent=1)
     log(f"done: best val {best:.3f}")
     return 0
 
@@ -170,6 +248,7 @@ def main(argv=None) -> int:
     p.add_argument("--task", choices=list(N_TRAIN), required=True)
     p.add_argument("--smoke", action="store_true")
     p.add_argument("--proto", action="store_true", help="option smells = prototypes of their training examples")
+    p.add_argument("--prefs", action="store_true", help="way B: one KC->MBON memory per option, item smell alone")
     p.set_defaults(fn=cmd_train)
     a = ap.parse_args(argv)
     return a.fn(a)

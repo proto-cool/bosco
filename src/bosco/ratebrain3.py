@@ -158,6 +158,12 @@ class RateBrain3(torch.nn.Module):
         )
         self.read, self.steps, self.read_steps = "dn", steps, read_steps
 
+    # ---- one learned preference per option (docs/GAP-DEV.md, way B) ----
+    def enable_bank(self, n_options: int) -> None:
+        """Give every option its own KC->MBON memory (the synapses a fly learns with); everything else is
+        shared. A sniff then runs with the memory of the option it asks about (`run(..., opt=...)`)."""
+        self.kp_bank = torch.nn.Parameter(self.kp_logm.detach().repeat(n_options, 1))
+
     # ---- serving fast path ----
     def freeze(self) -> None:
         """Inference only: fold the learned KC->MBON multipliers and each neuron's gain into one CSR matrix,
@@ -181,7 +187,7 @@ class RateBrain3(torch.nn.Module):
     def unit_fn(x: torch.Tensor) -> torch.Tensor:
         return torch.tanh(torch.nn.functional.softplus(BETA * x) / BETA)
 
-    def run(self, smell: torch.Tensor, sight: torch.Tensor | None = None, record: bool = False):
+    def run(self, smell: torch.Tensor, sight: torch.Tensor | None = None, record: bool = False, opt=None):
         """smell (B, nose.n), sight (B, eyes.n) in 0..1 -> (logit (B,), rates at the end (n, B), trace)."""
         bsz = smell.shape[0]
         inp = torch.zeros(self.n, bsz, device=self.device)
@@ -192,7 +198,10 @@ class RateBrain3(torch.nn.Module):
         bias = self.b[self.unit][:, None] + inp
         tau = torch.exp(self.log_tau).clamp(*TAU_RANGE)[self.unit][:, None]
         alpha = DT_MS / tau
-        kp_w = (self.kp_w * torch.exp(self.kp_logm))[:, None]
+        if opt is not None:  # per-sniff memory: (n_plastic, B)
+            kp_w = self.kp_w[:, None] * torch.exp(self.kp_bank[opt].T)
+        else:
+            kp_w = (self.kp_w * torch.exp(self.kp_logm))[:, None]
         ap, av = self.read_groups[self.read]
         r = torch.zeros(self.n, bsz, device=self.device)
         read, trace = [], []
@@ -200,7 +209,7 @@ class RateBrain3(torch.nn.Module):
         W_all = getattr(self, "_W_all", None)
 
         def step(r):
-            if W_all is not None and not torch.is_grad_enabled():
+            if W_all is not None and not torch.is_grad_enabled() and opt is None:
                 drive = W_all @ r
             else:
                 x = g * r
