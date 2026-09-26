@@ -37,6 +37,7 @@ BETA = 50.0  # softplus sharpness: rate 0.014 at threshold, 0.0016 at 0.05 below
 # slope 0.08 there (Adam rescales small gradients, so a silent type still trains)
 ACTIVE = 0.01  # a neuron counts as active above this rate (as in ratebrain2's probes)
 KC_ACTIVE_MAX = 0.10  # upper edge of the fly's KC range (2-10% active; Honegger et al. 2011)
+CHECKPOINT = 10  # steps per recomputed segment when training (memory for long runs and the optic lobes)
 LH_PREFIXES = ("LHAV", "LHAD", "LHPV", "LHPD", "LHCENT", "LHLN", "LHPN")
 
 
@@ -177,18 +178,40 @@ class RateBrain3(torch.nn.Module):
         ap, av = self.read_groups[self.read]
         r = torch.zeros(self.n, bsz, device=self.device)
         read, trace = [], []
-        for s in range(self.steps):
+
+        def step(r):
             x = g * r
             drive = torch.sparse.mm(self.W, x)
             drive = drive.index_add(0, self.kp_post, x[self.kp_pre] * kp_w)
-            r = r + alpha * (-r + self.unit_fn(drive + bias))
-            if s >= self.steps - self.read_steps:
-                read.append(r[ap].mean(0) - r[av].mean(0))
-            if record:
-                trace.append(r.detach().to(torch.float16).cpu())
+            return r + alpha * (-r + self.unit_fn(drive + bias))
+
+        # training keeps only every CHECKPOINT-th state and recomputes the rest in the backward pass
+        ckpt = torch.is_grad_enabled() and not record
+        s = 0
+        while s < self.steps:
+            n_seg = min(CHECKPOINT, self.steps - s)
+            reads_in = [k for k in range(n_seg) if s + k >= self.steps - self.read_steps]
+            if ckpt and not reads_in:
+                r = torch.utils.checkpoint.checkpoint(
+                    lambda r, n=n_seg: self._seg(step, r, n), r, use_reentrant=False
+                )
+            else:
+                for k in range(n_seg):
+                    r = step(r)
+                    if k in reads_in:
+                        read.append(r[ap].mean(0) - r[av].mean(0))
+                    if record:
+                        trace.append(r.detach().to(torch.float16).cpu())
+            s += n_seg
         d = torch.stack(read).mean(0)
         logit = torch.exp(self.log_k) * d * 10.0 + self.c
         return logit, r, (torch.stack(trace) if record else None)
+
+    @staticmethod
+    def _seg(step, r, n):
+        for _ in range(n):
+            r = step(r)
+        return r
 
     def forward(self, smell, sight=None):
         return self.run(smell, sight)[0]

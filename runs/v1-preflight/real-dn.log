@@ -1,0 +1,27 @@
+[real/dn] start: kc 0.050 raw spread 2.76e-04 (23s)
+  batch 25: loss 1.551 kc 0.073 (58s)
+  batch 50: loss 1.654 kc 0.111 (84s)
+  batch 75: loss 1.554 kc 0.070 (114s)
+  batch 100: loss 1.771 kc 0.086 (141s)
+  batch 125: loss 1.435 kc 0.068 (169s)
+  batch 150: loss 1.482 kc 0.073 (197s)
+{
+ "arm": "real",
+ "read": "dn",
+ "gain": 4.0,
+ "types_with_gradient_at_batch1": {
+  "kp_logm": 1.0,
+  "log_g": 0.9934601187705994,
+  "b": 0.9934601187705994,
+  "log_tau": 0.9934601187705994,
+  "log_k": 1.0,
+  "c": 0.0
+ },
+ "loss_first25": 1.5510262727737427,
+ "loss_last25": 1.4816694688796996,
+ "held_acc_before": 0.3566666666666667,
+ "held_acc_after": 0.43666666666666665,
+ "chance": 0.34312134056820964,
+ "wall_s": 202.71830701828003
+}
+exit 0
