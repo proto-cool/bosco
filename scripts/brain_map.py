@@ -163,50 +163,17 @@ def main(argv=None) -> int:
     with torch.no_grad():
         _, _, t1 = m.run(torch.tensor(s1), record=True)
     sd1 = t1.float().numpy()[:, :, 0] - rest  # signed distance from rest (steps, n)
-    d1 = np.abs(sd1)
-    from PIL import Image, ImageDraw
+    import brain_render as BR
 
-    frames = []
-    keys = list(cells)
-    dmat = np.stack([d1[:, cells[k]].mean(1) for k in keys], 1)  # (steps, dots)
-    # brightness scale per band: the 90th percentile of its dots' peaks, so weak reactors stay dim
-    bscale = {}
-    for b_ in [b for b, _, _ in BANDS] + ["midline"]:
-        js = [j for j, k in enumerate(keys) if dot_band[k] == b_]
-        if js:
-            bscale[b_] = max(float(np.percentile(dmat[:, js].max(0), 90)), 1e-6)
-    dpeak = np.array([bscale[dot_band[k]] for k in keys])
-    kidx = {k: j for j, k in enumerate(keys)}
-    smat = np.stack([sd1[:, cells[k]].mean(1) for k in keys], 1)  # signed, per dot
-    glow = np.zeros(len(keys))
-    sign = np.zeros(len(keys))
-    for st in range(m.steps):
-        lv = np.clip(dmat[st] / dpeak, 0, 1)
-        up = lv >= glow
-        sign = np.where(up, np.sign(smat[st]), sign)
-        glow = np.where(up, lv, glow * 0.88)  # afterglow: activity fades rather than vanishes
-        if st % 4 and st != m.steps - 1:
-            continue
-        img = Image.new("RGB", (W * 10, H * 10), (10, 10, 14))
-        dr = ImageDraw.Draw(img)
-        for gx in range(W):
-            for gy in range(H):
-                j = kidx.get((gx, gy))
-                if j is None:
-                    c, lvl = (255, 0, 0), 1.0
-                else:
-                    c = colour[dot_band[(gx, gy)]] if sign[j] >= 0 else INHIBIT
-                    lvl = 0.13 + 0.87 * float(glow[j]) ** 1.3
-                col_ = tuple(int(ch * lvl) for ch in c)
-                dr.ellipse([gx * 10 + 1, gy * 10 + 1, gx * 10 + 8, gy * 10 + 8], fill=col_)
-        dr.text((4, H * 10 - 12), f"{st * 5} ms", fill=(200, 200, 200))
-        frames.append(img)
-    strip = Image.new("RGB", (W * 10 * 2 + 10, H * 10 * 2 + 10), (0, 0, 0))
-    for j, fi in enumerate([2, 5, 10, len(frames) - 1]):
-        strip.paste(frames[fi], ((j % 2) * (W * 10 + 10), (j // 2) * (H * 10 + 10)))
-    strip.save(OUT / "frames-4.png")
+    keys = sorted(cells)
+    smat = np.stack([sd1[:, cells[k]].mean(1) for k in keys], 1)
+    faint = {b_: tuple(int(ch * 0.28) for ch in c) for b_, c in colour.items()}  # band identity, faint
+    tints = [faint[dot_band[k]] for k in keys]
+    emphasis = {k for k in keys if k[0] >= TIME_COLS and dot_band[k] == "output"}
+    draw = set(range(0, m.steps, 4)) | {m.steps - 1}
+    frames = BR.render(keys, [len(cells[k]) for k in keys], tints, smat, draw, W, H, emphasis, groups=[dot_band[k] for k in keys])
+    BR.strip(frames, [2, 5, 10, len(frames) - 1], W, H).save(OUT / "frames-4.png")
     frames[-1].save(OUT / "frame-last.png")
-    frames[len(frames) // 3].save(OUT / "frame-early.png")
     frames[0].save(OUT / "wave.gif", save_all=True, append_images=frames[1:], duration=120, loop=0)
     used = len(cells)
     print(f"dots used {used} of {W * H}; frames {len(frames)}; wrote {OUT}")
