@@ -120,3 +120,36 @@ def homeostatic_start(m: R3.RateBrain3, s: torch.Tensor, gain: float) -> dict:
     rd = bisect(m, s, m.set_read_threshold, "read", READ_TARGET)
     kc = bisect(m, s, m.set_kc_threshold, "kc", KC_TARGET)
     return {"gain": gain, "kc_threshold": kc, "read_threshold": rd, "homeo_err": hist, **probe(m, s)}
+
+
+# ---- the answer from descending neurons (decision 4; plan A5) ------------------------------------
+DN_MIN_EFFECT = 1e-4  # a DN type joins a group if its mean signed MBON input (1-2 hops) reaches this
+
+
+def dn_groups(m: R3.RateBrain3) -> tuple[np.ndarray, np.ndarray, dict]:
+    """Approach and avoid DN groups, anatomical and label-free, the way the MBON groups are: each DN
+    type's signed input from the approach MBONs minus the avoid MBONs, through one and two synapses
+    (normalised weights, per-group means), averaged over the type's cells. Types at or above
+    +DN_MIN_EFFECT approach, at or below -DN_MIN_EFFECT avoid. Fixed before any training."""
+    import pandas as pd
+
+    from bosco import data
+
+    n = m.n
+    W = m.W.coalesce().cpu()
+    kp = torch.sparse_coo_tensor(torch.stack([m.kp_post.cpu(), m.kp_pre.cpu()]), m.kp_w.cpu(), (n, n))
+    W = (W + kp).coalesce()
+    ap, av = (x.cpu() for x in m.read_groups["mbon"])
+    src = torch.zeros(n, 1)
+    src[ap] = 1.0 / len(ap)
+    src[av] = -1.0 / len(av)
+    h1 = torch.sparse.mm(W, src)
+    eff = (h1 + torch.sparse.mm(W, h1))[:, 0].numpy()
+    dn = m.regions["dn"].cpu().numpy()
+    ids = M2.load_or_build().brain.ids
+    typ = data.annotations().reindex(ids)["type"].fillna("").to_numpy()[dn]
+    df = pd.DataFrame({"idx": dn, "type": typ, "eff": eff[dn]})
+    t = df.groupby("type").eff.mean()
+    app_t, avo_t = t[t >= DN_MIN_EFFECT].index, t[t <= -DN_MIN_EFFECT].index
+    info = {"approach_types": sorted(app_t), "avoid_types": sorted(avo_t)}
+    return df[df.type.isin(app_t)].idx.to_numpy(), df[df.type.isin(avo_t)].idx.to_numpy(), info
