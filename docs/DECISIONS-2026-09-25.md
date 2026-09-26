@@ -53,6 +53,15 @@ power it, and it needs the fly to make honest decisions."
 
     That means jina-clip-v2 (CC BY-NC) is replaced or licensed, and every shipped
     specialist is trained on ledger-clean data only.
+14. **Encoders: auditable first, clean second** (Nick).
+    - **Now:** nomic-embed-text-v1.5 and nomic-embed-vision-v1.5 (Apache 2.0, with the
+      training data published) replace e5-large-v2 and jina-clip-v2 for the rebuild and
+      the specialist pilot. Each is pinned by commit hash.
+    - **In parallel:** our own text encoder (trained on Common Pile, with no MS MARCO and
+      no scraped social media) and our own image translator (self-supervised, trained on
+      commercially licensed images, with no generated captions), both on the 3080.
+    - **Before launch:** a gate compares ours against nomic; ship ours if it is close
+      enough, otherwise Nick chooses knowingly.
 
 ## Open (Nick to decide)
 
