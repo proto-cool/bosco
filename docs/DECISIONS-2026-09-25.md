@@ -100,6 +100,12 @@ power it, and it needs the fly to make honest decisions."
     not a reason in words). The 0.80 bar stays, so he is right as well as watchable.
     Priorities: the service and named-cell traces first; education and exhibits as the first
     paying market to explore; specialists passing the bar, clear-cut ones first.
+26. **Mood uses all of DynaSent round 2** (Nick, 2026-09-26), including the crowd-written sentences
+    prompted by Yelp sentences. The Yelp prompts themselves are never read, and round 1 (Yelp text)
+    was deleted. The model card says so.
+27. **Many-option specialists use one learned memory per option** (way B: approach or avoid on the
+    item's smell alone). CLINC reached 0.811 on validation at epoch 2, against 0.635 for
+    prototype-mixture sniffs. Few-option specialists keep the T-maze (topic 0.933).
 
 ## Open (Nick to decide)
 
