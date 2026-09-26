@@ -25,9 +25,13 @@ import v1_pilot as V  # noqa: E402
 
 OUT = paths.CACHE / "v1-gap"
 RUNS = paths.ROOT / "runs" / "gap-dev"
-N_TRAIN = {"topic": 30000, "intent_clinc": 15100}
-USE_TRAIN = {"topic": 10000, "intent_clinc": 15100}  # fits the night on the 3080 (each option is a brain run)
-MAX_EPOCHS = {"topic": 8, "intent_clinc": 4}
+N_TRAIN = {"topic": 30000, "intent_clinc": 15100, "intent_massive": 11514}
+USE_TRAIN = {
+    "topic": 10000,
+    "intent_clinc": 15100,
+    "intent_massive": 11514,
+}  # fits the night on the 3080 (each option is a brain run)
+MAX_EPOCHS = {"topic": 8, "intent_clinc": 4, "intent_massive": 4}
 PATIENCE = 3
 HARD, RANDOM = 10, 9  # many-option tasks: the right option + the 10 most confusable labels + 9 random
 
@@ -57,12 +61,41 @@ def cmd_embed(a) -> int:
     return VD.cmd_embed(a)
 
 
+def proto_smells(meta, X, L, zl, sets, task):
+    """Each of this task's options smells like the mean embedding of its training examples (through the same
+    antenna), not like its label words: 'he remembers what each option smells like'."""
+    lab = {x: i for i, x in enumerate(meta["labels"])}
+    opts = [lab[o] for o in meta["tasks"][task]["options"]]
+    tr = sets[task]["train"]
+    P = np.zeros((len(opts), X.shape[1]))
+    n = np.zeros(len(opts))
+    for it in tr:
+        P[it["gold"]] += X[it["i"]]
+        n[it["gold"]] += 1
+    P /= np.maximum(n, 1)[:, None]
+    P /= np.linalg.norm(P, axis=1, keepdims=True) + 1e-9
+    # the antenna as in v1_pilot.load (seeded, label-free), applied to the prototypes
+    tri = np.where([it["split"] == "train" for it in meta["items"]])[0]
+    Xf = X[tri[np.random.default_rng(V.SEED).permutation(len(tri))[:4000]]]
+    F = np.concatenate([Xf, np.repeat(L, max(1, len(Xf) // len(L)), 0)])
+    mu = F.mean(0)
+    _, sv, vt = np.linalg.svd(F - mu, full_matrices=False)
+    W = vt[:46] / sv[:46, None]
+    norm = float(np.percentile(np.abs((F - mu) @ W.T), 99))
+    zl, L = zl.copy(), L.copy()
+    zl[opts] = np.clip(0.5 + ((P - mu) @ W.T) / (2 * norm), 0, 1).astype(np.float32)
+    L[opts] = P.astype(L.dtype)  # hard negatives by prototype similarity
+    return zl, L
+
+
 def cmd_train(a) -> int:
     V.OUT = OUT  # load this round's data (nose fit label-free on its own training texts, as in the pilot)
     torch.manual_seed(1)
     t0 = time.time()
     log = lambda s: print(f"[gap-{a.task}] {s} ({time.time() - t0:.0f}s)", flush=True)  # noqa: E731
     meta, X, L, zl, sets = V.load()
+    if a.proto:
+        zl, L = proto_smells(meta, X, L, zl, sets, a.task)
     L_ = L
     import numpy as _np
 
@@ -83,6 +116,7 @@ def cmd_train(a) -> int:
             order = rng.permutation(len(chosen))
             out.append(it | {"opts": [chosen[j] for j in order], "gold": int(_np.where(order == 0)[0][0])})
         return out
+
     tr, va = sets[a.task]["train"][: USE_TRAIN[a.task]], sets[a.task]["val"]
     if a.smoke:
         tr, va = tr[:300], va[:10]
@@ -114,9 +148,13 @@ def cmd_train(a) -> int:
         log("smoke ok")
         return 0
     RUNS.mkdir(parents=True, exist_ok=True)
-    torch.save({"state": state, "start": op, "dn_groups": info}, RUNS / f"{a.task}.pt")
-    json.dump({"task": a.task, "hist": hist, "best_val": best, "wall_s": time.time() - t0},
-              open(RUNS / f"{a.task}.json", "w"), indent=1)
+    tag = a.task + ("-proto" if a.proto else "")
+    torch.save({"state": state, "start": op, "dn_groups": info}, RUNS / f"{tag}.pt")
+    json.dump(
+        {"task": a.task, "proto": a.proto, "hist": hist, "best_val": best, "wall_s": time.time() - t0},
+        open(RUNS / f"{tag}.json", "w"),
+        indent=1,
+    )
     log(f"done: best val {best:.3f}")
     return 0
 
@@ -131,6 +169,7 @@ def main(argv=None) -> int:
     p = sub.add_parser("train")
     p.add_argument("--task", choices=list(N_TRAIN), required=True)
     p.add_argument("--smoke", action="store_true")
+    p.add_argument("--proto", action="store_true", help="option smells = prototypes of their training examples")
     p.set_defaults(fn=cmd_train)
     a = ap.parse_args(argv)
     return a.fn(a)

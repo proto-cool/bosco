@@ -23,3 +23,22 @@ read.
 
 Data: `data/cache/v1-gap/` (same sources, sampler and nomic encoder as `scripts/v1_data.py`).
 Runner: `scripts/v1_gap.py`. Results: `docs/gap-dev-results.md`.
+
+## Addendum: prototype option smells (2026-09-26, before running; validation only)
+
+CLINC plateaued at about 0.36 on validation (epochs 1–2) while its training loss kept falling. A ceiling
+check on validation (no fly): matching an item to each option through the 46-glomerulus nose reaches
+
+| option smell | CLINC (151) | MASSIVE (60) | topic (14) |
+|---|---|---|---|
+| its label words (now) | 0.595 | 0.469 | 0.594 |
+| **the mean of its training examples' embeddings ("prototype")** | **0.918** | **0.764** | **0.949** |
+
+**Next round:** CLINC and MASSIVE with prototype option smells (`scripts/v1_gap.py --proto`). The same
+brain, read, start and hard negatives (now by prototype similarity), up to 4 epochs, validation only.
+MASSIVE's data was added (11,512 training items; validation 353 after near-duplicate removal); topic and
+CLINC are byte-identical to the round above.
+
+**Honesty:** the prototypes are built from labelled training examples, so "prototype matching alone"
+(0.918 / 0.764 above) is reported beside the fly every time. The fly still decides, between richer
+smells: "he remembers what each option smells like".
