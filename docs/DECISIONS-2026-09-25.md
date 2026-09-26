@@ -90,6 +90,11 @@ power it, and it needs the fly to make honest decisions."
 23. **The production bar is 0.80** balanced accuracy on the sealed test (CPU) with ECE ≤ 0.10. For
     a task flagged, before its test is read, as having disputed labels, the bar is 0.9 × its
     information ceiling, stated on its card (specialist pilot, amendments 1–2).
+24. **The architecture, in one line** (Nick): the encoders bridge the gap (they translate human things
+    into smells and sights), the specialists steer the problem (each owns one clear question), and
+    they work together on more complex problems. The **caller** combines specialists with explicit
+    rules (fan-out, composite scores, routing by confidence). Nothing automatic picks or overrides
+    them, so every decision stays a fly's and every rule stays visible.
 
 ## Open (Nick to decide)
 
