@@ -65,20 +65,18 @@ power it, and it needs the fly to make honest decisions."
 15. **The fleet: 15–20 specialists at launch,** growing toward about 100. Sources: the clean data
     already fetched (about 8–10), Wikipedia/Wikidata topic specialists (about 6–10), and
     commissioned labelling for must-haves such as sentiment (budget open).
-16. **Teach your own: never on Nick's server.** "I don't want training on my server for other
-    people." A user's specialist is taught, stored and run **in their browser** (Halteres, with the
-    brain compiled to WebAssembly) or in a **self-hosted** copy. Its examples never leave their
-    device. The proposed mechanism is the fly's own local rule on KC→MBON synapses (forward passes
-    only), measured in the specialist pilot against gradient training. The public specialists
-    never learn from anyone.
+16. **Teach your own is self-hosting only** (Nick). A user's specialist is taught, stored and run
+    in their own self-hosted copy; nothing about it touches Nick's server or Halteres. The proposed
+    mechanism is the fly's own local rule on KC→MBON synapses (forward passes only, cheap on a CPU),
+    measured in the specialist pilot against gradient training. The public specialists never learn
+    from anyone.
 17. **The server runs only our specialists.** Halteres is the public app for using them.
 18. **The API is public for our specialists** (reverses "the API is private to the server",
     2026-09-24): people get a key and can build their own front ends. Keys, caps and billing are
     to be designed.
 19. **No community specialists.** Nick does not want to moderate a public library.
-20. **Browser feasibility test (added to track A):** the rate brain in WebAssembly plus the
-    encoder through ONNX, timed on a laptop and a phone. Go if a sniff takes under about 2 s on a
-    laptop.
+20. ~~Browser feasibility test~~ withdrawn: teaching is self-hosted only, so nothing has to run in
+    a browser.
 
 ## Open (Nick to decide)
 
