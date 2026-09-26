@@ -1,0 +1,11 @@
+[hate-real] start kc 0.050 spread 2.56e-04 (23s)
+[hate-real] ep 1 batch 0 loss 0.773 kc 0.117 (26s)
+[hate-real] epoch 1: loss 0.684 val 0.559 (95s)
+[hate-real] ep 2 batch 0 loss 0.665 kc 0.066 (97s)
+[hate-real] epoch 2: loss 0.656 val 0.586 (166s)
+[hate-real] ep 3 batch 0 loss 0.689 kc 0.088 (168s)
+[hate-real] epoch 3: loss 0.647 val 0.613 (237s)
+[hate-real] ep 4 batch 0 loss 0.684 kc 0.089 (239s)
+[hate-real] epoch 4: loss 0.636 val 0.617 (308s)
+[hate-real] done (308s)
+exit 0

@@ -1,0 +1,11 @@
+[hate-layered] start kc 0.050 spread 1.40e-04 (25s)
+[hate-layered] ep 1 batch 0 loss 0.759 kc 0.116 (27s)
+[hate-layered] epoch 1: loss 0.676 val 0.623 (96s)
+[hate-layered] ep 2 batch 0 loss 0.669 kc 0.074 (98s)
+[hate-layered] epoch 2: loss 0.656 val 0.580 (167s)
+[hate-layered] ep 3 batch 0 loss 0.682 kc 0.084 (168s)
+[hate-layered] epoch 3: loss 0.650 val 0.596 (237s)
+[hate-layered] ep 4 batch 0 loss 0.728 kc 0.089 (239s)
+[hate-layered] epoch 4: loss 0.642 val 0.628 (308s)
+[hate-layered] done (308s)
+exit 0

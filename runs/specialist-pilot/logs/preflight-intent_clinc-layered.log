@@ -1,0 +1,19 @@
+{
+ "task": "intent_clinc",
+ "arm": "layered",
+ "loss_first25": 2.1844820833206176,
+ "loss_last25": 1.3911261129379273,
+ "held_before": 0.0,
+ "held_after": 0.12593984962406016,
+ "chance": 0.006622516556291392,
+ "checks": {
+  "kc_at_start_2_to_15pct": true,
+  "read_not_dead": true,
+  "loss_falls": true,
+  "gradients_reach_90pct_types": true,
+  "held_above_chance": true
+ },
+ "pass": true,
+ "wall_s": 452.35332775115967
+}
+exit 0

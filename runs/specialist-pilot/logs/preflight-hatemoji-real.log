@@ -1,0 +1,19 @@
+{
+ "task": "hatemoji",
+ "arm": "real",
+ "loss_first25": 0.7008681082725525,
+ "loss_last25": 0.6887336206436158,
+ "held_before": 0.4943840256730255,
+ "held_after": 0.449723658406133,
+ "chance": 0.5,
+ "checks": {
+  "kc_at_start_2_to_15pct": true,
+  "read_not_dead": true,
+  "loss_falls": false,
+  "gradients_reach_90pct_types": true,
+  "held_above_chance": false
+ },
+ "pass": false,
+ "wall_s": 241.2641613483429
+}
+exit 1

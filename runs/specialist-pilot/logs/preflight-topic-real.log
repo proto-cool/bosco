@@ -1,0 +1,19 @@
+{
+ "task": "topic",
+ "arm": "real",
+ "loss_first25": 1.4719655442237853,
+ "loss_last25": 0.7400743901729584,
+ "held_before": 0.15953801100859927,
+ "held_after": 0.6340839421813115,
+ "chance": 0.07142857142857141,
+ "checks": {
+  "kc_at_start_2_to_15pct": true,
+  "read_not_dead": true,
+  "loss_falls": true,
+  "gradients_reach_90pct_types": true,
+  "held_above_chance": true
+ },
+ "pass": true,
+ "wall_s": 230.3698742389679
+}
+exit 0

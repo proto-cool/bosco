@@ -1,0 +1,19 @@
+{
+ "task": "hate",
+ "arm": "real",
+ "loss_first25": 0.6893525576591492,
+ "loss_last25": 0.6390610265731812,
+ "held_before": 0.4993520711381206,
+ "held_after": 0.5778631752982707,
+ "chance": 0.5,
+ "checks": {
+  "kc_at_start_2_to_15pct": true,
+  "read_not_dead": true,
+  "loss_falls": true,
+  "gradients_reach_90pct_types": true,
+  "held_above_chance": true
+ },
+ "pass": true,
+ "wall_s": 239.32131385803223
+}
+exit 0
