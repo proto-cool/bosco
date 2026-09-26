@@ -95,6 +95,11 @@ power it, and it needs the fly to make honest decisions."
     they work together on more complex problems. The **caller** combines specialists with explicit
     rules (fan-out, composite scores, routing by confidence). Nothing automatic picks or overrides
     them, so every decision stays a fly's and every rule stays visible.
+25. **The positioning: lean into the novelty and the playback** (Nick). The pitch is "the AI you
+    can watch think, neuron by neuron", not "explainable AI" (it shows which real cells fired,
+    not a reason in words). The 0.80 bar stays, so he is right as well as watchable.
+    Priorities: the service and named-cell traces first; education and exhibits as the first
+    paying market to explore; specialists passing the bar, clear-cut ones first.
 
 ## Open (Nick to decide)
 
