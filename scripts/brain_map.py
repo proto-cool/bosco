@@ -27,16 +27,17 @@ import v1_pilot as V  # noqa: E402
 
 OUT = paths.ROOT / "runs" / "brain-map"
 W, H, HEMI, GAP, TIME_COLS = 64, 48, 23, 2, 60
-BANDS = [  # (name, rows, colour)
-    ("smell", 3, (86, 140, 255)),
+BANDS = [  # (name, rows, colour); 23 rows per hemisphere
+    ("smell", 3, (86, 140, 255)),        # receptors, projection neurons, local neurons
     ("taste", 1, (255, 170, 60)),
     ("vision", 3, (70, 200, 220)),
-    ("learning", 4, (180, 120, 255)),
+    ("learning", 6, (180, 120, 255)),    # KC gamma, KC alpha/beta, KC alpha'/beta', MBON approach, MBON avoid+other, DAN
     ("innate", 2, (255, 110, 150)),
     ("navigation", 2, (120, 220, 120)),
-    ("output", 2, (255, 120, 40)),
-    ("other", 6, (150, 150, 160)),
+    ("output", 3, (255, 120, 40)),
+    ("other", 3, (150, 150, 160)),
 ]
+INHIBIT = (150, 172, 205)  # below-rest colour: pale ice, distinct from every band
 MIDLINE_COLOUR = (220, 220, 235)
 
 
@@ -47,22 +48,22 @@ def band_rows(m):
     cls = a["class"].fillna("").to_numpy().astype(str)
     band = np.full(m.n, "other", object)
     sub = np.zeros(m.n, int)
-    for k, (b, s) in {"orn": ("smell", 0), "alpn": ("smell", 1), "alln": ("smell", 2), "vpn": ("vision", 0),
-                      "kc": ("learning", 0), "mbon": ("learning", 2), "dan": ("learning", 3), "lh": ("innate", 0),
-                      "cx": ("navigation", 0), "dn": ("output", 0)}.items():
-        band[R[k]], sub[R[k]] = b, s
+    for k, (b, s_) in {"orn": ("smell", 0), "alpn": ("smell", 1), "alln": ("smell", 2), "vpn": ("vision", 0),
+                       "kc": ("learning", 0), "mbon": ("learning", 4), "dan": ("learning", 5), "lh": ("innate", 0),
+                       "cx": ("navigation", 0), "dn": ("output", 0)}.items():
+        band[R[k]], sub[R[k]] = b, s_
     band[cls == "gustatory"] = "taste"
-    # spread big bands over their rows by a stable hash of the neuron index
-    rows = dict((b, r) for b, r, _ in BANDS)
+    typ = a["type"].fillna("").to_numpy().astype(str)
+    kc = R["kc"]
+    sub[kc] = np.where(np.char.startswith(typ[kc], "KCg"), 0, np.where(np.char.find(typ[kc], "a'b'") >= 0, 2, 1))
+    ap_m = m.read_groups["mbon"][0].cpu().numpy()
+    sub[ap_m] = 3
+    rows = {b: r for b, r, _ in BANDS}
     for b, r in rows.items():
+        if b in ("learning", "smell"):
+            continue
         idx = np.nonzero(band == b)[0]
-        if b == "learning":  # KCs over rows 0-1, MBON row 2, DAN row 3
-            kc = idx[sub[idx] == 0]
-            sub[kc] = kc % 2
-        elif b == "smell":
-            pass
-        else:
-            sub[idx] = idx % r
+        sub[idx] = idx % r
     side = a["somaSide"].fillna(a.get("rootSide", "")).astype(str).str.upper().str[:1].to_numpy()
     side = np.where(np.isin(side, ["L", "R"]), side, "M").astype(object)
     return band, sub, side
@@ -138,7 +139,7 @@ def main(argv=None) -> int:
                 fill([(x, y) for x in range(ncols)], np.nonzero(sel)[0].tolist())
             if b_ == "output":
                 for g, cols in ((0, (60, 61)), (1, (62, 63))):
-                    ys = [row_start["output"] + rr for rr in range(2)]
+                    ys = [row_start["output"] + rr for rr in range(dict((b, r) for b, r, _ in BANDS)["output"])]
                     ys = ys if hemi_left else [H - 1 - y for y in ys]
                     sel = (named == g) & (side == ("L" if hemi_left else "R"))
                     if not sel.any():
@@ -161,7 +162,8 @@ def main(argv=None) -> int:
     s1, _, _ = D.fly_sniffs([it | {"opts": [it["opts"][it["gold"]]], "gold": 0}], zl, "bi46")
     with torch.no_grad():
         _, _, t1 = m.run(torch.tensor(s1), record=True)
-    d1 = np.abs(t1.float().numpy()[:, :, 0] - rest)  # (steps, n)
+    sd1 = t1.float().numpy()[:, :, 0] - rest  # signed distance from rest (steps, n)
+    d1 = np.abs(sd1)
     from PIL import Image, ImageDraw
 
     frames = []
@@ -175,17 +177,26 @@ def main(argv=None) -> int:
             bscale[b_] = max(float(np.percentile(dmat[:, js].max(0), 90)), 1e-6)
     dpeak = np.array([bscale[dot_band[k]] for k in keys])
     kidx = {k: j for j, k in enumerate(keys)}
-    for st in list(range(0, m.steps, 4)) + [m.steps - 1]:
+    smat = np.stack([sd1[:, cells[k]].mean(1) for k in keys], 1)  # signed, per dot
+    glow = np.zeros(len(keys))
+    sign = np.zeros(len(keys))
+    for st in range(m.steps):
+        lv = np.clip(dmat[st] / dpeak, 0, 1)
+        up = lv >= glow
+        sign = np.where(up, np.sign(smat[st]), sign)
+        glow = np.where(up, lv, glow * 0.88)  # afterglow: activity fades rather than vanishes
+        if st % 4 and st != m.steps - 1:
+            continue
         img = Image.new("RGB", (W * 10, H * 10), (10, 10, 14))
         dr = ImageDraw.Draw(img)
         for gx in range(W):
             for gy in range(H):
-                v = cells.get((gx, gy))
-                if v is None:
-                    c, lvl = (255, 0, 0), 1.0  # an empty dot would be a bug: show it loudly
+                j = kidx.get((gx, gy))
+                if j is None:
+                    c, lvl = (255, 0, 0), 1.0
                 else:
-                    c = colour[dot_band[(gx, gy)]]
-                    lvl = 0.15 + 0.85 * float(np.clip(dmat[st, kidx[(gx, gy)]] / dpeak[kidx[(gx, gy)]], 0, 1)) ** 1.5
+                    c = colour[dot_band[(gx, gy)]] if sign[j] >= 0 else INHIBIT
+                    lvl = 0.13 + 0.87 * float(glow[j]) ** 1.3
                 col_ = tuple(int(ch * lvl) for ch in c)
                 dr.ellipse([gx * 10 + 1, gy * 10 + 1, gx * 10 + 8, gy * 10 + 8], fill=col_)
         dr.text((4, H * 10 - 12), f"{st * 5} ms", fill=(200, 200, 200))
