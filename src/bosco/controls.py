@@ -21,9 +21,18 @@ from bosco.kernel import csr_from_edges
 from bosco.model import Brain
 
 
-def _rebuild(b: Brain, post_new: np.ndarray) -> Brain:
+def _rebuild(b: Brain, post_new: np.ndarray, keep_duplicates: bool = False) -> Brain:
+    """`keep_duplicates` (v1): two edges that land on the same (pre, post) stay two edges instead of being
+    merged, so a control keeps exactly the real brain's number of edges and of trainable KC -> MBON
+    synapses (merging cost layered 11% of them; docs/audit-2026-09-25/code.md). The summed drive is the
+    same either way."""
     pre = b.pre_of_edges()
-    indptr, indices, cnt = csr_from_edges(b.n, pre, post_new, b.count.astype(np.float64))
+    if keep_duplicates:
+        order = np.lexsort((post_new, pre))
+        indptr = np.r_[0, np.cumsum(np.bincount(pre, minlength=b.n))].astype(np.int64)
+        indices, cnt = post_new[order].astype(np.int32), b.count[order].astype(np.float64)
+    else:
+        indptr, indices, cnt = csr_from_edges(b.n, pre, post_new, b.count.astype(np.float64))
     e_pre = np.repeat(np.arange(b.n, dtype=np.int32), np.diff(indptr))
     return Brain(b.ids, indptr, indices, cnt.astype(np.int32), b.nt_sign[e_pre], b.nt_sign)
 
@@ -49,16 +58,16 @@ def neuron_class(b: Brain) -> np.ndarray:
     return c
 
 
-def layered(b: Brain, seed: int) -> Brain:
+def layered(b: Brain, seed: int, keep_duplicates: bool = False) -> Brain:
     cls = neuron_class(b)
     _, cid = np.unique(cls, return_inverse=True)
     pre = b.pre_of_edges()
     k = cid.max() + 1
     block = cid[pre].astype(np.int64) * k + cid[b.indices]
-    return _rebuild(b, _shuffle_blocks(b, block, np.random.default_rng(seed)))
+    return _rebuild(b, _shuffle_blocks(b, block, np.random.default_rng(seed)), keep_duplicates)
 
 
-def hash_(b: Brain, seed: int) -> Brain:
+def hash_(b: Brain, seed: int, keep_duplicates: bool = False) -> Brain:
     kc = np.zeros(b.n, bool)
     kc[b.index_of_present(pop.kenyon_cells())] = True
     mb = np.zeros(b.n, bool)
@@ -68,7 +77,7 @@ def hash_(b: Brain, seed: int) -> Brain:
     block = np.full(b.nnz, -1, np.int64)
     block[~kc[pre] & kc[post]] = 0  # everything into KCs from outside the mushroom body
     block[kc[pre] & mb[post]] = 1  # KC -> MBON
-    return _rebuild(b, _shuffle_blocks(b, block, np.random.default_rng(seed)))
+    return _rebuild(b, _shuffle_blocks(b, block, np.random.default_rng(seed)), keep_duplicates)
 
 
 def free(b: Brain, seed: int) -> Brain:

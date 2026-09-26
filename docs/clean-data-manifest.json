@@ -1,0 +1,659 @@
+{
+  "generated": "2026-09-25",
+  "purpose": "Clean training data for bosco v2 track B (docs/PLAN-V1.md), fetched from original publishers per decision 10 (docs/DECISIONS-2026-09-25.md). Ledger: docs/audit-2026-09-25/provenance.md. Human summary: docs/clean-data.md.",
+  "root": "data/raw/clean",
+  "datasets": [
+    {
+      "name": "dynahate",
+      "title": "Dynamically Generated Hate Speech Dataset v0.2.3 (and v0.2.2)",
+      "citation": "Vidgen, Thrush, Waseem, Kiela. Learning from the worst: dynamically generated datasets to improve online hate detection. ACL 2021. arXiv:2012.15761",
+      "source": "https://github.com/bvidgen/Dynamically-Generated-Hate-Speech-Dataset",
+      "source_kind": "authors' GitHub",
+      "version": "git commit 36f9dc849626bc2f6d2e1c2861db556294a2a947; files v0.2.3 (deduplicated) and v0.2.2 (ACL paper)",
+      "licence": "CC BY 4.0",
+      "licence_verified": true,
+      "licence_evidence": "README.md at the pinned commit: 'The dataset is licenced under CC-BY 4.0.' (no LICENSE file in repo)",
+      "ledger_licence": "CC BY 4.0",
+      "ledger_status": "KEEP",
+      "collection": "Written adversarially on Dynabench by 20 trained annotators paid GBP 16/h (paper: above the London living wage of GBP 10.85), over 4 rounds with a model in the loop; each round validated by other annotators and experts. R3 and R4 entries were inspired by real-world hateful online content found by the annotators and 'subject to at least one substantial adjustment' (paper s5.3-5.4).",
+      "personal_data": "No real users' posts verbatim (README: 'All content is synthetic'); pseudonymous annotator IDs (random strings) in column 'annotator'. R3/R4 are adapted from real hateful posts. Content warning: explicit hate.",
+      "task": "single text -> hate / nothate (secondary: type, target)",
+      "labels": {
+        "label": [
+          "hate",
+          "nothate"
+        ],
+        "type": [
+          "Animosity",
+          "Derogation",
+          "Dehumanization",
+          "Threatening",
+          "Support",
+          "none",
+          "notgiven"
+        ]
+      },
+      "splits": {
+        "v0.2.3": {
+          "train": 32924,
+          "dev": 4100,
+          "test": 4120,
+          "total": 41144
+        },
+        "v0.2.2_total": 41255
+      },
+      "use_file": "Dynamically Generated Hate Dataset v0.2.3.csv",
+      "date_fetched": "2026-09-25",
+      "files": [
+        {
+          "path": "dynahate/Dynamically Generated Hate Dataset - annotation guidelines.pdf",
+          "bytes": 242733,
+          "sha256": "773317fd59da9069367cacedb1b4843af859e029652e1fb66a8e21379587aebc"
+        },
+        {
+          "path": "dynahate/Dynamically Generated Hate Dataset v0.2.2.csv",
+          "bytes": 9770336,
+          "sha256": "1be97ea2b0000cdada09a89d24f4d008ea1eeb6edfb237664c749775d9e408cc"
+        },
+        {
+          "path": "dynahate/Dynamically Generated Hate Dataset v0.2.3.csv",
+          "bytes": 9755776,
+          "sha256": "6e0aa7e598ab5b648cb1f0b48626a3e5f2e39a5abbd9fee998efa5a0b6cab4ca"
+        },
+        {
+          "path": "dynahate/README.md",
+          "bytes": 4795,
+          "sha256": "5c6f1d09ecf7fe250b3da442b1aa4e0e3ae8b9c897c0c32ff63cf68cf22fddd9"
+        }
+      ]
+    },
+    {
+      "name": "hatemojibuild",
+      "title": "HatemojiBuild",
+      "citation": "Kirk, Vidgen, Rottger, Thrush, Hale. Hatemoji: A Test Suite and Adversarially-Generated Dataset for Benchmarking and Detecting Emoji-based Hate. NAACL 2022. arXiv:2108.05921",
+      "source": "https://github.com/HannahKirk/Hatemoji (HatemojiBuild/)",
+      "source_kind": "author's GitHub (same three CSVs, byte-identical sizes, as the author's gated HF repo HannahRoseKirk/HatemojiBuild @ 17509b6678c3206ce7bfa43107fdadf53f3d06f7)",
+      "version": "git commit a626f63216158748d072e581efc00267031f4404",
+      "licence": "CC BY 4.0",
+      "licence_verified": true,
+      "licence_evidence": "LICENSE file in repo (CC BY 4.0, GitHub detects CC-BY-4.0); HF card licence cc-by-4.0",
+      "ledger_licence": "CC BY 4.0, gated on HF",
+      "ledger_status": "KEEP",
+      "gate_note": "HF gate asks only to 'agree to share your contact information'; preview disabled because it contains hate speech. The GitHub copy is ungated and under the same licence, so no gate terms bind this download.",
+      "collection": "Adversarial writing on Dynabench by 10 trained annotators (plus 1 expert), GBP 16/h (expert GBP 20/h), 3 rounds, 24 May-11 Jun (per HF card / paper).",
+      "personal_data": "Synthetic; no annotator IDs in the released columns. Content warning: explicit hate with emoji.",
+      "task": "single text -> hateful (1) / not (0)",
+      "labels": {
+        "label_gold": [
+          0,
+          1
+        ]
+      },
+      "splits": {
+        "train": 4728,
+        "validation": 591,
+        "test": 593,
+        "total": 5912
+      },
+      "date_fetched": "2026-09-25",
+      "files": [
+        {
+          "path": "hatemojibuild/LICENSE",
+          "bytes": 18657,
+          "sha256": "9ba9550ad48438d0836ddab3da480b3b69ffa0aac7b7878b5a0039e7ab429411"
+        },
+        {
+          "path": "hatemojibuild/README.md",
+          "bytes": 6800,
+          "sha256": "f04d880b31ef1d9e83056f0575c5dfca0484490087cace6153d870adf77509dd"
+        },
+        {
+          "path": "hatemojibuild/test.csv",
+          "bytes": 86451,
+          "sha256": "4b067b445c6445dbd4036d7c75dde21f72928bfd31db63d1c53d66226c53be99"
+        },
+        {
+          "path": "hatemojibuild/train.csv",
+          "bytes": 692090,
+          "sha256": "2255818a5b10153876320068451be582ed876a2eefb22a250bd2f6478d1815e5"
+        },
+        {
+          "path": "hatemojibuild/validation.csv",
+          "bytes": 83297,
+          "sha256": "721094d44fceb923a0b3897935126a654bbb1f092b1fed6a74d80e4a845c6f43"
+        }
+      ]
+    },
+    {
+      "name": "civil_comments",
+      "title": "Civil Comments (Jigsaw Unintended Bias release, 7 primary labels)",
+      "citation": "Borkan, Dixon, Sorensen, Thain, Vasserman. Nuanced Metrics for Measuring Unintended Bias with Real Data for Text Classification. WWW 2019 companion. arXiv:1903.04561",
+      "source": "https://huggingface.co/datasets/google/civil_comments",
+      "source_kind": "Hugging Face repo under the Google org. NOT a file Jigsaw uploaded: Parquet conversion by HF staff (albertvillanova, 2024-01-04) of the original release. The original is the Kaggle competition download (login + competition rules) and the TFDS bucket gs://jigsaw-unintended-bias-in-toxicity-classification/civil_comments_v1.2.zip, which returned HTTP 403 on 2026-09-25.",
+      "version": "HF revision f2970eb3a55777454c94069077cc8d9b5866312d",
+      "licence": "CC0 1.0",
+      "licence_verified": true,
+      "licence_evidence": "Google TFDS catalog https://www.tensorflow.org/datasets/catalog/civil_comments (licence CC0) and the HF card: 'This dataset is released under CC0, as is the underlying comment text.' The paper itself only says 'released under a Creative Commons license'. Kaggle page not readable without login.",
+      "ledger_licence": "CC0",
+      "ledger_status": "REVIEW",
+      "collection": "Public comments posted 2015-2017 on ~50 English-language news sites via the Civil Comments plugin, released as an open archive when the platform shut down (2017); user IDs stripped. Jigsaw crowd raters (up to ~10 per comment; platform and pay not stated in the paper) rated toxicity and subtypes per Perspective API guidelines; label = fraction of raters.",
+      "personal_data": "Yes: real people's public comments (IDs stripped, text may contain names/self-disclosure), including hate and threats. Consent rests on the Civil Comments platform terms (still unverified).",
+      "task": "single text -> toxicity score in [0,1] (binarise at >=0.5 conventionally)",
+      "labels": {
+        "columns": [
+          "toxicity",
+          "severe_toxicity",
+          "obscene",
+          "threat",
+          "insult",
+          "identity_attack",
+          "sexual_explicit"
+        ]
+      },
+      "splits": {
+        "train": 1804874,
+        "validation": 97320,
+        "test": 97320,
+        "train_toxicity_ge_0.5": 144334
+      },
+      "date_fetched": "2026-09-25",
+      "files": [
+        {
+          "path": "civil_comments/data/test-00000-of-00001.parquet",
+          "bytes": 20800265,
+          "sha256": "410f803ff161e7c4ba005db7de5b444cac413f4861bf056b0fd69d670d75aa08"
+        },
+        {
+          "path": "civil_comments/data/train-00000-of-00002.parquet",
+          "bytes": 193527147,
+          "sha256": "c20f01c3aecbdd942886cacb0ee67e995df33bc712a622fde75927ed3d6ccefe"
+        },
+        {
+          "path": "civil_comments/data/train-00001-of-00002.parquet",
+          "bytes": 186778090,
+          "sha256": "a76af69d7b24758bc38b196bc422d4767935c1dd7d3c1465554649c546d99ccb"
+        },
+        {
+          "path": "civil_comments/data/validation-00000-of-00001.parquet",
+          "bytes": 20955569,
+          "sha256": "2e0eb65474e7e1290df8689fc93eea783160c898c09ae15382c0a9662367bd03"
+        },
+        {
+          "path": "civil_comments/hf_card_README.md",
+          "bytes": 7734,
+          "sha256": "8ce0fee0cce0d54ddd5daaad7ba7cd5ed31d78b8e8f2d5cd2345b0dd015932c6"
+        }
+      ]
+    },
+    {
+      "name": "dbpedia_14",
+      "title": "DBPedia Ontology Classification Dataset, version 2 (2015-09-09)",
+      "citation": "Zhang, Zhao, LeCun. Character-level Convolutional Networks for Text Classification. NeurIPS 2015. arXiv:1509.01626",
+      "source": "https://drive.google.com/uc?export=download&id=0Bz8a_Dbh9QhbQ2Vic1kxMmZZQ1k (dbpedia_csv.tar.gz, linked from the author's repo https://github.com/zhangxiangxiao/Crepe)",
+      "source_kind": "author's original tarball (tar entries owned by user 'xiang'); the HF card fancyzhx/dbpedia_14 @ 9abd46cf7fc8b4c64290f26993c540b92aa145ac kept for reference only",
+      "version": "Version 2, updated 2015-09-09 (readme.txt); built from DBpedia 2014",
+      "licence": "CC BY-SA 3.0 and GFDL (dual, inherited from DBpedia/Wikipedia)",
+      "licence_verified": true,
+      "licence_evidence": "dbpedia_csv/readme.txt: 'licensed under the terms of the Creative Commons Attribution-ShareAlike License and the GNU Free Documentation License'. Version of CC BY-SA not stated in the readme; HF card says cc-by-sa-3.0 (DBpedia 2014 was CC BY-SA 3.0).",
+      "ledger_licence": "CC BY-SA 3.0 + GFDL",
+      "ledger_status": "KEEP",
+      "collection": "Wikipedia article abstracts (via DBpedia 2014) for 14 non-overlapping ontology classes; 40,000 train and 5,000 test sampled per class. Labels are DBpedia ontology classes (machine-derived from infoboxes), no crowd labour.",
+      "personal_data": "Biographies of real people (Artist, Athlete, OfficeHolder classes); public Wikipedia text, pre-LLM (2014).",
+      "task": "single text (title + abstract) -> 14 classes",
+      "labels": {
+        "class_index_1_to_14": [
+          "Company",
+          "EducationalInstitution",
+          "Artist",
+          "Athlete",
+          "OfficeHolder",
+          "MeanOfTransportation",
+          "Building",
+          "NaturalPlace",
+          "Village",
+          "Animal",
+          "Plant",
+          "Album",
+          "Film",
+          "WrittenWork"
+        ]
+      },
+      "splits": {
+        "train": 560000,
+        "test": 70000
+      },
+      "date_fetched": "2026-09-25",
+      "files": [
+        {
+          "path": "dbpedia_14/dbpedia_csv.tar.gz",
+          "bytes": 68341698,
+          "sha256": "cad5773f85d7501bb2783833768bc624641cdddf7056000a06f12bcd0239a310"
+        },
+        {
+          "path": "dbpedia_14/extracted/dbpedia_csv/classes.txt",
+          "bytes": 146,
+          "sha256": "3390a11cf615554211a10dfcc4f807d25bc0293cbb6e62e913c16c2281e7a02c"
+        },
+        {
+          "path": "dbpedia_14/extracted/dbpedia_csv/readme.txt",
+          "bytes": 1826,
+          "sha256": "b5abe6e8539d6f21ba027450daec0737274b3734264ba133e46cbc9d141bde6e"
+        },
+        {
+          "path": "dbpedia_14/extracted/dbpedia_csv/test.csv",
+          "bytes": 21775285,
+          "sha256": "3d7b5fc00870e3446e322479af553629f55e313dd3b4249c08b68132d1230804"
+        },
+        {
+          "path": "dbpedia_14/extracted/dbpedia_csv/train.csv",
+          "bytes": 174148970,
+          "sha256": "3fea0c8c6ae73d0911f9cf37ec68606d169c4edd9214c6443b035649a3fb38ce"
+        },
+        {
+          "path": "dbpedia_14/hf_card_README.md",
+          "bytes": 7642,
+          "sha256": "c700cd45f4f34bd66dea0a5e71264987f5e2ed7544579765c4e59ec96da72fbd"
+        }
+      ]
+    },
+    {
+      "name": "snips_built_in_intents",
+      "title": "Snips NLU benchmark, 2016-12 built-in intents",
+      "citation": "Snips (2016). Benchmarking Natural Language Understanding Systems. https://medium.com/snips-ai/benchmarking-natural-language-understanding-systems-d35be6ce568d",
+      "source": "https://github.com/sonos/nlu-benchmark/tree/master/2016-12-built-in-intents",
+      "source_kind": "publisher's GitHub (Snips, now Sonos)",
+      "version": "git commit b86ac7f1577868c42158d0dec77db50956046696; benchmark_data.json version 0.0.1",
+      "licence": "CC0 1.0",
+      "licence_verified": true,
+      "licence_evidence": "LICENSE at repo root: 'CC0 1.0 Universal'",
+      "ledger_licence": "CC0 1.0",
+      "ledger_status": "KEEP",
+      "collection": "328 queries over 10 intents written for a benchmark of commercial NLU services (Snips, SiriKit, Alexa, LUIS, API.ai); who wrote the queries is not documented ('Collection and supervision of results remained partially manual'). The JSON also contains each commercial service's predictions; only 'text' and the intent key are labels.",
+      "personal_data": "None apparent; contact names appear in queries (e.g. 'Hillary's sister').",
+      "task": "single text -> 10 intents",
+      "labels": {
+        "intents": [
+          "ShareCurrentLocation",
+          "ComparePlaces",
+          "GetPlaceDetails",
+          "SearchPlace",
+          "BookRestaurant",
+          "RequestRide",
+          "GetDirections",
+          "ShareETA",
+          "GetTrafficInformation",
+          "GetWeather"
+        ]
+      },
+      "splits": {
+        "all (no official split)": 328
+      },
+      "date_fetched": "2026-09-25",
+      "files": [
+        {
+          "path": "snips_built_in_intents/2016-12-built-in-intents_README.md",
+          "bytes": 1888,
+          "sha256": "492f5dddf117ad7bf7800384b7b3c20ab3099eb673d2a9562182d9f097a627bb"
+        },
+        {
+          "path": "snips_built_in_intents/2016-12-built-in-intents_benchmark_data.json",
+          "bytes": 9130264,
+          "sha256": "e3f6ba7b7ab0e8d1a5959a8c8ecb4fc566a281f4ebd34fdf1160929c630d299f"
+        },
+        {
+          "path": "snips_built_in_intents/LICENSE",
+          "bytes": 6555,
+          "sha256": "36ffd9dc085d529a7e60e1276d73ae5a030b020313e6c5408593a6ae2af39673"
+        },
+        {
+          "path": "snips_built_in_intents/README.md",
+          "bytes": 2376,
+          "sha256": "1b9d7e36688231152b789a0d1a323d028fc9387e72e7de84abcdc718181f965b"
+        }
+      ]
+    },
+    {
+      "name": "massive",
+      "title": "MASSIVE 1.1 (en-US used)",
+      "citation": "FitzGerald et al. MASSIVE: A 1M-Example Multilingual Natural Language Understanding Dataset with 51 Typologically-Diverse Languages. ACL 2023. arXiv:2204.08582",
+      "source": "https://amazon-massive-nlu-dataset.s3.amazonaws.com/amazon-massive-dataset-1.1.tar.gz (linked from github.com/alexa/massive and the AmazonScience/massive HF loader)",
+      "source_kind": "publisher's (Amazon) S3 release; HF card/LICENSE from AmazonScience/massive @ ff6bd8e4b27c3543e4f8fe2108f32bb95a6f8740 kept in hf_card/",
+      "version": "1.1 tarball (all 52 locales kept as released; en-US.jsonl extracted to extracted/1.1/data/)",
+      "licence": "CC BY 4.0 (Copyright Amazon.com Inc.); English text is SLURP's, also CC BY 4.0",
+      "licence_verified": true,
+      "licence_evidence": "1.1/LICENSE in tarball ('Copyright Amazon.com Inc. or its affiliates. Attribution 4.0 International'); 1.1/NOTICE.md cites SLURP CC BY 4.0; SLURP LICENSE.txt (github.com/pswietojanski/slurp): 'Textual part of this dataset is released under ... CC BY 4.0'",
+      "ledger_licence": "CC BY 4.0; check SLURP",
+      "ledger_status": "KEEP",
+      "collection": "en-US is the SLURP English text (Bastianelli et al. 2020, crowd-written home-assistant commands); other locales translated/localised by vendor translators with an MTurk-based workflow. Pay not stated.",
+      "personal_data": "Column worker_id (pseudonymous worker IDs) present; drop it before use. Utterances are commands, no personal data apparent.",
+      "task": "single text -> 60 intents (18 scenarios)",
+      "labels": {
+        "n_intents": 60,
+        "n_scenarios": 18
+      },
+      "splits": {
+        "en-US": {
+          "train": 11514,
+          "dev": 2033,
+          "test": 2974,
+          "total": 16521
+        }
+      },
+      "use_file": "extracted/1.1/data/en-US.jsonl",
+      "date_fetched": "2026-09-25",
+      "files": [
+        {
+          "path": "massive/amazon-massive-dataset-1.1.tar.gz",
+          "bytes": 40251390,
+          "sha256": "4cba5faa11c71437928e17cb1b9b3d8b8e727e7ea363a3a9a8045e19c0491577"
+        },
+        {
+          "path": "massive/extracted/1.1/CHANGELOG.md",
+          "bytes": 92,
+          "sha256": "cec9628a93c718dbbe44cfd63400b5828fb0200264de4cf9c4d3c434ceb435e9"
+        },
+        {
+          "path": "massive/extracted/1.1/CITATION.md",
+          "bytes": 1128,
+          "sha256": "96d21569b0e2f3b64e7e8a2ff22a5b15570ec3f7f93ffdc26efb01d366fe073f"
+        },
+        {
+          "path": "massive/extracted/1.1/LICENSE",
+          "bytes": 18704,
+          "sha256": "c2e6ea015269147de02117ebdd91f30ef09831251f5345fa8365273b1db1d435"
+        },
+        {
+          "path": "massive/extracted/1.1/NOTICE.md",
+          "bytes": 502,
+          "sha256": "b90534ccd20c6f0e1e5239567af0d150496339542b75a15bfbc3e1e737593ddb"
+        },
+        {
+          "path": "massive/extracted/1.1/data/en-US.jsonl",
+          "bytes": 3904197,
+          "sha256": "c70f75c6a543a26e249ec383df67733ad9b1066f6c0406c2e04a3f03356e407e"
+        },
+        {
+          "path": "massive/hf_card/CITATION.cff",
+          "bytes": 1146,
+          "sha256": "7432a8f5ed188ecb761e40a2295781d72a9de2b27dd5ba56adc6dcc21db81ad9"
+        },
+        {
+          "path": "massive/hf_card/LICENSE",
+          "bytes": 18704,
+          "sha256": "c2e6ea015269147de02117ebdd91f30ef09831251f5345fa8365273b1db1d435"
+        },
+        {
+          "path": "massive/hf_card/README.md",
+          "bytes": 34420,
+          "sha256": "9a74b2298db2cb509eb39725612ef5d5b9eb99d59ef7c960ab01f58526051e3d"
+        },
+        {
+          "path": "massive/hf_card/massive.py",
+          "bytes": 30340,
+          "sha256": "b6086578ec0bd3e29000ed4d73f2841dfba48cd8e5a91b00f92c87411df368ba"
+        }
+      ]
+    },
+    {
+      "name": "clinc150",
+      "title": "CLINC150 / OOS-eval, data_full",
+      "citation": "Larson et al. An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction. EMNLP 2019. arXiv:1909.02027",
+      "source": "https://github.com/clinc/oos-eval",
+      "source_kind": "publisher's GitHub (Clinc)",
+      "version": "git commit 828f8093932c8fe6ca7936c3d2e52903b1c523de",
+      "licence": "CC BY 3.0 Unported",
+      "licence_verified": true,
+      "licence_evidence": "LICENSE at repo root: 'Creative Commons Legal Code, Attribution 3.0 Unported'",
+      "ledger_licence": "CC BY 3.0",
+      "ledger_status": "KEEP",
+      "collection": "Crowdsourced: workers paraphrased seed phrases or answered scenarios; paper footnote 2: 'In all cases, crowd workers were paid $0.20 per task' (hourly rate unknown; platform not named in README).",
+      "personal_data": "None apparent.",
+      "task": "single text -> 150 intents + out-of-scope",
+      "labels": {
+        "n_intents": 150,
+        "plus": "oos"
+      },
+      "splits": {
+        "train": 15000,
+        "val": 3000,
+        "test": 4500,
+        "oos_train": 100,
+        "oos_val": 100,
+        "oos_test": 1000
+      },
+      "date_fetched": "2026-09-25",
+      "files": [
+        {
+          "path": "clinc150/LICENSE",
+          "bytes": 19467,
+          "sha256": "e6bc9e9c474700b708f568bac9e5a8a9bcb2b1dad53442f5ba449fcb848b8e76"
+        },
+        {
+          "path": "clinc150/README.md",
+          "bytes": 2668,
+          "sha256": "8a8df26c4de3d25b6c4cff385ca23602c30e4e56828b015206cbc202f6db363a"
+        },
+        {
+          "path": "clinc150/data_full.json",
+          "bytes": 2495390,
+          "sha256": "36923c3705a59e08fe9c3883d8bc2dd966ef93e22cb78ac41171782a698d56e0"
+        }
+      ]
+    },
+    {
+      "name": "boolq",
+      "title": "BoolQ",
+      "citation": "Clark et al. BoolQ: Exploring the Surprising Difficulty of Natural Yes/No Questions. NAACL 2019. arXiv:1905.10044",
+      "source": "https://huggingface.co/datasets/google/boolq",
+      "source_kind": "Hugging Face repo under the Google org. NOT the original jsonl: Parquet conversion by HF staff (albertvillanova, 2024-01-03); the conversion drops the 'title' field. The original gs://boolq/{train,dev}.jsonl linked from github.com/google-research-datasets/boolean-questions returned HTTP 403 on 2026-09-25 (storage.cloud.google.com links need a Google login). The original GitHub README is saved as boolq/github_README.md.",
+      "version": "HF revision 35b264d03638db9f4ce671b711558bf7ff0f80d5; GitHub README commit 90af34107399cc7a446b373dc4ee35b8001da7c2",
+      "licence": "CC BY-SA 3.0",
+      "licence_verified": true,
+      "licence_evidence": "github.com/google-research-datasets/boolean-questions README: 'BoolQ is released under the Creative Commons Share-Alike 3.0 license' (links CC BY-SA 3.0)",
+      "ledger_licence": "CC BY-SA 3.0",
+      "ledger_status": "KEEP",
+      "collection": "Questions from anonymised, aggregated Google search queries heuristically filtered to yes/no; annotators (Google, pay not stated) chose a Wikipedia passage and marked yes/no.",
+      "personal_data": "Queries anonymised and aggregated; passages are Wikipedia.",
+      "task": "text pair (passage, question) -> yes/no",
+      "labels": {
+        "answer": [
+          true,
+          false
+        ]
+      },
+      "splits": {
+        "train": 9427,
+        "validation": 3270,
+        "test_unlabelled_not_fetched": 3245
+      },
+      "date_fetched": "2026-09-25",
+      "files": [
+        {
+          "path": "boolq/data/train-00000-of-00001.parquet",
+          "bytes": 3685146,
+          "sha256": "4f028e992c0bd4df30b9f056f4946b64f5c23028034ff0ed5ea467d8538cc623"
+        },
+        {
+          "path": "boolq/data/validation-00000-of-00001.parquet",
+          "bytes": 1257630,
+          "sha256": "52355d11524b4b874a9b9dcc278feb10f672d52c4f4eff9872e695ede59820f8"
+        },
+        {
+          "path": "boolq/github_README.md",
+          "bytes": 2675,
+          "sha256": "0afe70d7cdbb644637592212f0cb15339389910bf00f35764ec3c545257aa663"
+        },
+        {
+          "path": "boolq/hf_card_README.md",
+          "bytes": 6570,
+          "sha256": "07447668f46c7c1e62e24b650ea2a73f1ab34f2b3759b1587c7b7a81b4bf1cf4"
+        }
+      ]
+    },
+    {
+      "name": "multinli",
+      "title": "MultiNLI 1.0",
+      "citation": "Williams, Nangia, Bowman. A Broad-Coverage Challenge Corpus for Sentence Understanding through Inference. NAACL 2018.",
+      "source": "https://cims.nyu.edu/~sbowman/multinli/multinli_1.0.zip",
+      "source_kind": "authors' official release (NYU)",
+      "version": "1.0 (zip; README release notes 1.0; files dated 2017-09-03)",
+      "licence": "Mixed, per genre (see genre_licences)",
+      "licence_verified": true,
+      "licence_evidence": "multinli_1.0/paper.pdf in the zip (README: 'License information ... included in the accompanying PDF'): 'The majority of the corpus is released under the OANC's license, which allows all content to be freely used, modified, and shared under permissive terms. The data in the FICTION section falls under several permissive licenses; Seven Swords is available under a Creative Commons Share-Alike 3.0 Unported License, and with the explicit permission of the author, Living History and Password Incorrect are available under Creative Commons Attribution 3.0 Unported Licenses; the remaining works of fiction are in the public domain in the United States (but may be licensed differently elsewhere).' OANC page https://anc.org/data/oanc/ : 'unrestricted in terms of usage and redistribution ... without restriction (including commercial use)'.",
+      "ledger_licence": "OANC terms plus CC BY-SA 3.0 and CC BY 3.0 fiction",
+      "ledger_status": "KEEP",
+      "collection": "Premises from OANC (9 genres) and 10 works of fiction; hypotheses written by 387 workers from an organised group on Hybrid (gethybrid.io), identities not known to authors; validated by 4 more workers. Base pay not stated.",
+      "personal_data": "TELEPHONE (Switchboard 1990-91) and FACE-TO-FACE (Charlotte Narrative and Conversation Collection) are transcripts of real, recruited speakers; LETTERS are real fundraising letters. No worker IDs in the fields used (annotator_labels are anonymous).",
+      "genre_licences": {
+        "government": {
+          "source": "OANC: public-domain US government sites",
+          "split": "train+dev_matched",
+          "safe": true
+        },
+        "slate": {
+          "source": "OANC: Slate magazine 1996-2000 (included in OANC by permission)",
+          "split": "train+dev_matched",
+          "safe": true,
+          "note": "copyrighted text relicensed via OANC; relies on OANC's grant"
+        },
+        "telephone": {
+          "source": "OANC: Switchboard transcripts 1990-91",
+          "split": "train+dev_matched",
+          "safe": true,
+          "note": "real conversations of recruited speakers"
+        },
+        "travel": {
+          "source": "OANC: Berlitz travel guides (by permission)",
+          "split": "train+dev_matched",
+          "safe": true,
+          "note": "relies on OANC's grant"
+        },
+        "fiction": {
+          "source": "10 works 1912-2010: Christie x2, Piper, Name, Norton, Shea, Essex, Del Rey, Asimov, Sabatini",
+          "split": "train+dev_matched",
+          "safe": false,
+          "note": "Mixed: Seven Swords CC BY-SA 3.0 (share-alike), two CC BY 3.0, the rest public domain in the US ONLY. Christie (d. 1976), Asimov (d. 1992), Del Rey (d. 1993), Norton (d. 2005), Piper (d. 1964) are still in copyright in the EU/UK. Exclude for a service hosted in France (Kimsufi/OVH) or anywhere outside the US."
+        },
+        "letters": {
+          "source": "OANC: ICIC philanthropic fundraising letters",
+          "split": "dev_mismatched only",
+          "safe": true
+        },
+        "oup": {
+          "source": "OANC: five OUP non-fiction works (by permission)",
+          "split": "dev_mismatched only",
+          "safe": true,
+          "note": "relies on OANC's grant"
+        },
+        "verbatim": {
+          "source": "OANC: Verbatim linguistics posts 1990-96",
+          "split": "dev_mismatched only",
+          "safe": true
+        },
+        "facetoface": {
+          "source": "OANC: Charlotte Narrative and Conversation Collection",
+          "split": "dev_mismatched only",
+          "safe": true,
+          "note": "real recruited speakers"
+        },
+        "nineeleven": {
+          "source": "OANC: 9/11 Commission report (public domain)",
+          "split": "dev_mismatched only",
+          "safe": true
+        }
+      },
+      "task": "text pair (premise, hypothesis) -> entailment / neutral / contradiction",
+      "labels": {
+        "gold_label": [
+          "entailment",
+          "neutral",
+          "contradiction",
+          "-"
+        ]
+      },
+      "splits": {
+        "train": {
+          "total": 392702,
+          "telephone": 83348,
+          "government": 77350,
+          "travel": 77350,
+          "fiction": 77348,
+          "slate": 77306
+        },
+        "dev_matched": {
+          "total": 10000,
+          "no_gold_label": 185,
+          "per_genre": 2000
+        },
+        "dev_mismatched": {
+          "total": 10000,
+          "no_gold_label": 168,
+          "per_genre": 2000
+        },
+        "train_without_fiction": 315354
+      },
+      "use_file": "extracted/multinli_1.0/multinli_1.0_{train,dev_matched,dev_mismatched}.jsonl",
+      "date_fetched": "2026-09-25",
+      "files": [
+        {
+          "path": "multinli/extracted/multinli_1.0/README.txt",
+          "bytes": 1160,
+          "sha256": "c9c51424d3f2c753d34d302e41980a75d3f6ee5552e2b97df600431762c0a9cf"
+        },
+        {
+          "path": "multinli/extracted/multinli_1.0/multinli_1.0_dev_matched.jsonl",
+          "bytes": 12925073,
+          "sha256": "9db14e02591c51b7c0401802382f01602ce97c21697a68a263f8c4b5958229a6"
+        },
+        {
+          "path": "multinli/extracted/multinli_1.0/multinli_1.0_dev_mismatched.jsonl",
+          "bytes": 13460535,
+          "sha256": "65f3a993919f6a26f1468145a7ea2a7d8f5da175f1fee93a14315ba4fda0fd0e"
+        },
+        {
+          "path": "multinli/extracted/multinli_1.0/multinli_1.0_train.jsonl",
+          "bytes": 492421641,
+          "sha256": "e440e582329a812feca8fedfed2dc6932aaddd99aad32bf894b4c3a2d4206032"
+        },
+        {
+          "path": "multinli/extracted/multinli_1.0/paper.pdf",
+          "bytes": 196418,
+          "sha256": "a33e8868232e285f839829d06262e3331e7b039b833115a270f5deabfae65410"
+        },
+        {
+          "path": "multinli/multinli_1.0.zip",
+          "bytes": 226850426,
+          "sha256": "049f507b9e36b1fcb756cfd5aeb3b7a0cfcb84bf023793652987f7e7e0957822"
+        }
+      ]
+    },
+    {
+      "name": "flywire_annotations",
+      "title": "FlyWire neuron annotations, Schlegel et al. 2024 Supplementary Data 1",
+      "citation": "Schlegel et al. Whole-brain annotation and multi-connectome cell typing of Drosophila. Nature 634, 139-152 (2024). doi:10.1038/s41586-024-07686-5",
+      "source": "https://static-content.springer.com/esm/art%3A10.1038%2Fs41586-024-07686-5/MediaObjects/41586_2024_7686_MOESM5_ESM.tsv",
+      "source_kind": "paper's official supplement (Nature; also PMC11446831 /bin/41586_2024_7686_MOESM5_ESM.tsv)",
+      "version": "as published with the paper (FlyWire materialisation 783)",
+      "licence": "CC BY 4.0",
+      "licence_verified": true,
+      "licence_evidence": "PMC11446831: 'This article is licensed under a Creative Commons Attribution 4.0 International License' (creativecommons.org/licenses/by/4.0)",
+      "ledger_licence": "CC BY 4.0 via Nature supplement or Zenodo 10.5281/zenodo.10877326; GitHub repo has no licence",
+      "ledger_status": "REVIEW",
+      "zenodo_note": "Zenodo 10.5281/zenodo.10877326 (CC BY 4.0) does NOT contain the annotation TSV: it holds only NBLAST feathers and skeletons, and its description says 'For neuron annotations ... see https://github.com/flyconnectome/flywire_annotations'. The ledger is wrong on this point. The Nature supplement was fetched instead.",
+      "differs_from_github": "Not a drop-in replacement for data/raw/flywire/Supplemental_file1_neuron_annotations.tsv (GitHub, sha256 9a4f8b2f...81d1be): 139,255 vs 139,248 rows; 139,241 root_ids shared; cell_type differs on 47,612 shared rows, super_class on 639; GitHub has extra columns (dimorphism, synonyms, supertype, fru_dsx, matching_notes), supplement has morphology_group. Gustatory cell_type -> cell_sub_class map (populations.grn_modality_map) has 4 types in the supplement vs 38 on GitHub.",
+      "collection": "Expert and community annotation of the FlyWire whole-brain connectome.",
+      "personal_data": "None.",
+      "splits": {
+        "rows": 139255
+      },
+      "date_fetched": "2026-09-25",
+      "files": [
+        {
+          "path": "flywire_annotations/41586_2024_7686_MOESM5_ESM.tsv",
+          "bytes": 27015208,
+          "sha256": "30be6c73975a70c56d930e27911f36455d3886e15abf383b78edd2a5d679e0b6"
+        }
+      ]
+    }
+  ]
+}

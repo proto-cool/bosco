@@ -254,3 +254,18 @@ Before the next training leg:
 - Whether jina's EVA02 checkpoint was trained on LAION.
 - Mistral's terms at the time the -c model's data was generated.
 - The exact tasksource revision behind v0's task mappings.
+
+## Corrections (2026-09-25, from fetching the originals; `docs/clean-data.md`)
+
+- **FlyWire annotations:** Zenodo 10.5281/zenodo.10877326 has no annotation table (only NBLAST
+  scores and skeletons). The CC BY 4.0 copy is Nature's Supplementary Data 1, and it differs from the
+  GitHub file the code uses: cell_type differs on 47,612 neurons. Used only to cross-check taste
+  neurons, so it stays out of the product path until Nick decides.
+- **MultiNLI fiction is DROP** for a service hosted in France: several novels are public domain in the
+  US only. The other four training genres (government, slate, telephone, travel) are fine.
+- **DynaHate:** rounds 3 *and* 4 were adapted from real hateful posts. Use v0.2.3.
+- **MASSIVE:** drop the `worker_id` column. **SNIPS:** use only the text and intent columns.
+- **DBpedia-14 and BoolQ are share-alike:** redistributed derivatives carry the same licence.
+- **Civil Comments and BoolQ** came from the Hugging Face copies under the Google org (the original
+  links return 403). Civil Comments stays **REVIEW**: not trained on until commenter consent and rater
+  pay are answered.
