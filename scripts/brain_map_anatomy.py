@@ -116,6 +116,9 @@ def main(argv=None) -> int:
 
     frames, glow = [], np.zeros(len(keys))
     sign = np.zeros(len(keys))
+    cnt = np.array([len(cells[k]) for k in keys], float)
+    dens = (np.log1p(cnt) - np.log1p(cnt).min()) / max(np.ptp(np.log1p(cnt)), 1e-9)  # 0..1 per dot
+    S = 14  # pixels per grid cell (finer rendering, sizes vary within it)
     for st in range(m.steps):
         v = np.clip(np.abs(smat[st]) / scale, 0, 1)
         up = v >= glow
@@ -123,21 +126,33 @@ def main(argv=None) -> int:
         glow = np.where(up, v, glow * 0.9)
         if st % 4 and st != m.steps - 1:
             continue
-        img = Image.new("RGB", (W * 10, H * 10), (6, 7, 10))
-        dr = ImageDraw.Draw(img)
+        img = Image.new("RGB", (W * S, H * S), (5, 6, 9))
+        halo = Image.new("RGB", (W * S, H * S), (0, 0, 0))
+        dr, dh = ImageDraw.Draw(img), ImageDraw.Draw(halo)
         for j, (gx, gy) in enumerate(keys):
             g = float(glow[j]) ** 1.2
-            b = base[(gx, gy)] * 0.55
-            hot = np.array([120, 255, 140]) if sign[j] >= 0 else np.array([230, 70, 190])
+            if sign[j] < 0:
+                g *= 0.55  # inhibition: a subtler dip than excitation
+            rest_lvl = 0.35 + 0.45 * dens[j]  # denser regions rest brighter
+            b = base[(gx, gy)] * rest_lvl
+            hot = np.array([130, 255, 150]) if sign[j] >= 0 else np.array([200, 80, 170])
             if sign[j] >= 0 and g > 0.7:
-                hot = hot + (np.array([255, 255, 255]) - hot) * (g - 0.7) / 0.3  # white-hot
+                hot = hot + (np.array([255, 255, 255]) - hot) * (g - 0.7) / 0.3
             c = b * (1 - g) + hot * g
-            dr.ellipse([gx * 10 + 1, gy * 10 + 1, gx * 10 + 8, gy * 10 + 8], fill=tuple(int(x) for x in c))
-        dr.text((4, H * 10 - 12), f"{st * 5} ms", fill=(170, 170, 180))
+            r = 1.8 + 1.4 * dens[j] + 2.2 * g  # size: density at rest, swelling with activity
+            cx, cy = gx * S + S / 2, gy * S + S / 2
+            dr.ellipse([cx - r, cy - r, cx + r, cy + r], fill=tuple(int(x) for x in c))
+            if g > 0.35 and sign[j] >= 0:
+                R = r + 4
+                dh.ellipse([cx - R, cy - R, cx + R, cy + R], fill=tuple(int(x * 0.35) for x in hot))
+        from PIL import ImageChops, ImageFilter
+
+        img = ImageChops.add(img, halo.filter(ImageFilter.GaussianBlur(4)))
+        ImageDraw.Draw(img).text((6, H * S - 14), f"{st * 5} ms", fill=(150, 150, 160))
         frames.append(img)
-    strip = Image.new("RGB", (W * 10 * 2 + 10, H * 10 * 2 + 10), (0, 0, 0))
+    strip = Image.new("RGB", (W * S * 2 + 10, H * S * 2 + 10), (0, 0, 0))
     for j, fi in enumerate([2, 5, 10, len(frames) - 1]):
-        strip.paste(frames[fi], ((j % 2) * (W * 10 + 10), (j // 2) * (H * 10 + 10)))
+        strip.paste(frames[fi], ((j % 2) * (W * S + 10), (j // 2) * (H * S + 10)))
     OUT.mkdir(parents=True, exist_ok=True)
     strip.save(OUT / f"anatomy-frames-mix{a.mix:g}.png")
     frames[0].save(OUT / f"anatomy-mix{a.mix:g}.gif", save_all=True, append_images=frames[1:], duration=120, loop=0)
