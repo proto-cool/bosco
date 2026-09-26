@@ -62,8 +62,21 @@ power it, and it needs the fly to make honest decisions."
       commercially licensed images, with no generated captions), both on the 3080.
     - **Before launch:** a gate compares ours against nomic; ship ours if it is close
       enough, otherwise Nick chooses knowingly.
+15. **The fleet: 15–20 specialists at launch,** growing toward about 100. Sources: the clean data
+    already fetched (about 8–10), Wikipedia/Wikidata topic specialists (about 6–10), and
+    commissioned labelling for must-haves such as sentiment (budget open).
+16. **Teach your own, in Halteres.** A user's specialist is trained only on that user's
+    examples and belongs to them. It is never shared or merged into the public fleet. The
+    public specialists still never learn from visitors. Proposed mechanism: the fly's own
+    local rule on KC→MBON synapses, which is fast on the CPU. It is measured in the
+    specialist pilot against gradient training and the simple baseline; the fallback is a
+    short CPU gradient job. The brain service keeps nothing after it returns the weights;
+    storage is Halteres's.
 
 ## Open (Nick to decide)
+
+- **A budget for commissioned labelling** (sentiment first): paid, consented annotation of
+  openly licensed text.
 
 - **Where the question enters,** given the eyes decision. It is decided from the
   anatomy check in the audit: which senses reach his Kenyon cells and descending
