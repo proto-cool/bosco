@@ -65,7 +65,7 @@ not the whole of it.
 No LLM, no model deciding, no training beyond per-cell-type parameters and
 the KC→MBON synapses (`CLAUDE.md`), no swarm, no text out, not on a feed.
 
-## Later: Doom (added 2026-09-24; reshaped by decision 37, 2026-09-27: general specialists, Doom as their held-out test)
+## Later: Doom (added 2026-09-24; withdrawn by decision 37, 2026-09-27: parity with Jev's contract is the yardstick, no Doom work)
 
 Jev plays Doom in real time (TypeSafe's launch demo): the game state goes
 in as a **text description, not frames**, and Jev picks the next action from

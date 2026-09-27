@@ -172,19 +172,18 @@ power it, and it needs the fly to make honest decisions."
     - **broad menus** (28 intents, 15 finance areas) stay single-source specialists and say so on their
       cards.
     Topic, language and danger get the same check when their data is built.
-37. **No game-specific specialists: Doom is a breadth test for the generalists** (Nick, 2026-09-27: "I
-    want generalist specialists"). A Doom turn is broken into general questions:
-    - **danger:** is this a risk of physical harm?
-    - **valence** (new): good or bad for me, approach or avoid? This is the fly's native question; his read
-      is the approach and avoid DN groups;
-    - **direction** (new): from a description, is the thing to the left, right or ahead?
-    - **urgency** (new): does this need action now?
-
-    Each is trained on pooled everyday text. Game states (ViZDoom, MIT; Freedoom assets; state written in
-    words, not numbers) are a **held-out source they never train on**. The game loop combines the answers
-    with a fixed, published rule. Expected order: scripted bot > Jev > generalist Bosco. The claim is only
-    that general fly judgements play a game they never saw, visibly. After Gate 4; eyes (the optic lobes)
-    come later still.
+37. **Parity with Jev is the yardstick, not Doom** (Nick, 2026-09-27: "No planning for doom specifically I
+    just want to make sure we have decent parity with what jev is capable of"). There is no game work and
+    no game-specific specialists. General fields stay candidates for the fleet: **valence** (good or bad
+    for me, approach or avoid; the fly's native question), **urgency** (does this need action now?) and
+    **direction** (left, right or ahead, from a description). The gaps against Jev's contract:
+    - **to build (service):** the score type (2–10 levels) and several questions per request;
+    - **speed:** many-option choices (7.9 s at 151 options) need all options in one batched pass, or
+      choice specialists kept to about 20 options;
+    - **coverage:** a fleet of generalist specialists wide enough that most questions map onto one;
+    - **structural, stated plainly:** Jev answers questions it has never seen; Bosco answers only what a
+      specialist was taught (422 not_taught).
+    Where Bosco can pass Jev: images (the eyes) and the playback.
 
 ## Open (Nick to decide)
 
