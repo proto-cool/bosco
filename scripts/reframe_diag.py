@@ -30,13 +30,29 @@ FRAMINGS = {
             "group",
             {
                 "do something": [
-                    "book or order", "cancel", "modify", "pay or transfer", "request item or document",
-                    "account management", "schedule and reminders", "lists and notes", "play media",
-                    "device control", "communicate", "navigation traffic",
+                    "book or order",
+                    "cancel",
+                    "modify",
+                    "pay or transfer",
+                    "request item or document",
+                    "account management",
+                    "schedule and reminders",
+                    "lists and notes",
+                    "play media",
+                    "device control",
+                    "communicate",
+                    "navigation traffic",
                 ],
                 "find out": [
-                    "check status", "ask service info", "ask fact", "how to", "calculate or convert",
-                    "ask time date", "weather", "find or recommend", "read news or messages",
+                    "check status",
+                    "ask service info",
+                    "ask fact",
+                    "how to",
+                    "calculate or convert",
+                    "ask time date",
+                    "weather",
+                    "find or recommend",
+                    "read news or messages",
                 ],
                 "problem": ["report problem", "fraud or security"],
                 "social": ["greeting", "thanks", "affirm", "deny", "small talk"],
@@ -55,7 +71,10 @@ FRAMINGS = {
             {
                 "banking and payments": ["bank accounts", "cards", "payments transfers"],
                 "credit and debt": [
-                    "credit reports scores", "consumer loans", "mortgages home", "student loans",
+                    "credit reports scores",
+                    "consumer loans",
+                    "mortgages home",
+                    "student loans",
                     "debt collection relief",
                 ],
                 "fraud": ["fraud scams"],
@@ -66,13 +85,58 @@ FRAMINGS = {
             },
         ),
         ("p(fraud or scam)", "yes", ["fraud scams"]),
-        ("p(credit and debt)", "yes", [
-            "credit reports scores", "consumer loans", "mortgages home", "student loans", "debt collection relief",
-        ]),
+        (
+            "p(credit and debt)",
+            "yes",
+            [
+                "credit reports scores",
+                "consumer loans",
+                "mortgages home",
+                "student loans",
+                "debt collection relief",
+            ],
+        ),
     ],
     "harm": [
         ("full 5", "full", None),
         ("p(harm)", "yes", ["hate", "harassment", "threat", "sexual"]),
+    ],
+    "topic": [
+        ("full 20", "full", None),
+        ("caller's options (subset)", "subset", None),
+        (
+            "broad area (6)",
+            "group",
+            {
+                "public affairs": [
+                    "politics and government",
+                    "war and conflict",
+                    "law and crime",
+                    "society and culture",
+                ],
+                "money and work": ["business and economy", "personal money and work"],
+                "science, tech, health": [
+                    "science",
+                    "technology and computing",
+                    "health and medicine",
+                    "environment and nature",
+                ],
+                "leisure": ["sport", "arts and entertainment", "food and drink", "travel and places"],
+                "life": [
+                    "education",
+                    "religion and belief",
+                    "family and relationships",
+                    "home and garden",
+                    "vehicles and transport",
+                ],
+                "past": ["history"],
+            },
+        ),
+        ("p(politics, war, law)", "yes", ["politics and government", "war and conflict", "law and crime"]),
+        ("p(science or tech)", "yes", ["science", "technology and computing"]),
+        ("p(health)", "yes", ["health and medicine"]),
+        ("p(sport)", "yes", ["sport"]),
+        ("p(business or money)", "yes", ["business and economy", "personal money and work"]),
     ],
     "tone": [
         ("full 4", "full", None),
@@ -129,7 +193,9 @@ def main() -> int:
         m = json.load(open(d / "items.json"))
         e = dict(np.load(d / "emb.npz"))
         for task, t in m["tasks"].items():
-            idx = [i for i, it in enumerate(m["items"]) if it["task"] == task and it["split"] in ("train", "val", "dev")]
+            idx = [
+                i for i, it in enumerate(m["items"]) if it["task"] == task and it["split"] in ("train", "val", "dev")
+            ]
             y = np.array([m["items"][i]["gold"] for i in idx])
             sp = np.array([m["items"][i]["split"] for i in idx])
             out[task] = {}
