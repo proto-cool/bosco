@@ -18,6 +18,7 @@ import uuid
 from pathlib import Path
 
 import numpy as np
+import scipy.sparse as sp
 import torch
 
 from bosco import data, v1
@@ -51,7 +52,11 @@ class Family:
         ap, av, info = v1.dn_groups(self.m)
         self.m.set_dn_read(ap, av, self.meta["steps"], self.meta["read_steps"])
         self.base_state = {k: x.clone() for k, x in self.m.state_dict().items()}
-        self.W_csr = self.m.W.coalesce().to_sparse_csr()  # the fixed connectome, shared by every specialist
+        W = self.m.W.coalesce().to_sparse_csr()  # the fixed connectome, shared by every specialist
+        # scipy's CSR product is 20-37% faster than torch's on CPU here, same result (runs/speed-spike.json)
+        self.W_csr = sp.csr_matrix(
+            (W.values().numpy(), W.col_indices().numpy(), W.crow_indices().numpy()), shape=W.shape
+        )
         ids = M2.load_or_build().brain.ids
         self.types = data.annotations().reindex(ids)["type"].fillna("").to_numpy().astype(str)
         self.region_of = np.full(self.m.n, "", object)
@@ -113,7 +118,8 @@ class Family:
         with self.lock, torch.no_grad():
             for st in range(m.steps):
                 x = G * r
-                drive = (self.W_csr @ x).index_add(0, m.kp_post, x[m.kp_pre] * kpw)
+                wx = torch.from_numpy(self.W_csr @ np.ascontiguousarray(x.numpy()))
+                drive = wx.index_add(0, m.kp_post, x[m.kp_pre] * kpw)
                 r = r + alpha * (-r + m.unit_fn(drive + bias))
                 if st >= m.steps - m.read_steps:
                     read.append(r[ap].mean(0) - r[av].mean(0))

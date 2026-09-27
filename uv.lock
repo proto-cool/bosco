@@ -71,6 +71,7 @@ gate = [
 service = [
     { name = "fastapi" },
     { name = "httpx" },
+    { name = "scipy" },
     { name = "uvicorn" },
 ]
 
@@ -98,6 +99,7 @@ gate = [
 service = [
     { name = "fastapi", specifier = ">=0.110" },
     { name = "httpx", specifier = ">=0.27" },
+    { name = "scipy", specifier = ">=1.11" },
     { name = "uvicorn", specifier = ">=0.29" },
 ]
 
