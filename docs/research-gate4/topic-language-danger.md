@@ -83,7 +83,7 @@ No "other" option. The card must say that text about none of these gets the near
   - **Keep only articles whose categories map to exactly one option.** Drop Obituaries and Disasters_and_accidents (not a topic here; danger uses them).
 - **Stack Exchange:**
   - politics → 1; law → 3; economics → 4; money, workplace, freelancing → 5;
-  - physics, chemistry, biology, astronomy, earthscience, math-free sites → 6;
+  - physics, chemistry, biology, astronomy, earthscience, space → 6 (physics sampled; math.SE left out as formula-heavy);
   - superuser (sampled), engineering, photo → 7; health, fitness → 8; sports → 9;
   - movies, music, scifi, literature, gaming, boardgames, writers → 10;
   - cooking, coffee, homebrew → 11; travel, expatriates → 12;
