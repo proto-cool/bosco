@@ -139,6 +139,11 @@ power it, and it needs the fly to make honest decisions."
     nomic-embed-text-v1.5's uncased BERT tokenizer loses most Chinese, Thai and South Asian, Southeast
     Asian and Ethiopic scripts (docs/research-gate4/topic-language-danger.md). Those languages are out of
     scope and are named on the card. A multilingual encoder is revisited with our own encoders.
+33. **Text from live sources must predate 2022-11-01** (Nick, 2026-09-27), before ChatGPT's launch
+    (2022-11-30). This keeps training and test text human-written, as the no-LLM-data rule requires, where
+    rows cannot be checked one by one: Wikipedia, Wikinews, Stack Exchange and CFPB. Fixed crowd-written
+    datasets that predate it need no cutoff. Cards say "text up to 2022". It may be relaxed per source only
+    for supervised human writing under a no-AI-tools rule, written down before use.
 
 ## Open (Nick to decide)
 
