@@ -6,8 +6,8 @@ Contract: `docs/API.md`, `docs/SERVICE-R10.md`, `docs/BRAIN-VIEWS.md`.
 ## Run
 
 ```
-uv run python scripts/export_family.py                                    # family v1 -> service/families/v1
-uv run python scripts/export_family.py --specialist topic-real --name topic  # -> service/specialists/topic/<version>
+uv run python scripts/export_family.py family                             # family v1 -> service/families/v1
+uv run python scripts/export_family.py specialist --gate 2 --task topic   # gate-passed only (docs/REGISTRY.md)
 uv run --group service --with "transformers==4.46.3" --with "sentence-transformers==3.3.1" --with einops \
     uvicorn bosco.service.app:app --host 127.0.0.1 --port 8420
 ```
@@ -36,7 +36,8 @@ licence (e.g. topic is trained on DBpedia, CC BY-SA), which matters before anyth
 ## Not yet
 - Only `choose` questions; `approach`, `rate` and `familiar` come later.
 - No auth, rate limits or queue (Ask Bosco's server does those); no batching across requests.
-- Specialists are development-grade until they pass the production bar.
+- Only shipped, hash-pinned specialists load (docs/REGISTRY.md): 8 as of 2026-09-27. Design B specialists
+  (support) answer only their own options, or a subset of them.
 - **The family antenna is fixed from the pilot's data.** Future specialists must train through this
   same antenna (the gap round refits its own; that is fine for development only).
 - The Kimsufi speed is not measured.

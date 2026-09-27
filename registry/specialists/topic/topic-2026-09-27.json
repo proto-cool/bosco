@@ -1,0 +1,78 @@
+{
+ "specialist": "topic",
+ "version": "topic-2026-09-27",
+ "status": "shipped",
+ "question": "What kind of thing is this text about?",
+ "options": [
+  "company",
+  "educational institution",
+  "artist",
+  "athlete",
+  "office holder",
+  "mean of transportation",
+  "building",
+  "natural place",
+  "village",
+  "animal",
+  "plant",
+  "album",
+  "film",
+  "written work"
+ ],
+ "design": "A",
+ "family": "v1",
+ "family_antenna_sha256": "5ca2decce41498dac1ffd7ab5fd170ddaa42e59a2047487c9f04d64ca225b1a4",
+ "family_neuron_order": "1541c410019942c4",
+ "encoder": {
+  "id": "nomic-ai/nomic-embed-text-v1.5",
+  "revision": "e9b6763023c676ca8431644204f50c2b100d9aab",
+  "licence": "apache-2.0",
+  "prefix": "classification: ",
+  "dim": 768
+ },
+ "task": "topic",
+ "temperature": 0.950492390111773,
+ "weights_sha256": "adaff5b9e77c748ee6330826e41a42a97422aec8e44a4e030c90c609c9298518",
+ "evidence": {
+  "ships": true,
+  "gate": "2",
+  "prereg": "docs/SPECIALIST-GATE-2.md",
+  "results": "docs/specialist-gate-2-results.md",
+  "test_items": 998,
+  "balanced_accuracy": 0.8837,
+  "ece": 0.0269,
+  "bar": 0.8,
+  "ece_limit": 0.1,
+  "best_val": 0.8811,
+  "epochs": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6
+  ],
+  "cpu_s_per_question": 0.738,
+  "temperature": 0.950492390111773,
+  "report_only": {
+   "plain": 0.9834,
+   "nose": 0.7612,
+   "prototype": 0.953
+  },
+  "data": "data/cache/v1-gate2",
+  "runs": "runs/specialist-gate-2"
+ },
+ "sources": [
+  {
+   "name": "DBpedia-14 (Zhang et al. 2015), version 2",
+   "licence": "CC BY-SA 3.0 and GFDL (dual)",
+   "credit": "DBpedia, from Wikipedia abstracts by Wikipedia contributors"
+  }
+ ],
+ "licence": "CC BY-SA 4.0 (trained on share-alike text; decision 28)",
+ "disputed_labels": null,
+ "limits": [
+  "Trained on encyclopedia abstracts in 14 classes; it always picks one of the 14, even when none fits."
+ ],
+ "exported": "2026-09-27"
+}

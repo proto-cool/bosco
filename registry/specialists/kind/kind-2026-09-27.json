@@ -1,0 +1,79 @@
+{
+ "specialist": "kind",
+ "version": "kind-2026-09-27",
+ "status": "shipped",
+ "question": "What kind of thing is this?",
+ "options": [
+  "person",
+  "place",
+  "organisation",
+  "creative work",
+  "event",
+  "species",
+  "product or technology"
+ ],
+ "design": "A",
+ "family": "v1",
+ "family_antenna_sha256": "5ca2decce41498dac1ffd7ab5fd170ddaa42e59a2047487c9f04d64ca225b1a4",
+ "family_neuron_order": "1541c410019942c4",
+ "encoder": {
+  "id": "nomic-ai/nomic-embed-text-v1.5",
+  "revision": "e9b6763023c676ca8431644204f50c2b100d9aab",
+  "licence": "apache-2.0",
+  "prefix": "classification: ",
+  "dim": 768
+ },
+ "task": "kind",
+ "temperature": 0.8587088373238679,
+ "weights_sha256": "ba0da6bcb4229cd8931f1bdf45b9d5feaa7072148d2df97bcc29178c8eb97929",
+ "evidence": {
+  "ships": true,
+  "gate": "3",
+  "prereg": "docs/SPECIALIST-GATE-3.md",
+  "results": "docs/specialist-gate-3-results.md",
+  "test_items": 1084,
+  "balanced_accuracy": 0.9402,
+  "ece": 0.0195,
+  "bar": 0.8,
+  "ece_limit": 0.1,
+  "best_val": 0.9286,
+  "epochs": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "cpu_s_per_question": 0.366,
+  "temperature": 0.8587088373238679,
+  "report_only": {
+   "plain": 0.9911,
+   "nose": 0.7435,
+   "prototype": 0.9586
+  },
+  "data": "data/cache/v1-gate3",
+  "runs": "runs/specialist-gate-3"
+ },
+ "sources": [
+  {
+   "name": "English Wikipedia, lead paragraphs, last revision on or before 2022-11-01",
+   "licence": "CC BY-SA 4.0 (older text also GFDL)",
+   "credit": "Wikipedia contributors; each training row's revision is listed in the attribution file"
+  },
+  {
+   "name": "Wikidata class labels",
+   "licence": "CC0 1.0",
+   "credit": "Wikidata contributors"
+  }
+ ],
+ "licence": "CC BY-SA 4.0 (trained on share-alike text; decision 28)",
+ "disputed_labels": null,
+ "limits": [
+  "Tested on Wikipedia lead paragraphs, which often state the answer outright; expect lower accuracy on everyday text."
+ ],
+ "exported": "2026-09-27",
+ "attribution_file": "specialists/kind/kind-2026-09-27.attribution.jsonl"
+}

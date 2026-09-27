@@ -1,0 +1,92 @@
+{
+ "specialists": [
+  {
+   "version": "danger-2026-09-27",
+   "specialist": "danger",
+   "status": "shipped",
+   "family": "v1",
+   "options": 2,
+   "balanced_accuracy": 0.9739,
+   "ece": 0.0088,
+   "licence": "CC BY-SA 4.0 (trained on share-alike text; decision 28)",
+   "card": "specialists/danger/danger-2026-09-27.json"
+  },
+  {
+   "version": "food-2026-09-27",
+   "specialist": "food",
+   "status": "shipped",
+   "family": "v1",
+   "options": 2,
+   "balanced_accuracy": 0.9914,
+   "ece": 0.0063,
+   "licence": "CC BY-SA 4.0 (trained on share-alike text; decision 28)",
+   "card": "specialists/food/food-2026-09-27.json"
+  },
+  {
+   "version": "hate-2026-09-27",
+   "specialist": "hate",
+   "status": "shipped",
+   "family": "v1",
+   "options": 2,
+   "balanced_accuracy": 0.6938,
+   "ece": 0.0211,
+   "licence": "Bosco specialist licence (the self-host bundle's LICENSE), crediting the sources listed",
+   "card": "specialists/hate/hate-2026-09-27.json"
+  },
+  {
+   "version": "junk-2026-09-27",
+   "specialist": "junk",
+   "status": "shipped",
+   "family": "v1",
+   "options": 2,
+   "balanced_accuracy": 0.9064,
+   "ece": 0.0231,
+   "licence": "Bosco specialist licence (the self-host bundle's LICENSE), crediting the sources listed",
+   "card": "specialists/junk/junk-2026-09-27.json"
+  },
+  {
+   "version": "kind-2026-09-27",
+   "specialist": "kind",
+   "status": "shipped",
+   "family": "v1",
+   "options": 7,
+   "balanced_accuracy": 0.9402,
+   "ece": 0.0195,
+   "licence": "CC BY-SA 4.0 (trained on share-alike text; decision 28)",
+   "card": "specialists/kind/kind-2026-09-27.json"
+  },
+  {
+   "version": "politeness-2026-09-27",
+   "specialist": "politeness",
+   "status": "shipped",
+   "family": "v1",
+   "options": 2,
+   "balanced_accuracy": 0.5996,
+   "ece": 0.0276,
+   "licence": "CC BY-SA 4.0 (trained on share-alike text; decision 28)",
+   "card": "specialists/politeness/politeness-2026-09-27.json"
+  },
+  {
+   "version": "support-2026-09-27",
+   "specialist": "support",
+   "status": "shipped",
+   "family": "v1",
+   "options": 18,
+   "balanced_accuracy": 0.8288,
+   "ece": 0.0352,
+   "licence": "Bosco specialist licence (the self-host bundle's LICENSE), crediting the sources listed",
+   "card": "specialists/support/support-2026-09-27.json"
+  },
+  {
+   "version": "topic-2026-09-27",
+   "specialist": "topic",
+   "status": "shipped",
+   "family": "v1",
+   "options": 14,
+   "balanced_accuracy": 0.8837,
+   "ece": 0.0269,
+   "licence": "CC BY-SA 4.0 (trained on share-alike text; decision 28)",
+   "card": "specialists/topic/topic-2026-09-27.json"
+  }
+ ]
+}
