@@ -147,7 +147,8 @@ power it, and it needs the fly to make honest decisions."
 34. **The consensus is the human's** (Nick, 2026-09-27: "it's the human's judgment out of all of the
     questions they asked Bosco and the answers he gave back. You're asking your group of experts"). Bosco
     does not vote or combine; decision 24 stands. Each specialist answers its own question with an honest
-    probability, and the person weighs the answers. Consequences:
+    probability, and the person weighs the answers (Nick: "you're asking it a series of questions for
+    your task. It gives you more data to make a decision with"). Consequences:
     - Calibration is a first-class requirement. A wrong answer given with confidence misleads the person's
       judgment; an unsure one does not.
     - Specialists that are only meaningful beside others (tone first) may ship as **components**. They
