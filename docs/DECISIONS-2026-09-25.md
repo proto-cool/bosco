@@ -106,6 +106,17 @@ power it, and it needs the fly to make honest decisions."
 27. **Many-option specialists use one learned memory per option** (way B: approach or avoid on the
     item's smell alone). CLINC reached 0.811 on validation at epoch 2, against 0.635 for
     prototype-mixture sniffs. Few-option specialists keep the T-maze (topic 0.933).
+28. **Share-alike data and the weights** (Nick, 2026-09-27). All shipped specialists are served from
+    Nick's server; answers and traces are not copies of the training text. For self-hosting:
+    - specialists trained only on CC BY / CC0 data (junk, support, hate) ship under our own licence,
+      with their NOTICE credits;
+    - specialists trained on CC BY-SA text (topic from DBpedia, politeness from Stack Exchange; kind,
+      food and danger from Wikipedia) ship **CC BY-SA 4.0**, with an attribution manifest (the
+      sources, and for Wikipedia each row's revision URL). Whether weights are an adaptation is
+      legally unsettled; this is the cautious reading;
+    - training text is never shipped with any weights;
+    - a lawyer's view on "weights as adaptation" before distributing weights, if Ask Bosco earns
+      real money. Serving through the API does not wait on it.
 
 ## Open (Nick to decide)
 
