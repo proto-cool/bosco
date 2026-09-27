@@ -29,6 +29,15 @@ DATA = paths.CACHE / "v1-gate2"
 RUNS = paths.ROOT / "runs" / "specialist-gate-2"
 TASKS = ("topic", "intent", "support", "junk", "hate", "politeness")
 BAR = {"topic": 0.80, "intent": 0.80, "support": 0.80, "junk": 0.80, "hate": 0.9 * 0.731, "politeness": 0.9 * 0.666}
+GATES = {  # gate 3 (docs/SPECIALIST-GATE-3.md) reuses this runner on its own data
+    "2": (DATA, RUNS, TASKS, BAR),
+    "3": (
+        paths.CACHE / "v1-gate3",
+        paths.ROOT / "runs" / "specialist-gate-3",
+        ("kind", "food", "danger", "plain"),
+        {"kind": 0.80, "food": 0.80, "danger": 0.80, "plain": 0.80},
+    ),
+}
 EPOCHS = {"A": 8, "B": 5}
 PATIENCE = {"A": 3, "B": 2}
 NEG = 19  # design B: the right option + 19 random others in training
@@ -326,10 +335,11 @@ def cmd_baselines(a) -> int:
 def cmd_report(a) -> int:
     base = json.load(open(RUNS / "baselines.json"))
     meta = json.load(open(DATA / "items.json"))
+    g = "3" if "gate-3" in str(RUNS) else "2"
     L_ = [
-        "# Specialist gate 2 results",
+        f"# Specialist gate {g} results",
         "",
-        "Pre-registration: `docs/SPECIALIST-GATE-2.md`. Sealed test sets, "
+        f"Pre-registration: `docs/SPECIALIST-GATE-{g}.md`. Sealed test sets, "
         "balanced accuracy, scored once on the CPU; ECE after temperature.",
         "",
         "| specialist | design | options | chance | **brain** | ECE | bar | ships | nose alone | prototype alone | plain baseline | CPU s/question |",
@@ -358,17 +368,18 @@ def cmd_report(a) -> int:
         )
     L_ += ["", f"**Ships: {', '.join(ships) if ships else 'none'}.**", ""]
     txt = "\n".join(L_) + "\n"
-    (paths.DOCS / "specialist-gate-2-results.md").write_text(txt)
+    (paths.DOCS / f"specialist-gate-{g}-results.md").write_text(txt)
     print(txt)
     return 0
 
 
 def main(argv=None) -> int:
+    global DATA, RUNS, TASKS, BAR
     ap = argparse.ArgumentParser()
     sub = ap.add_subparsers(dest="cmd", required=True)
     for name, fn in (("preflight", cmd_preflight), ("train", cmd_train), ("score", cmd_score)):
         p = sub.add_parser(name)
-        p.add_argument("--task", choices=TASKS, required=True)
+        p.add_argument("--task", choices=[*TASKS, "kind", "food", "danger", "plain"], required=True)
         p.add_argument("--smoke", action="store_true")
         if name == "score":
             p.add_argument("--split", choices=["test", "val"], default="test")
@@ -376,7 +387,9 @@ def main(argv=None) -> int:
         p.set_defaults(fn=fn)
     sub.add_parser("baselines").set_defaults(fn=cmd_baselines)
     sub.add_parser("report").set_defaults(fn=cmd_report)
-    a = ap.parse_args(argv)
+    ap.add_argument("--gate", choices=list(GATES), default="2")
+    a, rest = ap.parse_known_args(argv)
+    DATA, RUNS, TASKS, BAR = GATES[a.gate]
     return a.fn(a)
 
 
