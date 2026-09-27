@@ -37,6 +37,13 @@ GATES = {  # gate 3 (docs/SPECIALIST-GATE-3.md) reuses this runner on its own da
         ("kind", "food", "danger", "plain"),
         {"kind": 0.80, "food": 0.80, "danger": 0.80, "plain": 0.80},
     ),
+    # harm development run (decision 35): train/val/Aegis-dev only; no sealed test exists in this data
+    "harm-dev": (
+        paths.CACHE / "v1-harm-dev",
+        paths.ROOT / "runs" / "harm-dev",
+        ("threat", "sexual", "hate", "harassment", "harmful"),
+        {t: float("nan") for t in ("threat", "sexual", "hate", "harassment", "harmful")},
+    ),
 }
 EPOCHS = {"A": 8, "B": 5}
 PATIENCE = {"A": 3, "B": 2}
@@ -47,7 +54,7 @@ def load():
     meta = json.load(open(DATA / "items.json"))
     e = dict(np.load(DATA / "emb.npz"))  # load every array once (NpzFile re-reads an array on each access)
     lab = {x: i for i, x in enumerate(meta["labels"])}
-    sets = {t: {s: [] for s in ("train", "val", "test")} for t in meta["tasks"]}
+    sets = {t: {s: [] for s in ("train", "val", "dev", "test")} for t in meta["tasks"]}
     for i, it in enumerate(meta["items"]):
         opts = [lab[o] for o in meta["tasks"][it["task"]]["options"]]
         sets[it["task"]][it["split"]].append(
@@ -379,10 +386,10 @@ def main(argv=None) -> int:
     sub = ap.add_subparsers(dest="cmd", required=True)
     for name, fn in (("preflight", cmd_preflight), ("train", cmd_train), ("score", cmd_score)):
         p = sub.add_parser(name)
-        p.add_argument("--task", choices=[*TASKS, "kind", "food", "danger", "plain"], required=True)
+        p.add_argument("--task", choices=sorted({t for g in GATES.values() for t in g[2]}), required=True)
         p.add_argument("--smoke", action="store_true")
         if name == "score":
-            p.add_argument("--split", choices=["test", "val"], default="test")
+            p.add_argument("--split", choices=["test", "val", "dev"], default="test")
             p.add_argument("--threads", type=int, default=8)
         p.set_defaults(fn=fn)
     sub.add_parser("baselines").set_defaults(fn=cmd_baselines)
