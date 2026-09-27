@@ -117,6 +117,15 @@ power it, and it needs the fly to make honest decisions."
     - training text is never shipped with any weights;
     - a lawyer's view on "weights as adaptation" before distributing weights, if Ask Bosco earns
       real money. Serving through the API does not wait on it.
+29. **Specialists are generalists in their fields** (Nick, 2026-09-27: "the specialists need to be
+    generalists in their fields"). The next fields are **intent, harm, topic, language, tone, danger and
+    finance**.
+    - Each field gets a taxonomy written before training. Several clean sources are pooled onto it, and
+      each source's mapping is pre-registered.
+    - Each gate adds a **breadth test**: a held-out source the specialist never trained on, under the same
+      bar. A specialist that passes only on its own sources' test sets does not ship as a generalist.
+    - Today's 8 were each trained on one source. Their cards say so, and they are candidates to be
+      rebuilt into their fields (topic, harm, tone, danger).
 
 ## Open (Nick to decide)
 
