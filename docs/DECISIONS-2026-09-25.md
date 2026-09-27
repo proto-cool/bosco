@@ -126,6 +126,11 @@ power it, and it needs the fly to make honest decisions."
       bar. A specialist that passes only on its own sources' test sets does not ship as a generalist.
     - Today's 8 were each trained on one source. Their cards say so, and they are candidates to be
       rebuilt into their fields (topic, harm, tone, danger).
+30. **Civil Comments is accepted for training** (Nick, 2026-09-27: "accept it and note it"). The licence is
+    CC0 (Google's TFDS catalog and HF card; no Jigsaw-hosted page could be read). Two ethics gaps stay open
+    and go on every card trained on it: the commenters' consent rests on the Civil Comments platform terms,
+    and the raters' platform and pay are undocumented. It unblocks `sexual` in harm and the hostile end of
+    tone (docs/research-gate4/harm-tone.md).
 
 ## Open (Nick to decide)
 

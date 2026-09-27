@@ -17,7 +17,7 @@ The ledger this checks against is `docs/audit-2026-09-25/provenance.md`. Nothing
 |---|---|---|---|---|---|---|
 | dynahate | authors' GitHub `bvidgen/Dynamically-Generated-Hate-Speech-Dataset` | commit `36f9dc8`, v0.2.3 (and v0.2.2) | CC BY 4.0 (repo README; there is no LICENSE file) | KEEP | text → hate / nothate | train 32,924, dev 4,100, test 4,120 |
 | hatemojibuild | author's GitHub `HannahKirk/Hatemoji` (same CSVs as the gated HF repo) | commit `a626f63` | CC BY 4.0 (repo LICENSE; HF card) | KEEP | text → hateful 0/1 | train 4,728, val 591, test 593 |
-| civil_comments | HF `google/civil_comments` (HF-staff Parquet conversion, see note 3) | rev `f2970eb` | CC0 1.0 (TFDS catalog; HF card) | REVIEW | text → toxicity score in [0, 1], plus 6 subtypes | train 1,804,874, val 97,320, test 97,320 |
+| civil_comments | HF `google/civil_comments` (HF-staff Parquet conversion, see note 3) | rev `f2970eb` | CC0 1.0 (TFDS catalog; HF card) | KEEP (Nick, 2026-09-27; gaps on the card) | text → toxicity score in [0, 1], plus 6 subtypes | train 1,804,874, val 97,320, test 97,320 |
 | dbpedia_14 | author's original `dbpedia_csv.tar.gz` (Google Drive, linked from `zhangxiangxiao/Crepe`) | version 2, 2015-09-09 | CC BY-SA and GFDL, dual (tarball readme.txt) | KEEP | title + abstract → 14 classes | train 560,000, test 70,000 |
 | snips_built_in_intents | publisher's GitHub `sonos/nlu-benchmark` | commit `b86ac7f` | CC0 1.0 (repo LICENSE) | KEEP | text → 10 intents | 328, no official split |
 | massive | Amazon S3 `amazon-massive-dataset-1.1.tar.gz` (en-US extracted) | 1.1 | CC BY 4.0 (tarball LICENSE and NOTICE; SLURP LICENSE.txt, also CC BY 4.0) | KEEP | text → 60 intents / 18 scenarios | en-US: train 11,514, dev 2,033, test 2,974 |
@@ -78,7 +78,10 @@ Train without fiction has 315,354 rows. The hypotheses were written by 387 anony
    - CC0 is verified at Google's TFDS catalog; the paper says only "a Creative Commons license".
    - The text is real people's comments, including hate and threats.
    - The two open questions from the ledger are still unanswered: what the Civil Comments terms let commenters agree to, and the rater platform and pay.
-   - It was downloaded because the ledger says REVIEW. **Do not train on it until those are cleared.**
+   - It was downloaded because the ledger says REVIEW.
+   - **Accepted by Nick, 2026-09-27 (decision 30).** The licence is CC0; the ethics gaps stay open and are
+     written on every card trained on it: commenters' consent rests on the Civil Comments platform terms,
+     and the raters' platform and pay are undocumented.
 5. **DynaHate: rounds 3 and 4 are adapted from real posts.**
    - Annotators "searched for real-world hateful online content to inspire their entries", each "subject to at least one substantial adjustment" (paper §5.3–5.4).
    - The ledger names round 3 only; round 4 is the same.
