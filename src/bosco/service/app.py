@@ -3,7 +3,9 @@
     uv run --group service --with "transformers==4.46.3" --with "sentence-transformers==3.3.1" --with einops \
         uvicorn bosco.service.app:app --host 127.0.0.1 --port 8420
 
-POST /v1/decide   {version, state: {text}, questions: {id: {type: "choose", options?}}, allow_untaught?}
+POST /v1/decide   {version?, state: {text}, questions: {id: {type, specialist?, options?}}, allow_untaught?}
+                  type: choose | approach (yes/no) | rate (options ordered low -> high); each question may name
+                  its own specialist version, else the request's `version`
 GET  /v1/traces/{id}
 GET  /v1/models
 GET  /v1/families/{id}/maps/{anatomy|wave}
@@ -22,6 +24,14 @@ from bosco import paths
 from bosco.service.core import Fleet, NotTaught
 
 ROOT = paths.ROOT / "service"
+MAX_QUESTIONS = 16
+
+
+class _AnyZ(dict):
+    """Validation only: any option word has a (dummy) smell."""
+
+    def __getitem__(self, k):
+        return 0.5
 app = FastAPI(title="Bosco", docs_url=None, redoc_url=None)
 _fleet: Fleet | None = None
 
@@ -35,6 +45,7 @@ def fleet() -> Fleet:
 
 class Question(BaseModel):
     type: str = "choose"
+    specialist: str | None = None
     options: list[str] | None = None
 
 
@@ -43,7 +54,7 @@ class State(BaseModel):
 
 
 class DecideRequest(BaseModel):
-    version: str
+    version: str | None = None
     state: State
     questions: dict[str, Question]
     allow_untaught: bool = False
@@ -60,26 +71,41 @@ async def request_id(request: Request, call_next):
 @app.post("/v1/decide")
 def decide(req: DecideRequest):
     f = fleet()
-    try:
-        spec = f.get(req.version)
-    except KeyError:
-        raise HTTPException(404, {"error": "unknown_version", "version": req.version}) from None
     if len(req.state.text) > 4000:
         raise HTTPException(422, {"error": "text_too_long", "field": "state.text", "max": 4000})
-    t0 = time.time()
-    answers, sniffs = {}, 0
+    if not req.questions or len(req.questions) > MAX_QUESTIONS:
+        raise HTTPException(422, {"error": "questions", "detail": f"1 to {MAX_QUESTIONS} questions"})
+    specs = {}
     for qid, q in req.questions.items():
-        if q.type != "choose":
+        v = q.specialist or req.version
+        if q.type not in ("choose", "approach", "rate"):
             raise HTTPException(422, {"error": "unsupported_type", "field": f"questions.{qid}.type"})
         try:
-            r = f.family.decide(spec, req.state.text, q.options, req.allow_untaught)
+            specs[qid] = f.get(v) if v else None
+        except KeyError:
+            raise HTTPException(404, {"error": "unknown_version", "version": v}) from None
+        if specs[qid] is None:
+            raise HTTPException(422, {"error": "no_specialist", "field": f"questions.{qid}.specialist"})
+    t0 = time.time()
+    qids = list(req.questions)
+    for qid in qids:  # check every question before any brain time is spent
+        q = req.questions[qid]
+        try:
+            f.family.prepare(specs[qid], f.family.REST_Z, q.type, q.options, req.allow_untaught, _AnyZ())
         except NotTaught as e:
             raise HTTPException(422, {"error": "not_taught", "field": f"questions.{qid}", "detail": str(e)}) from None
+    # independent questions, possibly for different specialists: one encoder call, one brain pass
+    rs = f.family.ask_many(
+        req.state.text, [(specs[q], req.questions[q].type, req.questions[q].options) for q in qids], req.allow_untaught
+    )
+    answers, sniffs = {}, 0
+    for qid, r in zip(qids, rs, strict=True):
+        q, spec = req.questions[qid], specs[qid]
         tid = f.keep_trace(r.pop("trace"))
-        sniffs += len(r["p"])
-        answers[qid] = {"type": "choose", **r, "brain": {"trace_id": tid}}
+        sniffs += len(spec.card["options"]) if q.options is None else len(q.options)
+        answers[qid] = {"type": q.type, "specialist": spec.card["version"], **r, "brain": {"trace_id": tid}}
     return {
-        "version": spec.card["version"],
+        "version": req.version,
         "family": f.family.meta["id"],
         "answers": answers,
         "usage": {"sniffs": sniffs},
