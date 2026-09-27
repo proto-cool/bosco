@@ -1,0 +1,3228 @@
+{
+ "built": "2026-09-27T19:27:47Z",
+ "script": "scripts/v1_gate4_topic_language_danger.py",
+ "user_agent": "bosco-research/0.1 (https://bosco.systems)",
+ "flores_plus": {
+  "url": "https://huggingface.co/datasets/openlanguagedata/flores_plus",
+  "anonymous_devtest_http": 401,
+  "gated": "auto",
+  "checked": "2026-09-27T16:42:37Z",
+  "decision": "gated: not accessed; SIB-200 used as the language held-out instead"
+ },
+ "sources": {
+  "wikipedia_va": {
+   "name": "English Wikipedia leads, topic labels from Vital Articles level 5",
+   "url": "https://en.wikipedia.org/wiki/Wikipedia:Vital_articles/Level/5",
+   "version": "list pages as of the fetch (revids in va5_pages.json); text = last revision on or before 2022-11-01",
+   "licence": "CC BY-SA 4.0 (text); list pages CC BY-SA 4.0",
+   "pii": "no humans (Wikidata P31=Q5 dropped); People sub-lists not used; emails/URLs/phones scrubbed",
+   "licence_verified_at": {
+    "url": "https://en.wikipedia.org/wiki/Wikipedia:Copyrights",
+    "http": 200,
+    "checked": "2026-09-27T16:42:23Z",
+    "phrases_found": {
+     "Creative Commons Attribution-ShareAlike 4.0": true
+    },
+    "sha256": "8859109e43e460959875f65c3c01c9c857d611d380d2489b8ee61f150c1d6aa0"
+   },
+   "attribution": "attribution/wikipedia.jsonl (revision URL per row)",
+   "rows_used": {
+    "topic|train": 8875,
+    "topic|val": 1002
+   },
+   "files": {
+    "vital_articles/va5_pages.json": {
+     "url": "https://en.wikipedia.org/wiki/Wikipedia:Vital_articles/Level_5 (sub-list pages, current revisions; revids inside)",
+     "sha256": "5ff52b0583506d8aedae7d1b3d7d494c4157a139366206a15fd9eb46d6b712c1",
+     "fetched": "2026-09-27T16:20:36Z"
+    },
+    "vital_articles/revs_en.jsonl": {
+     "url": "https://en.wikipedia.org/w/api.php (prop=revisions, rvstart=2022-11-01)",
+     "sha256": "7646645f4def80ab0d043e3a688ad9bbc32b3d393b4e8ca8619dbcef15557683",
+     "fetched": "2026-09-27T18:47:20Z"
+    }
+   }
+  },
+  "wikipedia": {
+   "name": "Wikipedia leads in 38 languages (language pool)",
+   "url": "https://<lang>.wikipedia.org",
+   "version": "last revision on or before 2022-11-01; items drawn by Wikidata's random sampler (queries cached in data/raw/clean/wikidata/sparql/)",
+   "licence": "CC BY-SA 4.0",
+   "pii": "no humans (P31=Q5 excluded in the query); emails/URLs/phones scrubbed",
+   "licence_verified_at": {
+    "url": "https://en.wikipedia.org/wiki/Wikipedia:Copyrights",
+    "http": 200,
+    "checked": "2026-09-27T16:42:23Z",
+    "phrases_found": {
+     "Creative Commons Attribution-ShareAlike 4.0": true
+    },
+    "sha256": "8859109e43e460959875f65c3c01c9c857d611d380d2489b8ee61f150c1d6aa0"
+   },
+   "attribution": "attribution/wikipedia.jsonl (revision URL per row)",
+   "rows_used": {
+    "language|train": 5848,
+    "language|val": 584
+   },
+   "files": {
+    "wiki_multilingual/revs_af.jsonl": {
+     "url": "https://af.wikipedia.org/w/api.php (prop=revisions, rvstart=2022-11-01)",
+     "sha256": "ecf3b7da9c168369dfc6af4f4798da45a04d0f00f1415f7f6f2065e3d76ad704",
+     "fetched": "2026-09-27T17:04:10Z"
+    },
+    "wiki_multilingual/revs_ar.jsonl": {
+     "url": "https://ar.wikipedia.org/w/api.php (prop=revisions, rvstart=2022-11-01)",
+     "sha256": "d1c8eb6f418435a9440977c06cc503a828d37cfd80b954e68c35ac024c657c29",
+     "fetched": "2026-09-27T17:04:10Z"
+    },
+    "wiki_multilingual/revs_az.jsonl": {
+     "url": "https://az.wikipedia.org/w/api.php (prop=revisions, rvstart=2022-11-01)",
+     "sha256": "0fe22cef7dd3cc517cec03a4076f6a7341c3378a21d44ae46335c41130613d7f",
+     "fetched": "2026-09-27T17:04:10Z"
+    },
+    "wiki_multilingual/revs_bn.jsonl": {
+     "url": "https://bn.wikipedia.org/w/api.php (prop=revisions, rvstart=2022-11-01)",
+     "sha256": "bad0785d6135f467edae40794f21b98385854c98ee9a26a33690a23daeda32c0",
+     "fetched": "2026-09-27T17:05:07Z"
+    },
+    "wiki_multilingual/revs_ca.jsonl": {
+     "url": "https://ca.wikipedia.org/w/api.php (prop=revisions, rvstart=2022-11-01)",
+     "sha256": "b684a222aadcd5513275d48961092c9f6eb788020cd1918943ec92fd58e3adce",
+     "fetched": "2026-09-27T17:06:39Z"
+    },
+    "wiki_multilingual/revs_cy.jsonl": {
+     "url": "https://cy.wikipedia.org/w/api.php (prop=revisions, rvstart=2022-11-01)",
+     "sha256": "d4fc066e9b7cf08f72e3df592e1ab5c3253f355df8d370fc563fd051e754b4cf",
+     "fetched": "2026-09-27T17:08:06Z"
+    },
+    "wiki_multilingual/revs_da.jsonl": {
+     "url": "https://da.wikipedia.org/w/api.php (prop=revisions, rvstart=2022-11-01)",
+     "sha256": "367765b15916c41830b91fbb56f3172c48e8de147435013c9136db59f52c2066",
+     "fetched": "2026-09-27T17:09:27Z"
+    },
+    "wiki_multilingual/revs_de.jsonl": {
+     "url": "https://de.wikipedia.org/w/api.php (prop=revisions, rvstart=2022-11-01)",
+     "sha256": "16df9e44126cf2bccc50e8d97808183dfe8bc3995feb330d59648b82330f33ad",
+     "fetched": "2026-09-27T17:10:41Z"
+    },
+    "wiki_multilingual/revs_el.jsonl": {
+     "url": "https://el.wikipedia.org/w/api.php (prop=revisions, rvstart=2022-11-01)",
+     "sha256": "1a01cc52674bbc273f1d35d2747ba41eaadcd4da49debf88a1e17f5446562ea7",
+     "fetched": "2026-09-27T17:12:22Z"
+    },
+    "wiki_multilingual/revs_en.jsonl": {
+     "url": "https://en.wikipedia.org/w/api.php (prop=revisions, rvstart=2022-11-01)",
+     "sha256": "b045967a73314f8e576f90611a98a7ed3b1f4375afb9a2ff44c1bddfa9f45f21",
+     "fetched": "2026-09-27T17:14:42Z"
+    },
+    "wiki_multilingual/revs_es.jsonl": {
+     "url": "https://es.wikipedia.org/w/api.php (prop=revisions, rvstart=2022-11-01)",
+     "sha256": "a7fe4d69809afb70e673c2ed04bea75ab338ab5b22551714ffdd9137d53282bf",
+     "fetched": "2026-09-27T17:16:05Z"
+    },
+    "wiki_multilingual/revs_fa.jsonl": {
+     "url": "https://fa.wikipedia.org/w/api.php (prop=revisions, rvstart=2022-11-01)",
+     "sha256": "9dd0debb375779ee869be5aec05fafecdb64c31e95f854e29335ae113de68dd4",
+     "fetched": "2026-09-27T17:17:30Z"
+    },
+    "wiki_multilingual/revs_fi.jsonl": {
+     "url": "https://fi.wikipedia.org/w/api.php (prop=revisions, rvstart=2022-11-01)",
+     "sha256": "96abe933ad4591d0e705469249bba56d7408ffa6140345df6a7553948fa04b43",
+     "fetched": "2026-09-27T17:18:50Z"
+    },
+    "wiki_multilingual/revs_fr.jsonl": {
+     "url": "https://fr.wikipedia.org/w/api.php (prop=revisions, rvstart=2022-11-01)",
+     "sha256": "2724ee6bba5c2a42c6ce29710849b88249aa7ec1fc24c1bdd2ee0d9885c37d69",
+     "fetched": "2026-09-27T17:19:07Z"
+    },
+    "wiki_multilingual/revs_he.jsonl": {
+     "url": "https://he.wikipedia.org/w/api.php (prop=revisions, rvstart=2022-11-01)",
+     "sha256": "e123b1225072a343878706a9d058b67e7cf1eb2742ec2e07b6bf8d310249e4cd",
+     "fetched": "2026-09-27T17:20:31Z"
+    },
+    "wiki_multilingual/revs_hi.jsonl": {
+     "url": "https://hi.wikipedia.org/w/api.php (prop=revisions, rvstart=2022-11-01)",
+     "sha256": "6b7861e0264d599aed35a4a3d709a69401000eb547d6524a72cb88ce2ed99529",
+     "fetched": "2026-09-27T17:21:48Z"
+    },
+    "wiki_multilingual/revs_hu.jsonl": {
+     "url": "https://hu.wikipedia.org/w/api.php (prop=revisions, rvstart=2022-11-01)",
+     "sha256": "403de0f74a7692ec2dab94c919f053ace02b04f39f4edfbd0ca09335451c88bb",
+     "fetched": "2026-09-27T17:23:22Z"
+    },
+    "wiki_multilingual/revs_id.jsonl": {
+     "url": "https://id.wikipedia.org/w/api.php (prop=revisions, rvstart=2022-11-01)",
+     "sha256": "be680b2dc2424b05b7dc1cd37c927b375b9a2906ee60743b629863dd73009898",
+     "fetched": "2026-09-27T17:24:41Z"
+    },
+    "wiki_multilingual/revs_is.jsonl": {
+     "url": "https://is.wikipedia.org/w/api.php (prop=revisions, rvstart=2022-11-01)",
+     "sha256": "117acdf52b708249677ad42b4ce5149570c2769bd18313e8d001317208b53111",
+     "fetched": "2026-09-27T17:26:13Z"
+    },
+    "wiki_multilingual/revs_it.jsonl": {
+     "url": "https://it.wikipedia.org/w/api.php (prop=revisions, rvstart=2022-11-01)",
+     "sha256": "9e84a455a12ca1dd88306ad6933054fb4bd748b5f361837efe9fb6760f914440",
+     "fetched": "2026-09-27T17:27:36Z"
+    },
+    "wiki_multilingual/revs_jv.jsonl": {
+     "url": "https://jv.wikipedia.org/w/api.php (prop=revisions, rvstart=2022-11-01)",
+     "sha256": "e3951b4ee9cac201b6cd3cf4cb85b3c59e34006ff55421753f16cf5080a6c647",
+     "fetched": "2026-09-27T17:29:04Z"
+    },
+    "wiki_multilingual/revs_ko.jsonl": {
+     "url": "https://ko.wikipedia.org/w/api.php (prop=revisions, rvstart=2022-11-01)",
+     "sha256": "a0a5a96907db5c1a71e5f096244c03dff2410af93afb345af2b52f7f9d28b3e4",
+     "fetched": "2026-09-27T17:30:21Z"
+    },
+    "wiki_multilingual/revs_lv.jsonl": {
+     "url": "https://lv.wikipedia.org/w/api.php (prop=revisions, rvstart=2022-11-01)",
+     "sha256": "73110bdfe0f9bd6f982dd84b6adff2b05bb7372d4df260c2107e8090fe9844a4",
+     "fetched": "2026-09-27T17:31:46Z"
+    },
+    "wiki_multilingual/revs_mn.jsonl": {
+     "url": "https://mn.wikipedia.org/w/api.php (prop=revisions, rvstart=2022-11-01)",
+     "sha256": "b5e027f7fbef56bc8d6dfcd2fd026ca18d6d3c5bdf03539723c5652c7d0f7af5",
+     "fetched": "2026-09-27T17:33:21Z"
+    },
+    "wiki_multilingual/revs_ms.jsonl": {
+     "url": "https://ms.wikipedia.org/w/api.php (prop=revisions, rvstart=2022-11-01)",
+     "sha256": "4213300fe474e38b519810122bba1acfe3538914b541e1e85c72986bc1332e3a",
+     "fetched": "2026-09-27T17:34:39Z"
+    },
+    "wiki_multilingual/revs_no.jsonl": {
+     "url": "https://no.wikipedia.org/w/api.php (prop=revisions, rvstart=2022-11-01)",
+     "sha256": "637eb4f6e046a54d9d699fec61e29c35c6c397f185b9118751391c83db9cf71c",
+     "fetched": "2026-09-27T17:36:06Z"
+    },
+    "wiki_multilingual/revs_nl.jsonl": {
+     "url": "https://nl.wikipedia.org/w/api.php (prop=revisions, rvstart=2022-11-01)",
+     "sha256": "eb09969a4d13c4bd3b236001d066bdacb603837bcaa316759c6ab657eda5a89f",
+     "fetched": "2026-09-27T17:36:13Z"
+    },
+    "wiki_multilingual/revs_pl.jsonl": {
+     "url": "https://pl.wikipedia.org/w/api.php (prop=revisions, rvstart=2022-11-01)",
+     "sha256": "793a76ce7d689c62fd930955498df5a2633f0ddd215628cf045fecc268224fa5",
+     "fetched": "2026-09-27T17:37:40Z"
+    },
+    "wiki_multilingual/revs_pt.jsonl": {
+     "url": "https://pt.wikipedia.org/w/api.php (prop=revisions, rvstart=2022-11-01)",
+     "sha256": "a332976d2c2e34d27aabef4a3920687d248d4271561a99e00585ece74c60d2c7",
+     "fetched": "2026-09-27T17:39:08Z"
+    },
+    "wiki_multilingual/revs_ro.jsonl": {
+     "url": "https://ro.wikipedia.org/w/api.php (prop=revisions, rvstart=2022-11-01)",
+     "sha256": "d9c364a6242db8dc26a57ac6a31f310b959a808a7b3196ccc5324490bb3f19e8",
+     "fetched": "2026-09-27T17:40:26Z"
+    },
+    "wiki_multilingual/revs_ru.jsonl": {
+     "url": "https://ru.wikipedia.org/w/api.php (prop=revisions, rvstart=2022-11-01)",
+     "sha256": "b697dc2cb5f5eff3207e3b30c8b688080d98e916ba30a842c455df2b92c2b4d4",
+     "fetched": "2026-09-27T17:41:44Z"
+    },
+    "wiki_multilingual/revs_sl.jsonl": {
+     "url": "https://sl.wikipedia.org/w/api.php (prop=revisions, rvstart=2022-11-01)",
+     "sha256": "0ef8e6e0c8e55707860be2a6f99791a2d4207fc39b21935736f050c3288eccfb",
+     "fetched": "2026-09-27T17:43:11Z"
+    },
+    "wiki_multilingual/revs_sq.jsonl": {
+     "url": "https://sq.wikipedia.org/w/api.php (prop=revisions, rvstart=2022-11-01)",
+     "sha256": "d023dda8f465c16245aa2df8ae4307a054808e158c04cef442294a5b0d477166",
+     "fetched": "2026-09-27T17:44:37Z"
+    },
+    "wiki_multilingual/revs_sv.jsonl": {
+     "url": "https://sv.wikipedia.org/w/api.php (prop=revisions, rvstart=2022-11-01)",
+     "sha256": "de7694f5850f70517d71c881c981bd741d7e6f6896eca171078879502662ef6b",
+     "fetched": "2026-09-27T17:46:11Z"
+    },
+    "wiki_multilingual/revs_sw.jsonl": {
+     "url": "https://sw.wikipedia.org/w/api.php (prop=revisions, rvstart=2022-11-01)",
+     "sha256": "db5636d7e8b47d36acafbbf416c6d207b18bdf8c1d3f6edec2cfffd458d9b99c",
+     "fetched": "2026-09-27T17:47:25Z"
+    },
+    "wiki_multilingual/revs_tl.jsonl": {
+     "url": "https://tl.wikipedia.org/w/api.php (prop=revisions, rvstart=2022-11-01)",
+     "sha256": "e67ee58e7eec68245bce24123c4043b837e966150d9dd0789f4b86f0f41f2c32",
+     "fetched": "2026-09-27T17:49:08Z"
+    },
+    "wiki_multilingual/revs_tr.jsonl": {
+     "url": "https://tr.wikipedia.org/w/api.php (prop=revisions, rvstart=2022-11-01)",
+     "sha256": "1440891cc1b4044c0658e07458759c2301057bacfd6ea4f69723a3101cab3d15",
+     "fetched": "2026-09-27T17:50:30Z"
+    },
+    "wiki_multilingual/revs_ur.jsonl": {
+     "url": "https://ur.wikipedia.org/w/api.php (prop=revisions, rvstart=2022-11-01)",
+     "sha256": "f3779bbf78175e5244aeb3b1bc8eaffa38b3e47d4f8736e004d235ea4407edc6",
+     "fetched": "2026-09-27T17:51:56Z"
+    },
+    "wiki_multilingual/revs_vi.jsonl": {
+     "url": "https://vi.wikipedia.org/w/api.php (prop=revisions, rvstart=2022-11-01)",
+     "sha256": "433e5829f903f375863343938dc59f20647edd1b1c22031d9896543cf40eb32d",
+     "fetched": "2026-09-27T17:53:22Z"
+    }
+   }
+  },
+  "wikidata": {
+   "name": "Wikidata (QIDs, humans check, given-name list for the Wikinews scrub, random samples)",
+   "url": "https://query.wikidata.org",
+   "version": "queried 2026-09-27 (not a dated snapshot)",
+   "licence": "CC0 1.0",
+   "pii": "given names only (a list of names, used to remove names)",
+   "licence_verified_at": {
+    "url": "https://www.wikidata.org/wiki/Wikidata:Copyright",
+    "http": 200,
+    "checked": "2026-09-27T16:42:24Z",
+    "phrases_found": {
+     "CC0": true
+    },
+    "sha256": "496fdf31b5e6dd580b32e11d88029276a835f4da889ee144a7d662eb3597b9b6"
+   },
+   "attribution": null,
+   "rows_used": {},
+   "files": {
+    "wikidata/sparql/*": {
+     "n_queries": 73,
+     "note": "each file holds its query and fetch time"
+    },
+    "wikidata/given_names_en.json": {
+     "sha256": "4f7d61fba08bc705dcc921afdf3b9fda6f41a39ac840c2c64ede136d1edb65c8"
+    }
+   }
+  },
+  "wikinews": {
+   "name": "English Wikinews (held-out for topic and danger)",
+   "url": "https://en.wikinews.org",
+   "version": "last revision on or before 2022-11-01; categories from that revision; Published membership as of the fetch",
+   "licence": "CC BY 2.5 (articles 2005-09-25 to 2024-12-15; public domain before 2005-09-25)",
+   "pii": "person names scrubbed to <name> in every Wikinews text (given-name runs, honorific runs, recurring surnames); emails/URLs/phones scrubbed",
+   "licence_verified_at": {
+    "url": "https://en.wikinews.org/wiki/Wikinews:Copyright",
+    "http": 200,
+    "checked": "2026-09-27T16:42:22Z",
+    "phrases_found": {
+     "Creative Commons Attribution 2.5": true
+    },
+    "sha256": "1c8ef168fed5361959e13c9a0ac2ca13167e4c8e09998d53e1b15dd7997d0b77"
+   },
+   "attribution": "attribution/wikinews.jsonl (revision URL per row)",
+   "rows_used": {
+    "topic|test": 2056,
+    "topic|dev": 532,
+    "danger|test": 642,
+    "danger|dev": 158
+   },
+   "files": {
+    "wikinews/revs.jsonl": {
+     "url": "https://en.wikinews.org/w/api.php (prop=revisions, rvstart=2022-11-01)",
+     "sha256": "9d88ab8f3a3c91e03ed57ae22bd8d9388acd9e7ac8121a8b1fdc4bd15632159a",
+     "fetched": "2026-09-27T17:04:10Z"
+    },
+    "wikinews/category_members.json": {
+     "url": "https://en.wikinews.org/w/api.php (list=categorymembers, current)",
+     "sha256": "bd80491e9c7a1d481addedb21fbd1541d7fb870e42773b797cf61b167331a0d7",
+     "fetched": "2026-09-27T17:04:10Z"
+    }
+   }
+  },
+  "stackexchange": {
+   "name": "Stack Exchange data dump (per-site 7z)",
+   "url": "https://archive.org/details/stackexchange",
+   "version": "2024-04 dump (archive.org mtimes 2024-04-06/07); questions created before 2022-11-01",
+   "licence": "CC BY-SA 4.0 (2.5/3.0 for older posts); decision 31: the newer download terms are noted on every card",
+   "pii": "user ids and display names never enter items; they are only in attribution/stackexchange.jsonl; emails/URLs/phones scrubbed; code blocks removed",
+   "licence_verified_at": {
+    "url": "https://archive.org/metadata/stackexchange/metadata/description",
+    "http": 200,
+    "checked": "2026-09-27T16:42:36Z",
+    "phrases_found": {
+     "cc-by-sa 4.0": true
+    },
+    "sha256": "415f01e3dc5c09997fbab68b786ea045f821f7201f035d78fbe6e0e5f105e281"
+   },
+   "attribution": "attribution/stackexchange.jsonl (post URL, author display name, author URL)",
+   "rows_used": {
+    "topic|train": 8563,
+    "topic|val": 937,
+    "danger|train": 5098,
+    "danger|val": 596
+   },
+   "files": {
+    "stackexchange/academia.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/academia.stackexchange.com.7z",
+     "bytes": 198564136,
+     "sha256": "5113eb82928523f259cde2ace39c43ce34655b9eb2d765dddaae8477007ec06a",
+     "fetched": "2026-09-27T16:28:09Z",
+     "archive_org_sha1": "8d923dfb2d9caa11c491e2f025fa666928cc949b",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712443640"
+    },
+    "stackexchange/astronomy.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/astronomy.stackexchange.com.7z",
+     "bytes": 51377534,
+     "sha256": "73cabac977b1c361b3b9570787c4a10431edf5805171799467b07624d019e32b",
+     "fetched": "2026-09-27T16:28:26Z",
+     "archive_org_sha1": "b24d272b48675d16d88f175f643568777bb59a76",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712440476"
+    },
+    "stackexchange/bicycles.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/bicycles.stackexchange.com.7z",
+     "bytes": 81865054,
+     "sha256": "7e11fbc02483b8ad01b95467ea3adc50c36478e2becf2cc0fa3815f13d96287e",
+     "fetched": "2026-09-27T16:28:32Z",
+     "archive_org_sha1": "012a236ea46153b08f3715d04253068e36545e01",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712445665"
+    },
+    "stackexchange/biology.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/biology.stackexchange.com.7z",
+     "bytes": 82571431,
+     "sha256": "8a7e01f9e6e274843f388e38430e804f13ffed1112c15c98130e84b79a71f47c",
+     "fetched": "2026-09-27T16:28:40Z",
+     "archive_org_sha1": "dfa04aed8232e1d1d5542195a1ea679302f82058",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712445411"
+    },
+    "stackexchange/boardgames.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/boardgames.stackexchange.com.7z",
+     "bytes": 44504376,
+     "sha256": "fb23d9094672d6c3f1dc438c34d7d0ec74e95318df0f478219e403e9b5f81479",
+     "fetched": "2026-09-27T16:28:49Z",
+     "archive_org_sha1": "f3eff0f81d569b6106c0618831423f28801df719",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712446677"
+    },
+    "stackexchange/buddhism.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/buddhism.stackexchange.com.7z",
+     "bytes": 52072725,
+     "sha256": "021ba84619a34f420669757076ad00af50be59befa2fe4cdf498121baa47cabf",
+     "fetched": "2026-09-27T16:28:55Z",
+     "archive_org_sha1": "d46f4ada763473351896f4c06b9ae73521770523",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712442242"
+    },
+    "stackexchange/chemistry.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/chemistry.stackexchange.com.7z",
+     "bytes": 126167549,
+     "sha256": "46c0d3e9d7f507dfaa987532f96f8b829b10e34e3bdeef44ad0fa7388259f7d8",
+     "fetched": "2026-09-27T16:29:06Z",
+     "archive_org_sha1": "4a92641bf3543aad3233b9f8affb351802a097db",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712446051"
+    },
+    "stackexchange/christianity.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/christianity.stackexchange.com.7z",
+     "bytes": 125197318,
+     "sha256": "67e569033ed499aab38d2caa64e902f4f6483fb809e41fc177432ad476ce7d46",
+     "fetched": "2026-09-27T16:29:39Z",
+     "archive_org_sha1": "d61d2c4a25dcb87f3dc5794f44f760cafac9bb54",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712445729"
+    },
+    "stackexchange/coffee.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/coffee.stackexchange.com.7z",
+     "bytes": 5095298,
+     "sha256": "ed92031e75185b1e5549ae257b5280423941d17751042b0369b1f2d3e8d90952",
+     "fetched": "2026-09-27T16:29:53Z",
+     "archive_org_sha1": "7bba222b2092a6586c946330e893f7f985a79b53",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712440340"
+    },
+    "stackexchange/cooking.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/cooking.stackexchange.com.7z",
+     "bytes": 87555311,
+     "sha256": "de98b85f9807a23dfc8c91006f8b59b2149089e94ea9d54676d215ea156a9ac6",
+     "fetched": "2026-09-27T16:29:59Z",
+     "archive_org_sha1": "c9f780daa9a58cc81a698ce8ae9402e964670d22",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712443098"
+    },
+    "stackexchange/crafts.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/crafts.stackexchange.com.7z",
+     "bytes": 8667456,
+     "sha256": "556905e9020bc344be21c0a78b91d65d34a19a7875db3d8a8cba66c92d271aa2",
+     "fetched": "2026-09-27T16:30:08Z",
+     "archive_org_sha1": "a0e208aac68829bf4cdd4b98ee60f87efc5de109",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712440934"
+    },
+    "stackexchange/diy.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/diy.stackexchange.com.7z",
+     "bytes": 227459493,
+     "sha256": "f795b4dbe32aabc97802bd3846484fa01d580b23b98c8ab88162bf3e90107743",
+     "fetched": "2026-09-27T16:30:14Z",
+     "archive_org_sha1": "1cb90b29a402aadcb6d4855e07bfac755ba380fc",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712469360"
+    },
+    "stackexchange/earthscience.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/earthscience.stackexchange.com.7z",
+     "bytes": 22753550,
+     "sha256": "409be9a85a5e2a86fe2bed2542fc18f8f5d061d7b0407c4117c1ebf095f8f990",
+     "fetched": "2026-09-27T16:30:33Z",
+     "archive_org_sha1": "262e78e9c89256eb16d97d9cf0e61e8a772c9613",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712441846"
+    },
+    "stackexchange/economics.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/economics.stackexchange.com.7z",
+     "bytes": 43732829,
+     "sha256": "1edb42e0a440bccbef0ec6e29ec72b3412a699613b5ed6cf4186d1b1ac336008",
+     "fetched": "2026-09-27T16:30:39Z",
+     "archive_org_sha1": "a5655e9e825a55ad719c428a7bd2585b7319c0ec",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712442331"
+    },
+    "stackexchange/engineering.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/engineering.stackexchange.com.7z",
+     "bytes": 43495387,
+     "sha256": "2a818f9b37914da5f0229aae19d88dad9c01a4f5e1bdd6c3facea577d8aacb62",
+     "fetched": "2026-09-27T16:30:44Z",
+     "archive_org_sha1": "e7f7751acdc313f8f36896c0ac7a4deb95a9fbc5",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712466299"
+    },
+    "stackexchange/expatriates.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/expatriates.stackexchange.com.7z",
+     "bytes": 17900034,
+     "sha256": "60c0475a33644b989365b66ae26a417a84e2ea19364e6ce7e826ec75c6539f7c",
+     "fetched": "2026-09-27T16:30:50Z",
+     "archive_org_sha1": "6c4de468112a81e4e2347fd75194c2587fa9f1fc",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712442711"
+    },
+    "stackexchange/fitness.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/fitness.stackexchange.com.7z",
+     "bytes": 34959036,
+     "sha256": "5fe08b64b0fbdc917aa66217af5d162270a59159eccd2fff8bc287674d4f52a7",
+     "fetched": "2026-09-27T16:30:54Z",
+     "archive_org_sha1": "fc5d462adc3b30e4c127cfac164a1b9e3e933e2d",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712446845"
+    },
+    "stackexchange/freelancing.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/freelancing.stackexchange.com.7z",
+     "bytes": 9473390,
+     "sha256": "736d473af6f1f9d87275b5c5e3e294b88687eeef687f04c0f63e187bc12e7327",
+     "fetched": "2026-09-27T16:30:58Z",
+     "archive_org_sha1": "6f56ae25c2f7f70689a35d4fd9888f59d4e59195",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712448034"
+    },
+    "stackexchange/gardening.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/gardening.stackexchange.com.7z",
+     "bytes": 43596356,
+     "sha256": "f739cc994a19445f6c2b54277e762980f28c82f7b1c2d1a12028f1fca3387d63",
+     "fetched": "2026-09-27T16:31:03Z",
+     "archive_org_sha1": "718db7040d0b608b1c969d4630d8bb95db87eec5",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712447652"
+    },
+    "stackexchange/hardwarerecs.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/hardwarerecs.stackexchange.com.7z",
+     "bytes": 11206862,
+     "sha256": "4e33977e8302d1006a351651567a70c595035fa32c1b9de2568687187b35cc85",
+     "fetched": "2026-09-27T16:31:09Z",
+     "archive_org_sha1": "92827a6ba8bd76d59b66a08214eb952bed164091",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712443400"
+    },
+    "stackexchange/health.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/health.stackexchange.com.7z",
+     "bytes": 22447982,
+     "sha256": "640567b3dc94910db67fb776f371069e9f5786dee8239473e3240036b072abfb",
+     "fetched": "2026-09-27T16:31:13Z",
+     "archive_org_sha1": "c8ddc7fb5481df3aa35d9ca95d1ff1baf407e060",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712441992"
+    },
+    "stackexchange/history.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/history.stackexchange.com.7z",
+     "bytes": 93459545,
+     "sha256": "e519d617b205634089587e0ed2029cbebf7616f6ade4c20d6cdfe7a4227b10f6",
+     "fetched": "2026-09-27T16:31:20Z",
+     "archive_org_sha1": "2ed9d93ae25401e2df3d8fb62463ae0830a3a681",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712446009"
+    },
+    "stackexchange/homebrew.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/homebrew.stackexchange.com.7z",
+     "bytes": 16637684,
+     "sha256": "3c4f6351f91f98db9813ac4cf8710a5b92dab7d381e0ae464e26283ade8af1d9",
+     "fetched": "2026-09-27T16:31:30Z",
+     "archive_org_sha1": "c4e2a2ffeca7fcf2a1f43f5581888b6be6b12d62",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712442466"
+    },
+    "stackexchange/hsm.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/hsm.stackexchange.com.7z",
+     "bytes": 18128861,
+     "sha256": "9c8299f949a1d0b7f7e623ce81504fc67a8d6bb460234b8433c2c60cb97ad308",
+     "fetched": "2026-09-27T16:31:32Z",
+     "archive_org_sha1": "7cfbbd9bc17b125cfb20aa8e089ca7491257f1e2",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712441304"
+    },
+    "stackexchange/interpersonal.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/interpersonal.stackexchange.com.7z",
+     "bytes": 36147734,
+     "sha256": "6979dc44c79cc2b0028b3088de977151ef32e865acd26c78532d8810ffa57dc9",
+     "fetched": "2026-09-27T16:31:42Z",
+     "archive_org_sha1": "7c66edc73cba69c0eafc80567ed1bb5e3c177c93",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712442438"
+    },
+    "stackexchange/islam.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/islam.stackexchange.com.7z",
+     "bytes": 54713674,
+     "sha256": "bf38a1161e4ab3f5f39fb85fbeb34d4a575355837501079ad81ad203bed7304b",
+     "fetched": "2026-09-27T16:31:47Z",
+     "archive_org_sha1": "0fa2bd594f6fe0dab309baaf08001b101a1c3850",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712440975"
+    },
+    "stackexchange/law.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/law.stackexchange.com.7z",
+     "bytes": 103470504,
+     "sha256": "3f0d775128ee8ae064ceac9ee060e8272ca2bb78eafa56aa3d20d94e304f3097",
+     "fetched": "2026-09-27T16:31:58Z",
+     "archive_org_sha1": "85e7e30eb8062113077a9c9ac92b32ede3d50a96",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712442634"
+    },
+    "stackexchange/lifehacks.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/lifehacks.stackexchange.com.7z",
+     "bytes": 14214166,
+     "sha256": "b96ac28fd3c19244c1fd995caa5054bb8af2271104f8738a3e8042172842447f",
+     "fetched": "2026-09-27T16:32:06Z",
+     "archive_org_sha1": "ae57007eae454f72a699de79177a1da9228dac4b",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712441608"
+    },
+    "stackexchange/linguistics.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/linguistics.stackexchange.com.7z",
+     "bytes": 40912941,
+     "sha256": "1a663b66d953f5a9e801f1b72a30ed399b83eba81e9565317924395d38de37c5",
+     "fetched": "2026-09-27T16:32:09Z",
+     "archive_org_sha1": "74652f65b599405448c974de93f2a6e8e7a2fbce",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712447466"
+    },
+    "stackexchange/literature.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/literature.stackexchange.com.7z",
+     "bytes": 27905063,
+     "sha256": "2c9ae13381560209bb1d787d8fb934134fd3988c5bc8f9366376a2d5a42de268",
+     "fetched": "2026-09-27T16:32:14Z",
+     "archive_org_sha1": "f136c5a66f928f0ab45cca2075f33c6af4660f6c",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712441689"
+    },
+    "stackexchange/martialarts.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/martialarts.stackexchange.com.7z",
+     "bytes": 13599943,
+     "sha256": "d8dcd5d125650019b81e0b32cd177aa3c5253b65c49a7ffdf54b1a1cc9b7ae5f",
+     "fetched": "2026-09-27T16:32:19Z",
+     "archive_org_sha1": "4750ac50f9a3e480ecbc30f9e46a8feb6107a82c",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712448730"
+    },
+    "stackexchange/mechanics.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/mechanics.stackexchange.com.7z",
+     "bytes": 65574895,
+     "sha256": "d5082b227fe67845d6050f043a96492456b434baac6caaad09bc6ca3956145eb",
+     "fetched": "2026-09-27T16:32:25Z",
+     "archive_org_sha1": "82df6cb784dc09331473bd0fef44e9984fc77d63",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712441575"
+    },
+    "stackexchange/money.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/money.stackexchange.com.7z",
+     "bytes": 132623554,
+     "sha256": "ef2621a7c4f0ad5e52a1daef8b53e34033cd805f944787328ce47b6fd3839cc2",
+     "fetched": "2026-09-27T16:32:34Z",
+     "archive_org_sha1": "2cf6e40ec7e58fc052f81d471776465001df4f99",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712443337"
+    },
+    "stackexchange/movies.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/movies.stackexchange.com.7z",
+     "bytes": 85008557,
+     "sha256": "6dc79d53d3dbaa7b08ebfc3e2cc664c5d0ec8248282a9c5913c67f429feecb3f",
+     "fetched": "2026-09-27T16:32:49Z",
+     "archive_org_sha1": "90805c810ef6b55da9b837db892577bf1f65c13d",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712445181"
+    },
+    "stackexchange/outdoors.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/outdoors.stackexchange.com.7z",
+     "bytes": 31445654,
+     "sha256": "f45a642dcedcfc9642002aaf297426121aa2a0fa62799592ca2819d265f01a05",
+     "fetched": "2026-09-27T16:33:00Z",
+     "archive_org_sha1": "fc056f3e9f214570efaaf47153c0aecf16be0371",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712447818"
+    },
+    "stackexchange/parenting.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/parenting.stackexchange.com.7z",
+     "bytes": 45517811,
+     "sha256": "70a624fcb885e4aff13a18613163e34c0a07e61bc761381053f89c12fc13212f",
+     "fetched": "2026-09-27T16:33:04Z",
+     "archive_org_sha1": "ae3437ceb8ead60157442731c071bd66aa82047c",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712447114"
+    },
+    "stackexchange/pets.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/pets.stackexchange.com.7z",
+     "bytes": 27410072,
+     "sha256": "5fb7c41000f0c629a15b9cd940c16bf3c63ec45443c574abe06b2d3502ac38df",
+     "fetched": "2026-09-27T16:33:09Z",
+     "archive_org_sha1": "e490dcc296e6bed60e2639ef45d78ca62949612c",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712447974"
+    },
+    "stackexchange/philosophy.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/philosophy.stackexchange.com.7z",
+     "bytes": 127411126,
+     "sha256": "31a5a6d1ed4945f0ee97852f34c1b97e54b1c56348f75263a8b3a6c1c1c8961a",
+     "fetched": "2026-09-27T16:33:15Z",
+     "archive_org_sha1": "65f6257c687c28e2492078005bcdf446447dfc0a",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712445174"
+    },
+    "stackexchange/politics.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/politics.stackexchange.com.7z",
+     "bytes": 114772878,
+     "sha256": "3f7e3116329410a623a930b009b6cbfcd502e570cb8f5489d88fc334f63de739",
+     "fetched": "2026-09-27T16:33:28Z",
+     "archive_org_sha1": "b5127ad30ba1a00790dc01eade93c6ab99903cdc",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712445281"
+    },
+    "stackexchange/softwarerecs.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/softwarerecs.stackexchange.com.7z",
+     "bytes": 52664606,
+     "sha256": "af9f296b9b04735825db49dc94f433308ddc539002d285e865876dcf8956ffc4",
+     "fetched": "2026-09-27T16:33:39Z",
+     "archive_org_sha1": "de85e083ce5f93598bf136c6168cc34d09ad0bc1",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712446172"
+    },
+    "stackexchange/sports.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/sports.stackexchange.com.7z",
+     "bytes": 17250955,
+     "sha256": "ba3f3abef7dd2d0b52679237d11403577898341a5c442bd262608f6a24a97f3c",
+     "fetched": "2026-09-27T16:33:48Z",
+     "archive_org_sha1": "392caba188a51bd77762f633741935fd0b0f5d87",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712447293"
+    },
+    "stackexchange/sustainability.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/sustainability.stackexchange.com.7z",
+     "bytes": 9906380,
+     "sha256": "bc6d28b75f839cddd9780e9021f9aac55ccfa3f2d0273ed1b1c3c6d9cbd8e60b",
+     "fetched": "2026-09-27T16:33:53Z",
+     "archive_org_sha1": "9f39934d41d0c6d08c096512d41f146770adce21",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712448834"
+    },
+    "stackexchange/travel.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/travel.stackexchange.com.7z",
+     "bytes": 156149761,
+     "sha256": "4c33527edc970cc32a159607372ba652d4328fa007e1214f3510595f55629169",
+     "fetched": "2026-09-27T16:33:57Z",
+     "archive_org_sha1": "efe105ee99a6a1dbed46875bb3eaa1090100ce76",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712443852"
+    },
+    "stackexchange/webapps.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/webapps.stackexchange.com.7z",
+     "bytes": 82572178,
+     "sha256": "1db79bcde16e66f749e8cfbe3e4eaacc55d539677f4a8a82d8a13ff373910e05",
+     "fetched": "2026-09-27T16:34:18Z",
+     "archive_org_sha1": "94838dee2c434edf2244b1e551c50056631d4090",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712467680"
+    },
+    "stackexchange/woodworking.stackexchange.com.7z": {
+     "url": "https://archive.org/download/stackexchange/woodworking.stackexchange.com.7z",
+     "bytes": 15364781,
+     "sha256": "14a655feae269acb38e3dbf19054a33e6eb5818374874c2886a50d53b104f7e6",
+     "fetched": "2026-09-27T16:34:30Z",
+     "archive_org_sha1": "00e34f4e9f160c7e13a2888effdafea5c82cd048",
+     "sha1_ok": true,
+     "archive_org_mtime": "1712465534"
+    }
+   }
+  },
+  "arxiv": {
+   "name": "arXiv metadata (titles and abstracts) via OAI-PMH",
+   "url": "https://oaipmh.arxiv.org/oai",
+   "version": "records with OAI datestamp 2021-03 (unchanged since), first 1-2 pages per set",
+   "licence": "CC0 1.0 (metadata incl. abstracts)",
+   "pii": "author names never read",
+   "licence_verified_at": {
+    "url": "https://info.arxiv.org/help/api/tou.html",
+    "http": 200,
+    "checked": "2026-09-27T16:42:25Z",
+    "phrases_found": {
+     "CC0": true
+    },
+    "sha256": "badbec1e87aa317038c3a519a3fad3c4a855ebe019f0e681772d72f6a14f4e49"
+   },
+   "attribution": "attribution/arxiv.jsonl (abs URL)",
+   "rows_used": {
+    "topic|train": 714,
+    "topic|val": 82
+   },
+   "files": {
+    "arxiv/cs_0.xml": {
+     "url": "https://oaipmh.arxiv.org/oai?verb=ListRecords&metadataPrefix=arXiv&set=cs&from=2021-03-01&until=2021-03-31",
+     "sha256": "191d5fd167e3243d152ed1c4098935bc33d5c3bcff4195739b68b13a7db0aa4a",
+     "fetched": "2026-09-27T16:31:51Z"
+    },
+    "arxiv/cs_1.xml": {
+     "url": "https://oaipmh.arxiv.org/oai?verb=ListRecords&resumptionToken=verb%253DListRecords%2526metadataPrefix%253DarXiv%2526from%253D2021-03-05%2526until%253D2021-03-31%2526set%253Dcs%2526skip%253D66",
+     "sha256": "eba46f3c4436a350d79b7ff7454d1c170aaf2ccdeb6dddc35a81a1f1b30b169c",
+     "fetched": "2026-09-27T16:31:56Z"
+    },
+    "arxiv/eess_0.xml": {
+     "url": "https://oaipmh.arxiv.org/oai?verb=ListRecords&metadataPrefix=arXiv&set=eess&from=2021-03-01&until=2021-03-31",
+     "sha256": "e6cb3c5b75d4387d1dda812a0a428a4b216aaf5133d955836452906afae1706a",
+     "fetched": "2026-09-27T16:32:08Z"
+    },
+    "arxiv/q-fin_0.xml": {
+     "url": "https://oaipmh.arxiv.org/oai?verb=ListRecords&metadataPrefix=arXiv&set=q-fin&from=2021-03-01&until=2021-03-31",
+     "sha256": "80799b65b11a1c3f82ecc315c3985125b69b5cff3ecd28071d28bf025263537e",
+     "fetched": "2026-09-27T16:32:13Z"
+    },
+    "arxiv/econ_0.xml": {
+     "url": "https://oaipmh.arxiv.org/oai?verb=ListRecords&metadataPrefix=arXiv&set=econ&from=2021-03-01&until=2021-03-31",
+     "sha256": "bffab4eb558bdf28c4f743690b9e4d22cd73bbc43e3ca88b314e7b665ebcba25",
+     "fetched": "2026-09-27T16:32:19Z"
+    },
+    "arxiv/math_0.xml": {
+     "url": "https://oaipmh.arxiv.org/oai?verb=ListRecords&metadataPrefix=arXiv&set=math&from=2021-03-01&until=2021-03-31",
+     "sha256": "6cd5e2d3ced98cf0a7283221b325e0c5964cace70db51abcd2c53e90f39b4006",
+     "fetched": "2026-09-27T16:32:24Z"
+    },
+    "arxiv/math_1.xml": {
+     "url": "https://oaipmh.arxiv.org/oai?verb=ListRecords&resumptionToken=verb%253DListRecords%2526metadataPrefix%253DarXiv%2526from%253D2021-03-09%2526until%253D2021-03-31%2526set%253Dmath%2526skip%253D215",
+     "sha256": "513374b40ecc91c799f5c235d98247407667631386a9f732e90f6cdf0b5e079d",
+     "fetched": "2026-09-27T16:32:29Z"
+    },
+    "arxiv/physics_0.xml": {
+     "url": "https://oaipmh.arxiv.org/oai?verb=ListRecords&metadataPrefix=arXiv&set=physics&from=2021-03-01&until=2021-03-31",
+     "sha256": "59bac0278e8fcb7b888c37787c80e1c664a4e4f74fdd34cef3d92c1ec39333a3",
+     "fetched": "2026-09-27T16:32:42Z"
+    },
+    "arxiv/physics_1.xml": {
+     "url": "https://oaipmh.arxiv.org/oai?verb=ListRecords&resumptionToken=verb%253DListRecords%2526metadataPrefix%253DarXiv%2526from%253D2021-03-05%2526until%253D2021-03-31%2526set%253Dphysics%2526skip%253D93",
+     "sha256": "d0920fd8823d18a6f53b545ab17c4488f7cfca7e048376d9705a1ff0978a4680",
+     "fetched": "2026-09-27T16:32:56Z"
+    },
+    "arxiv/q-bio_0.xml": {
+     "url": "https://oaipmh.arxiv.org/oai?verb=ListRecords&metadataPrefix=arXiv&set=q-bio&from=2021-03-01&until=2021-03-31",
+     "sha256": "373e850eb1a6a1655df97675a2b4ca1cca7f6fd802b7fcae9e1ef469ba1f95e3",
+     "fetched": "2026-09-27T16:33:02Z"
+    },
+    "arxiv/stat_0.xml": {
+     "url": "https://oaipmh.arxiv.org/oai?verb=ListRecords&metadataPrefix=arXiv&set=stat&from=2021-03-01&until=2021-03-31",
+     "sha256": "71682d3f64eb0c2db5a1aa48542b401c65a5e007a3aa801ea3a204897bc1149a",
+     "fetched": "2026-09-27T16:33:07Z"
+    },
+    "arxiv/stat_1.xml": {
+     "url": "https://oaipmh.arxiv.org/oai?verb=ListRecords&resumptionToken=verb%253DListRecords%2526metadataPrefix%253DarXiv%2526from%253D2021-03-31%2526until%253D2021-03-31%2526set%253Dstat%2526skip%253D46",
+     "sha256": "5104f984ba3e0051883fa54d1747dea8181ad318d9f9641f750f75af8fea5d55",
+     "fetched": "2026-09-27T16:33:12Z"
+    }
+   }
+  },
+  "massive": {
+   "name": "Amazon MASSIVE 1.1",
+   "url": "https://github.com/alexa/massive",
+   "version": "1.1 (local tarball, see docs/clean-data.md)",
+   "licence": "CC BY 4.0 (tarball LICENSE; ledger docs/clean-data-manifest.json)",
+   "pii": "worker_id never read",
+   "licence_verified_at": "docs/clean-data-manifest.json",
+   "attribution": null,
+   "rows_used": {
+    "topic|train": 896,
+    "topic|val": 84,
+    "language|train": 7507,
+    "language|val": 859
+   },
+   "files": {
+    "massive/amazon-massive-dataset-1.1.tar.gz": {
+     "sha256": "4cba5faa11c71437928e17cb1b9b3d8b8e727e7ea363a3a9a8045e19c0491577",
+     "bytes": 40251390
+    }
+   }
+  },
+  "sgd": {
+   "name": "Schema-Guided Dialogue (train dialogues)",
+   "url": "https://github.com/google-research-datasets/dstc8-schema-guided-dialogue",
+   "version": "the copy fetched by the intent/finance gate-4 fetcher (pinned commit in data/raw/clean/sgd/FETCH.json); read only here",
+   "licence": "CC BY-SA 4.0 (LICENSE.txt)",
+   "pii": "none expected; emails/URLs/phones scrubbed",
+   "licence_verified_at": {
+    "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/master/LICENSE.txt",
+    "http": 200,
+    "checked": "2026-09-27T16:42:34Z",
+    "phrases_found": {
+     "Attribution-ShareAlike 4.0 International": true
+    },
+    "sha256": "71a43a169b52bb1b39510b65ec5b43b4bbb59196d449a835fe58b50af6a72742"
+   },
+   "attribution": null,
+   "rows_used": {
+    "topic|train": 1165,
+    "topic|val": 81
+   },
+   "files": {
+    "sgd/LICENSE.txt": {
+     "path": "LICENSE.txt",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/LICENSE.txt",
+     "bytes": 20139,
+     "sha256": "71a43a169b52bb1b39510b65ec5b43b4bbb59196d449a835fe58b50af6a72742",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/README.md": {
+     "path": "README.md",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/README.md",
+     "bytes": 16294,
+     "sha256": "e16545f163578037e6b7315b8da243f9f9871f4f071a812ab86b73702f124168",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_001.json": {
+     "path": "train/dialogues_001.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_001.json",
+     "bytes": 3128575,
+     "sha256": "5ce28a6e656bc88c1da29c983d243d5a81eb37de92698da3864d1cf02894ca24",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_002.json": {
+     "path": "train/dialogues_002.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_002.json",
+     "bytes": 2233395,
+     "sha256": "56a06f9762593b27f5b34225de4ce37da5e83c9c5747e56bca2899f147d88b3e",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_003.json": {
+     "path": "train/dialogues_003.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_003.json",
+     "bytes": 1804298,
+     "sha256": "aae3d8d141c8c36bc5268ca573044b4e82d4534947c169d951a1f229b9852029",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_004.json": {
+     "path": "train/dialogues_004.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_004.json",
+     "bytes": 2502125,
+     "sha256": "4f4aa821e01d7d9efd44c2e89264d37e428045e7058bf3b3c6be0eaec09eddce",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_005.json": {
+     "path": "train/dialogues_005.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_005.json",
+     "bytes": 2089510,
+     "sha256": "e19563efc34dead580435331d39ec3183c79230fa361b2e2d79035af242dd90b",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_006.json": {
+     "path": "train/dialogues_006.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_006.json",
+     "bytes": 1957196,
+     "sha256": "6b4829cb18185f063b81d271b847aa6915ef970cb592a2366edbec56d4b4c746",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_007.json": {
+     "path": "train/dialogues_007.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_007.json",
+     "bytes": 2012361,
+     "sha256": "59adf47264e106df1ce4a59d2c88e95b5a12497e6f5e3e5464381c2a7526837c",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_008.json": {
+     "path": "train/dialogues_008.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_008.json",
+     "bytes": 2703055,
+     "sha256": "36614c125ce310dd162b62d624b8bcd117053cf727978458b6c36b6592f6e757",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_009.json": {
+     "path": "train/dialogues_009.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_009.json",
+     "bytes": 3177831,
+     "sha256": "d8cc086374bbce168a03169341687eaa9f886fe25f8b8dd5bd6832f6f441951d",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_010.json": {
+     "path": "train/dialogues_010.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_010.json",
+     "bytes": 3679169,
+     "sha256": "d8658cd35bd4b6d274720d14308ec721f238d70cc37ea947c38f9d83a0267c1b",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_011.json": {
+     "path": "train/dialogues_011.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_011.json",
+     "bytes": 2328620,
+     "sha256": "66f7eb72a46fa379d85e53ae607e5920a4fa14a4a99765d91ee67f3675fdf4d7",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_012.json": {
+     "path": "train/dialogues_012.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_012.json",
+     "bytes": 1945135,
+     "sha256": "483b09fc9ad3d5b7285d2e1bc44057f1286ea3e73d7ff191fcec5e1acb364412",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_013.json": {
+     "path": "train/dialogues_013.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_013.json",
+     "bytes": 2187442,
+     "sha256": "c6592a97753a8d3be8bae0099b3877e21f293a12d8daf9bcdcbec7289d5f1be3",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_014.json": {
+     "path": "train/dialogues_014.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_014.json",
+     "bytes": 2126844,
+     "sha256": "5cd6cc68c676a2546a3312eda0f29be170ab5f0d6c602c9548ffa2c095037c7b",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_015.json": {
+     "path": "train/dialogues_015.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_015.json",
+     "bytes": 1744364,
+     "sha256": "b698e8db9b0898186453ec9fcec5f80ab043cfe301447d28dc577e99bd3acfd3",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_016.json": {
+     "path": "train/dialogues_016.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_016.json",
+     "bytes": 1857379,
+     "sha256": "5a7d85a3058f38bf40290782721865c3d816f43841e0cd302b21167eefecf449",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_017.json": {
+     "path": "train/dialogues_017.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_017.json",
+     "bytes": 3043775,
+     "sha256": "0eb666f375ba2cc6362c88c02cfd255b702a2b8216e30fce200f630bcca99fa0",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_018.json": {
+     "path": "train/dialogues_018.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_018.json",
+     "bytes": 3272644,
+     "sha256": "ceadf059b7c4ec5e31b7b53ee696198c7a5baa2ff03544b81b4adbe9cb7eca05",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_019.json": {
+     "path": "train/dialogues_019.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_019.json",
+     "bytes": 2457615,
+     "sha256": "96adb06dd0605bb3536bc5e795d045d745a035e9d1c2ed05f7e89937fe883fb9",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_020.json": {
+     "path": "train/dialogues_020.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_020.json",
+     "bytes": 1683144,
+     "sha256": "b2a3cd6d8e677c6a9d342f5703a947525b17b906348cd944a4da1c449ff4f3a4",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_021.json": {
+     "path": "train/dialogues_021.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_021.json",
+     "bytes": 2311967,
+     "sha256": "f13f15b1b62f62d4ae6b71db4f37a1843861d8c1c8907fd0fde19451c08576e9",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_022.json": {
+     "path": "train/dialogues_022.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_022.json",
+     "bytes": 1701259,
+     "sha256": "01a403f462a62b324f94de598c279b5adbaee55ac10c7aed72d798aa5924c510",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_023.json": {
+     "path": "train/dialogues_023.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_023.json",
+     "bytes": 2733844,
+     "sha256": "73bf6f4be084de8fafa347257f39cf7c312bc488178dd2ce667f6e5f8baddb82",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_024.json": {
+     "path": "train/dialogues_024.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_024.json",
+     "bytes": 2882867,
+     "sha256": "fc951b44990efac041bbbd993172b954d3d55af8230a00ce78ba8bbd50daf82a",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_025.json": {
+     "path": "train/dialogues_025.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_025.json",
+     "bytes": 2508401,
+     "sha256": "8305b0d85317d77c5b6ebf128ba4d5e2410e248071a49eb2e05b1ee347c1833d",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_026.json": {
+     "path": "train/dialogues_026.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_026.json",
+     "bytes": 1795205,
+     "sha256": "2b2e2c497c870d39c575892c7aae38b08cd4e39bd3a795be1e8550330e747800",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_027.json": {
+     "path": "train/dialogues_027.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_027.json",
+     "bytes": 3214939,
+     "sha256": "63b5dd62e100afa001b596cda967f5bc86f93dc1072bd00bdc57a198ff691268",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_028.json": {
+     "path": "train/dialogues_028.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_028.json",
+     "bytes": 2970619,
+     "sha256": "225af9eebcb34f90ab1c9634c5771c9e6179019fdb903884ff70a5833b77620c",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_029.json": {
+     "path": "train/dialogues_029.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_029.json",
+     "bytes": 2757385,
+     "sha256": "87b61fd3495d851df7fa66ce43084431a7cd19154c1de32c0d6949bf6c74bae9",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_030.json": {
+     "path": "train/dialogues_030.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_030.json",
+     "bytes": 2986214,
+     "sha256": "82b282eb98a4a26832b5e87d85fdfa8e19b1073a5a903123f7a28d056c4ec2b7",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_031.json": {
+     "path": "train/dialogues_031.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_031.json",
+     "bytes": 3173364,
+     "sha256": "45e31767734dc89d825b8f84c37fdd258250bb1e0b63d8a8e775c99dde07547e",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_032.json": {
+     "path": "train/dialogues_032.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_032.json",
+     "bytes": 2099971,
+     "sha256": "70a0916baba1e2fbeaef8bc8c2086cd3f31555a8eaec6d0eed80e483ed2b9a59",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_033.json": {
+     "path": "train/dialogues_033.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_033.json",
+     "bytes": 1415091,
+     "sha256": "74c23ae93203ed5672015ce13d01c01d80d4f3a3ccd64c8f62f52e0b7c411871",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_034.json": {
+     "path": "train/dialogues_034.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_034.json",
+     "bytes": 3187990,
+     "sha256": "782a499577aba5dc0f11edb6ed803cb8023bd4828a914cb4ff712966604e36cb",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_035.json": {
+     "path": "train/dialogues_035.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_035.json",
+     "bytes": 1880139,
+     "sha256": "d6cf92ad829d275f15a62409ab8d24187a5e120b09d8f545d16d898ed4a36fd7",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_036.json": {
+     "path": "train/dialogues_036.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_036.json",
+     "bytes": 2271996,
+     "sha256": "34223f6b06febfc5b86b0b20324e98b42e9ab4ca7e9c9797c6ba4e49e86e5cce",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_037.json": {
+     "path": "train/dialogues_037.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_037.json",
+     "bytes": 4335433,
+     "sha256": "6e6bd6787f30640305ce0dc1b1dac8fa3d9b53ab0dd28c224519ff727cea916f",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_038.json": {
+     "path": "train/dialogues_038.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_038.json",
+     "bytes": 2522702,
+     "sha256": "936ee784006908d323d558b84e1646dd932a3b4978bc03deafa1da6e2776e6f0",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_039.json": {
+     "path": "train/dialogues_039.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_039.json",
+     "bytes": 2016820,
+     "sha256": "155da94cb95bdbc95e52062459e46b98cce4c8e049b956c5f285ce7a821a08c3",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_040.json": {
+     "path": "train/dialogues_040.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_040.json",
+     "bytes": 1801095,
+     "sha256": "c807c28a3d1dbbe8ecaddd96ed97ac7b67918b12181e07eb89fb046ef6084891",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_041.json": {
+     "path": "train/dialogues_041.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_041.json",
+     "bytes": 2803330,
+     "sha256": "d24455e00ea88b20a94cfd54581b30b224c207b20a197484ef9b27022af47f05",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_042.json": {
+     "path": "train/dialogues_042.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_042.json",
+     "bytes": 1661780,
+     "sha256": "51d94d5d602cbf51c819c8f79a25f45174ebc3191c8ea3b2278d5b6c96742d51",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_043.json": {
+     "path": "train/dialogues_043.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_043.json",
+     "bytes": 1648319,
+     "sha256": "98c9cc7865bc70e67123cc4e64daad8843d5750552bae2559d7bb95aae782c0a",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_044.json": {
+     "path": "train/dialogues_044.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_044.json",
+     "bytes": 4091935,
+     "sha256": "8d3024399540122bef422925f2508ead00bcd85e4f07e16236de87747555fe5f",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_045.json": {
+     "path": "train/dialogues_045.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_045.json",
+     "bytes": 2795079,
+     "sha256": "056df88c7bbff91bcc9b8fe009bfc6f01400aa59feae549cace7d5caa823dcb0",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_046.json": {
+     "path": "train/dialogues_046.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_046.json",
+     "bytes": 3270897,
+     "sha256": "79c92a6fbb92481deb5fe00127359c6029724b49ade4913704a08ce397938eeb",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_047.json": {
+     "path": "train/dialogues_047.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_047.json",
+     "bytes": 3589299,
+     "sha256": "fbe4e810316077148a2d96c8197928486a547946b44b9fce96eafa4f6fa4e0e7",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_048.json": {
+     "path": "train/dialogues_048.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_048.json",
+     "bytes": 3522631,
+     "sha256": "882d7c255da334163b024a6fd511c5eaeedfd507da4db350e4ed2cde393cc787",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_049.json": {
+     "path": "train/dialogues_049.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_049.json",
+     "bytes": 3662320,
+     "sha256": "fa48932032d150414a97d12f9cde4d1ac00bcc593bb30c43a45f2b802f293ed5",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_050.json": {
+     "path": "train/dialogues_050.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_050.json",
+     "bytes": 3233186,
+     "sha256": "40543b657e832ab34b4bb4733ecbf1e7d1f15566674e49191c70261d29490aba",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_051.json": {
+     "path": "train/dialogues_051.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_051.json",
+     "bytes": 3924048,
+     "sha256": "e8eef63422e756f420c60ddfd3bcae3fc5caddf3370c31fa7fa3648a3579bbdc",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_052.json": {
+     "path": "train/dialogues_052.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_052.json",
+     "bytes": 4652256,
+     "sha256": "6736abeb95425a570f6ae5b1dd75967849957cabbdc550a9372a9a7646aba898",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_053.json": {
+     "path": "train/dialogues_053.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_053.json",
+     "bytes": 4363710,
+     "sha256": "2825a26dbed8e7aba44677fd2f387d131991921506a5c8647a75c1c905571491",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_054.json": {
+     "path": "train/dialogues_054.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_054.json",
+     "bytes": 4313652,
+     "sha256": "68e7ed4999fc4f21615e9f61a613309ab0560ed53e5e5837ccb96956ee2c5c2f",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_055.json": {
+     "path": "train/dialogues_055.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_055.json",
+     "bytes": 4290683,
+     "sha256": "c1e4d78a6137b9e3232f0d8a0045f81ac0bbda937cc6187621406f6279885034",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_056.json": {
+     "path": "train/dialogues_056.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_056.json",
+     "bytes": 4518344,
+     "sha256": "b4c4293c6cc1eea766025b0ba658e52070d6ef743afb73b1fb5531d280776977",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_057.json": {
+     "path": "train/dialogues_057.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_057.json",
+     "bytes": 4124305,
+     "sha256": "7586422916e6f7c943b97b304f2724e6eefbe4ee1dd42b9d45413c1fc457cfc2",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_058.json": {
+     "path": "train/dialogues_058.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_058.json",
+     "bytes": 4405722,
+     "sha256": "7ff43d0030fa5f32eb92aa87f3b4086d760d55ebefe0318b17ccf6c11795556e",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_059.json": {
+     "path": "train/dialogues_059.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_059.json",
+     "bytes": 3947089,
+     "sha256": "d5597d0c8e9a904aeeb722e8d8c3a8d15a92eacf1713241fe9c05bd470b625a5",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_060.json": {
+     "path": "train/dialogues_060.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_060.json",
+     "bytes": 4571269,
+     "sha256": "12d510c5644954820f48eb80601d599722672f6759aefdd7774d55d6b509f333",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_061.json": {
+     "path": "train/dialogues_061.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_061.json",
+     "bytes": 3331178,
+     "sha256": "1b1b9c6c8a8113f49e18998512f7d5fea2141be7bec48aac201f306586ac15ce",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_062.json": {
+     "path": "train/dialogues_062.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_062.json",
+     "bytes": 3827504,
+     "sha256": "4c4d76ffc33419e835087d081ff1d469f0b9e65b8d5c372b43d4680c286bbd45",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_063.json": {
+     "path": "train/dialogues_063.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_063.json",
+     "bytes": 3405227,
+     "sha256": "ab015c005d3e1d26bdcd970aee1992d7084453d57f82e2be9795846157eb8fa9",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_064.json": {
+     "path": "train/dialogues_064.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_064.json",
+     "bytes": 2909404,
+     "sha256": "ac2fac08f9f1673be6bd1cf6cec44dbd8d35861f658567313ef8d7b7f8c1908c",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_065.json": {
+     "path": "train/dialogues_065.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_065.json",
+     "bytes": 2617451,
+     "sha256": "a9bd32fb9cce88b4bd0a4a11b136423401ba6e14fb5be306fe1eda9e485e8760",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_066.json": {
+     "path": "train/dialogues_066.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_066.json",
+     "bytes": 4602133,
+     "sha256": "9b6145e988296f133c5414db17798098b97ef01bda44b7b1740ade97c268770e",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_067.json": {
+     "path": "train/dialogues_067.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_067.json",
+     "bytes": 3561936,
+     "sha256": "d16cfeda3585639f9ccbac0b5d1fa5c755d9b87bafa95ac737ddd40d7b1fe7a7",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_068.json": {
+     "path": "train/dialogues_068.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_068.json",
+     "bytes": 4761708,
+     "sha256": "ba2f245f26ba2c13463d34f8a8d1635347974a9f0e423bda53ca4bc15fb82a17",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_069.json": {
+     "path": "train/dialogues_069.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_069.json",
+     "bytes": 3806392,
+     "sha256": "319035b2843a089f352f2e7fbb06544c7d68d86ebbba57ebc3bbf3725c07a9cd",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_070.json": {
+     "path": "train/dialogues_070.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_070.json",
+     "bytes": 5178701,
+     "sha256": "ca37b41fefd5af07b4d9fba75c3268d6831f2ce49f5bf4e6d5412e39c764f0a8",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_071.json": {
+     "path": "train/dialogues_071.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_071.json",
+     "bytes": 4438526,
+     "sha256": "59a78ab61ef8e419c7c2791e028db3704254a196f73e79a890274f09e7e65801",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_072.json": {
+     "path": "train/dialogues_072.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_072.json",
+     "bytes": 5743859,
+     "sha256": "c0e8dd91f70c150ef02118b15152da7f973dcf261112a1604bfa4823d276829c",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_073.json": {
+     "path": "train/dialogues_073.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_073.json",
+     "bytes": 6231204,
+     "sha256": "e2b9aa0843a8cdfabaf24fecae2bf4b280ea8aed75670d6e955d25df58dc8494",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_074.json": {
+     "path": "train/dialogues_074.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_074.json",
+     "bytes": 5806688,
+     "sha256": "0c4fd25b8d66f46ee5a8332410a093473dc57655e1edc2e59ec1d53e2e1a7756",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_075.json": {
+     "path": "train/dialogues_075.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_075.json",
+     "bytes": 4914317,
+     "sha256": "4e1ce624c664a402ee31f69083fc263346aef3ed70d866dc940f4565c1c3e9b8",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_076.json": {
+     "path": "train/dialogues_076.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_076.json",
+     "bytes": 4520378,
+     "sha256": "72567237e51a2282a34d66acbc6beeb23b400f29da404d98de6f796686c720ec",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_077.json": {
+     "path": "train/dialogues_077.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_077.json",
+     "bytes": 4380935,
+     "sha256": "2ec1a3ed1a85498992f4fcfecbd8e9a6b4a72968b8da4cd3502d170edffd9437",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_078.json": {
+     "path": "train/dialogues_078.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_078.json",
+     "bytes": 5051676,
+     "sha256": "288a96936c4426a40e50eb6e220a93cce32177827b416f656c4c78e43aebad16",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_079.json": {
+     "path": "train/dialogues_079.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_079.json",
+     "bytes": 5157890,
+     "sha256": "a2817b6b744c4a03fb4f5cf36100a233ea0af7d96b784b237ea9ab1dd3dd4aad",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_080.json": {
+     "path": "train/dialogues_080.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_080.json",
+     "bytes": 5429441,
+     "sha256": "4b166ba32851d5164271d83ed671135682c344aca1ffa4095c1b38cd63a89600",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_081.json": {
+     "path": "train/dialogues_081.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_081.json",
+     "bytes": 6213747,
+     "sha256": "b34c8b63682242361d30ca5ced6d1a55719f4ed8f151f2a52854b61831e5a45c",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_082.json": {
+     "path": "train/dialogues_082.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_082.json",
+     "bytes": 5830819,
+     "sha256": "11751fd14c9580880d1b3157e10103477cd9a7333a689eda89c6f00a21660da6",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_083.json": {
+     "path": "train/dialogues_083.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_083.json",
+     "bytes": 5865254,
+     "sha256": "c4b2d5f1bbdbe6b53fd96d3fde936c66ecfe35674cae3c79e207c0b1c397616e",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_084.json": {
+     "path": "train/dialogues_084.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_084.json",
+     "bytes": 5636581,
+     "sha256": "f728459cbdbb4f69f87dfbc00af0584b9a44b841a568717e7dab7c3146f492cb",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_085.json": {
+     "path": "train/dialogues_085.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_085.json",
+     "bytes": 4471455,
+     "sha256": "f22be96c2ff0a95c4c883a64f9677e0a0106fac25ea42a523df91700ead7bfa3",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_086.json": {
+     "path": "train/dialogues_086.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_086.json",
+     "bytes": 3159341,
+     "sha256": "c1ebb9b572cd00cc4ec09e7ad775aadec6310e2fe1cc064e0ed18480992a04a4",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_087.json": {
+     "path": "train/dialogues_087.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_087.json",
+     "bytes": 3701611,
+     "sha256": "1b95dda470d3f0809bbbeb86cb99a9a322a81fd1a96e96735d953d5409331810",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_088.json": {
+     "path": "train/dialogues_088.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_088.json",
+     "bytes": 4065936,
+     "sha256": "cbb055520fdd1d7cfffe7b911829a00774cc8190c2d07cb29787cca7f5d51fbf",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_089.json": {
+     "path": "train/dialogues_089.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_089.json",
+     "bytes": 3993512,
+     "sha256": "357d12d7b5fcc9a2414cafc3a9bf6b31449b1f11474d16be5b7747e1999423b4",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_090.json": {
+     "path": "train/dialogues_090.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_090.json",
+     "bytes": 3272770,
+     "sha256": "78310f5e8e4c5a48cb600d36ba762448d13ab15e820aa5f56cc6f25994b6902a",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_091.json": {
+     "path": "train/dialogues_091.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_091.json",
+     "bytes": 2935497,
+     "sha256": "c80f229312047567f61db69223c79e1921662f88f63f9718a1ec51b5204612b0",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_092.json": {
+     "path": "train/dialogues_092.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_092.json",
+     "bytes": 3236069,
+     "sha256": "b9656f9135cefd1fe1bd175f4b45d74c2c2a558137a1f2d509771ccf7e8aff4b",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_093.json": {
+     "path": "train/dialogues_093.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_093.json",
+     "bytes": 4260445,
+     "sha256": "fb6ec8f4c975d7bf7e5a18645ef16614a393dab96e623074410ff5bd9a60d8ca",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_094.json": {
+     "path": "train/dialogues_094.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_094.json",
+     "bytes": 4422048,
+     "sha256": "309f412040022ca48c75c7b980fd65ff3f93e9c486305e2cd29a2bafbb57d7b0",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_095.json": {
+     "path": "train/dialogues_095.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_095.json",
+     "bytes": 3956055,
+     "sha256": "0411f940d9e3f659c6ab1037e14094612d088b9ee98a62043658fe1b76fa700f",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_096.json": {
+     "path": "train/dialogues_096.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_096.json",
+     "bytes": 3550934,
+     "sha256": "8d004b5c6a865428bf25093356f46a0a84b4bd3b749f4172f9d0e606a6d70217",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_097.json": {
+     "path": "train/dialogues_097.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_097.json",
+     "bytes": 2587709,
+     "sha256": "ac32e0ccd38e439655ef8a6fc5436e5d14c5dbcf44faeb1fac48b17e3a7bad34",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_098.json": {
+     "path": "train/dialogues_098.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_098.json",
+     "bytes": 4138095,
+     "sha256": "b08094174ff819f259ea64c199e8d3c5141006b11e00b428be21d5b7e452bc0b",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_099.json": {
+     "path": "train/dialogues_099.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_099.json",
+     "bytes": 3326260,
+     "sha256": "fb7110d90b179fe43eaee15393422ae7fb0d522190a69495023f0cf9cadebcbb",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_100.json": {
+     "path": "train/dialogues_100.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_100.json",
+     "bytes": 3680526,
+     "sha256": "4cdafb648909b34c0f609e61f5c4db5511a880e3d4ba7c726bf4e78e3fe09590",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_101.json": {
+     "path": "train/dialogues_101.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_101.json",
+     "bytes": 3666647,
+     "sha256": "142dc7b5452d6aaafb25fa9637b3f5126ac83194b907016af5e85659220d9cba",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_102.json": {
+     "path": "train/dialogues_102.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_102.json",
+     "bytes": 2915285,
+     "sha256": "15da667bc211a0abb82203184c09e19756cff59feecf1e8578632854254af05e",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_103.json": {
+     "path": "train/dialogues_103.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_103.json",
+     "bytes": 3411929,
+     "sha256": "8c5b4c3df6b7fb43e74b745bca2cfff0b2555be20d13859e6c6c502bb1f27326",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_104.json": {
+     "path": "train/dialogues_104.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_104.json",
+     "bytes": 4507712,
+     "sha256": "4e02e3fc67c89d50365feaa2a1424bf5a8de5edaef02f3191cc35cf46918f8b2",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_105.json": {
+     "path": "train/dialogues_105.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_105.json",
+     "bytes": 3973765,
+     "sha256": "fdf5795a36fe9b59721df5a3d35fe37efdc5d555573ee4f9a939409d737c7376",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_106.json": {
+     "path": "train/dialogues_106.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_106.json",
+     "bytes": 3193259,
+     "sha256": "98b72cb9cea0b320fbc58e80977d48879005159156d4e7c19b7905a6723f3d5f",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_107.json": {
+     "path": "train/dialogues_107.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_107.json",
+     "bytes": 2846725,
+     "sha256": "ae315294f293e65edbdd58f0476c8693605a791872db840788e334f637df9b4c",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_108.json": {
+     "path": "train/dialogues_108.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_108.json",
+     "bytes": 3266423,
+     "sha256": "584a1c096b49fac0b66d8ba08f39ca2cef41d93c98851f1b10e86cf995170b1e",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_109.json": {
+     "path": "train/dialogues_109.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_109.json",
+     "bytes": 3748197,
+     "sha256": "ec28252137a7ceae1a3843bf39d3c9a78a4bd139b13c70165982b0c05c391502",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_110.json": {
+     "path": "train/dialogues_110.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_110.json",
+     "bytes": 3584141,
+     "sha256": "48f2d6256d96385350e1b58e7cc3b499f1be78584790250e89d9d0d11cc03dd0",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_111.json": {
+     "path": "train/dialogues_111.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_111.json",
+     "bytes": 3628127,
+     "sha256": "740087b7e2a5305c4ef16a7227dcc61f9af3cf054690ee682a823070a9e2b2c1",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_112.json": {
+     "path": "train/dialogues_112.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_112.json",
+     "bytes": 3276752,
+     "sha256": "0120d9160a30b1b15c21613122250d2a036609b0ba1e3ed33b5b396c4161e10d",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_113.json": {
+     "path": "train/dialogues_113.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_113.json",
+     "bytes": 2381966,
+     "sha256": "895cbdca09acff80c6a194dc44a293fd6875390ad5899720bc98f004eca7d99b",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_114.json": {
+     "path": "train/dialogues_114.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_114.json",
+     "bytes": 3487920,
+     "sha256": "619616f5a4d46200105dc2ea3ce1b1c131051edf57ca64b495f693cd8eafb4f4",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_115.json": {
+     "path": "train/dialogues_115.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_115.json",
+     "bytes": 3765731,
+     "sha256": "3bb6c375846127053c01d51a0e6509eddfaad47f6d2a2bb3a7cfee65120bec32",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_116.json": {
+     "path": "train/dialogues_116.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_116.json",
+     "bytes": 3949443,
+     "sha256": "c0c409d8a0cf74e37a59d1843680501c245f91f9b28fea79c15a1e66195906ef",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_117.json": {
+     "path": "train/dialogues_117.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_117.json",
+     "bytes": 5004609,
+     "sha256": "b84563e3e581a1da03e48b780de326ad68f3004d225509d6ae89ea84b271a4c4",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_118.json": {
+     "path": "train/dialogues_118.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_118.json",
+     "bytes": 4705123,
+     "sha256": "f8116cfa196a5e43b94c6c3657d8cf4e62c112a2f683d179ade4f13baac588fc",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_119.json": {
+     "path": "train/dialogues_119.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_119.json",
+     "bytes": 4003507,
+     "sha256": "b374904ff28881f08e7212296848c0bf9cc18a45195f4d982123f27aa3bd3a23",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_120.json": {
+     "path": "train/dialogues_120.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_120.json",
+     "bytes": 3805349,
+     "sha256": "d4565f5378c2205129b0c0a1feada548a62220c0a8e2b1caf6d234ffe463eab3",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_121.json": {
+     "path": "train/dialogues_121.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_121.json",
+     "bytes": 4020882,
+     "sha256": "952e6284dbacb2bebca8ba36ac3c942edb50d248b2395706facf6c95f3b84d1c",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_122.json": {
+     "path": "train/dialogues_122.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_122.json",
+     "bytes": 3855293,
+     "sha256": "d4d3b718ac0527099412df7774c873939060d65e82b09ba6a1bec593f5559349",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_123.json": {
+     "path": "train/dialogues_123.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_123.json",
+     "bytes": 3773446,
+     "sha256": "469b268f44aad6fb2bba4d271163d6c774234a80123e66204357b37d0619e2c2",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_124.json": {
+     "path": "train/dialogues_124.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_124.json",
+     "bytes": 3596271,
+     "sha256": "8dd0418beb880f5f021c8466fc92233ef5992e8adcc6380a180f4107dfccf7f1",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_125.json": {
+     "path": "train/dialogues_125.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_125.json",
+     "bytes": 1906912,
+     "sha256": "45d59601652c9b648175125718b55e5d65b3567c09518c9d054f67bdc8b2eaba",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_126.json": {
+     "path": "train/dialogues_126.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_126.json",
+     "bytes": 2810251,
+     "sha256": "ae4c17bab75be5eb1ec8738dedd72bd5d33657243068e657642259c8091269ac",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/dialogues_127.json": {
+     "path": "train/dialogues_127.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_127.json",
+     "bytes": 2332220,
+     "sha256": "ba42de75a55e27a239b238d94ece3c98e5b64a755e155a027d8a31e5fbf791dc",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    },
+    "sgd/train/schema.json": {
+     "path": "train/schema.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/schema.json",
+     "bytes": 75764,
+     "sha256": "97b6c21673aa7e5c2d1ceef52aa35170c565223cdcbf33bb24c69739bda04a82",
+     "fetched": "2026-09-27",
+     "repo": "google-research-datasets/dstc8-schema-guided-dialogue",
+     "commit": "e852981ae34990f4358979625854259302feaa78"
+    }
+   }
+  },
+  "openfda": {
+   "name": "openFDA enforcement reports (food, drug, device)",
+   "url": "https://open.fda.gov/apis/food/enforcement/ (and drug, device)",
+   "version": "bulk export of 2026-09-25; recalls initiated before 2022-11-01",
+   "licence": "CC0 1.0 / public domain (GMDN fields not used)",
+   "pii": "company names only; emails/URLs/phones scrubbed",
+   "licence_verified_at": {
+    "url": "https://open.fda.gov/license/",
+    "http": 200,
+    "checked": "2026-09-27T16:42:27Z",
+    "phrases_found": {
+     "CC0": true
+    },
+    "sha256": "a6a2eab5020f90f7cd09a3b9a9717ba27b345a1d10e023d147f2d114f57f64ea"
+   },
+   "attribution": null,
+   "rows_used": {
+    "danger|train": 2602,
+    "danger|val": 282
+   },
+   "files": {
+    "openfda/food-enforcement-0001-of-0001.json.zip": {
+     "url": "https://download.open.fda.gov/food/enforcement/food-enforcement-0001-of-0001.json.zip",
+     "bytes": 5848411,
+     "sha256": "37788efc0c331fac74ca0b2e2f95d48b29159648ff0e7e6c518e8ac9c1f0eb78",
+     "fetched": "2026-09-27T16:28:03Z",
+     "export_date": "2026-09-25",
+     "records": 29415
+    },
+    "openfda/drug-enforcement-0001-of-0001.json.zip": {
+     "url": "https://download.open.fda.gov/drug/enforcement/drug-enforcement-0001-of-0001.json.zip",
+     "bytes": 4004072,
+     "sha256": "c6eb46526a3ad52102a88b65727874c2e23c43300b27e704eada05960d755092",
+     "fetched": "2026-09-27T16:28:03Z",
+     "export_date": "2026-09-25",
+     "records": 17975
+    },
+    "openfda/device-enforcement-0001-of-0001.json.zip": {
+     "url": "https://download.open.fda.gov/device/enforcement/device-enforcement-0001-of-0001.json.zip",
+     "bytes": 94631473,
+     "sha256": "80cbac584df05071b2ba0594aef15ae975df1ce2e21f5abf745093ef7002e9b8",
+     "fetched": "2026-09-27T16:28:04Z",
+     "export_date": "2026-09-25",
+     "records": 39969
+    }
+   }
+  },
+  "cpsc": {
+   "name": "CPSC Recalls API",
+   "url": "https://www.saferproducts.gov/RestWebServices/Recall",
+   "version": "recalls dated 2000-01-01 to 2022-10-31, fetched 2026-09-27",
+   "licence": "US public domain (usa.gov/publicdomain/label/1.0 on data.gov)",
+   "pii": "ConsumerContact never read; emails/URLs/phones scrubbed",
+   "licence_verified_at": {
+    "url": "https://catalog.data.gov/dataset/recalls-api",
+    "http": 200,
+    "checked": "2026-09-27T16:42:28Z",
+    "phrases_found": {
+     "usa.gov/publicdomain/label/1.0": true
+    },
+    "sha256": "21621944c6a6be6909ef34db9ea31808849f2a11a090984d2885ec4b1c3db41a"
+   },
+   "attribution": null,
+   "rows_used": {
+    "danger|train": 436,
+    "danger|val": 44
+   },
+   "files": {
+    "cpsc/recalls_2000-01-01_2022-10-31.json": {
+     "url": "https://www.saferproducts.gov/RestWebServices/Recall?format=json&RecallDateStart=2000-01-01&RecallDateEnd=2022-10-31",
+     "bytes": 17557339,
+     "sha256": "d5c7c303a1a6bf838c71d59af301414d4832fd8da667e07b2a7bf9638cb097fe",
+     "fetched": "2026-09-27T16:28:12Z"
+    }
+   }
+  },
+  "nhtsa": {
+   "name": "NHTSA recalls flat file (FLAT_RCL_POST_2010)",
+   "url": "https://static.nhtsa.gov/odi/ffdd/rcl/FLAT_RCL_POST_2010.zip",
+   "version": "file as of the fetch; reports received before 2022-11-01",
+   "licence": "US public domain (usa.gov/publicdomain/label/1.0 on data.gov)",
+   "pii": "only CAMPNO, COMPNAME, RCDATE, DESC_DEFECT, CONEQUENCE_DEFECT read; manufacturer and contact columns never read",
+   "licence_verified_at": {
+    "url": "https://catalog.data.gov/dataset/nhtsas-office-of-defects-investigation-odi-recalls",
+    "http": 200,
+    "checked": "2026-09-27T16:42:29Z",
+    "phrases_found": {
+     "usa.gov/publicdomain/label/1.0": true
+    },
+    "sha256": "42e80d2f7c240ba74c3b30842e1f9e09f6cc8b2aa692af7478c2eedbf910aed6"
+   },
+   "attribution": null,
+   "rows_used": {
+    "danger|train": 430,
+    "danger|val": 48
+   },
+   "files": {
+    "nhtsa/FLAT_RCL_POST_2010.zip": {
+     "url": "https://static.nhtsa.gov/odi/ffdd/rcl/FLAT_RCL_POST_2010.zip",
+     "bytes": 14956548,
+     "sha256": "823325f2ed5159f435f12fabc63774852fc5f5d0c91a29e04cca05af8d0acf32",
+     "fetched": "2026-09-27T16:28:13Z"
+    },
+    "nhtsa/RCL.txt": {
+     "url": "https://static.nhtsa.gov/odi/ffdd/rcl/RCL.txt",
+     "bytes": 3053,
+     "sha256": "3438cc7e4131efa401dfe6437dbe035607e092c129155dfb411d459d58802203",
+     "fetched": "2026-09-27T16:28:13Z"
+    }
+   }
+  },
+  "nws": {
+   "name": "NWS text products via api.weather.gov (TOR/SVR/FFW warnings vs ZFP forecasts)",
+   "url": "https://api.weather.gov/products",
+   "version": "products listed on 2026-09-27 (issued 2026-09); exception to the 2022-11 cutoff, government text",
+   "licence": "public domain (weather.gov/disclaimer: 'may be used ... for any lawful purpose')",
+   "pii": "none (headers, codes and lat/lon stripped)",
+   "licence_verified_at": {
+    "url": "https://www.weather.gov/disclaimer",
+    "http": 200,
+    "checked": "2026-09-27T16:42:30Z",
+    "phrases_found": {
+     "public domain": true,
+     "lawful purpose": true
+    },
+    "sha256": "2de6e0d8719c50de2dc7f53ca1fb5287eec08c23603fc44b59807e06f992ef4d"
+   },
+   "attribution": null,
+   "rows_used": {
+    "danger|train": 890,
+    "danger|val": 6
+   },
+   "files": {
+    "nws/products.jsonl": {
+     "url": "https://api.weather.gov/products/{id}",
+     "sha256": "5f8d0e16197ca5622dcd7d6fba3672292c35d6bf156b790db33d3245817467f9",
+     "fetched": "2026-09-27T16:47:13Z"
+    }
+   }
+  },
+  "tatoeba": {
+   "name": "Tatoeba per-language sentence exports (sentences_detailed)",
+   "url": "https://downloads.tatoeba.org/exports/per_language/",
+   "version": "exports as of the fetch; sentences added and last modified before 2022-11-01 (or undated)",
+   "licence": "CC BY 2.0 FR (text default; some sentences CC0)",
+   "pii": "usernames only in attribution/tatoeba.jsonl; emails/URLs/phones scrubbed",
+   "licence_verified_at": {
+    "url": "https://tatoeba.org/en/terms_of_use",
+    "http": 200,
+    "checked": "2026-09-27T16:42:32Z",
+    "phrases_found": {
+     "cc-by 2.0 fr": true
+    },
+    "sha256": "f3e46eaac2d25bfacaab4e3cb834bd5252bb3df6367dd9da932bf46ec5ca2c22"
+   },
+   "attribution": "attribution/tatoeba.jsonl (sentence URL, username)",
+   "rows_used": {
+    "language|train": 7525,
+    "language|val": 886
+   },
+   "files": {
+    "tatoeba/afr_sentences_detailed.tsv.bz2": {
+     "url": "https://downloads.tatoeba.org/exports/per_language/afr/afr_sentences_detailed.tsv.bz2",
+     "bytes": 92455,
+     "sha256": "3800e6e8d0e0661e930ae6e9bfde29e265cfb57de0d06c654dd0113abf8c778c",
+     "fetched": "2026-09-27T16:28:14Z"
+    },
+    "tatoeba/ara_sentences_detailed.tsv.bz2": {
+     "url": "https://downloads.tatoeba.org/exports/per_language/ara/ara_sentences_detailed.tsv.bz2",
+     "bytes": 1209928,
+     "sha256": "07a873c5b0d29dba44bb0b2377a9a3743ac641bb90c668f7a54fbf0fbe48a607",
+     "fetched": "2026-09-27T16:28:17Z"
+    },
+    "tatoeba/aze_sentences_detailed.tsv.bz2": {
+     "url": "https://downloads.tatoeba.org/exports/per_language/aze/aze_sentences_detailed.tsv.bz2",
+     "bytes": 237838,
+     "sha256": "fa58e96abb723bef3c59ab0e1f1aca59f68be5189313cf3a6186549b8efe434e",
+     "fetched": "2026-09-27T16:28:19Z"
+    },
+    "tatoeba/ben_sentences_detailed.tsv.bz2": {
+     "url": "https://downloads.tatoeba.org/exports/per_language/ben/ben_sentences_detailed.tsv.bz2",
+     "bytes": 343394,
+     "sha256": "2df539092815d6ae827e487617c974283ccfcfab7404b1a0d298551ea7cfb79d",
+     "fetched": "2026-09-27T16:28:21Z"
+    },
+    "tatoeba/cat_sentences_detailed.tsv.bz2": {
+     "url": "https://downloads.tatoeba.org/exports/per_language/cat/cat_sentences_detailed.tsv.bz2",
+     "bytes": 234212,
+     "sha256": "e9881d51e9eab33c22d815a6d96267dd359365e8e613ad401d1eb4cfd21e8fa8",
+     "fetched": "2026-09-27T16:28:23Z"
+    },
+    "tatoeba/cym_sentences_detailed.tsv.bz2": {
+     "url": "https://downloads.tatoeba.org/exports/per_language/cym/cym_sentences_detailed.tsv.bz2",
+     "bytes": 35949,
+     "sha256": "42aa23480f28110b49e3b1430ce575006e64ffc7c2bc20e5003df379582f915f",
+     "fetched": "2026-09-27T16:28:25Z"
+    },
+    "tatoeba/dan_sentences_detailed.tsv.bz2": {
+     "url": "https://downloads.tatoeba.org/exports/per_language/dan/dan_sentences_detailed.tsv.bz2",
+     "bytes": 1315447,
+     "sha256": "3565caaee7bafb6e8f674c093dd3188515849e46297ed1176cf303cd61d503a8",
+     "fetched": "2026-09-27T16:28:28Z"
+    },
+    "tatoeba/deu_sentences_detailed.tsv.bz2": {
+     "url": "https://downloads.tatoeba.org/exports/per_language/deu/deu_sentences_detailed.tsv.bz2",
+     "bytes": 17622882,
+     "sha256": "eb80b6a8d6b938a48fc33d65848d6efaf53d264c96e458ba6e4deec2deaaab59",
+     "fetched": "2026-09-27T16:28:31Z"
+    },
+    "tatoeba/ell_sentences_detailed.tsv.bz2": {
+     "url": "https://downloads.tatoeba.org/exports/per_language/ell/ell_sentences_detailed.tsv.bz2",
+     "bytes": 804347,
+     "sha256": "6c840410e815566631a7cfcf46806d2ee80177d70c61a461d0beef18fb150f9f",
+     "fetched": "2026-09-27T16:28:33Z"
+    },
+    "tatoeba/eng_sentences_detailed.tsv.bz2": {
+     "url": "https://downloads.tatoeba.org/exports/per_language/eng/eng_sentences_detailed.tsv.bz2",
+     "bytes": 34909145,
+     "sha256": "353d48de7905952cf6f1500f6a3158516ecf9e10cd844ba051982cfa4a11c111",
+     "fetched": "2026-09-27T16:28:38Z"
+    },
+    "tatoeba/spa_sentences_detailed.tsv.bz2": {
+     "url": "https://downloads.tatoeba.org/exports/per_language/spa/spa_sentences_detailed.tsv.bz2",
+     "bytes": 9494936,
+     "sha256": "76425b39fcfba2e0acb5348fb172bb5eeead611876f1b1daf4f3f00a7ae9ac9d",
+     "fetched": "2026-09-27T16:28:43Z"
+    },
+    "tatoeba/pes_sentences_detailed.tsv.bz2": {
+     "url": "https://downloads.tatoeba.org/exports/per_language/pes/pes_sentences_detailed.tsv.bz2",
+     "bytes": 694175,
+     "sha256": "08c2ad6e9f682ea7a74e3a02d6457e89cb304e1fdc1f73a31689d1745198c9e8",
+     "fetched": "2026-09-27T16:28:45Z"
+    },
+    "tatoeba/fin_sentences_detailed.tsv.bz2": {
+     "url": "https://downloads.tatoeba.org/exports/per_language/fin/fin_sentences_detailed.tsv.bz2",
+     "bytes": 2990571,
+     "sha256": "54932faff1a4b57a4c26ef60bba92cfd985ddc2917f6d23add509e622f29fe8e",
+     "fetched": "2026-09-27T16:28:48Z"
+    },
+    "tatoeba/fra_sentences_detailed.tsv.bz2": {
+     "url": "https://downloads.tatoeba.org/exports/per_language/fra/fra_sentences_detailed.tsv.bz2",
+     "bytes": 14820774,
+     "sha256": "c54845fd6a01649d4cbb17d1af736ad24afce93eabd045d63db2f1f0d6c5492a",
+     "fetched": "2026-09-27T16:28:51Z"
+    },
+    "tatoeba/heb_sentences_detailed.tsv.bz2": {
+     "url": "https://downloads.tatoeba.org/exports/per_language/heb/heb_sentences_detailed.tsv.bz2",
+     "bytes": 3637224,
+     "sha256": "18df5481b84aa25b477772f2d3b3784e5b46f2b11dd3d8684a7177f899eb103f",
+     "fetched": "2026-09-27T16:28:54Z"
+    },
+    "tatoeba/hin_sentences_detailed.tsv.bz2": {
+     "url": "https://downloads.tatoeba.org/exports/per_language/hin/hin_sentences_detailed.tsv.bz2",
+     "bytes": 283049,
+     "sha256": "d06a850e6fa7236f2d47d6aa7f75e67f43ca74058c5d62d8547cbdc0925f44f1",
+     "fetched": "2026-09-27T16:28:56Z"
+    },
+    "tatoeba/hun_sentences_detailed.tsv.bz2": {
+     "url": "https://downloads.tatoeba.org/exports/per_language/hun/hun_sentences_detailed.tsv.bz2",
+     "bytes": 9061758,
+     "sha256": "fbbe8614079ef7d9718511047504f19e95c7e0085cae857b04d005a5bdd47fc6",
+     "fetched": "2026-09-27T16:28:59Z"
+    },
+    "tatoeba/ind_sentences_detailed.tsv.bz2": {
+     "url": "https://downloads.tatoeba.org/exports/per_language/ind/ind_sentences_detailed.tsv.bz2",
+     "bytes": 532414,
+     "sha256": "4b6f2218feb5a5e0dadc729764b4bf837fba6359ee7ea4aefff044e15a09ee7d",
+     "fetched": "2026-09-27T16:29:02Z"
+    },
+    "tatoeba/isl_sentences_detailed.tsv.bz2": {
+     "url": "https://downloads.tatoeba.org/exports/per_language/isl/isl_sentences_detailed.tsv.bz2",
+     "bytes": 254076,
+     "sha256": "4e1b0531647bbe6db341f58d440c0e42bff5c89071d07caa34f17a3dacc54d2a",
+     "fetched": "2026-09-27T16:29:04Z"
+    },
+    "tatoeba/ita_sentences_detailed.tsv.bz2": {
+     "url": "https://downloads.tatoeba.org/exports/per_language/ita/ita_sentences_detailed.tsv.bz2",
+     "bytes": 14907285,
+     "sha256": "a07bbd0f64f226edb7109f7f955a6456518863fef50d64f83573ed5efc99a399",
+     "fetched": "2026-09-27T16:29:08Z"
+    },
+    "tatoeba/jav_sentences_detailed.tsv.bz2": {
+     "url": "https://downloads.tatoeba.org/exports/per_language/jav/jav_sentences_detailed.tsv.bz2",
+     "bytes": 33512,
+     "sha256": "4d719bca999fe23593f806209cda76d4a6c6fcbff8b32078d9408f40e7ef6ae7",
+     "fetched": "2026-09-27T16:29:09Z"
+    },
+    "tatoeba/kor_sentences_detailed.tsv.bz2": {
+     "url": "https://downloads.tatoeba.org/exports/per_language/kor/kor_sentences_detailed.tsv.bz2",
+     "bytes": 305891,
+     "sha256": "c35af428c111d7e999329d4572ba4a1bc8cc5f6190432ca7686e850180ad8318",
+     "fetched": "2026-09-27T16:29:12Z"
+    },
+    "tatoeba/lvs_sentences_detailed.tsv.bz2": {
+     "url": "https://downloads.tatoeba.org/exports/per_language/lvs/lvs_sentences_detailed.tsv.bz2",
+     "bytes": 389418,
+     "sha256": "44115b8ec7bc97b24553a08de3a579b63f562ab5ec4397b9eadec7886a5ce648",
+     "fetched": "2026-09-27T16:29:14Z"
+    },
+    "tatoeba/mon_sentences_detailed.tsv.bz2": {
+     "url": "https://downloads.tatoeba.org/exports/per_language/mon/mon_sentences_detailed.tsv.bz2",
+     "bytes": 47670,
+     "sha256": "5056ffc65661b7633d8a1a38bde442c9a59640366eccb384617c44e600a0bfb6",
+     "fetched": "2026-09-27T16:29:16Z"
+    },
+    "tatoeba/zsm_sentences_detailed.tsv.bz2": {
+     "url": "https://downloads.tatoeba.org/exports/per_language/zsm/zsm_sentences_detailed.tsv.bz2",
+     "bytes": 166148,
+     "sha256": "3e4701bc8b673a278a30a084be3c87deaa449da9ed011082a06bda1e27821d20",
+     "fetched": "2026-09-27T16:29:18Z"
+    },
+    "tatoeba/nob_sentences_detailed.tsv.bz2": {
+     "url": "https://downloads.tatoeba.org/exports/per_language/nob/nob_sentences_detailed.tsv.bz2",
+     "bytes": 377531,
+     "sha256": "9877e9c6d3eca20811c2b8ae82efbf0850f2108fded48e8beb05957fe4d40a1b",
+     "fetched": "2026-09-27T16:29:20Z"
+    },
+    "tatoeba/nld_sentences_detailed.tsv.bz2": {
+     "url": "https://downloads.tatoeba.org/exports/per_language/nld/nld_sentences_detailed.tsv.bz2",
+     "bytes": 3886655,
+     "sha256": "59e4c4b505208a233d926e90c8ae510926b29fff7372f165fc4369f60185eec1",
+     "fetched": "2026-09-27T16:29:23Z"
+    },
+    "tatoeba/pol_sentences_detailed.tsv.bz2": {
+     "url": "https://downloads.tatoeba.org/exports/per_language/pol/pol_sentences_detailed.tsv.bz2",
+     "bytes": 2684749,
+     "sha256": "86550cb7a4dbc00b26869ca8ccff91678175d30b095e5c62dd92355b18dd2b3d",
+     "fetched": "2026-09-27T16:29:26Z"
+    },
+    "tatoeba/por_sentences_detailed.tsv.bz2": {
+     "url": "https://downloads.tatoeba.org/exports/per_language/por/por_sentences_detailed.tsv.bz2",
+     "bytes": 9337823,
+     "sha256": "3c76d939d12528971264728fa48f4de52170d13eb2a36340b82fde311c3ad8f4",
+     "fetched": "2026-09-27T16:29:29Z"
+    },
+    "tatoeba/ron_sentences_detailed.tsv.bz2": {
+     "url": "https://downloads.tatoeba.org/exports/per_language/ron/ron_sentences_detailed.tsv.bz2",
+     "bytes": 850668,
+     "sha256": "8ff695560638af5e3083ad4d786862536a0dab93af7335f58920b0db8c5cc553",
+     "fetched": "2026-09-27T16:29:31Z"
+    },
+    "tatoeba/rus_sentences_detailed.tsv.bz2": {
+     "url": "https://downloads.tatoeba.org/exports/per_language/rus/rus_sentences_detailed.tsv.bz2",
+     "bytes": 23467285,
+     "sha256": "4270bbb5e918693bb8a2d96f0b7bcf62b5b3847e4a85d66362ff3e6213adc5d5",
+     "fetched": "2026-09-27T16:29:35Z"
+    },
+    "tatoeba/slv_sentences_detailed.tsv.bz2": {
+     "url": "https://downloads.tatoeba.org/exports/per_language/slv/slv_sentences_detailed.tsv.bz2",
+     "bytes": 72134,
+     "sha256": "6294d8bc6fa22b4ad1790cec5f01a87633a617aa4b5179c04d6e6f784d253e86",
+     "fetched": "2026-09-27T16:29:37Z"
+    },
+    "tatoeba/sqi_sentences_detailed.tsv.bz2": {
+     "url": "https://downloads.tatoeba.org/exports/per_language/sqi/sqi_sentences_detailed.tsv.bz2",
+     "bytes": 52965,
+     "sha256": "45ed3af3d1389f877f8ba291813a5d37eb2b40d9c9032f464b907cc37ae6e158",
+     "fetched": "2026-09-27T16:29:39Z"
+    },
+    "tatoeba/swe_sentences_detailed.tsv.bz2": {
+     "url": "https://downloads.tatoeba.org/exports/per_language/swe/swe_sentences_detailed.tsv.bz2",
+     "bytes": 1010969,
+     "sha256": "63fa7da77b5a9f72d0d30777bb1868b9ae871a020c79e8b8d0db213d3efbe71a",
+     "fetched": "2026-09-27T16:29:42Z"
+    },
+    "tatoeba/swh_sentences_detailed.tsv.bz2": {
+     "url": "https://downloads.tatoeba.org/exports/per_language/swh/swh_sentences_detailed.tsv.bz2",
+     "bytes": 109352,
+     "sha256": "6f0b77bd207427b21cee90b248d9ee3d0df4e8438de50543eee8024bf23e2d19",
+     "fetched": "2026-09-27T16:29:44Z"
+    },
+    "tatoeba/tgl_sentences_detailed.tsv.bz2": {
+     "url": "https://downloads.tatoeba.org/exports/per_language/tgl/tgl_sentences_detailed.tsv.bz2",
+     "bytes": 1434301,
+     "sha256": "142166dd2b446fcbd66bc8093aef35a7027caa41158c85ef027060449565c494",
+     "fetched": "2026-09-27T16:29:46Z"
+    },
+    "tatoeba/tur_sentences_detailed.tsv.bz2": {
+     "url": "https://downloads.tatoeba.org/exports/per_language/tur/tur_sentences_detailed.tsv.bz2",
+     "bytes": 13442623,
+     "sha256": "539b0f58972fffd3cd9c33287224ab33717f35bb3a7e886df64b81db24b47393",
+     "fetched": "2026-09-27T16:29:50Z"
+    },
+    "tatoeba/urd_sentences_detailed.tsv.bz2": {
+     "url": "https://downloads.tatoeba.org/exports/per_language/urd/urd_sentences_detailed.tsv.bz2",
+     "bytes": 57468,
+     "sha256": "871ad465167baa731cf9b541f1041958d48df60d5811edd3da2b46ae173548e1",
+     "fetched": "2026-09-27T16:29:51Z"
+    },
+    "tatoeba/vie_sentences_detailed.tsv.bz2": {
+     "url": "https://downloads.tatoeba.org/exports/per_language/vie/vie_sentences_detailed.tsv.bz2",
+     "bytes": 638963,
+     "sha256": "540c3bef0fcf0b6e3fdcfcf04f624a9b044bd55783cb0a7786596aff1e243559",
+     "fetched": "2026-09-27T16:29:54Z"
+    }
+   }
+  },
+  "sib200": {
+   "name": "SIB-200 (FLORES-200 sentences), language held-out",
+   "url": "https://huggingface.co/datasets/Davlan/sib200",
+   "version": "HF main at the fetch; all 1,004 sentences per language",
+   "licence": "CC BY-SA 4.0 (HF card); FLORES asks not to train on it: test-only role",
+   "pii": "none",
+   "licence_verified_at": {
+    "url": "https://huggingface.co/datasets/Davlan/sib200/raw/main/README.md",
+    "http": 200,
+    "checked": "2026-09-27T16:42:35Z",
+    "phrases_found": {
+     "cc-by-sa-4.0": true
+    },
+    "sha256": "73afd1b67ee71b07e28d52b52374de8bf40f884dd6a475be8fde20821cae1838"
+   },
+   "attribution": null,
+   "rows_used": {
+    "language|test": 31197,
+    "language|dev": 6954
+   },
+   "files": {
+    "sib200/afr_Latn.train.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/afr_Latn/train.tsv",
+     "bytes": 109874,
+     "sha256": "7b754b6446b58b9cd430109f8278a52759a32c26f6b3d315c3de6e3396818078",
+     "fetched": "2026-09-27T16:29:55Z"
+    },
+    "sib200/afr_Latn.dev.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/afr_Latn/dev.tsv",
+     "bytes": 14573,
+     "sha256": "eb0eba9f5fd19243ede8ab5f5a020822b100619a702c0b80fa16512263b09a05",
+     "fetched": "2026-09-27T16:29:55Z"
+    },
+    "sib200/afr_Latn.test.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/afr_Latn/test.tsv",
+     "bytes": 31379,
+     "sha256": "dd5869e4a6dc4d9a506f94cb5a4d8ad77ba89556240f8cdd9604ab95771614b3",
+     "fetched": "2026-09-27T16:29:56Z"
+    },
+    "sib200/arb_Arab.train.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/arb_Arab/train.tsv",
+     "bytes": 159745,
+     "sha256": "2daca4520afcc480de58673348cbae3cb180b79eca58e9409a16059f25b12961",
+     "fetched": "2026-09-27T16:29:56Z"
+    },
+    "sib200/arb_Arab.dev.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/arb_Arab/dev.tsv",
+     "bytes": 21210,
+     "sha256": "3e41235ba03924643a9ccffe9606d892005df116ed1e669363a82de67041a19c",
+     "fetched": "2026-09-27T16:29:56Z"
+    },
+    "sib200/arb_Arab.test.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/arb_Arab/test.tsv",
+     "bytes": 46872,
+     "sha256": "6ee8321b157e9c27e8ad38157ba5e88d085f8449d4a469149a6e1dafb2d26384",
+     "fetched": "2026-09-27T16:29:56Z"
+    },
+    "sib200/azj_Latn.train.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/azj_Latn/train.tsv",
+     "bytes": 128125,
+     "sha256": "50834ec9202df14a1a56bd21b7a49a883651423875a71e4ec6503a36da76d098",
+     "fetched": "2026-09-27T16:29:57Z"
+    },
+    "sib200/azj_Latn.dev.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/azj_Latn/dev.tsv",
+     "bytes": 16766,
+     "sha256": "c2c1789492e6d6fa40e64a4a94f29ef8a0bcc2310f8695fa24e4bad473c4da94",
+     "fetched": "2026-09-27T16:29:57Z"
+    },
+    "sib200/azj_Latn.test.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/azj_Latn/test.tsv",
+     "bytes": 37119,
+     "sha256": "922e261c2093816cc7609bd74de5522bbce02bd68ed6d30b357341db344e8823",
+     "fetched": "2026-09-27T16:29:57Z"
+    },
+    "sib200/ben_Beng.train.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/ben_Beng/train.tsv",
+     "bytes": 252333,
+     "sha256": "7fb79c8bca20b10142ac16d30b913788ee173cde9bbd009b4a8c34f5161b2810",
+     "fetched": "2026-09-27T16:29:57Z"
+    },
+    "sib200/ben_Beng.dev.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/ben_Beng/dev.tsv",
+     "bytes": 32765,
+     "sha256": "76e3eb79544dca81770813d451a9524e8f5f3a98aa12bd29718a3064412b0f5f",
+     "fetched": "2026-09-27T16:29:58Z"
+    },
+    "sib200/ben_Beng.test.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/ben_Beng/test.tsv",
+     "bytes": 72534,
+     "sha256": "0d524daff72c5a72bf6aad931782a3a39e0e275676dd1ebf725bff91d76ef7a8",
+     "fetched": "2026-09-27T16:29:58Z"
+    },
+    "sib200/cat_Latn.train.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/cat_Latn/train.tsv",
+     "bytes": 114857,
+     "sha256": "c052b174d904da720d0a8850f76082d490f1827ed7ccaa72429d8bb866880c29",
+     "fetched": "2026-09-27T16:29:58Z"
+    },
+    "sib200/cat_Latn.dev.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/cat_Latn/dev.tsv",
+     "bytes": 15103,
+     "sha256": "fda9356d5ed2bba53d43b35fc5b7db34af38483bf8e4b376b13332dd94634e27",
+     "fetched": "2026-09-27T16:29:59Z"
+    },
+    "sib200/cat_Latn.test.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/cat_Latn/test.tsv",
+     "bytes": 33255,
+     "sha256": "d0023172ae92340879f4fdb04a2b949654f7646dbeae4184266bf756f01d18b6",
+     "fetched": "2026-09-27T16:29:59Z"
+    },
+    "sib200/cym_Latn.train.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/cym_Latn/train.tsv",
+     "bytes": 109340,
+     "sha256": "cca21092ab18033dacd059c9ee7b994cbdc840b1f5576144cc4f633bc28a99db",
+     "fetched": "2026-09-27T16:29:59Z"
+    },
+    "sib200/cym_Latn.dev.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/cym_Latn/dev.tsv",
+     "bytes": 14612,
+     "sha256": "4bb28049a210f80817d7955e772cbe34a914a911ca75b3b85d5ee7f4fb130421",
+     "fetched": "2026-09-27T16:29:59Z"
+    },
+    "sib200/cym_Latn.test.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/cym_Latn/test.tsv",
+     "bytes": 31834,
+     "sha256": "950aa1b012c15cf7a729a3944548d55b120cf7e8784d1a1c89d6c8d2d90e79d7",
+     "fetched": "2026-09-27T16:29:59Z"
+    },
+    "sib200/dan_Latn.train.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/dan_Latn/train.tsv",
+     "bytes": 107455,
+     "sha256": "6dd27473945c0169354b51bbd33f85a80e8a3f19916592d6b74eb3a9640d17db",
+     "fetched": "2026-09-27T16:30:00Z"
+    },
+    "sib200/dan_Latn.dev.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/dan_Latn/dev.tsv",
+     "bytes": 14518,
+     "sha256": "e60df988ef6e87f4d7b0d7daf1d9161171d42c8c6739401354987204c17be226",
+     "fetched": "2026-09-27T16:30:00Z"
+    },
+    "sib200/dan_Latn.test.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/dan_Latn/test.tsv",
+     "bytes": 31192,
+     "sha256": "c44ed1e54bc059ec00ff944a62177f3c73b31ff8cb043e997b05835b188c7bab",
+     "fetched": "2026-09-27T16:30:00Z"
+    },
+    "sib200/deu_Latn.train.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/deu_Latn/train.tsv",
+     "bytes": 120241,
+     "sha256": "2c336ae7b65365a2e5c139fdf768c7f229b2faf76678cf0c450d563eecc93a2b",
+     "fetched": "2026-09-27T16:30:00Z"
+    },
+    "sib200/deu_Latn.dev.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/deu_Latn/dev.tsv",
+     "bytes": 15769,
+     "sha256": "809f5772264d1504f9ff70458514620eaf04aca0a817e01c181a6ba89b2f6ef6",
+     "fetched": "2026-09-27T16:30:01Z"
+    },
+    "sib200/deu_Latn.test.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/deu_Latn/test.tsv",
+     "bytes": 34775,
+     "sha256": "c7709a01e81725fd929145787fec51426e3c76be4125b2113b0dfecde9da4b39",
+     "fetched": "2026-09-27T16:30:01Z"
+    },
+    "sib200/ell_Grek.train.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/ell_Grek/train.tsv",
+     "bytes": 210931,
+     "sha256": "353cd2e848ff695415413753106d42b8348c95da5a168d9b751b038721446262",
+     "fetched": "2026-09-27T16:30:01Z"
+    },
+    "sib200/ell_Grek.dev.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/ell_Grek/dev.tsv",
+     "bytes": 27686,
+     "sha256": "d2059072e79e8ab4e833f52255aa13412f188257375d570dd24ef2b0267ed6ef",
+     "fetched": "2026-09-27T16:30:01Z"
+    },
+    "sib200/ell_Grek.test.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/ell_Grek/test.tsv",
+     "bytes": 61484,
+     "sha256": "ea3da695430b3b019080ec0b3d4ed7cedcc3728880490e1b5219729d4b834812",
+     "fetched": "2026-09-27T16:30:02Z"
+    },
+    "sib200/eng_Latn.train.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/eng_Latn/train.tsv",
+     "bytes": 102878,
+     "sha256": "056c2989673d0724cb27edb0d9ee5c6305b2548c17f9fd8f2092f40c98ac0156",
+     "fetched": "2026-09-27T16:30:02Z"
+    },
+    "sib200/eng_Latn.dev.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/eng_Latn/dev.tsv",
+     "bytes": 13639,
+     "sha256": "48fe23ed3c66e6978c6cdeff3f661ab9ea6451001d967e23d94796b009777181",
+     "fetched": "2026-09-27T16:30:02Z"
+    },
+    "sib200/eng_Latn.test.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/eng_Latn/test.tsv",
+     "bytes": 30069,
+     "sha256": "fd7012f846f5a8caead1e7419023d64a28351893f3d9c7ebcde4c5481ca5d326",
+     "fetched": "2026-09-27T16:30:02Z"
+    },
+    "sib200/spa_Latn.train.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/spa_Latn/train.tsv",
+     "bytes": 122295,
+     "sha256": "274f9381c0e6cd8eebbe6dc66e04e8fe81866f565435b92204d212c13a6f5bd5",
+     "fetched": "2026-09-27T16:30:03Z"
+    },
+    "sib200/spa_Latn.dev.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/spa_Latn/dev.tsv",
+     "bytes": 16044,
+     "sha256": "53adba2773b99377133cfae38260df5badfbef541e73b674208395c2ae05f834",
+     "fetched": "2026-09-27T16:30:03Z"
+    },
+    "sib200/spa_Latn.test.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/spa_Latn/test.tsv",
+     "bytes": 35644,
+     "sha256": "971fbbf0ed5e2f4d10953264c9d5ef05d854b654014d3a10b98f50a12443ea41",
+     "fetched": "2026-09-27T16:30:03Z"
+    },
+    "sib200/pes_Arab.train.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/pes_Arab/train.tsv",
+     "bytes": 168150,
+     "sha256": "f5b4aea9828151d655827d4f09f61d9aa8fd7cde9cc119251ed55fdaffe7d47e",
+     "fetched": "2026-09-27T16:30:03Z"
+    },
+    "sib200/pes_Arab.dev.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/pes_Arab/dev.tsv",
+     "bytes": 22029,
+     "sha256": "d50d2fd2613c7a524dc198c45ad3037809fd5645cde92faf02e4aee4b0e415f5",
+     "fetched": "2026-09-27T16:30:04Z"
+    },
+    "sib200/pes_Arab.test.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/pes_Arab/test.tsv",
+     "bytes": 49353,
+     "sha256": "ff728acd25c9c78689f5e86439d9d793d296e330ad0fdb1d873814a0df6e06b9",
+     "fetched": "2026-09-27T16:30:04Z"
+    },
+    "sib200/fin_Latn.train.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/fin_Latn/train.tsv",
+     "bytes": 112745,
+     "sha256": "b6951dbcb32e245299b0b1892a602f7d3f80709c04856f8db6d237ae7c63598f",
+     "fetched": "2026-09-27T16:30:04Z"
+    },
+    "sib200/fin_Latn.dev.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/fin_Latn/dev.tsv",
+     "bytes": 15179,
+     "sha256": "551e29c4b47b945d45cd9728d538d63d5534e82e728dcd7807c9804b500cee33",
+     "fetched": "2026-09-27T16:30:05Z"
+    },
+    "sib200/fin_Latn.test.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/fin_Latn/test.tsv",
+     "bytes": 33265,
+     "sha256": "8116581d0e24aa6e17ae7b32cc2b0bb5bd802128111a385fd69f7fcb97e7d825",
+     "fetched": "2026-09-27T16:30:05Z"
+    },
+    "sib200/fra_Latn.train.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/fra_Latn/train.tsv",
+     "bytes": 125091,
+     "sha256": "a958d94907b591b27f9be4d878efa01d597992cd707d761358424d16c7919350",
+     "fetched": "2026-09-27T16:30:05Z"
+    },
+    "sib200/fra_Latn.dev.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/fra_Latn/dev.tsv",
+     "bytes": 16461,
+     "sha256": "6a1bf1201dbd9aee5d57a5fe65a5ffa5e733d486e7f0c658c264b764e4bde35f",
+     "fetched": "2026-09-27T16:30:05Z"
+    },
+    "sib200/fra_Latn.test.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/fra_Latn/test.tsv",
+     "bytes": 36271,
+     "sha256": "6ef23d135ee0bde78d907a908dbb5127ab27ee1189b0c2e3db51f328e0707d05",
+     "fetched": "2026-09-27T16:30:06Z"
+    },
+    "sib200/heb_Hebr.train.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/heb_Hebr/train.tsv",
+     "bytes": 139529,
+     "sha256": "26185543e041440775cd47647865887d5f846e8c7ca67a2458ec953d8eac76a2",
+     "fetched": "2026-09-27T16:30:06Z"
+    },
+    "sib200/heb_Hebr.dev.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/heb_Hebr/dev.tsv",
+     "bytes": 18498,
+     "sha256": "818483b9218a6d1a61b62d204cfebd700127562276bcfb2ba2b6f2316be61f4d",
+     "fetched": "2026-09-27T16:30:06Z"
+    },
+    "sib200/heb_Hebr.test.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/heb_Hebr/test.tsv",
+     "bytes": 40890,
+     "sha256": "8572dddc2d61e2e41b9de5390b02193a225bf14efb827bdde7702a4797e16767",
+     "fetched": "2026-09-27T16:30:06Z"
+    },
+    "sib200/hin_Deva.train.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/hin_Deva/train.tsv",
+     "bytes": 245738,
+     "sha256": "2cd00a2b1d0f3259a3ed5a7c349f91f8eb73d23e06001b51486b37d684e8fe47",
+     "fetched": "2026-09-27T16:30:07Z"
+    },
+    "sib200/hin_Deva.dev.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/hin_Deva/dev.tsv",
+     "bytes": 32843,
+     "sha256": "fb0a429bf9957ac8386f53a987e816fba025d9e496bf590a4d1a40f7df242709",
+     "fetched": "2026-09-27T16:30:07Z"
+    },
+    "sib200/hin_Deva.test.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/hin_Deva/test.tsv",
+     "bytes": 71994,
+     "sha256": "cf0fa55bb3ed7a146798fa22e6350eae49ae0fb96126e9d84726628b406b55c6",
+     "fetched": "2026-09-27T16:30:07Z"
+    },
+    "sib200/hun_Latn.train.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/hun_Latn/train.tsv",
+     "bytes": 117479,
+     "sha256": "6804ae2de4b536385b9fb98af03676f1b6914603ac4b497982a30f2f37103a07",
+     "fetched": "2026-09-27T16:30:07Z"
+    },
+    "sib200/hun_Latn.dev.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/hun_Latn/dev.tsv",
+     "bytes": 15519,
+     "sha256": "6e7dc01d3d0f7299302e64004e935a7b82b641face80e3ddb2ba9118763b4db2",
+     "fetched": "2026-09-27T16:30:08Z"
+    },
+    "sib200/hun_Latn.test.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/hun_Latn/test.tsv",
+     "bytes": 34370,
+     "sha256": "1b5aca9cd13b39b8bd661d48af021dcc48bbf17bfd395a12269c016995deb83b",
+     "fetched": "2026-09-27T16:30:08Z"
+    },
+    "sib200/ind_Latn.train.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/ind_Latn/train.tsv",
+     "bytes": 110880,
+     "sha256": "c6406d1ade3acce6a8bb6640b111a016c1ed72864adb464c736fdb9e9c84786d",
+     "fetched": "2026-09-27T16:30:08Z"
+    },
+    "sib200/ind_Latn.dev.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/ind_Latn/dev.tsv",
+     "bytes": 14875,
+     "sha256": "df0a3b6d63bdeb451c1622593063857aa53e1553797e388b3f63731b9a2eec91",
+     "fetched": "2026-09-27T16:30:08Z"
+    },
+    "sib200/ind_Latn.test.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/ind_Latn/test.tsv",
+     "bytes": 32336,
+     "sha256": "b74f0ef860af5a0e322cd10099fb2a83abfaaf61c6ca6da5628e396d791d60c5",
+     "fetched": "2026-09-27T16:30:09Z"
+    },
+    "sib200/isl_Latn.train.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/isl_Latn/train.tsv",
+     "bytes": 112287,
+     "sha256": "67123ffe7b347b2132cf9ff95e6ccc6161d4d99e4975b4c320733d2fbf371285",
+     "fetched": "2026-09-27T16:30:09Z"
+    },
+    "sib200/isl_Latn.dev.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/isl_Latn/dev.tsv",
+     "bytes": 14610,
+     "sha256": "253674c5cc6f6f9b74242bf5175416ac3e3da9536afa0a0a4d4761477a7708ed",
+     "fetched": "2026-09-27T16:30:09Z"
+    },
+    "sib200/isl_Latn.test.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/isl_Latn/test.tsv",
+     "bytes": 32194,
+     "sha256": "eae188a83832d343cd45f40194132efdf212dc74bc2e56ef38303175880580d9",
+     "fetched": "2026-09-27T16:30:10Z"
+    },
+    "sib200/ita_Latn.train.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/ita_Latn/train.tsv",
+     "bytes": 120995,
+     "sha256": "09af21f542222307f8b162b21e554fe601c9c065b83af62b6382602055776e18",
+     "fetched": "2026-09-27T16:30:10Z"
+    },
+    "sib200/ita_Latn.dev.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/ita_Latn/dev.tsv",
+     "bytes": 16120,
+     "sha256": "7ef99758ffeccbcff030f2e5a7a97a588e144b8dc716048661641708c99caada",
+     "fetched": "2026-09-27T16:30:10Z"
+    },
+    "sib200/ita_Latn.test.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/ita_Latn/test.tsv",
+     "bytes": 34945,
+     "sha256": "8df9a2cf4f0df5ef1a4a945621bdf39ce06ea676bfb0819bb65b60c8e933152b",
+     "fetched": "2026-09-27T16:30:10Z"
+    },
+    "sib200/jav_Latn.train.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/jav_Latn/train.tsv",
+     "bytes": 107234,
+     "sha256": "7486d44e9993809eae255b4818223c22f89f9fa75e3cae40ff54994c6d1939bb",
+     "fetched": "2026-09-27T16:30:11Z"
+    },
+    "sib200/jav_Latn.dev.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/jav_Latn/dev.tsv",
+     "bytes": 14214,
+     "sha256": "6703bb8aa5f7706de03192ab8e66c75c9e6d35f44daef63c5522d756d12e57ab",
+     "fetched": "2026-09-27T16:30:11Z"
+    },
+    "sib200/jav_Latn.test.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/jav_Latn/test.tsv",
+     "bytes": 30725,
+     "sha256": "7cc1c94bf1cd6f5ba7bacaae9bb8a48f323db3d5fc0c4fcf646edda47834f10a",
+     "fetched": "2026-09-27T16:30:11Z"
+    },
+    "sib200/kor_Hang.train.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/kor_Hang/train.tsv",
+     "bytes": 122029,
+     "sha256": "22daffa05f1f74ce0580fc6e62ab20c69f29f768832fc975a8211d1cc158d71d",
+     "fetched": "2026-09-27T16:30:11Z"
+    },
+    "sib200/kor_Hang.dev.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/kor_Hang/dev.tsv",
+     "bytes": 16088,
+     "sha256": "54db0dcad532455be30dfc02452a49040c4d3425faadf7afc0b6c8ab7a91952c",
+     "fetched": "2026-09-27T16:30:12Z"
+    },
+    "sib200/kor_Hang.test.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/kor_Hang/test.tsv",
+     "bytes": 34888,
+     "sha256": "3effe5191e024624b64a05e493f7010e29aec099d279877f2cfced890d3ccb8d",
+     "fetched": "2026-09-27T16:30:12Z"
+    },
+    "sib200/lvs_Latn.train.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/lvs_Latn/train.tsv",
+     "bytes": 114294,
+     "sha256": "a5b822acc235e2c8f49cc67258ad087d3b45abfce819670218c1e5aa47194377",
+     "fetched": "2026-09-27T16:30:12Z"
+    },
+    "sib200/lvs_Latn.dev.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/lvs_Latn/dev.tsv",
+     "bytes": 14854,
+     "sha256": "21e4d4f9ac0df95cd9026c75baeddee50c463ec324805350a3657000216192d8",
+     "fetched": "2026-09-27T16:30:13Z"
+    },
+    "sib200/lvs_Latn.test.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/lvs_Latn/test.tsv",
+     "bytes": 33310,
+     "sha256": "f9deab9920c8e062538d94b33d259fad5a1906f6f39a9bf2943fc4bfe42fd28e",
+     "fetched": "2026-09-27T16:30:13Z"
+    },
+    "sib200/khk_Cyrl.train.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/khk_Cyrl/train.tsv",
+     "bytes": 188575,
+     "sha256": "016f6d2929f64a088cb353239c933c3c88b5d47b831a5b66496943352ce1cbb6",
+     "fetched": "2026-09-27T16:30:13Z"
+    },
+    "sib200/khk_Cyrl.dev.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/khk_Cyrl/dev.tsv",
+     "bytes": 24595,
+     "sha256": "efd539fb1884f8e8d446c77fd54fe94b8d9b7da3d2995abe8f3313e7b93e9eea",
+     "fetched": "2026-09-27T16:30:13Z"
+    },
+    "sib200/khk_Cyrl.test.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/khk_Cyrl/test.tsv",
+     "bytes": 55136,
+     "sha256": "0a33e630ca69c802ac78f0b02a2ee599e341d07ad7bdf040973289968f1dddac",
+     "fetched": "2026-09-27T16:30:14Z"
+    },
+    "sib200/zsm_Latn.train.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/zsm_Latn/train.tsv",
+     "bytes": 114020,
+     "sha256": "e27a8cad138c0753f22b355ac09e787e13c2875a69d88cfd7e9bea5bad1a2d9f",
+     "fetched": "2026-09-27T16:30:14Z"
+    },
+    "sib200/zsm_Latn.dev.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/zsm_Latn/dev.tsv",
+     "bytes": 15137,
+     "sha256": "ff31a8c560c2aaf2265eeb3b5ff2ffeaefaf9eed05be99a8a70e2e5f2a8b722f",
+     "fetched": "2026-09-27T16:30:14Z"
+    },
+    "sib200/zsm_Latn.test.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/zsm_Latn/test.tsv",
+     "bytes": 32994,
+     "sha256": "44cf582edf713ddd13a7e0953619e37fd3ca4b23d5ef3d70c9ddf7249b4a6164",
+     "fetched": "2026-09-27T16:30:14Z"
+    },
+    "sib200/nob_Latn.train.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/nob_Latn/train.tsv",
+     "bytes": 105655,
+     "sha256": "69e945dfa45489f52c5ddf23fe80d520a4b2b9a6efeac3302c5cac15a07258dc",
+     "fetched": "2026-09-27T16:30:15Z"
+    },
+    "sib200/nob_Latn.dev.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/nob_Latn/dev.tsv",
+     "bytes": 13969,
+     "sha256": "5ff4bfa216fd4322a7d8c80e88e6ed8b39755669ffa7b8b112e3bfcae82c186b",
+     "fetched": "2026-09-27T16:30:15Z"
+    },
+    "sib200/nob_Latn.test.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/nob_Latn/test.tsv",
+     "bytes": 30538,
+     "sha256": "7e3d1421c6ac78211e7af0c78d58b71670f653c2797164b725d7d72b558845c5",
+     "fetched": "2026-09-27T16:30:15Z"
+    },
+    "sib200/nld_Latn.train.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/nld_Latn/train.tsv",
+     "bytes": 113327,
+     "sha256": "841bd376ec24a69f818f8b139a81fe60360279947c25c6c350ddce30a83d7456",
+     "fetched": "2026-09-27T16:30:15Z"
+    },
+    "sib200/nld_Latn.dev.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/nld_Latn/dev.tsv",
+     "bytes": 15000,
+     "sha256": "5c60d63708cb4b3aa49e5de90f46e64d5f5d31d25465ebdff0574b9b3c46d0ee",
+     "fetched": "2026-09-27T16:30:16Z"
+    },
+    "sib200/nld_Latn.test.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/nld_Latn/test.tsv",
+     "bytes": 33249,
+     "sha256": "689bb2357e822ffb465bac1d9d604b8368d1da1afec65b437a01b121900339ca",
+     "fetched": "2026-09-27T16:30:16Z"
+    },
+    "sib200/pol_Latn.train.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/pol_Latn/train.tsv",
+     "bytes": 114920,
+     "sha256": "18d3fb3ba52415c912e18542f7843c45773195f02b632472a36fa0a1d5f038a9",
+     "fetched": "2026-09-27T16:30:16Z"
+    },
+    "sib200/pol_Latn.dev.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/pol_Latn/dev.tsv",
+     "bytes": 15281,
+     "sha256": "397536795db97a1803126fd9e5ad4b70aed055097c6626144e7595a9ab9df403",
+     "fetched": "2026-09-27T16:30:16Z"
+    },
+    "sib200/pol_Latn.test.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/pol_Latn/test.tsv",
+     "bytes": 33486,
+     "sha256": "f7a8837e3af1ee2893131f725594e68694a5e8a47cf49f019f1bf02da873b5f9",
+     "fetched": "2026-09-27T16:30:17Z"
+    },
+    "sib200/por_Latn.train.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/por_Latn/train.tsv",
+     "bytes": 114132,
+     "sha256": "0c4967359ac06cee4a274d21bfea027bef90c9c0e6c346eb9a8c01511ca0cd84",
+     "fetched": "2026-09-27T16:30:17Z"
+    },
+    "sib200/por_Latn.dev.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/por_Latn/dev.tsv",
+     "bytes": 15066,
+     "sha256": "1e303d34866f9a8afb6ae1009c9185115fa6a3260fc6346b66f7696f41e8fb39",
+     "fetched": "2026-09-27T16:30:17Z"
+    },
+    "sib200/por_Latn.test.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/por_Latn/test.tsv",
+     "bytes": 32951,
+     "sha256": "d13f67bf06d1a00b9f25aeda8ccd33d56ca252f3352e4e2bf085438d5b6541b1",
+     "fetched": "2026-09-27T16:30:17Z"
+    },
+    "sib200/ron_Latn.train.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/ron_Latn/train.tsv",
+     "bytes": 120513,
+     "sha256": "b7e3eabc5084e9ebb9e22a4239c9eaa83874afa8db41c51c0960c83923106f70",
+     "fetched": "2026-09-27T16:30:17Z"
+    },
+    "sib200/ron_Latn.dev.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/ron_Latn/dev.tsv",
+     "bytes": 16107,
+     "sha256": "40c8787bfa7ec86c595e05fecccb8183ea9b2e9c16938ec0af549445cb04b748",
+     "fetched": "2026-09-27T16:30:18Z"
+    },
+    "sib200/ron_Latn.test.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/ron_Latn/test.tsv",
+     "bytes": 34887,
+     "sha256": "893e729228ef4760176902e3f6df9b71b06bb48ea3bf5c7f0b3cda762dd09da4",
+     "fetched": "2026-09-27T16:30:18Z"
+    },
+    "sib200/rus_Cyrl.train.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/rus_Cyrl/train.tsv",
+     "bytes": 195294,
+     "sha256": "2c5d092fcd73df8b9bf62d93d5acb9e41482fd827b99a9b24273861054ec033e",
+     "fetched": "2026-09-27T16:30:18Z"
+    },
+    "sib200/rus_Cyrl.dev.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/rus_Cyrl/dev.tsv",
+     "bytes": 25329,
+     "sha256": "92a09f8bad4742f6c7b2a314535ce3e0e2f035726d5dcfa09ca645518302dca3",
+     "fetched": "2026-09-27T16:30:18Z"
+    },
+    "sib200/rus_Cyrl.test.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/rus_Cyrl/test.tsv",
+     "bytes": 57441,
+     "sha256": "9e08f02d142687110b580bf75e28ce643289939582190eb986c948f47c35fee7",
+     "fetched": "2026-09-27T16:30:19Z"
+    },
+    "sib200/slv_Latn.train.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/slv_Latn/train.tsv",
+     "bytes": 105755,
+     "sha256": "aa78baacbfd6298a0a161a7934608fcf2ddb8f725d06b76ca1366a64096db0a7",
+     "fetched": "2026-09-27T16:30:19Z"
+    },
+    "sib200/slv_Latn.dev.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/slv_Latn/dev.tsv",
+     "bytes": 13788,
+     "sha256": "9b85d65cb50b62a82d892a062252b819c3c1dd64d779e3ffc31671593140d3e4",
+     "fetched": "2026-09-27T16:30:19Z"
+    },
+    "sib200/slv_Latn.test.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/slv_Latn/test.tsv",
+     "bytes": 30614,
+     "sha256": "a4d80eab1150fabca33aa9ae3c9cae02bd825c1d7331756427e881e8670bbeb0",
+     "fetched": "2026-09-27T16:30:19Z"
+    },
+    "sib200/als_Latn.train.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/als_Latn/train.tsv",
+     "bytes": 122848,
+     "sha256": "28bed67640ad6a44368ea6b1e09194e05c6372a591014b66d33a1b1c86af4865",
+     "fetched": "2026-09-27T16:30:20Z"
+    },
+    "sib200/als_Latn.dev.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/als_Latn/dev.tsv",
+     "bytes": 16157,
+     "sha256": "c8e378288473b579cd0a30e2e2d2a2307c8cf804ee853d06e6c6f56d2b87f44e",
+     "fetched": "2026-09-27T16:30:20Z"
+    },
+    "sib200/als_Latn.test.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/als_Latn/test.tsv",
+     "bytes": 35809,
+     "sha256": "f172d9c922b71d166322d25febaf977f12857965691a66b253191eda2246e7cd",
+     "fetched": "2026-09-27T16:30:20Z"
+    },
+    "sib200/swe_Latn.train.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/swe_Latn/train.tsv",
+     "bytes": 107576,
+     "sha256": "6e6c2c3c6a29b6152acd1f3b0fe1f32ab19709ccd999c009743c90d0a8302552",
+     "fetched": "2026-09-27T16:30:20Z"
+    },
+    "sib200/swe_Latn.dev.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/swe_Latn/dev.tsv",
+     "bytes": 14153,
+     "sha256": "4b0033e99ebb445f268b9f3fde9e50a55af7cc9806724a24c3d5f0e0d7726b7b",
+     "fetched": "2026-09-27T16:30:20Z"
+    },
+    "sib200/swe_Latn.test.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/swe_Latn/test.tsv",
+     "bytes": 31158,
+     "sha256": "92b3cfd60de4ccd4ddde97d90cb9ed93ad4de45936c1f2bdc9696bdf40e30a5a",
+     "fetched": "2026-09-27T16:30:21Z"
+    },
+    "sib200/swh_Latn.train.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/swh_Latn/train.tsv",
+     "bytes": 107785,
+     "sha256": "80eb1a48a96e895bed890ee2fcdd17ef776dbc330021e601fbf978711b850b01",
+     "fetched": "2026-09-27T16:30:21Z"
+    },
+    "sib200/swh_Latn.dev.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/swh_Latn/dev.tsv",
+     "bytes": 14589,
+     "sha256": "b8dfce0f80e7fd5b94a1fdc224fe4bbac6d237061d4a75ec4bb311d8493b3add",
+     "fetched": "2026-09-27T16:30:21Z"
+    },
+    "sib200/swh_Latn.test.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/swh_Latn/test.tsv",
+     "bytes": 31492,
+     "sha256": "008e4ff2441c46d6fc92714658dedb2c185bafe06cb914e03342734a3a2c8288",
+     "fetched": "2026-09-27T16:30:21Z"
+    },
+    "sib200/tgl_Latn.train.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/tgl_Latn/train.tsv",
+     "bytes": 127554,
+     "sha256": "009bdee7a98fed4219c47a26b68256fe7d50ce26b5988cb6d957aaadda335a67",
+     "fetched": "2026-09-27T16:30:22Z"
+    },
+    "sib200/tgl_Latn.dev.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/tgl_Latn/dev.tsv",
+     "bytes": 16894,
+     "sha256": "23cad22ce4b5f5d1964052aaf621e7ff48d34f3b4d5c274e57a40e2866c54293",
+     "fetched": "2026-09-27T16:30:22Z"
+    },
+    "sib200/tgl_Latn.test.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/tgl_Latn/test.tsv",
+     "bytes": 37049,
+     "sha256": "be9cda47b2a73a634344cc681034c095702d70072b0642d96560ee96b96ec22d",
+     "fetched": "2026-09-27T16:30:22Z"
+    },
+    "sib200/tur_Latn.train.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/tur_Latn/train.tsv",
+     "bytes": 114338,
+     "sha256": "a5c8235d89e20d1be01658cf94b3508ab99bbac3ee108c0181f3057659386937",
+     "fetched": "2026-09-27T16:30:22Z"
+    },
+    "sib200/tur_Latn.dev.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/tur_Latn/dev.tsv",
+     "bytes": 15106,
+     "sha256": "1aad0dcd4b77f73e038d711069f7b897c31faec4fac2d4f5c03efd4b5abc1c37",
+     "fetched": "2026-09-27T16:30:23Z"
+    },
+    "sib200/tur_Latn.test.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/tur_Latn/test.tsv",
+     "bytes": 33368,
+     "sha256": "99e45820a77387109f9c6f989be7459881e54a82fcfb743b75b206eb686f0dde",
+     "fetched": "2026-09-27T16:30:23Z"
+    },
+    "sib200/urd_Arab.train.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/urd_Arab/train.tsv",
+     "bytes": 173852,
+     "sha256": "a39b3b3aa099e10e5f7bb280f96520ef53eddc8383e614a3bfa99c71ea8d9e87",
+     "fetched": "2026-09-27T16:30:23Z"
+    },
+    "sib200/urd_Arab.dev.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/urd_Arab/dev.tsv",
+     "bytes": 22933,
+     "sha256": "dcd31b30a145699589a7577151aadd104d5355627570e76bcbd0f1d3ba4398ce",
+     "fetched": "2026-09-27T16:30:23Z"
+    },
+    "sib200/urd_Arab.test.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/urd_Arab/test.tsv",
+     "bytes": 50022,
+     "sha256": "d3eddad726ac3680ab88891ac6223a99d2ff46d203d14b932ea19ff4f891317f",
+     "fetched": "2026-09-27T16:30:23Z"
+    },
+    "sib200/vie_Latn.train.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/vie_Latn/train.tsv",
+     "bytes": 139192,
+     "sha256": "d0938c13c6d44d3c2161c591704b6bcc3debf988becd7b59f8d6fa77619f727c",
+     "fetched": "2026-09-27T16:30:24Z"
+    },
+    "sib200/vie_Latn.dev.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/vie_Latn/dev.tsv",
+     "bytes": 18237,
+     "sha256": "6044ac110e14c5d1ae2d61c6cde25fba3ed578d763f3987618068aa216c2c475",
+     "fetched": "2026-09-27T16:30:24Z"
+    },
+    "sib200/vie_Latn.test.tsv": {
+     "url": "https://huggingface.co/datasets/Davlan/sib200/resolve/main/data/vie_Latn/test.tsv",
+     "bytes": 40601,
+     "sha256": "1de363037ff166e60f18f002555ef247cd2c80cc90fadc87c0c2ccb6612f42cc",
+     "fetched": "2026-09-27T16:30:24Z"
+    }
+   }
+  },
+  "wikipedia_danger": {
+   "name": "Our Wikipedia/Wikidata danger set (gate 3), train and val only",
+   "url": "docs/wiki-data.md",
+   "version": "as built 2026-09-26; its test split is not used",
+   "licence": "text CC BY-SA 4.0, labels CC0",
+   "pii": "no humans",
+   "licence_verified_at": {
+    "url": "https://en.wikipedia.org/wiki/Wikipedia:Copyrights",
+    "http": 200,
+    "checked": "2026-09-27T16:42:23Z",
+    "phrases_found": {
+     "Creative Commons Attribution-ShareAlike 4.0": true
+    },
+    "sha256": "8859109e43e460959875f65c3c01c9c857d611d380d2489b8ee61f150c1d6aa0"
+   },
+   "attribution": "url field per row in data/raw/clean/wiki/danger/*.jsonl",
+   "rows_used": {
+    "danger|train": 5549,
+    "danger|val": 358
+   },
+   "files": {
+    "wiki/danger/train.jsonl": {
+     "sha256": "791a7c150fa36cb7ab4ac54577054100743813182ee57d8d88165390e6849f9f",
+     "bytes": 4422433
+    },
+    "wiki/danger/val.jsonl": {
+     "sha256": "7e931fe47fdfabea566ad12a5ed25790677d40f3ed237ed22e2ca5f502e5211a",
+     "bytes": 292622
+    }
+   }
+  }
+ },
+ "near_dup_dropped": {
+  "topic": {
+   "val_near_train": 68,
+   "pool_near_heldout": 0,
+   "pool_near_heldout_by_source": {}
+  },
+  "language": {
+   "val_near_train": 189,
+   "pool_near_heldout": 330,
+   "pool_near_heldout_by_source": {
+    "wikipedia": 151,
+    "massive": 94,
+    "tatoeba": 85
+   }
+  },
+  "danger": {
+   "val_near_train": 99,
+   "pool_near_heldout": 0,
+   "pool_near_heldout_by_source": {}
+  }
+ }
+}
