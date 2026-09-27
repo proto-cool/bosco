@@ -131,6 +131,14 @@ power it, and it needs the fly to make honest decisions."
     and go on every card trained on it: the commenters' consent rests on the Civil Comments platform terms,
     and the raters' platform and pay are undocumented. It unblocks `sexual` in harm and the hostile end of
     tone (docs/research-gate4/harm-tone.md).
+31. **Stack Exchange data is accepted** (Nick, 2026-09-27: "it's explicitly not an LLM so I think it's
+    fine"). The text is CC BY-SA 4.0. Use the 2024-04 archive.org dump, and only posts from before 2022-11. The
+    newer download terms ("not training a large language model") are noted on every card trained on it;
+    Bosco is not a language model and generates no text. Usernames go only into attribution manifests.
+32. **Language covers the 30–40 languages the current encoder can see** (Nick: "30-40 is plenty").
+    nomic-embed-text-v1.5's uncased BERT tokenizer loses most Chinese, Thai and South Asian, Southeast
+    Asian and Ethiopic scripts (docs/research-gate4/topic-language-danger.md). Those languages are out of
+    scope and are named on the card. A multilingual encoder is revisited with our own encoders.
 
 ## Open (Nick to decide)
 
