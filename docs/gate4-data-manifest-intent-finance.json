@@ -1,0 +1,3867 @@
+{
+ "generated": "2026-09-27",
+ "builder": "scripts/v1_gate4_intent_finance.py",
+ "doc": "docs/gate4-data-intent-finance.md",
+ "rows": [
+  {
+   "row": "intent/clinc150",
+   "field": "intent",
+   "source": "clinc150",
+   "role": "pool",
+   "name": "CLINC150 (oos-eval data_full.json)",
+   "url": "https://github.com/clinc/oos-eval",
+   "version": "git 828f8093932c8fe6ca7936c3d2e52903b1c523de",
+   "licence": "CC BY 3.0",
+   "licence_where": "repo LICENSE (verified 2026-09-25, docs/clean-data.md; data/raw/clean/MANIFEST.json)",
+   "personal_data": "none",
+   "fetch": "already fetched (data/raw/clean/MANIFEST.json)",
+   "rows_used": {
+    "train": 7097,
+    "val": 670
+   },
+   "files": [
+    {
+     "path": "clinc150/LICENSE",
+     "bytes": 19467,
+     "sha256": "e6bc9e9c474700b708f568bac9e5a8a9bcb2b1dad53442f5ba449fcb848b8e76"
+    },
+    {
+     "path": "clinc150/README.md",
+     "bytes": 2668,
+     "sha256": "8a8df26c4de3d25b6c4cff385ca23602c30e4e56828b015206cbc202f6db363a"
+    },
+    {
+     "path": "clinc150/data_full.json",
+     "bytes": 2495390,
+     "sha256": "36923c3705a59e08fe9c3883d8bc2dd966ef93e22cb78ac41171782a698d56e0"
+    }
+   ]
+  },
+  {
+   "row": "finance/clinc150",
+   "field": "finance",
+   "source": "clinc150",
+   "role": "pool",
+   "name": "CLINC150 (oos-eval data_full.json)",
+   "url": "https://github.com/clinc/oos-eval",
+   "version": "git 828f8093932c8fe6ca7936c3d2e52903b1c523de",
+   "licence": "CC BY 3.0",
+   "licence_where": "repo LICENSE (verified 2026-09-25, docs/clean-data.md; data/raw/clean/MANIFEST.json)",
+   "personal_data": "none",
+   "fetch": "already fetched (data/raw/clean/MANIFEST.json)",
+   "rows_used": {
+    "train": 1840,
+    "val": 149
+   },
+   "files": [
+    {
+     "path": "clinc150/LICENSE",
+     "bytes": 19467,
+     "sha256": "e6bc9e9c474700b708f568bac9e5a8a9bcb2b1dad53442f5ba449fcb848b8e76"
+    },
+    {
+     "path": "clinc150/README.md",
+     "bytes": 2668,
+     "sha256": "8a8df26c4de3d25b6c4cff385ca23602c30e4e56828b015206cbc202f6db363a"
+    },
+    {
+     "path": "clinc150/data_full.json",
+     "bytes": 2495390,
+     "sha256": "36923c3705a59e08fe9c3883d8bc2dd966ef93e22cb78ac41171782a698d56e0"
+    }
+   ]
+  },
+  {
+   "row": "intent/massive",
+   "field": "intent",
+   "source": "massive",
+   "role": "pool",
+   "name": "MASSIVE 1.1 en-US",
+   "url": "https://amazon-massive-nlu-dataset.s3.amazonaws.com/amazon-massive-dataset-1.1.tar.gz",
+   "version": "1.1",
+   "licence": "CC BY 4.0",
+   "licence_where": "tarball LICENSE/NOTICE (docs/clean-data.md)",
+   "personal_data": "worker_id never read",
+   "fetch": "already fetched (data/raw/clean/MANIFEST.json)",
+   "rows_used": {
+    "train": 4256,
+    "val": 564
+   },
+   "files": [
+    {
+     "path": "massive/amazon-massive-dataset-1.1.tar.gz",
+     "bytes": 40251390,
+     "sha256": "4cba5faa11c71437928e17cb1b9b3d8b8e727e7ea363a3a9a8045e19c0491577"
+    },
+    {
+     "path": "massive/extracted/1.1/CHANGELOG.md",
+     "bytes": 92,
+     "sha256": "cec9628a93c718dbbe44cfd63400b5828fb0200264de4cf9c4d3c434ceb435e9"
+    },
+    {
+     "path": "massive/extracted/1.1/CITATION.md",
+     "bytes": 1128,
+     "sha256": "96d21569b0e2f3b64e7e8a2ff22a5b15570ec3f7f93ffdc26efb01d366fe073f"
+    },
+    {
+     "path": "massive/extracted/1.1/LICENSE",
+     "bytes": 18704,
+     "sha256": "c2e6ea015269147de02117ebdd91f30ef09831251f5345fa8365273b1db1d435"
+    },
+    {
+     "path": "massive/extracted/1.1/NOTICE.md",
+     "bytes": 502,
+     "sha256": "b90534ccd20c6f0e1e5239567af0d150496339542b75a15bfbc3e1e737593ddb"
+    },
+    {
+     "path": "massive/extracted/1.1/data/en-US.jsonl",
+     "bytes": 3904197,
+     "sha256": "c70f75c6a543a26e249ec383df67733ad9b1066f6c0406c2e04a3f03356e407e"
+    },
+    {
+     "path": "massive/hf_card/CITATION.cff",
+     "bytes": 1146,
+     "sha256": "7432a8f5ed188ecb761e40a2295781d72a9de2b27dd5ba56adc6dcc21db81ad9"
+    },
+    {
+     "path": "massive/hf_card/LICENSE",
+     "bytes": 18704,
+     "sha256": "c2e6ea015269147de02117ebdd91f30ef09831251f5345fa8365273b1db1d435"
+    },
+    {
+     "path": "massive/hf_card/README.md",
+     "bytes": 34420,
+     "sha256": "9a74b2298db2cb509eb39725612ef5d5b9eb99d59ef7c960ab01f58526051e3d"
+    },
+    {
+     "path": "massive/hf_card/massive.py",
+     "bytes": 30340,
+     "sha256": "b6086578ec0bd3e29000ed4d73f2841dfba48cd8e5a91b00f92c87411df368ba"
+    }
+   ]
+  },
+  {
+   "row": "intent/snips_builtin",
+   "field": "intent",
+   "source": "snips_builtin",
+   "role": "pool",
+   "name": "SNIPS built-in intents 2016-12",
+   "url": "https://github.com/sonos/nlu-benchmark",
+   "version": "git b86ac7f1577868c42158d0dec77db50956046696",
+   "licence": "CC0 1.0",
+   "licence_where": "repo LICENSE (docs/clean-data.md)",
+   "personal_data": "none",
+   "fetch": "already fetched (data/raw/clean/MANIFEST.json)",
+   "rows_used": {
+    "train": 134,
+    "val": 30
+   },
+   "files": [
+    {
+     "path": "snips_built_in_intents/2016-12-built-in-intents_README.md",
+     "bytes": 1888,
+     "sha256": "492f5dddf117ad7bf7800384b7b3c20ab3099eb673d2a9562182d9f097a627bb"
+    },
+    {
+     "path": "snips_built_in_intents/2016-12-built-in-intents_benchmark_data.json",
+     "bytes": 9130264,
+     "sha256": "e3f6ba7b7ab0e8d1a5959a8c8ecb4fc566a281f4ebd34fdf1160929c630d299f"
+    },
+    {
+     "path": "snips_built_in_intents/LICENSE",
+     "bytes": 6555,
+     "sha256": "36ffd9dc085d529a7e60e1276d73ae5a030b020313e6c5408593a6ae2af39673"
+    },
+    {
+     "path": "snips_built_in_intents/README.md",
+     "bytes": 2376,
+     "sha256": "1b9d7e36688231152b789a0d1a323d028fc9387e72e7de84abcdc718181f965b"
+    }
+   ]
+  },
+  {
+   "row": "intent/snips2017",
+   "field": "intent",
+   "source": "snips2017",
+   "role": "pool",
+   "name": "SNIPS 2017-06 custom-intent engines",
+   "url": "https://github.com/sonos/nlu-benchmark",
+   "version": "git b86ac7f1577868c42158d0dec77db50956046696",
+   "licence": "CC0 1.0",
+   "licence_where": "repo LICENSE at the pinned commit, re-read 2026-09-27",
+   "personal_data": "none",
+   "rows_used": {
+    "train": 813,
+    "val": 150
+   },
+   "files": [
+    {
+     "path": "LICENSE",
+     "url": "https://raw.githubusercontent.com/sonos/nlu-benchmark/b86ac7f1577868c42158d0dec77db50956046696/LICENSE",
+     "bytes": 6555,
+     "sha256": "36ffd9dc085d529a7e60e1276d73ae5a030b020313e6c5408593a6ae2af39673",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "README.md",
+     "url": "https://raw.githubusercontent.com/sonos/nlu-benchmark/b86ac7f1577868c42158d0dec77db50956046696/README.md",
+     "bytes": 2376,
+     "sha256": "1b9d7e36688231152b789a0d1a323d028fc9387e72e7de84abcdc718181f965b",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "2017-06-custom-intent-engines/AddToPlaylist/train_AddToPlaylist_full.json",
+     "url": "https://raw.githubusercontent.com/sonos/nlu-benchmark/b86ac7f1577868c42158d0dec77db50956046696/2017-06-custom-intent-engines/AddToPlaylist/train_AddToPlaylist_full.json",
+     "bytes": 833810,
+     "sha256": "fee1b4645352e70ed8a40f1f87c3b53fc3bf75f8ebc82252a22b82c107e75b01",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "2017-06-custom-intent-engines/AddToPlaylist/validate_AddToPlaylist.json",
+     "url": "https://raw.githubusercontent.com/sonos/nlu-benchmark/b86ac7f1577868c42158d0dec77db50956046696/2017-06-custom-intent-engines/AddToPlaylist/validate_AddToPlaylist.json",
+     "bytes": 44160,
+     "sha256": "14cc9ee49ae477b1452632a6e835498cf4c32da397b16967c82abb3e50403e83",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "2017-06-custom-intent-engines/BookRestaurant/train_BookRestaurant_full.json",
+     "url": "https://raw.githubusercontent.com/sonos/nlu-benchmark/b86ac7f1577868c42158d0dec77db50956046696/2017-06-custom-intent-engines/BookRestaurant/train_BookRestaurant_full.json",
+     "bytes": 980018,
+     "sha256": "7677e82cd6e9a8191f0a4502568c786278c984900b4796d3628e46f1abf73ef4",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "2017-06-custom-intent-engines/BookRestaurant/validate_BookRestaurant.json",
+     "url": "https://raw.githubusercontent.com/sonos/nlu-benchmark/b86ac7f1577868c42158d0dec77db50956046696/2017-06-custom-intent-engines/BookRestaurant/validate_BookRestaurant.json",
+     "bytes": 49353,
+     "sha256": "4f7258ccc768b777b2eb8916532db9aa50dbd058ddf1ffb0dc59218963e7442a",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "2017-06-custom-intent-engines/GetWeather/train_GetWeather_full.json",
+     "url": "https://raw.githubusercontent.com/sonos/nlu-benchmark/b86ac7f1577868c42158d0dec77db50956046696/2017-06-custom-intent-engines/GetWeather/train_GetWeather_full.json",
+     "bytes": 743646,
+     "sha256": "86f414b2ad8a993134d85d16e25e5d337beae47cef993c0af2a5f440405c60f6",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "2017-06-custom-intent-engines/GetWeather/validate_GetWeather.json",
+     "url": "https://raw.githubusercontent.com/sonos/nlu-benchmark/b86ac7f1577868c42158d0dec77db50956046696/2017-06-custom-intent-engines/GetWeather/validate_GetWeather.json",
+     "bytes": 39612,
+     "sha256": "60c095e193655d6ca92be220fed3926ca25e18cd70c85664145efe25d80993af",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "2017-06-custom-intent-engines/PlayMusic/train_PlayMusic_full.json",
+     "url": "https://raw.githubusercontent.com/sonos/nlu-benchmark/b86ac7f1577868c42158d0dec77db50956046696/2017-06-custom-intent-engines/PlayMusic/train_PlayMusic_full.json",
+     "bytes": 675343,
+     "sha256": "901ddbe9781d1fdb8196e789c543f80df3d29ca6e237da64947905adcc0312e4",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "2017-06-custom-intent-engines/PlayMusic/validate_PlayMusic.json",
+     "url": "https://raw.githubusercontent.com/sonos/nlu-benchmark/b86ac7f1577868c42158d0dec77db50956046696/2017-06-custom-intent-engines/PlayMusic/validate_PlayMusic.json",
+     "bytes": 33122,
+     "sha256": "922212775e26259d5bffeaf79b6048d070ca017d229df00b2cc9800f71c75d20",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "2017-06-custom-intent-engines/RateBook/train_RateBook_full.json",
+     "url": "https://raw.githubusercontent.com/sonos/nlu-benchmark/b86ac7f1577868c42158d0dec77db50956046696/2017-06-custom-intent-engines/RateBook/train_RateBook_full.json",
+     "bytes": 506364,
+     "sha256": "bb43e4b74134300d5766f6b420d0357a63402987a225f6dc92c806c9c040ce04",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "2017-06-custom-intent-engines/RateBook/validate_RateBook.json",
+     "url": "https://raw.githubusercontent.com/sonos/nlu-benchmark/b86ac7f1577868c42158d0dec77db50956046696/2017-06-custom-intent-engines/RateBook/validate_RateBook.json",
+     "bytes": 52854,
+     "sha256": "c1f8b4114da0bb5e8afd78a8062766e18b2eabb0e717539598db01b09d04619b",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "2017-06-custom-intent-engines/SearchCreativeWork/train_SearchCreativeWork_full.json",
+     "url": "https://raw.githubusercontent.com/sonos/nlu-benchmark/b86ac7f1577868c42158d0dec77db50956046696/2017-06-custom-intent-engines/SearchCreativeWork/train_SearchCreativeWork_full.json",
+     "bytes": 292392,
+     "sha256": "87b3432de48c71c205aa5238b41d9e3f2d70bdfcd0bea2427544fb9e4bd5e5bb",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "2017-06-custom-intent-engines/SearchCreativeWork/validate_SearchCreativeWork.json",
+     "url": "https://raw.githubusercontent.com/sonos/nlu-benchmark/b86ac7f1577868c42158d0dec77db50956046696/2017-06-custom-intent-engines/SearchCreativeWork/validate_SearchCreativeWork.json",
+     "bytes": 31404,
+     "sha256": "8a5e830eddb185d3e4a9d27ded140a145d04766bdce0e58834676ede32d13e77",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "2017-06-custom-intent-engines/SearchScreeningEvent/train_SearchScreeningEvent_full.json",
+     "url": "https://raw.githubusercontent.com/sonos/nlu-benchmark/b86ac7f1577868c42158d0dec77db50956046696/2017-06-custom-intent-engines/SearchScreeningEvent/train_SearchScreeningEvent_full.json",
+     "bytes": 364989,
+     "sha256": "5447e9440c02e2fb08c3ae16b9f58a4d1332b4bc77fd34691402b02aa4399765",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "2017-06-custom-intent-engines/SearchScreeningEvent/validate_SearchScreeningEvent.json",
+     "url": "https://raw.githubusercontent.com/sonos/nlu-benchmark/b86ac7f1577868c42158d0dec77db50956046696/2017-06-custom-intent-engines/SearchScreeningEvent/validate_SearchScreeningEvent.json",
+     "bytes": 35716,
+     "sha256": "81e1445713e03c7c3e615353c5f3fee05f369fe9834100b9b9735900a96b9498",
+     "fetched": "2026-09-27"
+    }
+   ]
+  },
+  {
+   "row": "intent/banking77",
+   "field": "intent",
+   "source": "banking77",
+   "role": "pool",
+   "name": "BANKING77",
+   "url": "https://github.com/PolyAI-LDN/task-specific-datasets",
+   "version": "git 57ec275d8078af65b7731c2a98be812d844a6d6b",
+   "licence": "CC BY 4.0",
+   "licence_where": "repo LICENSE (CC BY 4.0 legal code) + README \u00a7License, re-read 2026-09-27",
+   "personal_data": "none",
+   "rows_used": {
+    "train": 2000,
+    "val": 209
+   },
+   "files": [
+    {
+     "path": "LICENSE",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/LICENSE",
+     "bytes": 18650,
+     "sha256": "7e7170e3cebf88a9f60c7b8421418323c09304da1af4d5e90f4da1dc1c8a2661",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "README.md",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/README.md",
+     "bytes": 4735,
+     "sha256": "7b9ce9069931cc2de89dce8c7ffb53d07806cf413601ccf133b9af5227b3a373",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "banking_data/categories.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/banking_data/categories.json",
+     "bytes": 2036,
+     "sha256": "53261da888122daf2d120d925458631d9619e15d82e56052e7a42e535ce32b63",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "banking_data/train.csv",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/banking_data/train.csv",
+     "bytes": 839073,
+     "sha256": "b06e26ac675513959a63135f11b94ea7786ed02da65db93a5650d8838cbc664b",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "banking_data/test.csv",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/banking_data/test.csv",
+     "bytes": 239961,
+     "sha256": "d12d6e3bc4c3103966ae786dc435913c0c563dfa328f5a3646d0e62cfeeb474d",
+     "fetched": "2026-09-27"
+    }
+   ]
+  },
+  {
+   "row": "finance/banking77",
+   "field": "finance",
+   "source": "banking77",
+   "role": "pool",
+   "name": "BANKING77",
+   "url": "https://github.com/PolyAI-LDN/task-specific-datasets",
+   "version": "git 57ec275d8078af65b7731c2a98be812d844a6d6b",
+   "licence": "CC BY 4.0",
+   "licence_where": "repo LICENSE (CC BY 4.0 legal code) + README \u00a7License, re-read 2026-09-27",
+   "personal_data": "none",
+   "rows_used": {
+    "train": 1838,
+    "val": 201
+   },
+   "files": [
+    {
+     "path": "LICENSE",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/LICENSE",
+     "bytes": 18650,
+     "sha256": "7e7170e3cebf88a9f60c7b8421418323c09304da1af4d5e90f4da1dc1c8a2661",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "README.md",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/README.md",
+     "bytes": 4735,
+     "sha256": "7b9ce9069931cc2de89dce8c7ffb53d07806cf413601ccf133b9af5227b3a373",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "banking_data/categories.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/banking_data/categories.json",
+     "bytes": 2036,
+     "sha256": "53261da888122daf2d120d925458631d9619e15d82e56052e7a42e535ce32b63",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "banking_data/train.csv",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/banking_data/train.csv",
+     "bytes": 839073,
+     "sha256": "b06e26ac675513959a63135f11b94ea7786ed02da65db93a5650d8838cbc664b",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "banking_data/test.csv",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/banking_data/test.csv",
+     "bytes": 239961,
+     "sha256": "d12d6e3bc4c3103966ae786dc435913c0c563dfa328f5a3646d0e62cfeeb474d",
+     "fetched": "2026-09-27"
+    }
+   ]
+  },
+  {
+   "row": "intent/nlupp",
+   "field": "intent",
+   "source": "nlupp",
+   "role": "pool",
+   "name": "NLU++ (banking, hotels)",
+   "url": "https://github.com/PolyAI-LDN/task-specific-datasets",
+   "version": "git 57ec275d8078af65b7731c2a98be812d844a6d6b",
+   "licence": "CC BY 4.0",
+   "licence_where": "same repo LICENSE, re-read 2026-09-27",
+   "personal_data": "none",
+   "rows_used": {
+    "train": 417,
+    "val": 73
+   },
+   "files": [
+    {
+     "path": "LICENSE",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/LICENSE",
+     "bytes": 18650,
+     "sha256": "7e7170e3cebf88a9f60c7b8421418323c09304da1af4d5e90f4da1dc1c8a2661",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "README.md",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/README.md",
+     "bytes": 4735,
+     "sha256": "7b9ce9069931cc2de89dce8c7ffb53d07806cf413601ccf133b9af5227b3a373",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/README.md",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/README.md",
+     "bytes": 7301,
+     "sha256": "c1ca71675835fd70587077297685c771c8844973ed10f595e0bb2adb883583d3",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/data/ontology.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/data/ontology.json",
+     "bytes": 11660,
+     "sha256": "58736607898d17f73e8afa4fa41ca455670756398f3fc91751c31b62327e38c5",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/data/banking/fold0.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/data/banking/fold0.json",
+     "bytes": 23986,
+     "sha256": "bc9544ba197f5f073d07beab056466997ad986077d1ee46b434a251568034d0c",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/data/banking/fold1.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/data/banking/fold1.json",
+     "bytes": 25824,
+     "sha256": "ebe7cb30185e0884c9f6a20c8650636bb7ed0419d1a1a5608d63eb323f5df2ec",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/data/banking/fold2.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/data/banking/fold2.json",
+     "bytes": 22898,
+     "sha256": "9ce7cc6605cfa7dcb07be2b5f6ecb6cc075db5f344c998963a7a0be34727db99",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/data/banking/fold3.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/data/banking/fold3.json",
+     "bytes": 26062,
+     "sha256": "caff1b2b46503f85ae0ea2add66498857b341c87e87fa3dfbd3e8f12ee092fcd",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/data/banking/fold4.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/data/banking/fold4.json",
+     "bytes": 28099,
+     "sha256": "2c5121f7bcdca72c5a790b6a5ab1de6e0d89f5e9c6038bfa36507942f91aae5e",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/data/banking/fold5.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/data/banking/fold5.json",
+     "bytes": 24249,
+     "sha256": "fbc4252be25dfe5fd81b246eb51bcd9fccf509e43d29968832b99dcd0595449e",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/data/banking/fold6.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/data/banking/fold6.json",
+     "bytes": 25370,
+     "sha256": "fc2cbe872188462202f0fa4abdc4ee3bb38df130530500cb29f0c58c7f130cf1",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/data/banking/fold7.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/data/banking/fold7.json",
+     "bytes": 25169,
+     "sha256": "3029b8f9364ce6fc5ea202dc3b5d00b89a678cc90e49be0b865ace4cd944cea9",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/data/banking/fold8.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/data/banking/fold8.json",
+     "bytes": 29397,
+     "sha256": "7c76964657343991ed2d2c874db11b679b35cbe9fbf1ab05259667c02fd87335",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/data/banking/fold9.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/data/banking/fold9.json",
+     "bytes": 25396,
+     "sha256": "2d26f835b622d2c8bf83f4f29ebfc2cf5b1615f9cf7082e341f2cd77fd5d6a89",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/data/banking/fold10.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/data/banking/fold10.json",
+     "bytes": 24072,
+     "sha256": "a61de5477bd09ac0baa4152705be278f819de5ae60226c65c19d341b01330f6f",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/data/banking/fold11.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/data/banking/fold11.json",
+     "bytes": 24721,
+     "sha256": "cc01ca2a90f3da8c0e9d3762e59d1a84329bd357e5e9f17f490108ce5450b3a6",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/data/banking/fold12.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/data/banking/fold12.json",
+     "bytes": 24470,
+     "sha256": "d47c38523d56a9ffff0ffc1e4daa14339a6e42dfbf7b29ede030f1cc659dd612",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/data/banking/fold13.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/data/banking/fold13.json",
+     "bytes": 24816,
+     "sha256": "cb4c26ebecc7e68b8be0fafb4a691c9199fe6bb1368f0b549d29c6a1d6438fd1",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/data/banking/fold14.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/data/banking/fold14.json",
+     "bytes": 25311,
+     "sha256": "2b5350380c0d13e9cdef211a02b7406d97be2a766081bdab9beba12035948b48",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/data/banking/fold15.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/data/banking/fold15.json",
+     "bytes": 26727,
+     "sha256": "48ab8cf2a87cadfa3be845de6071f91cf22089b6618c471eceb749e6c719739e",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/data/banking/fold16.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/data/banking/fold16.json",
+     "bytes": 26694,
+     "sha256": "29e3bce3fa74908b85ee8c595b17419ae8161414cd4eb682fc41a79abe93c2bc",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/data/banking/fold17.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/data/banking/fold17.json",
+     "bytes": 25756,
+     "sha256": "4bf5dfe9d5114ef0300f970ed4c473eb7a9090900223a01af018e6a3e2a17bee",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/data/banking/fold18.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/data/banking/fold18.json",
+     "bytes": 23889,
+     "sha256": "f4f514ae92501dbe009ef639f229558d966eb63066f6273327558b51b9fcf69a",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/data/banking/fold19.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/data/banking/fold19.json",
+     "bytes": 22584,
+     "sha256": "c24f0fb42c4714d27f8639351c22df75e714e1e3e2451032d73452e4faa3942c",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/data/hotels/fold0.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/data/hotels/fold0.json",
+     "bytes": 14054,
+     "sha256": "16724351a44b5c8b32c84a827dcd8530f4d248c6fac4d309d88fd21245fca448",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/data/hotels/fold1.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/data/hotels/fold1.json",
+     "bytes": 15431,
+     "sha256": "123aeb21f3c73a47ce7df75ff28ba2cd318c9782f1c779e75e8e9322a36e68e7",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/data/hotels/fold2.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/data/hotels/fold2.json",
+     "bytes": 14654,
+     "sha256": "517732b73e40ac30993ec9ca7e7531ca2e7abac829258391961836dd7ebdc2d6",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/data/hotels/fold3.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/data/hotels/fold3.json",
+     "bytes": 15041,
+     "sha256": "555561c4484df605b2d180f762559d013bc864b304a6619a172d582eff15f859",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/data/hotels/fold4.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/data/hotels/fold4.json",
+     "bytes": 15126,
+     "sha256": "a6c7459c085a09646a1c77de4c70a288076d2426a7f2f15c8838dc4e3d4ee9a6",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/data/hotels/fold5.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/data/hotels/fold5.json",
+     "bytes": 15478,
+     "sha256": "489b91cb4132083fc975b85cce9774602e9aa7af46db2b7561884af17e281453",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/data/hotels/fold6.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/data/hotels/fold6.json",
+     "bytes": 14559,
+     "sha256": "052e52bf41f87b24c5bbf246e871f6456b105230bd84a8f7f13ff65bedcc2cad",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/data/hotels/fold7.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/data/hotels/fold7.json",
+     "bytes": 15278,
+     "sha256": "aa7869f8031cd3caa94675cc92052afd8526cbaa81b400de665fb95ba4b62c6c",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/data/hotels/fold8.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/data/hotels/fold8.json",
+     "bytes": 18010,
+     "sha256": "1d20d1b1b0ff349f33649d219b2359828977fd9663ba758e4e9e67672a0954a2",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/data/hotels/fold9.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/data/hotels/fold9.json",
+     "bytes": 15162,
+     "sha256": "0346a8658c7e47750d7a8589cd8b3b3e22f8beed3074b6488daa4213f47b5966",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/data/hotels/fold10.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/data/hotels/fold10.json",
+     "bytes": 15502,
+     "sha256": "b5ed876c74026c5be1aa6ae3956134a89894e01baa410c1ded1e52e72750839e",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/data/hotels/fold11.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/data/hotels/fold11.json",
+     "bytes": 14967,
+     "sha256": "582d1de5ac593226182b5e32c146750b6678a9d6198aef4c0cdfe9ad8b077161",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/data/hotels/fold12.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/data/hotels/fold12.json",
+     "bytes": 15966,
+     "sha256": "f36349037466f2cc01430fef6b39ffadb0d4222396c7beae028cf07f333f897a",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/data/hotels/fold13.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/data/hotels/fold13.json",
+     "bytes": 16366,
+     "sha256": "ee9773b91c2e37ea566b4f09687b6951a5c44d36e22292cead93eb221904e06a",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/data/hotels/fold14.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/data/hotels/fold14.json",
+     "bytes": 16208,
+     "sha256": "722562aa47b087cbd432930064da2e080df0ada23000783a9493786125a22dad",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/data/hotels/fold15.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/data/hotels/fold15.json",
+     "bytes": 16500,
+     "sha256": "f2d34e8c75d1e49f29b905de61d6690ae6f85f4e040f6f72882e161a09e57c24",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/data/hotels/fold16.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/data/hotels/fold16.json",
+     "bytes": 15767,
+     "sha256": "dac95faf7ba946819714ec5e4e3014d0cf3e054634cc10f1ac9f7693a90280cb",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/data/hotels/fold17.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/data/hotels/fold17.json",
+     "bytes": 16600,
+     "sha256": "3e0a95d9c8097d40d8919b5405938c0088a80926d262f03c9234fc93a20a5d33",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/data/hotels/fold18.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/data/hotels/fold18.json",
+     "bytes": 13819,
+     "sha256": "1034017ae94f7eb50ecf2cfb4ef850c53e362506b69b02ee7c99f346eec16437",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "nlupp/data/hotels/fold19.json",
+     "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/nlupp/data/hotels/fold19.json",
+     "bytes": 14296,
+     "sha256": "b0140eecf03dd9e6cb251c1a4b42edff2f4ea2c74079a9988777ee7181ebb3e7",
+     "fetched": "2026-09-27"
+    }
+   ]
+  },
+  {
+   "row": "intent/sgd",
+   "field": "intent",
+   "source": "sgd",
+   "role": "pool",
+   "name": "Schema-Guided Dialogue (SGD)",
+   "url": "https://github.com/google-research-datasets/dstc8-schema-guided-dialogue",
+   "version": "git e852981ae34990f4358979625854259302feaa78",
+   "licence": "CC BY-SA 4.0",
+   "licence_where": "README \u00a7License + LICENSE.txt, re-read 2026-09-27",
+   "personal_data": "none (fictional entities)",
+   "share_alike": true,
+   "rows_used": {
+    "train": 1609,
+    "val": 232
+   },
+   "files": [
+    {
+     "path": "LICENSE.txt",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/LICENSE.txt",
+     "bytes": 20139,
+     "sha256": "71a43a169b52bb1b39510b65ec5b43b4bbb59196d449a835fe58b50af6a72742",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "README.md",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/README.md",
+     "bytes": 16294,
+     "sha256": "e16545f163578037e6b7315b8da243f9f9871f4f071a812ab86b73702f124168",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/dialogues_001.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/dialogues_001.json",
+     "bytes": 2225937,
+     "sha256": "fe3a8ed9e160c15e20e7cfd16d03734b4473df0d3864f2ad687ea9eeee5eea52",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/dialogues_002.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/dialogues_002.json",
+     "bytes": 2507250,
+     "sha256": "fcbc8ba411ed8b3e0b06dff31819dc366f6bc6d228e021053920365e11004b03",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/dialogues_003.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/dialogues_003.json",
+     "bytes": 1965028,
+     "sha256": "5915cea36b77de920fbd66569333db2395626ec465ba23e2f0caa77fba2e5dae",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/dialogues_004.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/dialogues_004.json",
+     "bytes": 2794855,
+     "sha256": "d379a5149a86304a22162531e122ff9a7b8e9e46178789a5170e0a7091dd2bbf",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/dialogues_005.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/dialogues_005.json",
+     "bytes": 1512309,
+     "sha256": "107d8bc1ce21b06453f33cc8dfc19172e0956646b47d9c1db7bdcd978a323d73",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/dialogues_006.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/dialogues_006.json",
+     "bytes": 2680136,
+     "sha256": "20140828f25496461003140b67a5987d954109d9e14e12e472ed565ed2843bc3",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/dialogues_007.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/dialogues_007.json",
+     "bytes": 1381473,
+     "sha256": "d9af6ffcb69257ab3ce10e4637fc4d45d268094e55693b170a9b5b9d914dc611",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/dialogues_008.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/dialogues_008.json",
+     "bytes": 4040385,
+     "sha256": "986264c54cfabb8c70ace72e209ff0cd000523daecde226b19b3dbd6f44ea09b",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/dialogues_009.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/dialogues_009.json",
+     "bytes": 3323617,
+     "sha256": "92479f0285dcb5db0d50f51b27a86aa0368a62214c575ad5cdd74299372fa71f",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/dialogues_010.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/dialogues_010.json",
+     "bytes": 2485450,
+     "sha256": "76d9ff1656e8cad2287cd5cd44bb8e18df0bd8cc7d3340543e1980b61241d3f8",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/dialogues_011.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/dialogues_011.json",
+     "bytes": 3171402,
+     "sha256": "7f034dd1bc18e75fc21077dd6270f8e1f51d97fad80b4e6069dbbe28c3ebdd41",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/dialogues_012.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/dialogues_012.json",
+     "bytes": 4080667,
+     "sha256": "9228d58681e3b98db2e7c6a9bef86994718455e3a7d4c7584b6ac53bc35969d3",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/dialogues_013.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/dialogues_013.json",
+     "bytes": 3550658,
+     "sha256": "a62cf6bddd52beae0980ecdedf312373976425a9302fb0da79af1270b28b16e1",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/dialogues_014.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/dialogues_014.json",
+     "bytes": 3960820,
+     "sha256": "aca7316a63a215bcdeb95189c2e3259f50cd29da9a77deaa264b92ba737b8e95",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/dialogues_015.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/dialogues_015.json",
+     "bytes": 4295570,
+     "sha256": "8d8d7b25c21e4a24ed5b3adf0310a66124496f6d3d9a962ca2e77a29eac0f51a",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/dialogues_016.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/dialogues_016.json",
+     "bytes": 3972559,
+     "sha256": "36ed533dd0e0b8f178a0aa9ea70a12d7fa3ab042ec4959061aa70b391b92785c",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/dialogues_017.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/dialogues_017.json",
+     "bytes": 5023594,
+     "sha256": "50da6ef54acf2cdf630ec99f75fa7fca33bc41683c10d2a4540b4c94a081c11a",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/dialogues_018.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/dialogues_018.json",
+     "bytes": 4315111,
+     "sha256": "debc2d37540a4cebb1ff0e1a0b14eb55accd55071c21dbb2c2624bf978d82d3a",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/dialogues_019.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/dialogues_019.json",
+     "bytes": 4183695,
+     "sha256": "2e3934d15b5e0b8d47b0018845fb6fb6b1f5d8f480e1788ea67d934aaa2179eb",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/dialogues_020.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/dialogues_020.json",
+     "bytes": 3404013,
+     "sha256": "7e022ed5e4c972d607e71e46baeb0b79f57967d5e6de4a4fb28a99a1ed30d9c3",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/schema.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/schema.json",
+     "bytes": 45576,
+     "sha256": "8fee8b1211500a4a1fb071765150e3267d20148bcad72a22c04bb1fdcd649366",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_001.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_001.json",
+     "bytes": 2039827,
+     "sha256": "1fa13b0fe607100bc66ed15e0490df9c52a2cec087ca9733e0f506755eef0ada",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_002.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_002.json",
+     "bytes": 1954151,
+     "sha256": "b3b2a2596fad9146e96e4e1aa288f975332e2c7a3153bb2379d75e8d71c35a20",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_003.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_003.json",
+     "bytes": 1817838,
+     "sha256": "b595a04f7848aed76d11e82250089023e42a6e5ce047c78b8ddd0f4856dcbecb",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_004.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_004.json",
+     "bytes": 2554643,
+     "sha256": "5468f85dd867c7cc825aa6918980dd3142c95c926d685a56803b91cd2d3eb379",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_005.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_005.json",
+     "bytes": 1908492,
+     "sha256": "9f344d5660b5d8bf6935f72cf4dc11149caaf9febf688fd748eacbe262c67c2b",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_006.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_006.json",
+     "bytes": 1932663,
+     "sha256": "249d591df0c32b5518560c37a02cdc09b147ea4f95d1373ac22d42c656788ab7",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_007.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_007.json",
+     "bytes": 2120186,
+     "sha256": "24c5c86501aa50d045f4ba8822bf06606967261365fc5ca6ffa8f7375bd54935",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_008.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_008.json",
+     "bytes": 2119144,
+     "sha256": "e4ecce8acdd5b3657de7a7660b9bcd339d88a629147711ad2545b695666279c5",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_009.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_009.json",
+     "bytes": 1945100,
+     "sha256": "5d30edca006e4b4159a8027d68c3bcd241447d2257deb51b467b9aeefa7b1158",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_010.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_010.json",
+     "bytes": 1376297,
+     "sha256": "b4fc2c16d0cb46e14d0def357f4a941ee61fad3c6c8dd430ac8bae6145f1e4d0",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_011.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_011.json",
+     "bytes": 1017746,
+     "sha256": "1c2e312ce653bdd4ba1fe74b44ef20b36bab74b8ccf7bc2e591c632d5492a21b",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_012.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_012.json",
+     "bytes": 4287498,
+     "sha256": "30ccd033dfeb5032cb74ca237ee4679fb00abf9b2e21b0c686da543ec3ac8ca6",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_013.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_013.json",
+     "bytes": 2992048,
+     "sha256": "b31c288da94b084e4963e7eda27e11922c7c230e9de0bb159856facb442684bc",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_014.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_014.json",
+     "bytes": 2299187,
+     "sha256": "52c79021d28c2bb2bb69210f360c61c49250696eaf1b04fdfa89e1fd9a7be2c7",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_015.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_015.json",
+     "bytes": 3384304,
+     "sha256": "4e14295fac05ce179d72ec30b67f6b01e24e2d4c4836b95cc842d8ae4a93131f",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_016.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_016.json",
+     "bytes": 4691169,
+     "sha256": "b0515e87357d8537df046a38d2418257b38e16e9df1a960c9de2bd3d21e19c8b",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_017.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_017.json",
+     "bytes": 3155647,
+     "sha256": "ec669b6b24667e01033069827200312b9af4a182789a15784c43b4be5cf0668e",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_018.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_018.json",
+     "bytes": 3685297,
+     "sha256": "51e761019af71be0558667b69d917b120def65b6434f019e7e0c95584ad7fdbc",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_019.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_019.json",
+     "bytes": 4519326,
+     "sha256": "2bf4a842c133c427beb7162408488f39ab04cc8e7178ff51c489b41678652834",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_020.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_020.json",
+     "bytes": 4131834,
+     "sha256": "9619574d5043827ea2e397702b88033dc013e4ac870f410a8016c8b223f55ec4",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_021.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_021.json",
+     "bytes": 3637097,
+     "sha256": "7259172a6ba19f5d065fe95b4ae41755c6ac32cf2fec80fae6d52d94b8a10a1d",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_022.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_022.json",
+     "bytes": 6287583,
+     "sha256": "ffed1c89eb5c589c159b70062433e0655c5955ef9f1dd0b3c0e4ddb1db9ac74b",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_023.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_023.json",
+     "bytes": 4858015,
+     "sha256": "c3466bc38d356b2abb6a71e61f502e0b5c82cf35584b3c655d01a89165e8fe80",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_024.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_024.json",
+     "bytes": 3814170,
+     "sha256": "728b605675f7d4da54dfe8c3746eabfdec884f75c9306f5cdb3d8eb3ab315e5c",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_025.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_025.json",
+     "bytes": 3909834,
+     "sha256": "50e8aa3052aa720279068de31d7c7225d08b035ac62e488aadca0e1edd39145d",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_026.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_026.json",
+     "bytes": 5427415,
+     "sha256": "981946b39930b73c78b63af1ec220c71b15e24529f24b48d435f917a1375ff7d",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_027.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_027.json",
+     "bytes": 4349741,
+     "sha256": "d05108c80386d35891f511a425e4a194a22a74c22a14d3f12e3b7a54252c4f96",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_028.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_028.json",
+     "bytes": 4395570,
+     "sha256": "8548c8881eb5445ec8f9d8877ada1371c4698890ec76c96408929957d36b4d79",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_029.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_029.json",
+     "bytes": 5439064,
+     "sha256": "97fd99e95c0d5169f57e85a7799214de7bf7495d3613652a6ac8a494f10021fb",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_030.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_030.json",
+     "bytes": 4107674,
+     "sha256": "dabf6b8051f03ad1049a4c6b89f48986a5d597d0e637ccf555faa0241ecdbe87",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_031.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_031.json",
+     "bytes": 4640417,
+     "sha256": "c78c04a16cde6eccbd4092d70d7e6053651e4bdab89a993a4dafa78eedf47c0f",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_032.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_032.json",
+     "bytes": 3672080,
+     "sha256": "b7b739ccdd51ce4cd60d0b4d4ccaa751831bf448965e9bacfe5b7a123bc0f806",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_033.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_033.json",
+     "bytes": 3386860,
+     "sha256": "a9f5b0c275a55ba40374ea10c723e88c37b8f0dabd55c2a9d3679de2495e224d",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_034.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_034.json",
+     "bytes": 1605989,
+     "sha256": "d412ac423182dfe367d1549be9580bd7a964b695f5fd1a4d9d77c849763294a9",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/schema.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/schema.json",
+     "bytes": 54864,
+     "sha256": "0b4af32e01695aec4788681fe6b22fb7ee908907269f5ac7167d01f4c4132bcb",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_001.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_001.json",
+     "bytes": 3128575,
+     "sha256": "5ce28a6e656bc88c1da29c983d243d5a81eb37de92698da3864d1cf02894ca24",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_002.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_002.json",
+     "bytes": 2233395,
+     "sha256": "56a06f9762593b27f5b34225de4ce37da5e83c9c5747e56bca2899f147d88b3e",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_003.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_003.json",
+     "bytes": 1804298,
+     "sha256": "aae3d8d141c8c36bc5268ca573044b4e82d4534947c169d951a1f229b9852029",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_004.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_004.json",
+     "bytes": 2502125,
+     "sha256": "4f4aa821e01d7d9efd44c2e89264d37e428045e7058bf3b3c6be0eaec09eddce",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_005.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_005.json",
+     "bytes": 2089510,
+     "sha256": "e19563efc34dead580435331d39ec3183c79230fa361b2e2d79035af242dd90b",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_006.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_006.json",
+     "bytes": 1957196,
+     "sha256": "6b4829cb18185f063b81d271b847aa6915ef970cb592a2366edbec56d4b4c746",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_007.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_007.json",
+     "bytes": 2012361,
+     "sha256": "59adf47264e106df1ce4a59d2c88e95b5a12497e6f5e3e5464381c2a7526837c",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_008.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_008.json",
+     "bytes": 2703055,
+     "sha256": "36614c125ce310dd162b62d624b8bcd117053cf727978458b6c36b6592f6e757",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_009.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_009.json",
+     "bytes": 3177831,
+     "sha256": "d8cc086374bbce168a03169341687eaa9f886fe25f8b8dd5bd6832f6f441951d",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_010.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_010.json",
+     "bytes": 3679169,
+     "sha256": "d8658cd35bd4b6d274720d14308ec721f238d70cc37ea947c38f9d83a0267c1b",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_011.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_011.json",
+     "bytes": 2328620,
+     "sha256": "66f7eb72a46fa379d85e53ae607e5920a4fa14a4a99765d91ee67f3675fdf4d7",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_012.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_012.json",
+     "bytes": 1945135,
+     "sha256": "483b09fc9ad3d5b7285d2e1bc44057f1286ea3e73d7ff191fcec5e1acb364412",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_013.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_013.json",
+     "bytes": 2187442,
+     "sha256": "c6592a97753a8d3be8bae0099b3877e21f293a12d8daf9bcdcbec7289d5f1be3",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_014.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_014.json",
+     "bytes": 2126844,
+     "sha256": "5cd6cc68c676a2546a3312eda0f29be170ab5f0d6c602c9548ffa2c095037c7b",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_015.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_015.json",
+     "bytes": 1744364,
+     "sha256": "b698e8db9b0898186453ec9fcec5f80ab043cfe301447d28dc577e99bd3acfd3",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_016.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_016.json",
+     "bytes": 1857379,
+     "sha256": "5a7d85a3058f38bf40290782721865c3d816f43841e0cd302b21167eefecf449",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_017.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_017.json",
+     "bytes": 3043775,
+     "sha256": "0eb666f375ba2cc6362c88c02cfd255b702a2b8216e30fce200f630bcca99fa0",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_018.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_018.json",
+     "bytes": 3272644,
+     "sha256": "ceadf059b7c4ec5e31b7b53ee696198c7a5baa2ff03544b81b4adbe9cb7eca05",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_019.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_019.json",
+     "bytes": 2457615,
+     "sha256": "96adb06dd0605bb3536bc5e795d045d745a035e9d1c2ed05f7e89937fe883fb9",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_020.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_020.json",
+     "bytes": 1683144,
+     "sha256": "b2a3cd6d8e677c6a9d342f5703a947525b17b906348cd944a4da1c449ff4f3a4",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_021.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_021.json",
+     "bytes": 2311967,
+     "sha256": "f13f15b1b62f62d4ae6b71db4f37a1843861d8c1c8907fd0fde19451c08576e9",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_022.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_022.json",
+     "bytes": 1701259,
+     "sha256": "01a403f462a62b324f94de598c279b5adbaee55ac10c7aed72d798aa5924c510",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_023.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_023.json",
+     "bytes": 2733844,
+     "sha256": "73bf6f4be084de8fafa347257f39cf7c312bc488178dd2ce667f6e5f8baddb82",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_024.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_024.json",
+     "bytes": 2882867,
+     "sha256": "fc951b44990efac041bbbd993172b954d3d55af8230a00ce78ba8bbd50daf82a",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_025.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_025.json",
+     "bytes": 2508401,
+     "sha256": "8305b0d85317d77c5b6ebf128ba4d5e2410e248071a49eb2e05b1ee347c1833d",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_026.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_026.json",
+     "bytes": 1795205,
+     "sha256": "2b2e2c497c870d39c575892c7aae38b08cd4e39bd3a795be1e8550330e747800",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_027.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_027.json",
+     "bytes": 3214939,
+     "sha256": "63b5dd62e100afa001b596cda967f5bc86f93dc1072bd00bdc57a198ff691268",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_028.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_028.json",
+     "bytes": 2970619,
+     "sha256": "225af9eebcb34f90ab1c9634c5771c9e6179019fdb903884ff70a5833b77620c",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_029.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_029.json",
+     "bytes": 2757385,
+     "sha256": "87b61fd3495d851df7fa66ce43084431a7cd19154c1de32c0d6949bf6c74bae9",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_030.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_030.json",
+     "bytes": 2986214,
+     "sha256": "82b282eb98a4a26832b5e87d85fdfa8e19b1073a5a903123f7a28d056c4ec2b7",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_031.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_031.json",
+     "bytes": 3173364,
+     "sha256": "45e31767734dc89d825b8f84c37fdd258250bb1e0b63d8a8e775c99dde07547e",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_032.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_032.json",
+     "bytes": 2099971,
+     "sha256": "70a0916baba1e2fbeaef8bc8c2086cd3f31555a8eaec6d0eed80e483ed2b9a59",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_033.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_033.json",
+     "bytes": 1415091,
+     "sha256": "74c23ae93203ed5672015ce13d01c01d80d4f3a3ccd64c8f62f52e0b7c411871",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_034.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_034.json",
+     "bytes": 3187990,
+     "sha256": "782a499577aba5dc0f11edb6ed803cb8023bd4828a914cb4ff712966604e36cb",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_035.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_035.json",
+     "bytes": 1880139,
+     "sha256": "d6cf92ad829d275f15a62409ab8d24187a5e120b09d8f545d16d898ed4a36fd7",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_036.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_036.json",
+     "bytes": 2271996,
+     "sha256": "34223f6b06febfc5b86b0b20324e98b42e9ab4ca7e9c9797c6ba4e49e86e5cce",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_037.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_037.json",
+     "bytes": 4335433,
+     "sha256": "6e6bd6787f30640305ce0dc1b1dac8fa3d9b53ab0dd28c224519ff727cea916f",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_038.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_038.json",
+     "bytes": 2522702,
+     "sha256": "936ee784006908d323d558b84e1646dd932a3b4978bc03deafa1da6e2776e6f0",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_039.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_039.json",
+     "bytes": 2016820,
+     "sha256": "155da94cb95bdbc95e52062459e46b98cce4c8e049b956c5f285ce7a821a08c3",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_040.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_040.json",
+     "bytes": 1801095,
+     "sha256": "c807c28a3d1dbbe8ecaddd96ed97ac7b67918b12181e07eb89fb046ef6084891",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_041.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_041.json",
+     "bytes": 2803330,
+     "sha256": "d24455e00ea88b20a94cfd54581b30b224c207b20a197484ef9b27022af47f05",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_042.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_042.json",
+     "bytes": 1661780,
+     "sha256": "51d94d5d602cbf51c819c8f79a25f45174ebc3191c8ea3b2278d5b6c96742d51",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_043.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_043.json",
+     "bytes": 1648319,
+     "sha256": "98c9cc7865bc70e67123cc4e64daad8843d5750552bae2559d7bb95aae782c0a",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_044.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_044.json",
+     "bytes": 4091935,
+     "sha256": "8d3024399540122bef422925f2508ead00bcd85e4f07e16236de87747555fe5f",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_045.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_045.json",
+     "bytes": 2795079,
+     "sha256": "056df88c7bbff91bcc9b8fe009bfc6f01400aa59feae549cace7d5caa823dcb0",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_046.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_046.json",
+     "bytes": 3270897,
+     "sha256": "79c92a6fbb92481deb5fe00127359c6029724b49ade4913704a08ce397938eeb",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_047.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_047.json",
+     "bytes": 3589299,
+     "sha256": "fbe4e810316077148a2d96c8197928486a547946b44b9fce96eafa4f6fa4e0e7",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_048.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_048.json",
+     "bytes": 3522631,
+     "sha256": "882d7c255da334163b024a6fd511c5eaeedfd507da4db350e4ed2cde393cc787",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_049.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_049.json",
+     "bytes": 3662320,
+     "sha256": "fa48932032d150414a97d12f9cde4d1ac00bcc593bb30c43a45f2b802f293ed5",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_050.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_050.json",
+     "bytes": 3233186,
+     "sha256": "40543b657e832ab34b4bb4733ecbf1e7d1f15566674e49191c70261d29490aba",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_051.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_051.json",
+     "bytes": 3924048,
+     "sha256": "e8eef63422e756f420c60ddfd3bcae3fc5caddf3370c31fa7fa3648a3579bbdc",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_052.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_052.json",
+     "bytes": 4652256,
+     "sha256": "6736abeb95425a570f6ae5b1dd75967849957cabbdc550a9372a9a7646aba898",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_053.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_053.json",
+     "bytes": 4363710,
+     "sha256": "2825a26dbed8e7aba44677fd2f387d131991921506a5c8647a75c1c905571491",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_054.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_054.json",
+     "bytes": 4313652,
+     "sha256": "68e7ed4999fc4f21615e9f61a613309ab0560ed53e5e5837ccb96956ee2c5c2f",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_055.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_055.json",
+     "bytes": 4290683,
+     "sha256": "c1e4d78a6137b9e3232f0d8a0045f81ac0bbda937cc6187621406f6279885034",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_056.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_056.json",
+     "bytes": 4518344,
+     "sha256": "b4c4293c6cc1eea766025b0ba658e52070d6ef743afb73b1fb5531d280776977",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_057.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_057.json",
+     "bytes": 4124305,
+     "sha256": "7586422916e6f7c943b97b304f2724e6eefbe4ee1dd42b9d45413c1fc457cfc2",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_058.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_058.json",
+     "bytes": 4405722,
+     "sha256": "7ff43d0030fa5f32eb92aa87f3b4086d760d55ebefe0318b17ccf6c11795556e",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_059.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_059.json",
+     "bytes": 3947089,
+     "sha256": "d5597d0c8e9a904aeeb722e8d8c3a8d15a92eacf1713241fe9c05bd470b625a5",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_060.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_060.json",
+     "bytes": 4571269,
+     "sha256": "12d510c5644954820f48eb80601d599722672f6759aefdd7774d55d6b509f333",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_061.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_061.json",
+     "bytes": 3331178,
+     "sha256": "1b1b9c6c8a8113f49e18998512f7d5fea2141be7bec48aac201f306586ac15ce",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_062.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_062.json",
+     "bytes": 3827504,
+     "sha256": "4c4d76ffc33419e835087d081ff1d469f0b9e65b8d5c372b43d4680c286bbd45",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_063.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_063.json",
+     "bytes": 3405227,
+     "sha256": "ab015c005d3e1d26bdcd970aee1992d7084453d57f82e2be9795846157eb8fa9",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_064.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_064.json",
+     "bytes": 2909404,
+     "sha256": "ac2fac08f9f1673be6bd1cf6cec44dbd8d35861f658567313ef8d7b7f8c1908c",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_065.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_065.json",
+     "bytes": 2617451,
+     "sha256": "a9bd32fb9cce88b4bd0a4a11b136423401ba6e14fb5be306fe1eda9e485e8760",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_066.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_066.json",
+     "bytes": 4602133,
+     "sha256": "9b6145e988296f133c5414db17798098b97ef01bda44b7b1740ade97c268770e",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_067.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_067.json",
+     "bytes": 3561936,
+     "sha256": "d16cfeda3585639f9ccbac0b5d1fa5c755d9b87bafa95ac737ddd40d7b1fe7a7",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_068.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_068.json",
+     "bytes": 4761708,
+     "sha256": "ba2f245f26ba2c13463d34f8a8d1635347974a9f0e423bda53ca4bc15fb82a17",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_069.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_069.json",
+     "bytes": 3806392,
+     "sha256": "319035b2843a089f352f2e7fbb06544c7d68d86ebbba57ebc3bbf3725c07a9cd",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_070.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_070.json",
+     "bytes": 5178701,
+     "sha256": "ca37b41fefd5af07b4d9fba75c3268d6831f2ce49f5bf4e6d5412e39c764f0a8",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_071.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_071.json",
+     "bytes": 4438526,
+     "sha256": "59a78ab61ef8e419c7c2791e028db3704254a196f73e79a890274f09e7e65801",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_072.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_072.json",
+     "bytes": 5743859,
+     "sha256": "c0e8dd91f70c150ef02118b15152da7f973dcf261112a1604bfa4823d276829c",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_073.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_073.json",
+     "bytes": 6231204,
+     "sha256": "e2b9aa0843a8cdfabaf24fecae2bf4b280ea8aed75670d6e955d25df58dc8494",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_074.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_074.json",
+     "bytes": 5806688,
+     "sha256": "0c4fd25b8d66f46ee5a8332410a093473dc57655e1edc2e59ec1d53e2e1a7756",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_075.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_075.json",
+     "bytes": 4914317,
+     "sha256": "4e1ce624c664a402ee31f69083fc263346aef3ed70d866dc940f4565c1c3e9b8",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_076.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_076.json",
+     "bytes": 4520378,
+     "sha256": "72567237e51a2282a34d66acbc6beeb23b400f29da404d98de6f796686c720ec",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_077.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_077.json",
+     "bytes": 4380935,
+     "sha256": "2ec1a3ed1a85498992f4fcfecbd8e9a6b4a72968b8da4cd3502d170edffd9437",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_078.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_078.json",
+     "bytes": 5051676,
+     "sha256": "288a96936c4426a40e50eb6e220a93cce32177827b416f656c4c78e43aebad16",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_079.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_079.json",
+     "bytes": 5157890,
+     "sha256": "a2817b6b744c4a03fb4f5cf36100a233ea0af7d96b784b237ea9ab1dd3dd4aad",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_080.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_080.json",
+     "bytes": 5429441,
+     "sha256": "4b166ba32851d5164271d83ed671135682c344aca1ffa4095c1b38cd63a89600",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_081.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_081.json",
+     "bytes": 6213747,
+     "sha256": "b34c8b63682242361d30ca5ced6d1a55719f4ed8f151f2a52854b61831e5a45c",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_082.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_082.json",
+     "bytes": 5830819,
+     "sha256": "11751fd14c9580880d1b3157e10103477cd9a7333a689eda89c6f00a21660da6",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_083.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_083.json",
+     "bytes": 5865254,
+     "sha256": "c4b2d5f1bbdbe6b53fd96d3fde936c66ecfe35674cae3c79e207c0b1c397616e",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_084.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_084.json",
+     "bytes": 5636581,
+     "sha256": "f728459cbdbb4f69f87dfbc00af0584b9a44b841a568717e7dab7c3146f492cb",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_085.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_085.json",
+     "bytes": 4471455,
+     "sha256": "f22be96c2ff0a95c4c883a64f9677e0a0106fac25ea42a523df91700ead7bfa3",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_086.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_086.json",
+     "bytes": 3159341,
+     "sha256": "c1ebb9b572cd00cc4ec09e7ad775aadec6310e2fe1cc064e0ed18480992a04a4",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_087.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_087.json",
+     "bytes": 3701611,
+     "sha256": "1b95dda470d3f0809bbbeb86cb99a9a322a81fd1a96e96735d953d5409331810",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_088.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_088.json",
+     "bytes": 4065936,
+     "sha256": "cbb055520fdd1d7cfffe7b911829a00774cc8190c2d07cb29787cca7f5d51fbf",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_089.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_089.json",
+     "bytes": 3993512,
+     "sha256": "357d12d7b5fcc9a2414cafc3a9bf6b31449b1f11474d16be5b7747e1999423b4",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_090.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_090.json",
+     "bytes": 3272770,
+     "sha256": "78310f5e8e4c5a48cb600d36ba762448d13ab15e820aa5f56cc6f25994b6902a",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_091.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_091.json",
+     "bytes": 2935497,
+     "sha256": "c80f229312047567f61db69223c79e1921662f88f63f9718a1ec51b5204612b0",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_092.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_092.json",
+     "bytes": 3236069,
+     "sha256": "b9656f9135cefd1fe1bd175f4b45d74c2c2a558137a1f2d509771ccf7e8aff4b",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_093.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_093.json",
+     "bytes": 4260445,
+     "sha256": "fb6ec8f4c975d7bf7e5a18645ef16614a393dab96e623074410ff5bd9a60d8ca",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_094.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_094.json",
+     "bytes": 4422048,
+     "sha256": "309f412040022ca48c75c7b980fd65ff3f93e9c486305e2cd29a2bafbb57d7b0",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_095.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_095.json",
+     "bytes": 3956055,
+     "sha256": "0411f940d9e3f659c6ab1037e14094612d088b9ee98a62043658fe1b76fa700f",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_096.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_096.json",
+     "bytes": 3550934,
+     "sha256": "8d004b5c6a865428bf25093356f46a0a84b4bd3b749f4172f9d0e606a6d70217",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_097.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_097.json",
+     "bytes": 2587709,
+     "sha256": "ac32e0ccd38e439655ef8a6fc5436e5d14c5dbcf44faeb1fac48b17e3a7bad34",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_098.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_098.json",
+     "bytes": 4138095,
+     "sha256": "b08094174ff819f259ea64c199e8d3c5141006b11e00b428be21d5b7e452bc0b",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_099.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_099.json",
+     "bytes": 3326260,
+     "sha256": "fb7110d90b179fe43eaee15393422ae7fb0d522190a69495023f0cf9cadebcbb",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_100.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_100.json",
+     "bytes": 3680526,
+     "sha256": "4cdafb648909b34c0f609e61f5c4db5511a880e3d4ba7c726bf4e78e3fe09590",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_101.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_101.json",
+     "bytes": 3666647,
+     "sha256": "142dc7b5452d6aaafb25fa9637b3f5126ac83194b907016af5e85659220d9cba",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_102.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_102.json",
+     "bytes": 2915285,
+     "sha256": "15da667bc211a0abb82203184c09e19756cff59feecf1e8578632854254af05e",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_103.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_103.json",
+     "bytes": 3411929,
+     "sha256": "8c5b4c3df6b7fb43e74b745bca2cfff0b2555be20d13859e6c6c502bb1f27326",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_104.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_104.json",
+     "bytes": 4507712,
+     "sha256": "4e02e3fc67c89d50365feaa2a1424bf5a8de5edaef02f3191cc35cf46918f8b2",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_105.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_105.json",
+     "bytes": 3973765,
+     "sha256": "fdf5795a36fe9b59721df5a3d35fe37efdc5d555573ee4f9a939409d737c7376",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_106.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_106.json",
+     "bytes": 3193259,
+     "sha256": "98b72cb9cea0b320fbc58e80977d48879005159156d4e7c19b7905a6723f3d5f",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_107.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_107.json",
+     "bytes": 2846725,
+     "sha256": "ae315294f293e65edbdd58f0476c8693605a791872db840788e334f637df9b4c",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_108.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_108.json",
+     "bytes": 3266423,
+     "sha256": "584a1c096b49fac0b66d8ba08f39ca2cef41d93c98851f1b10e86cf995170b1e",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_109.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_109.json",
+     "bytes": 3748197,
+     "sha256": "ec28252137a7ceae1a3843bf39d3c9a78a4bd139b13c70165982b0c05c391502",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_110.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_110.json",
+     "bytes": 3584141,
+     "sha256": "48f2d6256d96385350e1b58e7cc3b499f1be78584790250e89d9d0d11cc03dd0",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_111.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_111.json",
+     "bytes": 3628127,
+     "sha256": "740087b7e2a5305c4ef16a7227dcc61f9af3cf054690ee682a823070a9e2b2c1",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_112.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_112.json",
+     "bytes": 3276752,
+     "sha256": "0120d9160a30b1b15c21613122250d2a036609b0ba1e3ed33b5b396c4161e10d",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_113.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_113.json",
+     "bytes": 2381966,
+     "sha256": "895cbdca09acff80c6a194dc44a293fd6875390ad5899720bc98f004eca7d99b",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_114.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_114.json",
+     "bytes": 3487920,
+     "sha256": "619616f5a4d46200105dc2ea3ce1b1c131051edf57ca64b495f693cd8eafb4f4",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_115.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_115.json",
+     "bytes": 3765731,
+     "sha256": "3bb6c375846127053c01d51a0e6509eddfaad47f6d2a2bb3a7cfee65120bec32",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_116.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_116.json",
+     "bytes": 3949443,
+     "sha256": "c0c409d8a0cf74e37a59d1843680501c245f91f9b28fea79c15a1e66195906ef",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_117.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_117.json",
+     "bytes": 5004609,
+     "sha256": "b84563e3e581a1da03e48b780de326ad68f3004d225509d6ae89ea84b271a4c4",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_118.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_118.json",
+     "bytes": 4705123,
+     "sha256": "f8116cfa196a5e43b94c6c3657d8cf4e62c112a2f683d179ade4f13baac588fc",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_119.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_119.json",
+     "bytes": 4003507,
+     "sha256": "b374904ff28881f08e7212296848c0bf9cc18a45195f4d982123f27aa3bd3a23",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_120.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_120.json",
+     "bytes": 3805349,
+     "sha256": "d4565f5378c2205129b0c0a1feada548a62220c0a8e2b1caf6d234ffe463eab3",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_121.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_121.json",
+     "bytes": 4020882,
+     "sha256": "952e6284dbacb2bebca8ba36ac3c942edb50d248b2395706facf6c95f3b84d1c",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_122.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_122.json",
+     "bytes": 3855293,
+     "sha256": "d4d3b718ac0527099412df7774c873939060d65e82b09ba6a1bec593f5559349",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_123.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_123.json",
+     "bytes": 3773446,
+     "sha256": "469b268f44aad6fb2bba4d271163d6c774234a80123e66204357b37d0619e2c2",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_124.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_124.json",
+     "bytes": 3596271,
+     "sha256": "8dd0418beb880f5f021c8466fc92233ef5992e8adcc6380a180f4107dfccf7f1",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_125.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_125.json",
+     "bytes": 1906912,
+     "sha256": "45d59601652c9b648175125718b55e5d65b3567c09518c9d054f67bdc8b2eaba",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_126.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_126.json",
+     "bytes": 2810251,
+     "sha256": "ae4c17bab75be5eb1ec8738dedd72bd5d33657243068e657642259c8091269ac",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_127.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_127.json",
+     "bytes": 2332220,
+     "sha256": "ba42de75a55e27a239b238d94ece3c98e5b64a755e155a027d8a31e5fbf791dc",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/schema.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/schema.json",
+     "bytes": 75764,
+     "sha256": "97b6c21673aa7e5c2d1ceef52aa35170c565223cdcbf33bb24c69739bda04a82",
+     "fetched": "2026-09-27"
+    }
+   ]
+  },
+  {
+   "row": "finance/sgd",
+   "field": "finance",
+   "source": "sgd",
+   "role": "pool",
+   "name": "Schema-Guided Dialogue (SGD)",
+   "url": "https://github.com/google-research-datasets/dstc8-schema-guided-dialogue",
+   "version": "git e852981ae34990f4358979625854259302feaa78",
+   "licence": "CC BY-SA 4.0",
+   "licence_where": "README \u00a7License + LICENSE.txt, re-read 2026-09-27",
+   "personal_data": "none (fictional entities)",
+   "share_alike": true,
+   "rows_used": {
+    "train": 474,
+    "val": 48
+   },
+   "files": [
+    {
+     "path": "LICENSE.txt",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/LICENSE.txt",
+     "bytes": 20139,
+     "sha256": "71a43a169b52bb1b39510b65ec5b43b4bbb59196d449a835fe58b50af6a72742",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "README.md",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/README.md",
+     "bytes": 16294,
+     "sha256": "e16545f163578037e6b7315b8da243f9f9871f4f071a812ab86b73702f124168",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/dialogues_001.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/dialogues_001.json",
+     "bytes": 2225937,
+     "sha256": "fe3a8ed9e160c15e20e7cfd16d03734b4473df0d3864f2ad687ea9eeee5eea52",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/dialogues_002.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/dialogues_002.json",
+     "bytes": 2507250,
+     "sha256": "fcbc8ba411ed8b3e0b06dff31819dc366f6bc6d228e021053920365e11004b03",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/dialogues_003.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/dialogues_003.json",
+     "bytes": 1965028,
+     "sha256": "5915cea36b77de920fbd66569333db2395626ec465ba23e2f0caa77fba2e5dae",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/dialogues_004.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/dialogues_004.json",
+     "bytes": 2794855,
+     "sha256": "d379a5149a86304a22162531e122ff9a7b8e9e46178789a5170e0a7091dd2bbf",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/dialogues_005.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/dialogues_005.json",
+     "bytes": 1512309,
+     "sha256": "107d8bc1ce21b06453f33cc8dfc19172e0956646b47d9c1db7bdcd978a323d73",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/dialogues_006.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/dialogues_006.json",
+     "bytes": 2680136,
+     "sha256": "20140828f25496461003140b67a5987d954109d9e14e12e472ed565ed2843bc3",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/dialogues_007.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/dialogues_007.json",
+     "bytes": 1381473,
+     "sha256": "d9af6ffcb69257ab3ce10e4637fc4d45d268094e55693b170a9b5b9d914dc611",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/dialogues_008.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/dialogues_008.json",
+     "bytes": 4040385,
+     "sha256": "986264c54cfabb8c70ace72e209ff0cd000523daecde226b19b3dbd6f44ea09b",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/dialogues_009.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/dialogues_009.json",
+     "bytes": 3323617,
+     "sha256": "92479f0285dcb5db0d50f51b27a86aa0368a62214c575ad5cdd74299372fa71f",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/dialogues_010.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/dialogues_010.json",
+     "bytes": 2485450,
+     "sha256": "76d9ff1656e8cad2287cd5cd44bb8e18df0bd8cc7d3340543e1980b61241d3f8",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/dialogues_011.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/dialogues_011.json",
+     "bytes": 3171402,
+     "sha256": "7f034dd1bc18e75fc21077dd6270f8e1f51d97fad80b4e6069dbbe28c3ebdd41",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/dialogues_012.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/dialogues_012.json",
+     "bytes": 4080667,
+     "sha256": "9228d58681e3b98db2e7c6a9bef86994718455e3a7d4c7584b6ac53bc35969d3",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/dialogues_013.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/dialogues_013.json",
+     "bytes": 3550658,
+     "sha256": "a62cf6bddd52beae0980ecdedf312373976425a9302fb0da79af1270b28b16e1",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/dialogues_014.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/dialogues_014.json",
+     "bytes": 3960820,
+     "sha256": "aca7316a63a215bcdeb95189c2e3259f50cd29da9a77deaa264b92ba737b8e95",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/dialogues_015.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/dialogues_015.json",
+     "bytes": 4295570,
+     "sha256": "8d8d7b25c21e4a24ed5b3adf0310a66124496f6d3d9a962ca2e77a29eac0f51a",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/dialogues_016.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/dialogues_016.json",
+     "bytes": 3972559,
+     "sha256": "36ed533dd0e0b8f178a0aa9ea70a12d7fa3ab042ec4959061aa70b391b92785c",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/dialogues_017.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/dialogues_017.json",
+     "bytes": 5023594,
+     "sha256": "50da6ef54acf2cdf630ec99f75fa7fca33bc41683c10d2a4540b4c94a081c11a",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/dialogues_018.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/dialogues_018.json",
+     "bytes": 4315111,
+     "sha256": "debc2d37540a4cebb1ff0e1a0b14eb55accd55071c21dbb2c2624bf978d82d3a",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/dialogues_019.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/dialogues_019.json",
+     "bytes": 4183695,
+     "sha256": "2e3934d15b5e0b8d47b0018845fb6fb6b1f5d8f480e1788ea67d934aaa2179eb",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/dialogues_020.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/dialogues_020.json",
+     "bytes": 3404013,
+     "sha256": "7e022ed5e4c972d607e71e46baeb0b79f57967d5e6de4a4fb28a99a1ed30d9c3",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "dev/schema.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/dev/schema.json",
+     "bytes": 45576,
+     "sha256": "8fee8b1211500a4a1fb071765150e3267d20148bcad72a22c04bb1fdcd649366",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_001.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_001.json",
+     "bytes": 2039827,
+     "sha256": "1fa13b0fe607100bc66ed15e0490df9c52a2cec087ca9733e0f506755eef0ada",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_002.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_002.json",
+     "bytes": 1954151,
+     "sha256": "b3b2a2596fad9146e96e4e1aa288f975332e2c7a3153bb2379d75e8d71c35a20",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_003.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_003.json",
+     "bytes": 1817838,
+     "sha256": "b595a04f7848aed76d11e82250089023e42a6e5ce047c78b8ddd0f4856dcbecb",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_004.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_004.json",
+     "bytes": 2554643,
+     "sha256": "5468f85dd867c7cc825aa6918980dd3142c95c926d685a56803b91cd2d3eb379",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_005.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_005.json",
+     "bytes": 1908492,
+     "sha256": "9f344d5660b5d8bf6935f72cf4dc11149caaf9febf688fd748eacbe262c67c2b",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_006.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_006.json",
+     "bytes": 1932663,
+     "sha256": "249d591df0c32b5518560c37a02cdc09b147ea4f95d1373ac22d42c656788ab7",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_007.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_007.json",
+     "bytes": 2120186,
+     "sha256": "24c5c86501aa50d045f4ba8822bf06606967261365fc5ca6ffa8f7375bd54935",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_008.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_008.json",
+     "bytes": 2119144,
+     "sha256": "e4ecce8acdd5b3657de7a7660b9bcd339d88a629147711ad2545b695666279c5",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_009.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_009.json",
+     "bytes": 1945100,
+     "sha256": "5d30edca006e4b4159a8027d68c3bcd241447d2257deb51b467b9aeefa7b1158",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_010.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_010.json",
+     "bytes": 1376297,
+     "sha256": "b4fc2c16d0cb46e14d0def357f4a941ee61fad3c6c8dd430ac8bae6145f1e4d0",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_011.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_011.json",
+     "bytes": 1017746,
+     "sha256": "1c2e312ce653bdd4ba1fe74b44ef20b36bab74b8ccf7bc2e591c632d5492a21b",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_012.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_012.json",
+     "bytes": 4287498,
+     "sha256": "30ccd033dfeb5032cb74ca237ee4679fb00abf9b2e21b0c686da543ec3ac8ca6",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_013.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_013.json",
+     "bytes": 2992048,
+     "sha256": "b31c288da94b084e4963e7eda27e11922c7c230e9de0bb159856facb442684bc",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_014.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_014.json",
+     "bytes": 2299187,
+     "sha256": "52c79021d28c2bb2bb69210f360c61c49250696eaf1b04fdfa89e1fd9a7be2c7",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_015.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_015.json",
+     "bytes": 3384304,
+     "sha256": "4e14295fac05ce179d72ec30b67f6b01e24e2d4c4836b95cc842d8ae4a93131f",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_016.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_016.json",
+     "bytes": 4691169,
+     "sha256": "b0515e87357d8537df046a38d2418257b38e16e9df1a960c9de2bd3d21e19c8b",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_017.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_017.json",
+     "bytes": 3155647,
+     "sha256": "ec669b6b24667e01033069827200312b9af4a182789a15784c43b4be5cf0668e",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_018.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_018.json",
+     "bytes": 3685297,
+     "sha256": "51e761019af71be0558667b69d917b120def65b6434f019e7e0c95584ad7fdbc",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_019.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_019.json",
+     "bytes": 4519326,
+     "sha256": "2bf4a842c133c427beb7162408488f39ab04cc8e7178ff51c489b41678652834",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_020.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_020.json",
+     "bytes": 4131834,
+     "sha256": "9619574d5043827ea2e397702b88033dc013e4ac870f410a8016c8b223f55ec4",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_021.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_021.json",
+     "bytes": 3637097,
+     "sha256": "7259172a6ba19f5d065fe95b4ae41755c6ac32cf2fec80fae6d52d94b8a10a1d",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_022.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_022.json",
+     "bytes": 6287583,
+     "sha256": "ffed1c89eb5c589c159b70062433e0655c5955ef9f1dd0b3c0e4ddb1db9ac74b",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_023.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_023.json",
+     "bytes": 4858015,
+     "sha256": "c3466bc38d356b2abb6a71e61f502e0b5c82cf35584b3c655d01a89165e8fe80",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_024.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_024.json",
+     "bytes": 3814170,
+     "sha256": "728b605675f7d4da54dfe8c3746eabfdec884f75c9306f5cdb3d8eb3ab315e5c",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_025.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_025.json",
+     "bytes": 3909834,
+     "sha256": "50e8aa3052aa720279068de31d7c7225d08b035ac62e488aadca0e1edd39145d",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_026.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_026.json",
+     "bytes": 5427415,
+     "sha256": "981946b39930b73c78b63af1ec220c71b15e24529f24b48d435f917a1375ff7d",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_027.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_027.json",
+     "bytes": 4349741,
+     "sha256": "d05108c80386d35891f511a425e4a194a22a74c22a14d3f12e3b7a54252c4f96",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_028.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_028.json",
+     "bytes": 4395570,
+     "sha256": "8548c8881eb5445ec8f9d8877ada1371c4698890ec76c96408929957d36b4d79",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_029.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_029.json",
+     "bytes": 5439064,
+     "sha256": "97fd99e95c0d5169f57e85a7799214de7bf7495d3613652a6ac8a494f10021fb",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_030.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_030.json",
+     "bytes": 4107674,
+     "sha256": "dabf6b8051f03ad1049a4c6b89f48986a5d597d0e637ccf555faa0241ecdbe87",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_031.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_031.json",
+     "bytes": 4640417,
+     "sha256": "c78c04a16cde6eccbd4092d70d7e6053651e4bdab89a993a4dafa78eedf47c0f",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_032.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_032.json",
+     "bytes": 3672080,
+     "sha256": "b7b739ccdd51ce4cd60d0b4d4ccaa751831bf448965e9bacfe5b7a123bc0f806",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_033.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_033.json",
+     "bytes": 3386860,
+     "sha256": "a9f5b0c275a55ba40374ea10c723e88c37b8f0dabd55c2a9d3679de2495e224d",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/dialogues_034.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/dialogues_034.json",
+     "bytes": 1605989,
+     "sha256": "d412ac423182dfe367d1549be9580bd7a964b695f5fd1a4d9d77c849763294a9",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "test/schema.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/test/schema.json",
+     "bytes": 54864,
+     "sha256": "0b4af32e01695aec4788681fe6b22fb7ee908907269f5ac7167d01f4c4132bcb",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_001.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_001.json",
+     "bytes": 3128575,
+     "sha256": "5ce28a6e656bc88c1da29c983d243d5a81eb37de92698da3864d1cf02894ca24",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_002.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_002.json",
+     "bytes": 2233395,
+     "sha256": "56a06f9762593b27f5b34225de4ce37da5e83c9c5747e56bca2899f147d88b3e",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_003.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_003.json",
+     "bytes": 1804298,
+     "sha256": "aae3d8d141c8c36bc5268ca573044b4e82d4534947c169d951a1f229b9852029",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_004.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_004.json",
+     "bytes": 2502125,
+     "sha256": "4f4aa821e01d7d9efd44c2e89264d37e428045e7058bf3b3c6be0eaec09eddce",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_005.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_005.json",
+     "bytes": 2089510,
+     "sha256": "e19563efc34dead580435331d39ec3183c79230fa361b2e2d79035af242dd90b",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_006.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_006.json",
+     "bytes": 1957196,
+     "sha256": "6b4829cb18185f063b81d271b847aa6915ef970cb592a2366edbec56d4b4c746",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_007.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_007.json",
+     "bytes": 2012361,
+     "sha256": "59adf47264e106df1ce4a59d2c88e95b5a12497e6f5e3e5464381c2a7526837c",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_008.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_008.json",
+     "bytes": 2703055,
+     "sha256": "36614c125ce310dd162b62d624b8bcd117053cf727978458b6c36b6592f6e757",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_009.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_009.json",
+     "bytes": 3177831,
+     "sha256": "d8cc086374bbce168a03169341687eaa9f886fe25f8b8dd5bd6832f6f441951d",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_010.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_010.json",
+     "bytes": 3679169,
+     "sha256": "d8658cd35bd4b6d274720d14308ec721f238d70cc37ea947c38f9d83a0267c1b",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_011.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_011.json",
+     "bytes": 2328620,
+     "sha256": "66f7eb72a46fa379d85e53ae607e5920a4fa14a4a99765d91ee67f3675fdf4d7",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_012.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_012.json",
+     "bytes": 1945135,
+     "sha256": "483b09fc9ad3d5b7285d2e1bc44057f1286ea3e73d7ff191fcec5e1acb364412",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_013.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_013.json",
+     "bytes": 2187442,
+     "sha256": "c6592a97753a8d3be8bae0099b3877e21f293a12d8daf9bcdcbec7289d5f1be3",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_014.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_014.json",
+     "bytes": 2126844,
+     "sha256": "5cd6cc68c676a2546a3312eda0f29be170ab5f0d6c602c9548ffa2c095037c7b",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_015.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_015.json",
+     "bytes": 1744364,
+     "sha256": "b698e8db9b0898186453ec9fcec5f80ab043cfe301447d28dc577e99bd3acfd3",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_016.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_016.json",
+     "bytes": 1857379,
+     "sha256": "5a7d85a3058f38bf40290782721865c3d816f43841e0cd302b21167eefecf449",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_017.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_017.json",
+     "bytes": 3043775,
+     "sha256": "0eb666f375ba2cc6362c88c02cfd255b702a2b8216e30fce200f630bcca99fa0",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_018.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_018.json",
+     "bytes": 3272644,
+     "sha256": "ceadf059b7c4ec5e31b7b53ee696198c7a5baa2ff03544b81b4adbe9cb7eca05",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_019.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_019.json",
+     "bytes": 2457615,
+     "sha256": "96adb06dd0605bb3536bc5e795d045d745a035e9d1c2ed05f7e89937fe883fb9",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_020.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_020.json",
+     "bytes": 1683144,
+     "sha256": "b2a3cd6d8e677c6a9d342f5703a947525b17b906348cd944a4da1c449ff4f3a4",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_021.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_021.json",
+     "bytes": 2311967,
+     "sha256": "f13f15b1b62f62d4ae6b71db4f37a1843861d8c1c8907fd0fde19451c08576e9",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_022.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_022.json",
+     "bytes": 1701259,
+     "sha256": "01a403f462a62b324f94de598c279b5adbaee55ac10c7aed72d798aa5924c510",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_023.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_023.json",
+     "bytes": 2733844,
+     "sha256": "73bf6f4be084de8fafa347257f39cf7c312bc488178dd2ce667f6e5f8baddb82",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_024.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_024.json",
+     "bytes": 2882867,
+     "sha256": "fc951b44990efac041bbbd993172b954d3d55af8230a00ce78ba8bbd50daf82a",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_025.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_025.json",
+     "bytes": 2508401,
+     "sha256": "8305b0d85317d77c5b6ebf128ba4d5e2410e248071a49eb2e05b1ee347c1833d",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_026.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_026.json",
+     "bytes": 1795205,
+     "sha256": "2b2e2c497c870d39c575892c7aae38b08cd4e39bd3a795be1e8550330e747800",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_027.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_027.json",
+     "bytes": 3214939,
+     "sha256": "63b5dd62e100afa001b596cda967f5bc86f93dc1072bd00bdc57a198ff691268",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_028.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_028.json",
+     "bytes": 2970619,
+     "sha256": "225af9eebcb34f90ab1c9634c5771c9e6179019fdb903884ff70a5833b77620c",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_029.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_029.json",
+     "bytes": 2757385,
+     "sha256": "87b61fd3495d851df7fa66ce43084431a7cd19154c1de32c0d6949bf6c74bae9",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_030.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_030.json",
+     "bytes": 2986214,
+     "sha256": "82b282eb98a4a26832b5e87d85fdfa8e19b1073a5a903123f7a28d056c4ec2b7",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_031.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_031.json",
+     "bytes": 3173364,
+     "sha256": "45e31767734dc89d825b8f84c37fdd258250bb1e0b63d8a8e775c99dde07547e",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_032.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_032.json",
+     "bytes": 2099971,
+     "sha256": "70a0916baba1e2fbeaef8bc8c2086cd3f31555a8eaec6d0eed80e483ed2b9a59",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_033.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_033.json",
+     "bytes": 1415091,
+     "sha256": "74c23ae93203ed5672015ce13d01c01d80d4f3a3ccd64c8f62f52e0b7c411871",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_034.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_034.json",
+     "bytes": 3187990,
+     "sha256": "782a499577aba5dc0f11edb6ed803cb8023bd4828a914cb4ff712966604e36cb",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_035.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_035.json",
+     "bytes": 1880139,
+     "sha256": "d6cf92ad829d275f15a62409ab8d24187a5e120b09d8f545d16d898ed4a36fd7",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_036.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_036.json",
+     "bytes": 2271996,
+     "sha256": "34223f6b06febfc5b86b0b20324e98b42e9ab4ca7e9c9797c6ba4e49e86e5cce",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_037.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_037.json",
+     "bytes": 4335433,
+     "sha256": "6e6bd6787f30640305ce0dc1b1dac8fa3d9b53ab0dd28c224519ff727cea916f",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_038.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_038.json",
+     "bytes": 2522702,
+     "sha256": "936ee784006908d323d558b84e1646dd932a3b4978bc03deafa1da6e2776e6f0",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_039.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_039.json",
+     "bytes": 2016820,
+     "sha256": "155da94cb95bdbc95e52062459e46b98cce4c8e049b956c5f285ce7a821a08c3",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_040.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_040.json",
+     "bytes": 1801095,
+     "sha256": "c807c28a3d1dbbe8ecaddd96ed97ac7b67918b12181e07eb89fb046ef6084891",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_041.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_041.json",
+     "bytes": 2803330,
+     "sha256": "d24455e00ea88b20a94cfd54581b30b224c207b20a197484ef9b27022af47f05",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_042.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_042.json",
+     "bytes": 1661780,
+     "sha256": "51d94d5d602cbf51c819c8f79a25f45174ebc3191c8ea3b2278d5b6c96742d51",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_043.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_043.json",
+     "bytes": 1648319,
+     "sha256": "98c9cc7865bc70e67123cc4e64daad8843d5750552bae2559d7bb95aae782c0a",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_044.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_044.json",
+     "bytes": 4091935,
+     "sha256": "8d3024399540122bef422925f2508ead00bcd85e4f07e16236de87747555fe5f",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_045.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_045.json",
+     "bytes": 2795079,
+     "sha256": "056df88c7bbff91bcc9b8fe009bfc6f01400aa59feae549cace7d5caa823dcb0",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_046.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_046.json",
+     "bytes": 3270897,
+     "sha256": "79c92a6fbb92481deb5fe00127359c6029724b49ade4913704a08ce397938eeb",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_047.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_047.json",
+     "bytes": 3589299,
+     "sha256": "fbe4e810316077148a2d96c8197928486a547946b44b9fce96eafa4f6fa4e0e7",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_048.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_048.json",
+     "bytes": 3522631,
+     "sha256": "882d7c255da334163b024a6fd511c5eaeedfd507da4db350e4ed2cde393cc787",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_049.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_049.json",
+     "bytes": 3662320,
+     "sha256": "fa48932032d150414a97d12f9cde4d1ac00bcc593bb30c43a45f2b802f293ed5",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_050.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_050.json",
+     "bytes": 3233186,
+     "sha256": "40543b657e832ab34b4bb4733ecbf1e7d1f15566674e49191c70261d29490aba",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_051.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_051.json",
+     "bytes": 3924048,
+     "sha256": "e8eef63422e756f420c60ddfd3bcae3fc5caddf3370c31fa7fa3648a3579bbdc",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_052.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_052.json",
+     "bytes": 4652256,
+     "sha256": "6736abeb95425a570f6ae5b1dd75967849957cabbdc550a9372a9a7646aba898",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_053.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_053.json",
+     "bytes": 4363710,
+     "sha256": "2825a26dbed8e7aba44677fd2f387d131991921506a5c8647a75c1c905571491",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_054.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_054.json",
+     "bytes": 4313652,
+     "sha256": "68e7ed4999fc4f21615e9f61a613309ab0560ed53e5e5837ccb96956ee2c5c2f",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_055.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_055.json",
+     "bytes": 4290683,
+     "sha256": "c1e4d78a6137b9e3232f0d8a0045f81ac0bbda937cc6187621406f6279885034",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_056.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_056.json",
+     "bytes": 4518344,
+     "sha256": "b4c4293c6cc1eea766025b0ba658e52070d6ef743afb73b1fb5531d280776977",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_057.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_057.json",
+     "bytes": 4124305,
+     "sha256": "7586422916e6f7c943b97b304f2724e6eefbe4ee1dd42b9d45413c1fc457cfc2",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_058.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_058.json",
+     "bytes": 4405722,
+     "sha256": "7ff43d0030fa5f32eb92aa87f3b4086d760d55ebefe0318b17ccf6c11795556e",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_059.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_059.json",
+     "bytes": 3947089,
+     "sha256": "d5597d0c8e9a904aeeb722e8d8c3a8d15a92eacf1713241fe9c05bd470b625a5",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_060.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_060.json",
+     "bytes": 4571269,
+     "sha256": "12d510c5644954820f48eb80601d599722672f6759aefdd7774d55d6b509f333",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_061.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_061.json",
+     "bytes": 3331178,
+     "sha256": "1b1b9c6c8a8113f49e18998512f7d5fea2141be7bec48aac201f306586ac15ce",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_062.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_062.json",
+     "bytes": 3827504,
+     "sha256": "4c4d76ffc33419e835087d081ff1d469f0b9e65b8d5c372b43d4680c286bbd45",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_063.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_063.json",
+     "bytes": 3405227,
+     "sha256": "ab015c005d3e1d26bdcd970aee1992d7084453d57f82e2be9795846157eb8fa9",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_064.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_064.json",
+     "bytes": 2909404,
+     "sha256": "ac2fac08f9f1673be6bd1cf6cec44dbd8d35861f658567313ef8d7b7f8c1908c",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_065.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_065.json",
+     "bytes": 2617451,
+     "sha256": "a9bd32fb9cce88b4bd0a4a11b136423401ba6e14fb5be306fe1eda9e485e8760",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_066.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_066.json",
+     "bytes": 4602133,
+     "sha256": "9b6145e988296f133c5414db17798098b97ef01bda44b7b1740ade97c268770e",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_067.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_067.json",
+     "bytes": 3561936,
+     "sha256": "d16cfeda3585639f9ccbac0b5d1fa5c755d9b87bafa95ac737ddd40d7b1fe7a7",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_068.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_068.json",
+     "bytes": 4761708,
+     "sha256": "ba2f245f26ba2c13463d34f8a8d1635347974a9f0e423bda53ca4bc15fb82a17",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_069.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_069.json",
+     "bytes": 3806392,
+     "sha256": "319035b2843a089f352f2e7fbb06544c7d68d86ebbba57ebc3bbf3725c07a9cd",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_070.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_070.json",
+     "bytes": 5178701,
+     "sha256": "ca37b41fefd5af07b4d9fba75c3268d6831f2ce49f5bf4e6d5412e39c764f0a8",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_071.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_071.json",
+     "bytes": 4438526,
+     "sha256": "59a78ab61ef8e419c7c2791e028db3704254a196f73e79a890274f09e7e65801",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_072.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_072.json",
+     "bytes": 5743859,
+     "sha256": "c0e8dd91f70c150ef02118b15152da7f973dcf261112a1604bfa4823d276829c",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_073.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_073.json",
+     "bytes": 6231204,
+     "sha256": "e2b9aa0843a8cdfabaf24fecae2bf4b280ea8aed75670d6e955d25df58dc8494",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_074.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_074.json",
+     "bytes": 5806688,
+     "sha256": "0c4fd25b8d66f46ee5a8332410a093473dc57655e1edc2e59ec1d53e2e1a7756",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_075.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_075.json",
+     "bytes": 4914317,
+     "sha256": "4e1ce624c664a402ee31f69083fc263346aef3ed70d866dc940f4565c1c3e9b8",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_076.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_076.json",
+     "bytes": 4520378,
+     "sha256": "72567237e51a2282a34d66acbc6beeb23b400f29da404d98de6f796686c720ec",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_077.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_077.json",
+     "bytes": 4380935,
+     "sha256": "2ec1a3ed1a85498992f4fcfecbd8e9a6b4a72968b8da4cd3502d170edffd9437",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_078.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_078.json",
+     "bytes": 5051676,
+     "sha256": "288a96936c4426a40e50eb6e220a93cce32177827b416f656c4c78e43aebad16",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_079.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_079.json",
+     "bytes": 5157890,
+     "sha256": "a2817b6b744c4a03fb4f5cf36100a233ea0af7d96b784b237ea9ab1dd3dd4aad",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_080.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_080.json",
+     "bytes": 5429441,
+     "sha256": "4b166ba32851d5164271d83ed671135682c344aca1ffa4095c1b38cd63a89600",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_081.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_081.json",
+     "bytes": 6213747,
+     "sha256": "b34c8b63682242361d30ca5ced6d1a55719f4ed8f151f2a52854b61831e5a45c",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_082.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_082.json",
+     "bytes": 5830819,
+     "sha256": "11751fd14c9580880d1b3157e10103477cd9a7333a689eda89c6f00a21660da6",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_083.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_083.json",
+     "bytes": 5865254,
+     "sha256": "c4b2d5f1bbdbe6b53fd96d3fde936c66ecfe35674cae3c79e207c0b1c397616e",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_084.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_084.json",
+     "bytes": 5636581,
+     "sha256": "f728459cbdbb4f69f87dfbc00af0584b9a44b841a568717e7dab7c3146f492cb",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_085.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_085.json",
+     "bytes": 4471455,
+     "sha256": "f22be96c2ff0a95c4c883a64f9677e0a0106fac25ea42a523df91700ead7bfa3",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_086.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_086.json",
+     "bytes": 3159341,
+     "sha256": "c1ebb9b572cd00cc4ec09e7ad775aadec6310e2fe1cc064e0ed18480992a04a4",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_087.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_087.json",
+     "bytes": 3701611,
+     "sha256": "1b95dda470d3f0809bbbeb86cb99a9a322a81fd1a96e96735d953d5409331810",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_088.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_088.json",
+     "bytes": 4065936,
+     "sha256": "cbb055520fdd1d7cfffe7b911829a00774cc8190c2d07cb29787cca7f5d51fbf",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_089.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_089.json",
+     "bytes": 3993512,
+     "sha256": "357d12d7b5fcc9a2414cafc3a9bf6b31449b1f11474d16be5b7747e1999423b4",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_090.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_090.json",
+     "bytes": 3272770,
+     "sha256": "78310f5e8e4c5a48cb600d36ba762448d13ab15e820aa5f56cc6f25994b6902a",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_091.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_091.json",
+     "bytes": 2935497,
+     "sha256": "c80f229312047567f61db69223c79e1921662f88f63f9718a1ec51b5204612b0",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_092.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_092.json",
+     "bytes": 3236069,
+     "sha256": "b9656f9135cefd1fe1bd175f4b45d74c2c2a558137a1f2d509771ccf7e8aff4b",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_093.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_093.json",
+     "bytes": 4260445,
+     "sha256": "fb6ec8f4c975d7bf7e5a18645ef16614a393dab96e623074410ff5bd9a60d8ca",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_094.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_094.json",
+     "bytes": 4422048,
+     "sha256": "309f412040022ca48c75c7b980fd65ff3f93e9c486305e2cd29a2bafbb57d7b0",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_095.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_095.json",
+     "bytes": 3956055,
+     "sha256": "0411f940d9e3f659c6ab1037e14094612d088b9ee98a62043658fe1b76fa700f",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_096.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_096.json",
+     "bytes": 3550934,
+     "sha256": "8d004b5c6a865428bf25093356f46a0a84b4bd3b749f4172f9d0e606a6d70217",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_097.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_097.json",
+     "bytes": 2587709,
+     "sha256": "ac32e0ccd38e439655ef8a6fc5436e5d14c5dbcf44faeb1fac48b17e3a7bad34",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_098.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_098.json",
+     "bytes": 4138095,
+     "sha256": "b08094174ff819f259ea64c199e8d3c5141006b11e00b428be21d5b7e452bc0b",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_099.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_099.json",
+     "bytes": 3326260,
+     "sha256": "fb7110d90b179fe43eaee15393422ae7fb0d522190a69495023f0cf9cadebcbb",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_100.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_100.json",
+     "bytes": 3680526,
+     "sha256": "4cdafb648909b34c0f609e61f5c4db5511a880e3d4ba7c726bf4e78e3fe09590",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_101.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_101.json",
+     "bytes": 3666647,
+     "sha256": "142dc7b5452d6aaafb25fa9637b3f5126ac83194b907016af5e85659220d9cba",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_102.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_102.json",
+     "bytes": 2915285,
+     "sha256": "15da667bc211a0abb82203184c09e19756cff59feecf1e8578632854254af05e",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_103.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_103.json",
+     "bytes": 3411929,
+     "sha256": "8c5b4c3df6b7fb43e74b745bca2cfff0b2555be20d13859e6c6c502bb1f27326",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_104.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_104.json",
+     "bytes": 4507712,
+     "sha256": "4e02e3fc67c89d50365feaa2a1424bf5a8de5edaef02f3191cc35cf46918f8b2",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_105.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_105.json",
+     "bytes": 3973765,
+     "sha256": "fdf5795a36fe9b59721df5a3d35fe37efdc5d555573ee4f9a939409d737c7376",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_106.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_106.json",
+     "bytes": 3193259,
+     "sha256": "98b72cb9cea0b320fbc58e80977d48879005159156d4e7c19b7905a6723f3d5f",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_107.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_107.json",
+     "bytes": 2846725,
+     "sha256": "ae315294f293e65edbdd58f0476c8693605a791872db840788e334f637df9b4c",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_108.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_108.json",
+     "bytes": 3266423,
+     "sha256": "584a1c096b49fac0b66d8ba08f39ca2cef41d93c98851f1b10e86cf995170b1e",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_109.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_109.json",
+     "bytes": 3748197,
+     "sha256": "ec28252137a7ceae1a3843bf39d3c9a78a4bd139b13c70165982b0c05c391502",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_110.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_110.json",
+     "bytes": 3584141,
+     "sha256": "48f2d6256d96385350e1b58e7cc3b499f1be78584790250e89d9d0d11cc03dd0",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_111.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_111.json",
+     "bytes": 3628127,
+     "sha256": "740087b7e2a5305c4ef16a7227dcc61f9af3cf054690ee682a823070a9e2b2c1",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_112.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_112.json",
+     "bytes": 3276752,
+     "sha256": "0120d9160a30b1b15c21613122250d2a036609b0ba1e3ed33b5b396c4161e10d",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_113.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_113.json",
+     "bytes": 2381966,
+     "sha256": "895cbdca09acff80c6a194dc44a293fd6875390ad5899720bc98f004eca7d99b",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_114.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_114.json",
+     "bytes": 3487920,
+     "sha256": "619616f5a4d46200105dc2ea3ce1b1c131051edf57ca64b495f693cd8eafb4f4",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_115.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_115.json",
+     "bytes": 3765731,
+     "sha256": "3bb6c375846127053c01d51a0e6509eddfaad47f6d2a2bb3a7cfee65120bec32",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_116.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_116.json",
+     "bytes": 3949443,
+     "sha256": "c0c409d8a0cf74e37a59d1843680501c245f91f9b28fea79c15a1e66195906ef",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_117.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_117.json",
+     "bytes": 5004609,
+     "sha256": "b84563e3e581a1da03e48b780de326ad68f3004d225509d6ae89ea84b271a4c4",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_118.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_118.json",
+     "bytes": 4705123,
+     "sha256": "f8116cfa196a5e43b94c6c3657d8cf4e62c112a2f683d179ade4f13baac588fc",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_119.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_119.json",
+     "bytes": 4003507,
+     "sha256": "b374904ff28881f08e7212296848c0bf9cc18a45195f4d982123f27aa3bd3a23",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_120.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_120.json",
+     "bytes": 3805349,
+     "sha256": "d4565f5378c2205129b0c0a1feada548a62220c0a8e2b1caf6d234ffe463eab3",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_121.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_121.json",
+     "bytes": 4020882,
+     "sha256": "952e6284dbacb2bebca8ba36ac3c942edb50d248b2395706facf6c95f3b84d1c",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_122.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_122.json",
+     "bytes": 3855293,
+     "sha256": "d4d3b718ac0527099412df7774c873939060d65e82b09ba6a1bec593f5559349",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_123.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_123.json",
+     "bytes": 3773446,
+     "sha256": "469b268f44aad6fb2bba4d271163d6c774234a80123e66204357b37d0619e2c2",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_124.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_124.json",
+     "bytes": 3596271,
+     "sha256": "8dd0418beb880f5f021c8466fc92233ef5992e8adcc6380a180f4107dfccf7f1",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_125.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_125.json",
+     "bytes": 1906912,
+     "sha256": "45d59601652c9b648175125718b55e5d65b3567c09518c9d054f67bdc8b2eaba",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_126.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_126.json",
+     "bytes": 2810251,
+     "sha256": "ae4c17bab75be5eb1ec8738dedd72bd5d33657243068e657642259c8091269ac",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/dialogues_127.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/dialogues_127.json",
+     "bytes": 2332220,
+     "sha256": "ba42de75a55e27a239b238d94ece3c98e5b64a755e155a027d8a31e5fbf791dc",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "train/schema.json",
+     "url": "https://raw.githubusercontent.com/google-research-datasets/dstc8-schema-guided-dialogue/e852981ae34990f4358979625854259302feaa78/train/schema.json",
+     "bytes": 75764,
+     "sha256": "97b6c21673aa7e5c2d1ceef52aa35170c565223cdcbf33bb24c69739bda04a82",
+     "fetched": "2026-09-27"
+    }
+   ]
+  },
+  {
+   "row": "intent/abcd",
+   "field": "intent",
+   "source": "abcd",
+   "role": "pool",
+   "name": "ABCD v1.1",
+   "url": "https://github.com/asappresearch/abcd",
+   "version": "git 6b8700ce67c6b37b062dd7a60abc76d7ef832a97",
+   "licence": "MIT",
+   "licence_where": "repo LICENSE, re-read 2026-09-27",
+   "personal_data": "generated scenario personal block never read; text scrubbed",
+   "rows_used": {
+    "train": 1841,
+    "val": 192
+   },
+   "files": [
+    {
+     "path": "LICENSE",
+     "url": "https://raw.githubusercontent.com/asappresearch/abcd/6b8700ce67c6b37b062dd7a60abc76d7ef832a97/LICENSE",
+     "bytes": 1071,
+     "sha256": "3ab7e179a7f13027b7bc64293541f0e9beacca3701cade67fb8fce78c2d9317b",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "README.md",
+     "url": "https://raw.githubusercontent.com/asappresearch/abcd/6b8700ce67c6b37b062dd7a60abc76d7ef832a97/README.md",
+     "bytes": 7326,
+     "sha256": "b08125bfdbeadd5b6086aabe5534cc2c8778cbd203de843eae0186ebf1cb549d",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "data/abcd_v1.1.json.gz",
+     "url": "https://raw.githubusercontent.com/asappresearch/abcd/6b8700ce67c6b37b062dd7a60abc76d7ef832a97/data/abcd_v1.1.json.gz",
+     "bytes": 36985084,
+     "sha256": "2bdf53ac359543dcdc38d55bc6513e78df120363f8f44870716e909f4606de15",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "data/ontology.json",
+     "url": "https://raw.githubusercontent.com/asappresearch/abcd/6b8700ce67c6b37b062dd7a60abc76d7ef832a97/data/ontology.json",
+     "bytes": 5770,
+     "sha256": "2e1c1d763518ba084ada7f7bc8b54f0b489c81da3b170875cf9340891e06524c",
+     "fetched": "2026-09-27"
+    }
+   ]
+  },
+  {
+   "row": "intent/multidogo",
+   "field": "intent",
+   "source": "multidogo",
+   "role": "held-out",
+   "name": "MultiDoGO (turn-level paper splits)",
+   "url": "https://github.com/awslabs/multi-domain-goal-oriented-dialogues-dataset",
+   "version": "git baa30639c4b271f394b81443c842193407cdf26d",
+   "licence": "CDLA-Permissive-1.0",
+   "licence_where": "LICENSE.txt first line + README \u00a7License, re-read 2026-09-27",
+   "personal_data": "role-played; text scrubbed",
+   "rows_used": {
+    "dev": 799,
+    "test": 3092
+   },
+   "files": [
+    {
+     "path": "LICENSE.txt",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/LICENSE.txt",
+     "bytes": 10459,
+     "sha256": "8be8b09ba4230a6ab89a62439b45e3374e15870360d27c9a51131592b91a2f10",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "NOTICE",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/NOTICE",
+     "bytes": 67,
+     "sha256": "d4290ed64c2edd0fce1d84e3f9dfb2881240fe534def76b8cd29ed6af683e287",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "README.md",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/README.md",
+     "bytes": 2569,
+     "sha256": "1a36fb24ceb44a75224ca4566b816024abc0b05ba13d27c959809b243440008b",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "data/paper_splits/splits_annotated_at_turn_level/airline/train.tsv",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/data/paper_splits/splits_annotated_at_turn_level/airline/train.tsv",
+     "bytes": 1897575,
+     "sha256": "a1fe5779dd81ed22da718e3981e4ec1ff3853d4313bf07b7404612422df743d5",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "data/paper_splits/splits_annotated_at_turn_level/airline/dev.tsv",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/data/paper_splits/splits_annotated_at_turn_level/airline/dev.tsv",
+     "bytes": 272410,
+     "sha256": "9127571445872970357b9b7100a207ee4fccccb113fbbc2eab2d0816a169c701",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "data/paper_splits/splits_annotated_at_turn_level/airline/test.tsv",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/data/paper_splits/splits_annotated_at_turn_level/airline/test.tsv",
+     "bytes": 552460,
+     "sha256": "eef0d39c592a7b785e87307e59d4386d0e42b5eb8fab0c8651c6d85befea0b3f",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "data/paper_splits/splits_annotated_at_turn_level/fastfood/train.tsv",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/data/paper_splits/splits_annotated_at_turn_level/fastfood/train.tsv",
+     "bytes": 1989976,
+     "sha256": "1460d3096166fe756ea04033d4dd136389fdaf2de84e4ce8ee820990ae3c6bae",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "data/paper_splits/splits_annotated_at_turn_level/fastfood/dev.tsv",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/data/paper_splits/splits_annotated_at_turn_level/fastfood/dev.tsv",
+     "bytes": 273330,
+     "sha256": "90c0667a1f743070ac26dd9b77e267096936d499c6359ae2ce0a258d034cc06c",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "data/paper_splits/splits_annotated_at_turn_level/fastfood/test.tsv",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/data/paper_splits/splits_annotated_at_turn_level/fastfood/test.tsv",
+     "bytes": 573972,
+     "sha256": "252b69ca216f3c98a6feabdc43ca1024e8a1c13f1cbc3008e6d8d56c27acb76e",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "data/paper_splits/splits_annotated_at_turn_level/finance/train.tsv",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/data/paper_splits/splits_annotated_at_turn_level/finance/train.tsv",
+     "bytes": 2070448,
+     "sha256": "88d17fe400fd859ea60686d771333f58af99811bbe108dfd40035f79d1f0cfa7",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "data/paper_splits/splits_annotated_at_turn_level/finance/dev.tsv",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/data/paper_splits/splits_annotated_at_turn_level/finance/dev.tsv",
+     "bytes": 297593,
+     "sha256": "1091278fa9a33caa7847c18dd2d2de4a5ae6a875922f485659165e62aacf15f0",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "data/paper_splits/splits_annotated_at_turn_level/finance/test.tsv",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/data/paper_splits/splits_annotated_at_turn_level/finance/test.tsv",
+     "bytes": 592511,
+     "sha256": "2bc4e19bb11fee50c7d16d3810662addd9d5de463134518752052a8267b72e44",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "data/paper_splits/splits_annotated_at_turn_level/insurance/train.tsv",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/data/paper_splits/splits_annotated_at_turn_level/insurance/train.tsv",
+     "bytes": 1811267,
+     "sha256": "290eb53eadb0d6d6dc986bc870b8600b1f66c64dbd76f677761ec06b24d350e7",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "data/paper_splits/splits_annotated_at_turn_level/insurance/dev.tsv",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/data/paper_splits/splits_annotated_at_turn_level/insurance/dev.tsv",
+     "bytes": 260892,
+     "sha256": "235d9cf0571b64da28de5f4964a665744fd8d9486e8e45a7ce136f3f7e58efdd",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "data/paper_splits/splits_annotated_at_turn_level/insurance/test.tsv",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/data/paper_splits/splits_annotated_at_turn_level/insurance/test.tsv",
+     "bytes": 514009,
+     "sha256": "fd6703811450d7d3a5ee9671d44f422108e0188d96e774a38918809cf271413b",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "data/paper_splits/splits_annotated_at_turn_level/media/train.tsv",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/data/paper_splits/splits_annotated_at_turn_level/media/train.tsv",
+     "bytes": 1610116,
+     "sha256": "93336acb2840fa09dc0ebaebc168a526d1c665330c9b4e80087aa7c200fdd104",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "data/paper_splits/splits_annotated_at_turn_level/media/dev.tsv",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/data/paper_splits/splits_annotated_at_turn_level/media/dev.tsv",
+     "bytes": 229025,
+     "sha256": "b414afeea1f2427cbf026ef50d52abc2746743bcb555658e7d87ae242fd81b9e",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "data/paper_splits/splits_annotated_at_turn_level/media/test.tsv",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/data/paper_splits/splits_annotated_at_turn_level/media/test.tsv",
+     "bytes": 453921,
+     "sha256": "ae6d37c6a9ebcdc64359e9a79245cc077daf1add125e762209b8940b9ff8374d",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "data/paper_splits/splits_annotated_at_turn_level/software/train.tsv",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/data/paper_splits/splits_annotated_at_turn_level/software/train.tsv",
+     "bytes": 1725065,
+     "sha256": "b1e21e7b6f0f8a4a153c941c9d3bee48612eae2462e869bca34dba51a0f7b27d",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "data/paper_splits/splits_annotated_at_turn_level/software/dev.tsv",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/data/paper_splits/splits_annotated_at_turn_level/software/dev.tsv",
+     "bytes": 241785,
+     "sha256": "e30bd5510391c559bf281a660d8e2cda922e1780ddc93e3e5cfbe0bc4f390eaa",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "data/paper_splits/splits_annotated_at_turn_level/software/test.tsv",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/data/paper_splits/splits_annotated_at_turn_level/software/test.tsv",
+     "bytes": 478978,
+     "sha256": "cb725f4a024ed7c19d6c7afc1b01d9dc298e8baeef5634ec3bb91e9d2b9863e3",
+     "fetched": "2026-09-27"
+    }
+   ]
+  },
+  {
+   "row": "finance/multidogo",
+   "field": "finance",
+   "source": "multidogo",
+   "role": "pool",
+   "name": "MultiDoGO (turn-level paper splits)",
+   "url": "https://github.com/awslabs/multi-domain-goal-oriented-dialogues-dataset",
+   "version": "git baa30639c4b271f394b81443c842193407cdf26d",
+   "licence": "CDLA-Permissive-1.0",
+   "licence_where": "LICENSE.txt first line + README \u00a7License, re-read 2026-09-27",
+   "personal_data": "role-played; text scrubbed",
+   "rows_used": {
+    "train": 1458,
+    "val": 88
+   },
+   "files": [
+    {
+     "path": "LICENSE.txt",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/LICENSE.txt",
+     "bytes": 10459,
+     "sha256": "8be8b09ba4230a6ab89a62439b45e3374e15870360d27c9a51131592b91a2f10",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "NOTICE",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/NOTICE",
+     "bytes": 67,
+     "sha256": "d4290ed64c2edd0fce1d84e3f9dfb2881240fe534def76b8cd29ed6af683e287",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "README.md",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/README.md",
+     "bytes": 2569,
+     "sha256": "1a36fb24ceb44a75224ca4566b816024abc0b05ba13d27c959809b243440008b",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "data/paper_splits/splits_annotated_at_turn_level/airline/train.tsv",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/data/paper_splits/splits_annotated_at_turn_level/airline/train.tsv",
+     "bytes": 1897575,
+     "sha256": "a1fe5779dd81ed22da718e3981e4ec1ff3853d4313bf07b7404612422df743d5",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "data/paper_splits/splits_annotated_at_turn_level/airline/dev.tsv",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/data/paper_splits/splits_annotated_at_turn_level/airline/dev.tsv",
+     "bytes": 272410,
+     "sha256": "9127571445872970357b9b7100a207ee4fccccb113fbbc2eab2d0816a169c701",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "data/paper_splits/splits_annotated_at_turn_level/airline/test.tsv",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/data/paper_splits/splits_annotated_at_turn_level/airline/test.tsv",
+     "bytes": 552460,
+     "sha256": "eef0d39c592a7b785e87307e59d4386d0e42b5eb8fab0c8651c6d85befea0b3f",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "data/paper_splits/splits_annotated_at_turn_level/fastfood/train.tsv",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/data/paper_splits/splits_annotated_at_turn_level/fastfood/train.tsv",
+     "bytes": 1989976,
+     "sha256": "1460d3096166fe756ea04033d4dd136389fdaf2de84e4ce8ee820990ae3c6bae",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "data/paper_splits/splits_annotated_at_turn_level/fastfood/dev.tsv",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/data/paper_splits/splits_annotated_at_turn_level/fastfood/dev.tsv",
+     "bytes": 273330,
+     "sha256": "90c0667a1f743070ac26dd9b77e267096936d499c6359ae2ce0a258d034cc06c",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "data/paper_splits/splits_annotated_at_turn_level/fastfood/test.tsv",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/data/paper_splits/splits_annotated_at_turn_level/fastfood/test.tsv",
+     "bytes": 573972,
+     "sha256": "252b69ca216f3c98a6feabdc43ca1024e8a1c13f1cbc3008e6d8d56c27acb76e",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "data/paper_splits/splits_annotated_at_turn_level/finance/train.tsv",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/data/paper_splits/splits_annotated_at_turn_level/finance/train.tsv",
+     "bytes": 2070448,
+     "sha256": "88d17fe400fd859ea60686d771333f58af99811bbe108dfd40035f79d1f0cfa7",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "data/paper_splits/splits_annotated_at_turn_level/finance/dev.tsv",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/data/paper_splits/splits_annotated_at_turn_level/finance/dev.tsv",
+     "bytes": 297593,
+     "sha256": "1091278fa9a33caa7847c18dd2d2de4a5ae6a875922f485659165e62aacf15f0",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "data/paper_splits/splits_annotated_at_turn_level/finance/test.tsv",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/data/paper_splits/splits_annotated_at_turn_level/finance/test.tsv",
+     "bytes": 592511,
+     "sha256": "2bc4e19bb11fee50c7d16d3810662addd9d5de463134518752052a8267b72e44",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "data/paper_splits/splits_annotated_at_turn_level/insurance/train.tsv",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/data/paper_splits/splits_annotated_at_turn_level/insurance/train.tsv",
+     "bytes": 1811267,
+     "sha256": "290eb53eadb0d6d6dc986bc870b8600b1f66c64dbd76f677761ec06b24d350e7",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "data/paper_splits/splits_annotated_at_turn_level/insurance/dev.tsv",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/data/paper_splits/splits_annotated_at_turn_level/insurance/dev.tsv",
+     "bytes": 260892,
+     "sha256": "235d9cf0571b64da28de5f4964a665744fd8d9486e8e45a7ce136f3f7e58efdd",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "data/paper_splits/splits_annotated_at_turn_level/insurance/test.tsv",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/data/paper_splits/splits_annotated_at_turn_level/insurance/test.tsv",
+     "bytes": 514009,
+     "sha256": "fd6703811450d7d3a5ee9671d44f422108e0188d96e774a38918809cf271413b",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "data/paper_splits/splits_annotated_at_turn_level/media/train.tsv",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/data/paper_splits/splits_annotated_at_turn_level/media/train.tsv",
+     "bytes": 1610116,
+     "sha256": "93336acb2840fa09dc0ebaebc168a526d1c665330c9b4e80087aa7c200fdd104",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "data/paper_splits/splits_annotated_at_turn_level/media/dev.tsv",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/data/paper_splits/splits_annotated_at_turn_level/media/dev.tsv",
+     "bytes": 229025,
+     "sha256": "b414afeea1f2427cbf026ef50d52abc2746743bcb555658e7d87ae242fd81b9e",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "data/paper_splits/splits_annotated_at_turn_level/media/test.tsv",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/data/paper_splits/splits_annotated_at_turn_level/media/test.tsv",
+     "bytes": 453921,
+     "sha256": "ae6d37c6a9ebcdc64359e9a79245cc077daf1add125e762209b8940b9ff8374d",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "data/paper_splits/splits_annotated_at_turn_level/software/train.tsv",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/data/paper_splits/splits_annotated_at_turn_level/software/train.tsv",
+     "bytes": 1725065,
+     "sha256": "b1e21e7b6f0f8a4a153c941c9d3bee48612eae2462e869bca34dba51a0f7b27d",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "data/paper_splits/splits_annotated_at_turn_level/software/dev.tsv",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/data/paper_splits/splits_annotated_at_turn_level/software/dev.tsv",
+     "bytes": 241785,
+     "sha256": "e30bd5510391c559bf281a660d8e2cda922e1780ddc93e3e5cfbe0bc4f390eaa",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "data/paper_splits/splits_annotated_at_turn_level/software/test.tsv",
+     "url": "https://raw.githubusercontent.com/awslabs/multi-domain-goal-oriented-dialogues-dataset/baa30639c4b271f394b81443c842193407cdf26d/data/paper_splits/splits_annotated_at_turn_level/software/test.tsv",
+     "bytes": 478978,
+     "sha256": "cb725f4a024ed7c19d6c7afc1b01d9dc298e8baeef5634ec3bb91e9d2b9863e3",
+     "fetched": "2026-09-27"
+    }
+   ]
+  },
+  {
+   "row": "finance/money_se",
+   "field": "finance",
+   "source": "money_se",
+   "role": "pool",
+   "name": "Personal Finance & Money Stack Exchange (2024-04-02 dump)",
+   "url": "https://archive.org/details/stackexchange_20240402",
+   "version": "archive.org item stackexchange_20240402, money.stackexchange.com.7z; questions created < 2022-11-01",
+   "licence": "CC BY-SA (2.5/3.0/4.0 by post date)",
+   "licence_where": "dump license.txt (cc-wiki, CC BY-SA 3.0 link, attribution required), read 2026-09-27; CAUTION accepted by Nick, decision 31 (docs/DECISIONS-2026-09-25.md)",
+   "personal_data": "Owner/Editor fields never read; attribution by question id (https://money.stackexchange.com/q/<unit>); text scrubbed",
+   "share_alike": true,
+   "card_note": "newer SE download terms say 'not training a large language model'; Bosco is not one",
+   "rows_used": {
+    "train": 7208,
+    "val": 1216
+   },
+   "files": [
+    {
+     "path": "license.txt",
+     "url": "https://archive.org/download/stackexchange_20240402/license.txt",
+     "bytes": 1738,
+     "sha256": "d36393108ad6b64f97a7b17dd873fe670ace6aa948975ef546a744481678e545",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "readme.txt",
+     "url": "https://archive.org/download/stackexchange_20240402/readme.txt",
+     "bytes": 5856,
+     "sha256": "29af21f6da80aa6be67c35a75e8cbd2c06d5bd8bbe719630a946acc6b86c7681",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "money.stackexchange.com.7z",
+     "url": "https://archive.org/download/stackexchange_20240402/money.stackexchange.com.7z",
+     "bytes": 155157577,
+     "sha256": "afd64afaecae6286d80b342b4ecb777393e8ac4011a2b6fbf9df1b04626fe215",
+     "fetched": "2026-09-27"
+    }
+   ]
+  },
+  {
+   "row": "finance/cfpb_archive",
+   "field": "finance",
+   "source": "cfpb_archive",
+   "role": "held-out",
+   "name": "CFPB Consumer Complaint Database Narratives Archive, Exports 1-3",
+   "url": "https://www.consumerfinance.gov/foia-requests/foia-electronic-reading-room/cfpb-consumer-complaint-database-narratives-archive/",
+   "version": "Exports 1-3 (Dec 2011 - Oct 2022), Last-Modified 2026-09-14; rows received <= 2022-10-31",
+   "licence": "public domain for FOIA purposes (no licence field)",
+   "licence_where": "CFPB newsroom 2026-08-14 'The CFPB to Cease Discretionary Publication of Complaint Narratives...' and consumerfinance.gov website privacy policy, both read 2026-09-27; CAUTION -> USE (docs/free-datasets.md)",
+   "personal_data": "consumer-written, opt-in, CFPB-scrubbed (XXXX kept); state/ZIP/company/tags never kept; zips deleted after extracting 7 columns; text scrubbed",
+   "rows_used": {
+    "dev": 527,
+    "test": 2173
+   },
+   "files": [
+    {
+     "path": "CCDB_Export_1_December_2011_through_April_2018.zip",
+     "url": "https://files.consumerfinance.gov/f/documents/CCDB_Export_1_December_2011_through_April_2018.zip",
+     "bytes": 134688697,
+     "sha256": "9d4fabeb5db925ce4303e81ab448f44531303a995aec1a935abc09156f2fc533",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "CCDB_Export_1_December_2011_through_April_2018.narratives.csv.gz",
+     "bytes": 105241780,
+     "sha256": "b81e824c1791763fa8199c70ab9508534227b673854c6f28cf5ad778b2c036cd",
+     "derived_from": "CCDB_Export_1_December_2011_through_April_2018.zip",
+     "rows_read": 1031863,
+     "rows_kept": 291574
+    },
+    {
+     "path": "CCDB_Export_2_May_2018_through_April_2021.zip",
+     "url": "https://files.consumerfinance.gov/f/documents/CCDB_Export_2_May_2018_through_April_2021.zip",
+     "bytes": 164598156,
+     "sha256": "4b33ffc92fa0236836228c5618b7247f0f59ffef35760a45175c858a0d5aaf45",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "CCDB_Export_2_May_2018_through_April_2021.narratives.csv.gz",
+     "bytes": 134261870,
+     "sha256": "8d390869995be180058825420d99ad98e4c4c7a40ad57fa6c114201d0210ad89",
+     "derived_from": "CCDB_Export_2_May_2018_through_April_2021.zip",
+     "rows_read": 1041632,
+     "rows_kept": 439860
+    },
+    {
+     "path": "CCDB_Export_3_May_2021_through_October_2022.zip",
+     "url": "https://files.consumerfinance.gov/f/documents/CCDB_Export_3_May_2021_through_October_2022.zip",
+     "bytes": 128680448,
+     "sha256": "b8b195ff7d6b8e137bd0f37d13d90c0efb4f216c08dff3c4af91f02af3756130",
+     "fetched": "2026-09-27"
+    },
+    {
+     "path": "CCDB_Export_3_May_2021_through_October_2022.narratives.csv.gz",
+     "bytes": 101187885,
+     "sha256": "b453a1a9a39317dc60034e356e8384b9a29f4fa37e80065cd8f65df4e6ed8dcb",
+     "derived_from": "CCDB_Export_3_May_2021_through_October_2022.zip",
+     "rows_read": 977426,
+     "rows_kept": 408046
+    }
+   ]
+  }
+ ]
+}

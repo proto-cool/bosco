@@ -1,0 +1,277 @@
+{
+ "note": "report-only ceilings; pool val and held-out dev only; sealed test never scored",
+ "encoder": "nomic-embed-text-v1.5 (bosco.encoders.TEXT), family antenna service/families/v1",
+ "intent": {
+  "n": {
+   "train": 18167,
+   "val": 2120,
+   "dev": 799,
+   "test_sealed_count": 3092
+  },
+  "held_out_source": "multidogo",
+  "held_out_classes_present": [
+   "book or order",
+   "cancel",
+   "modify",
+   "check status",
+   "pay or transfer",
+   "report problem",
+   "fraud or security",
+   "account management",
+   "request item or document",
+   "ask service info",
+   "greeting",
+   "thanks",
+   "affirm",
+   "deny"
+  ],
+  "held_out_classes_testable": [
+   "book or order",
+   "modify",
+   "check status",
+   "pay or transfer",
+   "report problem",
+   "fraud or security",
+   "account management",
+   "request item or document",
+   "ask service info",
+   "greeting",
+   "thanks",
+   "affirm",
+   "deny"
+  ],
+  "min_test_per_class": 50,
+  "held_out_sealed_test_per_class": {
+   "account management": 224,
+   "affirm": 251,
+   "ask service info": 242,
+   "book or order": 240,
+   "cancel": 13,
+   "check status": 224,
+   "deny": 241,
+   "fraud or security": 220,
+   "greeting": 247,
+   "modify": 249,
+   "pay or transfer": 228,
+   "report problem": 241,
+   "request item or document": 237,
+   "thanks": 235
+  },
+  "X768": {
+   "val_by_C": {
+    "0.1": 0.7004,
+    "1.0": 0.8213,
+    "10.0": 0.8759
+   },
+   "C": 10.0,
+   "pool_val_bacc": 0.8759,
+   "held_out_dev_bacc": 0.5811,
+   "held_out_dev_bacc_testable_classes": 0.5745,
+   "held_out_dev_recall": {
+    "book or order": 0.3,
+    "cancel": 0.667,
+    "modify": 0.49,
+    "check status": 0.724,
+    "pay or transfer": 0.944,
+    "report problem": 0.797,
+    "fraud or security": 0.709,
+    "account management": 0.842,
+    "request item or document": 0.175,
+    "ask service info": 0.345,
+    "greeting": 0.698,
+    "thanks": 0.769,
+    "affirm": 0.49,
+    "deny": 0.186
+   },
+   "held_out_dev_confusions_top": [
+    "deny -> thanks: 17",
+    "modify -> book or order: 17",
+    "request item or document -> schedule and reminders: 13",
+    "deny -> greeting: 12",
+    "request item or document -> check status: 11",
+    "ask service info -> check status: 10",
+    "check status -> account management: 10",
+    "book or order -> how to: 9"
+   ]
+  },
+  "Z46": {
+   "val_by_C": {
+    "0.1": 0.7348,
+    "1.0": 0.7625,
+    "10.0": 0.7657
+   },
+   "C": 10.0,
+   "pool_val_bacc": 0.7657,
+   "held_out_dev_bacc": 0.532,
+   "held_out_dev_bacc_testable_classes": 0.5216,
+   "held_out_dev_recall": {
+    "book or order": 0.367,
+    "cancel": 0.667,
+    "modify": 0.451,
+    "check status": 0.539,
+    "pay or transfer": 0.875,
+    "report problem": 0.542,
+    "fraud or security": 0.618,
+    "account management": 0.803,
+    "request item or document": 0.127,
+    "ask service info": 0.431,
+    "greeting": 0.679,
+    "thanks": 0.723,
+    "affirm": 0.49,
+    "deny": 0.136
+   },
+   "held_out_dev_confusions_top": [
+    "check status -> account management: 19",
+    "deny -> thanks: 14",
+    "modify -> book or order: 14",
+    "request item or document -> ask fact: 14",
+    "deny -> greeting: 12",
+    "book or order -> modify: 9",
+    "book or order -> how to: 9",
+    "ask service info -> check status: 7"
+   ]
+  },
+  "prototype_X768": {
+   "pool_val_bacc": 0.7514,
+   "held_out_dev_bacc": 0.5746,
+   "held_out_dev_recall": {
+    "book or order": 0.217,
+    "cancel": 1.0,
+    "modify": 0.412,
+    "check status": 0.724,
+    "pay or transfer": 0.931,
+    "report problem": 0.593,
+    "fraud or security": 0.873,
+    "account management": 0.658,
+    "request item or document": 0.063,
+    "ask service info": 0.5,
+    "greeting": 0.679,
+    "thanks": 0.831,
+    "affirm": 0.429,
+    "deny": 0.136
+   }
+  }
+ },
+ "finance": {
+  "n": {
+   "train": 12818,
+   "val": 1702,
+   "dev": 527,
+   "test_sealed_count": 2173
+  },
+  "held_out_source": "cfpb_archive",
+  "held_out_classes_present": [
+   "bank accounts",
+   "cards",
+   "payments transfers",
+   "credit reports scores",
+   "consumer loans",
+   "mortgages home",
+   "student loans",
+   "debt collection relief",
+   "fraud scams"
+  ],
+  "held_out_classes_testable": [
+   "bank accounts",
+   "cards",
+   "payments transfers",
+   "credit reports scores",
+   "consumer loans",
+   "mortgages home",
+   "student loans",
+   "debt collection relief",
+   "fraud scams"
+  ],
+  "min_test_per_class": 50,
+  "held_out_sealed_test_per_class": {
+   "bank accounts": 248,
+   "cards": 236,
+   "consumer loans": 242,
+   "credit reports scores": 240,
+   "debt collection relief": 250,
+   "fraud scams": 237,
+   "mortgages home": 241,
+   "payments transfers": 245,
+   "student loans": 234
+  },
+  "X768": {
+   "val_by_C": {
+    "0.1": 0.6603,
+    "1.0": 0.822,
+    "10.0": 0.8387
+   },
+   "C": 10.0,
+   "pool_val_bacc": 0.8387,
+   "held_out_dev_bacc": 0.5022,
+   "held_out_dev_bacc_testable_classes": 0.5022,
+   "held_out_dev_recall": {
+    "bank accounts": 0.5,
+    "cards": 0.516,
+    "payments transfers": 0.418,
+    "credit reports scores": 0.383,
+    "consumer loans": 0.483,
+    "mortgages home": 0.644,
+    "student loans": 0.47,
+    "debt collection relief": 0.36,
+    "fraud scams": 0.746
+   },
+   "held_out_dev_confusions_top": [
+    "credit reports scores -> fraud scams: 28",
+    "debt collection relief -> fraud scams: 22",
+    "bank accounts -> fraud scams: 18",
+    "cards -> fraud scams: 18",
+    "payments transfers -> bank accounts: 15",
+    "payments transfers -> fraud scams: 12",
+    "consumer loans -> fraud scams: 11",
+    "student loans -> fraud scams: 9"
+   ]
+  },
+  "Z46": {
+   "val_by_C": {
+    "0.1": 0.6888,
+    "1.0": 0.7349,
+    "10.0": 0.743
+   },
+   "C": 10.0,
+   "pool_val_bacc": 0.743,
+   "held_out_dev_bacc": 0.3957,
+   "held_out_dev_bacc_testable_classes": 0.3957,
+   "held_out_dev_recall": {
+    "bank accounts": 0.327,
+    "cards": 0.312,
+    "payments transfers": 0.182,
+    "credit reports scores": 0.4,
+    "consumer loans": 0.414,
+    "mortgages home": 0.525,
+    "student loans": 0.303,
+    "debt collection relief": 0.32,
+    "fraud scams": 0.778
+   },
+   "held_out_dev_confusions_top": [
+    "payments transfers -> fraud scams: 31",
+    "bank accounts -> fraud scams: 24",
+    "cards -> fraud scams: 24",
+    "credit reports scores -> fraud scams: 17",
+    "debt collection relief -> fraud scams: 17",
+    "student loans -> consumer loans: 12",
+    "consumer loans -> debt collection relief: 11",
+    "mortgages home -> debt collection relief: 11"
+   ]
+  },
+  "prototype_X768": {
+   "pool_val_bacc": 0.7568,
+   "held_out_dev_bacc": 0.2929,
+   "held_out_dev_recall": {
+    "bank accounts": 0.058,
+    "cards": 0.172,
+    "payments transfers": 0.073,
+    "credit reports scores": 0.35,
+    "consumer loans": 0.172,
+    "mortgages home": 0.169,
+    "student loans": 0.348,
+    "debt collection relief": 0.42,
+    "fraud scams": 0.873
+   }
+  }
+ }
+}
