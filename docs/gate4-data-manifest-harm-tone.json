@@ -1,0 +1,642 @@
+{
+ "generated": "2026-09-27",
+ "doc": "docs/gate4-data-harm-tone.md",
+ "script": "scripts/v1_gate4_harm_tone.py",
+ "cache": "data/cache/v1-gate4-harm-tone/",
+ "user_agent": "bosco-research/0.1 (https://bosco.systems)",
+ "datasets": [
+  {
+   "name": "civil_comments",
+   "role": "harm pool (hate/harassment/threat/sexual/fine); tone pool (neutral/curt/hostile)",
+   "url": "https://huggingface.co/datasets/google/civil_comments",
+   "version": "HF rev f2970eb3a55777454c94069077cc8d9b5866312d (HF-staff Parquet conversion; fetched 2026-09-25)",
+   "licence": "CC0 1.0",
+   "licence_verified_at": "TFDS catalog tensorflow.org/datasets/catalog/civil_comments and HF card (re-checked in the local hf_card_README.md); accepted by Nick 2026-09-27, decision 30",
+   "ethics_gaps": "commenter consent rests on the Civil Comments platform terms; rater platform and pay undocumented (on every card)",
+   "files": [
+    {
+     "path": "civil_comments/data/train-00000-of-00002.parquet",
+     "bytes": 193527147,
+     "sha256": "c20f01c3aecbdd942886cacb0ee67e995df33bc712a622fde75927ed3d6ccefe"
+    },
+    {
+     "path": "civil_comments/data/train-00001-of-00002.parquet",
+     "bytes": 186778090,
+     "sha256": "a76af69d7b24758bc38b196bc422d4767935c1dd7d3c1465554649c546d99ccb"
+    },
+    {
+     "path": "civil_comments/data/validation-00000-of-00001.parquet",
+     "bytes": 20955569,
+     "sha256": "2e0eb65474e7e1290df8689fc93eea783160c898c09ae15382c0a9662367bd03"
+    }
+   ],
+   "rows_used": {
+    "harm/train": 11617,
+    "harm/val": 959,
+    "tone/train": 5092,
+    "tone/val": 459
+   },
+   "personal_data": "real public comments, IDs stripped by the publisher; e-mails, URLs, phone/7+ digit runs scrubbed on read; the text may still name people"
+  },
+  {
+   "name": "wiki_detox_attack",
+   "role": "harm pool (harassment/fine)",
+   "url": "https://doi.org/10.6084/m9.figshare.4054689.v6",
+   "version": "figshare 4054689 v6 (published 2017-02-22); fetched 2026-09-27; md5 matches figshare computed_md5",
+   "licence": "labels CC0; comment text CC BY-SA (Wikipedia)",
+   "licence_verified_at": "figshare API api.figshare.com/v2/articles/4054689 license=CC0 (2026-09-27); text licence per meta.wikimedia.org/wiki/Research:Detox/Data_Release (research doc, 2026-09-27)",
+   "files": [
+    {
+     "path": "wiki_detox/attack_annotated_comments.tsv",
+     "url": "https://ndownloader.figshare.com/files/7554634",
+     "bytes": 58121115,
+     "sha256": "35348ef473842424f78bee54e83125064eddfbc250ebe49b4258a462a2509126"
+    },
+    {
+     "path": "wiki_detox/attack_annotations.tsv",
+     "url": "https://ndownloader.figshare.com/files/7554637",
+     "bytes": 46760112,
+     "sha256": "eb97decf252083d359273fe358d7b212614ead2119310c10601fd575fb91b5cf"
+    }
+   ],
+   "rows_used": {
+    "harm/train": 3830,
+    "harm/val": 383
+   },
+   "personal_data": "Wikipedia talk comments; worker_id never read; attack_worker_demographics.tsv NOT fetched; User:Name links, e-mails, URLs, digit runs scrubbed; attribution by rev_id (kept in items.json `unit`)"
+  },
+  {
+   "name": "wiki_detox_aggression",
+   "role": "tone pool (warm/neutral/curt/hostile)",
+   "url": "https://doi.org/10.6084/m9.figshare.4267550.v5",
+   "version": "figshare 4267550 v5 (published 2017-02-22); fetched 2026-09-27; md5 matches",
+   "licence": "labels CC0; comment text CC BY-SA (Wikipedia)",
+   "licence_verified_at": "figshare API license=CC0 (2026-09-27); Wikimedia Detox page for the text",
+   "files": [
+    {
+     "path": "wiki_detox/aggression_annotated_comments.tsv",
+     "url": "https://ndownloader.figshare.com/files/7038038",
+     "bytes": 58090178,
+     "sha256": "545dd5f16eeab5c9ca70d9edc034b0810e1e20c1dec660e297dc2c21826e5682"
+    },
+    {
+     "path": "wiki_detox/aggression_annotations.tsv",
+     "url": "https://ndownloader.figshare.com/files/7394506",
+     "bytes": 30627328,
+     "sha256": "fe2629c30be695ae723704aa957bd34ae2331c83c4397015b9651e1e322f802d"
+    }
+   ],
+   "rows_used": {
+    "tone/train": 8483,
+    "tone/val": 862
+   },
+   "personal_data": "as wiki_detox_attack; aggression_worker_demographics.tsv NOT fetched"
+  },
+  {
+   "name": "wiki_politeness",
+   "role": "tone pool (warm/neutral/curt)",
+   "url": "https://zissou.infosci.cornell.edu/convokit/datasets/wikipedia-politeness-corpus/wikipedia-politeness-corpus.zip",
+   "version": "ConvoKit zip fetched 2026-09-27 (no version string; pinned by sha256)",
+   "licence": "CC BY 4.0 (ConvoKit corpus); text CC BY-SA (Wikipedia)",
+   "licence_verified_at": "convokit.cornell.edu/documentation/wiki_politeness.html 'Data License: ConvoKit's Stanford Politeness Corpus is governed by the CC BY license v4.0' (2026-09-27)",
+   "files": [
+    {
+     "path": "wiki_politeness/wikipedia-politeness-corpus.zip",
+     "url": "https://zissou.infosci.cornell.edu/convokit/datasets/wikipedia-politeness-corpus/wikipedia-politeness-corpus.zip",
+     "bytes": 1737651,
+     "sha256": "90ec6c2c6e05d064a805d2e4be4a8d442f370b31f0025798e8eaf62d0014ba48"
+    },
+    {
+     "path": "wiki_politeness/wikipedia-politeness-corpus/utterances.jsonl",
+     "bytes": 10807650,
+     "sha256": "c43ad7c1252bcc8349f2813dfa671b9d705841fafa4aa28a6e85aca2756abc79"
+    }
+   ],
+   "rows_used": {
+    "tone/train": 3193,
+    "tone/val": 328
+   },
+   "personal_data": "`user` field never read; text scrubbed as above"
+  },
+  {
+   "name": "dynahate",
+   "role": "harm pool (hate/threat/fine)",
+   "url": "https://github.com/bvidgen/Dynamically-Generated-Hate-Speech-Dataset",
+   "version": "commit 36f9dc8, v0.2.3 (fetched 2026-09-25)",
+   "licence": "CC BY 4.0",
+   "licence_verified_at": "README at the pinned commit (no LICENSE file); docs/clean-data.md",
+   "files": [
+    {
+     "path": "dynahate/Dynamically Generated Hate Dataset v0.2.3.csv",
+     "bytes": 9755776,
+     "sha256": "6e0aa7e598ab5b648cb1f0b48626a3e5f2e39a5abbd9fee998efa5a0b6cab4ca"
+    }
+   ],
+   "rows_used": {
+    "harm/train": 3592,
+    "harm/val": 326
+   },
+   "personal_data": "crowd-written; `annotator` never read; rounds 3-4 adapted from real posts"
+  },
+  {
+   "name": "hatemojibuild",
+   "role": "harm pool (hate/fine)",
+   "url": "https://github.com/HannahKirk/Hatemoji",
+   "version": "commit a626f63 (fetched 2026-09-25)",
+   "licence": "CC BY 4.0",
+   "licence_verified_at": "repo LICENSE; docs/clean-data.md",
+   "files": [
+    {
+     "path": "hatemojibuild/train.csv",
+     "bytes": 692090,
+     "sha256": "2255818a5b10153876320068451be582ed876a2eefb22a250bd2f6478d1815e5"
+    },
+    {
+     "path": "hatemojibuild/validation.csv",
+     "bytes": 83297,
+     "sha256": "721094d44fceb923a0b3897935126a654bbb1f092b1fed6a74d80e4a845c6f43"
+    }
+   ],
+   "rows_used": {
+    "harm/train": 2459,
+    "harm/val": 197
+   },
+   "personal_data": "none (crowd-written)"
+  },
+  {
+   "name": "aegis1",
+   "role": "HARM HELD-OUT (20% dev / 80% sealed test); user_message rows matching an HH-RLHF human turn only",
+   "url": "https://huggingface.co/datasets/nvidia/Aegis-AI-Content-Safety-Dataset-1.0",
+   "version": "HF rev bd96d862068e47630197de64eb91f8d1481ff3e0; fetched 2026-09-27",
+   "licence": "CC BY 4.0 (prompts: HH-RLHF, MIT)",
+   "licence_verified_at": "HF card at the pinned revision: 'license: cc-by-4.0', 'License: CC-BY-4.0' (aegis1/README.md, 2026-09-27)",
+   "files": [
+    {
+     "path": "aegis1/README.md",
+     "url": "https://huggingface.co/datasets/nvidia/Aegis-AI-Content-Safety-Dataset-1.0/resolve/bd96d862068e47630197de64eb91f8d1481ff3e0/README.md",
+     "bytes": 9397,
+     "sha256": "5cea7efa47c4029ea9b04e266a4cabf53d8a771335ecac60961a8b256cba3592"
+    },
+    {
+     "path": "aegis1/Content Moderation Extracted Annotations 02.08.24_train_release_0418_v1.parquet",
+     "url": "https://huggingface.co/datasets/nvidia/Aegis-AI-Content-Safety-Dataset-1.0/resolve/bd96d862068e47630197de64eb91f8d1481ff3e0/Content%20Moderation%20Extracted%20Annotations%2002.08.24_train_release_0418_v1.parquet",
+     "bytes": 4905593,
+     "sha256": "1bed0b8da79321501346cc5f55c8e360a926e75e695fafb4ebaee65e086b6748"
+    },
+    {
+     "path": "aegis1/Content Moderation Extracted Annotations 02.08.24_test_release_0418_v1.parquet",
+     "url": "https://huggingface.co/datasets/nvidia/Aegis-AI-Content-Safety-Dataset-1.0/resolve/bd96d862068e47630197de64eb91f8d1481ff3e0/Content%20Moderation%20Extracted%20Annotations%2002.08.24_test_release_0418_v1.parquet",
+     "bytes": 558668,
+     "sha256": "90cebe34ee64c7a0f533fe5534bc03f862f89981969c00376a45c9d9f4ca2159"
+    }
+   ],
+   "rows_used": {
+    "harm/test": 1425,
+    "harm/dev": 331
+   },
+   "personal_data": "card says PII removed; model responses (Mistral-7B) never read; 12 NVIDIA annotators, volunteer basis"
+  },
+  {
+   "name": "aegis2",
+   "role": "HARM HELD-OUT; prompt-only rows (response null) whose prompt exactly matches an HH-RLHF human turn (drops DAN, AART, REDACTED Reddit)",
+   "url": "https://huggingface.co/datasets/nvidia/Aegis-AI-Content-Safety-Dataset-2.0",
+   "version": "HF rev d86bb8bedff51d25ac834ab7838f1cc61acb7a2c; fetched 2026-09-27 (refusals_* files not fetched)",
+   "licence": "CC BY 4.0 (prompts: HH-RLHF, MIT)",
+   "licence_verified_at": "HF card at the pinned revision (aegis2/README.md, 2026-09-27)",
+   "files": [
+    {
+     "path": "aegis2/README.md",
+     "url": "https://huggingface.co/datasets/nvidia/Aegis-AI-Content-Safety-Dataset-2.0/resolve/d86bb8bedff51d25ac834ab7838f1cc61acb7a2c/README.md",
+     "bytes": 14107,
+     "sha256": "da2598e587850bacc77c0658f56d0ea430f55d1cf70b197eb06070871802d3ba"
+    },
+    {
+     "path": "aegis2/train.json",
+     "url": "https://huggingface.co/datasets/nvidia/Aegis-AI-Content-Safety-Dataset-2.0/resolve/d86bb8bedff51d25ac834ab7838f1cc61acb7a2c/train.json",
+     "bytes": 22705956,
+     "sha256": "154fba82c71d9fa73abd2ca5588a198e693ddc816c83444df180a22f613e02f6"
+    },
+    {
+     "path": "aegis2/validation.json",
+     "url": "https://huggingface.co/datasets/nvidia/Aegis-AI-Content-Safety-Dataset-2.0/resolve/d86bb8bedff51d25ac834ab7838f1cc61acb7a2c/validation.json",
+     "bytes": 1137821,
+     "sha256": "a97200e226ad4f6ba6a639982f817f675909bc74513859df3e8fc9a92951dfcd"
+    },
+    {
+     "path": "aegis2/test.json",
+     "url": "https://huggingface.co/datasets/nvidia/Aegis-AI-Content-Safety-Dataset-2.0/resolve/d86bb8bedff51d25ac834ab7838f1cc61acb7a2c/test.json",
+     "bytes": 1731373,
+     "sha256": "b0a6d602260524866053cb34105194f074f2c2906e3691b68d43b9e6e9318f35"
+    }
+   ],
+   "rows_used": {
+    "harm/test": 1157,
+    "harm/dev": 285
+   },
+   "personal_data": "as aegis1; only prompt_label (human) used, never response labels (partly LLM jury)"
+  },
+  {
+   "name": "hh_rlhf",
+   "role": "match list only (human turns); no rows enter items.json",
+   "url": "https://huggingface.co/datasets/Anthropic/hh-rlhf",
+   "version": "HF rev 09be8c5bbc57cb3887f3a9732ad6aa7ec602a1fa; LICENSE from GitHub anthropics/hh-rlhf c72f5ce; fetched 2026-09-27",
+   "licence": "MIT",
+   "licence_verified_at": "GitHub LICENSE at c72f5ce; HF card 'license: mit' (2026-09-27)",
+   "files": [
+    {
+     "path": "hh_rlhf/README.md",
+     "url": "https://huggingface.co/datasets/Anthropic/hh-rlhf/resolve/09be8c5bbc57cb3887f3a9732ad6aa7ec602a1fa/README.md",
+     "bytes": 5771,
+     "sha256": "f75f40db0268656ba07736ec8e59a9720c1910ce554c85354cec74b1c8bda175"
+    },
+    {
+     "path": "hh_rlhf/harmless-base__train.jsonl.gz",
+     "url": "https://huggingface.co/datasets/Anthropic/hh-rlhf/resolve/09be8c5bbc57cb3887f3a9732ad6aa7ec602a1fa/harmless-base/train.jsonl.gz",
+     "bytes": 13197306,
+     "sha256": "bf3e1ecd3db61bf21d190f69351d26670c67aababa0fd282fa008c17a7202217"
+    },
+    {
+     "path": "hh_rlhf/harmless-base__test.jsonl.gz",
+     "url": "https://huggingface.co/datasets/Anthropic/hh-rlhf/resolve/09be8c5bbc57cb3887f3a9732ad6aa7ec602a1fa/harmless-base/test.jsonl.gz",
+     "bytes": 742801,
+     "sha256": "ebfaaed21162a4de120ae85366075b34425e2a6303fac59b99555002f7016f03"
+    },
+    {
+     "path": "hh_rlhf/red-team-attempts__red_team_attempts.jsonl.gz",
+     "url": "https://huggingface.co/datasets/Anthropic/hh-rlhf/resolve/09be8c5bbc57cb3887f3a9732ad6aa7ec602a1fa/red-team-attempts/red_team_attempts.jsonl.gz",
+     "bytes": 15483307,
+     "sha256": "4c7b0069991460f0064f279fd400b51f3f0095697d14d7793c49b0925f80814f"
+    },
+    {
+     "path": "hh_rlhf/LICENSE",
+     "url": "https://raw.githubusercontent.com/anthropics/hh-rlhf/c72f5cee8eb7b4d2ea5617657f4430d5e333af07/LICENSE",
+     "bytes": 1066,
+     "sha256": "d4fb18db48757e273261a5597b8a09381de8073da060474ce33d0643e06c875e"
+    }
+   ],
+   "rows_used": {
+    "human_turns_in_match_list": 126192
+   },
+   "personal_data": "red_team_member_id never read; assistant turns (LLM output) never read"
+  },
+  {
+   "name": "se_politeness",
+   "role": "TONE HELD-OUT (20% dev / 80% sealed test); Binary 1/0/-1 -> warm/neutral/curt",
+   "url": "https://convokit.cornell.edu/documentation/stack_politeness.html",
+   "version": "ConvoKit stack-exchange-politeness-corpus.zip (sha d5be7586...81a3, fetched 2026-09-26)",
+   "licence": "CC BY 4.0 (ConvoKit); SE text CC BY-SA",
+   "licence_verified_at": "docs/clean-data.md (2026-09-26); decision 31 (SE accepted; the corpus predates 2022-11)",
+   "files": [
+    {
+     "path": "politeness/stack-exchange-politeness-corpus/utterances.jsonl",
+     "bytes": 14243732,
+     "sha256": "7b21d5026c1b20ae70c19d84e34892c1acab7f7771575b317dfbc179ac7d2fa4"
+    }
+   ],
+   "rows_used": {
+    "tone/test": 5290,
+    "tone/dev": 1313
+   },
+   "personal_data": "`user` never read; text scrubbed"
+  },
+  {
+   "name": "hatecheck",
+   "role": "report-only functional suite; fetched and counted, NOT scored",
+   "url": "https://github.com/paul-rottger/hatecheck-data",
+   "version": "commit 3490854f969111a32c55c05f0d9788b471337fa9",
+   "licence": "CC BY 4.0",
+   "licence_verified_at": "repo LICENSE at commit + GitHub licence API CC-BY-4.0 (2026-09-27)",
+   "files": [
+    {
+     "path": "hatecheck/LICENSE",
+     "url": "https://raw.githubusercontent.com/paul-rottger/hatecheck-data/3490854f969111a32c55c05f0d9788b471337fa9/LICENSE",
+     "bytes": 18656,
+     "sha256": "9e5f1b3c610b9c2da5c313bf81d577a7d1acec686bdb0384edefa6df0f90cd94"
+    },
+    {
+     "path": "hatecheck/README.md",
+     "url": "https://raw.githubusercontent.com/paul-rottger/hatecheck-data/3490854f969111a32c55c05f0d9788b471337fa9/README.md",
+     "bytes": 2744,
+     "sha256": "4b609fe3c0978c03d70c6db19eafb5cd74664c69608a6a7a4de5a6cfff4f2531"
+    },
+    {
+     "path": "hatecheck/test_suite_cases.csv",
+     "url": "https://raw.githubusercontent.com/paul-rottger/hatecheck-data/3490854f969111a32c55c05f0d9788b471337fa9/test_suite_cases.csv",
+     "bytes": 664630,
+     "sha256": "ecf0dc1e93fccc90b6f880e632b19e635c0f0a68b3157915a9e20b6938f121cf"
+    }
+   ],
+   "rows_used": {
+    "cases": 3728,
+    "hateful": 2563,
+    "non-hateful": 1165,
+    "functionalities": 29
+   },
+   "personal_data": "none (templated)"
+  },
+  {
+   "name": "xstest",
+   "role": "report-only (safe half should be `fine`); NOT scored",
+   "url": "https://github.com/paul-rottger/xstest",
+   "version": "commit d7bb5bd738c1fcbc36edd83d5e7d1b71a3e2d84d (model_completions not fetched)",
+   "licence": "CC BY 4.0 (prompts)",
+   "licence_verified_at": "LICENSE and readme.md 'XSTest prompts are subject to CC-BY-4.0' (2026-09-27)",
+   "files": [
+    {
+     "path": "xstest/LICENSE",
+     "url": "https://raw.githubusercontent.com/paul-rottger/xstest/d7bb5bd738c1fcbc36edd83d5e7d1b71a3e2d84d/LICENSE",
+     "bytes": 18656,
+     "sha256": "9e5f1b3c610b9c2da5c313bf81d577a7d1acec686bdb0384edefa6df0f90cd94"
+    },
+    {
+     "path": "xstest/readme.md",
+     "url": "https://raw.githubusercontent.com/paul-rottger/xstest/d7bb5bd738c1fcbc36edd83d5e7d1b71a3e2d84d/readme.md",
+     "bytes": 2772,
+     "sha256": "51488f4032ba007b0345449e63293fccf5588cde1a967e3897107c6e08b532ce"
+    },
+    {
+     "path": "xstest/xstest_prompts.csv",
+     "url": "https://raw.githubusercontent.com/paul-rottger/xstest/d7bb5bd738c1fcbc36edd83d5e7d1b71a3e2d84d/xstest_prompts.csv",
+     "bytes": 38719,
+     "sha256": "11783fb294ed017473ee53c207d71f2161c7672c8d0b037501e78387f801cb5a"
+    }
+   ],
+   "rows_used": {
+    "prompts": 450,
+    "safe": 250,
+    "unsafe": 200
+   },
+   "personal_data": "none (hand-written)"
+  },
+  {
+   "name": "simplesafetytests",
+   "role": "report-only; NOT scored (20 self-harm prompts: self-harm is outside the taxonomy)",
+   "url": "https://github.com/bertiev/SimpleSafetyTests",
+   "version": "commit d7aee9a9422a5a5488f478fd79c2479c891c0f3b",
+   "licence": "CC BY 4.0",
+   "licence_verified_at": "LICENSE; README 'Licence is CC-BY' (2026-09-27)",
+   "files": [
+    {
+     "path": "simplesafetytests/LICENSE",
+     "url": "https://raw.githubusercontent.com/bertiev/SimpleSafetyTests/d7aee9a9422a5a5488f478fd79c2479c891c0f3b/LICENSE",
+     "bytes": 18650,
+     "sha256": "7e7170e3cebf88a9f60c7b8421418323c09304da1af4d5e90f4da1dc1c8a2661"
+    },
+    {
+     "path": "simplesafetytests/README.md",
+     "url": "https://raw.githubusercontent.com/bertiev/SimpleSafetyTests/d7aee9a9422a5a5488f478fd79c2479c891c0f3b/README.md",
+     "bytes": 703,
+     "sha256": "ca1a8620a9e3e443117052fc62de20864000c75f2ddc99d7fddc552d555f50de"
+    },
+    {
+     "path": "simplesafetytests/SimpleSafetyTests - test cases.csv",
+     "url": "https://raw.githubusercontent.com/bertiev/SimpleSafetyTests/d7aee9a9422a5a5488f478fd79c2479c891c0f3b/SimpleSafetyTests%20-%20test%20cases.csv",
+     "bytes": 12610,
+     "sha256": "6d95a1301e0d0f3a3c4cf5392f4afff11ad6e3066f95d23aaa138d44aedf986c"
+    }
+   ],
+   "rows_used": {
+    "prompts": 100
+   },
+   "personal_data": "none (hand-written)"
+  }
+ ],
+ "not_used": [
+  {
+   "name": "wikipedia_toxicity_subtypes",
+   "reason": "publisher copies unobtainable 2026-09-27: gs://jigsaw-unintended-bias-in-toxicity-classification/wikipedia_toxicity_subtypes.zip HTTP 403; Kaggle needs login + competition rules; HF google/jigsaw_toxicity_pred is a manual-download loader. Its comments are a subset of the Detox comments; only its subtype labels are lost."
+  },
+  {
+   "name": "convabuse",
+   "reason": "research verdict CAUTION (ELIZA consent unclear); not fetched. The tone `hostile` end therefore has no held-out test."
+  },
+  {
+   "name": "wiki_detox_toxicity",
+   "reason": "secondary in the plan; not needed by the mapping; not fetched"
+  }
+ ],
+ "counts_final": {
+  "harm": {
+   "train": {
+    "total": 21498,
+    "fine": 5000,
+    "by_source": {
+     "civil_comments": 11617,
+     "wiki_detox_attack": 3830,
+     "dynahate": 3592,
+     "hatemojibuild": 2459
+    },
+    "harassment": 5000,
+    "hate": 4998,
+    "sexual": 3000,
+    "threat": 3500
+   },
+   "val": {
+    "total": 1865,
+    "fine": 451,
+    "by_source": {
+     "civil_comments": 959,
+     "wiki_detox_attack": 383,
+     "dynahate": 326,
+     "hatemojibuild": 197
+    },
+    "harassment": 494,
+    "sexual": 195,
+    "hate": 450,
+    "threat": 275
+   },
+   "test": {
+    "total": 2582,
+    "harassment": 255,
+    "by_source": {
+     "aegis1": 1425,
+     "aegis2": 1157
+    },
+    "fine": 1451,
+    "sexual": 196,
+    "hate": 343,
+    "threat": 337
+   },
+   "dev": {
+    "total": 616,
+    "fine": 339,
+    "by_source": {
+     "aegis1": 331,
+     "aegis2": 285
+    },
+    "harassment": 62,
+    "threat": 80,
+    "sexual": 49,
+    "hate": 86
+   }
+  },
+  "tone": {
+   "train": {
+    "total": 16768,
+    "neutral": 5000,
+    "by_source": {
+     "wiki_detox_aggression": 8483,
+     "wiki_politeness": 3193,
+     "civil_comments": 5092
+    },
+    "warm": 2099,
+    "curt": 4669,
+    "hostile": 5000
+   },
+   "val": {
+    "total": 1649,
+    "neutral": 499,
+    "by_source": {
+     "wiki_detox_aggression": 862,
+     "wiki_politeness": 328,
+     "civil_comments": 459
+    },
+    "warm": 222,
+    "curt": 432,
+    "hostile": 496
+   },
+   "test": {
+    "total": 5290,
+    "neutral": 2644,
+    "by_source": {
+     "se_politeness": 5290
+    },
+    "warm": 1324,
+    "curt": 1322
+   },
+   "dev": {
+    "total": 1313,
+    "neutral": 657,
+    "by_source": {
+     "se_politeness": 1313
+    },
+    "warm": 327,
+    "curt": 329
+   }
+  }
+ },
+ "near_dup": {
+  "harm": {
+   "heldout_dev_moved_to_test": 23,
+   "pool_near_heldout_dropped": {
+    "train": 2,
+    "val": 1
+   },
+   "val_near_train_dropped": 109
+  },
+  "tone": {
+   "heldout_dev_moved_to_test": 7,
+   "pool_near_heldout_dropped": {
+    "train": 5,
+    "val": 1
+   },
+   "val_near_train_dropped": 24
+  }
+ },
+ "build_report": {
+  "harm": {
+   "available_after_mapping_and_exact_dedupe": {
+    "train": {
+     "civil_comments": {
+      "fine": 1220375,
+      "harassment": 96955,
+      "hate": 11850,
+      "sexual": 4575,
+      "threat": 4238
+     },
+     "wiki_detox_attack": {
+      "fine": 51254,
+      "harassment": 13991
+     },
+     "dynahate": {
+      "hate": 17205,
+      "fine": 15172,
+      "threat": 500
+     },
+     "hatemojibuild": {
+      "hate": 2384,
+      "fine": 2337
+     }
+    },
+    "val": {
+     "civil_comments": {
+      "fine": 65994,
+      "harassment": 5215,
+      "sexual": 196,
+      "hate": 598,
+      "threat": 221
+     },
+     "wiki_detox_attack": {
+      "fine": 5733,
+      "harassment": 1502
+     },
+     "dynahate": {
+      "hate": 2108,
+      "fine": 1932,
+      "threat": 58
+     },
+     "hatemojibuild": {
+      "fine": 319,
+      "hate": 270
+     }
+    }
+   },
+   "exact_dupes_dropped": 24244,
+   "pool_exact_matches_of_heldout_dropped": 1625,
+   "empty_after_scrub": 5,
+   "heldout_stats": {
+    "hh_human_turns": 126192,
+    "aegis1_user_message": 3458,
+    "aegis1_hh_matched": 3439,
+    "aegis2_prompt_only": 16608,
+    "aegis2_hh_matched": 5618,
+    "aegis_dupe_groups_conflicting_dropped": 38,
+    "aegis_dupes_collapsed": 1754
+   }
+  },
+  "tone": {
+   "available_after_mapping_and_exact_dedupe": {
+    "train": {
+     "wiki_detox_aggression": {
+      "neutral": 68635,
+      "warm": 1124,
+      "curt": 8188,
+      "hostile": 7300
+     },
+     "wiki_politeness": {
+      "curt": 987,
+      "neutral": 1964,
+      "warm": 978
+     },
+     "civil_comments": {
+      "neutral": 1220473,
+      "hostile": 55812,
+      "curt": 684
+     }
+    },
+    "val": {
+     "wiki_detox_aggression": {
+      "neutral": 7719,
+      "warm": 128,
+      "curt": 880,
+      "hostile": 800
+     },
+     "wiki_politeness": {
+      "warm": 106,
+      "neutral": 205,
+      "curt": 97
+     },
+     "civil_comments": {
+      "neutral": 65998,
+      "hostile": 3026,
+      "curt": 43
+     }
+    }
+   },
+   "exact_dupes_dropped": 24964,
+   "pool_exact_matches_of_heldout_dropped": 0,
+   "empty_after_scrub": 5,
+   "heldout_stats": {}
+  }
+ }
+}

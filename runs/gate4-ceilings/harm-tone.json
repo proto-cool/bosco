@@ -1,0 +1,164 @@
+{
+ "date": "2026-09-27",
+ "sealed": "held-out test never scored",
+ "fields": {
+  "harm": {
+   "n": {
+    "train": 21498,
+    "val": 1865,
+    "dev": 616
+   },
+   "chance_pool": 0.2,
+   "chance_heldout_dev": 0.2,
+   "lr_768": {
+    "C": 10.0,
+    "pool_val_bal_acc": 0.7397222626182831,
+    "heldout_dev_bal_acc": 0.6284361626798247,
+    "pool_val_recall": {
+     "hate": 0.6844444444444444,
+     "harassment": 0.7773279352226721,
+     "threat": 0.8218181818181818,
+     "sexual": 0.7897435897435897,
+     "fine": 0.6252771618625277
+    },
+    "heldout_dev_recall": {
+     "hate": 0.5581395348837209,
+     "harassment": 0.25806451612903225,
+     "threat": 0.8,
+     "sexual": 0.673469387755102,
+     "fine": 0.8525073746312685
+    },
+    "heldout_dev_pred_dist": {
+     "hate": 66,
+     "harassment": 40,
+     "threat": 111,
+     "sexual": 53,
+     "fine": 346
+    }
+   },
+   "lr_z46": {
+    "C": 1.0,
+    "pool_val_bal_acc": 0.6413611896590075,
+    "heldout_dev_bal_acc": 0.6056795847417696,
+    "pool_val_recall": {
+     "hate": 0.6288888888888889,
+     "harassment": 0.6396761133603239,
+     "threat": 0.7527272727272727,
+     "sexual": 0.6666666666666666,
+     "fine": 0.5188470066518847
+    },
+    "heldout_dev_recall": {
+     "hate": 0.5581395348837209,
+     "harassment": 0.3225806451612903,
+     "threat": 0.825,
+     "sexual": 0.6530612244897959,
+     "fine": 0.6696165191740413
+    },
+    "heldout_dev_pred_dist": {
+     "hate": 65,
+     "harassment": 54,
+     "threat": 156,
+     "sexual": 84,
+     "fine": 257
+    }
+   },
+   "proto_768": {
+    "pool_val_bal_acc": 0.658736897961545,
+    "heldout_dev_bal_acc": 0.6744354782257059,
+    "heldout_dev_recall": {
+     "hate": 0.6162790697674418,
+     "harassment": 0.3870967741935484,
+     "threat": 0.7875,
+     "sexual": 0.7346938775510204,
+     "fine": 0.8466076696165191
+    }
+   },
+   "proto_z46": {
+    "pool_val_bal_acc": 0.600678406460178,
+    "heldout_dev_bal_acc": 0.5813033617804849,
+    "heldout_dev_recall": {
+     "hate": 0.5232558139534884,
+     "harassment": 0.2903225806451613,
+     "threat": 0.8,
+     "sexual": 0.673469387755102,
+     "fine": 0.6194690265486725
+    }
+   },
+   "ceiling_for_bar": 0.6284361626798247,
+   "disputed_bar_0.9x": 0.5655925464118423
+  },
+  "tone": {
+   "n": {
+    "train": 16768,
+    "val": 1649,
+    "dev": 1313
+   },
+   "chance_pool": 0.25,
+   "chance_heldout_dev": 0.3333333333333333,
+   "lr_768": {
+    "C": 10.0,
+    "pool_val_bal_acc": 0.7523995517189566,
+    "heldout_dev_bal_acc": 0.4127873461926978,
+    "pool_val_recall": {
+     "warm": 0.8873873873873874,
+     "neutral": 0.6833667334669339,
+     "curt": 0.6041666666666666,
+     "hostile": 0.8346774193548387
+    },
+    "heldout_dev_recall": {
+     "warm": 0.2782874617737003,
+     "neutral": 0.7290715372907154,
+     "curt": 0.23100303951367782
+    },
+    "heldout_dev_pred_dist": {
+     "warm": 248,
+     "neutral": 904,
+     "curt": 159,
+     "hostile": 2
+    }
+   },
+   "lr_z46": {
+    "C": 1.0,
+    "pool_val_bal_acc": 0.7023773573576809,
+    "heldout_dev_bal_acc": 0.40689607518493637,
+    "pool_val_recall": {
+     "warm": 0.8558558558558559,
+     "neutral": 0.6132264529058116,
+     "curt": 0.5601851851851852,
+     "hostile": 0.780241935483871
+    },
+    "heldout_dev_recall": {
+     "warm": 0.4036697247706422,
+     "neutral": 0.5981735159817352,
+     "curt": 0.2188449848024316
+    },
+    "heldout_dev_pred_dist": {
+     "warm": 409,
+     "neutral": 752,
+     "curt": 150,
+     "hostile": 2
+    }
+   },
+   "proto_768": {
+    "pool_val_bal_acc": 0.6828966629050668,
+    "heldout_dev_bal_acc": 0.38814075673631954,
+    "heldout_dev_recall": {
+     "warm": 0.3944954128440367,
+     "neutral": 0.6118721461187214,
+     "curt": 0.1580547112462006
+    }
+   },
+   "proto_z46": {
+    "pool_val_bal_acc": 0.641925263108153,
+    "heldout_dev_bal_acc": 0.3750027641395873,
+    "heldout_dev_recall": {
+     "warm": 0.1529051987767584,
+     "neutral": 0.6438356164383562,
+     "curt": 0.3282674772036474
+    }
+   },
+   "ceiling_for_bar": 0.4127873461926978,
+   "disputed_bar_0.9x": 0.371508611573428
+  }
+ }
+}
