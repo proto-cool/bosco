@@ -1,0 +1,16 @@
+# Specialist gate 2 results
+
+Pre-registration: `docs/SPECIALIST-GATE-2.md`. Sealed test sets, balanced accuracy, scored once on the CPU; ECE after temperature.
+
+| specialist | design | options | chance | **brain** | ECE | bar | ships | nose alone | prototype alone | plain baseline | CPU s/question |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| topic | A | 14 | 0.071 | **0.884** | 0.027 | 0.800 | **yes** | 0.761 | 0.953 | 0.983 | 0.74 |
+| intent | B | 151 | 0.007 | **0.810** | 0.119 | 0.800 | no | 0.649 | 0.901 | 0.949 | 7.89 |
+| support | B | 18 | 0.056 | **0.829** | 0.035 | 0.800 | **yes** | 0.534 | 0.845 | 0.884 | 1.68 |
+| junk | A | 2 | 0.500 | **0.906** | 0.023 | 0.800 | **yes** | 0.616 | 0.946 | 0.908 | 0.10 |
+| hate | A | 2 | 0.500 | **0.694** | 0.021 | 0.658 | **yes** | 0.487 | 0.644 | 0.711 | 0.10 |
+| politeness | A | 2 | 0.500 | **0.600** | 0.028 | 0.599 | **yes** | 0.554 | 0.642 | 0.661 | 0.10 |
+
+**Ships: topic, support, junk, hate, politeness.**
+
+

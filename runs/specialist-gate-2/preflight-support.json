@@ -1,0 +1,18 @@
+{
+ "task": "support",
+ "design": "B",
+ "loss_first25": 2.766133871078491,
+ "loss_last25": 0.8805237042903901,
+ "held_before": 0.06614572417329029,
+ "held_after": 0.6988065055923711,
+ "chance": 0.05555555555555557,
+ "checks": {
+  "kc_at_start_2_to_15pct": true,
+  "read_not_dead": true,
+  "loss_falls": true,
+  "gradients_reach_90pct_types": true,
+  "held_above_chance": true
+ },
+ "pass": true,
+ "wall_s": 239.44715976715088
+}
