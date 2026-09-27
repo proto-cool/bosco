@@ -160,6 +160,18 @@ power it, and it needs the fly to make honest decisions."
     not mean screening prompts sent to an AI, which would be a separate specialist later. It is built as
     separate yes/no experts (hate, threat, harassment, sexual; tone as a component), tested across
     platforms with one source held back at a time. HateCheck stays unscored until it is used as a gate test.
+36. **Sharp yes/no questions over broad menus** (Nick, 2026-09-27; runs/gate4-ceilings/reframe.json).
+    Across intent, finance, harm and tone, yes/no framings carry to a held-back source and broad
+    multiple-choice ones do not (through his nose, held-out dev: p(social) 0.885, p(problem) 0.839, p(harm)
+    0.798, p(credit and debt) 0.782, against 0.40–0.61 for the full menus). Gate 4 candidates:
+    - **candidates:** p(harm) (the headline harm question), p(problem), p(social), p(credit and debt);
+    - **follow-up experts** (asked when p(harm) is high): threat, sexual, hate, harassment;
+    - **not ready:** p(cancel or change) and p(fraud or scam);
+    - **tone is out of Gate 4.** No framing transfers from Wikipedia to Stack Exchange. It can return
+      only as a calibrated component (decision 34);
+    - **broad menus** (28 intents, 15 finance areas) stay single-source specialists and say so on their
+      cards.
+    Topic, language and danger get the same check when their data is built.
 
 ## Open (Nick to decide)
 
