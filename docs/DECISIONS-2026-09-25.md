@@ -144,6 +144,21 @@ power it, and it needs the fly to make honest decisions."
     rows cannot be checked one by one: Wikipedia, Wikinews, Stack Exchange and CFPB. Fixed crowd-written
     datasets that predate it need no cutoff. Cards say "text up to 2022". It may be relaxed per source only
     for supervised human writing under a no-AI-tools rule, written down before use.
+34. **The consensus is the human's** (Nick, 2026-09-27: "it's the human's judgment out of all of the
+    questions they asked Bosco and the answers he gave back. You're asking your group of experts"). Bosco
+    does not vote or combine; decision 24 stands. Each specialist answers its own question with an honest
+    probability, and the person weighs the answers. Consequences:
+    - Calibration is a first-class requirement. A wrong answer given with confidence misleads the person's
+      judgment; an unsure one does not.
+    - Specialists that are only meaningful beside others (tone first) may ship as **components**. They
+      must be calibrated on the held-back source (ECE ≤ 0.10) and better than chance where they are
+      confident. Their cards say they are a second opinion, never a verdict. The exact component bar is
+      pre-registered with Gate 4.
+35. **Harm is the priority** (Nick, 2026-09-27: "flagging potentially harmful content is a huge value
+    add… we need to crack this"). Harm means **content moderation**: is this text itself harmful. It does
+    not mean screening prompts sent to an AI, which would be a separate specialist later. It is built as
+    separate yes/no experts (hate, threat, harassment, sexual; tone as a component), tested across
+    platforms with one source held back at a time. HateCheck stays unscored until it is used as a gate test.
 
 ## Open (Nick to decide)
 
