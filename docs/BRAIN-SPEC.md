@@ -112,3 +112,32 @@ val split to score, with no model selection on val):
 - **T5:** L3 and L4 on the 200 label-free items with the trained weights, plus L5 as amended (item 1).
 - **T6:** the layered control, with its own label-free start and the real brain's read cells, trained with the
   same recipe and scored the same way. Reported beside the real brain, with no pass or fail.
+
+## Amendment 2 (2026-09-28, Nick agreed; written before the runs it governs): seeds, sampling error, T7
+
+Amendment 1's trained checks came from one seed on one validation set: 0.727 against 0.724, and 78.9% against 80%,
+could be noise either way. From now on:
+
+- **Seeds.** Every trained arm (real, real on flipped labels, layered) is trained with seeds 1–5. Only the
+  training seed changes, and with it the batch order. The antenna, the label-free starts, the read cells and the
+  layered wiring (shuffle seed 1) stay as in amendment 1. Amendment 1's runs are seed 1; they are kept as they
+  are, not retrained.
+- **Sampling error in every bar (audit decision 5).** Each trained statistic is recomputed over 2,000 bootstrap
+  draws. Each draw resamples the 5 seeds with replacement and the 1,865 validation items with replacement (the
+  same items for every seed and arm within a draw), and averages the statistic over the drawn seeds.
+  - An "at least" bar passes if the draws' 5th percentile clears it.
+  - An "at most" bar passes if their 95th percentile does.
+  - The label-free KC measures in T5 must hold for every seed.
+  - The rule is seeded (20260928) and deterministic.
+- **T1–T5 as in amendment 1,** under this rule. T1, for example, passes if the 5th percentile of (brain balanced
+  accuracy − logistic balanced accuracy) is ≥ −0.05.
+- **T7, new: the real wiring carries the memory to the DNs.** In the fly, what an odour means is stored at KC→MBON
+  and has to reach the motor side. A random expansion can learn the same items without carrying them through
+  real circuits. Pass if the 5th percentile of (real trained read s.d. ÷ layered trained read s.d.) is ≥ 2.
+  - The read s.d. is the s.d. across validation items of approach − avoid, taken from the served logits as
+    (logit − c) / (10 k).
+  - Seed 1 measured 7.0 (0.0121 against 0.0017).
+  - Both arms are trained with the same recipe and scored on the same items.
+- **T6 still has no pass or fail.** The real-minus-layered balanced accuracy is reported with its 90% bootstrap
+  interval.
+- **Cost:** 12 new trainings on the 3080 (4 seeds × 3 arms), and scoring on the Mac CPU through `answer`.

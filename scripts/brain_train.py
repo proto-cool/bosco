@@ -1,16 +1,18 @@
-"""Trained brain checks T1-T6 (docs/BRAIN-SPEC.md and its amendment 1). One yes/no task, `harmful`, train/val only.
+"""Trained brain checks T1-T7 (docs/BRAIN-SPEC.md, amendments 1 and 2). One yes/no task, `harmful`, train/val only.
 
 Train (the 3080): only the KC->MBON memory (kp_logm) and the read's scale and offset (log_k, c) learn, from the
 label-free start of scripts/brain_check.py (its antenna, operating point, resting state and DN read). Recipe fixed in
-amendment 1: class-balanced BCE, Adam lr 0.03, batch 64, 3 epochs, seed 1, every sniff from the resting state
-(re-settled, detached, every 20 batches). No model selection on val.
+amendment 1: class-balanced BCE, Adam lr 0.03, batch 64, 3 epochs, every sniff from the resting state (re-settled,
+detached, every 20 batches). No model selection on val. Amendment 2: seeds 1-5 (the batch order).
 
-    uv run python scripts/brain_train.py train --arm real [--flip] --device cuda
-    uv run python scripts/brain_train.py train --arm layered --device cuda
+    uv run python scripts/brain_train.py train --arm real [--flip] --seed N --device cuda
+    uv run python scripts/brain_train.py train --arm layered --seed N --device cuda
 
-Score (the Mac CPU, the served path `RateBrain3.answer`): T1-T6 into runs/brain-train/checks.json.
+Score one seed (the Mac CPU, the served path `RateBrain3.answer`): per-item logits into runs/brain-train/seedN.npz.
+Aggregate: the bootstrap over seeds and items (amendment 2) into runs/brain-train/checks.json.
 
-    uv run --with scikit-learn python scripts/brain_train.py score
+    uv run --with scikit-learn python scripts/brain_train.py score --seed N
+    uv run --with scikit-learn python scripts/brain_train.py aggregate
 """
 
 from __future__ import annotations
@@ -34,7 +36,13 @@ from bosco import ratebrain3 as R3  # noqa: E402
 DATA = paths.CACHE / "v1-harm-dev"
 TASK = "harmful"
 OUT = paths.ROOT / "runs" / "brain-train"
-LR, BATCH, EPOCHS, SEED, RESETTLE = 0.03, 64, 3, 1, 20
+LR, BATCH, EPOCHS, RESETTLE = 0.03, 64, 3, 20
+SEEDS = (1, 2, 3, 4, 5)
+BOOT, BOOT_SEED = 2000, 20260928
+
+
+def name(arm: str, flip: bool, seed: int) -> str:
+    return f"{arm}{'-flip' if flip else ''}-s{seed}"
 
 
 def harm(split: str):
@@ -59,8 +67,8 @@ def load_brain(arm: str, device: str) -> R3.RateBrain3:
     return m
 
 
-def train(arm: str, flip: bool, device: str) -> None:
-    torch.manual_seed(SEED)
+def train(arm: str, flip: bool, seed: int, device: str) -> None:
+    torch.manual_seed(seed)
     m = load_brain(arm, device)
     m.thaw()
     for p in m.parameters():
@@ -78,16 +86,14 @@ def train(arm: str, flip: bool, device: str) -> None:
     pos = float(Y.mean())
     weight = torch.where(Y > 0.5, 0.5 / pos, 0.5 / (1 - pos))  # class-balanced
     opt = torch.optim.Adam(params, lr=LR)
-    rng = np.random.default_rng(SEED)
+    rng = np.random.default_rng(seed)
     log, t0, step = [], time.time(), 0
-    name = f"{arm}{'-flip' if flip else ''}"
     for ep in range(EPOCHS):
-        for bi, start in enumerate(range(0, len(S), BATCH)):
+        perm = torch.tensor(rng.permutation(len(S)), device=device)
+        for start in range(0, len(S), BATCH):
             if step % RESETTLE == 0:
                 m.r_rest = None
                 m.settle(rest)  # detached: the resting state under the current memory
-            if bi == 0:
-                perm = torch.tensor(rng.permutation(len(S)), device=device)
             b = perm[start : start + BATCH]
             logit, _, _ = m.run(S[b])
             loss = (torch.nn.functional.binary_cross_entropy_with_logits(logit, Y[b], reduction="none") * weight[b]).mean()
@@ -101,9 +107,9 @@ def train(arm: str, flip: bool, device: str) -> None:
                 print(json.dumps(log[-1]), flush=True)
     OUT.mkdir(parents=True, exist_ok=True)
     torch.save({"kp_logm": m.kp_logm.detach().cpu(), "log_k": m.log_k.detach().cpu(), "c": m.c.detach().cpu(),
-                "arm": arm, "flip": flip, "log": log, "recipe": {"lr": LR, "batch": BATCH, "epochs": EPOCHS,
-                                                                  "seed": SEED, "resettle": RESETTLE}},
-               OUT / f"{name}.pt")
+                "arm": arm, "flip": flip, "seed": seed, "log": log,
+                "recipe": {"lr": LR, "batch": BATCH, "epochs": EPOCHS, "resettle": RESETTLE}},
+               OUT / f"{name(arm, flip, seed)}.pt")
 
 
 # ---- scoring (CPU, the served path) ----------------------------------------------------------------------------
@@ -117,122 +123,147 @@ def with_memory(m, kp_logm, log_k, c, rest):
     m.settle(rest)
 
 
-def bal_acc(y, yes) -> tuple[float, float, float]:
-    r1 = float((yes[y == 1]).mean())
-    r0 = float((~yes[y == 0]).mean())
-    return (r1 + r0) / 2, r1, r0
-
-
-def score_layered(Sva, yva, rest, logits) -> dict:
-    """T6: the layered control, scored like the real brain (reported, no pass or fail)."""
-    lay = torch.load(OUT / "layered.pt")
-    ml = BC.brain("layered", M2.load_or_build())
-    BC.load_start(ml, "layered")
-    with_memory(ml, lay["kp_logm"], lay["log_k"], lay["c"], rest)
-    z_l, _ = logits(ml)
-    ba_l, r1_l, r0_l = bal_acc(yva, z_l >= 0)
-    with_memory(ml, torch.zeros_like(lay["kp_logm"]), lay["log_k"], lay["c"], rest)
-    z_lr, _ = logits(ml)
-    return {"bal_acc": ba_l, "recall_yes": r1_l, "recall_no": r0_l, "reset_bal_acc": bal_acc(yva, z_lr >= 0)[0],
-            "read_sd": float(np.std((z_l - float(lay["c"])) / (10 * float(torch.exp(lay["log_k"])))))}
-
-
-def score_control() -> int:
-    """T6 alone, merged into checks.json (the layered model finished after the real brain was scored)."""
+def score_seed(seed: int) -> int:
+    """Every logit amendments 1-2 need for one seed, per validation item, through `answer`."""
     torch.set_num_threads(BC.THREADS)
     ant = BC.antenna()
     rest = torch.tensor(ant.resting())
-    Xva, yva = harm("val")
-    Sva = torch.tensor(ant(Xva))
-    res = json.load(open(OUT / "checks.json"))
-    res["layered"] = score_layered(Sva, yva, rest, lambda m: (m.answer(Sva).numpy(), 0.0))
-    json.dump(res, open(OUT / "checks.json", "w"), indent=1)
-    print(json.dumps(res["layered"], indent=1))
+    Sva = torch.tensor(ant(harm("val")[0]))
+    b2 = M2.load_or_build()
+    out, info = {}, {"seed": seed}
+    for arm, flips in (("real", True), ("layered", False)):
+        tr = torch.load(OUT / f"{name(arm, False, seed)}.pt")
+        m = BC.brain(arm, b2)
+        BC.load_start(m, arm)
+        zero = torch.zeros_like(tr["kp_logm"])
+        with_memory(m, tr["kp_logm"], tr["log_k"], tr["c"], rest)
+        t0 = time.time()
+        out[f"{arm}_trained"] = m.answer(Sva).numpy()
+        info[f"{arm}_s_per_answer"] = (time.time() - t0) / len(Sva)
+        info[f"{arm}_k"], info[f"{arm}_c"] = float(torch.exp(tr["log_k"])), float(tr["c"])
+        if arm == "real":  # T5: the label-free KC measures with the trained weights (200 gate-2 items)
+            lf = BC.measure(m, torch.tensor(ant(BC.items()[0])), rest)
+            info["real_trained_label_free"] = {k: lf[k] for k in ("kc_active_per_sniff", "kc_ever_active",
+                                                                  "kc_jaccard_between_items")}
+        with_memory(m, zero, tr["log_k"], tr["c"], rest)
+        out[f"{arm}_reset"] = m.answer(Sva).numpy()
+        if flips:
+            fl = torch.load(OUT / f"{name(arm, True, seed)}.pt")
+            with_memory(m, fl["kp_logm"], tr["log_k"], tr["c"], rest)
+            out[f"{arm}_swapped"] = m.answer(Sva).numpy()
+    np.savez(OUT / f"seed{seed}.npz", **out)
+    json.dump(info, open(OUT / f"seed{seed}.json", "w"), indent=1)
+    print(json.dumps(info, indent=1))
     return 0
 
 
-def score() -> int:
+# ---- the bootstrap (amendment 2) -------------------------------------------------------------------------------
+def bal_acc(y, yes, w):
+    """Balanced accuracy with item weights w (bootstrap counts)."""
+    r1 = (w * yes * (y == 1)).sum() / (w * (y == 1)).sum()
+    r0 = (w * ~yes * (y == 0)).sum() / (w * (y == 0)).sum()
+    return (r1 + r0) / 2, r1, r0
+
+
+def wsd(x, w):
+    mu = (w * x).sum() / w.sum()
+    return float(np.sqrt((w * (x - mu) ** 2).sum() / w.sum()))
+
+
+def wr2(a, b, w):
+    ma, mb = (w * a).sum() / w.sum(), (w * b).sum() / w.sum()
+    cov = (w * (a - ma) * (b - mb)).sum()
+    va, vb = (w * (a - ma) ** 2).sum(), (w * (b - mb) ** 2).sum()
+    return float(cov**2 / (va * vb)) if va > 0 and vb > 0 else 0.0
+
+
+def stats(y, z, info, lr_yes, w) -> dict:
+    """Every trained statistic for one seed on item weights w."""
+    kr, cr, kl, cl = info["real_k"], info["real_c"], info["layered_k"], info["layered_c"]
+    ba, r1, r0 = bal_acc(y, z["real_trained"] >= 0, w)
+    ba_re = bal_acc(y, z["real_reset"] >= 0, w)[0]
+    ba_l = bal_acc(y, z["layered_trained"] >= 0, w)[0]
+    sd_r = wsd((z["real_trained"] - cr) / (10 * kr), w)
+    sd_l = wsd((z["layered_trained"] - cl) / (10 * kl), w)
+    flipped = (w * ((z["real_swapped"] >= 0) != (z["real_trained"] >= 0))).sum() / w.sum()
+    return {
+        "bal_acc": ba, "recall_yes": r1, "recall_no": r0,
+        "T1_margin_vs_logistic": ba - bal_acc(y, lr_yes, w)[0],
+        "T2_drop_minus_bar": (ba - ba_re) - 0.75 * (ba - 0.5),
+        "reset_bal_acc": ba_re,
+        "T3_flipped_share": flipped,
+        "T4_min_recall": min(r1, r0),
+        "T4_untrained_share_r2": wr2(z["real_trained"], z["real_reset"], w),
+        "T5_trained_read_sd": sd_r,
+        "layered_bal_acc": ba_l, "layered_reset_bal_acc": bal_acc(y, z["layered_reset"] >= 0, w)[0],
+        "layered_read_sd": sd_l,
+        "T6_real_minus_layered": ba - ba_l,
+        "T7_read_sd_ratio": sd_r / sd_l if sd_l > 0 else float("inf"),
+    }
+
+
+def aggregate() -> int:
     from sklearn.linear_model import LogisticRegression
 
-    torch.set_num_threads(BC.THREADS)
     ant = BC.antenna()
-    rest = torch.tensor(ant.resting())
     Xtr, ytr = harm("train")
     Xva, yva = harm("val")
-    Sva = torch.tensor(ant(Xva))
-    res: dict = {"n_val": int(len(yva)), "val_positive_share": float(yva.mean())}
     lr = LogisticRegression(C=1.0, class_weight="balanced", max_iter=2000).fit(ant(Xtr), ytr)
-    res["logistic_46"] = bal_acc(yva, lr.predict(ant(Xva)) > 0.5)[0]
-
-    def logits(m):
-        t0 = time.time()
-        z = m.answer(Sva).numpy()
-        return z, time.time() - t0
-
-    trained = torch.load(OUT / "real.pt")
-    flipped = torch.load(OUT / "real-flip.pt")
-    m = BC.brain("real", M2.load_or_build())
-    BC.load_start(m, "real")
-    zero = torch.zeros_like(trained["kp_logm"])
-    # untrained memory with the start's own read (k=1, c=0): the reported untrained L5
-    with_memory(m, zero, torch.tensor(0.0), torch.tensor(0.0), rest)
-    z_un, _ = logits(m)
-    res["untrained_read_sd"] = float(np.std(z_un / 10.0))
-    # trained
-    with_memory(m, trained["kp_logm"], trained["log_k"], trained["c"], rest)
-    z_tr, dt = logits(m)
-    k = float(torch.exp(trained["log_k"]))
-    ba, r1, r0 = bal_acc(yva, z_tr >= 0)
-    res["trained"] = {"bal_acc": ba, "recall_yes": r1, "recall_no": r0, "k": k, "c": float(trained["c"]),
-                      "read_sd": float(np.std((z_tr - float(trained["c"])) / (10 * k))),
-                      "logit_sd": float(np.std(z_tr)), "s_per_answer": dt / len(yva)}
-    # T5: the label-free KC measures with the trained weights
-    Xe = BC.items()[0]
-    lf = BC.measure(m, torch.tensor(ant(Xe)), rest)
-    res["trained_label_free"] = {k2: lf[k2] for k2 in ("kc_active_per_sniff", "kc_ever_active",
-                                                       "kc_jaccard_between_items")}
-    # T2: memory reset, trained k and c
-    with_memory(m, zero, trained["log_k"], trained["c"], rest)
-    z_re, _ = logits(m)
-    res["reset"] = {"bal_acc": bal_acc(yva, z_re >= 0)[0]}
-    # T3: the flipped copy's memory in the original
-    with_memory(m, flipped["kp_logm"], trained["log_k"], trained["c"], rest)
-    z_sw, _ = logits(m)
-    res["swapped"] = {"flipped_share": float(((z_sw >= 0) != (z_tr >= 0)).mean())}
-    # T4: share of the trained logits explained by the untrained part
-    r2 = float(np.corrcoef(z_tr, z_re)[0, 1] ** 2) if np.std(z_re) > 0 else 0.0
-    res["untrained_share_r2"] = r2
-    # T6: layered control
-    if (OUT / "layered.pt").exists():
-        res["layered"] = score_layered(Sva, yva, rest, logits)
-    t = res["trained"]
-    res["checks"] = {
-        "T1_learns": t["bal_acc"] >= res["logistic_46"] - 0.05,
-        "T2_memory_is_the_learner": (t["bal_acc"] - res["reset"]["bal_acc"]) >= 0.75 * (t["bal_acc"] - 0.5),
-        "T3_memory_carries_answer": res["swapped"]["flipped_share"] >= 0.80,
-        "T4_recall_both_ge_0.5": min(t["recall_yes"], t["recall_no"]) >= 0.5,
-        "T4_untrained_share_le_0.2": r2 <= 0.2,
-        "T5_L3": 0.02 <= res["trained_label_free"]["kc_active_per_sniff"] <= 0.10,
-        "T5_L4": res["trained_label_free"]["kc_ever_active"] >= 0.5
-        and res["trained_label_free"]["kc_jaccard_between_items"] <= 0.25,
-        "T5_L5_trained_read_sd_ge_0.01": t["read_sd"] >= 0.01,
+    lr_yes = lr.predict(ant(Xva)) > 0.5
+    seeds = [s for s in SEEDS if (OUT / f"seed{s}.npz").exists()]
+    Z = {s: dict(np.load(OUT / f"seed{s}.npz")) for s in seeds}
+    info = {s: json.load(open(OUT / f"seed{s}.json")) for s in seeds}
+    ones = np.ones(len(yva))
+    per_seed = {s: stats(yva, Z[s], info[s], lr_yes, ones) for s in seeds}
+    rng = np.random.default_rng(BOOT_SEED)
+    keys = list(per_seed[seeds[0]])
+    draws = {k: np.empty(BOOT) for k in keys}
+    for i in range(BOOT):
+        pick = rng.choice(seeds, len(seeds), replace=True)
+        w = np.bincount(rng.integers(0, len(yva), len(yva)), minlength=len(yva)).astype(float)
+        st = [stats(yva, Z[s], info[s], lr_yes, w) for s in pick]
+        for k in keys:
+            draws[k][i] = np.mean([x[k] for x in st])
+    summary = {k: {"mean": float(np.mean([per_seed[s][k] for s in seeds])),
+                   "p5": float(np.percentile(draws[k], 5)), "p95": float(np.percentile(draws[k], 95))}
+               for k in keys}
+    lf = [info[s]["real_trained_label_free"] for s in seeds]
+    s_ = summary
+    checks = {
+        "T1_learns": s_["T1_margin_vs_logistic"]["p5"] >= -0.05,
+        "T2_memory_is_the_learner": s_["T2_drop_minus_bar"]["p5"] >= 0,
+        "T3_memory_carries_answer": s_["T3_flipped_share"]["p5"] >= 0.80,
+        "T4_recall_both_ge_0.5": s_["T4_min_recall"]["p5"] >= 0.5,
+        "T4_untrained_share_le_0.2": s_["T4_untrained_share_r2"]["p95"] <= 0.2,
+        "T5_L3_every_seed": all(0.02 <= x["kc_active_per_sniff"] <= 0.10 for x in lf),
+        "T5_L4_every_seed": all(x["kc_ever_active"] >= 0.5 and x["kc_jaccard_between_items"] <= 0.25 for x in lf),
+        "T5_L5_trained_read_sd_ge_0.01": s_["T5_trained_read_sd"]["p5"] >= 0.01,
+        "T7_real_carries_memory_ratio_ge_2": s_["T7_read_sd_ratio"]["p5"] >= 2.0,
     }
-    json.dump(res, open(OUT / "checks.json", "w"), indent=1)
-    print(json.dumps(res, indent=1))
+    res = {"seeds": seeds, "n_val": int(len(yva)), "logistic_46_bal_acc": float(bal_acc(yva, lr_yes, ones)[0]),
+           "bootstrap": {"draws": BOOT, "seed": BOOT_SEED}, "summary": summary,
+           "per_seed": {s: {**per_seed[s], "k_real": info[s]["real_k"], "k_layered": info[s]["layered_k"],
+                            "label_free": info[s]["real_trained_label_free"]} for s in seeds},
+           "checks": checks}
+    json.dump(res, open(OUT / "checks.json", "w"), indent=1, default=float)
+    print(json.dumps({"summary": summary, "checks": checks}, indent=1, default=float))
     return 0
 
 
 def main() -> int:
     p = argparse.ArgumentParser()
-    p.add_argument("cmd", choices=("train", "score", "score-control"))
+    p.add_argument("cmd", choices=("train", "score", "aggregate"))
     p.add_argument("--arm", default="real", choices=("real", "layered"))
     p.add_argument("--flip", action="store_true")
+    p.add_argument("--seed", type=int, default=1)
     p.add_argument("--device", default="cuda")
     a = p.parse_args()
     if a.cmd == "train":
-        train(a.arm, a.flip, a.device)
+        train(a.arm, a.flip, a.seed, a.device)
         return 0
-    return score_control() if a.cmd == "score-control" else score()
+    if a.cmd == "score":
+        return score_seed(a.seed)
+    return aggregate()
 
 
 if __name__ == "__main__":

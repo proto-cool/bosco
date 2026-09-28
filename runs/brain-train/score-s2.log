@@ -1,0 +1,14 @@
+{
+ "seed": 2,
+ "real_s_per_answer": 0.15289560489296594,
+ "real_k": 8.381393432617188,
+ "real_c": -1.4699763059616089,
+ "real_trained_label_free": {
+  "kc_active_per_sniff": 0.07582800090312958,
+  "kc_ever_active": 0.9923720359802246,
+  "kc_jaccard_between_items": 0.11709557473659515
+ },
+ "layered_s_per_answer": 0.16380082250600206,
+ "layered_k": 70.95547485351562,
+ "layered_c": 0.11495432257652283
+}

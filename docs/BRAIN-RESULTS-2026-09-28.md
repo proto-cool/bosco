@@ -72,3 +72,41 @@ train, for 3 epochs.
 2. **The real-versus-layered tie** is the question BRAIN-SPEC T2/T3 were meant to answer about "what the fly adds".
    T6 has no bar. Should one be set?
 3. **Speed:** 80 steps kept. The step-60 answer correlates 0.9996 with step 80 (untrained).
+
+---
+
+## Update: 5 seeds and the sampling-error rule (amendment 2)
+
+`runs/brain-train/checks.json`:
+- seeds 1–5 for the real brain, the real brain on flipped labels, and the layered control;
+- 2,000 bootstrap draws over seeds and items.
+
+**Verdict: 7 of 9 pass. T2 and T3 fail:** both clear their bars on the mean, but not at the 5% bound. The single
+seed-1 run had passed T2 and missed T3 by a hair; with 5 seeds the picture is steadier and the same as before.
+
+| check | mean over seeds | 5th / 95th percentile | bar | result |
+|---|---|---|---|---|
+| T1 brain − logistic balanced accuracy (logistic 0.735) | −0.010 | −0.027 / +0.007 | p5 ≥ −0.05 | pass |
+| T2 drop on reset − 0.75 × margin | +0.014 | **−0.008** / +0.035 | p5 ≥ 0 | **fail** |
+| T3 answers flipped by the swapped memory | 0.809 | **0.777** / 0.838 | p5 ≥ 0.80 | **fail** |
+| T4 lower recall | 0.691 | 0.650 / 0.725 | p5 ≥ 0.5 | pass |
+| T4 untrained share (R²) | 0.141 | 0.117 / 0.167 | p95 ≤ 0.2 | pass |
+| T5 KCs, trained, every seed | 7.4–9.0% active, ≥ 99.2% ever, Jaccard 0.10–0.19 | — | L3, L4 | pass |
+| T5 L5, trained read s.d. | 0.0120 | 0.0116 / 0.0124 | p5 ≥ 0.01 | pass |
+| **T7 real ÷ layered read s.d.** | **7.10** | 6.93 / 7.27 | p5 ≥ 2 | **pass** |
+| T6 real − layered balanced accuracy | +0.001 | −0.013 / +0.016 | reported | tie |
+
+Per seed: balanced accuracy 0.715–0.730; with the memory reset, 0.503–0.583; flipped share 0.75–0.86.
+
+**What it means:**
+- **The memory carries most, not all, of the answer.** About 14% of the trained logit variance, and about 19% of
+  the answers, follow the path that does not learn: the item reaches the DNs through the lateral horn and the rest
+  of the brain, and k scales that path together with the memory. In a fly, innate and learned paths both drive
+  behaviour, but the spec asks for the memory to dominate, and it does not reach the bars.
+- **The real wiring carries the learned memory to the motor side 7× better than scrambled wiring (T7).** Accuracy
+  is a tie (T6).
+- **The KC drift (4.8% to 7–9% active after training) is explained.** Training potentiates KC→MBON: the avoid
+  MBONs go from a mean rate of 0.041 to 0.307, and the approach MBONs from 0.038 to 0.115. Their output lowers
+  APL's rate (0.029 to 0.025), which releases the KCs. The direct MBON→KC feedback works against the drift:
+  cutting it raises KC activity further, from 7.7% to 8.6%. Real KC→MBON learning is mainly depression (Hige et al.
+  2015); ours is unbounded both ways.
