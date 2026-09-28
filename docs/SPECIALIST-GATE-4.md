@@ -92,6 +92,12 @@ Done in the three builds; see their docs.
 - **Report-only, after the verdicts:** pool validation, the held-out dev part, the plain logistic baseline, nose
   alone and prototype alone on each test, and CPU time per question.
 
+## Amendment 1 (2026-09-27, before any sealed test was scored)
+- **Harassment is deferred to gate 4b.** Its dev part (0.672) sits under its bar (0.70), and Nick wants it worked
+  until it meets the bar ("work it until we meet it"). That work runs on validation and the Aegis dev part only.
+  Its sealed test (2,582 items, 255 yes) is scored **once**, in gate 4b, with the bar unchanged (0.70). Gate 4b's
+  pre-registration will name what changed. The other 14 specialists are unchanged.
+
 ## Disclosure
 Seen before this was written, all on validation or the held-out **dev** parts, never a sealed test:
 - the encoder ceilings for every field (`runs/gate4-ceilings/`);
