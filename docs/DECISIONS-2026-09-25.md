@@ -199,6 +199,20 @@ power it, and it needs the fly to make honest decisions."
     anatomy check (do gustatory neurons reach the KCs, DANs or DN read within 80 steps in our cut?), then a taste
     spike after gate 4, tested on language and plain.
 
+39. **No more neurons: use the ones we have properly** (Nick, 2026-09-28: "We can't make it go any slower. I don't
+    think we need to add neurons just use them correctly"). This amends decision 2: the optic lobes and the VNC stay
+    out, because speed rules. "His brain" means the 50,140-neuron central brain (with the visual projection
+    neurons), and the cards say so. Decision 3 (question and item through different senses) was never built and
+    stands. Family changes, in order, each tested on dev against the plain nose ceiling before adoption, at no cost
+    to neurons or speed:
+    1. **Timed sniffs:** the smell changes over the 80 steps, carrying different parts of the encoder's meaning in
+       different time windows, as flies sample odour over time. The same 46 channels carry more.
+    2. **Taste for form** (decision 38), on the 355 gustatory neurons already in the model.
+    3. **Question and item apart** (decision 3): the option word through its own channel, not blended into the
+       item's smell.
+    4. **Wake idle sensory neurons** only where they carry real input.
+    Each change is a new family version; specialists retrain onto it, and the shipped ones stay until then.
+
 ## Open (Nick to decide)
 
 - **A budget for commissioned labelling** (sentiment first): paid, consented annotation of
