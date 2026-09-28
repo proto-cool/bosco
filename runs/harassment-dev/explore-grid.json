@@ -1,0 +1,2276 @@
+{
+ "date": "2026-09-27",
+ "note": "val/dev only; no sealed test scored",
+ "leakage_dropped": {
+  "cc": 56,
+  "wiki": 149,
+  "dynahate": 3,
+  "hatemojibuild": 79,
+  "ca": 0,
+  "ca_dev_near_test_excluded": 96
+ },
+ "experiments": [
+  {
+   "name": "base cc->wiki",
+   "n_train": {
+    "pos": 9409,
+    "neg": 4973
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.8904,
+    "wiki:ref": {
+     "bal_acc": 0.8276,
+     "tpr": 0.697,
+     "tnr": 0.958,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8176,
+     "tpr": 0.677,
+     "tnr": 0.958,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   },
+   "Z": {
+    "C": 10.0,
+    "pool_val": 0.8228,
+    "wiki:ref": {
+     "bal_acc": 0.8343,
+     "tpr": 0.72,
+     "tnr": 0.949,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.841,
+     "tpr": 0.742,
+     "tnr": 0.94,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "base wiki->cc",
+   "n_train": {
+    "pos": 13968,
+    "neg": 10789
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9523,
+    "cc:ref": {
+     "bal_acc": 0.7399,
+     "tpr": 0.887,
+     "tnr": 0.593,
+     "n_pos": 1852,
+     "n_neg": 994
+    },
+    "ca:ref": {
+     "bal_acc": 0.8755,
+     "tpr": 0.935,
+     "tnr": 0.816,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   },
+   "Z": {
+    "C": 1.0,
+    "pool_val": 0.9239,
+    "cc:ref": {
+     "bal_acc": 0.6885,
+     "tpr": 0.885,
+     "tnr": 0.492,
+     "n_pos": 1852,
+     "n_neg": 994
+    },
+    "ca:ref": {
+     "bal_acc": 0.8461,
+     "tpr": 0.968,
+     "tnr": 0.724,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.5,neg=clean0,other_neg=True,pure=True]->wiki",
+   "n_train": {
+    "pos": 9409,
+    "neg": 4973
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.8904,
+    "wiki:ref": {
+     "bal_acc": 0.8276,
+     "tpr": 0.697,
+     "tnr": 0.958,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.8447,
+     "tpr": 0.731,
+     "tnr": 0.958,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8176,
+     "tpr": 0.677,
+     "tnr": 0.958,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.5,neg=clean0,other_neg=True,pure=False]->wiki",
+   "n_train": {
+    "pos": 9952,
+    "neg": 4973
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.8743,
+    "wiki:ref": {
+     "bal_acc": 0.8335,
+     "tpr": 0.709,
+     "tnr": 0.958,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.8531,
+     "tpr": 0.748,
+     "tnr": 0.958,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8337,
+     "tpr": 0.71,
+     "tnr": 0.958,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.5,neg=clean0,other_neg=False,pure=True]->wiki",
+   "n_train": {
+    "pos": 9409,
+    "neg": 2486
+   },
+   "X": {
+    "C": 1.0,
+    "pool_val": 0.8804,
+    "wiki:ref": {
+     "bal_acc": 0.8919,
+     "tpr": 0.808,
+     "tnr": 0.976,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.9229,
+     "tpr": 0.87,
+     "tnr": 0.976,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8677,
+     "tpr": 0.806,
+     "tnr": 0.929,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.5,neg=clean0,other_neg=False,pure=False]->wiki",
+   "n_train": {
+    "pos": 9952,
+    "neg": 2486
+   },
+   "X": {
+    "C": 1.0,
+    "pool_val": 0.8799,
+    "wiki:ref": {
+     "bal_acc": 0.8961,
+     "tpr": 0.82,
+     "tnr": 0.972,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.9273,
+     "tpr": 0.882,
+     "tnr": 0.972,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8654,
+     "tpr": 0.806,
+     "tnr": 0.924,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.5,neg=tox<0.1,other_neg=True,pure=True]->wiki",
+   "n_train": {
+    "pos": 9409,
+    "neg": 7467
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.8809,
+    "wiki:ref": {
+     "bal_acc": 0.8389,
+     "tpr": 0.711,
+     "tnr": 0.967,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.8619,
+     "tpr": 0.757,
+     "tnr": 0.967,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8348,
+     "tpr": 0.71,
+     "tnr": 0.96,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.5,neg=tox<0.1,other_neg=True,pure=False]->wiki",
+   "n_train": {
+    "pos": 9952,
+    "neg": 7467
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.873,
+    "wiki:ref": {
+     "bal_acc": 0.8469,
+     "tpr": 0.727,
+     "tnr": 0.967,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.8715,
+     "tpr": 0.776,
+     "tnr": 0.967,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8337,
+     "tpr": 0.71,
+     "tnr": 0.958,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.5,neg=tox<0.1,other_neg=False,pure=True]->wiki",
+   "n_train": {
+    "pos": 9409,
+    "neg": 4980
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.8788,
+    "wiki:ref": {
+     "bal_acc": 0.885,
+     "tpr": 0.801,
+     "tnr": 0.97,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.9131,
+     "tpr": 0.857,
+     "tnr": 0.97,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8721,
+     "tpr": 0.806,
+     "tnr": 0.938,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.5,neg=tox<0.1,other_neg=False,pure=False]->wiki",
+   "n_train": {
+    "pos": 9952,
+    "neg": 4980
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.8728,
+    "wiki:ref": {
+     "bal_acc": 0.8918,
+     "tpr": 0.812,
+     "tnr": 0.971,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.9207,
+     "tpr": 0.87,
+     "tnr": 0.971,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8849,
+     "tpr": 0.839,
+     "tnr": 0.931,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.5,neg=tox<0.3,other_neg=True,pure=True]->wiki",
+   "n_train": {
+    "pos": 9409,
+    "neg": 9966
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.8641,
+    "wiki:ref": {
+     "bal_acc": 0.8438,
+     "tpr": 0.71,
+     "tnr": 0.977,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.8705,
+     "tpr": 0.764,
+     "tnr": 0.977,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8187,
+     "tpr": 0.677,
+     "tnr": 0.96,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.5,neg=tox<0.3,other_neg=True,pure=False]->wiki",
+   "n_train": {
+    "pos": 9952,
+    "neg": 9966
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.8532,
+    "wiki:ref": {
+     "bal_acc": 0.8503,
+     "tpr": 0.728,
+     "tnr": 0.973,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.879,
+     "tpr": 0.785,
+     "tnr": 0.973,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8154,
+     "tpr": 0.677,
+     "tnr": 0.953,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.5,neg=tox<0.3,other_neg=False,pure=True]->wiki",
+   "n_train": {
+    "pos": 9409,
+    "neg": 7479
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.8605,
+    "wiki:ref": {
+     "bal_acc": 0.8778,
+     "tpr": 0.776,
+     "tnr": 0.98,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.911,
+     "tpr": 0.842,
+     "tnr": 0.98,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8271,
+     "tpr": 0.71,
+     "tnr": 0.944,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.5,neg=tox<0.3,other_neg=False,pure=False]->wiki",
+   "n_train": {
+    "pos": 9952,
+    "neg": 7479
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.8597,
+    "wiki:ref": {
+     "bal_acc": 0.8784,
+     "tpr": 0.781,
+     "tnr": 0.976,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.9139,
+     "tpr": 0.852,
+     "tnr": 0.976,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8248,
+     "tpr": 0.71,
+     "tnr": 0.94,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.6,neg=clean0,other_neg=True,pure=True]->wiki",
+   "n_train": {
+    "pos": 7057,
+    "neg": 4973
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.906,
+    "wiki:ref": {
+     "bal_acc": 0.817,
+     "tpr": 0.667,
+     "tnr": 0.967,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.834,
+     "tpr": 0.701,
+     "tnr": 0.967,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8176,
+     "tpr": 0.677,
+     "tnr": 0.958,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.6,neg=clean0,other_neg=True,pure=False]->wiki",
+   "n_train": {
+    "pos": 7455,
+    "neg": 4973
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.8938,
+    "wiki:ref": {
+     "bal_acc": 0.8294,
+     "tpr": 0.69,
+     "tnr": 0.969,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.8527,
+     "tpr": 0.737,
+     "tnr": 0.969,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8337,
+     "tpr": 0.71,
+     "tnr": 0.958,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.6,neg=clean0,other_neg=False,pure=True]->wiki",
+   "n_train": {
+    "pos": 7057,
+    "neg": 2486
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.8978,
+    "wiki:ref": {
+     "bal_acc": 0.8807,
+     "tpr": 0.787,
+     "tnr": 0.975,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.9146,
+     "tpr": 0.854,
+     "tnr": 0.975,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8387,
+     "tpr": 0.742,
+     "tnr": 0.936,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.6,neg=clean0,other_neg=False,pure=False]->wiki",
+   "n_train": {
+    "pos": 7455,
+    "neg": 2486
+   },
+   "X": {
+    "C": 1.0,
+    "pool_val": 0.8986,
+    "wiki:ref": {
+     "bal_acc": 0.8903,
+     "tpr": 0.8,
+     "tnr": 0.981,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.9238,
+     "tpr": 0.867,
+     "tnr": 0.981,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8666,
+     "tpr": 0.806,
+     "tnr": 0.927,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.6,neg=tox<0.1,other_neg=True,pure=True]->wiki",
+   "n_train": {
+    "pos": 7057,
+    "neg": 7467
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.8984,
+    "wiki:ref": {
+     "bal_acc": 0.8268,
+     "tpr": 0.679,
+     "tnr": 0.975,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.8558,
+     "tpr": 0.737,
+     "tnr": 0.975,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8499,
+     "tpr": 0.742,
+     "tnr": 0.958,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.6,neg=tox<0.1,other_neg=True,pure=False]->wiki",
+   "n_train": {
+    "pos": 7455,
+    "neg": 7467
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.889,
+    "wiki:ref": {
+     "bal_acc": 0.8358,
+     "tpr": 0.694,
+     "tnr": 0.977,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.8666,
+     "tpr": 0.756,
+     "tnr": 0.977,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8499,
+     "tpr": 0.742,
+     "tnr": 0.958,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.6,neg=tox<0.1,other_neg=False,pure=True]->wiki",
+   "n_train": {
+    "pos": 7057,
+    "neg": 4980
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.8959,
+    "wiki:ref": {
+     "bal_acc": 0.8701,
+     "tpr": 0.76,
+     "tnr": 0.98,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.906,
+     "tpr": 0.832,
+     "tnr": 0.98,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8571,
+     "tpr": 0.774,
+     "tnr": 0.94,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.6,neg=tox<0.1,other_neg=False,pure=False]->wiki",
+   "n_train": {
+    "pos": 7455,
+    "neg": 4980
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.8927,
+    "wiki:ref": {
+     "bal_acc": 0.879,
+     "tpr": 0.782,
+     "tnr": 0.976,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.9161,
+     "tpr": 0.857,
+     "tnr": 0.976,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8732,
+     "tpr": 0.806,
+     "tnr": 0.94,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.6,neg=tox<0.3,other_neg=True,pure=True]->wiki",
+   "n_train": {
+    "pos": 7057,
+    "neg": 9966
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.878,
+    "wiki:ref": {
+     "bal_acc": 0.8185,
+     "tpr": 0.655,
+     "tnr": 0.982,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.8492,
+     "tpr": 0.717,
+     "tnr": 0.982,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8359,
+     "tpr": 0.71,
+     "tnr": 0.962,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.6,neg=tox<0.3,other_neg=True,pure=False]->wiki",
+   "n_train": {
+    "pos": 7455,
+    "neg": 9966
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.8776,
+    "wiki:ref": {
+     "bal_acc": 0.8373,
+     "tpr": 0.693,
+     "tnr": 0.982,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.8733,
+     "tpr": 0.765,
+     "tnr": 0.982,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8337,
+     "tpr": 0.71,
+     "tnr": 0.958,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.6,neg=tox<0.3,other_neg=False,pure=True]->wiki",
+   "n_train": {
+    "pos": 7057,
+    "neg": 7479
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.8786,
+    "wiki:ref": {
+     "bal_acc": 0.8542,
+     "tpr": 0.721,
+     "tnr": 0.988,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.8931,
+     "tpr": 0.798,
+     "tnr": 0.988,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.812,
+     "tpr": 0.677,
+     "tnr": 0.947,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.6,neg=tox<0.3,other_neg=False,pure=False]->wiki",
+   "n_train": {
+    "pos": 7455,
+    "neg": 7479
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.8773,
+    "wiki:ref": {
+     "bal_acc": 0.8632,
+     "tpr": 0.739,
+     "tnr": 0.987,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.9044,
+     "tpr": 0.822,
+     "tnr": 0.987,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8259,
+     "tpr": 0.71,
+     "tnr": 0.942,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.7,neg=clean0,other_neg=True,pure=True]->wiki",
+   "n_train": {
+    "pos": 3765,
+    "neg": 4973
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9294,
+    "wiki:ref": {
+     "bal_acc": 0.8103,
+     "tpr": 0.644,
+     "tnr": 0.976,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.8382,
+     "tpr": 0.7,
+     "tnr": 0.976,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8348,
+     "tpr": 0.71,
+     "tnr": 0.96,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.7,neg=clean0,other_neg=True,pure=False]->wiki",
+   "n_train": {
+    "pos": 3947,
+    "neg": 4973
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9236,
+    "wiki:ref": {
+     "bal_acc": 0.8279,
+     "tpr": 0.678,
+     "tnr": 0.978,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.8575,
+     "tpr": 0.737,
+     "tnr": 0.978,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8337,
+     "tpr": 0.71,
+     "tnr": 0.958,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.7,neg=clean0,other_neg=False,pure=True]->wiki",
+   "n_train": {
+    "pos": 3765,
+    "neg": 2486
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9225,
+    "wiki:ref": {
+     "bal_acc": 0.8685,
+     "tpr": 0.749,
+     "tnr": 0.988,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.9066,
+     "tpr": 0.825,
+     "tnr": 0.988,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8432,
+     "tpr": 0.742,
+     "tnr": 0.944,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.7,neg=clean0,other_neg=False,pure=False]->wiki",
+   "n_train": {
+    "pos": 3947,
+    "neg": 2486
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9207,
+    "wiki:ref": {
+     "bal_acc": 0.8794,
+     "tpr": 0.773,
+     "tnr": 0.986,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.918,
+     "tpr": 0.85,
+     "tnr": 0.986,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.856,
+     "tpr": 0.774,
+     "tnr": 0.938,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.7,neg=tox<0.1,other_neg=True,pure=True]->wiki",
+   "n_train": {
+    "pos": 3765,
+    "neg": 7467
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9245,
+    "wiki:ref": {
+     "bal_acc": 0.8239,
+     "tpr": 0.664,
+     "tnr": 0.983,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.854,
+     "tpr": 0.725,
+     "tnr": 0.983,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8337,
+     "tpr": 0.71,
+     "tnr": 0.958,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.7,neg=tox<0.1,other_neg=True,pure=False]->wiki",
+   "n_train": {
+    "pos": 3947,
+    "neg": 7467
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9183,
+    "wiki:ref": {
+     "bal_acc": 0.8346,
+     "tpr": 0.687,
+     "tnr": 0.983,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.8681,
+     "tpr": 0.754,
+     "tnr": 0.983,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8476,
+     "tpr": 0.742,
+     "tnr": 0.953,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.7,neg=tox<0.1,other_neg=False,pure=True]->wiki",
+   "n_train": {
+    "pos": 3765,
+    "neg": 4980
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9212,
+    "wiki:ref": {
+     "bal_acc": 0.8607,
+     "tpr": 0.732,
+     "tnr": 0.99,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.9007,
+     "tpr": 0.812,
+     "tnr": 0.99,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8443,
+     "tpr": 0.742,
+     "tnr": 0.947,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.7,neg=tox<0.1,other_neg=False,pure=False]->wiki",
+   "n_train": {
+    "pos": 3947,
+    "neg": 4980
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9222,
+    "wiki:ref": {
+     "bal_acc": 0.8729,
+     "tpr": 0.759,
+     "tnr": 0.987,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.9128,
+     "tpr": 0.839,
+     "tnr": 0.987,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.871,
+     "tpr": 0.806,
+     "tnr": 0.936,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.7,neg=tox<0.3,other_neg=True,pure=True]->wiki",
+   "n_train": {
+    "pos": 3765,
+    "neg": 9966
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9099,
+    "wiki:ref": {
+     "bal_acc": 0.818,
+     "tpr": 0.646,
+     "tnr": 0.99,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.8569,
+     "tpr": 0.723,
+     "tnr": 0.99,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8198,
+     "tpr": 0.677,
+     "tnr": 0.962,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.7,neg=tox<0.3,other_neg=True,pure=False]->wiki",
+   "n_train": {
+    "pos": 3947,
+    "neg": 9966
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9075,
+    "wiki:ref": {
+     "bal_acc": 0.8283,
+     "tpr": 0.667,
+     "tnr": 0.99,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.8677,
+     "tpr": 0.746,
+     "tnr": 0.99,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8154,
+     "tpr": 0.677,
+     "tnr": 0.953,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.7,neg=tox<0.3,other_neg=False,pure=True]->wiki",
+   "n_train": {
+    "pos": 3765,
+    "neg": 7479
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9045,
+    "wiki:ref": {
+     "bal_acc": 0.8447,
+     "tpr": 0.696,
+     "tnr": 0.993,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.8862,
+     "tpr": 0.779,
+     "tnr": 0.993,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8282,
+     "tpr": 0.71,
+     "tnr": 0.947,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.7,neg=tox<0.3,other_neg=False,pure=False]->wiki",
+   "n_train": {
+    "pos": 3947,
+    "neg": 7479
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.8998,
+    "wiki:ref": {
+     "bal_acc": 0.8564,
+     "tpr": 0.724,
+     "tnr": 0.989,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.9003,
+     "tpr": 0.812,
+     "tnr": 0.989,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8282,
+     "tpr": 0.71,
+     "tnr": 0.947,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.8,neg=clean0,other_neg=True,pure=True]->wiki",
+   "n_train": {
+    "pos": 2361,
+    "neg": 4973
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9203,
+    "wiki:ref": {
+     "bal_acc": 0.7924,
+     "tpr": 0.614,
+     "tnr": 0.971,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.8081,
+     "tpr": 0.645,
+     "tnr": 0.971,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.822,
+     "tpr": 0.677,
+     "tnr": 0.967,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.8,neg=clean0,other_neg=True,pure=False]->wiki",
+   "n_train": {
+    "pos": 2472,
+    "neg": 4973
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9129,
+    "wiki:ref": {
+     "bal_acc": 0.8145,
+     "tpr": 0.659,
+     "tnr": 0.97,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.8369,
+     "tpr": 0.704,
+     "tnr": 0.97,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8209,
+     "tpr": 0.677,
+     "tnr": 0.964,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.8,neg=clean0,other_neg=False,pure=True]->wiki",
+   "n_train": {
+    "pos": 2361,
+    "neg": 2486
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.907,
+    "wiki:ref": {
+     "bal_acc": 0.8659,
+     "tpr": 0.752,
+     "tnr": 0.98,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.8993,
+     "tpr": 0.819,
+     "tnr": 0.98,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8487,
+     "tpr": 0.742,
+     "tnr": 0.956,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.8,neg=clean0,other_neg=False,pure=False]->wiki",
+   "n_train": {
+    "pos": 2472,
+    "neg": 2486
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9093,
+    "wiki:ref": {
+     "bal_acc": 0.871,
+     "tpr": 0.764,
+     "tnr": 0.978,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.904,
+     "tpr": 0.83,
+     "tnr": 0.978,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8432,
+     "tpr": 0.742,
+     "tnr": 0.944,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.8,neg=tox<0.1,other_neg=True,pure=True]->wiki",
+   "n_train": {
+    "pos": 2361,
+    "neg": 7467
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9127,
+    "wiki:ref": {
+     "bal_acc": 0.8107,
+     "tpr": 0.641,
+     "tnr": 0.98,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.836,
+     "tpr": 0.692,
+     "tnr": 0.98,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.822,
+     "tpr": 0.677,
+     "tnr": 0.967,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.8,neg=tox<0.1,other_neg=True,pure=False]->wiki",
+   "n_train": {
+    "pos": 2472,
+    "neg": 7467
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9051,
+    "wiki:ref": {
+     "bal_acc": 0.8246,
+     "tpr": 0.673,
+     "tnr": 0.976,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.8539,
+     "tpr": 0.731,
+     "tnr": 0.976,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8187,
+     "tpr": 0.677,
+     "tnr": 0.96,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.8,neg=tox<0.1,other_neg=False,pure=True]->wiki",
+   "n_train": {
+    "pos": 2361,
+    "neg": 4980
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9094,
+    "wiki:ref": {
+     "bal_acc": 0.8568,
+     "tpr": 0.731,
+     "tnr": 0.983,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.8927,
+     "tpr": 0.803,
+     "tnr": 0.983,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8337,
+     "tpr": 0.71,
+     "tnr": 0.958,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.8,neg=tox<0.1,other_neg=False,pure=False]->wiki",
+   "n_train": {
+    "pos": 2472,
+    "neg": 4980
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9096,
+    "wiki:ref": {
+     "bal_acc": 0.8655,
+     "tpr": 0.752,
+     "tnr": 0.979,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.9011,
+     "tpr": 0.823,
+     "tnr": 0.979,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8304,
+     "tpr": 0.71,
+     "tnr": 0.951,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.8,neg=tox<0.3,other_neg=True,pure=True]->wiki",
+   "n_train": {
+    "pos": 2361,
+    "neg": 9966
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.8991,
+    "wiki:ref": {
+     "bal_acc": 0.809,
+     "tpr": 0.637,
+     "tnr": 0.981,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.8392,
+     "tpr": 0.698,
+     "tnr": 0.981,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.822,
+     "tpr": 0.677,
+     "tnr": 0.967,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.8,neg=tox<0.3,other_neg=True,pure=False]->wiki",
+   "n_train": {
+    "pos": 2472,
+    "neg": 9966
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.8931,
+    "wiki:ref": {
+     "bal_acc": 0.8187,
+     "tpr": 0.657,
+     "tnr": 0.98,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.8528,
+     "tpr": 0.726,
+     "tnr": 0.98,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8198,
+     "tpr": 0.677,
+     "tnr": 0.962,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.8,neg=tox<0.3,other_neg=False,pure=True]->wiki",
+   "n_train": {
+    "pos": 2361,
+    "neg": 7479
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.8939,
+    "wiki:ref": {
+     "bal_acc": 0.8278,
+     "tpr": 0.668,
+     "tnr": 0.988,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.8674,
+     "tpr": 0.747,
+     "tnr": 0.988,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8337,
+     "tpr": 0.71,
+     "tnr": 0.958,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "cc[ins>=0.8,neg=tox<0.3,other_neg=False,pure=False]->wiki",
+   "n_train": {
+    "pos": 2472,
+    "neg": 7479
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.8855,
+    "wiki:ref": {
+     "bal_acc": 0.8473,
+     "tpr": 0.71,
+     "tnr": 0.984,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:strict0.7": {
+     "bal_acc": 0.8841,
+     "tpr": 0.784,
+     "tnr": 0.984,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8326,
+     "tpr": 0.71,
+     "tnr": 0.956,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "wiki[att>=0.5,neg=zero]->cc",
+   "n_train": {
+    "pos": 13968,
+    "neg": 10789
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9523,
+    "cc:ref": {
+     "bal_acc": 0.7399,
+     "tpr": 0.887,
+     "tnr": 0.593,
+     "n_pos": 1852,
+     "n_neg": 994
+    },
+    "cc:strict0.7": {
+     "bal_acc": 0.7702,
+     "tpr": 0.948,
+     "tnr": 0.593,
+     "n_pos": 749,
+     "n_neg": 994
+    },
+    "ca:ref": {
+     "bal_acc": 0.8755,
+     "tpr": 0.935,
+     "tnr": 0.816,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "wiki[rec>=0.5,neg=zero]->cc",
+   "n_train": {
+    "pos": 9069,
+    "neg": 10789
+   },
+   "X": {
+    "C": 1.0,
+    "pool_val": 0.9685,
+    "cc:ref": {
+     "bal_acc": 0.7596,
+     "tpr": 0.765,
+     "tnr": 0.755,
+     "n_pos": 1852,
+     "n_neg": 994
+    },
+    "cc:strict0.7": {
+     "bal_acc": 0.8105,
+     "tpr": 0.866,
+     "tnr": 0.755,
+     "n_pos": 749,
+     "n_neg": 994
+    },
+    "ca:ref": {
+     "bal_acc": 0.8538,
+     "tpr": 0.903,
+     "tnr": 0.804,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "wiki[att>=0.5,neg=lt0.2]->cc",
+   "n_train": {
+    "pos": 13968,
+    "neg": 13831
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.944,
+    "cc:ref": {
+     "bal_acc": 0.7522,
+     "tpr": 0.864,
+     "tnr": 0.64,
+     "n_pos": 1852,
+     "n_neg": 994
+    },
+    "cc:strict0.7": {
+     "bal_acc": 0.7885,
+     "tpr": 0.937,
+     "tnr": 0.64,
+     "n_pos": 749,
+     "n_neg": 994
+    },
+    "ca:ref": {
+     "bal_acc": 0.8877,
+     "tpr": 0.935,
+     "tnr": 0.84,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "wiki[rec>=0.5,neg=lt0.2]->cc",
+   "n_train": {
+    "pos": 9069,
+    "neg": 13831
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.967,
+    "cc:ref": {
+     "bal_acc": 0.7356,
+     "tpr": 0.675,
+     "tnr": 0.796,
+     "n_pos": 1852,
+     "n_neg": 994
+    },
+    "cc:strict0.7": {
+     "bal_acc": 0.7944,
+     "tpr": 0.793,
+     "tnr": 0.796,
+     "n_pos": 749,
+     "n_neg": 994
+    },
+    "ca:ref": {
+     "bal_acc": 0.8844,
+     "tpr": 0.935,
+     "tnr": 0.833,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "wiki[att>=0.6,neg=zero]->cc",
+   "n_train": {
+    "pos": 11169,
+    "neg": 10789
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9639,
+    "cc:ref": {
+     "bal_acc": 0.7476,
+     "tpr": 0.862,
+     "tnr": 0.633,
+     "n_pos": 1852,
+     "n_neg": 994
+    },
+    "cc:strict0.7": {
+     "bal_acc": 0.7844,
+     "tpr": 0.936,
+     "tnr": 0.633,
+     "n_pos": 749,
+     "n_neg": 994
+    },
+    "ca:ref": {
+     "bal_acc": 0.8844,
+     "tpr": 0.935,
+     "tnr": 0.833,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "wiki[rec>=0.6,neg=zero]->cc",
+   "n_train": {
+    "pos": 7067,
+    "neg": 10789
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9792,
+    "cc:ref": {
+     "bal_acc": 0.7296,
+     "tpr": 0.654,
+     "tnr": 0.805,
+     "n_pos": 1852,
+     "n_neg": 994
+    },
+    "cc:strict0.7": {
+     "bal_acc": 0.7909,
+     "tpr": 0.777,
+     "tnr": 0.805,
+     "n_pos": 749,
+     "n_neg": 994
+    },
+    "ca:ref": {
+     "bal_acc": 0.8855,
+     "tpr": 0.935,
+     "tnr": 0.836,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "wiki[att>=0.6,neg=lt0.2]->cc",
+   "n_train": {
+    "pos": 11169,
+    "neg": 13831
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.961,
+    "cc:ref": {
+     "bal_acc": 0.7496,
+     "tpr": 0.812,
+     "tnr": 0.687,
+     "n_pos": 1852,
+     "n_neg": 994
+    },
+    "cc:strict0.7": {
+     "bal_acc": 0.7968,
+     "tpr": 0.907,
+     "tnr": 0.687,
+     "n_pos": 749,
+     "n_neg": 994
+    },
+    "ca:ref": {
+     "bal_acc": 0.89,
+     "tpr": 0.935,
+     "tnr": 0.844,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "wiki[rec>=0.6,neg=lt0.2]->cc",
+   "n_train": {
+    "pos": 7067,
+    "neg": 13831
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9753,
+    "cc:ref": {
+     "bal_acc": 0.7213,
+     "tpr": 0.594,
+     "tnr": 0.848,
+     "n_pos": 1852,
+     "n_neg": 994
+    },
+    "cc:strict0.7": {
+     "bal_acc": 0.7872,
+     "tpr": 0.726,
+     "tnr": 0.848,
+     "n_pos": 749,
+     "n_neg": 994
+    },
+    "ca:ref": {
+     "bal_acc": 0.8922,
+     "tpr": 0.935,
+     "tnr": 0.849,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "wiki[att>=0.7,neg=zero]->cc",
+   "n_train": {
+    "pos": 8850,
+    "neg": 10789
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9731,
+    "cc:ref": {
+     "bal_acc": 0.7605,
+     "tpr": 0.808,
+     "tnr": 0.713,
+     "n_pos": 1852,
+     "n_neg": 994
+    },
+    "cc:strict0.7": {
+     "bal_acc": 0.8072,
+     "tpr": 0.901,
+     "tnr": 0.713,
+     "n_pos": 749,
+     "n_neg": 994
+    },
+    "ca:ref": {
+     "bal_acc": 0.8911,
+     "tpr": 0.935,
+     "tnr": 0.847,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "wiki[rec>=0.7,neg=zero]->cc",
+   "n_train": {
+    "pos": 5358,
+    "neg": 10789
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9831,
+    "cc:ref": {
+     "bal_acc": 0.7316,
+     "tpr": 0.616,
+     "tnr": 0.847,
+     "n_pos": 1852,
+     "n_neg": 994
+    },
+    "cc:strict0.7": {
+     "bal_acc": 0.796,
+     "tpr": 0.745,
+     "tnr": 0.847,
+     "n_pos": 749,
+     "n_neg": 994
+    },
+    "ca:ref": {
+     "bal_acc": 0.8749,
+     "tpr": 0.903,
+     "tnr": 0.847,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "wiki[att>=0.7,neg=lt0.2]->cc",
+   "n_train": {
+    "pos": 8850,
+    "neg": 13831
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9676,
+    "cc:ref": {
+     "bal_acc": 0.7371,
+     "tpr": 0.785,
+     "tnr": 0.689,
+     "n_pos": 1852,
+     "n_neg": 994
+    },
+    "cc:strict0.7": {
+     "bal_acc": 0.7898,
+     "tpr": 0.891,
+     "tnr": 0.689,
+     "n_pos": 749,
+     "n_neg": 994
+    },
+    "ca:ref": {
+     "bal_acc": 0.8911,
+     "tpr": 0.935,
+     "tnr": 0.847,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "wiki[rec>=0.7,neg=lt0.2]->cc",
+   "n_train": {
+    "pos": 5358,
+    "neg": 13831
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9799,
+    "cc:ref": {
+     "bal_acc": 0.713,
+     "tpr": 0.574,
+     "tnr": 0.852,
+     "n_pos": 1852,
+     "n_neg": 994
+    },
+    "cc:strict0.7": {
+     "bal_acc": 0.7752,
+     "tpr": 0.698,
+     "tnr": 0.852,
+     "n_pos": 749,
+     "n_neg": 994
+    },
+    "ca:ref": {
+     "bal_acc": 0.8772,
+     "tpr": 0.903,
+     "tnr": 0.851,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "wiki[att>=0.8,neg=zero]->cc",
+   "n_train": {
+    "pos": 6715,
+    "neg": 10789
+   },
+   "X": {
+    "C": 1.0,
+    "pool_val": 0.9777,
+    "cc:ref": {
+     "bal_acc": 0.7446,
+     "tpr": 0.754,
+     "tnr": 0.735,
+     "n_pos": 1852,
+     "n_neg": 994
+    },
+    "cc:strict0.7": {
+     "bal_acc": 0.8003,
+     "tpr": 0.865,
+     "tnr": 0.735,
+     "n_pos": 749,
+     "n_neg": 994
+    },
+    "ca:ref": {
+     "bal_acc": 0.8733,
+     "tpr": 0.935,
+     "tnr": 0.811,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "wiki[rec>=0.8,neg=zero]->cc",
+   "n_train": {
+    "pos": 3673,
+    "neg": 10789
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9826,
+    "cc:ref": {
+     "bal_acc": 0.7011,
+     "tpr": 0.54,
+     "tnr": 0.862,
+     "n_pos": 1852,
+     "n_neg": 994
+    },
+    "cc:strict0.7": {
+     "bal_acc": 0.7649,
+     "tpr": 0.668,
+     "tnr": 0.862,
+     "n_pos": 749,
+     "n_neg": 994
+    },
+    "ca:ref": {
+     "bal_acc": 0.8944,
+     "tpr": 0.935,
+     "tnr": 0.853,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "wiki[att>=0.8,neg=lt0.2]->cc",
+   "n_train": {
+    "pos": 6715,
+    "neg": 13831
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9769,
+    "cc:ref": {
+     "bal_acc": 0.7372,
+     "tpr": 0.714,
+     "tnr": 0.761,
+     "n_pos": 1852,
+     "n_neg": 994
+    },
+    "cc:strict0.7": {
+     "bal_acc": 0.8015,
+     "tpr": 0.842,
+     "tnr": 0.761,
+     "n_pos": 749,
+     "n_neg": 994
+    },
+    "ca:ref": {
+     "bal_acc": 0.8922,
+     "tpr": 0.935,
+     "tnr": 0.849,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "wiki[rec>=0.8,neg=lt0.2]->cc",
+   "n_train": {
+    "pos": 3673,
+    "neg": 13831
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9826,
+    "cc:ref": {
+     "bal_acc": 0.6679,
+     "tpr": 0.43,
+     "tnr": 0.905,
+     "n_pos": 1852,
+     "n_neg": 994
+    },
+    "cc:strict0.7": {
+     "bal_acc": 0.7324,
+     "tpr": 0.559,
+     "tnr": 0.905,
+     "n_pos": 749,
+     "n_neg": 994
+    },
+    "ca:ref": {
+     "bal_acc": 0.8805,
+     "tpr": 0.903,
+     "tnr": 0.858,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "wiki[att>=0.9,neg=zero]->cc",
+   "n_train": {
+    "pos": 4375,
+    "neg": 10789
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9796,
+    "cc:ref": {
+     "bal_acc": 0.7233,
+     "tpr": 0.639,
+     "tnr": 0.808,
+     "n_pos": 1852,
+     "n_neg": 994
+    },
+    "cc:strict0.7": {
+     "bal_acc": 0.7884,
+     "tpr": 0.769,
+     "tnr": 0.808,
+     "n_pos": 749,
+     "n_neg": 994
+    },
+    "ca:ref": {
+     "bal_acc": 0.8922,
+     "tpr": 0.935,
+     "tnr": 0.849,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "wiki[rec>=0.9,neg=zero]->cc",
+   "n_train": {
+    "pos": 1959,
+    "neg": 10789
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9905,
+    "cc:ref": {
+     "bal_acc": 0.6899,
+     "tpr": 0.494,
+     "tnr": 0.886,
+     "n_pos": 1852,
+     "n_neg": 994
+    },
+    "cc:strict0.7": {
+     "bal_acc": 0.7536,
+     "tpr": 0.621,
+     "tnr": 0.886,
+     "n_pos": 749,
+     "n_neg": 994
+    },
+    "ca:ref": {
+     "bal_acc": 0.8822,
+     "tpr": 0.871,
+     "tnr": 0.893,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "wiki[att>=0.9,neg=lt0.2]->cc",
+   "n_train": {
+    "pos": 4375,
+    "neg": 13831
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.981,
+    "cc:ref": {
+     "bal_acc": 0.7041,
+     "tpr": 0.548,
+     "tnr": 0.86,
+     "n_pos": 1852,
+     "n_neg": 994
+    },
+    "cc:strict0.7": {
+     "bal_acc": 0.7759,
+     "tpr": 0.692,
+     "tnr": 0.86,
+     "n_pos": 749,
+     "n_neg": 994
+    },
+    "ca:ref": {
+     "bal_acc": 0.8838,
+     "tpr": 0.903,
+     "tnr": 0.864,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  {
+   "name": "wiki[rec>=0.9,neg=lt0.2]->cc",
+   "n_train": {
+    "pos": 1959,
+    "neg": 13831
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9911,
+    "cc:ref": {
+     "bal_acc": 0.6507,
+     "tpr": 0.385,
+     "tnr": 0.916,
+     "n_pos": 1852,
+     "n_neg": 994
+    },
+    "cc:strict0.7": {
+     "bal_acc": 0.7213,
+     "tpr": 0.526,
+     "tnr": 0.916,
+     "n_pos": 749,
+     "n_neg": 994
+    },
+    "ca:ref": {
+     "bal_acc": 0.881,
+     "tpr": 0.871,
+     "tnr": 0.891,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  }
+ ]
+}

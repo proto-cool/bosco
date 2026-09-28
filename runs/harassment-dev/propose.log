@@ -1,0 +1,475 @@
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py:2939: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/Users/nickd/projects/bosco/scripts/harassment_dev.py:344: RuntimeWarning: Mean of empty slice
+  "tpr": round(float((p[y == 1] == 1).mean()), 3),
+/Users/nickd/projects/bosco/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+4b pool cc[ins>=0.5,other_neg=True,any]+dyn=none -> wiki4b-dev, ca-dev {'pos': 9940, 'neg': 4972} {"X": {"C": 10.0, "pool_val": 0.8756, "wiki:ref": 0.8382, "wiki:att0.7": 0.8586, "ca:ref": 0.8348, "ca:strong": 0.8252, "ca:carbonbot": 0.995, "ca:eliza": 0.807, "ca:no_other_neg": 0.8451, "cc:other_harm_only": 0.903, "cc:other_harm_clear_only": 0.9704}, "Z": {"C": 10.0, "pool_val": 0.8129, "wiki:ref": 0.8421, "wiki:att0.7": 0.8643, "ca:ref": 0.8387, "ca:strong": 0.8148, "ca:carbonbot": 0.9926, "ca:eliza": 0.8047, "ca:no_other_neg": 0.8516, "cc:other_harm_only": 0.8343, "cc:other_harm_clear_only": 0.8621}}
+4b pool cc[ins>=0.7,other_neg=True,any]+dyn=none -> wiki4b-dev, ca-dev {'pos': 3935, 'neg': 4972} {"X": {"C": 10.0, "pool_val": 0.9218, "wiki:ref": 0.828, "wiki:att0.7": 0.8582, "ca:ref": 0.8499, "ca:strong": 0.8241, "ca:carbonbot": 0.995, "ca:eliza": 0.8229, "ca:no_other_neg": 0.86, "cc:other_harm_only": 0.9515, "cc:other_harm_clear_only": 0.9852}, "Z": {"C": 10.0, "pool_val": 0.8585, "wiki:ref": 0.8289, "wiki:att0.7": 0.8589, "ca:ref": 0.8399, "ca:strong": 0.8171, "ca:carbonbot": 0.9926, "ca:eliza": 0.8067, "ca:no_other_neg": 0.8528, "cc:other_harm_only": 0.8747, "cc:other_harm_clear_only": 0.8867}}
+4b pool cc[ins>=0.5,other_neg=True,any]+dyn=other -> wiki4b-dev, ca-dev {'pos': 9940, 'neg': 8645} {"X": {"C": 10.0, "pool_val": 0.8697, "wiki:ref": 0.7439, "wiki:att0.7": 0.744, "ca:ref": 0.7353, "ca:strong": 0.6853, "ca:carbonbot": 0.8309, "ca:eliza": 0.7221, "ca:no_other_neg": 0.7371, "cc:other_harm_only": 0.8808, "cc:other_harm_clear_only": 0.9507}, "Z": {"C": 1.0, "pool_val": 0.813, "wiki:ref": 0.7574, "wiki:att0.7": 0.7651, "ca:ref": 0.7414, "ca:strong": 0.7518, "ca:carbonbot": 0.8234, "ca:eliza": 0.7278, "ca:no_other_neg": 0.7447, "cc:other_harm_only": 0.8404, "cc:other_harm_clear_only": 0.8473}}
+4b pool cc[ins>=0.7,other_neg=True,any]+dyn=other -> wiki4b-dev, ca-dev {'pos': 3935, 'neg': 8645} {"X": {"C": 10.0, "pool_val": 0.9122, "wiki:ref": 0.7482, "wiki:att0.7": 0.7611, "ca:ref": 0.7492, "ca:strong": 0.7215, "ca:carbonbot": 0.8284, "ca:eliza": 0.7379, "ca:no_other_neg": 0.752, "cc:other_harm_only": 0.9515, "cc:other_harm_clear_only": 0.9852}, "Z": {"C": 10.0, "pool_val": 0.848, "wiki:ref": 0.7638, "wiki:att0.7": 0.7805, "ca:ref": 0.7887, "ca:strong": 0.7891, "ca:carbonbot": 0.8259, "ca:eliza": 0.7774, "ca:no_other_neg": 0.7931, "cc:other_harm_only": 0.8828, "cc:other_harm_clear_only": 0.8768}}
+4b pool cc[ins>=0.5,other_neg=True,any]+dyn=all -> wiki4b-dev, ca-dev {'pos': 9940, 'neg': 10941} {"X": {"C": 10.0, "pool_val": 0.8662, "wiki:ref": 0.7182, "wiki:att0.7": 0.7066, "ca:ref": 0.6546, "ca:strong": 0.6853, "ca:carbonbot": 0.5, "ca:eliza": 0.6665, "ca:no_other_neg": 0.6564, "cc:other_harm_only": 0.8727, "cc:other_harm_clear_only": 0.9409}, "Z": {"C": 10.0, "pool_val": 0.8106, "wiki:ref": 0.7237, "wiki:att0.7": 0.7236, "ca:ref": 0.6941, "ca:strong": 0.7145, "ca:carbonbot": 0.821, "ca:eliza": 0.6783, "ca:no_other_neg": 0.6963, "cc:other_harm_only": 0.8222, "cc:other_harm_clear_only": 0.8276}}
+4b pool cc[ins>=0.7,other_neg=True,any]+dyn=all -> wiki4b-dev, ca-dev {'pos': 3935, 'neg': 10941} {"X": {"C": 10.0, "pool_val": 0.9065, "wiki:ref": 0.7258, "wiki:att0.7": 0.7274, "ca:ref": 0.7353, "ca:strong": 0.6853, "ca:carbonbot": 0.8284, "ca:eliza": 0.7241, "ca:no_other_neg": 0.7371, "cc:other_harm_only": 0.9333, "cc:other_harm_clear_only": 0.9754}, "Z": {"C": 10.0, "pool_val": 0.8507, "wiki:ref": 0.7379, "wiki:att0.7": 0.7479, "ca:ref": 0.7564, "ca:strong": 0.7891, "ca:carbonbot": 0.8234, "ca:eliza": 0.7437, "ca:no_other_neg": 0.7608, "cc:other_harm_only": 0.8727, "cc:other_harm_clear_only": 0.867}}
+4b pool cc[ins>=0.5,other_neg=clear,any]+dyn=none -> wiki4b-dev, ca-dev {'pos': 9940, 'neg': 3476} {"X": {"C": 10.0, "pool_val": 0.8872, "wiki:ref": 0.8642, "wiki:att0.7": 0.8934, "ca:ref": 0.8476, "ca:strong": 0.8229, "ca:carbonbot": 0.9975, "ca:eliza": 0.8168, "ca:no_other_neg": 0.86, "cc:other_harm_only": 0.796, "cc:other_harm_clear_only": 0.931}, "Z": {"C": 10.0, "pool_val": 0.8241, "wiki:ref": 0.8536, "wiki:att0.7": 0.8801, "ca:ref": 0.8399, "ca:strong": 0.8171, "ca:carbonbot": 0.9901, "ca:eliza": 0.8088, "ca:no_other_neg": 0.854, "cc:other_harm_only": 0.7414, "cc:other_harm_clear_only": 0.8227}}
+4b pool cc[ins>=0.7,other_neg=clear,any]+dyn=none -> wiki4b-dev, ca-dev {'pos': 3935, 'neg': 3476} {"X": {"C": 10.0, "pool_val": 0.9254, "wiki:ref": 0.8471, "wiki:att0.7": 0.8842, "ca:ref": 0.8454, "ca:strong": 0.8206, "ca:carbonbot": 0.995, "ca:eliza": 0.8148, "ca:no_other_neg": 0.8588, "cc:other_harm_only": 0.8929, "cc:other_harm_clear_only": 0.9655}, "Z": {"C": 10.0, "pool_val": 0.8648, "wiki:ref": 0.8441, "wiki:att0.7": 0.8772, "ca:ref": 0.8354, "ca:strong": 0.8124, "ca:carbonbot": 0.9901, "ca:eliza": 0.8007, "ca:no_other_neg": 0.8503, "cc:other_harm_only": 0.8162, "cc:other_harm_clear_only": 0.8522}}
+4b pool cc[ins>=0.5,other_neg=clear,any]+dyn=other -> wiki4b-dev, ca-dev {'pos': 9940, 'neg': 7149} {"X": {"C": 10.0, "pool_val": 0.8781, "wiki:ref": 0.7453, "wiki:att0.7": 0.7448, "ca:ref": 0.7191, "ca:strong": 0.6853, "ca:carbonbot": 0.8333, "ca:eliza": 0.7022, "ca:no_other_neg": 0.721, "cc:other_harm_only": 0.8263, "cc:other_harm_clear_only": 0.931}, "Z": {"C": 1.0, "pool_val": 0.814, "wiki:ref": 0.754, "wiki:att0.7": 0.7611, "ca:ref": 0.7264, "ca:strong": 0.753, "ca:carbonbot": 0.8234, "ca:eliza": 0.712, "ca:no_other_neg": 0.7298, "cc:other_harm_only": 0.8121, "cc:other_harm_clear_only": 0.8424}}
+4b pool cc[ins>=0.7,other_neg=clear,any]+dyn=other -> wiki4b-dev, ca-dev {'pos': 3935, 'neg': 7149} {"X": {"C": 10.0, "pool_val": 0.9129, "wiki:ref": 0.7493, "wiki:att0.7": 0.7635, "ca:ref": 0.7503, "ca:strong": 0.7226, "ca:carbonbot": 0.8309, "ca:eliza": 0.7379, "ca:no_other_neg": 0.7544, "cc:other_harm_only": 0.9152, "cc:other_harm_clear_only": 0.9803}, "Z": {"C": 10.0, "pool_val": 0.8486, "wiki:ref": 0.7631, "wiki:att0.7": 0.7802, "ca:ref": 0.7586, "ca:strong": 0.7914, "ca:carbonbot": 0.8259, "ca:eliza": 0.7457, "ca:no_other_neg": 0.7621, "cc:other_harm_only": 0.8667, "cc:other_harm_clear_only": 0.8621}}
+4b pool cc[ins>=0.5,other_neg=clear,any]+dyn=all -> wiki4b-dev, ca-dev {'pos': 9940, 'neg': 9445} {"X": {"C": 10.0, "pool_val": 0.8728, "wiki:ref": 0.7192, "wiki:att0.7": 0.7078, "ca:ref": 0.6235, "ca:strong": 0.6865, "ca:carbonbot": 0.5, "ca:eliza": 0.6328, "ca:no_other_neg": 0.6254, "cc:other_harm_only": 0.8061, "cc:other_harm_clear_only": 0.8916}, "Z": {"C": 0.1, "pool_val": 0.811, "wiki:ref": 0.7182, "wiki:att0.7": 0.7174, "ca:ref": 0.6941, "ca:strong": 0.7145, "ca:carbonbot": 0.821, "ca:eliza": 0.6783, "ca:no_other_neg": 0.6963, "cc:other_harm_only": 0.798, "cc:other_harm_clear_only": 0.8325}}
+4b pool cc[ins>=0.7,other_neg=clear,any]+dyn=all -> wiki4b-dev, ca-dev {'pos': 3935, 'neg': 9445} {"X": {"C": 10.0, "pool_val": 0.9066, "wiki:ref": 0.7215, "wiki:att0.7": 0.722, "ca:ref": 0.673, "ca:strong": 0.6877, "ca:carbonbot": 0.5, "ca:eliza": 0.6884, "ca:no_other_neg": 0.675, "cc:other_harm_only": 0.8949, "cc:other_harm_clear_only": 0.9655}, "Z": {"C": 1.0, "pool_val": 0.8505, "wiki:ref": 0.736, "wiki:att0.7": 0.7462, "ca:ref": 0.7264, "ca:strong": 0.7914, "ca:carbonbot": 0.8234, "ca:eliza": 0.712, "ca:no_other_neg": 0.7298, "cc:other_harm_only": 0.8485, "cc:other_harm_clear_only": 0.8522}}
+4b pool cc[ins>=0.5,other_neg=False,any]+dyn=none -> wiki4b-dev, ca-dev {'pos': 9940, 'neg': 2486} {"X": {"C": 1.0, "pool_val": 0.8812, "wiki:ref": 0.8952, "wiki:att0.7": 0.9275, "ca:ref": 0.8654, "ca:strong": 0.8521, "ca:carbonbot": 0.9975, "ca:eliza": 0.8263, "ca:no_other_neg": 0.8874, "cc:other_harm_only": 0.5657, "cc:other_harm_clear_only": 0.6847}, "Z": {"C": 1.0, "pool_val": 0.8444, "wiki:ref": 0.8855, "wiki:att0.7": 0.9159, "ca:ref": 0.8499, "ca:strong": 0.8404, "ca:carbonbot": 0.9876, "ca:eliza": 0.8062, "ca:no_other_neg": 0.8753, "cc:other_harm_only": 0.5293, "cc:other_harm_clear_only": 0.6256}}
+4b pool cc[ins>=0.7,other_neg=False,any]+dyn=none -> wiki4b-dev, ca-dev {'pos': 3935, 'neg': 2486} {"X": {"C": 10.0, "pool_val": 0.921, "wiki:ref": 0.8786, "wiki:att0.7": 0.9199, "ca:ref": 0.856, "ca:strong": 0.859, "ca:carbonbot": 0.9975, "ca:eliza": 0.8206, "ca:no_other_neg": 0.8762, "cc:other_harm_only": 0.7414, "cc:other_harm_clear_only": 0.8522}, "Z": {"C": 10.0, "pool_val": 0.8688, "wiki:ref": 0.8699, "wiki:att0.7": 0.9093, "ca:ref": 0.851, "ca:strong": 0.8416, "ca:carbonbot": 0.9876, "ca:eliza": 0.8082, "ca:no_other_neg": 0.8765, "cc:other_harm_only": 0.6465, "cc:other_harm_clear_only": 0.7192}}
+4b pool cc[ins>=0.5,other_neg=False,any]+dyn=other -> wiki4b-dev, ca-dev {'pos': 9940, 'neg': 6159} {"X": {"C": 10.0, "pool_val": 0.8688, "wiki:ref": 0.743, "wiki:att0.7": 0.7437, "ca:ref": 0.7041, "ca:strong": 0.6865, "ca:carbonbot": 0.8333, "ca:eliza": 0.6863, "ca:no_other_neg": 0.706, "cc:other_harm_only": 0.7616, "cc:other_harm_clear_only": 0.8571}, "Z": {"C": 1.0, "pool_val": 0.815, "wiki:ref": 0.7613, "wiki:att0.7": 0.7718, "ca:ref": 0.7403, "ca:strong": 0.8275, "ca:carbonbot": 0.821, "ca:eliza": 0.7278, "ca:no_other_neg": 0.7435, "cc:other_harm_only": 0.7717, "cc:other_harm_clear_only": 0.803}}
+4b pool cc[ins>=0.7,other_neg=False,any]+dyn=other -> wiki4b-dev, ca-dev {'pos': 3935, 'neg': 6159} {"X": {"C": 10.0, "pool_val": 0.9057, "wiki:ref": 0.746, "wiki:att0.7": 0.7601, "ca:ref": 0.7503, "ca:strong": 0.7226, "ca:carbonbot": 0.8309, "ca:eliza": 0.7379, "ca:no_other_neg": 0.7544, "cc:other_harm_only": 0.8869, "cc:other_harm_clear_only": 0.9507}, "Z": {"C": 10.0, "pool_val": 0.8465, "wiki:ref": 0.7649, "wiki:att0.7": 0.7832, "ca:ref": 0.7898, "ca:strong": 0.8287, "ca:carbonbot": 0.8259, "ca:eliza": 0.7794, "ca:no_other_neg": 0.7943, "cc:other_harm_only": 0.8444, "cc:other_harm_clear_only": 0.8473}}
+4b pool cc[ins>=0.5,other_neg=False,any]+dyn=all -> wiki4b-dev, ca-dev {'pos': 9940, 'neg': 8455} {"X": {"C": 10.0, "pool_val": 0.8685, "wiki:ref": 0.7191, "wiki:att0.7": 0.7072, "ca:ref": 0.6235, "ca:strong": 0.6865, "ca:carbonbot": 0.5, "ca:eliza": 0.6328, "ca:no_other_neg": 0.6254, "cc:other_harm_only": 0.7293, "cc:other_harm_clear_only": 0.803}, "Z": {"C": 10.0, "pool_val": 0.8104, "wiki:ref": 0.7231, "wiki:att0.7": 0.7242, "ca:ref": 0.7103, "ca:strong": 0.7914, "ca:carbonbot": 0.6543, "ca:eliza": 0.714, "ca:no_other_neg": 0.7125, "cc:other_harm_only": 0.7434, "cc:other_harm_clear_only": 0.7685}}
+4b pool cc[ins>=0.7,other_neg=False,any]+dyn=all -> wiki4b-dev, ca-dev {'pos': 3935, 'neg': 8455} {"X": {"C": 10.0, "pool_val": 0.9035, "wiki:ref": 0.7239, "wiki:att0.7": 0.7275, "ca:ref": 0.6708, "ca:strong": 0.6853, "ca:carbonbot": 0.4975, "ca:eliza": 0.6863, "ca:no_other_neg": 0.6738, "cc:other_harm_only": 0.8566, "cc:other_harm_clear_only": 0.9261}, "Z": {"C": 1.0, "pool_val": 0.8463, "wiki:ref": 0.742, "wiki:att0.7": 0.7546, "ca:ref": 0.7414, "ca:strong": 0.8287, "ca:carbonbot": 0.8234, "ca:eliza": 0.7278, "ca:no_other_neg": 0.7459, "cc:other_harm_only": 0.8202, "cc:other_harm_clear_only": 0.8325}}
+4b gate-4 recipe cc[ref]+dyn=other -> wiki4b-dev, ca-dev {'pos': 9397, 'neg': 8645} {"X": {"C": 10.0, "pool_val": 0.8809, "wiki:ref": 0.7421, "wiki:att0.7": 0.7357, "ca:ref": 0.7342, "ca:strong": 0.6842, "ca:carbonbot": 0.8309, "ca:eliza": 0.72, "ca:no_other_neg": 0.7359, "cc:other_harm_only": 0.9131, "cc:other_harm_clear_only": 0.9557}, "Z": {"C": 10.0, "pool_val": 0.8279, "wiki:ref": 0.7524, "wiki:att0.7": 0.7578, "ca:ref": 0.7425, "ca:strong": 0.753, "ca:carbonbot": 0.8234, "ca:eliza": 0.7298, "ca:no_other_neg": 0.7447, "cc:other_harm_only": 0.8667, "cc:other_harm_clear_only": 0.8571}}

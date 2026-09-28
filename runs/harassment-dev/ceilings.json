@@ -1,0 +1,692 @@
+{
+ "date": "2026-09-27",
+ "sealed": "no sealed test scored: Aegis test, gate-4 held-out tests, Wikipedia 4b test (80%), ConvAbuse test (80%) never scored; ConvAbuse test labels never computed",
+ "encoder": "nomic-embed-text-v1.5 @ e9b6763, 'classification: ' prefix, first 200 words; Z = family v1 antenna",
+ "method": "LogisticRegression(class_weight=balanced), C in {0.1,1,10} by pool-val balanced accuracy",
+ "leakage_dropped": {
+  "cc": 72,
+  "wiki": 0,
+  "hatemojibuild": 79,
+  "ca": 0,
+  "dynahate": 3,
+  "ca_dev_near_test_excluded": 96,
+  "wiki_dev_near_test_excluded": 223
+ },
+ "baseline_harm_dev_expert (v1-harm-dev items, report)": {
+  "train without CC -> CC val": {
+   "X": 0.638,
+   "Z": 0.626
+  },
+  "train without Wiki -> Wiki val": {
+   "X": 0.662,
+   "Z": 0.67
+  }
+ },
+ "transfer_gate4_definitions_no_dynahate": {
+  "cc->wiki val": {
+   "n_train": {
+    "pos": 9409,
+    "neg": 4973
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.8904,
+    "wiki:ref": {
+     "bal_acc": 0.8276,
+     "tpr": 0.697,
+     "tnr": 0.958,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.8447,
+     "tpr": 0.731,
+     "tnr": 0.958,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.8176,
+     "tpr": 0.677,
+     "tnr": 0.958,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   },
+   "Z": {
+    "C": 10.0,
+    "pool_val": 0.8228,
+    "wiki:ref": {
+     "bal_acc": 0.8343,
+     "tpr": 0.72,
+     "tnr": 0.949,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.85,
+     "tpr": 0.751,
+     "tnr": 0.949,
+     "n_pos": 893,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.841,
+     "tpr": 0.742,
+     "tnr": 0.94,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  "wiki->cc val": {
+   "n_train": {
+    "pos": 13968,
+    "neg": 10789
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9523,
+    "cc:ref": {
+     "bal_acc": 0.7399,
+     "tpr": 0.887,
+     "tnr": 0.593,
+     "n_pos": 1852,
+     "n_neg": 994
+    },
+    "cc:ins0.7": {
+     "bal_acc": 0.7702,
+     "tpr": 0.948,
+     "tnr": 0.593,
+     "n_pos": 749,
+     "n_neg": 994
+    },
+    "cc:no_other_neg,any": {
+     "bal_acc": 0.8571,
+     "tpr": 0.885,
+     "tnr": 0.83,
+     "n_pos": 1967,
+     "n_neg": 499
+    },
+    "ca:ref": {
+     "bal_acc": 0.8755,
+     "tpr": 0.935,
+     "tnr": 0.816,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   },
+   "Z": {
+    "C": 1.0,
+    "pool_val": 0.9239,
+    "cc:ref": {
+     "bal_acc": 0.6885,
+     "tpr": 0.885,
+     "tnr": 0.492,
+     "n_pos": 1852,
+     "n_neg": 994
+    },
+    "cc:ins0.7": {
+     "bal_acc": 0.7146,
+     "tpr": 0.937,
+     "tnr": 0.492,
+     "n_pos": 749,
+     "n_neg": 994
+    },
+    "cc:no_other_neg,any": {
+     "bal_acc": 0.7852,
+     "tpr": 0.885,
+     "tnr": 0.685,
+     "n_pos": 1967,
+     "n_neg": 499
+    },
+    "ca:ref": {
+     "bal_acc": 0.8461,
+     "tpr": 0.968,
+     "tnr": 0.724,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  "cc->wiki val, dyn=other (DynaHate/Hatemoji hate as negatives)": {
+   "n_train": {
+    "pos": 9409,
+    "neg": 8646
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.88,
+    "wiki:ref": {
+     "bal_acc": 0.7416,
+     "tpr": 0.534,
+     "tnr": 0.949,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.718,
+     "tpr": 0.452,
+     "tnr": 0.984,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   },
+   "Z": {
+    "C": 1.0,
+    "pool_val": 0.8282,
+    "wiki:ref": {
+     "bal_acc": 0.7506,
+     "tpr": 0.597,
+     "tnr": 0.904,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.7575,
+     "tpr": 0.548,
+     "tnr": 0.967,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  },
+  "cc->wiki val, dyn=all (+ their fine)": {
+   "n_train": {
+    "pos": 9409,
+    "neg": 10942
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.8742,
+    "wiki:ref": {
+     "bal_acc": 0.7126,
+     "tpr": 0.491,
+     "tnr": 0.935,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.6708,
+     "tpr": 0.355,
+     "tnr": 0.987,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   },
+   "Z": {
+    "C": 10.0,
+    "pool_val": 0.8252,
+    "wiki:ref": {
+     "bal_acc": 0.7213,
+     "tpr": 0.553,
+     "tnr": 0.889,
+     "n_pos": 1439,
+     "n_neg": 1148
+    },
+    "ca:ref": {
+     "bal_acc": 0.6941,
+     "tpr": 0.419,
+     "tnr": 0.969,
+     "n_pos": 31,
+     "n_neg": 450
+    }
+   }
+  }
+ },
+ "gate4b_candidate_wiki_heldout_dev": {
+  "A max transfer: cc ins>=0.5 (any type) vs clean0, no other-harm negatives, no DynaHate": {
+   "n_train": {
+    "pos": 9940,
+    "neg": 2486
+   },
+   "X": {
+    "C": 1.0,
+    "pool_val": 0.8812,
+    "wiki:ref": {
+     "bal_acc": 0.8952,
+     "tpr": 0.817,
+     "tnr": 0.973,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.9275,
+     "tpr": 0.882,
+     "tnr": 0.973,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.8654,
+     "tpr": 0.806,
+     "tnr": 0.924,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.9975,
+     "tpr": 1.0,
+     "tnr": 0.995,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.8263,
+     "tpr": 0.786,
+     "tnr": 0.867,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.5657,
+     "tpr": NaN,
+     "tnr": 0.566,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.6847,
+     "tpr": NaN,
+     "tnr": 0.685,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   },
+   "Z": {
+    "C": 1.0,
+    "pool_val": 0.8444,
+    "wiki:ref": {
+     "bal_acc": 0.8855,
+     "tpr": 0.821,
+     "tnr": 0.95,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.9159,
+     "tpr": 0.882,
+     "tnr": 0.95,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.8499,
+     "tpr": 0.806,
+     "tnr": 0.893,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.9876,
+     "tpr": 1.0,
+     "tnr": 0.975,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.8062,
+     "tpr": 0.786,
+     "tnr": 0.827,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.5293,
+     "tpr": NaN,
+     "tnr": 0.529,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.6256,
+     "tpr": NaN,
+     "tnr": 0.626,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   }
+  },
+  "B recommended: cc ins>=0.5 (any type) vs clean0 + CC other harms, no DynaHate": {
+   "n_train": {
+    "pos": 9940,
+    "neg": 4972
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.8756,
+    "wiki:ref": {
+     "bal_acc": 0.8382,
+     "tpr": 0.713,
+     "tnr": 0.964,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.8586,
+     "tpr": 0.753,
+     "tnr": 0.964,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.8348,
+     "tpr": 0.71,
+     "tnr": 0.96,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.995,
+     "tpr": 1.0,
+     "tnr": 0.99,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.807,
+     "tpr": 0.679,
+     "tnr": 0.935,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.903,
+     "tpr": NaN,
+     "tnr": 0.903,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.9704,
+     "tpr": NaN,
+     "tnr": 0.97,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   },
+   "Z": {
+    "C": 10.0,
+    "pool_val": 0.8129,
+    "wiki:ref": {
+     "bal_acc": 0.8421,
+     "tpr": 0.734,
+     "tnr": 0.95,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.8643,
+     "tpr": 0.779,
+     "tnr": 0.95,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.8387,
+     "tpr": 0.742,
+     "tnr": 0.936,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.9926,
+     "tpr": 1.0,
+     "tnr": 0.985,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.8047,
+     "tpr": 0.714,
+     "tnr": 0.895,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.8343,
+     "tpr": NaN,
+     "tnr": 0.834,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.8621,
+     "tpr": NaN,
+     "tnr": 0.862,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   }
+  },
+  "B' strict: cc ins>=0.7 (any) vs clean0 + non-insulting (<0.2) other harms, no DynaHate": {
+   "n_train": {
+    "pos": 3935,
+    "neg": 3476
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9254,
+    "wiki:ref": {
+     "bal_acc": 0.8471,
+     "tpr": 0.709,
+     "tnr": 0.985,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.8842,
+     "tpr": 0.784,
+     "tnr": 0.985,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.8454,
+     "tpr": 0.742,
+     "tnr": 0.949,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.995,
+     "tpr": 1.0,
+     "tnr": 0.99,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.8148,
+     "tpr": 0.714,
+     "tnr": 0.915,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.8929,
+     "tpr": NaN,
+     "tnr": 0.893,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.9655,
+     "tpr": NaN,
+     "tnr": 0.966,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   },
+   "Z": {
+    "C": 10.0,
+    "pool_val": 0.8648,
+    "wiki:ref": {
+     "bal_acc": 0.8441,
+     "tpr": 0.725,
+     "tnr": 0.963,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.8772,
+     "tpr": 0.792,
+     "tnr": 0.963,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.8354,
+     "tpr": 0.742,
+     "tnr": 0.929,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.9901,
+     "tpr": 1.0,
+     "tnr": 0.98,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.8007,
+     "tpr": 0.714,
+     "tnr": 0.887,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.8162,
+     "tpr": NaN,
+     "tnr": 0.816,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.8522,
+     "tpr": NaN,
+     "tnr": 0.852,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   }
+  },
+  "gate-4 recipe (cc ref + DynaHate/Hatemoji hate negatives)": {
+   "n_train": {
+    "pos": 9397,
+    "neg": 8645
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.8809,
+    "wiki:ref": {
+     "bal_acc": 0.7421,
+     "tpr": 0.531,
+     "tnr": 0.953,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.7357,
+     "tpr": 0.519,
+     "tnr": 0.953,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.7342,
+     "tpr": 0.484,
+     "tnr": 0.984,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.8309,
+     "tpr": 0.667,
+     "tnr": 0.995,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.72,
+     "tpr": 0.464,
+     "tnr": 0.976,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.9131,
+     "tpr": NaN,
+     "tnr": 0.913,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.9557,
+     "tpr": NaN,
+     "tnr": 0.956,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   },
+   "Z": {
+    "C": 10.0,
+    "pool_val": 0.8279,
+    "wiki:ref": {
+     "bal_acc": 0.7524,
+     "tpr": 0.591,
+     "tnr": 0.914,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.7578,
+     "tpr": 0.602,
+     "tnr": 0.914,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.7425,
+     "tpr": 0.516,
+     "tnr": 0.969,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.8234,
+     "tpr": 0.667,
+     "tnr": 0.98,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.7298,
+     "tpr": 0.5,
+     "tnr": 0.96,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.8667,
+     "tpr": NaN,
+     "tnr": 0.867,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.8571,
+     "tpr": NaN,
+     "tnr": 0.857,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   }
+  }
+ },
+ "files": [
+  "explore-grid.json",
+  "explore-pool.json",
+  "explore-propose.json"
+ ]
+}

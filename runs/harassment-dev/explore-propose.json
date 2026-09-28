@@ -1,0 +1,2694 @@
+{
+ "date": "2026-09-27",
+ "note": "val/dev only; no sealed test scored",
+ "leakage_dropped": {
+  "cc": 72,
+  "wiki": 0,
+  "hatemojibuild": 79,
+  "ca": 0,
+  "dynahate": 3,
+  "ca_dev_near_test_excluded": 96,
+  "wiki_dev_near_test_excluded": 223
+ },
+ "experiments": [
+  {
+   "name": "4b pool cc[ins>=0.5,other_neg=True,any]+dyn=none -> wiki4b-dev, ca-dev",
+   "n_train": {
+    "pos": 9940,
+    "neg": 4972
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.8756,
+    "wiki:ref": {
+     "bal_acc": 0.8382,
+     "tpr": 0.713,
+     "tnr": 0.964,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.8586,
+     "tpr": 0.753,
+     "tnr": 0.964,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.8348,
+     "tpr": 0.71,
+     "tnr": 0.96,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:strong": {
+     "bal_acc": 0.8252,
+     "tpr": 0.692,
+     "tnr": 0.958,
+     "n_pos": 13,
+     "n_neg": 430
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.995,
+     "tpr": 1.0,
+     "tnr": 0.99,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.807,
+     "tpr": 0.679,
+     "tnr": 0.935,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "ca:no_other_neg": {
+     "bal_acc": 0.8451,
+     "tpr": 0.71,
+     "tnr": 0.981,
+     "n_pos": 31,
+     "n_neg": 412
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.903,
+     "tpr": NaN,
+     "tnr": 0.903,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.9704,
+     "tpr": NaN,
+     "tnr": 0.97,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   },
+   "Z": {
+    "C": 10.0,
+    "pool_val": 0.8129,
+    "wiki:ref": {
+     "bal_acc": 0.8421,
+     "tpr": 0.734,
+     "tnr": 0.95,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.8643,
+     "tpr": 0.779,
+     "tnr": 0.95,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.8387,
+     "tpr": 0.742,
+     "tnr": 0.936,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:strong": {
+     "bal_acc": 0.8148,
+     "tpr": 0.692,
+     "tnr": 0.937,
+     "n_pos": 13,
+     "n_neg": 430
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.9926,
+     "tpr": 1.0,
+     "tnr": 0.985,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.8047,
+     "tpr": 0.714,
+     "tnr": 0.895,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "ca:no_other_neg": {
+     "bal_acc": 0.8516,
+     "tpr": 0.742,
+     "tnr": 0.961,
+     "n_pos": 31,
+     "n_neg": 412
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.8343,
+     "tpr": NaN,
+     "tnr": 0.834,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.8621,
+     "tpr": NaN,
+     "tnr": 0.862,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   }
+  },
+  {
+   "name": "4b pool cc[ins>=0.7,other_neg=True,any]+dyn=none -> wiki4b-dev, ca-dev",
+   "n_train": {
+    "pos": 3935,
+    "neg": 4972
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9218,
+    "wiki:ref": {
+     "bal_acc": 0.828,
+     "tpr": 0.677,
+     "tnr": 0.979,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.8582,
+     "tpr": 0.737,
+     "tnr": 0.979,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.8499,
+     "tpr": 0.742,
+     "tnr": 0.958,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:strong": {
+     "bal_acc": 0.8241,
+     "tpr": 0.692,
+     "tnr": 0.956,
+     "n_pos": 13,
+     "n_neg": 430
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.995,
+     "tpr": 1.0,
+     "tnr": 0.99,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.8229,
+     "tpr": 0.714,
+     "tnr": 0.931,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "ca:no_other_neg": {
+     "bal_acc": 0.86,
+     "tpr": 0.742,
+     "tnr": 0.978,
+     "n_pos": 31,
+     "n_neg": 412
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.9515,
+     "tpr": NaN,
+     "tnr": 0.952,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.9852,
+     "tpr": NaN,
+     "tnr": 0.985,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   },
+   "Z": {
+    "C": 10.0,
+    "pool_val": 0.8585,
+    "wiki:ref": {
+     "bal_acc": 0.8289,
+     "tpr": 0.698,
+     "tnr": 0.96,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.8589,
+     "tpr": 0.758,
+     "tnr": 0.96,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.8399,
+     "tpr": 0.742,
+     "tnr": 0.938,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:strong": {
+     "bal_acc": 0.8171,
+     "tpr": 0.692,
+     "tnr": 0.942,
+     "n_pos": 13,
+     "n_neg": 430
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.9926,
+     "tpr": 1.0,
+     "tnr": 0.985,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.8067,
+     "tpr": 0.714,
+     "tnr": 0.899,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "ca:no_other_neg": {
+     "bal_acc": 0.8528,
+     "tpr": 0.742,
+     "tnr": 0.964,
+     "n_pos": 31,
+     "n_neg": 412
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.8747,
+     "tpr": NaN,
+     "tnr": 0.875,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.8867,
+     "tpr": NaN,
+     "tnr": 0.887,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   }
+  },
+  {
+   "name": "4b pool cc[ins>=0.5,other_neg=True,any]+dyn=other -> wiki4b-dev, ca-dev",
+   "n_train": {
+    "pos": 9940,
+    "neg": 8645
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.8697,
+    "wiki:ref": {
+     "bal_acc": 0.7439,
+     "tpr": 0.532,
+     "tnr": 0.956,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.744,
+     "tpr": 0.532,
+     "tnr": 0.956,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.7353,
+     "tpr": 0.484,
+     "tnr": 0.987,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:strong": {
+     "bal_acc": 0.6853,
+     "tpr": 0.385,
+     "tnr": 0.986,
+     "n_pos": 13,
+     "n_neg": 430
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.8309,
+     "tpr": 0.667,
+     "tnr": 0.995,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.7221,
+     "tpr": 0.464,
+     "tnr": 0.98,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "ca:no_other_neg": {
+     "bal_acc": 0.7371,
+     "tpr": 0.484,
+     "tnr": 0.99,
+     "n_pos": 31,
+     "n_neg": 412
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.8808,
+     "tpr": NaN,
+     "tnr": 0.881,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.9507,
+     "tpr": NaN,
+     "tnr": 0.951,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   },
+   "Z": {
+    "C": 1.0,
+    "pool_val": 0.813,
+    "wiki:ref": {
+     "bal_acc": 0.7574,
+     "tpr": 0.604,
+     "tnr": 0.911,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.7651,
+     "tpr": 0.619,
+     "tnr": 0.911,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.7414,
+     "tpr": 0.516,
+     "tnr": 0.967,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:strong": {
+     "bal_acc": 0.7518,
+     "tpr": 0.538,
+     "tnr": 0.965,
+     "n_pos": 13,
+     "n_neg": 430
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.8234,
+     "tpr": 0.667,
+     "tnr": 0.98,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.7278,
+     "tpr": 0.5,
+     "tnr": 0.956,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "ca:no_other_neg": {
+     "bal_acc": 0.7447,
+     "tpr": 0.516,
+     "tnr": 0.973,
+     "n_pos": 31,
+     "n_neg": 412
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.8404,
+     "tpr": NaN,
+     "tnr": 0.84,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.8473,
+     "tpr": NaN,
+     "tnr": 0.847,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   }
+  },
+  {
+   "name": "4b pool cc[ins>=0.7,other_neg=True,any]+dyn=other -> wiki4b-dev, ca-dev",
+   "n_train": {
+    "pos": 3935,
+    "neg": 8645
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9122,
+    "wiki:ref": {
+     "bal_acc": 0.7482,
+     "tpr": 0.52,
+     "tnr": 0.977,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.7611,
+     "tpr": 0.546,
+     "tnr": 0.977,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.7492,
+     "tpr": 0.516,
+     "tnr": 0.982,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:strong": {
+     "bal_acc": 0.7215,
+     "tpr": 0.462,
+     "tnr": 0.981,
+     "n_pos": 13,
+     "n_neg": 430
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.8284,
+     "tpr": 0.667,
+     "tnr": 0.99,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.7379,
+     "tpr": 0.5,
+     "tnr": 0.976,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "ca:no_other_neg": {
+     "bal_acc": 0.752,
+     "tpr": 0.516,
+     "tnr": 0.988,
+     "n_pos": 31,
+     "n_neg": 412
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.9515,
+     "tpr": NaN,
+     "tnr": 0.952,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.9852,
+     "tpr": NaN,
+     "tnr": 0.985,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   },
+   "Z": {
+    "C": 10.0,
+    "pool_val": 0.848,
+    "wiki:ref": {
+     "bal_acc": 0.7638,
+     "tpr": 0.582,
+     "tnr": 0.945,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.7805,
+     "tpr": 0.616,
+     "tnr": 0.945,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.7887,
+     "tpr": 0.613,
+     "tnr": 0.964,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:strong": {
+     "bal_acc": 0.7891,
+     "tpr": 0.615,
+     "tnr": 0.963,
+     "n_pos": 13,
+     "n_neg": 430
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.8259,
+     "tpr": 0.667,
+     "tnr": 0.985,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.7774,
+     "tpr": 0.607,
+     "tnr": 0.948,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "ca:no_other_neg": {
+     "bal_acc": 0.7931,
+     "tpr": 0.613,
+     "tnr": 0.973,
+     "n_pos": 31,
+     "n_neg": 412
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.8828,
+     "tpr": NaN,
+     "tnr": 0.883,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.8768,
+     "tpr": NaN,
+     "tnr": 0.877,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   }
+  },
+  {
+   "name": "4b pool cc[ins>=0.5,other_neg=True,any]+dyn=all -> wiki4b-dev, ca-dev",
+   "n_train": {
+    "pos": 9940,
+    "neg": 10941
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.8662,
+    "wiki:ref": {
+     "bal_acc": 0.7182,
+     "tpr": 0.488,
+     "tnr": 0.949,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.7066,
+     "tpr": 0.465,
+     "tnr": 0.949,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.6546,
+     "tpr": 0.323,
+     "tnr": 0.987,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:strong": {
+     "bal_acc": 0.6853,
+     "tpr": 0.385,
+     "tnr": 0.986,
+     "n_pos": 13,
+     "n_neg": 430
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.5,
+     "tpr": 0.0,
+     "tnr": 1.0,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.6665,
+     "tpr": 0.357,
+     "tnr": 0.976,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "ca:no_other_neg": {
+     "bal_acc": 0.6564,
+     "tpr": 0.323,
+     "tnr": 0.99,
+     "n_pos": 31,
+     "n_neg": 412
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.8727,
+     "tpr": NaN,
+     "tnr": 0.873,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.9409,
+     "tpr": NaN,
+     "tnr": 0.941,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   },
+   "Z": {
+    "C": 10.0,
+    "pool_val": 0.8106,
+    "wiki:ref": {
+     "bal_acc": 0.7237,
+     "tpr": 0.554,
+     "tnr": 0.893,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.7236,
+     "tpr": 0.554,
+     "tnr": 0.893,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.6941,
+     "tpr": 0.419,
+     "tnr": 0.969,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:strong": {
+     "bal_acc": 0.7145,
+     "tpr": 0.462,
+     "tnr": 0.967,
+     "n_pos": 13,
+     "n_neg": 430
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.821,
+     "tpr": 0.667,
+     "tnr": 0.975,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.6783,
+     "tpr": 0.393,
+     "tnr": 0.964,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "ca:no_other_neg": {
+     "bal_acc": 0.6963,
+     "tpr": 0.419,
+     "tnr": 0.973,
+     "n_pos": 31,
+     "n_neg": 412
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.8222,
+     "tpr": NaN,
+     "tnr": 0.822,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.8276,
+     "tpr": NaN,
+     "tnr": 0.828,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   }
+  },
+  {
+   "name": "4b pool cc[ins>=0.7,other_neg=True,any]+dyn=all -> wiki4b-dev, ca-dev",
+   "n_train": {
+    "pos": 3935,
+    "neg": 10941
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9065,
+    "wiki:ref": {
+     "bal_acc": 0.7258,
+     "tpr": 0.481,
+     "tnr": 0.97,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.7274,
+     "tpr": 0.485,
+     "tnr": 0.97,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.7353,
+     "tpr": 0.484,
+     "tnr": 0.987,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:strong": {
+     "bal_acc": 0.6853,
+     "tpr": 0.385,
+     "tnr": 0.986,
+     "n_pos": 13,
+     "n_neg": 430
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.8284,
+     "tpr": 0.667,
+     "tnr": 0.99,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.7241,
+     "tpr": 0.464,
+     "tnr": 0.984,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "ca:no_other_neg": {
+     "bal_acc": 0.7371,
+     "tpr": 0.484,
+     "tnr": 0.99,
+     "n_pos": 31,
+     "n_neg": 412
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.9333,
+     "tpr": NaN,
+     "tnr": 0.933,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.9754,
+     "tpr": NaN,
+     "tnr": 0.975,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   },
+   "Z": {
+    "C": 10.0,
+    "pool_val": 0.8507,
+    "wiki:ref": {
+     "bal_acc": 0.7379,
+     "tpr": 0.543,
+     "tnr": 0.932,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.7479,
+     "tpr": 0.563,
+     "tnr": 0.932,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.7564,
+     "tpr": 0.548,
+     "tnr": 0.964,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:strong": {
+     "bal_acc": 0.7891,
+     "tpr": 0.615,
+     "tnr": 0.963,
+     "n_pos": 13,
+     "n_neg": 430
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.8234,
+     "tpr": 0.667,
+     "tnr": 0.98,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.7437,
+     "tpr": 0.536,
+     "tnr": 0.952,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "ca:no_other_neg": {
+     "bal_acc": 0.7608,
+     "tpr": 0.548,
+     "tnr": 0.973,
+     "n_pos": 31,
+     "n_neg": 412
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.8727,
+     "tpr": NaN,
+     "tnr": 0.873,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.867,
+     "tpr": NaN,
+     "tnr": 0.867,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   }
+  },
+  {
+   "name": "4b pool cc[ins>=0.5,other_neg=clear,any]+dyn=none -> wiki4b-dev, ca-dev",
+   "n_train": {
+    "pos": 9940,
+    "neg": 3476
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.8872,
+    "wiki:ref": {
+     "bal_acc": 0.8642,
+     "tpr": 0.76,
+     "tnr": 0.968,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.8934,
+     "tpr": 0.819,
+     "tnr": 0.968,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.8476,
+     "tpr": 0.742,
+     "tnr": 0.953,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:strong": {
+     "bal_acc": 0.8229,
+     "tpr": 0.692,
+     "tnr": 0.953,
+     "n_pos": 13,
+     "n_neg": 430
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.9975,
+     "tpr": 1.0,
+     "tnr": 0.995,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.8168,
+     "tpr": 0.714,
+     "tnr": 0.919,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "ca:no_other_neg": {
+     "bal_acc": 0.86,
+     "tpr": 0.742,
+     "tnr": 0.978,
+     "n_pos": 31,
+     "n_neg": 412
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.796,
+     "tpr": NaN,
+     "tnr": 0.796,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.931,
+     "tpr": NaN,
+     "tnr": 0.931,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   },
+   "Z": {
+    "C": 10.0,
+    "pool_val": 0.8241,
+    "wiki:ref": {
+     "bal_acc": 0.8536,
+     "tpr": 0.758,
+     "tnr": 0.949,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.8801,
+     "tpr": 0.811,
+     "tnr": 0.949,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.8399,
+     "tpr": 0.742,
+     "tnr": 0.938,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:strong": {
+     "bal_acc": 0.8171,
+     "tpr": 0.692,
+     "tnr": 0.942,
+     "n_pos": 13,
+     "n_neg": 430
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.9901,
+     "tpr": 1.0,
+     "tnr": 0.98,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.8088,
+     "tpr": 0.714,
+     "tnr": 0.903,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "ca:no_other_neg": {
+     "bal_acc": 0.854,
+     "tpr": 0.742,
+     "tnr": 0.966,
+     "n_pos": 31,
+     "n_neg": 412
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.7414,
+     "tpr": NaN,
+     "tnr": 0.741,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.8227,
+     "tpr": NaN,
+     "tnr": 0.823,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   }
+  },
+  {
+   "name": "4b pool cc[ins>=0.7,other_neg=clear,any]+dyn=none -> wiki4b-dev, ca-dev",
+   "n_train": {
+    "pos": 3935,
+    "neg": 3476
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9254,
+    "wiki:ref": {
+     "bal_acc": 0.8471,
+     "tpr": 0.709,
+     "tnr": 0.985,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.8842,
+     "tpr": 0.784,
+     "tnr": 0.985,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.8454,
+     "tpr": 0.742,
+     "tnr": 0.949,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:strong": {
+     "bal_acc": 0.8206,
+     "tpr": 0.692,
+     "tnr": 0.949,
+     "n_pos": 13,
+     "n_neg": 430
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.995,
+     "tpr": 1.0,
+     "tnr": 0.99,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.8148,
+     "tpr": 0.714,
+     "tnr": 0.915,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "ca:no_other_neg": {
+     "bal_acc": 0.8588,
+     "tpr": 0.742,
+     "tnr": 0.976,
+     "n_pos": 31,
+     "n_neg": 412
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.8929,
+     "tpr": NaN,
+     "tnr": 0.893,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.9655,
+     "tpr": NaN,
+     "tnr": 0.966,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   },
+   "Z": {
+    "C": 10.0,
+    "pool_val": 0.8648,
+    "wiki:ref": {
+     "bal_acc": 0.8441,
+     "tpr": 0.725,
+     "tnr": 0.963,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.8772,
+     "tpr": 0.792,
+     "tnr": 0.963,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.8354,
+     "tpr": 0.742,
+     "tnr": 0.929,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:strong": {
+     "bal_acc": 0.8124,
+     "tpr": 0.692,
+     "tnr": 0.933,
+     "n_pos": 13,
+     "n_neg": 430
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.9901,
+     "tpr": 1.0,
+     "tnr": 0.98,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.8007,
+     "tpr": 0.714,
+     "tnr": 0.887,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "ca:no_other_neg": {
+     "bal_acc": 0.8503,
+     "tpr": 0.742,
+     "tnr": 0.959,
+     "n_pos": 31,
+     "n_neg": 412
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.8162,
+     "tpr": NaN,
+     "tnr": 0.816,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.8522,
+     "tpr": NaN,
+     "tnr": 0.852,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   }
+  },
+  {
+   "name": "4b pool cc[ins>=0.5,other_neg=clear,any]+dyn=other -> wiki4b-dev, ca-dev",
+   "n_train": {
+    "pos": 9940,
+    "neg": 7149
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.8781,
+    "wiki:ref": {
+     "bal_acc": 0.7453,
+     "tpr": 0.529,
+     "tnr": 0.961,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.7448,
+     "tpr": 0.528,
+     "tnr": 0.961,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.7191,
+     "tpr": 0.452,
+     "tnr": 0.987,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:strong": {
+     "bal_acc": 0.6853,
+     "tpr": 0.385,
+     "tnr": 0.986,
+     "n_pos": 13,
+     "n_neg": 430
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.8333,
+     "tpr": 0.667,
+     "tnr": 1.0,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.7022,
+     "tpr": 0.429,
+     "tnr": 0.976,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "ca:no_other_neg": {
+     "bal_acc": 0.721,
+     "tpr": 0.452,
+     "tnr": 0.99,
+     "n_pos": 31,
+     "n_neg": 412
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.8263,
+     "tpr": NaN,
+     "tnr": 0.826,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.931,
+     "tpr": NaN,
+     "tnr": 0.931,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   },
+   "Z": {
+    "C": 1.0,
+    "pool_val": 0.814,
+    "wiki:ref": {
+     "bal_acc": 0.754,
+     "tpr": 0.595,
+     "tnr": 0.913,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.7611,
+     "tpr": 0.609,
+     "tnr": 0.913,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.7264,
+     "tpr": 0.484,
+     "tnr": 0.969,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:strong": {
+     "bal_acc": 0.753,
+     "tpr": 0.538,
+     "tnr": 0.967,
+     "n_pos": 13,
+     "n_neg": 430
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.8234,
+     "tpr": 0.667,
+     "tnr": 0.98,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.712,
+     "tpr": 0.464,
+     "tnr": 0.96,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "ca:no_other_neg": {
+     "bal_acc": 0.7298,
+     "tpr": 0.484,
+     "tnr": 0.976,
+     "n_pos": 31,
+     "n_neg": 412
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.8121,
+     "tpr": NaN,
+     "tnr": 0.812,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.8424,
+     "tpr": NaN,
+     "tnr": 0.842,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   }
+  },
+  {
+   "name": "4b pool cc[ins>=0.7,other_neg=clear,any]+dyn=other -> wiki4b-dev, ca-dev",
+   "n_train": {
+    "pos": 3935,
+    "neg": 7149
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9129,
+    "wiki:ref": {
+     "bal_acc": 0.7493,
+     "tpr": 0.521,
+     "tnr": 0.977,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.7635,
+     "tpr": 0.55,
+     "tnr": 0.977,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.7503,
+     "tpr": 0.516,
+     "tnr": 0.984,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:strong": {
+     "bal_acc": 0.7226,
+     "tpr": 0.462,
+     "tnr": 0.984,
+     "n_pos": 13,
+     "n_neg": 430
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.8309,
+     "tpr": 0.667,
+     "tnr": 0.995,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.7379,
+     "tpr": 0.5,
+     "tnr": 0.976,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "ca:no_other_neg": {
+     "bal_acc": 0.7544,
+     "tpr": 0.516,
+     "tnr": 0.993,
+     "n_pos": 31,
+     "n_neg": 412
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.9152,
+     "tpr": NaN,
+     "tnr": 0.915,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.9803,
+     "tpr": NaN,
+     "tnr": 0.98,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   },
+   "Z": {
+    "C": 10.0,
+    "pool_val": 0.8486,
+    "wiki:ref": {
+     "bal_acc": 0.7631,
+     "tpr": 0.577,
+     "tnr": 0.949,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.7802,
+     "tpr": 0.611,
+     "tnr": 0.949,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.7586,
+     "tpr": 0.548,
+     "tnr": 0.969,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:strong": {
+     "bal_acc": 0.7914,
+     "tpr": 0.615,
+     "tnr": 0.967,
+     "n_pos": 13,
+     "n_neg": 430
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.8259,
+     "tpr": 0.667,
+     "tnr": 0.985,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.7457,
+     "tpr": 0.536,
+     "tnr": 0.956,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "ca:no_other_neg": {
+     "bal_acc": 0.7621,
+     "tpr": 0.548,
+     "tnr": 0.976,
+     "n_pos": 31,
+     "n_neg": 412
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.8667,
+     "tpr": NaN,
+     "tnr": 0.867,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.8621,
+     "tpr": NaN,
+     "tnr": 0.862,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   }
+  },
+  {
+   "name": "4b pool cc[ins>=0.5,other_neg=clear,any]+dyn=all -> wiki4b-dev, ca-dev",
+   "n_train": {
+    "pos": 9940,
+    "neg": 9445
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.8728,
+    "wiki:ref": {
+     "bal_acc": 0.7192,
+     "tpr": 0.485,
+     "tnr": 0.954,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.7078,
+     "tpr": 0.462,
+     "tnr": 0.954,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.6235,
+     "tpr": 0.258,
+     "tnr": 0.989,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:strong": {
+     "bal_acc": 0.6865,
+     "tpr": 0.385,
+     "tnr": 0.988,
+     "n_pos": 13,
+     "n_neg": 430
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.5,
+     "tpr": 0.0,
+     "tnr": 1.0,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.6328,
+     "tpr": 0.286,
+     "tnr": 0.98,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "ca:no_other_neg": {
+     "bal_acc": 0.6254,
+     "tpr": 0.258,
+     "tnr": 0.993,
+     "n_pos": 31,
+     "n_neg": 412
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.8061,
+     "tpr": NaN,
+     "tnr": 0.806,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.8916,
+     "tpr": NaN,
+     "tnr": 0.892,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   },
+   "Z": {
+    "C": 0.1,
+    "pool_val": 0.811,
+    "wiki:ref": {
+     "bal_acc": 0.7182,
+     "tpr": 0.569,
+     "tnr": 0.868,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.7174,
+     "tpr": 0.567,
+     "tnr": 0.868,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.6941,
+     "tpr": 0.419,
+     "tnr": 0.969,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:strong": {
+     "bal_acc": 0.7145,
+     "tpr": 0.462,
+     "tnr": 0.967,
+     "n_pos": 13,
+     "n_neg": 430
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.821,
+     "tpr": 0.667,
+     "tnr": 0.975,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.6783,
+     "tpr": 0.393,
+     "tnr": 0.964,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "ca:no_other_neg": {
+     "bal_acc": 0.6963,
+     "tpr": 0.419,
+     "tnr": 0.973,
+     "n_pos": 31,
+     "n_neg": 412
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.798,
+     "tpr": NaN,
+     "tnr": 0.798,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.8325,
+     "tpr": NaN,
+     "tnr": 0.833,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   }
+  },
+  {
+   "name": "4b pool cc[ins>=0.7,other_neg=clear,any]+dyn=all -> wiki4b-dev, ca-dev",
+   "n_train": {
+    "pos": 3935,
+    "neg": 9445
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9066,
+    "wiki:ref": {
+     "bal_acc": 0.7215,
+     "tpr": 0.476,
+     "tnr": 0.966,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.722,
+     "tpr": 0.478,
+     "tnr": 0.966,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.673,
+     "tpr": 0.355,
+     "tnr": 0.991,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:strong": {
+     "bal_acc": 0.6877,
+     "tpr": 0.385,
+     "tnr": 0.991,
+     "n_pos": 13,
+     "n_neg": 430
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.5,
+     "tpr": 0.0,
+     "tnr": 1.0,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.6884,
+     "tpr": 0.393,
+     "tnr": 0.984,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "ca:no_other_neg": {
+     "bal_acc": 0.675,
+     "tpr": 0.355,
+     "tnr": 0.995,
+     "n_pos": 31,
+     "n_neg": 412
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.8949,
+     "tpr": NaN,
+     "tnr": 0.895,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.9655,
+     "tpr": NaN,
+     "tnr": 0.966,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   },
+   "Z": {
+    "C": 1.0,
+    "pool_val": 0.8505,
+    "wiki:ref": {
+     "bal_acc": 0.736,
+     "tpr": 0.544,
+     "tnr": 0.928,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.7462,
+     "tpr": 0.564,
+     "tnr": 0.928,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.7264,
+     "tpr": 0.484,
+     "tnr": 0.969,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:strong": {
+     "bal_acc": 0.7914,
+     "tpr": 0.615,
+     "tnr": 0.967,
+     "n_pos": 13,
+     "n_neg": 430
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.8234,
+     "tpr": 0.667,
+     "tnr": 0.98,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.712,
+     "tpr": 0.464,
+     "tnr": 0.96,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "ca:no_other_neg": {
+     "bal_acc": 0.7298,
+     "tpr": 0.484,
+     "tnr": 0.976,
+     "n_pos": 31,
+     "n_neg": 412
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.8485,
+     "tpr": NaN,
+     "tnr": 0.848,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.8522,
+     "tpr": NaN,
+     "tnr": 0.852,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   }
+  },
+  {
+   "name": "4b pool cc[ins>=0.5,other_neg=False,any]+dyn=none -> wiki4b-dev, ca-dev",
+   "n_train": {
+    "pos": 9940,
+    "neg": 2486
+   },
+   "X": {
+    "C": 1.0,
+    "pool_val": 0.8812,
+    "wiki:ref": {
+     "bal_acc": 0.8952,
+     "tpr": 0.817,
+     "tnr": 0.973,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.9275,
+     "tpr": 0.882,
+     "tnr": 0.973,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.8654,
+     "tpr": 0.806,
+     "tnr": 0.924,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:strong": {
+     "bal_acc": 0.8521,
+     "tpr": 0.769,
+     "tnr": 0.935,
+     "n_pos": 13,
+     "n_neg": 430
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.9975,
+     "tpr": 1.0,
+     "tnr": 0.995,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.8263,
+     "tpr": 0.786,
+     "tnr": 0.867,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "ca:no_other_neg": {
+     "bal_acc": 0.8874,
+     "tpr": 0.806,
+     "tnr": 0.968,
+     "n_pos": 31,
+     "n_neg": 412
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.5657,
+     "tpr": NaN,
+     "tnr": 0.566,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.6847,
+     "tpr": NaN,
+     "tnr": 0.685,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   },
+   "Z": {
+    "C": 1.0,
+    "pool_val": 0.8444,
+    "wiki:ref": {
+     "bal_acc": 0.8855,
+     "tpr": 0.821,
+     "tnr": 0.95,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.9159,
+     "tpr": 0.882,
+     "tnr": 0.95,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.8499,
+     "tpr": 0.806,
+     "tnr": 0.893,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:strong": {
+     "bal_acc": 0.8404,
+     "tpr": 0.769,
+     "tnr": 0.912,
+     "n_pos": 13,
+     "n_neg": 430
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.9876,
+     "tpr": 1.0,
+     "tnr": 0.975,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.8062,
+     "tpr": 0.786,
+     "tnr": 0.827,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "ca:no_other_neg": {
+     "bal_acc": 0.8753,
+     "tpr": 0.806,
+     "tnr": 0.944,
+     "n_pos": 31,
+     "n_neg": 412
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.5293,
+     "tpr": NaN,
+     "tnr": 0.529,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.6256,
+     "tpr": NaN,
+     "tnr": 0.626,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   }
+  },
+  {
+   "name": "4b pool cc[ins>=0.7,other_neg=False,any]+dyn=none -> wiki4b-dev, ca-dev",
+   "n_train": {
+    "pos": 3935,
+    "neg": 2486
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.921,
+    "wiki:ref": {
+     "bal_acc": 0.8786,
+     "tpr": 0.771,
+     "tnr": 0.986,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.9199,
+     "tpr": 0.854,
+     "tnr": 0.986,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.856,
+     "tpr": 0.774,
+     "tnr": 0.938,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:strong": {
+     "bal_acc": 0.859,
+     "tpr": 0.769,
+     "tnr": 0.949,
+     "n_pos": 13,
+     "n_neg": 430
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.9975,
+     "tpr": 1.0,
+     "tnr": 0.995,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.8206,
+     "tpr": 0.75,
+     "tnr": 0.891,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "ca:no_other_neg": {
+     "bal_acc": 0.8762,
+     "tpr": 0.774,
+     "tnr": 0.978,
+     "n_pos": 31,
+     "n_neg": 412
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.7414,
+     "tpr": NaN,
+     "tnr": 0.741,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.8522,
+     "tpr": NaN,
+     "tnr": 0.852,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   },
+   "Z": {
+    "C": 10.0,
+    "pool_val": 0.8688,
+    "wiki:ref": {
+     "bal_acc": 0.8699,
+     "tpr": 0.777,
+     "tnr": 0.963,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.9093,
+     "tpr": 0.856,
+     "tnr": 0.963,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.851,
+     "tpr": 0.806,
+     "tnr": 0.896,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:strong": {
+     "bal_acc": 0.8416,
+     "tpr": 0.769,
+     "tnr": 0.914,
+     "n_pos": 13,
+     "n_neg": 430
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.9876,
+     "tpr": 1.0,
+     "tnr": 0.975,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.8082,
+     "tpr": 0.786,
+     "tnr": 0.831,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "ca:no_other_neg": {
+     "bal_acc": 0.8765,
+     "tpr": 0.806,
+     "tnr": 0.947,
+     "n_pos": 31,
+     "n_neg": 412
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.6465,
+     "tpr": NaN,
+     "tnr": 0.646,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.7192,
+     "tpr": NaN,
+     "tnr": 0.719,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   }
+  },
+  {
+   "name": "4b pool cc[ins>=0.5,other_neg=False,any]+dyn=other -> wiki4b-dev, ca-dev",
+   "n_train": {
+    "pos": 9940,
+    "neg": 6159
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.8688,
+    "wiki:ref": {
+     "bal_acc": 0.743,
+     "tpr": 0.522,
+     "tnr": 0.964,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.7437,
+     "tpr": 0.523,
+     "tnr": 0.964,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.7041,
+     "tpr": 0.419,
+     "tnr": 0.989,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:strong": {
+     "bal_acc": 0.6865,
+     "tpr": 0.385,
+     "tnr": 0.988,
+     "n_pos": 13,
+     "n_neg": 430
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.8333,
+     "tpr": 0.667,
+     "tnr": 1.0,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.6863,
+     "tpr": 0.393,
+     "tnr": 0.98,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "ca:no_other_neg": {
+     "bal_acc": 0.706,
+     "tpr": 0.419,
+     "tnr": 0.993,
+     "n_pos": 31,
+     "n_neg": 412
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.7616,
+     "tpr": NaN,
+     "tnr": 0.762,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.8571,
+     "tpr": NaN,
+     "tnr": 0.857,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   },
+   "Z": {
+    "C": 1.0,
+    "pool_val": 0.815,
+    "wiki:ref": {
+     "bal_acc": 0.7613,
+     "tpr": 0.605,
+     "tnr": 0.918,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.7718,
+     "tpr": 0.626,
+     "tnr": 0.918,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.7403,
+     "tpr": 0.516,
+     "tnr": 0.964,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:strong": {
+     "bal_acc": 0.8275,
+     "tpr": 0.692,
+     "tnr": 0.963,
+     "n_pos": 13,
+     "n_neg": 430
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.821,
+     "tpr": 0.667,
+     "tnr": 0.975,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.7278,
+     "tpr": 0.5,
+     "tnr": 0.956,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "ca:no_other_neg": {
+     "bal_acc": 0.7435,
+     "tpr": 0.516,
+     "tnr": 0.971,
+     "n_pos": 31,
+     "n_neg": 412
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.7717,
+     "tpr": NaN,
+     "tnr": 0.772,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.803,
+     "tpr": NaN,
+     "tnr": 0.803,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   }
+  },
+  {
+   "name": "4b pool cc[ins>=0.7,other_neg=False,any]+dyn=other -> wiki4b-dev, ca-dev",
+   "n_train": {
+    "pos": 3935,
+    "neg": 6159
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9057,
+    "wiki:ref": {
+     "bal_acc": 0.746,
+     "tpr": 0.514,
+     "tnr": 0.978,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.7601,
+     "tpr": 0.542,
+     "tnr": 0.978,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.7503,
+     "tpr": 0.516,
+     "tnr": 0.984,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:strong": {
+     "bal_acc": 0.7226,
+     "tpr": 0.462,
+     "tnr": 0.984,
+     "n_pos": 13,
+     "n_neg": 430
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.8309,
+     "tpr": 0.667,
+     "tnr": 0.995,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.7379,
+     "tpr": 0.5,
+     "tnr": 0.976,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "ca:no_other_neg": {
+     "bal_acc": 0.7544,
+     "tpr": 0.516,
+     "tnr": 0.993,
+     "n_pos": 31,
+     "n_neg": 412
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.8869,
+     "tpr": NaN,
+     "tnr": 0.887,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.9507,
+     "tpr": NaN,
+     "tnr": 0.951,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   },
+   "Z": {
+    "C": 10.0,
+    "pool_val": 0.8465,
+    "wiki:ref": {
+     "bal_acc": 0.7649,
+     "tpr": 0.579,
+     "tnr": 0.951,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.7832,
+     "tpr": 0.615,
+     "tnr": 0.951,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.7898,
+     "tpr": 0.613,
+     "tnr": 0.967,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:strong": {
+     "bal_acc": 0.8287,
+     "tpr": 0.692,
+     "tnr": 0.965,
+     "n_pos": 13,
+     "n_neg": 430
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.8259,
+     "tpr": 0.667,
+     "tnr": 0.985,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.7794,
+     "tpr": 0.607,
+     "tnr": 0.952,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "ca:no_other_neg": {
+     "bal_acc": 0.7943,
+     "tpr": 0.613,
+     "tnr": 0.976,
+     "n_pos": 31,
+     "n_neg": 412
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.8444,
+     "tpr": NaN,
+     "tnr": 0.844,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.8473,
+     "tpr": NaN,
+     "tnr": 0.847,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   }
+  },
+  {
+   "name": "4b pool cc[ins>=0.5,other_neg=False,any]+dyn=all -> wiki4b-dev, ca-dev",
+   "n_train": {
+    "pos": 9940,
+    "neg": 8455
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.8685,
+    "wiki:ref": {
+     "bal_acc": 0.7191,
+     "tpr": 0.484,
+     "tnr": 0.955,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.7072,
+     "tpr": 0.46,
+     "tnr": 0.955,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.6235,
+     "tpr": 0.258,
+     "tnr": 0.989,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:strong": {
+     "bal_acc": 0.6865,
+     "tpr": 0.385,
+     "tnr": 0.988,
+     "n_pos": 13,
+     "n_neg": 430
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.5,
+     "tpr": 0.0,
+     "tnr": 1.0,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.6328,
+     "tpr": 0.286,
+     "tnr": 0.98,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "ca:no_other_neg": {
+     "bal_acc": 0.6254,
+     "tpr": 0.258,
+     "tnr": 0.993,
+     "n_pos": 31,
+     "n_neg": 412
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.7293,
+     "tpr": NaN,
+     "tnr": 0.729,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.803,
+     "tpr": NaN,
+     "tnr": 0.803,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   },
+   "Z": {
+    "C": 10.0,
+    "pool_val": 0.8104,
+    "wiki:ref": {
+     "bal_acc": 0.7231,
+     "tpr": 0.553,
+     "tnr": 0.893,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.7242,
+     "tpr": 0.555,
+     "tnr": 0.893,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.7103,
+     "tpr": 0.452,
+     "tnr": 0.969,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:strong": {
+     "bal_acc": 0.7914,
+     "tpr": 0.615,
+     "tnr": 0.967,
+     "n_pos": 13,
+     "n_neg": 430
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.6543,
+     "tpr": 0.333,
+     "tnr": 0.975,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.714,
+     "tpr": 0.464,
+     "tnr": 0.964,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "ca:no_other_neg": {
+     "bal_acc": 0.7125,
+     "tpr": 0.452,
+     "tnr": 0.973,
+     "n_pos": 31,
+     "n_neg": 412
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.7434,
+     "tpr": NaN,
+     "tnr": 0.743,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.7685,
+     "tpr": NaN,
+     "tnr": 0.768,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   }
+  },
+  {
+   "name": "4b pool cc[ins>=0.7,other_neg=False,any]+dyn=all -> wiki4b-dev, ca-dev",
+   "n_train": {
+    "pos": 3935,
+    "neg": 8455
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.9035,
+    "wiki:ref": {
+     "bal_acc": 0.7239,
+     "tpr": 0.474,
+     "tnr": 0.974,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.7275,
+     "tpr": 0.481,
+     "tnr": 0.974,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.6708,
+     "tpr": 0.355,
+     "tnr": 0.987,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:strong": {
+     "bal_acc": 0.6853,
+     "tpr": 0.385,
+     "tnr": 0.986,
+     "n_pos": 13,
+     "n_neg": 430
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.4975,
+     "tpr": 0.0,
+     "tnr": 0.995,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.6863,
+     "tpr": 0.393,
+     "tnr": 0.98,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "ca:no_other_neg": {
+     "bal_acc": 0.6738,
+     "tpr": 0.355,
+     "tnr": 0.993,
+     "n_pos": 31,
+     "n_neg": 412
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.8566,
+     "tpr": NaN,
+     "tnr": 0.857,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.9261,
+     "tpr": NaN,
+     "tnr": 0.926,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   },
+   "Z": {
+    "C": 1.0,
+    "pool_val": 0.8463,
+    "wiki:ref": {
+     "bal_acc": 0.742,
+     "tpr": 0.554,
+     "tnr": 0.93,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.7546,
+     "tpr": 0.58,
+     "tnr": 0.93,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.7414,
+     "tpr": 0.516,
+     "tnr": 0.967,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:strong": {
+     "bal_acc": 0.8287,
+     "tpr": 0.692,
+     "tnr": 0.965,
+     "n_pos": 13,
+     "n_neg": 430
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.8234,
+     "tpr": 0.667,
+     "tnr": 0.98,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.7278,
+     "tpr": 0.5,
+     "tnr": 0.956,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "ca:no_other_neg": {
+     "bal_acc": 0.7459,
+     "tpr": 0.516,
+     "tnr": 0.976,
+     "n_pos": 31,
+     "n_neg": 412
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.8202,
+     "tpr": NaN,
+     "tnr": 0.82,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.8325,
+     "tpr": NaN,
+     "tnr": 0.833,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   }
+  },
+  {
+   "name": "4b gate-4 recipe cc[ref]+dyn=other -> wiki4b-dev, ca-dev",
+   "n_train": {
+    "pos": 9397,
+    "neg": 8645
+   },
+   "X": {
+    "C": 10.0,
+    "pool_val": 0.8809,
+    "wiki:ref": {
+     "bal_acc": 0.7421,
+     "tpr": 0.531,
+     "tnr": 0.953,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.7357,
+     "tpr": 0.519,
+     "tnr": 0.953,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.7342,
+     "tpr": 0.484,
+     "tnr": 0.984,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:strong": {
+     "bal_acc": 0.6842,
+     "tpr": 0.385,
+     "tnr": 0.984,
+     "n_pos": 13,
+     "n_neg": 430
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.8309,
+     "tpr": 0.667,
+     "tnr": 0.995,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.72,
+     "tpr": 0.464,
+     "tnr": 0.976,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "ca:no_other_neg": {
+     "bal_acc": 0.7359,
+     "tpr": 0.484,
+     "tnr": 0.988,
+     "n_pos": 31,
+     "n_neg": 412
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.9131,
+     "tpr": NaN,
+     "tnr": 0.913,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.9557,
+     "tpr": NaN,
+     "tnr": 0.956,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   },
+   "Z": {
+    "C": 10.0,
+    "pool_val": 0.8279,
+    "wiki:ref": {
+     "bal_acc": 0.7524,
+     "tpr": 0.591,
+     "tnr": 0.914,
+     "n_pos": 2936,
+     "n_neg": 2355
+    },
+    "wiki:att0.7": {
+     "bal_acc": 0.7578,
+     "tpr": 0.602,
+     "tnr": 0.914,
+     "n_pos": 1853,
+     "n_neg": 2355
+    },
+    "ca:ref": {
+     "bal_acc": 0.7425,
+     "tpr": 0.516,
+     "tnr": 0.969,
+     "n_pos": 31,
+     "n_neg": 450
+    },
+    "ca:strong": {
+     "bal_acc": 0.753,
+     "tpr": 0.538,
+     "tnr": 0.967,
+     "n_pos": 13,
+     "n_neg": 430
+    },
+    "ca:carbonbot": {
+     "bal_acc": 0.8234,
+     "tpr": 0.667,
+     "tnr": 0.98,
+     "n_pos": 3,
+     "n_neg": 202
+    },
+    "ca:eliza": {
+     "bal_acc": 0.7298,
+     "tpr": 0.5,
+     "tnr": 0.96,
+     "n_pos": 28,
+     "n_neg": 248
+    },
+    "ca:no_other_neg": {
+     "bal_acc": 0.7447,
+     "tpr": 0.516,
+     "tnr": 0.973,
+     "n_pos": 31,
+     "n_neg": 412
+    },
+    "cc:other_harm_only": {
+     "bal_acc": 0.8667,
+     "tpr": NaN,
+     "tnr": 0.867,
+     "n_pos": 0,
+     "n_neg": 495
+    },
+    "cc:other_harm_clear_only": {
+     "bal_acc": 0.8571,
+     "tpr": NaN,
+     "tnr": 0.857,
+     "n_pos": 0,
+     "n_neg": 203
+    }
+   }
+  }
+ ]
+}
