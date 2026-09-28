@@ -187,15 +187,25 @@ class RateBrain3(torch.nn.Module):
     def unit_fn(x: torch.Tensor) -> torch.Tensor:
         return torch.tanh(torch.nn.functional.softplus(BETA * x) / BETA)
 
-    def run(self, smell: torch.Tensor, sight: torch.Tensor | None = None, record: bool = False, opt=None):
-        """smell (B, nose.n), sight (B, eyes.n) in 0..1 -> (logit (B,), rates at the end (n, B), trace)."""
+    def run(self, smell: torch.Tensor, sight: torch.Tensor | None = None, record: bool = False, opt=None,
+            r0: torch.Tensor | None = None):
+        """smell (B, nose.n), or (B, W, nose.n) for W timed windows of equal length across the steps; sight
+        (B, eyes.n) in 0..1; r0 the start state (n,) or (n, B), default r = 0 (docs/BRAIN-SPEC.md L1: start from
+        rest) -> (logit (B,), rates at the end (n, B), trace)."""
         bsz = smell.shape[0]
-        inp = torch.zeros(self.n, bsz, device=self.device)
-        inp[self.orn_idx] = smell.T[self.orn_chan]
+        windows = smell[:, None, :] if smell.dim() == 2 else smell
+        n_win = windows.shape[1]
+        base = torch.zeros(self.n, bsz, device=self.device)
         if sight is not None:
-            inp[self.vis_idx] += self.vis_M @ sight.T
+            base[self.vis_idx] += self.vis_M @ sight.T
+        inps = []
+        for w in range(n_win):
+            inp = base.clone()
+            inp[self.orn_idx] = windows[:, w, :].T[self.orn_chan]
+            inps.append(inp)
         g = torch.exp(self.log_g)[self.unit][:, None]
-        bias = self.b[self.unit][:, None] + inp
+        cell = self.b_cell[:, None] if hasattr(self, "b_cell") else 0.0  # fixed, label-free per-cell offsets
+        biases = [self.b[self.unit][:, None] + cell + inp for inp in inps]
         tau = torch.exp(self.log_tau).clamp(*TAU_RANGE)[self.unit][:, None]
         alpha = DT_MS / tau
         if opt is not None:  # per-sniff memory: (n_plastic, B)
@@ -203,12 +213,16 @@ class RateBrain3(torch.nn.Module):
         else:
             kp_w = (self.kp_w * torch.exp(self.kp_logm))[:, None]
         ap, av = self.read_groups[self.read]
-        r = torch.zeros(self.n, bsz, device=self.device)
+        if r0 is None:
+            r = torch.zeros(self.n, bsz, device=self.device)
+        else:
+            r = (r0[:, None] if r0.dim() == 1 else r0).expand(self.n, bsz).clone()
         read, trace = [], []
+        win_len = -(-self.steps // n_win)
 
         W_all = getattr(self, "_W_all", None)
 
-        def step(r):
+        def step(r, bias):
             if W_all is not None and not torch.is_grad_enabled() and opt is None:
                 drive = W_all @ r
             else:
@@ -223,13 +237,14 @@ class RateBrain3(torch.nn.Module):
         while s < self.steps:
             n_seg = min(CHECKPOINT, self.steps - s)
             reads_in = [k for k in range(n_seg) if s + k >= self.steps - self.read_steps]
-            if ckpt and not reads_in:
+            if ckpt and not reads_in and (s // win_len) == ((s + n_seg - 1) // win_len):
+                bias = biases[s // win_len]
                 r = torch.utils.checkpoint.checkpoint(
-                    lambda r, n=n_seg: self._seg(step, r, n), r, use_reentrant=False
+                    lambda r, n=n_seg, bias=bias: self._seg(step, r, n, bias), r, use_reentrant=False
                 )
             else:
                 for k in range(n_seg):
-                    r = step(r)
+                    r = step(r, biases[(s + k) // win_len])
                     if k in reads_in:
                         read.append(r[ap].mean(0) - r[av].mean(0))
                     if record:
@@ -240,9 +255,9 @@ class RateBrain3(torch.nn.Module):
         return logit, r, (torch.stack(trace) if record else None)
 
     @staticmethod
-    def _seg(step, r, n):
+    def _seg(step, r, n, bias):
         for _ in range(n):
-            r = step(r)
+            r = step(r, bias)
         return r
 
     def forward(self, smell, sight=None):
