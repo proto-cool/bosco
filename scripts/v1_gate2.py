@@ -34,7 +34,8 @@ BAR = {"topic": 0.80, "intent": 0.80, "support": 0.80, "junk": 0.80, "hate": 0.9
 HARM_FLOOR = 0.70  # Nick, 2026-09-27 ("strict at 0.7"), fixed before any sealed test was scored
 HARM_CEILING = {"harmful": 0.824, "threat": 0.842, "sexual": 0.844, "hate": 0.831, "harassment": 0.635}
 GATE4_TASKS = (
-    "harmful", "threat", "sexual", "hate", "problem",  # harassment: deferred to gate 4b (amendment 1) "social", "credit_debt",
+    # harassment: deferred to gate 4b (amendment 1)
+    "harmful", "threat", "sexual", "hate", "problem", "social", "credit_debt",
     "sport", "business", "health", "science", "politics", "danger", "language",
 )
 GATE4_BARS = {t: 0.80 for t in GATE4_TASKS} | {
