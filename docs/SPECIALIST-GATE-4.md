@@ -82,7 +82,7 @@ Done in the three builds; see their docs.
   - Harm experts: **max(0.9 × ceiling, floor)**, where the ceiling is the plain class-balanced logistic on all
     768 encoder numbers, trained on the pool and scored on the Aegis dev part. The ceilings were measured
     2026-09-27: harmful 0.824, threat 0.842, sexual 0.844, hate 0.831, harassment 0.635.
-  - The **floor** is Nick's, fixed before any sealed test is scored and written here: **floor = ____**.
+  - The **floor** is Nick's, fixed before any sealed test is scored and written here: **floor = 0.70** (Nick, 2026-09-27: "strict at 0.7"). Harm bars: harmful 0.742, threat 0.758, sexual 0.760, hate 0.748, harassment 0.700.
 - **A shipped specialist's card** states what it was trained on and what it was tested on:
   - its held-out source and pool;
   - its disputed-labels note;

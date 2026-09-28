@@ -31,7 +31,7 @@ TASKS = ("topic", "intent", "support", "junk", "hate", "politeness")
 BAR = {"topic": 0.80, "intent": 0.80, "support": 0.80, "junk": 0.80, "hate": 0.9 * 0.731, "politeness": 0.9 * 0.666}
 # gate 4 bars (docs/SPECIALIST-GATE-4.md). Disputed labels (the harm experts): max(0.9 x the encoder's ceiling on the
 # held-out dev part, HARM_FLOOR). HARM_FLOOR is Nick's; it is fixed before any sealed test is scored.
-HARM_FLOOR = None
+HARM_FLOOR = 0.70  # Nick, 2026-09-27 ("strict at 0.7"), fixed before any sealed test was scored
 HARM_CEILING = {"harmful": 0.824, "threat": 0.842, "sexual": 0.844, "hate": 0.831, "harassment": 0.635}
 GATE4_TASKS = (
     "harmful", "threat", "sexual", "hate", "harassment", "problem", "social", "credit_debt",
