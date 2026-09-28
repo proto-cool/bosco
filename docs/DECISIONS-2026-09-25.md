@@ -185,6 +185,20 @@ power it, and it needs the fly to make honest decisions."
       specialist was taught (422 not_taught).
     Where Bosco can pass Jev: images (the eyes) and the playback.
 
+38. **Use every sense that has something honest to carry** (Nick, 2026-09-28: "we should be using all senses at
+    least reasonably to help our experts make the best decisions"). The brain cut has olfactory receptors
+    (2,639), gustatory neurons (355), visual projection neurons (9,201), Johnston's organ (672) and other
+    mechano-, thermo- and hygrosensory neurons. **Each sense carries a different kind of information; meaning is
+    never duplicated into extra senses:**
+    - **smell = meaning** (the pinned encoder; in use);
+    - **taste = form** (letters, word shapes, length, punctuation, capitals), a fixed counting rule rather than a
+      learned model. For language, plain language, and possibly junk and tone;
+    - **sight = pictures** (option c eyes; optic lobes later);
+    - **hearing** only if audio input ever comes. Touch, temperature and humidity stay idle.
+    A sense a specialist was not trained with gets no input, so shipped specialists are unchanged. First: an
+    anatomy check (do gustatory neurons reach the KCs, DANs or DN read within 80 steps in our cut?), then a taste
+    spike after gate 4, tested on language and plain.
+
 ## Open (Nick to decide)
 
 - **A budget for commissioned labelling** (sentiment first): paid, consented annotation of
