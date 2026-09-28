@@ -29,6 +29,19 @@ DATA = paths.CACHE / "v1-gate2"
 RUNS = paths.ROOT / "runs" / "specialist-gate-2"
 TASKS = ("topic", "intent", "support", "junk", "hate", "politeness")
 BAR = {"topic": 0.80, "intent": 0.80, "support": 0.80, "junk": 0.80, "hate": 0.9 * 0.731, "politeness": 0.9 * 0.666}
+# gate 4 bars (docs/SPECIALIST-GATE-4.md). Disputed labels (the harm experts): max(0.9 x the encoder's ceiling on the
+# held-out dev part, HARM_FLOOR). HARM_FLOOR is Nick's; it is fixed before any sealed test is scored.
+HARM_FLOOR = None
+HARM_CEILING = {"harmful": 0.824, "threat": 0.842, "sexual": 0.844, "hate": 0.831, "harassment": 0.635}
+GATE4_TASKS = (
+    "harmful", "threat", "sexual", "hate", "harassment", "problem", "social", "credit_debt",
+    "sport", "business", "health", "science", "politics", "danger", "language",
+)
+GATE4_BARS = {t: 0.80 for t in GATE4_TASKS} | {
+    t: (max(0.9 * c, HARM_FLOOR) if HARM_FLOOR is not None else float("nan")) for t, c in HARM_CEILING.items()
+}
+T_ITEMS = 1000  # gate 4: the temperature is fit on CPU logits of up to this many validation items (seeded)
+
 GATES = {  # gate 3 (docs/SPECIALIST-GATE-3.md) reuses this runner on its own data
     "2": (DATA, RUNS, TASKS, BAR),
     "3": (
@@ -36,6 +49,13 @@ GATES = {  # gate 3 (docs/SPECIALIST-GATE-3.md) reuses this runner on its own da
         paths.ROOT / "runs" / "specialist-gate-3",
         ("kind", "food", "danger", "plain"),
         {"kind": 0.80, "food": 0.80, "danger": 0.80, "plain": 0.80},
+    ),
+    # gate 4 (docs/SPECIALIST-GATE-4.md): the sharp questions, each scored on a held-out source it never trained on
+    "4": (
+        paths.CACHE / "v1-gate4",
+        paths.ROOT / "runs" / "specialist-gate-4",
+        GATE4_TASKS,
+        GATE4_BARS,
     ),
     # harm development run (decision 35): train/val/Aegis-dev only; no sealed test exists in this data
     "harm-dev": (
@@ -268,8 +288,15 @@ def cmd_score(a) -> int:
     meta, X, L, zl, sets = load()
     m, _, design = brain(a.task, meta, device="cpu")
     m.load_state_dict(ck["state"])
-    byi = {it["i"]: it for it in sets[a.task]["val"]}
-    T = V.fit_temperature(tj["val_logits"], [byi[i] for i in tj["val_items"]])
+    if "gate-4" in str(RUNS):  # gate 4: the temperature from CPU logits, as served (the intent ECE lesson, gate 2)
+        if a.split == "test" and not all(np.isfinite(BAR[t]) for t in TASKS):
+            raise SystemExit("refusing: the harm floor is not fixed (docs/SPECIALIST-GATE-4.md)")
+        va = sets[a.task]["val"]
+        va = [va[i] for i in sorted(np.random.default_rng(V.SEED).permutation(len(va))[:T_ITEMS])]
+        T = V.fit_temperature(logits_A(m, va, zl) if design == "A" else logits_B(m, va), va)
+    else:
+        byi = {it["i"]: it for it in sets[a.task]["val"]}
+        T = V.fit_temperature(tj["val_logits"], [byi[i] for i in tj["val_items"]])
     items = sets[a.task][a.split][: 30 if a.smoke else None]
     t1 = time.time()
     lg = logits_A(m, items, zl) if design == "A" else logits_B(m, items)
@@ -342,7 +369,7 @@ def cmd_baselines(a) -> int:
 def cmd_report(a) -> int:
     base = json.load(open(RUNS / "baselines.json"))
     meta = json.load(open(DATA / "items.json"))
-    g = "3" if "gate-3" in str(RUNS) else "2"
+    g = RUNS.name.rsplit("-", 1)[-1]  # specialist-gate-<g>
     L_ = [
         f"# Specialist gate {g} results",
         "",
