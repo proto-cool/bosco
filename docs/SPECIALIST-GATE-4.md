@@ -98,6 +98,11 @@ Done in the three builds; see their docs.
   Its sealed test (2,582 items, 255 yes) is scored **once**, in gate 4b, with the bar unchanged (0.70). Gate 4b's
   pre-registration will name what changed. The other 14 specialists are unchanged.
 
+## Halted (2026-09-28, Nick: "Stop all training and evaluations until we fix this")
+Training and scoring were stopped pending a full audit (`docs/audit-2026-09-28/`). By then, 13 of the 14 sealed tests
+had been scored (every specialist except language). The scores were not read, reported or used, and no report was
+generated. Gate 4b's harassment training was killed at its start.
+
 ## Disclosure
 Seen before this was written, all on validation or the held-out **dev** parts, never a sealed test:
 - the encoder ceilings for every field (`runs/gate4-ceilings/`);
