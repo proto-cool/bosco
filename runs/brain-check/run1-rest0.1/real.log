@@ -1,0 +1,113 @@
+{
+ "arm": "real",
+ "rest_input": 0.1,
+ "settle": {
+  "steps": 40,
+  "max_step_change": 1.407042145729065e-06,
+  "converged": true
+ },
+ "rest_drift_after_80_steps": 7.450580596923828e-09,
+ "orn_rest_rate": 0.15397313237190247,
+ "orn_fed_rest_rate": 0.21718324720859528,
+ "kc_active_per_sniff": 0.04838214069604874,
+ "kc_active_per_sniff_min_max": [
+  0.006397638004273176,
+  0.13804133236408234
+ ],
+ "kc_ever_active": 0.9970472455024719,
+ "kc_jaccard_between_items": 0.02911360375583172,
+ "read_spread": 0.0003328491293359548,
+ "read_mean": 0.013045061379671097,
+ "read_corr_with_80_steps_at": {
+  "10": 0.04837021798488604,
+  "20": 0.6667707152209992,
+  "40": 0.9887896498643839,
+  "60": 0.9996550540289686
+ },
+ "s_batch_of_200": 12.446608781814575,
+ "checks": {
+  "L1_starts_from_rest": true,
+  "L2_orn_rest_le_0.15": false,
+  "L3_kc_2_to_10pct": true,
+  "L4_kc_ever_ge_50pct": true,
+  "L4_jaccard_le_0.25": true,
+  "L5_read_spread_ge_0.01": false
+ },
+ "silenced_mb": {
+  "settle": {
+   "steps": 240,
+   "max_step_change": 6.300210952758789e-06,
+   "converged": true
+  },
+  "rest_drift_after_80_steps": 8.432567119598389e-05,
+  "orn_rest_rate": 0.15397390723228455,
+  "orn_fed_rest_rate": 0.2171844094991684,
+  "kc_active_per_sniff": 0.0,
+  "kc_active_per_sniff_min_max": [
+   0.0,
+   0.0
+  ],
+  "kc_ever_active": 0.0,
+  "kc_jaccard_between_items": 0.0,
+  "read_spread": 0.00033602010807953775,
+  "read_mean": 0.015011579729616642,
+  "read_corr_with_80_steps_at": {
+   "10": 0.05487577023861507,
+   "20": 0.7004291186018408,
+   "40": 0.9900009716257704,
+   "60": 0.999668744191344
+  },
+  "regions": {
+   "orn": {
+    "active_ever": 0.7089806795120239,
+    "varies": 0.7089806795120239
+   },
+   "alpn": {
+    "active_ever": 0.9402332305908203,
+    "varies": 0.9329445958137512
+   },
+   "alln": {
+    "active_ever": 0.9190475940704346,
+    "varies": 0.9023809432983398
+   },
+   "kc": {
+    "active_ever": 0.0,
+    "varies": 0.0
+   },
+   "mbon": {
+    "active_ever": 1.0,
+    "varies": 0.39175257086753845
+   },
+   "dan": {
+    "active_ever": 1.0,
+    "varies": 0.13235294818878174
+   },
+   "lh": {
+    "active_ever": 0.9994931817054749,
+    "varies": 0.9974657893180847
+   },
+   "cx": {
+    "active_ever": 0.846101701259613,
+    "varies": 0.22203390300273895
+   },
+   "vpn": {
+    "active_ever": 0.9980437159538269,
+    "varies": 0.011955222114920616
+   },
+   "dn": {
+    "active_ever": 0.9337899684906006,
+    "varies": 0.10121765732765198
+   },
+   "other_sensory": {
+    "active_ever": 0.004667863715440035,
+    "varies": 0.0003590664127841592
+   },
+   "rest": {
+    "active_ever": 0.9626969695091248,
+    "varies": 0.37053778767585754
+   }
+  },
+  "s_batch_of_200": 12.42365574836731
+ },
+ "wall_s": 1956.9273190498352
+}

@@ -56,8 +56,12 @@ KC_TARGET = 0.05  # fraction of KCs active per sniff (the fly's 2-10%)
 READ_TARGET = 0.2  # read neurons' mean rate: a resting operating point, neither silent nor saturated
 
 
-def probe(m: R3.RateBrain3, s: torch.Tensor) -> dict:
+def probe(m: R3.RateBrain3, s: torch.Tensor, rest: torch.Tensor | None = None) -> dict:
+    """Operating-point measures on sniffs s; with `rest` (the resting smell) the brain re-settles to its resting
+    state first and every sniff starts there (docs/BRAIN-SPEC.md L1), else sniffs start from r = 0."""
     with torch.no_grad():
+        if rest is not None:
+            m.settle(rest)
         logit, r, _ = m.run(s)
     ap, av = m.read_groups[m.read]
     return {
@@ -68,11 +72,11 @@ def probe(m: R3.RateBrain3, s: torch.Tensor) -> dict:
     }
 
 
-def bisect(m, s, setter, key: str, target: float, lo: float = -3.0, hi: float = 3.0) -> float:
+def bisect(m, s, setter, key: str, target: float, lo: float = -3.0, hi: float = 3.0, rest=None) -> float:
     for _ in range(16):
         mid = 0.5 * (lo + hi)
         setter(mid)
-        lo, hi = (mid, hi) if probe(m, s)[key] > target else (lo, mid)
+        lo, hi = (mid, hi) if probe(m, s, rest)[key] > target else (lo, mid)
     setter(0.5 * (lo + hi))
     return 0.5 * (lo + hi)
 
@@ -89,12 +93,13 @@ TONIC = 0.05  # resting rate a neuron's excitability is tuned to (homeostatic se
 HOMEO_ITERS, HOMEO_LR = 40, 1.0
 
 
-def homeostatic_start(m: R3.RateBrain3, s: torch.Tensor, gain: float) -> dict:
+def homeostatic_start(m: R3.RateBrain3, s: torch.Tensor, gain: float, rest: torch.Tensor | None = None) -> dict:
     """Label-free start (plan A2): real neurons fire spontaneously at low rates and tune their own
     excitability toward a set point (homeostatic intrinsic plasticity; Turrigiano 2011). Here: every cell
     type's threshold is nudged until its mean rate over unlabelled calibration sniffs is TONIC, except the
     sensory neurons (driven by the input as given), the Kenyon cells (bisected to KC_TARGET active, the
-    fly's sparse code) and the read neurons (READ_TARGET). Returns the operating point and liveness."""
+    fly's sparse code) and the read neurons (READ_TARGET). Returns the operating point and liveness. With `rest`
+    (the resting smell), every calibration sniff starts from the resting state, re-settled after each change."""
     m.set_init(gain, 0.05)
     n_u = m.n_units
     sensory = torch.zeros(n_u, dtype=torch.bool, device=m.b.device)
@@ -110,15 +115,66 @@ def homeostatic_start(m: R3.RateBrain3, s: torch.Tensor, gain: float) -> dict:
     hist = []
     for _ in range(HOMEO_ITERS):
         with torch.no_grad():
+            if rest is not None:
+                m.settle(rest)
             _, r, _ = m.run(s)
             rate_u = torch.zeros(n_u, device=r.device).index_add(0, m.unit, r.mean(1)) / cnt
             err = TONIC - rate_u
             m.b[tuned] += HOMEO_LR * err[tuned]
         hist.append(float(err[tuned].abs().mean()))
-    kc = bisect(m, s, m.set_kc_threshold, "kc", KC_TARGET)
-    rd = bisect(m, s, m.set_read_threshold, "read", READ_TARGET)
-    kc = bisect(m, s, m.set_kc_threshold, "kc", KC_TARGET)
-    return {"gain": gain, "kc_threshold": kc, "read_threshold": rd, "homeo_err": hist, **probe(m, s)}
+    kc = bisect(m, s, m.set_kc_threshold, "kc", KC_TARGET, rest=rest)
+    rd = bisect(m, s, m.set_read_threshold, "read", READ_TARGET, rest=rest)
+    kc = bisect(m, s, m.set_kc_threshold, "kc", KC_TARGET, rest=rest)
+    return {"gain": gain, "kc_threshold": kc, "read_threshold": rd, "homeo_err": hist, **probe(m, s, rest)}
+
+
+# ---- the label-free start from rest (docs/BRAIN-SPEC.md, 2026-09-28) ----------------------------------------
+KC_CELL_ITERS, KC_CELL_DAMP = 8, 0.7
+
+
+def kc_cell_offsets(m: R3.RateBrain3, s: torch.Tensor, rest: torch.Tensor, target: float = KC_TARGET) -> dict:
+    """Per-KC thresholds, label-free: each Kenyon cell's offset is moved until it is active (rate > ACTIVE, read
+    window) on about `target` of the unlabelled calibration sniffs s. Real KCs compensate for their own input
+    strength (Abdelrahman, Merkler & Hige 2021), so no KC is always on or never on. Each pass puts a KC's
+    (1 - target) quantile of input at the input that gives rate ACTIVE; damped and repeated, because the KCs
+    inhibit each other through APL."""
+    x_act = float(np.log(np.expm1(R3.BETA * np.arctanh(R3.ACTIVE))) / R3.BETA)  # unit_fn(x_act) = ACTIVE
+    hist = []
+    for _ in range(KC_CELL_ITERS):
+        with torch.no_grad():
+            m.settle(rest)
+            _, _, rr = m.run(s, record="read")
+            share = (rr[m.kc] > R3.ACTIVE).float().mean(1)
+            hist.append(
+                {
+                    "mean": float(share.mean()),
+                    "never": float((share == 0).float().mean()),
+                    "over_2x": float((share > 2 * target).float().mean()),
+                }
+            )
+            q = torch.quantile(m.preact(rr, m.kc), 1 - target, dim=1)
+            m.b_cell[m.kc] += KC_CELL_DAMP * (x_act - q)
+    return {"x_active": x_act, "share_by_pass": hist}
+
+
+def rest_start(m: R3.RateBrain3, s: torch.Tensor, rest: torch.Tensor, gain: float = 4.0) -> dict:
+    """The label-free operating point, every sniff starting from rest: the homeostatic start (types toward
+    TONIC, KC type threshold to KC_TARGET, read neurons to READ_TARGET), then per-KC offsets, then the read
+    neurons again (the KC change moves them), then the resting state is settled and kept. Inference only: the
+    wiring is folded once (`freeze`) and stays valid, since only thresholds change."""
+    m.set_init(gain, 0.05)
+    m.freeze()
+    op = homeostatic_start(m, s, gain, rest=rest)
+    kcc = kc_cell_offsets(m, s, rest)
+    rd = bisect(m, s, m.set_read_threshold, "read", READ_TARGET, rest=rest)
+    settle = m.settle(rest)
+    return {
+        **{k: v for k, v in op.items() if k != "live"},
+        "kc_cell": kcc,
+        "read_threshold_final": rd,
+        "settle": settle,
+        **probe(m, s, rest),
+    }
 
 
 # ---- the answer from descending neurons (decision 4; plan A5) ------------------------------------
@@ -151,4 +207,56 @@ def dn_groups(m: R3.RateBrain3) -> tuple[np.ndarray, np.ndarray, dict]:
     t = df.groupby("type").eff.mean()
     app_t, avo_t = t[t >= DN_MIN_EFFECT].index, t[t <= -DN_MIN_EFFECT].index
     info = {"approach_types": sorted(app_t), "avoid_types": sorted(avo_t)}
+    return df[df.type.isin(app_t)].idx.to_numpy(), df[df.type.isin(avo_t)].idx.to_numpy(), info
+
+
+# ---- the DN read by MBON coupling (docs/BRAIN-SPEC.md, amendment 1; audit F10) ------------------------------
+COUPLING_DX = 0.1  # extra drive on a whole MBON group
+COUPLING_Q = 0.95  # a DN type joins a group if its |coupling| is in the top 5% of DN types
+STEERING_DNS = ("DNa02", "DNa03")  # steering: averaging left and right loses the sign
+
+
+def dn_coupling(m: R3.RateBrain3, rest: torch.Tensor, dx: float = COUPLING_DX) -> np.ndarray:
+    """Each neuron's resting-state response to +dx drive on all approach MBONs, minus its response to +dx on all
+    avoid MBONs (label-free; from the current operating point, in the brain's own dynamics). Returns (n,)."""
+    apm, avm = m.read_groups["mbon"]
+
+    def rest_with(idx):
+        with torch.no_grad():
+            if idx is not None:
+                m.b_cell[idx] += dx
+            m.r_rest = None
+            m.settle(rest)
+            r = m.r_rest.clone()
+            if idx is not None:
+                m.b_cell[idx] -= dx
+        return r
+
+    r0 = rest_with(None)
+    d = (rest_with(apm) - r0) - (rest_with(avm) - r0)
+    m.r_rest = None
+    m.settle(rest)
+    return d.cpu().numpy()
+
+
+def dn_groups_coupled(m: R3.RateBrain3, rest: torch.Tensor) -> tuple[np.ndarray, np.ndarray, dict]:
+    """Approach and avoid DN cells: the DN types the MBONs drive most, by sign (amendment 1). Approach: type mean
+    coupling >= the COUPLING_Q quantile of |coupling| over DN types; avoid: <= minus it; steering DNs excluded."""
+    import pandas as pd
+
+    from bosco import data
+
+    d = dn_coupling(m, rest)
+    dn = m.regions["dn"].cpu().numpy()
+    typ = data.annotations().reindex(M2.load_or_build().brain.ids)["type"].fillna("").to_numpy()[dn]
+    df = pd.DataFrame({"idx": dn, "type": typ, "dR": d[dn]})
+    t = df.groupby("type").dR.mean()
+    th = float(np.quantile(t.abs(), COUPLING_Q))
+    ok = ~t.index.isin(STEERING_DNS)
+    app_t, avo_t = t.index[ok & (t >= th)], t.index[ok & (t <= -th)]
+    info = {
+        "threshold": th,
+        "approach_types": {k: float(t[k]) for k in app_t},
+        "avoid_types": {k: float(t[k]) for k in avo_t},
+    }
     return df[df.type.isin(app_t)].idx.to_numpy(), df[df.type.isin(avo_t)].idx.to_numpy(), info

@@ -9,6 +9,7 @@ dependencies = [
     "pandas>=2.2",
     "neuprint-python>=0.4",
     "pyyaml>=6",
+    "torch>=2.14",  # the rate brain (ratebrain3); was only pulled in by the gate group
 ]
 
 [dependency-groups]

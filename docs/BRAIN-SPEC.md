@@ -62,3 +62,53 @@ trains the per-type gain, threshold and time constant (the amendment of 2026-09-
 - **One sniff for yes/no,** answered as sigmoid(k · (approach − avoid) + c).
 
 Anything else needs Nick first.
+
+## Amendment 1 (2026-09-28, Nick; written before the runs it governs)
+
+**What was found** (label-free, `runs/brain-check/`, first run with the allowed changes: rest 0.1, per-KC
+thresholds, start from rest). L1, L3, L4 and L6 pass: KCs 4.8% active per sniff, 99.7% ever active, Jaccard 0.029,
+one answer 0.107 s. L2 fails narrowly (ORN rest 0.154). **L5 fails by 30×** (read s.d. 0.00033). The item is strong
+at the ORNs (per-cell s.d. 0.19) and PNs (0.05), but the untrained MBONs barely vary with the item (0.002), and the
+MBON→DN coupling is weak. The layered, hash and silenced-mushroom-body controls give the same 0.00033. No
+label-free DN selection reaches past 0.00073. Stronger KC output (×3 to ×30) does not help and breaks the sparse
+code. A random KC→MBON memory (log-multipliers ~ N(0, 3)) reaches 0.0044. Before learning, a mushroom body that
+pools thousands of KCs gives much the same output for every odour; the valence lives in the learned KC→MBON
+memory. So:
+
+1. **L5 is measured on the trained brain** (main arm, `harmful`): the read's s.d. across the validation items is
+   ≥ 0.01 rate units. The untrained value is still reported.
+2. **The DN read (audit F10), label-free, fixed before training.**
+   - At the label-free start built with the anatomical groups (`v1.dn_groups`), each DN's resting-state response
+     to +0.1 drive on all approach MBONs, minus its response to +0.1 on all avoid MBONs, is its coupling `dR`.
+     Each type takes the mean `dR` of its cells.
+   - Approach types: `dR` ≥ the 95th percentile of |`dR`| over DN types. Avoid types: `dR` ≤ minus that value.
+   - DNa02 and DNa03 are excluded: they are steering DNs, and averaging the left and right cells loses the sign.
+   - The label-free start is then rebuilt from scratch with these groups.
+3. **Rest input 0.05** (an allowed change, for L2): the recurrent ORN excitation lifted the rest rate above the
+   expected rate for 0.1.
+4. **80 steps are kept** (Nick). From rest, the step-60 answer correlates 0.9997 with step 80.
+5. **The answer path is one sniff at a time on the CPU** (`RateBrain3.answer`). It is bit-identical at any thread
+   count and between runs: softplus is written as relu(z) + log1p(exp(−|z|)), mathematically the same.
+   Published numbers use this path.
+
+**Trained checks, as they will be run** (`scripts/brain_train.py`, `harmful`, the train split to train and the
+val split to score, with no model selection on val):
+- **Recipe.**
+  - Main arm: only `kp_logm` (KC→MBON), `log_k` and `c` train.
+  - Every sniff starts from the resting state (re-settled, detached, every 20 batches).
+  - Class-balanced BCE, Adam at learning rate 0.03, batch 64, 3 epochs, seed 1, on the 3080.
+  - The antenna, operating point and read are the label-free ones above.
+  - Scoring is on the Mac CPU through `answer`, with p(harmful) = sigmoid(logit) and yes at p ≥ 0.5.
+- **T1:** val balanced accuracy ≥ that of a logistic regression (sklearn, class-balanced, C = 1) on the same
+  46-number smell, fit on train, minus 0.05.
+- **T2:** with `kp_logm` reset to 0 (keeping the trained k and c), balanced accuracy falls by ≥ 75% of
+  (trained − 0.5).
+- **T3:** a copy trained with the same recipe on flipped labels has its `kp_logm` put into the original (keeping
+  the original's k and c). At least 80% of the original's val answers flip.
+- **T4:**
+  - recall ≥ 0.5 on both classes;
+  - the untrained part's share ≤ 0.2, where the share is the R² of the trained val logits on the logits with
+    `kp_logm` reset (the same k and c).
+- **T5:** L3 and L4 on the 200 label-free items with the trained weights, plus L5 as amended (item 1).
+- **T6:** the layered control, with its own label-free start and the real brain's read cells, trained with the
+  same recipe and scored the same way. Reported beside the real brain, with no pass or fail.

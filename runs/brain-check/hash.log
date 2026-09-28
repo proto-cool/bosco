@@ -1,0 +1,37 @@
+{
+ "arm": "hash",
+ "rest_input": 0.05,
+ "settle": {
+  "steps": 40,
+  "max_step_change": 1.442432403564453e-06,
+  "converged": true
+ },
+ "rest_drift_after_80_steps": 6.556510925292969e-07,
+ "orn_rest_rate": 0.09577913582324982,
+ "orn_fed_rest_rate": 0.13483354449272156,
+ "kc_active_per_sniff": 0.04604700207710266,
+ "kc_active_per_sniff_min_max": [
+  0.006397638004273176,
+  0.14542323350906372
+ ],
+ "kc_ever_active": 0.9975393414497375,
+ "kc_jaccard_between_items": 0.027091195806860924,
+ "read_spread": 0.0007642562850378454,
+ "read_mean": 0.012637610547244549,
+ "read_corr_with_80_steps_at": {
+  "10": 0.6207191019268691,
+  "20": 0.8648825621489966,
+  "40": 0.9904034438260304,
+  "60": 0.9996087586688197
+ },
+ "s_batch_of_200": 10.449280977249146,
+ "checks": {
+  "L1_starts_from_rest": true,
+  "L2_orn_rest_le_0.15": true,
+  "L3_kc_2_to_10pct": true,
+  "L4_kc_ever_ge_50pct": true,
+  "L4_jaccard_le_0.25": true,
+  "L5_read_spread_ge_0.01": false
+ },
+ "wall_s": 2153.6288220882416
+}

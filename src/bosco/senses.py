@@ -87,3 +87,52 @@ def eyes(b: Brain) -> Eyes:
     for i, t in enumerate(typ):
         M[i, chans[t]] = 1.0 / VIS_FAN
     return Eyes(types, vp, M)
+
+
+# ---- the antenna: text embedding -> the 46 glomeruli, quiet at rest (docs/BRAIN-SPEC.md L2) ----------------
+REST = 0.05  # glomerulus drive with no odour, so ORNs rest at a low spontaneous rate: real ORNs fire at a few
+# percent of their maximum (de Bruyne, Foster & Carlson 2001: ~10 spikes/s against 200+ when driven). The audit's
+# F8: the v1 nose rested at 0.5. 0.1 was tried first; recurrent ORN excitation lifted the rest rate to 0.154, over
+# BRAIN-SPEC L2's 0.15 (amendment 1).
+
+
+@dataclass
+class Antenna:
+    """Label-free, fit once on unlabelled texts (no option words, no labels): the top n_chan / 2 principal
+    components of the embeddings, each whitened and split into its positive and its negative part, one part per
+    glomerulus. A glomerulus rests at `rest` and reaches 1 at the fit's 99th percentile, so an item raises the
+    drive of the glomeruli its components point to and leaves the rest at rest."""
+
+    mu: np.ndarray  # (dim,)
+    W: np.ndarray  # (n_chan / 2, dim)
+    norm: float
+    rest: float
+
+    @classmethod
+    def fit(cls, X_fit: np.ndarray, n_chan: int, rest: float = REST) -> Antenna:
+        k = n_chan // 2
+        mu = X_fit.mean(0)
+        _, s, vt = np.linalg.svd(X_fit - mu, full_matrices=False)
+        W = vt[:k] / s[:k, None]
+        norm = float(np.percentile(np.abs((X_fit - mu) @ W.T), 99))
+        return cls(mu.astype(np.float64), W.astype(np.float64), norm, float(rest))
+
+    @property
+    def n(self) -> int:
+        return 2 * self.W.shape[0]
+
+    def resting(self) -> np.ndarray:
+        return np.full(self.n, self.rest, np.float32)
+
+    def __call__(self, X: np.ndarray) -> np.ndarray:
+        p = ((np.atleast_2d(X) - self.mu) @ self.W.T) / self.norm
+        pm = np.concatenate([np.maximum(0, p), np.maximum(0, -p)], 1)
+        return (self.rest + (1 - self.rest) * np.clip(pm, 0, 1)).astype(np.float32)
+
+    def save(self, path) -> None:
+        np.savez(path, mu=self.mu, W=self.W, norm=self.norm, rest=self.rest)
+
+    @classmethod
+    def load(cls, path) -> Antenna:
+        z = np.load(path)
+        return cls(z["mu"], z["W"], float(z["norm"]), float(z["rest"]))

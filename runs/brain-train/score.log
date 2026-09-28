@@ -1,0 +1,38 @@
+{
+ "n_val": 1865,
+ "val_positive_share": 0.7581769227981567,
+ "logistic_46": 0.7345118658207284,
+ "untrained_read_sd": 0.0006865208270028234,
+ "trained": {
+  "bal_acc": 0.7269528346562879,
+  "recall_yes": 0.7355021216407355,
+  "recall_no": 0.7184035476718403,
+  "k": 8.459695816040039,
+  "c": -1.4853510856628418,
+  "read_sd": 0.01205232460051775,
+  "logit_sd": 1.019589900970459,
+  "s_per_answer": 0.10469119734163258
+ },
+ "trained_label_free": {
+  "kc_active_per_sniff": 0.0769512876868248,
+  "kc_ever_active": 0.9923720359802246,
+  "kc_jaccard_between_items": 0.11451942473649979
+ },
+ "reset": {
+  "bal_acc": 0.534183819078772
+ },
+ "swapped": {
+  "flipped_share": 0.788739946380697
+ },
+ "untrained_share_r2": 0.13387766410698296,
+ "checks": {
+  "T1_learns": true,
+  "T2_memory_is_the_learner": true,
+  "T3_memory_carries_answer": false,
+  "T4_recall_both_ge_0.5": true,
+  "T4_untrained_share_le_0.2": true,
+  "T5_L3": true,
+  "T5_L4": true,
+  "T5_L5_trained_read_sd_ge_0.01": true
+ }
+}

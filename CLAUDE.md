@@ -19,8 +19,10 @@ audit did not fault.
   - smell: 46 glomeruli, fed by a frozen text encoder (nomic-embed-text-v1.5, pinned), the translator;
   - taste: 355 gustatory neurons; sight: 9,201 visual projection neurons. Both are in the model but not yet
     fed (see the handoff).
-- **Answer:** read from descending-neuron approach and avoid groups (`v1.dn_groups`). The audit flags that
-  steering neurons are counted as avoid, and that this needs fixing.
+- **Answer:** yes/no is one sniff from rest, read as approach − avoid over the DN types the MBONs drive most,
+  by sign (`v1.dn_groups_coupled`, BRAIN-SPEC amendment 1; steering DNs excluded). Served and scored only through
+  `RateBrain3.answer` (one sniff at a time, bit-identical at any thread count, ~0.1 s on the Mac).
+  Status: `docs/BRAIN-RESULTS-2026-09-28.md`.
 - **Learning:** by gradient descent on task labels, allowed only on the KC→MBON synapses (the main arm) and on
   per-cell-type gain, threshold and time constant (a comparison arm). The graph and the signs are never trained.
 

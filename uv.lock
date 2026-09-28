@@ -54,6 +54,7 @@ dependencies = [
     { name = "pandas" },
     { name = "pyarrow" },
     { name = "pyyaml" },
+    { name = "torch" },
 ]
 
 [package.dev-dependencies]
@@ -82,6 +83,7 @@ requires-dist = [
     { name = "pandas", specifier = ">=2.2" },
     { name = "pyarrow", specifier = ">=17" },
     { name = "pyyaml", specifier = ">=6" },
+    { name = "torch", specifier = ">=2.14" },
 ]
 
 [package.metadata.requires-dev]

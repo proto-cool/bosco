@@ -24,3 +24,6 @@ runs/product/logs/
 
 # exported families and specialists (regenerate with scripts/export_family.py; weights carry their data licences)
 /service/
+
+# trained weights carry their data licences: kept local (results and logs are committed)
+runs/brain-train/*.pt

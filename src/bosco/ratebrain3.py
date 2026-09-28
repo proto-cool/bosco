@@ -132,6 +132,9 @@ class RateBrain3(torch.nn.Module):
         self.regions = {k: torch.tensor(v, device=device) for k, v in regions(b2.brain).items()}
         self.behaviour = {k: torch.tensor(v, device=device) for k, v in M2.behaviour_groups(b2.brain).items()}
         self.steps, self.read_steps = R2.STEPS, R2.READ_STEPS
+        # label-free per-cell offsets (docs/BRAIN-SPEC.md: per-KC thresholds), zero unless set
+        self.register_buffer("b_cell", torch.zeros(b.n, device=device))
+        self.r_rest: torch.Tensor | None = None  # the resting state every sniff starts from, once `settle`d
 
     # ---- operating point (label-free starts set these) ----
     def set_init(self, gain: float, threshold: float) -> None:
@@ -185,13 +188,25 @@ class RateBrain3(torch.nn.Module):
     # ---- dynamics ----
     @staticmethod
     def unit_fn(x: torch.Tensor) -> torch.Tensor:
-        return torch.tanh(torch.nn.functional.softplus(BETA * x) / BETA)
+        # softplus written out as relu(z) + log1p(exp(-|z|)): torch's fused softplus kernel rounds its scalar tail
+        # differently from its vector body, so on the CPU its last bit depended on the thread count (where the
+        # array is split). These ops round the same either way, so answers are bit-identical at any thread count.
+        z = BETA * x
+        return torch.tanh((torch.relu(z) + torch.log1p(torch.exp(-z.abs()))) / BETA)
 
-    def run(self, smell: torch.Tensor, sight: torch.Tensor | None = None, record: bool = False, opt=None,
-            r0: torch.Tensor | None = None):
+    def run(
+        self,
+        smell: torch.Tensor,
+        sight: torch.Tensor | None = None,
+        record: bool | str = False,
+        opt=None,
+        r0: torch.Tensor | None = None,
+    ):
         """smell (B, nose.n), or (B, W, nose.n) for W timed windows of equal length across the steps; sight
-        (B, eyes.n) in 0..1; r0 the start state (n,) or (n, B), default r = 0 (docs/BRAIN-SPEC.md L1: start from
-        rest) -> (logit (B,), rates at the end (n, B), trace)."""
+        (B, eyes.n) in 0..1; r0 the start state (n,) or (n, B), default the resting state if `settle` has set
+        one, else r = 0 (docs/BRAIN-SPEC.md L1: start from rest) -> (logit (B,), rates at the end (n, B),
+        trace). record=True keeps every step's rates as the trace; record="read" returns instead the mean rates
+        over the read window (n, B)."""
         bsz = smell.shape[0]
         windows = smell[:, None, :] if smell.dim() == 2 else smell
         n_win = windows.shape[1]
@@ -204,8 +219,7 @@ class RateBrain3(torch.nn.Module):
             inp[self.orn_idx] = windows[:, w, :].T[self.orn_chan]
             inps.append(inp)
         g = torch.exp(self.log_g)[self.unit][:, None]
-        cell = self.b_cell[:, None] if hasattr(self, "b_cell") else 0.0  # fixed, label-free per-cell offsets
-        biases = [self.b[self.unit][:, None] + cell + inp for inp in inps]
+        biases = [self.b[self.unit][:, None] + self.b_cell[:, None] + inp for inp in inps]
         tau = torch.exp(self.log_tau).clamp(*TAU_RANGE)[self.unit][:, None]
         alpha = DT_MS / tau
         if opt is not None:  # per-sniff memory: (n_plastic, B)
@@ -213,6 +227,8 @@ class RateBrain3(torch.nn.Module):
         else:
             kp_w = (self.kp_w * torch.exp(self.kp_logm))[:, None]
         ap, av = self.read_groups[self.read]
+        if r0 is None:
+            r0 = self.r_rest
         if r0 is None:
             r = torch.zeros(self.n, bsz, device=self.device)
         else:
@@ -224,7 +240,9 @@ class RateBrain3(torch.nn.Module):
 
         def step(r, bias):
             if W_all is not None and not torch.is_grad_enabled() and opt is None:
-                drive = W_all @ r
+                # one sniff: CSR matvec, ~10x faster than CSR @ (n, 1); bit-identical on the CPU to the batched
+                # product (each row is summed in index order), so a served answer equals a scored one
+                drive = torch.mv(W_all, r[:, 0])[:, None] if r.shape[1] == 1 else W_all @ r
             else:
                 x = g * r
                 drive = torch.sparse.mm(self.W, x)
@@ -233,6 +251,8 @@ class RateBrain3(torch.nn.Module):
 
         # training keeps only every CHECKPOINT-th state and recomputes the rest in the backward pass
         ckpt = torch.is_grad_enabled() and not record
+        window = record == "read"
+        acc = 0.0
         s = 0
         while s < self.steps:
             n_seg = min(CHECKPOINT, self.steps - s)
@@ -247,12 +267,56 @@ class RateBrain3(torch.nn.Module):
                     r = step(r, biases[(s + k) // win_len])
                     if k in reads_in:
                         read.append(r[ap].mean(0) - r[av].mean(0))
-                    if record:
+                        if window:
+                            acc = acc + r
+                    if record is True:
                         trace.append(r.detach().to(torch.float16).cpu())
             s += n_seg
         d = torch.stack(read).mean(0)
         logit = torch.exp(self.log_k) * d * 10.0 + self.c
+        if window:
+            return logit, r, acc / self.read_steps
         return logit, r, (torch.stack(trace) if record else None)
+
+    # ---- the answer (served and scored: one path) ----
+    def answer(self, smell: torch.Tensor) -> torch.Tensor:
+        """Yes/no logits (B,) for smells (B, nose.n), one sniff each from rest: p(yes) = sigmoid(logit), the read
+        being approach minus avoid (docs/BRAIN-SPEC.md). Each sniff runs alone, so a number is the same bit for bit
+        whether it is scored in a batch or served on its own: on the CPU, softplus and the read's mean round
+        differently in a (n, B) batch than in one column (by ~1 ulp), and a published number must be the served
+        one (decision 7). One sniff is also the fast path (CSR matvec). Call `freeze` first."""
+        with torch.no_grad():
+            return torch.cat([self.run(smell[i : i + 1])[0] for i in range(smell.shape[0])])
+
+    # ---- the resting state (docs/BRAIN-SPEC.md L1) ----
+    def settle(self, rest_smell: torch.Tensor, chunk: int = 40, max_chunks: int = 50, tol: float = 1e-5) -> dict:
+        """Hold the resting smell (nose.n,) until the rates stop changing, and keep that state as the start of
+        every sniff: the fly is alive before the odour. Continues from the current resting state, if any.
+        Converged when no rate moves more than `tol` per step over a `chunk`-step stretch."""
+        saved = self.steps
+        self.steps = chunk
+        r = self.r_rest if self.r_rest is not None else torch.zeros(self.n, device=self.device)
+        delta, steps = float("inf"), 0
+        try:
+            with torch.no_grad():
+                while steps < max_chunks * chunk and delta >= tol:
+                    _, r_new, _ = self.run(rest_smell[None], r0=r)
+                    r_new = r_new[:, 0]
+                    delta = float((r_new - r).abs().max()) / chunk
+                    r, steps = r_new, steps + chunk
+        finally:
+            self.steps = saved
+        self.r_rest = r
+        return {"steps": steps, "max_step_change": delta, "converged": delta < tol}
+
+    def preact(self, r: torch.Tensor, idx: torch.Tensor) -> torch.Tensor:
+        """Input to the unit function of cells `idx` at rates r (n, B), without sensory input: W g r + b + b_cell."""
+        with torch.no_grad():
+            g = torch.exp(self.log_g)[self.unit][:, None]
+            x = g * r
+            drive = torch.sparse.mm(self.W, x)
+            drive = drive.index_add(0, self.kp_post, x[self.kp_pre] * (self.kp_w * torch.exp(self.kp_logm))[:, None])
+            return drive[idx] + self.b[self.unit][idx, None] + self.b_cell[idx, None]
 
     @staticmethod
     def _seg(step, r, n, bias):

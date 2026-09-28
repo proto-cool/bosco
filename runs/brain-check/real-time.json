@@ -1,0 +1,24 @@
+{
+ "s_one_answer_median": 0.10178649995941669,
+ "s_one_answer_all": [
+  0.10461124998982996,
+  0.10203650000039488,
+  0.10165762493852526,
+  0.1017055829288438,
+  0.10166520799975842,
+  0.10217833297792822,
+  0.10178649995941669
+ ],
+ "deterministic": {
+  "repeat": true,
+  "threads1": true,
+  "threads2": true,
+  "threads3": true,
+  "threads10": true
+ },
+ "batched_run_max_logit_gap": 1.341104507446289e-07,
+ "checks": {
+  "L6_one_answer_le_1.1s": true,
+  "deterministic": true
+ }
+}

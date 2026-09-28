@@ -1,0 +1,37 @@
+{
+ "arm": "layered",
+ "rest_input": 0.1,
+ "settle": {
+  "steps": 40,
+  "max_step_change": 1.2062489986419678e-06,
+  "converged": true
+ },
+ "rest_drift_after_80_steps": 0.0,
+ "orn_rest_rate": 0.08332739770412445,
+ "orn_fed_rest_rate": 0.10538961738348007,
+ "kc_active_per_sniff": 0.04324065148830414,
+ "kc_active_per_sniff_min_max": [
+  0.0012303149560466409,
+  0.24803149700164795
+ ],
+ "kc_ever_active": 0.998031497001648,
+ "kc_jaccard_between_items": 0.021113993600010872,
+ "read_spread": 0.00033897015964612365,
+ "read_mean": 0.004434115719050169,
+ "read_corr_with_80_steps_at": {
+  "10": 0.8288660010983888,
+  "20": 0.9177292084545744,
+  "40": 0.9997587732663338,
+  "60": 0.9999993358615887
+ },
+ "s_batch_of_200": 9.686596155166626,
+ "checks": {
+  "L1_starts_from_rest": true,
+  "L2_orn_rest_le_0.15": true,
+  "L3_kc_2_to_10pct": true,
+  "L4_kc_ever_ge_50pct": true,
+  "L4_jaccard_le_0.25": true,
+  "L5_read_spread_ge_0.01": false
+ },
+ "wall_s": 2004.988127231598
+}
