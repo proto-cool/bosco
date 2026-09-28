@@ -58,6 +58,13 @@ GATES = {  # gate 3 (docs/SPECIALIST-GATE-3.md) reuses this runner on its own da
         GATE4_TASKS,
         GATE4_BARS,
     ),
+    # gate 4b (docs/SPECIALIST-GATE-4B.md): p(harassment), Civil Comments -> Wikipedia Detox
+    "4b": (
+        paths.CACHE / "v1-gate4b",
+        paths.ROOT / "runs" / "specialist-gate-4b",
+        ("harassment",),
+        {"harassment": max(0.9 * 0.838, HARM_FLOOR)},
+    ),
     # harm development run (decision 35): train/val/Aegis-dev only; no sealed test exists in this data
     "harm-dev": (
         paths.CACHE / "v1-harm-dev",
@@ -289,7 +296,7 @@ def cmd_score(a) -> int:
     meta, X, L, zl, sets = load()
     m, _, design = brain(a.task, meta, device="cpu")
     m.load_state_dict(ck["state"])
-    if "gate-4" in str(RUNS):  # gate 4: the temperature from CPU logits, as served (the intent ECE lesson, gate 2)
+    if "gate-4" in str(RUNS):  # gates 4 and 4b: the temperature from CPU logits, as served (the intent ECE lesson, gate 2)
         if a.split == "test" and not all(np.isfinite(BAR[t]) for t in TASKS):
             raise SystemExit("refusing: the harm floor is not fixed (docs/SPECIALIST-GATE-4.md)")
         va = sets[a.task]["val"]
@@ -374,7 +381,7 @@ def cmd_report(a) -> int:
     L_ = [
         f"# Specialist gate {g} results",
         "",
-        f"Pre-registration: `docs/SPECIALIST-GATE-{g}.md`. Sealed test sets, "
+        f"Pre-registration: `docs/SPECIALIST-GATE-{g.upper()}.md`. Sealed test sets, "
         "balanced accuracy, scored once on the CPU; ECE after temperature.",
         "",
         "| specialist | design | options | chance | **brain** | ECE | bar | ships | nose alone | prototype alone | plain baseline | CPU s/question |",
