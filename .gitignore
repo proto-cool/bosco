@@ -1,0 +1,26 @@
+data/raw/
+data/cache/
+*.part
+.venv/
+__pycache__/
+*.pyc
+*.so
+*.o
+build/
+.pytest_cache/
+.ruff_cache/
+state/
+*.env
+.env
+panel/node_modules/
+panel/dist/
+.claude/worktrees/
+.DS_Store
+runs/gate-b/smoke/
+runs/gate-b/logs/
+runs/gate-b/*/state.npz
+runs/gate-b3/logs/
+runs/product/logs/
+
+# exported families and specialists (regenerate with scripts/export_family.py; weights carry their data licences)
+/service/
