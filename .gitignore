@@ -26,4 +26,4 @@ runs/product/logs/
 /service/
 
 # trained weights carry their data licences: kept local (results and logs are committed)
-runs/brain-train/*.pt
+runs/brain-train*/*.pt
