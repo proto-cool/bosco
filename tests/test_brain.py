@@ -67,3 +67,21 @@ def test_answer_is_bit_identical(brain):
     finally:
         torch.set_num_threads(4)
     assert torch.equal(brain.answer(s[2:3]), a[2:3])
+
+
+@needs_data
+def test_served_answers_match_the_golden_fixture():
+    """The served numbers (label-free start in runs/brain-check, untrained memory) never move silently."""
+    import sys
+    from pathlib import Path
+
+    sys.path.insert(0, str(Path(__file__).parents[1] / "scripts"))
+    import brain_check as B
+
+    from bosco import model2 as M2
+
+    g = np.load(Path(__file__).parent / "fixtures" / "answer_golden.npz")
+    m = B.brain("real", M2.load_or_build())
+    B.load_start(m, "real")
+    z = m.answer(torch.tensor(g["smell"])).numpy()
+    np.testing.assert_allclose(z, g["logit"], rtol=0, atol=1e-6)
