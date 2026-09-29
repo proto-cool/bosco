@@ -1,0 +1,225 @@
+{
+ "seeds": [
+  1,
+  2,
+  3,
+  4,
+  5
+ ],
+ "n_val": 1865,
+ "logistic_46_bal_acc": 0.7345118658207284,
+ "bootstrap": {
+  "draws": 2000,
+  "seed": 20260928
+ },
+ "summary": {
+  "bal_acc": {
+   "mean": 0.5152541735009738,
+   "p5": 0.5,
+   "p95": 0.5387232046642463
+  },
+  "recall_yes": {
+   "mean": 0.5626591230551627,
+   "p5": 0.2,
+   "p95": 0.9243877569148894
+  },
+  "recall_no": {
+   "mean": 0.46784922394678496,
+   "p5": 0.14344567338972022,
+   "p95": 0.8
+  },
+  "T1_margin_vs_logistic": {
+   "mean": -0.2192576923197546,
+   "p5": -0.2475309248545689,
+   "p95": -0.18958264826543045
+  },
+  "T2_drop_minus_bar": {
+   "mean": -0.008276986235208894,
+   "p5": -0.02156683680660241,
+   "p95": 0.0
+  },
+  "reset_bal_acc": {
+   "mean": 0.5120905296104523,
+   "p5": 0.5,
+   "p95": 0.5310899373757033
+  },
+  "T3_flipped_share": {
+   "mean": 0.01319034852546917,
+   "p5": 0.0,
+   "p95": 0.031109919571045565
+  },
+  "T4_min_recall": {
+   "mean": 0.06784922394678491,
+   "p5": 0.0,
+   "p95": 0.154245804988662
+  },
+  "T4_untrained_share_r2": {
+   "mean": 0.9850820050352447,
+   "p5": 0.9837113010697517,
+   "p95": 0.9863472159128572
+  },
+  "T5_trained_read_sd": {
+   "mean": 0.0007168073456439742,
+   "p5": 0.0006977411974877588,
+   "p95": 0.000736416931379448
+  },
+  "layered_bal_acc": {
+   "mean": 0.4981079292598249,
+   "p5": 0.49353525803322335,
+   "p95": 0.5002863483706766
+  },
+  "layered_reset_bal_acc": {
+   "mean": 0.49847110146554724,
+   "p5": 0.4943448614535337,
+   "p95": 0.500573107012041
+  },
+  "layered_read_sd": {
+   "mean": 0.00025845149531453503,
+   "p5": 0.0002518528168023246,
+   "p95": 0.00026499003817093944
+  },
+  "T6_real_minus_layered": {
+   "mean": 0.017146244241148845,
+   "p5": -0.00021010614772224546,
+   "p95": 0.04368810521407033
+  },
+  "T7_read_sd_ratio": {
+   "mean": 2.7734695810629724,
+   "p5": 2.6733660862761073,
+   "p95": 2.8769610699913897
+  }
+ },
+ "per_seed": {
+  "1": {
+   "bal_acc": 0.5,
+   "recall_yes": 0.0,
+   "recall_no": 1.0,
+   "T1_margin_vs_logistic": -0.23451186582072836,
+   "T2_drop_minus_bar": 0.0,
+   "reset_bal_acc": 0.5,
+   "T3_flipped_share": 0.0,
+   "T4_min_recall": 0.0,
+   "T4_untrained_share_r2": 0.9852662603405001,
+   "T5_trained_read_sd": 0.0007161171651784053,
+   "layered_bal_acc": 0.5,
+   "layered_reset_bal_acc": 0.5,
+   "layered_read_sd": 0.00025844088508618834,
+   "T6_real_minus_layered": 0.0,
+   "T7_read_sd_ratio": 2.770912833468996,
+   "k_real": 1.56502366065979,
+   "k_layered": 1.3621233701705933,
+   "label_free": {
+    "kc_active_per_sniff": 0.04998892918229103,
+    "kc_ever_active": 0.9963090419769287,
+    "kc_jaccard_between_items": 0.03237893059849739
+   }
+  },
+  "2": {
+   "bal_acc": 0.5,
+   "recall_yes": 0.0,
+   "recall_no": 1.0,
+   "T1_margin_vs_logistic": -0.23451186582072836,
+   "T2_drop_minus_bar": 0.0,
+   "reset_bal_acc": 0.5,
+   "T3_flipped_share": 0.0,
+   "T4_min_recall": 0.0,
+   "T4_untrained_share_r2": 0.9850300730063287,
+   "T5_trained_read_sd": 0.0007170566956647937,
+   "layered_bal_acc": 0.5003536067892503,
+   "layered_reset_bal_acc": 0.5003536067892503,
+   "layered_read_sd": 0.0002585548261106164,
+   "T6_real_minus_layered": -0.00035360678925033806,
+   "T7_read_sd_ratio": 2.773325512624616,
+   "k_real": 1.6599737405776978,
+   "k_layered": 1.5702964067459106,
+   "label_free": {
+    "kc_active_per_sniff": 0.04999507963657379,
+    "kc_ever_active": 0.9963090419769287,
+    "kc_jaccard_between_items": 0.032378241419792175
+   }
+  },
+  "3": {
+   "bal_acc": 0.5762708675048689,
+   "recall_yes": 0.8132956152758133,
+   "recall_no": 0.3392461197339246,
+   "T1_margin_vs_logistic": -0.15824099831585947,
+   "T2_drop_minus_bar": -0.04138493117604447,
+   "reset_bal_acc": 0.5604526480522617,
+   "T3_flipped_share": 0.06595174262734585,
+   "T4_min_recall": 0.3392461197339246,
+   "T4_untrained_share_r2": 0.9849391212717442,
+   "T5_trained_read_sd": 0.0007165125049766239,
+   "layered_bal_acc": 0.4901860395098743,
+   "layered_reset_bal_acc": 0.4920019005384859,
+   "layered_read_sd": 0.0002584184465671677,
+   "T6_real_minus_layered": 0.08608482799499456,
+   "T7_read_sd_ratio": 2.772683275883671,
+   "k_real": 1.7697802782058716,
+   "k_layered": 1.2871782779693604,
+   "label_free": {
+    "kc_active_per_sniff": 0.05002337321639061,
+    "kc_ever_active": 0.9963090419769287,
+    "kc_jaccard_between_items": 0.032425880432128906
+   }
+  },
+  "4": {
+   "bal_acc": 0.5,
+   "recall_yes": 1.0,
+   "recall_no": 0.0,
+   "T1_margin_vs_logistic": -0.23451186582072836,
+   "T2_drop_minus_bar": 0.0,
+   "reset_bal_acc": 0.5,
+   "T3_flipped_share": 0.0,
+   "T4_min_recall": 0.0,
+   "T4_untrained_share_r2": 0.9849054786825612,
+   "T5_trained_read_sd": 0.0007168191628967405,
+   "layered_bal_acc": 0.5,
+   "layered_reset_bal_acc": 0.5,
+   "layered_read_sd": 0.0002584245491570491,
+   "T6_real_minus_layered": 0.0,
+   "T7_read_sd_ratio": 2.773804444024074,
+   "k_real": 1.9641863107681274,
+   "k_layered": 1.4305925369262695,
+   "label_free": {
+    "kc_active_per_sniff": 0.05005412921309471,
+    "kc_ever_active": 0.9963090419769287,
+    "kc_jaccard_between_items": 0.03247574716806412
+   }
+  },
+  "5": {
+   "bal_acc": 0.5,
+   "recall_yes": 1.0,
+   "recall_no": 0.0,
+   "T1_margin_vs_logistic": -0.23451186582072836,
+   "T2_drop_minus_bar": 0.0,
+   "reset_bal_acc": 0.5,
+   "T3_flipped_share": 0.0,
+   "T4_min_recall": 0.0,
+   "T4_untrained_share_r2": 0.985269091875089,
+   "T5_trained_read_sd": 0.0007175311995033082,
+   "layered_bal_acc": 0.5,
+   "layered_reset_bal_acc": 0.5,
+   "layered_read_sd": 0.0002584187696516539,
+   "T6_real_minus_layered": 0.0,
+   "T7_read_sd_ratio": 2.776621839313505,
+   "k_real": 1.6345651149749756,
+   "k_layered": 1.4024949073791504,
+   "label_free": {
+    "kc_active_per_sniff": 0.050009842962026596,
+    "kc_ever_active": 0.9963090419769287,
+    "kc_jaccard_between_items": 0.03240564838051796
+   }
+  }
+ },
+ "checks": {
+  "T1_learns": false,
+  "T2_memory_is_the_learner": false,
+  "T3_memory_carries_answer": false,
+  "T4_recall_both_ge_0.5": false,
+  "T4_untrained_share_le_0.2": false,
+  "T5_L3_every_seed": true,
+  "T5_L4_every_seed": true,
+  "T5_L5_trained_read_sd_ge_0.01": false,
+  "T7_real_carries_memory_ratio_ge_2": true
+ }
+}

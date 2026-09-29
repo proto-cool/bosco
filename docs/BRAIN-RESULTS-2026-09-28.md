@@ -110,3 +110,30 @@ Per seed: balanced accuracy 0.715–0.730; with the memory reset, 0.503–0.583;
   APL's rate (0.029 to 0.025), which releases the KCs. The direct MBON→KC feedback works against the drift:
   cutting it raises KC activity further, from 7.7% to 8.6%. Real KC→MBON learning is mainly depression (Hige et al.
   2015); ours is unbounded both ways.
+
+---
+
+## Update: amendment 3, depression-only learning, fails, and is not adopted
+
+`runs/brain-train-depress/checks.json`: 5 seeds, the same bootstrap as amendment 2.
+
+| check | mean | 5th / 95th percentile | result |
+|---|---|---|---|
+| T1 balanced accuracy (logistic 0.735) | **0.515** | 0.500 / 0.539 | **fail** |
+| T2 | −0.008 | −0.022 / 0.000 | **fail** |
+| T3 flipped share | **0.013** | 0.000 / 0.031 | **fail** |
+| T4 lower recall / untrained share | 0.068 / 0.985 | — | **fail** |
+| T5 L5 trained read s.d. | 0.0007 | — | **fail** |
+| T5 KCs (every seed) | 5.0% active, 99.6% ever, Jaccard 0.032 | — | pass (no drift) |
+| T7 ratio | 2.77 | 2.67 / 2.88 | pass |
+
+He did not learn: four of the five seeds answer 0.500 (always one class), and the fifth reaches 0.576.
+
+**Why.** At the label-free operating point, the MBONs are held up by their own thresholds, not by the KCs.
+- Silencing every KC→approach-MBON synapse lowers those MBONs only from a rate of 0.038 to 0.034.
+- The whole range that depression can reach on the read is about ±0.0007, the size of the untrained item spread.
+- Strengthening the same synapses 7.4× moves the read +0.0046.
+
+So a weakening-only memory has almost nothing to remove. In the fly, MBON odour responses are driven by the
+KCs, and learning cuts them. Our MBONs, and the KCs' weak output (active KCs fire at a median rate of 0.015), are
+not at that operating point. Amendment 2's results (potentiation allowed) stand.

@@ -102,8 +102,9 @@ def train(arm: str, flip: bool, seed: int, device: str) -> None:
         perm = torch.tensor(rng.permutation(len(S)), device=device)
         for start in range(0, len(S), BATCH):
             if step % RESETTLE == 0:
-                m.r_rest = None
-                m.settle(rest)  # detached: the resting state under the current memory
+                # detached: the resting state under the current memory, continued from the last one (to settle's
+                # tolerance; the first settle starts from r = 0)
+                m.settle(rest)
             b = perm[start : start + BATCH]
             logit, _, _ = m.run(S[b])
             loss = (torch.nn.functional.binary_cross_entropy_with_logits(logit, Y[b], reduction="none") * weight[b]).mean()
