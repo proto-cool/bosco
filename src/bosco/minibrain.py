@@ -242,3 +242,14 @@ def set_kc_threshold(m: MiniBrain, smells: torch.Tensor, target: float = 0.05, i
     th = 0.5 * (lo + hi)
     m.b[kc] = -th
     return th
+
+
+def from_fit(path, layers=("base",)) -> MiniBrain:
+    """The minimum brain at the settings fitted to physiology (scripts/minibrain_fit.py -> runs/minibrain/fit.json)."""
+    import json
+
+    best = json.load(open(path))["best"]
+    m = build(gain=best["G"], layers=layers)
+    m.g[m.groups["apl"]] = best["G"] * best["apl_gain"]
+    m.b[m.groups["kc"]] = -best["kc_threshold"]
+    return m

@@ -1,0 +1,24 @@
+=== layers [base] gain x1
+G=0.0: rest: settled True states-diff 2.4e-06 osc 0 rho 0.934 mean 0.021 sat 0.00 | sniff0: settled True states-diff 7.2e-07 osc 0 rho 0.904 mean 0.082 sat 0.00 | sniff1: settled True states-diff 9.8e-07 osc 0 rho 0.849 mean 0.080 sat 0.00 | sniff2: settled True states-diff 8.3e-07 osc 0 rho 0.870 mean 0.092 sat 0.01
+KC active 0.051 (J 0.07, rate 0.306) | E1 True (PN 0.58 vs ORN 0.59) | E2 True [0.05071781203150749, 0.09873854368925095] | E4 True cut 0.98 | MBON mod 0.63 rest 0.001
+ "all_items_settled": true,  "items_with_more_than_one_state": 0,  "item_sd": 0.007500296924263239,  "E5_pass_share": 0.631578947368421 
+=== layers [base] gain x0.75
+G=0.0: rest: settled True states-diff 2.4e-06 osc 0 rho 0.921 mean 0.020 sat 0.00 | sniff0: settled True states-diff 5.4e-07 osc 0 rho 0.899 mean 0.069 sat 0.00 | sniff1: settled True states-diff 7.2e-07 osc 0 rho 0.878 mean 0.066 sat 0.00 | sniff2: settled True states-diff 8.3e-07 osc 0 rho 0.872 mean 0.073 sat 0.00
+KC active 0.011 (J 0.03, rate 0.173) | E1 True (PN 0.57 vs ORN 0.58) | E2 False [0.011280450038611889, 0.013681487180292606] | E4 True cut 0.93 | MBON mod 0.88 rest 0.001
+ "all_items_settled": true,  "items_with_more_than_one_state": 0,  "item_sd": 0.0016599362716078758,  "E5_pass_share": 0.3684210526315789 
+=== layers [base] gain x1.25
+G=0.0: rest: settled True states-diff 1.2e-07 osc 0 rho 0.940 mean 0.023 sat 0.00 | sniff0: settled True states-diff 1.4e-06 osc 0 rho 0.904 mean 0.106 sat 0.01 | sniff1: settled True states-diff 1.2e-06 osc 0 rho 0.877 mean 0.109 sat 0.01 | sniff2: settled True states-diff 9.8e-07 osc 0 rho 0.870 mean 0.130 sat 0.02
+AssertionError: did not settle (0.11667108535766602)
+ "all_items_settled": true,  "items_with_more_than_one_state": 0,  "item_sd": 0.016831861808896065,  "E5_pass_share": 0.7368421052631579 
+=== layers [base lh] gain x1
+IndexError: index 0 is out of bounds for axis 0 with size 0
+IndexError: index 0 is out of bounds for axis 0 with size 0
+
+=== layers [base lh] gain x0.75
+IndexError: index 0 is out of bounds for axis 0 with size 0
+IndexError: index 0 is out of bounds for axis 0 with size 0
+
+=== layers [base lh] gain x1.25
+IndexError: index 0 is out of bounds for axis 0 with size 0
+IndexError: index 0 is out of bounds for axis 0 with size 0
+

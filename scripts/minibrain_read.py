@@ -80,6 +80,8 @@ def dn_read(m, map_, mav, r0, u_rest, dx=0.1, q=0.95):
 def main() -> int:
     p = argparse.ArgumentParser()
     p.add_argument("--gain", type=float, default=12.0)
+    p.add_argument("--fit", action="store_true", help="use the physiology-fitted settings (runs/minibrain/fit.json)")
+    p.add_argument("--gain-scale", type=float, default=1.0, help="with --fit: scale every non-sensory gain (margin test)")
     p.add_argument("--layers", nargs="+", default=["base"], help="base lh conv dn")
     p.add_argument("--threads", type=int, default=8)
     a = p.parse_args()
@@ -89,8 +91,13 @@ def main() -> int:
     rest = torch.tensor(ant.resting())[None]
     X = np.load(EXPLORE)["X"]
     S = torch.tensor(ant(X))
-    m = MB.build(gain=a.gain, layers=tuple(a.layers))
-    th = MB.set_kc_threshold(m, torch.tensor(ant(B.items()[1][:64])))
+    if a.fit:
+        m = MB.from_fit(OUT / "fit.json", layers=tuple(a.layers))
+        m.g[m.g != 1.0] *= a.gain_scale
+        th = float(-m.b[m.groups["kc"]][0])
+    else:
+        m = MB.build(gain=a.gain, layers=tuple(a.layers))
+        th = MB.set_kc_threshold(m, torch.tensor(ant(B.items()[1][:64])))
     res = {"gain": a.gain, "kc_threshold": th}
     # 1. robustness
     R, steps, d = m.settle(m.inp(S), max_steps=8000, tol=1e-6)
@@ -149,7 +156,7 @@ def main() -> int:
                                 and abs(dread) >= 0.5 * float(read.std()))})
     res["E5"] = e5
     res["E5_pass_share"] = float(np.mean([x["pass"] for x in e5]))
-    json.dump(res, open(OUT / f"read_g{a.gain:g}_{'-'.join(a.layers)}.json", "w"), indent=1, default=str)
+    json.dump(res, open(OUT / (f"read_g{a.gain:g}_{'-'.join(a.layers)}" + (f"_fitx{a.gain_scale:g}" if a.fit else "") + ".json"), "w"), indent=1, default=str)
     print(json.dumps({k: v for k, v in res.items() if k not in ("E5", "mbon_valence")}, indent=1, default=str))
     for x in e5:
         print(f"  {x['type']:12s} {x['side']:8s} drop A {x['drop_A']:.2f} others {x['drop_others']:.2f} "

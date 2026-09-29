@@ -1,0 +1,16 @@
+G=  4.0 APLx 16.0: threshold 1.530 KC 0.050 block 1.78 rate 0.238 err 0.067 settled True
+G=  4.0 APLx 24.0: threshold 1.482 KC 0.050 block 2.01 rate 0.242 err 0.047 settled True
+G=  4.0 APLx 32.0: threshold 1.458 KC 0.050 block 2.14 rate 0.244 err 0.047 settled True
+G=  4.0 APLx 48.0: threshold 1.437 KC 0.050 block 2.23 rate 0.248 err 0.048 settled True
+G=  4.0 APLx 64.0: threshold 1.430 KC 0.050 block 2.18 rate 0.249 err 0.043 settled True
+G=  5.0 APLx 16.0: threshold 1.973 KC 0.050 block 1.96 rate 0.311 err 0.002 settled True
+G=  5.0 APLx 24.0: threshold 1.932 KC 0.050 block 2.12 rate 0.316 err 0.006 settled True
+G=  5.0 APLx 32.0: threshold 1.917 KC 0.050 block 2.17 rate 0.318 err 0.010 settled True
+G=  5.0 APLx 48.0: threshold 1.905 KC 0.050 block 2.09 rate 0.320 err 0.006 settled True
+G=  5.0 APLx 64.0: threshold 1.901 KC 0.050 block 1.93 rate 0.320 err 0.006 settled True
+G=  6.0 APLx 16.0: threshold 2.422 KC 0.050 block 2.05 rate 0.379 err 0.055 settled True
+G=  6.0 APLx 24.0: threshold 2.390 KC 0.050 block 2.14 rate 0.383 err 0.065 settled True
+G=  6.0 APLx 32.0: threshold 2.380 KC 0.050 block 2.11 rate 0.385 err 0.065 settled True
+G=  6.0 APLx 48.0: threshold 2.374 KC 0.050 block 1.91 rate 0.386 err 0.065 settled True
+G=  6.0 APLx 64.0: threshold 2.372 KC 0.050 block 1.69 rate 0.386 err 0.092 settled True
+BEST {"G": 5.0, "apl_gain": 16.0, "kc_threshold": 1.9733619689941406, "kc_active": 0.049998845905065536, "apl_block": 1.9623976909223682, "kc_rate": 0.3109028935432434, "settled": true, "error": 0.0016346042382982754}

@@ -1,0 +1,432 @@
+{
+ "gain": 12.0,
+ "kc_threshold": 1.9733619689941406,
+ "all_items_settled": true,
+ "settle_steps": 137,
+ "one_state_128_items_max_diff": 7.580965757369995e-06,
+ "items_with_more_than_one_state": 0,
+ "mbon_valence": [
+  [
+   "MBON01",
+   2,
+   "glutamate",
+   "avoid"
+  ],
+  [
+   "MBON02",
+   2,
+   "glutamate",
+   "avoid"
+  ],
+  [
+   "MBON03",
+   2,
+   "glutamate",
+   "avoid"
+  ],
+  [
+   "MBON04",
+   2,
+   "glutamate",
+   "avoid"
+  ],
+  [
+   "MBON05",
+   2,
+   "glutamate",
+   "avoid"
+  ],
+  [
+   "MBON06",
+   2,
+   "glutamate",
+   "avoid"
+  ],
+  [
+   "MBON07",
+   4,
+   "glutamate",
+   "avoid"
+  ],
+  [
+   "MBON09",
+   4,
+   "gaba",
+   "approach"
+  ],
+  [
+   "MBON10",
+   9,
+   "gaba",
+   "atypical"
+  ],
+  [
+   "MBON11",
+   2,
+   "gaba",
+   "approach"
+  ],
+  [
+   "MBON12",
+   4,
+   "acetylcholine",
+   "approach"
+  ],
+  [
+   "MBON13",
+   2,
+   "acetylcholine",
+   "approach"
+  ],
+  [
+   "MBON14",
+   4,
+   "acetylcholine",
+   "approach"
+  ],
+  [
+   "MBON15",
+   4,
+   "acetylcholine",
+   "approach"
+  ],
+  [
+   "MBON15-like",
+   4,
+   "acetylcholine",
+   "approach"
+  ],
+  [
+   "MBON16",
+   2,
+   "acetylcholine",
+   "novelty"
+  ],
+  [
+   "MBON17",
+   2,
+   "acetylcholine",
+   "novelty"
+  ],
+  [
+   "MBON17-like",
+   2,
+   "acetylcholine",
+   "novelty"
+  ],
+  [
+   "MBON18",
+   2,
+   "acetylcholine",
+   "approach"
+  ],
+  [
+   "MBON19",
+   4,
+   "acetylcholine",
+   "approach"
+  ],
+  [
+   "MBON20",
+   2,
+   "gaba",
+   "atypical"
+  ],
+  [
+   "MBON21",
+   2,
+   "acetylcholine",
+   "approach"
+  ],
+  [
+   "MBON22",
+   2,
+   "acetylcholine",
+   "approach"
+  ],
+  [
+   "MBON23",
+   2,
+   "acetylcholine",
+   "approach"
+  ],
+  [
+   "MBON24",
+   2,
+   "acetylcholine",
+   "atypical"
+  ],
+  [
+   "MBON25",
+   2,
+   "glutamate",
+   "atypical"
+  ],
+  [
+   "MBON25-like",
+   4,
+   "glutamate",
+   "atypical"
+  ],
+  [
+   "MBON26",
+   2,
+   "acetylcholine",
+   "atypical"
+  ],
+  [
+   "MBON27",
+   2,
+   "acetylcholine",
+   "atypical"
+  ],
+  [
+   "MBON28",
+   2,
+   "acetylcholine",
+   "atypical"
+  ],
+  [
+   "MBON29",
+   2,
+   "acetylcholine",
+   "atypical"
+  ],
+  [
+   "MBON30",
+   2,
+   "glutamate",
+   "atypical"
+  ],
+  [
+   "MBON31",
+   2,
+   "gaba",
+   "atypical"
+  ],
+  [
+   "MBON32",
+   2,
+   "gaba",
+   "atypical"
+  ],
+  [
+   "MBON33",
+   2,
+   "acetylcholine",
+   "atypical"
+  ],
+  [
+   "MBON34",
+   2,
+   "glutamate",
+   "atypical"
+  ],
+  [
+   "MBON35",
+   2,
+   "acetylcholine",
+   "atypical"
+  ]
+ ],
+ "read": {
+  "approach_cells": 36,
+  "avoid_cells": 16,
+  "rest": 4.0942803025245667e-05,
+  "item_sd": 0.0016599362716078758,
+  "item_mean": 0.001790195470675826
+ },
+ "E5": [
+  {
+   "type": "MBON01",
+   "side": "avoid",
+   "drop_A": 0.5731959939002991,
+   "drop_others": 0.38894063234329224,
+   "read_change": 5.041016265749931e-05,
+   "read_change_in_item_sd": 0.030368733739802048,
+   "right_direction": true,
+   "pass": false
+  },
+  {
+   "type": "MBON02",
+   "side": "avoid",
+   "drop_A": 0.9930675625801086,
+   "drop_others": 0.06181104853749275,
+   "read_change": 0.002503589726984501,
+   "read_change_in_item_sd": 1.5082444849279852,
+   "right_direction": true,
+   "pass": true
+  },
+  {
+   "type": "MBON03",
+   "side": "avoid",
+   "drop_A": 1.0664691925048828,
+   "drop_others": 0.0889446809887886,
+   "read_change": 0.0020239055156707764,
+   "read_change_in_item_sd": 1.219266998551906,
+   "right_direction": true,
+   "pass": true
+  },
+  {
+   "type": "MBON04",
+   "side": "avoid",
+   "drop_A": 0.8774078488349915,
+   "drop_others": 0.05198768526315689,
+   "read_change": 0.0004309997893869877,
+   "read_change_in_item_sd": 0.259648395398641,
+   "right_direction": true,
+   "pass": false
+  },
+  {
+   "type": "MBON05",
+   "side": "avoid",
+   "drop_A": 0.1449776142835617,
+   "drop_others": 0.026193970814347267,
+   "read_change": 1.8172431737184525e-05,
+   "read_change_in_item_sd": 0.010947668321978429,
+   "right_direction": true,
+   "pass": false
+  },
+  {
+   "type": "MBON06",
+   "side": "avoid",
+   "drop_A": 1.0305148363113403,
+   "drop_others": 0.08649766445159912,
+   "read_change": 0.0023769596591591835,
+   "read_change_in_item_sd": 1.4319583828701883,
+   "right_direction": true,
+   "pass": true
+  },
+  {
+   "type": "MBON07",
+   "side": "avoid",
+   "drop_A": 1.1492795944213867,
+   "drop_others": 0.1183028444647789,
+   "read_change": 0.0015029278583824635,
+   "read_change_in_item_sd": 0.9054129872869588,
+   "right_direction": true,
+   "pass": true
+  },
+  {
+   "type": "MBON09",
+   "side": "approach",
+   "drop_A": 0.9810672402381897,
+   "drop_others": 0.009944085031747818,
+   "read_change": -0.00039991410449147224,
+   "read_change_in_item_sd": -0.24092136025445157,
+   "right_direction": true,
+   "pass": false
+  },
+  {
+   "type": "MBON11",
+   "side": "approach",
+   "drop_A": 5.339648246765137,
+   "drop_others": 0.1349194347858429,
+   "read_change": -1.3748183846473694e-05,
+   "read_change_in_item_sd": -0.008282356426344424,
+   "right_direction": true,
+   "pass": false
+  },
+  {
+   "type": "MBON12",
+   "side": "approach",
+   "drop_A": 0.8734200596809387,
+   "drop_others": 0.08724306523799896,
+   "read_change": -0.0007712217047810555,
+   "read_change_in_item_sd": -0.4646092250481529,
+   "right_direction": true,
+   "pass": false
+  },
+  {
+   "type": "MBON13",
+   "side": "approach",
+   "drop_A": 0.8733606934547424,
+   "drop_others": 0.06126293167471886,
+   "read_change": -4.154280759394169e-05,
+   "read_change_in_item_sd": -0.02502674849902628,
+   "right_direction": true,
+   "pass": false
+  },
+  {
+   "type": "MBON14",
+   "side": "approach",
+   "drop_A": 0.9570661187171936,
+   "drop_others": 0.08418712019920349,
+   "read_change": -0.0017466554418206215,
+   "read_change_in_item_sd": -1.0522424696032133,
+   "right_direction": true,
+   "pass": true
+  },
+  {
+   "type": "MBON15",
+   "side": "approach",
+   "drop_A": 0.8696527481079102,
+   "drop_others": 0.07641344517469406,
+   "read_change": -0.001570364460349083,
+   "read_change_in_item_sd": -0.9460390059601322,
+   "right_direction": true,
+   "pass": true
+  },
+  {
+   "type": "MBON15-like",
+   "side": "approach",
+   "drop_A": 0.8614771366119385,
+   "drop_others": 0.04655728489160538,
+   "read_change": -0.000689774751663208,
+   "read_change_in_item_sd": -0.4155429117739964,
+   "right_direction": true,
+   "pass": false
+  },
+  {
+   "type": "MBON18",
+   "side": "approach",
+   "drop_A": 0.9289642572402954,
+   "drop_others": 0.03401891514658928,
+   "read_change": -0.002096431329846382,
+   "read_change_in_item_sd": -1.2629589254144684,
+   "right_direction": true,
+   "pass": true
+  },
+  {
+   "type": "MBON19",
+   "side": "approach",
+   "drop_A": 1.1108729839324951,
+   "drop_others": 0.1464194655418396,
+   "read_change": -0.00035750167444348335,
+   "read_change_in_item_sd": -0.21537072269478993,
+   "right_direction": true,
+   "pass": false
+  },
+  {
+   "type": "MBON21",
+   "side": "approach",
+   "drop_A": 1.1398948431015015,
+   "drop_others": 0.02151004783809185,
+   "read_change": -2.3577595129609108e-05,
+   "read_change_in_item_sd": -0.014203915856824416,
+   "right_direction": true,
+   "pass": false
+  },
+  {
+   "type": "MBON22",
+   "side": "approach",
+   "drop_A": 0.7884517908096313,
+   "drop_others": 0.07985939830541611,
+   "read_change": -0.0004292083904147148,
+   "read_change_in_item_sd": -0.25856919796021305,
+   "right_direction": true,
+   "pass": false
+  },
+  {
+   "type": "MBON23",
+   "side": "approach",
+   "drop_A": 1.0735807418823242,
+   "drop_others": 0.045883603394031525,
+   "read_change": -0.00033791735768318176,
+   "read_change_in_item_sd": -0.20357248857262603,
+   "right_direction": true,
+   "pass": false
+  }
+ ],
+ "E5_pass_share": 0.3684210526315789
+}
