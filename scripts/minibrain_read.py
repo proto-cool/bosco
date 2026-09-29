@@ -67,12 +67,23 @@ def dn_read(m, map_, mav, r0, u_rest, dx=0.1, q=0.95):
 
     d = (with_drive(map_) - r0[:, 0]) - (with_drive(mav) - r0[:, 0])
     dn = m.groups["dn"].numpy()
+    # eligible: DNs taking >= 5% of their driving input from MBON-side neurons (MBONs, convergence, relay)
+    src = torch.zeros(m.n, dtype=torch.bool)
+    for gname in ("mbon", "conv", "relay"):
+        if len(m.groups.get(gname, [])):
+            src[m.groups[gname]] = True
+    Wc = m.W.to_sparse_coo().coalesce()
+    po, pr = Wc.indices()
+    share = torch.zeros(m.n).index_add_(0, po[src[pr]], Wc.values()[src[pr]].abs())
+    dn = dn[share[dn].numpy() >= 0.05]
+    if len(dn) == 0:
+        return torch.tensor([], dtype=torch.long), torch.tensor([], dtype=torch.long), {"eligible": 0}
     df = pd.DataFrame({"idx": dn, "type": m.typ[dn], "dR": d[dn].numpy()})
     t = df.groupby("type").dR.mean()
-    th = float(np.quantile(t.abs(), q))
+    th = 0.0  # every eligible type, read by the sign of its coupling
     ok = ~t.index.isin(STEERING)
-    app, avo = t.index[ok & (t >= th)], t.index[ok & (t <= -th)]
-    info = {"threshold": th, "approach": {k: float(t[k]) for k in app}, "avoid": {k: float(t[k]) for k in avo}}
+    app, avo = t.index[ok & (t > th)], t.index[ok & (t < -th)]
+    info = {"eligible": int(len(dn)), "threshold": th, "approach": {k: float(t[k]) for k in app}, "avoid": {k: float(t[k]) for k in avo}}
     return (torch.tensor(df[df.type.isin(app)].idx.to_numpy()), torch.tensor(df[df.type.isin(avo)].idx.to_numpy()),
             info)
 

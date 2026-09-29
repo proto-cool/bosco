@@ -163,6 +163,37 @@ def mbon_input_share(floor: float = FLOOR, silence_ach_lns: bool = True,
     return pd.Series(frm / np.maximum(tot, 1), index=full.ids)
 
 
+RELAY_FLOW, RELAY_DN = 0.02, 0.05  # relay: MBON influence (1-2 hops) and share of output onto DNs
+
+
+@lru_cache(maxsize=2)
+def relay_scores(floor: float = FLOOR, compartments: bool = COMPARTMENTS) -> tuple[np.ndarray, np.ndarray]:
+    """Per neuron of the 50,140: its MBON influence (share of its driving input from MBONs, directly or through one
+    neuron) and the share of its output synapses onto descending neurons."""
+    import scipy.sparse as sp
+
+    ids = M2.load_or_build().brain.ids
+    n, idx = len(ids), pd.Index(ids)
+    bodies, sign_b, _, w = _whole_brain_fast(floor, True, compartments)
+    s = pd.Series(sign_b, index=bodies)
+    w = w[s.reindex(w.body_pre).fillna(0).to_numpy() != 0]
+    post, pre, cnt = idx.get_indexer(w.body_post), idx.get_indexer(w.body_pre), w.weight.to_numpy().astype(float)
+    tot = np.bincount(post, weights=cnt, minlength=n)
+    ok = pre >= 0
+    A = sp.csr_matrix((cnt[ok] / tot[post[ok]], (post[ok], pre[ok])), shape=(n, n))
+    a = data.annotations().reindex(idx)
+    f1 = A @ (a["class"] == "MBON").to_numpy().astype(float)
+    flow = f1 + A @ f1
+    wo = data.weights()
+    op, oq, ow = idx.get_indexer(wo.body_pre), idx.get_indexer(wo.body_post), wo.weight.to_numpy()
+    dn = (a["superclass"] == "descending_neuron").to_numpy()
+    m = op >= 0
+    out_tot = np.bincount(op[m], weights=ow[m], minlength=n)
+    m2 = m & (oq >= 0) & dn[np.maximum(oq, 0)]
+    to_dn = np.bincount(op[m2], weights=ow[m2], minlength=n)
+    return flow, to_dn / np.maximum(out_tot, 1)
+
+
 def select(layers=("base",), floor: float = FLOOR, silence_ach_lns: bool = True,
            compartments: bool = COMPARTMENTS) -> np.ndarray:
     """Which of the 50,140 neurons are in: 'base' (the smell path to the MBONs), 'lh' (lateral horn), 'conv'
@@ -176,6 +207,9 @@ def select(layers=("base",), floor: float = FLOOR, silence_ach_lns: bool = True,
         keep |= a["type"].fillna("").str.startswith(LH_PREFIXES).to_numpy()
     if "conv" in layers:
         keep |= (mbon_input_share(floor, silence_ach_lns, compartments) >= CONV_SHARE).to_numpy()
+    if "relay" in layers:
+        flow, dnshare = relay_scores(floor, compartments)
+        keep |= (flow >= RELAY_FLOW) & (dnshare >= RELAY_DN)
     if "dn" in layers:
         keep |= (a["superclass"] == "descending_neuron").to_numpy()
     return keep
@@ -220,9 +254,14 @@ def build(floor: float = FLOOR, silence_ach_lns: bool = True, gain: float = 1.0,
     m.g[torch.tensor(cls == "olfactory")] = 1.0
     m.b = torch.zeros(n)
     t = lambda mask: torch.tensor(np.nonzero(mask)[0])  # noqa: E731
+    flow, dnshare = relay_scores(floor, compartments)
+    relay_mask = (flow >= RELAY_FLOW) & (dnshare >= RELAY_DN)
     m.groups = {"orn": t(cls == "olfactory"), "ln": t(cls == "ALLN"), "pn": t(cls == "ALPN"),
                 "kc": t(cls == "Kenyon_Cell"), "apl": t(typ == "APL"), "dpm": t(typ == "DPM"),
                 "mbon": t(cls == "MBON"), "lh": t(np.array([x.startswith(LH_PREFIXES) for x in typ])),
+                "conv": t((mbon_input_share(floor, silence_ach_lns, compartments) >= CONV_SHARE).to_numpy()[keep]
+                          & (cls != "MBON")),
+                "relay": t(relay_mask[keep]),
                 "dn": t(a["superclass"].to_numpy()[keep] == "descending_neuron")}
     return m
 
