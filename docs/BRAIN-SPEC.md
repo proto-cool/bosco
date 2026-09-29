@@ -163,3 +163,72 @@ rule). Before anything is relaxed, the fly's own learning rule is tried:
 - **Passing:** the brain passes only if all nine checks pass.
 - **If it does not pass,** option B (the memory carries the majority, with the innate share reported) goes back to
   Nick. It is not adopted here.
+
+## Amendment 4 (2026-09-29, Nick: "sound good"): brain v3.1, the deep-dive package (written before its runs)
+
+This fixes the 14 flaws in `docs/audit-2026-09-28/brain-deep-dive.md` as one package, judged against
+`docs/BRAIN-REQUIREMENTS.md` (R1–R7, with resemblance first). Every part points at the fly.
+
+**P1. A silent sub-threshold.** BETA goes from 50 to 500, so the rate at threshold falls from 0.0139 to 0.0014
+(R1.7 requires ≤ 0.002).
+
+**P2. Only fast transmitters drive** (R1.6).
+- **Transmitter per neuron:**
+  - the consensus call, else the body's prediction, else its type's prediction;
+  - DPM is GABA (as before);
+  - still unknown means no fast output.
+- **Fast signs:** acetylcholine +1; GABA, glutamate and histamine −1; dopamine, octopamine and serotonin 0
+  (metabotropic; they are the teaching signal, not fast drive).
+- **KC→KC synapses:** 0 (Manoim et al. 2022).
+- **Antennal-lobe LNs:** the fix now zeroes only the confidently cholinergic ones.
+- **Input totals:** a neuron's input total counts only fast-drive synapses, from any MaleCNS body, with the same
+  rule applied to bodies outside the model. The controls get the same rule on their own wiring.
+
+**P3. Operating points by stage, set label-free, by input gain rather than bias** (R1.3, R1.7).
+- **One new fixed buffer per neuron:** an input scale `s_in` on its synaptic drive, set per cell type. Its
+  biology is intrinsic excitability (Apostolopoulou & Lin 2020, Abdelrahman et al. 2021). Thresholds are 0 for
+  every non-sensory type, so no neuron is held up by a bias. `s_in` folds into the frozen matrix, at no cost in
+  speed.
+- **The homeostatic start** now moves `s_in`, multiplicatively and clipped to [0.1, 100], until each type's mean
+  sniff rate reaches its target:
+  - 0.05 in general;
+  - 0.2 for the DN read cells.
+  - Types whose net drive is inhibitory stay near silent, and are reported.
+  - It runs to convergence (mean residual ≤ 5% of the target, at most 80 iterations).
+  - "untyped" cells are split by class and superclass.
+- **ORNs:** threshold 0, so with rest input 0.05 an ORN rests near a rate of 0.05.
+- **KCs:**
+  - a per-cell offset keeps each KC active on about 5% of the calibration smells;
+  - the KC types' `s_in` is bisected so that the median rate of an active KC is 0.3 (R1.7: ≥ 0.2).
+- **MBONs:** threshold 0 and a target rate of 0.2, so their response comes from their inputs. New check L7:
+  silencing KC→MBON cuts the MBONs' mean sniff rate by ≥ 80%.
+
+**P6. The read.**
+- **MBON valence by transmitter,** for the typical MBONs (MBON01–19) only (Aso et al. 2014b):
+  - glutamatergic → avoid;
+  - GABAergic or cholinergic → approach;
+  - novelty (PPL104) not read;
+  - the atypical MBON20–35 (Li et al. 2020) are not in the valence groups.
+- **The DN read cells** are then re-chosen by amendment 1's coupling rule (top 5% of |coupling| by sign, steering
+  DNs out), on the new wiring. The start is rebuilt after that choice.
+
+**Label-free checks (must all pass before any training):**
+- L1–L6 as before.
+- L7 as above.
+- R1.3 on the path PN → KC → MBON → DN read: median bias share ≤ 0.5, and item modulation (cell s.d. ÷ mean)
+  ≥ 0.2.
+- R1.7: the rate at threshold ≤ 0.002, and the median rate of an active KC ≥ 0.2.
+- The layered, hash and silenced-mushroom-body controls are reported beside them.
+
+**P4. Training** (only if the label-free checks pass):
+- KC→MBON may weaken without limit, and strengthen at most 2×: `kp_logm` ≤ ln 2.
+- The resting state is re-settled before every batch.
+- Otherwise amendment 2's recipe, 5 seeds.
+
+**P5. Trained checks.** Amendment 2's bootstrap, with T2 and T3 measured by ranking (AUC), independent of c:
+- **T2:** AUC(reset) − 0.5 ≤ 0.25 × (AUC(trained) − 0.5), at the 95th percentile.
+- **T3:** 0.5 − AUC(swapped) ≥ 0.8 × (AUC(trained) − 0.5), at the 5th percentile.
+- T1, T4, T5 and T7 as in amendment 2.
+- New T8, for requirements R4.2 and R4.3: the seed s.d. of balanced accuracy ≤ 0.01, and every seed's k ≤ 20.
+
+**P7 (timed sniffs)** comes after the brain passes, as its own tested change (decision 39.1).
