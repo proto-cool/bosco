@@ -24,6 +24,17 @@ rather than being settled here.
   hash shuffles (T7, measured 7.1). It must also either match or beat them on accuracy, or the cards say plainly
   that it ties.
 - **R1.5 Replayable.** The trace of any served answer can be regenerated bit for bit from its inputs (decision 7).
+- **R1.6 Only fast synapses are fast drive.** Transmitters that act through metabotropic receptors are not fast
+  excitation: dopamine, octopamine, serotonin, and KC→KC axo-axonal acetylcholine (mAChR-B, Manoim et al. 2022).
+  A neuron's input total counts only the synapses that drive it. An unknown transmitter is never defaulted to
+  excitatory (deep dive, #7–9).
+- **R1.7 Each stage sits at the fly's operating point.**
+  - **Below threshold is silent:** a unit's rate at threshold is ≤ 0.002.
+  - **KCs are sparse and burst:** 2–10% active per sniff, and the median rate of an active KC is *proposed*
+    ≥ 0.2 of max (Turner 2008).
+  - **MBONs are KC-driven:** silencing KC→MBON cuts the MBONs' odour-evoked response by ≥ 80% (Hige et al. 2015).
+    This is a new label-free check, L7.
+  - No single set point is imposed on every type.
 
 ## R2. Small
 - **R2.1** The 50,140 neurons, one unit each (decision 39; Nick, Q1): no more, and no fewer.
