@@ -141,3 +141,25 @@ could be noise either way. From now on:
 - **T6 still has no pass or fail.** The real-minus-layered balanced accuracy is reported with its 90% bootstrap
   interval.
 - **Cost:** 12 new trainings on the 3080 (4 seeds × 3 arms), and scoring on the Mac CPU through `answer`.
+
+## Amendment 3 (2026-09-28, Nick: "A"; written before the runs it governs): the memory must dominate, by the fly's own rule
+
+The question settled: the trained answer must come from what he learned. T2 and T3 keep their bars (amendment 2's
+rule). Before anything is relaxed, the fly's own learning rule is tried:
+
+- **Depression-only KC→MBON learning.** In flies, dopamine mainly weakens KC→MBON synapses (Hige et al. 2015), and
+  that weakening is the memory. The trained multiplier on each KC→MBON synapse is exp(`kp_logm`) with
+  `kp_logm` ≤ 0: after each step it is clipped to ≤ 0, so a synapse can only weaken, down to zero. Amendment 2's
+  runs let synapses strengthen without bound. That pushed the avoid MBONs from a rate of 0.04 to 0.31 and loosened
+  the KC code through APL.
+- **Train as it serves.** The resting state is re-settled before every batch (it was every 20).
+- **Otherwise unchanged:**
+  - the arms (real, real on flipped labels, layered, all under the same rule), seeds 1–5, the recipe (Adam at lr
+    0.03, batch 64, 3 epochs, class-balanced BCE), the label-free starts and the read;
+  - CPU scoring through `answer`, and amendment 2's bootstrap and bars for T1–T7.
+- **Outputs:** in `runs/brain-train-depress/`. Amendment 2's results stay as they are.
+- **Adoption:** the rule is adopted if T1 and T7 still pass and the 5th percentiles of T2 and T3 are higher than
+  in amendment 2 (−0.008 and 0.777).
+- **Passing:** the brain passes only if all nine checks pass.
+- **If it does not pass,** option B (the memory carries the majority, with the innate share reported) goes back to
+  Nick. It is not adopted here.

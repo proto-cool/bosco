@@ -5,7 +5,7 @@ label-free start of scripts/brain_check.py (its antenna, operating point, restin
 amendment 1: class-balanced BCE, Adam lr 0.03, batch 64, 3 epochs, every sniff from the resting state (re-settled,
 detached, every 20 batches). No model selection on val. Amendment 2: seeds 1-5 (the batch order).
 
-    uv run python scripts/brain_train.py train --arm real [--flip] --seed N --device cuda
+    uv run python scripts/brain_train.py train --arm real [--flip] --seed N --device cuda [--variant depress]
     uv run python scripts/brain_train.py train --arm layered --seed N --device cuda
 
 Score one seed (the Mac CPU, the served path `RateBrain3.answer`): per-item logits into runs/brain-train/seedN.npz.
@@ -38,6 +38,16 @@ TASK = "harmful"
 OUT = paths.ROOT / "runs" / "brain-train"
 LR, BATCH, EPOCHS, RESETTLE = 0.03, 64, 3, 20
 SEEDS = (1, 2, 3, 4, 5)
+# amendment 3: depression-only KC->MBON (kp_logm <= 0), the resting state re-settled before every batch
+VARIANTS = {"base": {"out": "brain-train", "depress": False, "resettle": 20},
+            "depress": {"out": "brain-train-depress", "depress": True, "resettle": 1}}
+DEPRESS = False
+
+
+def use_variant(v: str) -> None:
+    global OUT, RESETTLE, DEPRESS
+    cfg = VARIANTS[v]
+    OUT, RESETTLE, DEPRESS = paths.ROOT / "runs" / cfg["out"], cfg["resettle"], cfg["depress"]
 BOOT, BOOT_SEED = 2000, 20260928
 
 
@@ -100,6 +110,9 @@ def train(arm: str, flip: bool, seed: int, device: str) -> None:
             opt.zero_grad()
             loss.backward()
             opt.step()
+            if DEPRESS:
+                with torch.no_grad():
+                    m.kp_logm.clamp_(max=0.0)  # a synapse can only weaken (amendment 3)
             step += 1
             if step % 20 == 0:
                 log.append({"step": step, "epoch": ep, "loss": float(loss), "k": float(torch.exp(m.log_k)),
@@ -108,7 +121,7 @@ def train(arm: str, flip: bool, seed: int, device: str) -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     torch.save({"kp_logm": m.kp_logm.detach().cpu(), "log_k": m.log_k.detach().cpu(), "c": m.c.detach().cpu(),
                 "arm": arm, "flip": flip, "seed": seed, "log": log,
-                "recipe": {"lr": LR, "batch": BATCH, "epochs": EPOCHS, "resettle": RESETTLE}},
+                "recipe": {"lr": LR, "batch": BATCH, "epochs": EPOCHS, "resettle": RESETTLE, "depress": DEPRESS}},
                OUT / f"{name(arm, flip, seed)}.pt")
 
 
@@ -257,7 +270,9 @@ def main() -> int:
     p.add_argument("--flip", action="store_true")
     p.add_argument("--seed", type=int, default=1)
     p.add_argument("--device", default="cuda")
+    p.add_argument("--variant", default="base", choices=tuple(VARIANTS))
     a = p.parse_args()
+    use_variant(a.variant)
     if a.cmd == "train":
         train(a.arm, a.flip, a.seed, a.device)
         return 0
