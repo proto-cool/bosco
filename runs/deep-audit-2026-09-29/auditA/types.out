@@ -1,0 +1,310 @@
+predicted/celltype serotonin: 304 FlyWire top_nt for their types: {'serotonin': 108, 'dopamine': 85, 'acetylcholine': 54, nan: 51, 'glutamate': 6} known_nt: {nan: 190, 'tyramine, MIP, Dh331, acetylcholine-negative, gaba-negative, glutamate-negative, dopamine-negative, serotonin-negative, octopamine-negative': 46, 'serotonin': 16, 'hugin, sNPF': 8, 'dNPF; dNPF; acetylcholine-negative': 4, 'eclosion hormone; gaba-negative': 4, 'allatostatin-c; serotonin': 4, 'drosulfakinin; drosulfakinin': 4, 'eclosion hormone': 4, 'corazonin, sNPF': 3, 'gaba-negative': 3, 'FMRFa': 2, 'dopamine': 2, 'leucokinin': 2, 'dopamine; dopamine; gaba': 2, 'capability': 2, 'CCAP, bursicon-negative': 2, 'CCAP': 2, 'myosuppressin': 2, 'allatostatin-a': 1, 'proctolin, allatostatin-c': 1}
+          n      out     pconf             fw                                                                                                                                          fwk
+type                                                                                                                                                                                      
+LHPV6q1   2  28444.0  0.681138  acetylcholine                                                                                                                                        FMRFa
+AVLP532   2  22938.0  0.577788       dopamine                                                                                                                                          NaN
+SAxx02   11  14475.0  0.545386      serotonin                                                                                                                                          NaN
+PFGs     18  10856.0  0.798221      serotonin  tyramine, MIP, Dh331, acetylcholine-negative, gaba-negative, glutamate-negative, dopamine-negative, serotonin-negative, octopamine-negative
+PFR_a    28   9444.0  0.553578       dopamine  tyramine, MIP, Dh331, acetylcholine-negative, gaba-negative, glutamate-negative, dopamine-negative, serotonin-negative, octopamine-negative
+PRW006   19   6571.0  0.568690            NaN                                                                                                                                          NaN
+PRW068    2   6290.0  0.594336  acetylcholine                                                                                                                      CCAP, bursicon-negative
+GNG643    8   6061.0  0.539682      serotonin                                                                                                                                          NaN
+         15   5410.0  0.594290            NaN                                                                                                                                          NaN
+GNG644    2   4680.0  0.696333      serotonin                                                                                                                                          NaN
+GNG002    1   4437.0  0.591942      serotonin                                                                                                                                          NaN
+DNp32     2   4050.0  0.580228       dopamine                                                                                                                                myosuppressin
+GNG572    3   3902.0  0.722910       dopamine                                                                                                                                          NaN
+GNG642    2   3717.0  0.599956      serotonin                                                                                                                                          NaN
+DNpe048   2   3555.0  0.503166      serotonin                                                                                                                                         CCAP
+DNp29     2   3532.0  0.593408  acetylcholine                                                                                                           dNPF; dNPF; acetylcholine-negative
+SMP145    2   3297.0  0.582581       dopamine                                                                                                                                          NaN
+SMP142    2   3288.0  0.556443       dopamine                                                                                                                                          NaN
+SIP087    2   3224.0  0.715952       dopamine                                                                                                                                    serotonin
+DSKMP3    4   3035.0  0.527137       dopamine                                                                                                                 drosulfakinin; drosulfakinin
+CB1026   10   2894.0  0.648304  acetylcholine                                                                                                                                          NaN
+GNG137    2   2852.0  0.636815       dopamine                                                                                                                                          NaN
+SLP438    4   2739.0  0.539534       dopamine                                                                                                              eclosion hormone; gaba-negative
+FLA006m   6   2681.0  0.595351            NaN                                                                                                                                          NaN
+OA-ASM3   2   2588.0  0.530159       dopamine                                                                                                                                          NaN
+CL365     4   2483.0  0.519520       dopamine                                                                                                                                          NaN
+ENS5      4   2446.0  0.767431      serotonin                                                                                                                                          NaN
+SMP384    2   2309.0  0.680819       dopamine                                                                                                                                    serotonin
+CB4246    1   2237.0  0.673256      serotonin                                                                                                                                          NaN
+GNG101    1   2218.0  0.713893  acetylcholine                                                                                                                               allatostatin-a
+consensus serotonin types: {'5-HTPMPD01': 2, '5-HTPMPV01': 2, 'CSD': 2, 'DNg28': 4, 'DNg30': 2, 'ExR3': 2, 'FB4Y': 4, 'GNG056': 2, 'GNG540': 2, 'GNG550': 2, 'SNpp23': 1, 'aDT4': 4} fw: {'dopamine': 14, 'serotonin': 6, 'gaba': 4, 'acetylcholine': 4, nan: 1}
+
+no-transmitter neurons: 858 FlyWire top_nt for types: {nan: 253, 'glutamate': 215, 'acetylcholine': 158, 'gaba': 120, 'serotonin': 52, 'dopamine': 42, 'octopamine': 18} their out_cut by fw_top: {'acetylcholine': 29292.0, 'dopamine': 76595.0, 'gaba': 127274.0, 'glutamate': 144597.0, 'none': 63013.0, 'octopamine': 185.0, 'serotonin': 30900.0}
+                     n       out
+cls                             
+cb_intrinsic       367  258013.0
+ALLN                46  135936.0
+CX                  15   32103.0
+descending_neuron   14   14519.0
+ascending_neuron    14   10489.0
+unknown_sensory     51    7346.0
+ALIN                 4    6727.0
+visual_projection   95    3462.0
+cb_motor            74    1535.0
+gustatory            9    1095.0
+cb_endocrine        70     404.0
+cb_sensory          15     166.0
+
+predicted-path label vs FlyWire top (neurons):
+ fw_top         acetylcholine  dopamine  gaba  glutamate  none  octopamine  serotonin
+lab31                                                                               
+acetylcholine             11         0     3        186    20           1         20
+dopamine                   0         3     0          0     0           0          0
+gaba                       1         0    27          7    12           0          0
+glutamate                  1         0     7        238     9           0          0
+octopamine                 3         0     2          2     4           8          1
+serotonin                 49        80     0          6    49           0        103
+consensus agree with FlyWire top_nt: 0.861 n 42224  fast-sign agree: 0.873
+predicted agree with FlyWire top_nt: 0.514 n 759  fast-sign agree: 0.639
+celltype agree with FlyWire top_nt: 0.312 n 16  fast-sign agree: 0.625
+disagreeing (label vs FlyWire) neurons: 6267 out syn 2944980
+                                n        out
+lab31         fw_top                        
+acetylcholine dopamine       4095  1260217.0
+              serotonin       921   505816.0
+gaba          glutamate       424   243654.0
+glutamate     gaba            103   190726.0
+gaba          acetylcholine    73   136620.0
+serotonin     dopamine         99   112871.0
+glutamate     acetylcholine   135   109812.0
+acetylcholine gaba             31   100769.0
+              glutamate       248    83707.0
+serotonin     acetylcholine    58    62671.0
+gaba          dopamine          2    44611.0
+glutamate     serotonin        20    33476.0
+octopamine    gaba             21    26582.0
+gaba          serotonin         6    14940.0
+histamine     dopamine          6     7772.0
+                                                     n       out
+type       lab31         fw_top        path31                   
+KCg-m      acetylcholine dopamine      consensus  1342  363709.0
+lLN1_bc    acetylcholine dopamine      consensus    30  214114.0
+KCab-s     acetylcholine dopamine      consensus   657  125563.0
+KCa'b'-ap2 acetylcholine dopamine      consensus   291  109361.0
+KCa'b'-ap1 acetylcholine dopamine      consensus   199   94404.0
+KCab-m     acetylcholine dopamine      consensus   536   83897.0
+KCg-d      acetylcholine dopamine      consensus   206   74643.0
+KCa'b'-m   acetylcholine dopamine      consensus   205   72951.0
+KCab-c     acetylcholine dopamine      consensus   488   66698.0
+AN07B004   acetylcholine gaba          consensus     2   50120.0
+il3LN6     gaba          acetylcholine consensus     2   49083.0
+KCab-p     acetylcholine dopamine      consensus   129   46625.0
+lLN2T_a    acetylcholine serotonin     consensus     5   45864.0
+DPM        gaba          dopamine      override      2   44611.0
+lLN2T_c    acetylcholine serotonin     consensus     4   42622.0
+lLN2T_b    acetylcholine serotonin     consensus     4   37087.0
+ORN_DM1    acetylcholine serotonin     consensus    74   36947.0
+lLN2X11    acetylcholine serotonin     consensus     4   33187.0
+lLN2X04    acetylcholine gaba          consensus     4   32994.0
+ORN_VA2    acetylcholine serotonin     consensus    83   32163.0
+LHPV6q1    serotonin     acetylcholine predicted     2   28444.0
+lLN2X05    acetylcholine serotonin     consensus     4   27960.0
+lLN2T_e    acetylcholine serotonin     consensus     4   27688.0
+lLN2P_a    gaba          glutamate     consensus     7   25788.0
+EL         octopamine    gaba          consensus    18   23108.0
+AVLP532    serotonin     dopamine      predicted     2   22938.0
+TuTuA_2    glutamate     gaba          consensus     2   20499.0
+TuTuA_1    glutamate     gaba          consensus     2   19818.0
+ORN_DM2    acetylcholine serotonin     consensus    54   19379.0
+ORN_V      acetylcholine serotonin     consensus    55   19224.0
+
+== APL
+   type lab31     path31  sign30  sign31 fw_top    fw_known  n   out_cut     pconf
+0  APL  gaba  consensus      -1      -1   gaba  gaba; gaba  2  207533.0  0.688902
+
+== DPM
+   type lab31    path31  sign30  sign31    fw_top                                    fw_known  n  out_cut     pconf
+0  DPM  gaba  override      -1      -1  dopamine  serotonin; amnesiac; gaba; gaba, serotonin  2  44611.0  0.870179
+
+== OA-VUM
+        type       lab31     path31  sign30  sign31      fw_top    fw_known  n  out_cut     pconf
+0  OA-VUMa1  octopamine  consensus       1       0  octopamine  octopamine  2  30773.0  0.876699
+1  OA-VUMa2  octopamine  consensus       1       0  octopamine  octopamine  2  13040.0  0.816495
+2  OA-VUMa3  octopamine  consensus       1       0  octopamine  octopamine  2  11519.0  0.835794
+3  OA-VUMa4  octopamine  consensus       1       0  octopamine  octopamine  2  14416.0  0.875600
+4  OA-VUMa5  octopamine  consensus       1       0  octopamine  octopamine  2   5111.0  0.748538
+5  OA-VUMa6  octopamine  consensus       1       0  octopamine  octopamine  2  17785.0  0.825210
+6  OA-VUMa8  octopamine  consensus       1       0  octopamine  octopamine  1  24274.0  0.864925
+
+== MDN
+   type          lab31     path31  sign30  sign31         fw_top       fw_known  n  out_cut     pconf
+0  MDN  acetylcholine  consensus       1       1  acetylcholine  acetylcholine  4   3869.0  0.951817
+
+== DNp09
+     type          lab31     path31  sign30  sign31         fw_top       fw_known  n  out_cut    pconf
+0  DNp09  acetylcholine  consensus       1       1  acetylcholine  acetylcholine  2   4956.0  0.95539
+
+== GF (DNp01)
+     type          lab31     path31  sign30  sign31         fw_top fw_known  n  out_cut     pconf
+0  DNp01  acetylcholine  consensus       1       1  acetylcholine      NaN  2    761.0  0.528818
+
+== PFR
+     type          lab31     path31  sign30  sign31    fw_top                                                                                                                                     fw_known   n  out_cut     pconf
+0  PFR_a      serotonin   celltype       1       0  dopamine  tyramine, MIP, Dh331, acetylcholine-negative, gaba-negative, glutamate-negative, dopamine-negative, serotonin-negative, octopamine-negative   2    423.0  0.483594
+1  PFR_a      serotonin  predicted       1       0  dopamine  tyramine, MIP, Dh331, acetylcholine-negative, gaba-negative, glutamate-negative, dopamine-negative, serotonin-negative, octopamine-negative  26   9021.0  0.555195
+2  PFR_b  acetylcholine  consensus       1       1       NaN                                                                                                                                          NaN  16  16047.0  0.740316
+
+== PFN
+      type          lab31     path31  sign30  sign31         fw_top                                                                                                          fw_known    n  out_cut     pconf
+0    PFNa  acetylcholine  consensus       1       1  acetylcholine                                                                                                               NaN   58  33212.0  0.902322
+1    PFNd  acetylcholine  consensus       1       1  acetylcholine                                                                  acetylcholine, gaba-negative, glutamate-negative   40  45620.0  0.755015
+2  PFNm_a  acetylcholine  consensus       1       1  acetylcholine  acetylcholine, MIP, gaba-negative, glutamate-negative, dopamine-negative, tyramine-negative, octopamine-negative   21   5746.0  0.765482
+3  PFNm_b  acetylcholine  consensus       1       1  acetylcholine  acetylcholine, MIP, gaba-negative, glutamate-negative, dopamine-negative, tyramine-negative, octopamine-negative   26   7211.0  0.768785
+4  PFNp_a  acetylcholine  consensus       1       1  acetylcholine  acetylcholine, MIP, gaba-negative, glutamate-negative, dopamine-negative, tyramine-negative, octopamine-negative   64   8292.0  0.730964
+5  PFNp_b  acetylcholine  consensus       1       1  acetylcholine  acetylcholine, MIP, gaba-negative, glutamate-negative, dopamine-negative, tyramine-negative, octopamine-negative  136   8480.0  0.522304
+6  PFNp_c  acetylcholine  consensus       1       1  acetylcholine  acetylcholine, MIP, gaba-negative, glutamate-negative, dopamine-negative, tyramine-negative, octopamine-negative   40   8914.0  0.881382
+7  PFNp_d  acetylcholine  consensus       1       1  acetylcholine  acetylcholine, MIP, gaba-negative, glutamate-negative, dopamine-negative, tyramine-negative, octopamine-negative   28   1023.0  0.762509
+8  PFNp_e  acetylcholine  consensus       1       1  acetylcholine  acetylcholine, MIP, gaba-negative, glutamate-negative, dopamine-negative, tyramine-negative, octopamine-negative   23   3760.0  0.881113
+9    PFNv  acetylcholine  consensus       1       1  acetylcholine                                                                                                               NaN   20  20428.0  0.810309
+
+== DANs(class)
+       type      lab31     path31  sign30  sign31    fw_top                                    fw_known   n  out_cut     pconf
+0    PAM01   dopamine  consensus       1       0  dopamine            dopamine; dopamine, nitric oxide  44   2826.0  0.915362
+1    PAM02   dopamine  consensus       1       0  dopamine                          dopamine; dopamine  17   1570.0  0.900225
+2    PAM03   dopamine  consensus       1       0  dopamine                                    dopamine  12    198.0  0.900630
+3    PAM04   dopamine  consensus       1       0  dopamine                                    dopamine  32   2147.0  0.885611
+4    PAM05   dopamine  consensus       1       0  dopamine            dopamine; dopamine, nitric oxide  20   7203.0  0.894628
+5    PAM06   dopamine  consensus       1       0  dopamine            dopamine; dopamine, nitric oxide  28   7092.0  0.908949
+6    PAM07   dopamine  consensus       1       0  dopamine                          dopamine; dopamine  14   2093.0  0.909804
+7    PAM08   dopamine  consensus       1       0  dopamine                                    dopamine  50   6147.0  0.905778
+8    PAM09   dopamine  consensus       1       0  dopamine                                    dopamine   9   4233.0  0.879460
+9    PAM10   dopamine  consensus       1       0  dopamine                          dopamine; dopamine  15   6766.0  0.910581
+10   PAM11   dopamine  consensus       1       0  dopamine                          dopamine; dopamine  15   2840.0  0.839650
+11   PAM12   dopamine  consensus       1       0  dopamine                          dopamine; dopamine  22   2507.0  0.906342
+12   PAM13   dopamine  consensus       1       0  dopamine                                    dopamine  16   1750.0  0.878124
+13   PAM14   dopamine  consensus       1       0  dopamine                                    dopamine  18   1507.0  0.890434
+14   PAM15   dopamine  consensus       1       0  dopamine                                    dopamine   4    261.0  0.913745
+15  PPL101   dopamine  consensus       1       0  dopamine  dopamine; dopamine; dopamine, nitric oxide   2   7440.0  0.841912
+16  PPL102   dopamine  consensus       1       0  dopamine                          dopamine; dopamine   2   3542.0  0.665548
+17  PPL103   dopamine  consensus       1       0  dopamine  dopamine; dopamine; dopamine, nitric oxide   2  20440.0  0.868124
+18  PPL104   dopamine  consensus       1       0  dopamine                          dopamine; dopamine   2   1709.0  0.744620
+19  PPL105   dopamine  consensus       1       0  dopamine          dopamine; dopamine; dopamine, sNPF   2   4822.0  0.874966
+20  PPL106   dopamine  consensus       1       0  dopamine                dopamine; dopamine; dopamine   2   2158.0  0.807220
+21  PPL107   dopamine  consensus       1       0  dopamine                          dopamine; dopamine   2   6079.0  0.649063
+22  PPL108   dopamine  consensus       1       0  dopamine                          dopamine; dopamine   2   3726.0  0.662947
+23  PPL201   dopamine  consensus       1       0  dopamine                          dopamine; dopamine   2   4996.0  0.493103
+24  PPL202   dopamine  consensus       1       0  dopamine                          dopamine; dopamine   2   2955.0  0.551595
+25  PPL203  serotonin  predicted       1       0  dopamine                    dopamine; dopamine; gaba   2   1322.0  0.653528
+26  PPL204   dopamine  consensus       1       0  dopamine                          dopamine; dopamine   2    806.0  0.484841
+
+== ALPN by label x path
+                            n        out
+lab31         path31                   
+acetylcholine consensus  469  1430593.0
+gaba          consensus  209   111914.0
+glutamate     consensus    8     6049.0
+ALPN type prefixes: {'M': 295, 'VP': 66, 'VM': 52, 'VA': 44, 'CB': 44, 'DL': 40, 'DA': 33, 'DM': 28, 'VC': 23, 'VL': 18, 'DC': 16, 'DP': 11, 'D': 6, 'V': 4, 'MZ': 2}
+ALPN GABA types: {'M_vPNml53': 12, 'M_vPNml83': 8, 'M_vPNml84': 8, 'M_vPNml63': 7, 'M_vPNml65': 6, 'CB2004': 6, 'VL2a_vPN': 6, 'M_VPNml66': 6, 'M_vPNml87': 6, 'M_vPNml76': 6, 'CB2589': 6, 'CB2703': 6, 'M_vPNml60': 5, 'CB3447': 5, 'M_vPNml68': 5, 'CB1296_a': 5, 'VA1v_vPN': 4, 'M_vPNml50': 4, 'M_vPNml72': 4, 'VL2p_vPN': 4, 'M_vPNml67': 4, 'M_vPNml75': 4, 'M_vPNml80': 4, 'DP1m_vPN': 4, 'M_vPNml77': 4, 'DL2d_vPN': 4, 'M_vPNml69': 4, 'CB2711': 4, 'DP1l_vPN': 3, 'CB3228': 3}
+ALPN ACh 'uni' prefixed?: {'M_lv': 83, 'M_l': 57, 'VP': 56, 'VM': 52, 'VA': 38, 'DL': 36, 'DA': 31, 'DM': 24, 'VC': 23, 'M_ad': 22}
+
+== ALLN label x path
+                            n       out
+lab31         path31                  
+acetylcholine consensus  137  610034.0
+              predicted    7    9566.0
+gaba          consensus  115  339502.0
+              predicted    5   40901.0
+glutamate     consensus   99   43767.0
+              predicted    9    8334.0
+octopamine    consensus    2    5111.0
+unclear       unknown     46  135936.0
+ALLN no-fast (unclear) types with FlyWire:                         n      out
+type     fw_top                   
+v2LN30   glutamate      2  50382.0
+lLN2F_a  gaba           2  27905.0
+lLN2T_d  gaba           3  20352.0
+         acetylcholine  3   9197.0
+l2LN22   gaba           3   4609.0
+v2LN3A   acetylcholine  2   3260.0
+ALBN1    gaba           1   3174.0
+lLN10    gaba           1   2627.0
+CB3417   glutamate      4   2517.0
+vLN26    glutamate      1   2253.0
+vLN27    glutamate      2   2108.0
+v2LN31   glutamate      2   1581.0
+v2LN40_2 glutamate      3   1000.0
+v2LN41   gaba           2    855.0
+v2LNX01  glutamate      2    817.0
+CB2471   gaba           3    665.0
+vLN29    glutamate      1    609.0
+CB2845   acetylcholine  3    579.0
+v2LN41   acetylcholine  1    525.0
+CB3326   glutamate      2    482.0
+CB3172   glutamate      2    377.0
+         gaba           1     62.0
+ALLN silenced (ACh) v3.1:                           n       out
+type      fw_top                     
+          NaN             7   22559.0
+CB2471    gaba            1     256.0
+CB2908    gaba            4    1094.0
+CB3202    gaba            5    1802.0
+CB3417    glutamate       2    1570.0
+CB3679    acetylcholine   1     488.0
+lLN10     gaba            1    2865.0
+lLN12A    NaN            10    3585.0
+lLN1_a    serotonin       2   12497.0
+lLN1_bc   dopamine       30  214114.0
+lLN2T_a   serotonin       5   45864.0
+lLN2T_b   serotonin       4   37087.0
+lLN2T_c   serotonin       4   42622.0
+lLN2T_e   serotonin       4   27688.0
+lLN2X04   gaba            4   32994.0
+lLN2X05   serotonin       4   27960.0
+lLN2X11   serotonin       4   33187.0
+lLN2X12   acetylcholine  11   58112.0
+v2LN33    glutamate       4    1819.0
+v2LN34C   acetylcholine   2    2743.0
+v2LN34F   glutamate       4    3275.0
+v2LN38    glutamate       4    2557.0
+v2LN3A    acetylcholine   2    4155.0
+v2LN3A1_a acetylcholine   2    2597.0
+v2LN3A1_b glutamate       9   14439.0
+v2LN4     acetylcholine   6    5924.0
+v2LN41    acetylcholine   1     720.0
+v2LN5     glutamate       3    3554.0
+vLN24     acetylcholine   4   11473.0
+
+== MBON valence
+            type  cells  from_PAM  from_PPL1  from_PPL104  side_v30             nt  side_v31           hb
+0        MBON01      2      2317          5            0     avoid      glutamate     avoid       MBON01
+1        MBON02      2      1327          0            6     avoid      glutamate     avoid       MBON02
+2        MBON03      2      4734          7            0     avoid      glutamate     avoid       MBON03
+3        MBON04      2      1746          9            4     avoid      glutamate     avoid       MBON04
+4        MBON05      2      3420         49            1     avoid      glutamate     avoid       MBON05
+5        MBON06      2      3918         42            3     avoid      glutamate     avoid       MBON06
+6        MBON07      4      2038          9            0     avoid      glutamate     avoid       MBON07
+7        MBON09      4      3618         21            0     avoid           gaba  approach       MBON09
+8        MBON10      9       415          3            0     avoid           gaba  approach       MBON10
+9        MBON11      2       304       2461            6  approach           gaba  approach       MBON11
+10       MBON12      4        22        836            0  approach  acetylcholine  approach       MBON12
+11       MBON13      2         7        664            2  approach  acetylcholine  approach       MBON13
+12       MBON14      4         0        860            4  approach  acetylcholine  approach       MBON14
+13       MBON15      4        19        136            7  approach  acetylcholine  approach       MBON15
+14  MBON15-like      4         3        217            5  approach  acetylcholine  approach  MBON15-like
+15       MBON16      2         0          1          302   novelty  acetylcholine   novelty       MBON16
+16       MBON17      2         1          2          118   novelty  acetylcholine   novelty       MBON17
+17  MBON17-like      2         0         11           49   novelty  acetylcholine   novelty  MBON17-like
+18       MBON18      2         0        435            6  approach  acetylcholine  approach       MBON18
+19       MBON19      4         0        100            8  approach  acetylcholine  approach       MBON19
+20       MBON20      2        37        147            0  approach           gaba  atypical       MBON20
+21       MBON21      2      1147         18            0     avoid  acetylcholine  atypical       MBON21
+22       MBON22      2        48          0            0     avoid  acetylcholine  atypical       MBON22
+23       MBON23      2         2        125            5  approach  acetylcholine  atypical       MBON23
+24       MBON24      2       600          1            5     avoid  acetylcholine  atypical       MBON24
+25       MBON25      2         5        122            0  approach      glutamate  atypical       MBON25
+26  MBON25-like      4         2        102            0  approach      glutamate  atypical             
+27       MBON26      2      1383          5            0     avoid  acetylcholine  atypical       MBON26
+28       MBON27      2       603         13            0     avoid  acetylcholine  atypical       MBON27
+29       MBON28      2         0          2          167   novelty  acetylcholine  atypical       MBON28
+30       MBON29      2       493         15            0     avoid  acetylcholine  atypical       MBON29
+31       MBON30      2       132        314            0  approach      glutamate  atypical       MBON30
+32       MBON31      2        34        712            0  approach           gaba  atypical       MBON31
+33       MBON32      2         9       1064            0  approach           gaba  atypical       MBON32
+34       MBON33      2       151        324            0  approach  acetylcholine  atypical       MBON33
+35       MBON34      2         3         12            0  approach      glutamate  atypical       MBON34
+36       MBON35      2         8        891            0  approach  acetylcholine  atypical       MBON35
+approach cells v3.0/v3.1: 48 39  avoid: 41 16

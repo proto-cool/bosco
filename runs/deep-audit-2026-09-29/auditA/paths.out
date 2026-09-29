@@ -1,0 +1,70 @@
+MBON08 rows: []
+MBON-typed bodies not class MBON (in model): []
+class MBON types: [np.str_('MBON01'), np.str_('MBON02'), np.str_('MBON03'), np.str_('MBON04'), np.str_('MBON05'), np.str_('MBON06'), np.str_('MBON07'), np.str_('MBON09'), np.str_('MBON10'), np.str_('MBON11'), np.str_('MBON12'), np.str_('MBON13'), np.str_('MBON14'), np.str_('MBON15'), np.str_('MBON15-like'), np.str_('MBON16'), np.str_('MBON17'), np.str_('MBON17-like'), np.str_('MBON18'), np.str_('MBON19'), np.str_('MBON20'), np.str_('MBON21'), np.str_('MBON22'), np.str_('MBON23'), np.str_('MBON24'), np.str_('MBON25'), np.str_('MBON25-like'), np.str_('MBON26'), np.str_('MBON27'), np.str_('MBON28'), np.str_('MBON29'), np.str_('MBON30'), np.str_('MBON31'), np.str_('MBON32'), np.str_('MBON33'), np.str_('MBON34'), np.str_('MBON35')]
+          path   edges      syn  kept_cut  fast_kept_cut
+0     ORN->uPN   17277   436879     0.979          0.979
+1     ORN->mPN   16509    65611     0.641          0.641
+2    ORN->ALLN  118601   632862     0.748          0.748
+3     ORN->ORN   70338   184335     0.422          0.422
+4    ALLN->ORN   73006   232403     0.540          0.397
+5    ALLN->uPN   26389   352707     0.939          0.355
+6      uPN->KC   22236   388841     0.988          0.988
+7      mPN->KC     350     2087     0.819          0.819
+8     uPN->LHN   42225   329681     0.850          0.850
+9     mPN->LHN   19067    96934     0.742          0.742
+10      KC->KC  642933  1153845     0.184          0.000
+11     KC->APL    4693   210352     0.995          0.995
+12     APL->KC    4633   196200     0.995          0.995
+13    KC->MBON   61210   463640     1.000          1.000
+14     KC->DAN  145663   281862     0.220          0.220
+15   DAN->MBON    3160    39711     0.921          0.000
+16  MBON->MBON    1606    26259     0.934          0.934
+17   MBON->DAN    2589    11309     0.703          0.703
+18   MBON->LHN    3866    33492     0.865          0.865
+19    MBON->DN     409     4347     0.891          0.891
+20     LHN->DN    2718    20926     0.835          0.806
+21    LHN->LHN  134908   534582     0.655          0.648
+22    MBON->CX    1433     8543     0.801          0.801
+23     uPN->DN     815    10354     0.907          0.907
+DNs with any MBON input (uncut/cut): 170 88
+approach read DN input by pre class (cut): {'cb_intrinsic': 0.757, 'descending_neuron': 0.116, 'ascending_neuron': 0.102, 'MBON': 0.013, 'visual_projection': 0.006, 'CX': 0.002}  from MBON direct: 1047
+avoid read DN input by pre class (cut): {'cb_intrinsic': 0.762, 'descending_neuron': 0.104, 'ascending_neuron': 0.099, 'visual_projection': 0.022, 'MBON': 0.006, 'SEZPN': 0.003}  from MBON direct: 830
+read DN types and labels: {'approach': [(np.str_('DNbe006'), np.str_('acetylcholine')), (np.str_('DNg104'), np.str_('octopamine')), (np.str_('DNge138'), np.str_('octopamine')), (np.str_('DNge149'), np.str_('octopamine')), (np.str_('DNge150'), np.str_('octopamine')), (np.str_('DNge151'), np.str_('octopamine')), (np.str_('DNge152'), np.str_('octopamine')), (np.str_('DNp13'), np.str_('acetylcholine')), (np.str_('DNp60'), np.str_('acetylcholine')), (np.str_('DNp67'), np.str_('acetylcholine')), (np.str_('pIP10'), np.str_('acetylcholine')), (np.str_('pMP2'), np.str_('acetylcholine'))], 'avoid': [(np.str_('DNa13'), np.str_('acetylcholine')), (np.str_('DNg04'), np.str_('acetylcholine')), (np.str_('DNg64'), np.str_('gaba')), (np.str_('DNge023'), np.str_('acetylcholine')), (np.str_('DNge030'), np.str_('acetylcholine')), (np.str_('DNge127'), np.str_('gaba')), (np.str_('DNp42'), np.str_('acetylcholine')), (np.str_('DNp52'), np.str_('acetylcholine')), (np.str_('DNpe003'), np.str_('acetylcholine')), (np.str_('DNpe023'), np.str_('acetylcholine')), (np.str_('DNpe027'), np.str_('acetylcholine')), (np.str_('MDN'), np.str_('acetylcholine'))]}
+STEERING present: {'DNa02': 2, 'DNa03': 2}
+
+[layered] edges 9770780 vs 9770780; fast syn 48385758 vs 48385758; KC->KC syn 1153845 vs 1153845; KC->MBON edges 61210 vs 61210
+  in_fast equal to real? max|diff| 86356; neurons with different in_fast: 49783
+  cut edges 2387559 vs real cut 2387559; cut fast syn 37558027 vs 37558027
+  shortcuts: {'ORN->KC': 0, 'ORN->MBON': 0}
+  ORN->uPN syn onto the matching glomerulus: real 0.917 layered 0.024
+  self-loops: 1206 real: 85
+
+[hash] edges 9770780 vs 9770780; fast syn 48385758 vs 48385758; KC->KC syn 1153845 vs 1153845; KC->MBON edges 61210 vs 61210
+  in_fast equal to real? max|diff| 13218; neurons with different in_fast: 4146
+  cut edges 2387559 vs real cut 2387559; cut fast syn 37558027 vs 37558027
+  shortcuts: {'ORN->KC': 0, 'ORN->MBON': 0}
+  self-loops: 85 real: 85
+  APL->KC syn per KC: real mean/sd/zero 48.3 16.4 1  hash 48.3 52.1 1395
+  PN->KC syn per KC: real zero-KCs 252  hash zero-KCs 41
+
+units v3.0 8257 v3.1 8266
+largest v3.0 units {'KCg-m': 1342, 'untyped:unclassified': 898, 'BM_InOm': 745, 'KCab-s': 657, 'KCab-m': 536, 'LC12': 498}
+largest v3.1 units {'KCg-m': 1342, 'untyped:unclassified:cb_intrinsic': 855, 'BM_InOm': 745, 'KCab-s': 657, 'KCab-m': 536, 'LC12': 498, 'KCab-c': 488, 'TmY14': 477}
+v3.1 units mixing sensory and non-sensory cells: {}
+v3.1 units spanning >1 class: {'CB4246': 2, 'SAxx01': 2} count 2
+units both 'sensory' (kept s_in=1) and containing non-sensory cells: {}
+KC units containing non-KCs: {}
+MBON units containing non-MBONs: {}
+
+ORN glomeruli: 53 usable 46 fed 46 dropped (usable, unfed): []
+innate present: ['DA1', 'DL3', 'VA1d', 'VA1v', 'VL2a', 'DA2', 'V'] innate absent from data: []
+glomerulus labels odd: []
+olfactory-class cells: 2639 fed: 1865 unfed olfactory: 774 unfed types: {'ORN_DA1': 204, 'ORN_VA1d': 132, 'ORN_VA1v': 130, 'ORN_DL3': 103, 'ORN_VL2a': 98, 'ORN_V': 55, 'ORN_DA2': 48, '': 4}
+fed ORN sides: {nan: 1865}
+ORNs per fed glomerulus min/median/max: 14 34 84
+other sensory (no input): 2785 {'mechanosensory': 1733, 'mechanosensory_proprioceptive': 424, 'gustatory': 355, 'unknown_sensory': 143, 'hygrosensory': 66, 'thermosensory': 25, 'cb_sensory': 20, 'mechanosensory_tbc': 11}
+hygro/thermo classes in 'orn' region? {'olfactory': 2639}
+BETA 50.0: f(x) {-0.05000000074505806: 0.0015780000248923898, -0.009999999776482582: 0.009480999782681465, 0.0: 0.013861999846994877, 0.009999999776482582: 0.019478999078273773, 0.05000000074505806: 0.05153200030326843, 0.5: 0.4621169865131378}  f'(x) [0.0758579894900322, 0.37750673294067383, 0.0, 0.6222231388092041, 0.921687662601471, 0.7864477038383484]
+BETA 500.0: f(x) {-0.05000000074505806: 0.0, -0.009999999776482582: 1.2999999853491317e-05, 0.0: 0.0013859999598935246, 0.009999999776482582: 0.01001300010830164, 0.05000000074505806: 0.0499580018222332, 0.5: 0.4621169865131378}  f'(x) [0.0, 0.0066928500309586525, 0.0, 0.993207573890686, 0.9975042343139648, 0.7864477038383484]
+x at ACTIVE (BETA 500): 0.009986814115600044
+f(+inf) upper bound tanh(x) -> rate 0.3 needs x = 0.30951960420311175

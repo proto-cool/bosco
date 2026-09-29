@@ -1,0 +1,212 @@
+{
+ "2.0": {
+  "calib": {
+   "iters": 20,
+   "converged": false,
+   "final": {
+    "it": 19,
+    "settled": true,
+    "step_change": 9.476207196712494e-08,
+    "kc_active": 0.10513810068368912,
+    "kc_rate": 0.10776805877685547,
+    "mbon": 0.06366860121488571,
+    "read_resid": 0.0
+   },
+   "settle": {
+    "steps": 80,
+    "max_step_change": 2.9653310775756836e-06,
+    "converged": true
+   }
+  },
+  "calib_s": 35.719533920288086,
+  "rest": {
+   "max_step_change_last200": 0.0,
+   "n_osc_cells": 0,
+   "osc_types": [],
+   "mean_rate": 0.005421304609626532,
+   "share_sat(>0.9)": 0.0013163143303245306,
+   "share_dead(<1e-3)": 0.14168328046798706,
+   "rho": 0.9029488573529378,
+   "mu": [
+    0.9029488573529378,
+    0.0
+   ],
+   "maxRe_M": 0.6117954294117833,
+   "imM": 0.0,
+   "lead_types": [
+    [
+     "PEN_a(PEN1)",
+     0.467
+    ],
+    [
+     "PEN_b(PEN2)",
+     0.274
+    ],
+    [
+     "GLNO",
+     0.113
+    ],
+    [
+     "ExR8",
+     0.032
+    ]
+   ]
+  },
+  "smell": {
+   "max_step_change_last200": 0.0,
+   "n_osc_cells": 0,
+   "osc_types": [],
+   "mean_rate": 0.021586311981081963,
+   "share_sat(>0.9)": 0.005963302683085203,
+   "share_dead(<1e-3)": 0.1801755130290985,
+   "rho": 0.9427140678712215,
+   "mu": [
+    0.9427140678712215,
+    0.0
+   ],
+   "maxRe_M": 0.7708562714848952,
+   "imM": 0.0,
+   "lead_types": [
+    [
+     "KCab-s",
+     0.862
+    ]
+   ]
+  },
+  "rest_from0": {
+   "max_step_change_last200": 0.0,
+   "n_osc_cells": 0,
+   "osc_types": [],
+   "mean_rate": 0.005421304609626532,
+   "share_sat(>0.9)": 0.0013163143303245306,
+   "share_dead(<1e-3)": 0.14168328046798706,
+   "maxabs_vs_rest": 0.0,
+   "share_diff": 0.0
+  },
+  "rest_from_sat": {
+   "max_step_change_last200": 0.0,
+   "n_osc_cells": 0,
+   "osc_types": [],
+   "mean_rate": 0.014124210923910141,
+   "share_sat(>0.9)": 0.008356601931154728,
+   "share_dead(<1e-3)": 0.1819106489419937,
+   "maxabs_vs_rest": 0.9999997615814209,
+   "share_diff": 0.024212205782532692
+  }
+ },
+ "6.0": {
+  "calib": {
+   "iters": 20,
+   "converged": false,
+   "final": {
+    "it": 19,
+    "settled": true,
+    "step_change": 5.27501106262207e-06,
+    "kc_active": 0.12383119761943817,
+    "kc_rate": 0.21019509434700012,
+    "mbon": 0.14836576581001282,
+    "read_resid": 0.0
+   },
+   "settle": {
+    "steps": 800,
+    "max_step_change": 9.775161743164062e-06,
+    "converged": true
+   }
+  },
+  "calib_s": 49.188183069229126,
+  "rest": {
+   "max_step_change_last200": 7.450580596923828e-09,
+   "n_osc_cells": 0,
+   "osc_types": [],
+   "mean_rate": 0.020831052213907242,
+   "share_sat(>0.9)": 0.0034104506485164165,
+   "share_dead(<1e-3)": 0.46023136377334595,
+   "rho": 0.997178391071238,
+   "mu": [
+    0.997178391071238,
+    0.0
+   ],
+   "maxRe_M": 0.9887135642849647,
+   "imM": 0.0,
+   "lead_types": [
+    [
+     "GNG566",
+     0.084
+    ],
+    [
+     "GNG406",
+     0.053
+    ],
+    [
+     "GNG016",
+     0.04
+    ],
+    [
+     "AN09B033",
+     0.039
+    ],
+    [
+     "mAL4D",
+     0.034
+    ]
+   ]
+  },
+  "smell": {
+   "max_step_change_last200": 0.0,
+   "n_osc_cells": 0,
+   "osc_types": [],
+   "mean_rate": 0.04257333278656006,
+   "share_sat(>0.9)": 0.00574391707777977,
+   "share_dead(<1e-3)": 0.48041483759880066,
+   "rho": 0.9932997744554257,
+   "mu": [
+    0.9932997744554257,
+    0.0
+   ],
+   "maxRe_M": 0.9731990978216949,
+   "imM": 0.0,
+   "lead_types": [
+    [
+     "GNG566",
+     0.069
+    ],
+    [
+     "GNG406",
+     0.048
+    ],
+    [
+     "GNG016",
+     0.036
+    ],
+    [
+     "AN09B033",
+     0.034
+    ],
+    [
+     "mAL4D",
+     0.03
+    ]
+   ]
+  },
+  "rest_from0": {
+   "max_step_change_last200": 5.960464477539063e-08,
+   "n_osc_cells": 0,
+   "osc_types": [],
+   "mean_rate": 0.02083105966448784,
+   "share_sat(>0.9)": 0.0034104506485164165,
+   "share_dead(<1e-3)": 0.46023136377334595,
+   "maxabs_vs_rest": 4.947185516357422e-06,
+   "share_diff": 0.0
+  },
+  "rest_from_sat": {
+   "max_step_change_last200": 7.450580596923828e-09,
+   "n_osc_cells": 0,
+   "osc_types": [],
+   "mean_rate": 0.023697786033153534,
+   "share_sat(>0.9)": 0.0053250896744430065,
+   "share_dead(<1e-3)": 0.4650578498840332,
+   "maxabs_vs_rest": 0.9996981620788574,
+   "share_diff": 0.0423414446413517
+  }
+ }
+}

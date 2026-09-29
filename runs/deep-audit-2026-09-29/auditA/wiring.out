@@ -1,0 +1,280 @@
+model n 50140 ids equal fresh True
+
+== selection
+model-superclass bodies not Traced: {'Anchor': 14, 'Orphan': 1}
+ of which typed: 0 {}
+Traced excluded by superclass: {'ol_intrinsic': 89390, 'vnc_intrinsic': 13151, 'vnc_sensory': 6365, 'ol_sensory': 4114, 'vnc_motor': 708, 'visual_centrifugal': 563, nan: 516, 'vnc_efferent': 94, 'ENS': 47, 'vnc_endocrine': 22, 'vnc_sensory_tbc': 9, 'visual_projection_tbc': 2, 'vnc_tbc': 1}
+ NaN-superclass traced, class: {nan: 516} types e.g. <ArrowStringArray>
+[]
+Length: 0, dtype: str
+
+== transmitter paths (model neurons)
+model ids missing from NT table: 92 classes: {'mechanosensory': 60, 'unknown_sensory': 28, 'visual_projection': 1, 'cb_intrinsic': 1, 'cb_sensory_tbc': 1, 'cb_sensory': 1}
+           neurons     out_cut
+src30                         
+consensus    48409  38599658.0
+default        876    484604.0
+override         2     44611.0
+predicted      853    379541.0
+                         neurons     out_cut  pconf_med  cconf_med
+path31    lab31                                                   
+celltype  octopamine           1        35.0   0.367853   0.619931
+          serotonin           17     12713.0   0.486072   0.528660
+consensus acetylcholine    34561  24315096.0   0.934356   0.932582
+          dopamine           382    185973.0   0.896344   0.885433
+          gaba              5646   7627793.0   0.810597   0.808248
+          glutamate         7749   6240744.0   0.795810   0.796142
+          histamine            6      7772.0   0.780312   0.786028
+          octopamine          36    171414.0   0.768259   0.743587
+          serotonin           29     50866.0   0.751267   0.743353
+override  gaba                 2     44611.0   0.870179   0.870181
+predicted acetylcholine      241     45966.0   0.563027   0.486914
+          dopamine             3      2950.0   0.513215   0.486295
+          gaba                47     56843.0   0.531678   0.472536
+          glutamate          255     22765.0   0.558191   0.486914
+          octopamine          20     30012.0   0.766642   0.765835
+          serotonin          287    221005.0   0.595705   0.579357
+unknown   unclear            766    471856.0   0.456664   0.438725
+          unknown             92         0.0        NaN        NaN
+
+celltype-fallback neurons: 18 labels {'serotonin': 17, 'octopamine': 1}
+                     n  out_cut     cconf
+type     lab31                           
+SAxx02   serotonin   3   4107.0  0.510504
+DNp29    serotonin   1   1957.0  0.597074
+DNpe048  serotonin   1   1668.0  0.503469
+PRW006   serotonin   2    819.0  0.570396
+DSKMP3   serotonin   1    750.0  0.528141
+SMP738   serotonin   3    734.0  0.566919
+CL365    serotonin   1    631.0  0.520095
+CB1009   serotonin   1    575.0  0.522507
+SLP374   serotonin   1    570.0  0.528660
+ANXXX005 serotonin   1    479.0  0.522876
+PFR_a    serotonin   2    423.0  0.556141
+GNG629   octopamine  1     35.0  0.619931
+
+predicted-path conf quantiles [0.514 0.533 0.572 0.635] n<0.5: 0
+v3.1 serotonin: 333 neurons, by path {'predicted': 287, 'consensus': 29, 'celltype': 17}
+v3.1 octopamine: 57 neurons, by path {'consensus': 36, 'predicted': 20, 'celltype': 1}
+v3.1 dopamine: 385 neurons, by path {'consensus': 382, 'predicted': 3}
+v3.1 histamine: 6 neurons, by path {'consensus': 6}
+
+== sign changes by type (out synapses after the cut)
+neurons changing sign: 1633 out_cut syn 1146824 of 39508414
+                          neurons       syn
+sign30 sign31 lab31                        
+1      0      dopamine        385  188923.0
+              octopamine       57  201461.0
+              serotonin       333  284584.0
+              unclear         766  471856.0
+              unknown          92       0.0
+         type                cls       lab31  sign30  sign31   n  out_cut
+389    v2LN30               ALLN     unclear       1       0   2  50382.0
+257  OA-VUMa1       cb_intrinsic  octopamine       1       0   2  30773.0
+235   LHPV6q1       cb_intrinsic   serotonin       1       0   2  28444.0
+381   lLN2F_a               ALLN     unclear       1       0   2  27905.0
+263  OA-VUMa8       cb_intrinsic  octopamine       1       0   1  24274.0
+135        EL                 CX  octopamine       1       0  18  23108.0
+45    AVLP532       cb_intrinsic   serotonin       1       0   2  22938.0
+46    AVLP538       cb_intrinsic     unclear       1       0   2  21473.0
+292    PPL103                DAN    dopamine       1       0   2  20440.0
+382   lLN2T_d               ALLN     unclear       1       0   3  20352.0
+322   PVLP106       cb_intrinsic     unclear       1       0   2  19803.0
+262  OA-VUMa6       cb_intrinsic  octopamine       1       0   2  17785.0
+157      GLNO                 CX     unclear       1       0   4  17573.0
+255   OA-VPM3       cb_intrinsic  octopamine       1       0   2  17537.0
+142      ExR3                 CX   serotonin       1       0   2  15922.0
+324    SAxx02    unknown_sensory   serotonin       1       0  11  14475.0
+260  OA-VUMa4       cb_intrinsic  octopamine       1       0   2  14416.0
+256   OA-VPM4       cb_intrinsic  octopamine       1       0   2  13851.0
+258  OA-VUMa2       cb_intrinsic  octopamine       1       0   2  13040.0
+149      FB4M                 CX    dopamine       1       0   4  11662.0
+259  OA-VUMa3       cb_intrinsic  octopamine       1       0   2  11519.0
+281      PFGs                 CX   serotonin       1       0  18  10856.0
+286    PLP211       cb_intrinsic     unclear       1       0   2   9601.0
+220    LAL123       cb_intrinsic     unclear       1       0   2   9483.0
+282     PFR_a                 CX   serotonin       1       0  28   9444.0
+0                           ALLN     unclear       1       0   4   9259.0
+150      FB4Y                 CX   serotonin       1       0   4   8913.0
+41    AVLP476       cb_intrinsic    dopamine       1       0   2   8852.0
+304   PPM1203       cb_intrinsic    dopamine       1       0   2   8829.0
+159    GNG016       cb_intrinsic     unclear       1       0   2   8717.0
+98        CSD       cb_intrinsic   serotonin       1       0   2   8652.0
+374   TuTuB_a       cb_intrinsic     unclear       1       0   2   8074.0
+56   AVLP743m       cb_intrinsic     unclear       1       0  11   7941.0
+147    FB2B_a                 CX     unclear       1       0   4   7889.0
+342    SMP143       cb_intrinsic     unclear       1       0   4   7700.0
+290    PPL101                DAN    dopamine       1       0   2   7440.0
+145      FB1H                 CX    dopamine       1       0   2   7358.0
+53    AVLP594       cb_intrinsic     unclear       1       0   2   7312.0
+270     PAM05                DAN    dopamine       1       0  20   7203.0
+271     PAM06                DAN    dopamine       1       0  28   7092.0
+4                   cb_intrinsic     unclear       1       0  34   6938.0
+275     PAM10                DAN    dopamine       1       0  15   6766.0
+23      ALIN1               ALIN     unclear       1       0   4   6727.0
+111    DNg104  descending_neuron  octopamine       1       0   2   6614.0
+55    AVLP610       cb_intrinsic    dopamine       1       0   2   6608.0
+307    PRW006       cb_intrinsic   serotonin       1       0  19   6571.0
+319    PRW068       cb_intrinsic   serotonin       1       0   2   6290.0
+114     DNg30  descending_neuron   serotonin       1       0   2   6283.0
+115     DNg34  descending_neuron  octopamine       1       0   2   6232.0
+273     PAM08                DAN    dopamine       1       0  50   6147.0
+296    PPL107                DAN    dopamine       1       0   2   6079.0
+191    GNG643    unknown_sensory   serotonin       1       0   8   6061.0
+326   SIP106m       cb_intrinsic    dopamine       1       0   2   5931.0
+121   DNge138  descending_neuron  octopamine       1       0   2   5414.0
+3                   cb_intrinsic   serotonin       1       0  14   5398.0
+52    AVLP593       cb_intrinsic     unclear       1       0   2   5168.0
+261  OA-VUMa5               ALLN  octopamine       1       0   2   5111.0
+161    GNG060       cb_intrinsic     unclear       1       0   2   5110.0
+298    PPL201                DAN    dopamine       1       0   2   4996.0
+387   mAL_m3b       cb_intrinsic     unclear       1       0   8   4883.0/Users/nickd/.claude/jobs/4059153c/tmp/auditA/wiring.py:144: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  pc = pc.div(pc.sum(1), axis=0)
+
+
+nonzero-to-other-nonzero or 0->nonzero changes:
+ Empty DataFrame
+Columns: [type, cls, lab31, sign30, sign31, n, out_cut]
+Index: []
+
+cache ids ok True cache label==fresh True
+
+== fast drive removed in v3.1 (cut edges that drove in v3.0): 1203524 syn of 38761551
+reason
+             352973.0
+KC->KC       211732.0
+monoamine    638819.0
+reason     pre_cls           
+monoamine  cb_intrinsic          365947.0
+           cb_intrinsic          258013.0
+KC->KC     Kenyon_Cell           211732.0
+monoamine  CX                    104741.0
+           DAN                    72986.0
+           descending_neuron      44019.0
+           CX                     32103.0
+monoamine  unknown_sensory        31930.0
+           ALLN                   17053.0
+           descending_neuron      14519.0
+           ascending_neuron       10489.0
+           unknown_sensory         7346.0
+           ALIN                    6727.0
+monoamine  ALLN                    5111.0
+           ascending_neuron        3741.0
+           mechanosensory          3717.0
+           visual_projection       3462.0
+monoamine  gustatory               2531.0
+           mechanosensory_tbc      2237.0
+           cb_motor                1535.0
+           gustatory               1095.0
+monoamine  visual_projection       1016.0
+           cb_endocrine             404.0
+monoamine  cb_motor                 356.0
+           cb_sensory_tbc           183.0
+by post class (share of that class's v3.0 fast in-model cut input lost):
+post_cls
+Kenyon_Cell                      0.244
+cb_endocrine                     0.170
+unknown_sensory                  0.147
+chemosensory                     0.139
+gustatory                        0.130
+cb_sensory                       0.111
+mechanosensory_tbc               0.081
+efferent_descending              0.077
+MBON                             0.062
+hygrosensory                     0.059
+CX                               0.058
+SEZPN                            0.051
+sensory_ascending                0.041
+ascending_neuron                 0.035
+ALIN                             0.030
+DAN                              0.027
+ALLN                             0.027
+cb_intrinsic                     0.025
+ALON                             0.024
+ALPN                             0.018
+thermosensory                    0.014
+visual_projection                0.013
+cb_motor                         0.013
+mechanosensory_proprioceptive    0.012
+efferent_ascending               0.011
+edges re-enabled in v3.1 (v3.0 zeroed): 0 {}
+
+== input totals
+neurons with in_fast < 0.5 in_total: 4881  <0.25: 662  ==0: 149 in_total==0: 99
+cls
+Kenyon_Cell                      4059
+mechanosensory                    402
+olfactory                         152
+gustatory                          59
+unknown_sensory                    58
+ALLN                               43
+hygrosensory                       31
+thermosensory                      18
+ALPN                               14
+cb_endocrine                       11
+cb_sensory                          9
+cb_intrinsic                        8
+mechanosensory_tbc                  6
+cb_motor                            4
+visual_projection                   2
+ascending_neuron                    2
+cb_sensory_tbc                      2
+mechanosensory_proprioceptive       1
+{'KCg-m': 1341, 'KCab-s': 656, 'KCab-m': 535, 'KCab-c': 488, "KCa'b'-ap2": 291, 'BM_InOm': 234, 'KCg-d': 206, "KCa'b'-m": 205, "KCa'b'-ap1": 199, 'KCab-p': 129, 'JO-unclear': 65, '': 64, 'ORN_DL3': 36, 'JO-FV': 30, 'lLN1_bc': 29, 'ORN_VL1': 23, 'JO-A-unclear': 22, 'HRN_VP1d': 18, 'ORN_V': 14, 'LB1e': 12, 'ORN_DL4': 10, 'JO-B-unclear': 10, 'BM_vOcci_vPoOr': 10, 'ORN_DA1': 9, 'ORN_VA7m': 8}
+                                   n  ratio_med  outside30  outside31  kept30  kept31
+cls                                                                                  
+cb_intrinsic                   23538      0.931      0.040      0.000   0.629   0.666
+visual_projection               9201      0.963      0.794      0.788   0.076   0.078
+Kenyon_Cell                     4064      0.327      0.041      0.000   0.404   0.939
+CX                              2950      0.922      0.028      0.000   0.666   0.699
+olfactory                       2639      0.691      0.111      0.000   0.305   0.373
+ascending_neuron                1846      0.914      0.584      0.556   0.258   0.277
+mechanosensory                  1733      0.665      0.333      0.000   0.116   0.190
+descending_neuron               1314      0.936      0.084      0.025   0.706   0.763
+ALPN                             686      0.736      0.088      0.000   0.659   0.780
+mechanosensory_proprioceptive    424      0.831      0.599      0.522   0.221   0.272
+ALLN                             420      0.687      0.086      0.003   0.625   0.707
+gustatory                        355      0.686      0.184      0.000   0.557   0.664
+DAN                              340      0.927      0.035      0.000   0.161   0.169
+unknown_sensory                  143      0.624      0.361      0.054   0.283   0.432
+cb_motor                         107      0.915      0.071      0.002   0.840   0.902
+MBON                              97      0.911      0.034      0.000   0.906   0.952
+cb_endocrine                      72      0.745      0.113      0.000   0.640   0.770
+hygrosensory                      66      0.503      0.131      0.000   0.500   0.716
+SEZPN                             27      0.881      0.076      0.008   0.586   0.654
+thermosensory                     25      0.452      0.078      0.000   0.789   0.909
+ALIN                              24      0.811      0.079      0.004   0.565   0.629
+cb_sensory                        20      0.526      0.455      0.000   0.000   0.000
+ALON                              14      0.772      0.098      0.001   0.723   0.795
+mechanosensory_tbc                11      0.450      0.532      0.000   0.142   0.322
+
+all synapses onto model neurons by source: {'model': 0.7863, 'traced:ol_intrinsic': 0.1167, 'untraced:none': 0.0416, 'traced:vnc_intrinsic': 0.0275, 'traced:vnc_sensory': 0.0125, 'traced:visual_centrifugal': 0.0091, 'untraced:Orphan': 0.0046, 'traced:ol_sensory': 0.0005, 'untraced:Assign': 0.0005, 'untraced:Glia': 0.0003, 'untraced:Anchor': 0.0002, 'traced:none': 0.0001, 'untraced:Unimportant': 0.0001, 'traced:vnc_motor': 0.0, 'traced:vnc_efferent': 0.0}
+label mix of untraced sources: {'acetylcholine': 0.019, 'dopamine': 0.0, 'gaba': 0.008, 'glutamate': 0.002, 'histamine': 0.0, 'octopamine': 0.001, 'serotonin': 0.001, 'unclear': 0.968}
+label mix of model sources: {'acetylcholine': 0.6191, 'dopamine': 0.0093, 'gaba': 0.1843, 'glutamate': 0.1584, 'histamine': 0.0003, 'octopamine': 0.0063, 'serotonin': 0.0094, 'unclear': 0.013}
+share of v3.0 in_total from untraced fragments (all): 0.0473
+share of v3.1 in_fast from untraced fragments: 0.0015
+per-class share of all input by source (v3.0 denominators):
+ src                            model  traced  untraced
+cls                                                   
+ALIN                           0.885   0.001     0.114
+ALLN                           0.918   0.000     0.082
+ALPN                           0.894   0.000     0.106
+CX                             0.970   0.001     0.029
+DAN                            0.967   0.000     0.032
+Kenyon_Cell                    0.956   0.000     0.044
+MBON                           0.966   0.000     0.034
+SEZPN                          0.917   0.000     0.083
+ascending_neuron               0.341   0.566     0.093
+cb_endocrine                   0.870   0.001     0.129
+cb_intrinsic                   0.956   0.005     0.039
+cb_motor                       0.947   0.001     0.051
+cb_sensory                     0.614   0.001     0.384
+descending_neuron              0.887   0.045     0.068
+gustatory                      0.819   0.006     0.175
+hygrosensory                   0.878   0.000     0.122
+mechanosensory                 0.743   0.002     0.254
+mechanosensory_proprioceptive  0.418   0.442     0.139
+olfactory                      0.887   0.000     0.113
+thermosensory                  0.909   0.000     0.091
+unknown_sensory                0.745   0.091     0.164
+visual_projection              0.215   0.756     0.029

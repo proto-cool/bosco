@@ -1,4 +1,11 @@
-# Brain checks, 2026-09-28 (BRAIN-SPEC with amendment 1)
+# Brain checks, 2026-09-28
+
+> **Superseded, 2026-09-29.** See `docs/audit-2026-09-29-full.md`. Several checks below were invalid (T7 measures the
+> ratio of the read scales k; T2 and T3 are confounded; T4's R² measures alignment, not share), and these claims are
+> retracted:
+> - "7× memory transport";
+> - "14% / 19% innate";
+> - "about 7× potentiation" (the real maximum is 166,000×). (BRAIN-SPEC with amendment 1)
 
 **Verdict: the brain does not yet pass.** Thirteen of the fourteen checks pass. **T3 fails narrowly:** 78.9% of
 answers flip, against a bar of 80%. The standard error is about 0.9 points (n = 1,865), so the miss is within

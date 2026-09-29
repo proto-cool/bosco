@@ -1,0 +1,35 @@
+{
+ "seed1_repro_maxdiff": 0.0,
+ "threads1_equal": true,
+ "threads4_equal": true,
+ "threads8_equal": true,
+ "batch_vs_answer_maxdiff": 1.7881393432617188e-06,
+ "batch_vs_answer_flips": 0,
+ "record_true_vs_answer_equal": true,
+ "trace_dtype": "torch.float16",
+ "trace_f16_reconstructed_logit_err": 0.00012159347534179688,
+ "thawed_vs_frozen_maxdiff": 8.344650268554688e-07,
+ "stale_after_kp_reset_equal_to_trained": true,
+ "after_refreeze_maxdiff": 2.485459804534912,
+ "reset_memory_stale_rest_vs_resettled_maxdiff": 0.00020444393157958984,
+ "settle_info": {
+  "steps": 720,
+  "max_step_change": 9.823590517044067e-06,
+  "converged": true
+ },
+ "rest_one_step_max_change": 7.599592208862305e-06,
+ "rest_2000_steps_max_drift": 0.0006340742111206055,
+ "rest_trace_step_change_max": 0.000244140625,
+ "rest_from_0.3_vs_from_0_max": 0.9939737319946289,
+ "alt_rest_answer_maxdiff": 0.17808103561401367,
+ "alt_rest_flips": 0,
+ "start_saved_rest_vs_resettled_state_max": 0.9933186769485474,
+ "start_saved_vs_resettled_logit_max": 0.017625704407691956,
+ "start_resettle": {
+  "steps": 760,
+  "max_step_change": 6.473809480667114e-06,
+  "converged": true
+ },
+ "f64_vs_f32_maxdiff": 1.3245223020597052e-06,
+ "f64_flips": 0
+}

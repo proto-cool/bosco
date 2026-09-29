@@ -1,0 +1,42 @@
+{
+ "arm": "layered",
+ "n_kp": 61210,
+ "read_sd_untrained": 0.00028433301486074924,
+ "read_mean_untrained": -0.000983453937806189,
+ "trained_own": {
+  "logm_sd": 1.2625502347946167,
+  "logm_mean": 0.052545368671417236,
+  "read_sd": 0.002046199981123209,
+  "delta_read_sd": 0.0020720767788589,
+  "delta_read_mean": -0.0007442405330948532,
+  "delta_mbon_abs_mean": 0.14993880689144135,
+  "delta_mbon_item_sd": 0.06432261317968369,
+  "transfer_sd_ratio": 0.03221381455659866,
+  "kc_active": 0.08982452750205994
+ },
+ "trained_own_k": 59.18973159790039,
+ "permuted_0": {
+  "logm_sd": 1.2625502347946167,
+  "logm_mean": 0.052545368671417236,
+  "read_sd": 0.0003324332064948976,
+  "delta_read_sd": 0.00030116760171949863,
+  "delta_read_mean": 0.00024626668891869485,
+  "delta_mbon_abs_mean": 0.10768576711416245,
+  "delta_mbon_item_sd": 0.04893426224589348,
+  "transfer_sd_ratio": 0.0061545344069600105,
+  "kc_active": 0.056617558002471924,
+  "corr_with_trained": 0.09738147913333967
+ },
+ "permuted_1": {
+  "logm_sd": 1.2625502347946167,
+  "logm_mean": 0.05254536494612694,
+  "read_sd": 0.0006389195914380252,
+  "delta_read_sd": 0.0006440188735723495,
+  "delta_read_mean": 0.0003630958090070635,
+  "delta_mbon_abs_mean": 0.1310642510652542,
+  "delta_mbon_item_sd": 0.042609892785549164,
+  "transfer_sd_ratio": 0.015114303678274155,
+  "kc_active": 0.09409218281507492,
+  "corr_with_trained": -0.35714297464569345
+ }
+}

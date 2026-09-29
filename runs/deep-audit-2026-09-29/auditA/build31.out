@@ -1,0 +1,66 @@
+/Users/nickd/projects/bosco/src/bosco/ratebrain3.py:115: UserWarning: Sparse invariant checks are implicitly disabled. Memory errors (e.g. SEGFAULT) will occur when operating on a sparse tensor which violates the invariants, but checks incur performance overhead. To silence this warning, explicitly opt in or out. See `torch.sparse.check_sparse_tensor_invariants.__doc__` for guidance.  (Triggered internally at /Users/runner/work/pytorch/pytorch/aten/src/ATen/Context.cpp:855.)
+  torch.sparse_coo_tensor(
+{
+ "tree": "/Users/nickd/projects/bosco",
+ "BETA": 500.0,
+ "W_nnz": 2185324,
+ "plastic": 61210,
+ "n_units": 8266,
+ "W_sum_pos": 15125.3525390625,
+ "W_sum_neg": -11799.9375,
+ "kp_w_sum": 59.875946044921875,
+ "approach_mbon": 39,
+ "avoid_mbon": 16,
+ "row_sums_median_by_class": {
+  "Kenyon_Cell": {
+   "net": 0.244,
+   "pos": 0.592
+  },
+  "MBON": {
+   "net": 0.604,
+   "pos": 0.757
+  },
+  "ALPN": {
+   "net": 0.375,
+   "pos": 0.544
+  },
+  "ALLN": {
+   "net": 0.413,
+   "pos": 0.558
+  },
+  "olfactory": {
+   "net": -0.055,
+   "pos": 0.114
+  },
+  "DAN": {
+   "net": 0.041,
+   "pos": 0.105
+  },
+  "descending_neuron": {
+   "net": 0.13,
+   "pos": 0.443
+  },
+  "cb_intrinsic": {
+   "net": 0.105,
+   "pos": 0.38
+  },
+  "visual_projection": {
+   "net": 0.0,
+   "pos": 0.035
+  },
+  "CX": {
+   "net": -0.055,
+   "pos": 0.281
+  }
+ },
+ "start_keys": [
+  "b",
+  "b_cell",
+  "log_g",
+  "r_rest",
+  "read",
+  "info"
+ ],
+ "start_loads": "FAIL: RuntimeError: The size of tensor a (8266) must match the size of tensor b (8257) at non-singleton dimension 0",
+ "wall": 6.090510129928589
+}

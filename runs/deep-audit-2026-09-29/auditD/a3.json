@@ -1,0 +1,107 @@
+{
+ "base": {
+  "stages": {
+   "orn": 0.1914,
+   "alpn": 0.0515,
+   "kc_active": 0.0806,
+   "mbon_ap": 0.1241,
+   "mbon_av": 0.2884,
+   "dn_ap": 0.2068,
+   "dn_av": 0.2005,
+   "all_mean": 0.0508,
+   "sat_share": 0.0005,
+   "rest_mean": 0.0443
+  }
+ },
+ "counts": {
+  "glutamate": 8004,
+  "uncertain_conf<0.6": 2847,
+  "uncertain_nonzero_sign": 2847,
+  "monoamine": 759,
+  "unknown_default_plus": 92
+ },
+ "glutamate_excitatory": {
+  "flip": 0.7421875,
+  "corr": 0.5340038950270757,
+  "mean_abs_dlogit": 3.461015224456787,
+  "yes": 1.0,
+  "nan": 0,
+  "settle_conv": true,
+  "settle_steps": 600,
+  "stages": {
+   "orn": 0.1836,
+   "alpn": 0.0676,
+   "kc_active": 0.0752,
+   "mbon_ap": 0.537,
+   "mbon_av": 0.512,
+   "dn_ap": 0.7487,
+   "dn_av": 0.7008,
+   "all_mean": 0.2935,
+   "sat_share": 0.0497,
+   "rest_mean": 0.2847
+  }
+ },
+ "uncertain_flipped": {
+  "flip": 0.3515625,
+  "corr": 0.7156416179107645,
+  "mean_abs_dlogit": 1.1710370779037476,
+  "yes": 0.609375,
+  "nan": 0,
+  "settle_conv": true,
+  "settle_steps": 760,
+  "stages": {
+   "orn": 0.2869,
+   "alpn": 0.1617,
+   "kc_active": 0.3708,
+   "mbon_ap": 0.3632,
+   "mbon_av": 0.6222,
+   "dn_ap": 0.2161,
+   "dn_av": 0.1954,
+   "all_mean": 0.0665,
+   "sat_share": 0.0014,
+   "rest_mean": 0.047
+  }
+ },
+ "monoamine_removed": {
+  "flip": 0.0546875,
+  "corr": 0.999620492653972,
+  "mean_abs_dlogit": 0.24771954119205475,
+  "yes": 0.203125,
+  "nan": 0,
+  "settle_conv": true,
+  "settle_steps": 720,
+  "stages": {
+   "orn": 0.1919,
+   "alpn": 0.0514,
+   "kc_active": 0.1281,
+   "mbon_ap": 0.1274,
+   "mbon_av": 0.3029,
+   "dn_ap": 0.2039,
+   "dn_av": 0.2006,
+   "all_mean": 0.0503,
+   "sat_share": 0.0005,
+   "rest_mean": 0.0437
+  }
+ },
+ "unknown_silenced": {
+  "flip": 0.0,
+  "corr": 1.0,
+  "mean_abs_dlogit": 0.0,
+  "yes": 0.2578125,
+  "nan": 0,
+  "settle_conv": true,
+  "settle_steps": 720,
+  "stages": {
+   "orn": 0.1914,
+   "alpn": 0.0515,
+   "kc_active": 0.0806,
+   "mbon_ap": 0.1241,
+   "mbon_av": 0.2884,
+   "dn_ap": 0.2068,
+   "dn_av": 0.2005,
+   "all_mean": 0.0508,
+   "sat_share": 0.0005,
+   "rest_mean": 0.0443
+  }
+ }
+}

@@ -1,0 +1,42 @@
+{
+ "arm": "hash",
+ "n_kp": 61210,
+ "read_sd_untrained": 0.0007651686319150031,
+ "read_mean_untrained": 0.012884500436484814,
+ "real_memory_by_index": {
+  "logm_sd": 1.7222249507904053,
+  "logm_mean": 0.34996822476387024,
+  "read_sd": 0.005073418375104666,
+  "delta_read_sd": 0.004773302003741264,
+  "delta_read_mean": 0.01198731642216444,
+  "delta_mbon_abs_mean": 0.23875662684440613,
+  "delta_mbon_item_sd": 0.15875516831874847,
+  "transfer_sd_ratio": 0.030067065730690956,
+  "kc_active": 0.06667537987232208
+ },
+ "trained_own_k": 8.459695816040039,
+ "permuted_0": {
+  "logm_sd": 1.7222249507904053,
+  "logm_mean": 0.34996822476387024,
+  "read_sd": 0.008222762495279312,
+  "delta_read_sd": 0.008142477832734585,
+  "delta_read_mean": 0.02634425461292267,
+  "delta_mbon_abs_mean": 0.22748033702373505,
+  "delta_mbon_item_sd": 0.1798241138458252,
+  "transfer_sd_ratio": 0.04528023302555084,
+  "kc_active": 0.06839653849601746,
+  "corr_with_trained": 0.15245621116252053
+ },
+ "permuted_1": {
+  "logm_sd": 1.7222249507904053,
+  "logm_mean": 0.34996822476387024,
+  "read_sd": 0.005361612420529127,
+  "delta_read_sd": 0.005289264023303986,
+  "delta_read_mean": 0.01479304302483797,
+  "delta_mbon_abs_mean": 0.21257451176643372,
+  "delta_mbon_item_sd": 0.16253286600112915,
+  "transfer_sd_ratio": 0.03254273533821106,
+  "kc_active": 0.06288190931081772,
+  "corr_with_trained": 0.02017460373508538
+ }
+}

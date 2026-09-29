@@ -1,0 +1,150 @@
+/Users/nickd/.claude/jobs/4059153c/tmp/v30/src/bosco/ratebrain3.py:95: UserWarning: Sparse invariant checks are implicitly disabled. Memory errors (e.g. SEGFAULT) will occur when operating on a sparse tensor which violates the invariants, but checks incur performance overhead. To silence this warning, explicitly opt in or out. See `torch.sparse.check_sparse_tensor_invariants.__doc__` for guidance.  (Triggered internally at /Users/runner/work/pytorch/pytorch/aten/src/ATen/Context.cpp:855.)
+  torch.sparse_coo_tensor(
+{
+ "tree": "/Users/nickd/.claude/jobs/4059153c/tmp/v30",
+ "BETA": 50.0,
+ "W_nnz": 2294517,
+ "plastic": 61210,
+ "n_units": 8257,
+ "W_sum_pos": 13289.7294921875,
+ "W_sum_neg": -9642.1796875,
+ "kp_w_sum": 54.153709411621094,
+ "approach_mbon": 48,
+ "avoid_mbon": 41,
+ "row_sums_median_by_class": {
+  "Kenyon_Cell": {
+   "net": 0.169,
+   "pos": 0.281
+  },
+  "MBON": {
+   "net": 0.595,
+   "pos": 0.741
+  },
+  "ALPN": {
+   "net": 0.279,
+   "pos": 0.401
+  },
+  "ALLN": {
+   "net": 0.276,
+   "pos": 0.359
+  },
+  "olfactory": {
+   "net": -0.037,
+   "pos": 0.078
+  },
+  "DAN": {
+   "net": 0.041,
+   "pos": 0.103
+  },
+  "descending_neuron": {
+   "net": 0.13,
+   "pos": 0.414
+  },
+  "cb_intrinsic": {
+   "net": 0.113,
+   "pos": 0.366
+  },
+  "visual_projection": {
+   "net": 0.0,
+   "pos": 0.035
+  },
+  "CX": {
+   "net": -0.026,
+   "pos": 0.285
+  }
+ },
+ "start_keys": [
+  "b",
+  "b_cell",
+  "log_g",
+  "r_rest",
+  "read",
+  "info"
+ ],
+ "start_loads": true,
+ "threshold_by_region": {
+  "orn": [
+   0.05000000074505806,
+   0.05000000074505806,
+   0.05000000074505806
+  ],
+  "alpn": [
+   0.0562942735850811,
+   -0.1152462288737297,
+   1.7538256645202637
+  ],
+  "alln": [
+   0.08878674358129501,
+   -0.06413464993238449,
+   2.093099355697632
+  ],
+  "kc": [
+   0.1175994873046875,
+   0.1175994873046875,
+   0.1175994873046875
+  ],
+  "mbon": [
+   -0.02712644636631012,
+   -0.0717630684375763,
+   0.005623282864689827
+  ],
+  "dan": [
+   -0.04515351355075836,
+   -0.060253389179706573,
+   0.03287271037697792
+  ],
+  "lh": [
+   -0.02759404107928276,
+   -0.10147100687026978,
+   0.09647366404533386
+  ],
+  "cx": [
+   -0.0468277782201767,
+   -0.22290007770061493,
+   0.78899085521698
+  ],
+  "vpn": [
+   -0.046773768961429596,
+   -0.19829154014587402,
+   0.0636407881975174
+  ],
+  "dn": [
+   -0.03449823707342148,
+   -0.1688690185546875,
+   0.4311155080795288
+  ],
+  "other_sensory": [
+   0.05000000074505806,
+   0.05000000074505806,
+   0.05000000074505806
+  ],
+  "rest": [
+   -0.028370361775159836,
+   -0.17420974373817444,
+   1.891778826713562
+  ]
+ },
+ "kc_b_cell": {
+  "median": 0.016301453113555908,
+  "frac_pos": 0.6311515748031497,
+  "min": -0.38566985726356506,
+  "max": 0.12464747577905655
+ },
+ "kc_effective_bias_median": -0.10129803419113159,
+ "rest_rate_by_region": {
+  "orn": 0.09577107429504395,
+  "alpn": 0.02683749422430992,
+  "alln": 0.023036280646920204,
+  "kc": 0.0013600015081465244,
+  "mbon": 0.03772920370101929,
+  "dan": 0.05013082176446915,
+  "lh": 0.03896784037351608,
+  "cx": 0.04082297161221504,
+  "vpn": 0.05029086023569107,
+  "dn": 0.06164366006851196,
+  "other_sensory": 0.018333323299884796,
+  "rest": 0.048831578344106674
+ },
+ "log_g": 1.3862947225570679,
+ "wall": 5.3963401317596436
+}

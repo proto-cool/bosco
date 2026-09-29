@@ -1,0 +1,117 @@
+/Users/nickd/projects/bosco/src/bosco/ratebrain3.py:115: UserWarning: Sparse invariant checks are implicitly disabled. Memory errors (e.g. SEGFAULT) will occur when operating on a sparse tensor which violates the invariants, but checks incur performance overhead. To silence this warning, explicitly opt in or out. See `torch.sparse.check_sparse_tensor_invariants.__doc__` for guidance.  (Triggered internally at /Users/runner/work/pytorch/pytorch/aten/src/ATen/Context.cpp:855.)
+  torch.sparse_coo_tensor(
+/Users/nickd/projects/bosco/src/bosco/ratebrain3.py:206: UserWarning: Sparse CSR tensor support is in beta state. If you miss a functionality in the sparse tensor support, please submit a feature request to https://github.com/pytorch/pytorch/issues. (Triggered internally at /Users/runner/work/pytorch/pytorch/aten/src/ATen/SparseCsrTensorImpl.cpp:51.)
+  self._W_all = A.to_sparse_csr()
+{"iters": 30, "converged": false, "settle": {"steps": 2000, "max_step_change": 0.19666147232055664, "converged": false}, "tuned_types": 7704, "types_at_max_scale": 942, "types_inhibited": 796, "kc_scale": 58.20684814453125}
+{'iter': 0, 'resid': 0.9797384738922119, 'kc_active': 0.3779565989971161, 'kc_active_rate': 0.25749456882476807, 'inhibited_types': 0}
+{'iter': 3, 'resid': 0.871457576751709, 'kc_active': 0.21748124063014984, 'kc_active_rate': 0.11253713816404343, 'inhibited_types': 0}
+{'iter': 6, 'resid': 1.3088051080703735, 'kc_active': 0.09714874625205994, 'kc_active_rate': 0.13793271780014038, 'inhibited_types': 0}
+{'iter': 9, 'resid': 2.2291624546051025, 'kc_active': 0.06546428799629211, 'kc_active_rate': 0.1960349678993225, 'inhibited_types': 0}
+{'iter': 12, 'resid': 2.1080434322357178, 'kc_active': 0.05637149512767792, 'kc_active_rate': 0.5723740458488464, 'inhibited_types': 0}
+{'iter': 15, 'resid': 2.592031478881836, 'kc_active': 0.14530403912067413, 'kc_active_rate': 0.3095051348209381, 'inhibited_types': 0}
+{'iter': 18, 'resid': 3.8053061962127686, 'kc_active': 0.189207062125206, 'kc_active_rate': 0.2491995394229889, 'inhibited_types': 1025}
+{'iter': 21, 'resid': 4.28296422958374, 'kc_active': 0.1079409122467041, 'kc_active_rate': 0.6458237171173096, 'inhibited_types': 982}
+{'iter': 24, 'resid': 4.162192344665527, 'kc_active': 0.09321174025535583, 'kc_active_rate': 0.5266073346138, 'inhibited_types': 893}
+{'iter': 27, 'resid': 3.8127622604370117, 'kc_active': 0.0904858186841011, 'kc_active_rate': 0.5451677441596985, 'inhibited_types': 836}
+{'iter': 29, 'resid': 3.1254630088806152, 'kc_active': 0.12041707336902618, 'kc_active_rate': 0.21411651372909546, 'inhibited_types': 796}
+{
+"orn": {
+"mean": 0.14168521761894226,
+"frac_cells_silent(<0.002)": 0.29064038395881653,
+"s_in_median": 1.0,
+"s_in_at_max": 0.0,
+"s_in_at_min": 0.0,
+"item_sd_median": 0.18510450422763824
+},
+"alpn": {
+"mean": 0.04430972412228584,
+"frac_cells_silent(<0.002)": 0.2288629710674286,
+"s_in_median": 1.91251802444458,
+"s_in_at_max": 0.1501457691192627,
+"s_in_at_min": 0.0,
+"item_sd_median": 0.03586992993950844
+},
+"alln": {
+"mean": 0.05288229510188103,
+"frac_cells_silent(<0.002)": 0.12142857164144516,
+"s_in_median": 1.7201335430145264,
+"s_in_at_max": 0.0595238097012043,
+"s_in_at_min": 0.0,
+"item_sd_median": 0.015911530703306198
+},
+"kc": {
+"mean": 0.036627206951379776,
+"frac_cells_silent(<0.002)": 0.12721456587314606,
+"s_in_median": 58.20684814453125,
+"s_in_at_max": 0.0,
+"s_in_at_min": 0.0,
+"item_sd_median": 0.10474833101034164
+},
+"mbon": {
+"mean": 0.24806390702724457,
+"frac_cells_silent(<0.002)": 0.06185567006468773,
+"s_in_median": 9.131576538085938,
+"s_in_at_max": 0.020618556067347527,
+"s_in_at_min": 0.0,
+"item_sd_median": 0.04272380843758583
+},
+"dan": {
+"mean": 0.05005069449543953,
+"frac_cells_silent(<0.002)": 0.15882353484630585,
+"s_in_median": 4.204472541809082,
+"s_in_at_max": 0.0,
+"s_in_at_min": 0.0,
+"item_sd_median": 0.00743156997486949
+},
+"lh": {
+"mean": 0.0908595621585846,
+"frac_cells_silent(<0.002)": 0.17587430775165558,
+"s_in_median": 9.287741661071777,
+"s_in_at_max": 0.034465283155441284,
+"s_in_at_min": 0.0,
+"item_sd_median": 0.03212907910346985
+},
+"cx": {
+"mean": 0.11607978492975235,
+"frac_cells_silent(<0.002)": 0.6200000047683716,
+"s_in_median": 25.435455322265625,
+"s_in_at_max": 0.20576271414756775,
+"s_in_at_min": 0.0,
+"item_sd_median": 1.726396692269816e-09
+},
+"vpn": {
+"mean": 0.0013523981906473637,
+"frac_cells_silent(<0.002)": 0.9625040888786316,
+"s_in_median": 1.0,
+"s_in_at_max": 0.0,
+"s_in_at_min": 0.0,
+"item_sd_median": 1.1819951168945408e-06
+},
+"dn": {
+"mean": 0.12734590470790863,
+"frac_cells_silent(<0.002)": 0.3394216001033783,
+"s_in_median": 4.66763973236084,
+"s_in_at_max": 0.06392694264650345,
+"s_in_at_min": 0.0,
+"item_sd_median": 0.0009791819611564279
+},
+"other_sensory": {
+"mean": 0.0009006980690173805,
+"frac_cells_silent(<0.002)": 0.9867145419120789,
+"s_in_median": 1.0,
+"s_in_at_max": 0.0,
+"s_in_at_min": 0.0,
+"item_sd_median": 4.8237614993430175e-21
+},
+"rest": {
+"mean": 0.14565478265285492,
+"frac_cells_silent(<0.002)": 0.3185754716396332,
+"s_in_median": 7.144929885864258,
+"s_in_at_max": 0.10700857639312744,
+"s_in_at_min": 0.0,
+"item_sd_median": 0.002882679458707571
+}
+}
+KC active/sniff 0.09046275168657303 median active rate 0.34846606850624084
+KC b_cell median/frac>0 -1.658846139907837 0.07111220806837082
+wall s 270.3206489086151

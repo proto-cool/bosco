@@ -1,0 +1,1 @@
+{"n_phases": 10, "read_item_sd": 0.03750390186905861, "phase_sd_per_item_median": 0.002096338663250208, "phase_sd_over_item_sd": 0.05589654669165611, "min_rank_corr_between_phases": 0.9830952039281899, "max_abs_read_change": 0.04633314907550812, "sign_flips_centered_share": 0.09375}

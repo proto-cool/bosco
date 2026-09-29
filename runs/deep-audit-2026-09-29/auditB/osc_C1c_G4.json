@@ -1,0 +1,26 @@
+{
+ "rest_a0.25": {
+  "steps": 3000,
+  "max_step_change_tail": 0.0,
+  "n_cells_amp_gt_0.01": 0,
+  "max_amp": 0.0,
+  "read_amp": 0.0,
+  "read_mean": 0.07872297614812851,
+  "succ_diff_cos": 0.0,
+  "period_ms_top_cell": null,
+  "period_ms_read": null,
+  "top_types": []
+ },
+ "smell_a0.25": {
+  "steps": 3000,
+  "max_step_change_tail": 7.450580596923828e-09,
+  "n_cells_amp_gt_0.01": 0,
+  "max_amp": 3.725290298461914e-08,
+  "read_amp": 0.0,
+  "read_mean": 0.1028403490781784,
+  "succ_diff_cos": 0.7019785046577454,
+  "period_ms_top_cell": null,
+  "period_ms_read": null,
+  "top_types": []
+ }
+}

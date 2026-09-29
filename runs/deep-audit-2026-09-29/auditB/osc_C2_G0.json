@@ -1,0 +1,368 @@
+{
+ "rest_a0.25": {
+  "steps": 3000,
+  "max_step_change_tail": 0.17346888780593872,
+  "n_cells_amp_gt_0.01": 11829,
+  "max_amp": 0.9982423186302185,
+  "read_amp": 0.018327564001083374,
+  "read_mean": 0.04852443188428879,
+  "succ_diff_cos": 0.9426884651184082,
+  "period_ms_top_cell": 571.4285714285714,
+  "period_ms_read": 571.4285714285714,
+  "top_types": [
+   [
+    "?",
+    319
+   ],
+   [
+    "KCg-d",
+    141
+   ],
+   [
+    "PFNa",
+    58
+   ],
+   [
+    "PFNp_a",
+    49
+   ],
+   [
+    "PFNp_b",
+    39
+   ],
+   [
+    "PFNp_c",
+    38
+   ],
+   [
+    "KCab-p",
+    33
+   ],
+   [
+    "IbSpsP",
+    28
+   ],
+   [
+    "vDeltaM",
+    28
+   ],
+   [
+    "PFNm_b",
+    25
+   ],
+   [
+    "FS4A",
+    24
+   ],
+   [
+    "SApp10",
+    21
+   ]
+  ]
+ },
+ "rest_a0.125": {
+  "steps": 6000,
+  "max_step_change_tail": 0.069847971200943,
+  "n_cells_amp_gt_0.01": 11355,
+  "max_amp": 0.9922949075698853,
+  "read_amp": 0.019526436924934387,
+  "read_mean": 0.04571641981601715,
+  "succ_diff_cos": 0.9898473620414734,
+  "period_ms_top_cell": 800.0,
+  "period_ms_read": 800.0,
+  "top_types": [
+   [
+    "?",
+    267
+   ],
+   [
+    "KCg-d",
+    128
+   ],
+   [
+    "PFNp_b",
+    64
+   ],
+   [
+    "PFNa",
+    58
+   ],
+   [
+    "KCg-m",
+    58
+   ],
+   [
+    "PFNp_a",
+    50
+   ],
+   [
+    "PFNp_c",
+    39
+   ],
+   [
+    "ORN_VL1",
+    33
+   ],
+   [
+    "IbSpsP",
+    28
+   ],
+   [
+    "vDeltaM",
+    27
+   ],
+   [
+    "KCab-p",
+    27
+   ],
+   [
+    "PFNm_b",
+    26
+   ]
+  ]
+ },
+ "rest_a0.0625": {
+  "steps": 12000,
+  "max_step_change_tail": 0.03356042504310608,
+  "n_cells_amp_gt_0.01": 9379,
+  "max_amp": 0.9774840474128723,
+  "read_amp": 0.005759283900260925,
+  "read_mean": 0.05641068518161774,
+  "succ_diff_cos": 0.9956466555595398,
+  "period_ms_top_cell": 1333.3333333333335,
+  "period_ms_read": 571.4285714285714,
+  "top_types": [
+   [
+    "?",
+    209
+   ],
+   [
+    "KCg-d",
+    93
+   ],
+   [
+    "PFNp_b",
+    70
+   ],
+   [
+    "PFNa",
+    58
+   ],
+   [
+    "PFNp_a",
+    47
+   ],
+   [
+    "PFNp_c",
+    40
+   ],
+   [
+    "ORN_VL1",
+    33
+   ],
+   [
+    "KCg-m",
+    31
+   ],
+   [
+    "PFNm_b",
+    26
+   ],
+   [
+    "vDeltaM",
+    26
+   ],
+   [
+    "FC1B",
+    22
+   ],
+   [
+    "IbSpsP",
+    21
+   ]
+  ]
+ },
+ "smell_a0.25": {
+  "steps": 3000,
+  "max_step_change_tail": 0.22977113723754883,
+  "n_cells_amp_gt_0.01": 11179,
+  "max_amp": 0.9969750046730042,
+  "read_amp": 0.031246870756149292,
+  "read_mean": 0.09027541428804398,
+  "succ_diff_cos": 0.950227677822113,
+  "period_ms_top_cell": 800.0,
+  "period_ms_read": 200.0,
+  "top_types": [
+   [
+    "?",
+    296
+   ],
+   [
+    "KCg-d",
+    144
+   ],
+   [
+    "KCg-m",
+    66
+   ],
+   [
+    "PFNa",
+    55
+   ],
+   [
+    "PFNp_a",
+    36
+   ],
+   [
+    "PFNp_b",
+    33
+   ],
+   [
+    "PFNp_c",
+    28
+   ],
+   [
+    "PAM01",
+    27
+   ],
+   [
+    "vDeltaM",
+    27
+   ],
+   [
+    "IbSpsP",
+    26
+   ],
+   [
+    "FC1B",
+    22
+   ],
+   [
+    "PEN_a(PEN1)",
+    20
+   ]
+  ]
+ },
+ "smell_a0.125": {
+  "steps": 6000,
+  "max_step_change_tail": 0.10642886161804199,
+  "n_cells_amp_gt_0.01": 12463,
+  "max_amp": 0.9974256157875061,
+  "read_amp": 0.010540515184402466,
+  "read_mean": 0.061473533511161804,
+  "succ_diff_cos": 0.9883549213409424,
+  "period_ms_top_cell": 800.0,
+  "period_ms_read": 800.0,
+  "top_types": [
+   [
+    "?",
+    386
+   ],
+   [
+    "KCg-d",
+    93
+   ],
+   [
+    "PFNa",
+    58
+   ],
+   [
+    "KCg-m",
+    44
+   ],
+   [
+    "PFNp_b",
+    41
+   ],
+   [
+    "PFNp_a",
+    39
+   ],
+   [
+    "PFNp_c",
+    35
+   ],
+   [
+    "IbSpsP",
+    31
+   ],
+   [
+    "PAM01",
+    30
+   ],
+   [
+    "KCab-p",
+    26
+   ],
+   [
+    "PFNm_b",
+    23
+   ],
+   [
+    "PFNm_a",
+    21
+   ]
+  ]
+ },
+ "smell_a0.0625": {
+  "steps": 12000,
+  "max_step_change_tail": 0.029487162828445435,
+  "n_cells_amp_gt_0.01": 10739,
+  "max_amp": 0.9895549416542053,
+  "read_amp": 0.01117861270904541,
+  "read_mean": 0.0533655509352684,
+  "succ_diff_cos": 0.9993329644203186,
+  "period_ms_top_cell": 800.0,
+  "period_ms_read": 800.0,
+  "top_types": [
+   [
+    "?",
+    266
+   ],
+   [
+    "KCg-d",
+    69
+   ],
+   [
+    "PFNp_b",
+    58
+   ],
+   [
+    "PFNp_a",
+    42
+   ],
+   [
+    "PFNa",
+    41
+   ],
+   [
+    "PFNp_c",
+    39
+   ],
+   [
+    "ORN_VL1",
+    33
+   ],
+   [
+    "vDeltaM",
+    27
+   ],
+   [
+    "LC9",
+    25
+   ],
+   [
+    "IbSpsP",
+    24
+   ],
+   [
+    "FC1B",
+    22
+   ],
+   [
+    "KCg-m",
+    21
+   ]
+  ]
+ }
+}

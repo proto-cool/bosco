@@ -1,0 +1,55 @@
+{
+ "BETA": 500.0,
+ "fast_cache_matches_fresh": {
+  "ids": true,
+  "sign": true,
+  "silenced": true,
+  "kc": true,
+  "in_fast": true,
+  "label": true
+ },
+ "n_units_v31": 8266,
+ "n_plastic_v31": 61210,
+ "v30_start_b_len": 8257,
+ "load_v30_start_with_v31": "ERROR RuntimeError('The size of tensor a (8266) must match the size of tensor b (8257) at non-singleton dimension 0')",
+ "v30_kp_len": 61210,
+ "load_v30_memory_with_v31": "no error",
+ "dn_read_keys": [
+  "approach",
+  "avoid",
+  "threshold",
+  "approach_types",
+  "avoid_types"
+ ],
+ "dn_read_labels_ap": {
+  "acetylcholine": "12",
+  "octopamine": "8"
+ },
+ "dn_read_labels_av": {
+  "acetylcholine": "28",
+  "gaba": "4"
+ },
+ "dn_read_ap_n": 20,
+ "dn_read_av_n": 32,
+ "mbon_valence_counts": {
+  "atypical": 17,
+  "approach": 10,
+  "avoid": 7,
+  "novelty": 3
+ },
+ "mbon_unknown_types": [],
+ "mbon_ap_cells": 39,
+ "mbon_av_cells": 16,
+ "mbon_nonstandard_types": [],
+ "label_counts": {
+  "acetylcholine": 34802,
+  "dopamine": 385,
+  "gaba": 5695,
+  "glutamate": 8004,
+  "histamine": 6,
+  "octopamine": 57,
+  "serotonin": 333,
+  "unclear": 766,
+  "unknown": 92
+ }
+}

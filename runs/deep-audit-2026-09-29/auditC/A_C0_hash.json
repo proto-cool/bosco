@@ -1,0 +1,137 @@
+{
+ "ver": "C0",
+ "arm": "hash",
+ "n_items": 384,
+ "rest_input": 0.05000000074505806,
+ "E1": {
+  "items": {
+   "orn": {
+    "lifetime_sparseness": 0.6549537777900696,
+    "responsive_cells": 1865,
+    "n": 1865,
+    "skew_pooled": 1.0674201250076294,
+    "mean_evoked": 0.1338132619857788,
+    "sd_evoked": 0.2434786558151245,
+    "frac_resp_gt_0.01": 0.4593624472618103
+   },
+   "uni_pn": {
+    "lifetime_sparseness": 0.8386266231536865,
+    "responsive_cells": 193,
+    "n": 199,
+    "skew_pooled": 2.785994291305542,
+    "mean_evoked": 0.048912014812231064,
+    "sd_evoked": 0.12215549498796463,
+    "frac_resp_gt_0.01": 0.215282142162323
+   },
+   "all_pn": {
+    "lifetime_sparseness": 0.7856637239456177,
+    "responsive_cells": 564,
+    "n": 686,
+    "skew_pooled": 3.830392599105835,
+    "mean_evoked": 0.0233768317848444,
+    "sd_evoked": 0.0865272507071495,
+    "frac_resp_gt_0.01": 0.21849565207958221
+   },
+   "pass_sparseness": false,
+   "pass_skew": false
+  },
+  "synthetic": {
+   "orn": {
+    "lifetime_sparseness": 0.9555049538612366,
+    "responsive_cells": 1865,
+    "n": 1865,
+    "skew_pooled": 4.562472820281982,
+    "mean_evoked": 0.030696280300617218,
+    "sd_evoked": 0.1502332240343094,
+    "frac_resp_gt_0.01": 0.05664548650383949
+   },
+   "uni_pn": {
+    "lifetime_sparseness": 0.9568262696266174,
+    "responsive_cells": 193,
+    "n": 199,
+    "skew_pooled": 4.9925642013549805,
+    "mean_evoked": 0.021115340292453766,
+    "sd_evoked": 0.10082025825977325,
+    "frac_resp_gt_0.01": 0.05083637312054634
+   },
+   "all_pn": {
+    "lifetime_sparseness": 0.912068247795105,
+    "responsive_cells": 620,
+    "n": 686,
+    "skew_pooled": 7.312822341918945,
+    "mean_evoked": 0.010289868339896202,
+    "sd_evoked": 0.06438223272562027,
+    "frac_resp_gt_0.01": 0.0763908326625824
+   },
+   "pass_sparseness": false,
+   "pass_skew": false
+  },
+  "glom_specificity": {
+   "mean_share_on_own_glom": 0.9781654380088629,
+   "own_glom_is_top": 43,
+   "n_glom_with_pns": 43,
+   "chance_share": 0.023255813953488372
+  },
+  "orn_pn_same_glom_corr_median": 0.8312734198922942
+ },
+ "E3": {
+  "kc_active_frac_mean": 0.05367889627814293,
+  "kc_active_frac_min_max": [
+   0.004675196949392557,
+   0.16609251499176025
+  ],
+  "frac_odours_in_2_10pct": 0.7630208134651184,
+  "popcorr_orn": 0.08042836924830056,
+  "popcorr_uni_pn": 0.058862240107161706,
+  "popcorr_all_pn": 0.1895248441562041,
+  "popcorr_kc": 0.0345662797863352,
+  "kc_jaccard_mean": 0.02877257764339447,
+  "spearman_embcos_vs_kcjaccard": 0.2603620580869694,
+  "spearman_inputcorr_vs_kcjaccard": 0.5360713996545748,
+  "jaccard_top5pct_similar": 0.08772608637809753,
+  "jaccard_bottom50pct": 0.01901380531489849,
+  "pass_sparse": true,
+  "pass_decorrelate": true,
+  "pass_similar_share_more": 1.0
+ },
+ "E2": {
+  "apl_cells": 2,
+  "apl_rest_rate_intact": 0.018249280750751495,
+  "apl_evoked_intact": 0.005802714731544256,
+  "kc_frac_intact": 0.0535084493458271,
+  "kc_frac_apl_off": 0.10305681824684143,
+  "jaccard_intact": 0.02853267639875412,
+  "jaccard_apl_off": 0.18961992859840393,
+  "kc_rest_active_apl_off": 0.029773622751235962,
+  "ratio": 1.9259914930590003,
+  "pass": true
+ },
+ "E4": {
+  "mbon_abs_evoked_intact": 0.003835932817310095,
+  "mbon_abs_evoked_kp_off": 0.0010634151985868812,
+  "typical_abs_evoked_intact": 0.0040816632099449635,
+  "typical_abs_evoked_kp_off": 0.0011652845423668623,
+  "mbon_sd_across_odours_intact": 0.002586674178019166,
+  "mbon_sd_across_odours_kp_off": 0.0008223818731494248,
+  "mbon_rest_intact": 0.027384983375668526,
+  "mbon_rest_kp_off": 0.02614280767738819,
+  "cut_pct_all": 72.27753328243665,
+  "cut_pct_typical": 71.45074244421615,
+  "cut_pct_sd": 68.20697867022464,
+  "pass": false
+ },
+ "E7": {
+  "read_sd_intact": 0.0007651686319150031,
+  "read_sd_kc_off": 0.0007284610182978213,
+  "read_corr_with_intact_kc_off": 0.983583252844904,
+  "read_sd_lh_off": 0.0005686334916390479,
+  "read_corr_with_intact_lh_off": 0.953087489681525,
+  "read_sd_kc_and_lh_off": 0.0005301188211888075,
+  "read_corr_with_intact_kc_and_lh_off": 0.9142397110478578,
+  "read_sd_pn_off": 5.15902393090073e-05,
+  "read_corr_with_intact_pn_off": -0.07339248004256407,
+  "kc_off_ratio": 0.9520267662759346,
+  "lh_off_ratio": 0.743147938796076,
+  "pass": true
+ }
+}
