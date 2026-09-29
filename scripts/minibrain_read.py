@@ -121,6 +121,16 @@ def main() -> int:
     read = R[ap].mean(0) - R[av].mean(0)
     res["read"] = {"approach_cells": len(ap), "avoid_cells": len(av), "rest": float(r0[ap].mean() - r0[av].mean()),
                    "item_sd": float(read.std()), "item_mean": float(read.mean())}
+    if "dn" in a.layers:  # E7 (Heimbeck et al. 2001): the innate path survives MB loss; the lateral horn carries it
+        e7 = {}
+        for name, idx in (("kcs_silenced", m.groups["kc"]), ("lh_silenced", m.groups["lh"])):
+            b0 = m.b.clone()
+            m.b[idx] = -10.0
+            Rx, _, _ = m.settle(m.inp(S), max_steps=8000, tol=1e-6)
+            m.b.copy_(b0)
+            e7[name] = float((Rx[ap].mean(0) - Rx[av].mean(0)).std()) / float(read.std())
+        e7["pass"] = e7["kcs_silenced"] >= 0.5 and e7["lh_silenced"] < 1.0
+        res["E7"] = e7
     # 3. E5
     kc = m.groups["kc"]
     Wc = m.W.to_sparse_coo().coalesce()

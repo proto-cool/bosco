@@ -1,0 +1,8 @@
+=== layers [base lh conv dn] gain x1
+G=0.0: rest: settled True states-diff 3.2e-06 osc 0 rho 0.943 mean 0.025 sat 0.00 | sniff0: settled True states-diff 2.2e-06 osc 0 rho 0.916 mean 0.087 sat 0.00 | sniff1: settled True states-diff 1.5e-06 osc 0 rho 0.897 mean 0.089 sat 0.00 | sniff2: settled True states-diff 2.2e-06 osc 0 rho 0.921 mean 0.093 sat 0.00
+KC active 0.048 (J 0.07, rate 0.304) | E1 True (PN 0.58 vs ORN 0.59) | E2 True [0.04778043553233147, 0.09322519600391388] | E4 True cut 0.91 | MBON mod 0.64 rest 0.003
+ "all_items_settled": true,  "items_with_more_than_one_state": 0,  "approach_cells": 45,  "avoid_cells": 4,  "item_sd": 0.026050344109535217,  "E5_pass_share": 0.0 
+=== layers [base lh conv dn] gain x1.25
+G=0.0: rest: settled True states-diff 9.4e-01 osc 0 rho 0.942 mean 0.030 sat 0.00 | sniff0: settled True states-diff 9.4e-01 osc 0 rho 0.957 mean 0.111 sat 0.01 | sniff1: settled True states-diff 9.4e-01 osc 0 rho 0.881 mean 0.117 sat 0.01 | sniff2: settled True states-diff 9.4e-01 osc 0 rho 0.901 mean 0.128 sat 0.01
+AssertionError: did not settle (0.10211870074272156)
+ "all_items_settled": true,  "items_with_more_than_one_state": 128,  "approach_cells": 44,  "avoid_cells": 4,  "item_sd": 0.03848907724022865,  "E5_pass_share": 0.0 
