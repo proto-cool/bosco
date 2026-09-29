@@ -72,6 +72,7 @@ def main() -> int:
     p = argparse.ArgumentParser()
     p.add_argument("--gains", type=float, nargs="+", default=[1, 2, 4, 8])
     p.add_argument("--kc-sparse", action="store_true", help="one KC threshold for 5%% active (calibration items)")
+    p.add_argument("--layers", nargs="+", default=["base"], help="base lh conv dn")
     p.add_argument("--threads", type=int, default=6)
     a = p.parse_args()
     torch.set_num_threads(a.threads)
@@ -82,7 +83,7 @@ def main() -> int:
     sniffs = torch.tensor(ant(np.load(EXPLORE)["X"][:3]))
     res = {}
     for G in a.gains:
-        m = MB.build(gain=G)
+        m = MB.build(gain=G, layers=tuple(a.layers))
         if a.kc_sparse:
             th = MB.set_kc_threshold(m, torch.tensor(ant(B.items()[1][:64])))
             print(f"G={G}: KC threshold {th:.3f}", flush=True)
@@ -94,7 +95,7 @@ def main() -> int:
             f"{k}: settled {v['settled_all']} states-diff {v['states_max_diff']:.1e} osc {v['cells_oscillating']} "
             f"rho {v['spectral_radius']:.3f} mean {v['mean_rate']:.3f} sat {v['saturated']:.2f}"
             for k, v in r.items()), flush=True)
-    json.dump(res, open(OUT / ("dynamics_kc.json" if a.kc_sparse else "dynamics.json"), "w"), indent=1)
+    json.dump(res, open(OUT / (("dynamics_kc" if a.kc_sparse else "dynamics") + "_" + "-".join(a.layers) + ".json"), "w"), indent=1)
     return 0
 
 

@@ -49,9 +49,38 @@ def valence(m):
     return torch.tensor(ap), torch.tensor(av), rows
 
 
+STEERING = ("DNa02", "DNa03")
+
+
+def dn_read(m, map_, mav, r0, u_rest, dx=0.1, q=0.95):
+    """Amendment 1's rule on the minimum brain: each DN's resting response to +dx drive on the approach MBONs minus on
+    the avoid MBONs; per type the mean; approach types >= the q-quantile of |coupling|, avoid <= minus it; steering
+    DNs out."""
+    import pandas as pd
+
+    def with_drive(idx):
+        b0 = m.b.clone()
+        m.b[idx] += dx
+        r, _, _ = m.settle(u_rest, r0=r0, max_steps=8000, tol=1e-7)
+        m.b.copy_(b0)
+        return r[:, 0]
+
+    d = (with_drive(map_) - r0[:, 0]) - (with_drive(mav) - r0[:, 0])
+    dn = m.groups["dn"].numpy()
+    df = pd.DataFrame({"idx": dn, "type": m.typ[dn], "dR": d[dn].numpy()})
+    t = df.groupby("type").dR.mean()
+    th = float(np.quantile(t.abs(), q))
+    ok = ~t.index.isin(STEERING)
+    app, avo = t.index[ok & (t >= th)], t.index[ok & (t <= -th)]
+    info = {"threshold": th, "approach": {k: float(t[k]) for k in app}, "avoid": {k: float(t[k]) for k in avo}}
+    return (torch.tensor(df[df.type.isin(app)].idx.to_numpy()), torch.tensor(df[df.type.isin(avo)].idx.to_numpy()),
+            info)
+
+
 def main() -> int:
     p = argparse.ArgumentParser()
     p.add_argument("--gain", type=float, default=12.0)
+    p.add_argument("--layers", nargs="+", default=["base"], help="base lh conv dn")
     p.add_argument("--threads", type=int, default=8)
     a = p.parse_args()
     torch.set_num_threads(a.threads)
@@ -60,7 +89,7 @@ def main() -> int:
     rest = torch.tensor(ant.resting())[None]
     X = np.load(EXPLORE)["X"]
     S = torch.tensor(ant(X))
-    m = MB.build(gain=a.gain)
+    m = MB.build(gain=a.gain, layers=tuple(a.layers))
     th = MB.set_kc_threshold(m, torch.tensor(ant(B.items()[1][:64])))
     res = {"gain": a.gain, "kc_threshold": th}
     # 1. robustness
@@ -75,10 +104,13 @@ def main() -> int:
     worst = torch.stack(diffs).amax(0)
     res["one_state_128_items_max_diff"] = float(worst.max())
     res["items_with_more_than_one_state"] = int((worst > 1e-3).sum())
-    # 2. the read
-    ap, av, rows = valence(m)
+    # 2. the read: MBON approach - avoid; with the DN layer, the DN types the MBONs drive most, by sign
+    map_, mav, rows = valence(m)
     res["mbon_valence"] = rows
     r0, _, _ = m.settle(m.inp(rest), max_steps=8000, tol=1e-6)
+    ap, av = map_, mav
+    if "dn" in a.layers:
+        ap, av, res["dn_read"] = dn_read(m, map_, mav, r0, m.inp(rest))
     read = R[ap].mean(0) - R[av].mean(0)
     res["read"] = {"approach_cells": len(ap), "avoid_cells": len(av), "rest": float(r0[ap].mean() - r0[av].mean()),
                    "item_sd": float(read.std()), "item_mean": float(read.mean())}
@@ -117,7 +149,7 @@ def main() -> int:
                                 and abs(dread) >= 0.5 * float(read.std()))})
     res["E5"] = e5
     res["E5_pass_share"] = float(np.mean([x["pass"] for x in e5]))
-    json.dump(res, open(OUT / f"read_g{a.gain:g}.json", "w"), indent=1, default=str)
+    json.dump(res, open(OUT / f"read_g{a.gain:g}_{'-'.join(a.layers)}.json", "w"), indent=1, default=str)
     print(json.dumps({k: v for k, v in res.items() if k not in ("E5", "mbon_valence")}, indent=1, default=str))
     for x in e5:
         print(f"  {x['type']:12s} {x['side']:8s} drop A {x['drop_A']:.2f} others {x['drop_others']:.2f} "

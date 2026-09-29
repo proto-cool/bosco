@@ -63,10 +63,21 @@ def transmitters(body_ids, floor: float = FLOOR) -> tuple[pd.Series, pd.Series]:
     return lab, src
 
 
+COMPARTMENTS = True  # only synapses in a target's input regions drive it (bosco.compartments)
+
+
 @lru_cache(maxsize=4)
-def _whole_brain_fast(floor: float, silence_ach_lns: bool):
-    """Fast sign per presynaptic body over all of MaleCNS, and the weights table (cached per rule set)."""
-    w = data.weights()
+def _whole_brain_fast(floor: float, silence_ach_lns: bool, compartments: bool = COMPARTMENTS):
+    """Fast sign per presynaptic body over all of MaleCNS, and the weights table (cached per rule set). With
+    compartments, a connection's weight is its synapses in the target's input regions (the rest land on the target's
+    own output terminals and do not drive it)."""
+    if compartments:
+        from bosco import compartments as C
+
+        w = C.drive_table().rename(columns={"drive": "weight"})[["body_pre", "body_post", "weight"]]
+        w = w[w.weight > 0]
+    else:
+        w = data.weights()
     pre_b = w["body_pre"].to_numpy()
     bodies = np.unique(pre_b)
     lab, _ = transmitters(bodies, floor)
@@ -131,14 +142,54 @@ class MiniBrain:
         return r, max_steps, d
 
 
-def build(floor: float = FLOOR, silence_ach_lns: bool = True, gain: float = 1.0) -> MiniBrain:
+LH_PREFIXES = ("LHAV", "LHAD", "LHPV", "LHPD", "LHCENT", "LHLN", "LHPN")
+CONV_SHARE = 0.10  # a convergence neuron takes >= this share of its fast input from MBONs
+
+
+def mbon_input_share(floor: float = FLOOR, silence_ach_lns: bool = True,
+                     compartments: bool = COMPARTMENTS) -> pd.Series:
+    """Per neuron of the 50,140: its share of fast input (synapses, from any MaleCNS body) coming from MBONs."""
+    full = M2.load_or_build().brain
+    bodies, sign_b, kc_b, w = _whole_brain_fast(floor, silence_ach_lns, compartments)
+    a_b = data.annotations().reindex(pd.Index(bodies))
+    mbon_b = (a_b["class"] == "MBON").to_numpy()
+    pi = np.searchsorted(bodies, w["body_pre"].to_numpy())
+    post = pd.Index(full.ids).get_indexer(w["body_post"].to_numpy())
+    cnt = w["weight"].to_numpy().astype(np.float64)
+    ok = (post >= 0) & (sign_b[pi] != 0)
+    tot = np.bincount(post[ok], weights=cnt[ok], minlength=full.n)
+    fm = ok & mbon_b[pi]
+    frm = np.bincount(post[fm], weights=cnt[fm], minlength=full.n)
+    return pd.Series(frm / np.maximum(tot, 1), index=full.ids)
+
+
+def select(layers=("base",), floor: float = FLOOR, silence_ach_lns: bool = True,
+           compartments: bool = COMPARTMENTS) -> np.ndarray:
+    """Which of the 50,140 neurons are in: 'base' (the smell path to the MBONs), 'lh' (lateral horn), 'conv'
+    (neurons taking >= CONV_SHARE of their fast input from MBONs), 'dn' (descending neurons)."""
+    full = M2.load_or_build().brain
+    a = data.annotations().reindex(pd.Index(full.ids))
+    keep = np.zeros(full.n, bool)
+    if "base" in layers:
+        keep |= (a["class"].isin(CLASSES) | a["type"].isin(TYPES)).to_numpy()
+    if "lh" in layers:
+        keep |= a["type"].fillna("").str.startswith(LH_PREFIXES).to_numpy()
+    if "conv" in layers:
+        keep |= (mbon_input_share(floor, silence_ach_lns, compartments) >= CONV_SHARE).to_numpy()
+    if "dn" in layers:
+        keep |= (a["superclass"] == "descending_neuron").to_numpy()
+    return keep
+
+
+def build(floor: float = FLOOR, silence_ach_lns: bool = True, gain: float = 1.0, layers=("base",),
+          compartments: bool = COMPARTMENTS) -> MiniBrain:
     b2 = M2.load_or_build()
     full = b2.brain
     a = data.annotations().reindex(pd.Index(full.ids))
-    keep = (a["class"].isin(CLASSES) | a["type"].isin(TYPES)).to_numpy()
+    keep = select(layers, floor, silence_ach_lns, compartments)
     ids = full.ids[keep]
     n = len(ids)
-    bodies, sign_b, kc_b, w = _whole_brain_fast(floor, silence_ach_lns)
+    bodies, sign_b, kc_b, w = _whole_brain_fast(floor, silence_ach_lns, compartments)
     pre_b, post_b, cnt = w["body_pre"].to_numpy(), w["body_post"].to_numpy(), w["weight"].to_numpy().astype(np.float64)
     pi = np.searchsorted(bodies, pre_b)
     idx = pd.Index(ids)
@@ -171,7 +222,8 @@ def build(floor: float = FLOOR, silence_ach_lns: bool = True, gain: float = 1.0)
     t = lambda mask: torch.tensor(np.nonzero(mask)[0])  # noqa: E731
     m.groups = {"orn": t(cls == "olfactory"), "ln": t(cls == "ALLN"), "pn": t(cls == "ALPN"),
                 "kc": t(cls == "Kenyon_Cell"), "apl": t(typ == "APL"), "dpm": t(typ == "DPM"),
-                "mbon": t(cls == "MBON")}
+                "mbon": t(cls == "MBON"), "lh": t(np.array([x.startswith(LH_PREFIXES) for x in typ])),
+                "dn": t(a["superclass"].to_numpy()[keep] == "descending_neuron")}
     return m
 
 

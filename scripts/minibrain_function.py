@@ -71,6 +71,7 @@ def main() -> int:
     p.add_argument("--gains", type=float, nargs="+", default=[1, 2, 4, 8])
     p.add_argument("--items", type=int, default=128)
     p.add_argument("--kc-sparse", action="store_true", help="one KC threshold for 5%% active (calibration items)")
+    p.add_argument("--layers", nargs="+", default=["base"], help="base lh conv dn")
     p.add_argument("--threads", type=int, default=8)
     a = p.parse_args()
     torch.set_num_threads(a.threads)
@@ -81,7 +82,7 @@ def main() -> int:
     S = torch.tensor(ant(np.load(EXPLORE)["X"][: a.items]))
     res = {}
     for G in a.gains:
-        m = MB.build(gain=G)
+        m = MB.build(gain=G, layers=tuple(a.layers))
         if a.kc_sparse:
             th = MB.set_kc_threshold(m, torch.tensor(ant(B.items()[1][:64])))
             print(f"G={G}: KC threshold {th:.3f}", flush=True)
@@ -117,7 +118,7 @@ def main() -> int:
               f"E1 {e1['pass']} (PN {e1['pn_ls']:.2f} vs ORN {e1['orn_ls']:.2f}) | E2 {e2['pass']} {e2['kc_active']} | "
               f"E4 {e4['pass']} cut {e4['cut']:.2f} | MBON mod {stages['mbon']['modulation']:.2f} rest {stages['mbon']['rest']:.3f}",
               flush=True)
-    json.dump(res, open(OUT / ("function_kc.json" if a.kc_sparse else "function.json"), "w"), indent=1)
+    json.dump(res, open(OUT / (("function_kc" if a.kc_sparse else "function") + "_" + "-".join(a.layers) + ".json"), "w"), indent=1)
     return 0
 
 
