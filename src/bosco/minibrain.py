@@ -216,11 +216,13 @@ def select(layers=("base",), floor: float = FLOOR, silence_ach_lns: bool = True,
 
 
 def build(floor: float = FLOOR, silence_ach_lns: bool = True, gain: float = 1.0, layers=("base",),
-          compartments: bool = COMPARTMENTS) -> MiniBrain:
+          compartments: bool = COMPARTMENTS, keep: np.ndarray | None = None) -> MiniBrain:
+    """`keep`: an explicit neuron mask over the 50,140 (e.g. the taste circuit), instead of `layers`."""
     b2 = M2.load_or_build()
     full = b2.brain
     a = data.annotations().reindex(pd.Index(full.ids))
-    keep = select(layers, floor, silence_ach_lns, compartments)
+    if keep is None:
+        keep = select(layers, floor, silence_ach_lns, compartments)
     ids = full.ids[keep]
     n = len(ids)
     bodies, sign_b, kc_b, w = _whole_brain_fast(floor, silence_ach_lns, compartments)

@@ -1,0 +1,131 @@
+{
+ "9.0": {
+  "MN9_rate": {
+   "rest": 3.857470661962856e-25,
+   "sugar": 0.21423254907131195,
+   "sugar+bitter": 5.726500574044176e-17,
+   "water": 0.38812583684921265,
+   "bitter": 3.6417674942676173e-25,
+   "sugar0.25": 3.8574992581706704e-25,
+   "sugar0.5": 6.901347183286711e-17,
+   "sugar+ir94e": 0.21841880679130554,
+   "sugar+metal": 0.31997454166412354
+  },
+  "MN9_evoked": {
+   "rest": 0.0,
+   "sugar": 0.21423254907131195,
+   "sugar+bitter": 5.72650053546947e-17,
+   "water": 0.38812583684921265,
+   "bitter": -2.157031676952389e-26,
+   "sugar0.25": 2.8596207814261678e-30,
+   "sugar0.5": 6.901347144712005e-17,
+   "sugar+ir94e": 0.21841880679130554,
+   "sugar+metal": 0.31997454166412354
+  },
+  "dynamics": {
+   "rest": {
+    "settle_steps": {
+     "zero": 41,
+     "ones": 191,
+     "rand0": 189,
+     "rand1": 189,
+     "rand2": 159,
+     "rand3": 189
+    },
+    "settled_all": true,
+    "states_max_diff": 0.9382188320159912,
+    "cells_differing": 42,
+    "long_run_one_step_change": 0.0,
+    "cells_oscillating": 0,
+    "spectral_radius": 0.8031975626945496,
+    "mean_rate": 0.00016539449279662222,
+    "saturated": 0.0,
+    "silent": 0.8873002529144287
+   },
+   "sugar": {
+    "settle_steps": {
+     "zero": 271,
+     "ones": 160,
+     "rand0": 167,
+     "rand1": 153,
+     "rand2": 143,
+     "rand3": 165
+    },
+    "settled_all": true,
+    "states_max_diff": 0.8974655866622925,
+    "cells_differing": 177,
+    "long_run_one_step_change": 0.0,
+    "cells_oscillating": 0,
+    "spectral_radius": 0.8884559869766235,
+    "mean_rate": 0.07091720402240753,
+    "saturated": 0.00504625728353858,
+    "silent": 0.7216147780418396
+   },
+   "sugar+bitter": {
+    "settle_steps": {
+     "zero": 253,
+     "ones": 208,
+     "rand0": 205,
+     "rand1": 206,
+     "rand2": 105,
+     "rand3": 201
+    },
+    "settled_all": true,
+    "states_max_diff": 0.9536927938461304,
+    "cells_differing": 197,
+    "long_run_one_step_change": 0.0,
+    "cells_oscillating": 0,
+    "spectral_radius": 0.9573360681533813,
+    "mean_rate": 0.10192034393548965,
+    "saturated": 0.011774600483477116,
+    "silent": 0.7375946044921875
+   },
+   "water": {
+    "settle_steps": {
+     "zero": 174,
+     "ones": 297,
+     "rand0": 291,
+     "rand1": 292,
+     "rand2": 259,
+     "rand3": 291
+    },
+    "settled_all": true,
+    "states_max_diff": 0.9340753555297852,
+    "cells_differing": 137,
+    "long_run_one_step_change": 0.0,
+    "cells_oscillating": 0,
+    "spectral_radius": 0.915203332901001,
+    "mean_rate": 0.040135838091373444,
+    "saturated": 0.003364171599969268,
+    "silent": 0.7813288569450378
+   },
+   "bitter": {
+    "settle_steps": {
+     "zero": 85,
+     "ones": 222,
+     "rand0": 220,
+     "rand1": 218,
+     "rand2": 99,
+     "rand3": 218
+    },
+    "settled_all": true,
+    "states_max_diff": 0.9444782733917236,
+    "cells_differing": 117,
+    "long_run_one_step_change": 0.0,
+    "cells_oscillating": 0,
+    "spectral_radius": 0.7983882427215576,
+    "mean_rate": 0.059466857463121414,
+    "saturated": 0.01009251456707716,
+    "silent": 0.7956265807151794
+   }
+  },
+  "checks": {
+   "S1_sugar_drives_MN9": true,
+   "S2_bitter_suppresses_sugar": true,
+   "S3_water_drives_MN9": true,
+   "S4_bitter_alone_not": true,
+   "S5_sugar_dose": true,
+   "stable_one_state": false
+  }
+ }
+}
