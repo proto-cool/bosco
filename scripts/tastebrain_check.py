@@ -41,6 +41,7 @@ def main() -> int:
     p.add_argument("--gains", type=float, nargs="+", default=[1, 2, 4, 8, 16])
     p.add_argument("--fit", action="store_true", help="use runs/tastebrain/fit.json (gain and threshold)")
     p.add_argument("--gain-scale", type=float, default=1.0)
+    p.add_argument("--threshold", type=float, default=None, help="with --gains: a firing threshold for non-taste cells")
     p.add_argument("--threads", type=int, default=6)
     a = p.parse_args()
     torch.set_num_threads(a.threads)
@@ -52,9 +53,10 @@ def main() -> int:
         a.gains = [best["G"] * a.gain_scale]
     for G in a.gains:
         m = T.build(gain=G)
-        if a.fit:
+        th = best["threshold"] if a.fit else a.threshold
+        if th is not None:
             taste = torch.cat([v for k, v in m.groups.items() if k.startswith("taste_")])
-            m.b[:] = -best["threshold"]
+            m.b[:] = -th
             m.b[taste] = 0.0
         mn9 = m.groups["mn9"]
         out, dyn = {}, {}
@@ -64,6 +66,14 @@ def main() -> int:
             out[name] = float(r[mn9].mean())
             if name in ("rest", "sugar", "sugar+bitter", "bitter", "water"):
                 dyn[name] = examine(m, u)
+        # return to rest: after a sequence of tastes, back to nothing, the brain must reach its original rest
+        u0 = T.taste_input(m, {})
+        r_rest, _, _ = m.settle(u0, max_steps=8000, tol=1e-7)
+        rr = r_rest.clone()
+        for st in ("sugar", "bitter", "water", "sugar+bitter", "metal", "ir94e", "sugar"):
+            rr, _, _ = m.settle(T.taste_input(m, {k: 1.0 for k in st.split("+")}), r0=rr, max_steps=8000, tol=1e-7)
+            rr, _, _ = m.settle(u0, r0=rr, max_steps=8000, tol=1e-7)
+        latched = int(((rr - r_rest).abs() > 1e-3).sum())
         r0 = out["rest"]
         ev = {k: v - r0 for k, v in out.items()}
         checks = {
@@ -72,13 +82,14 @@ def main() -> int:
             "S3_water_drives_MN9": ev["water"] >= 0.1,
             "S4_bitter_alone_not": ev["bitter"] <= 0.02,
             "S5_sugar_dose": ev["sugar0.25"] <= ev["sugar0.5"] <= ev["sugar"],
+            "returns_to_rest": latched == 0,
             "stable_one_state": all(v["settled_all"] and v["states_max_diff"] < 1e-3 and v["cells_oscillating"] == 0
                                     and v["spectral_radius"] < 1 for v in dyn.values()),
         }
-        res[str(G)] = {"MN9_rate": out, "MN9_evoked": ev, "dynamics": dyn, "checks": checks}
+        res[str(G)] = {"MN9_rate": out, "MN9_evoked": ev, "dynamics": dyn, "checks": checks, "latched_cells": latched}
         print(f"G={G}: MN9 rest {r0:.3f} | evoked: " + ", ".join(f"{k} {v:+.3f}" for k, v in ev.items() if k != "rest")
               + f" | stable {checks['stable_one_state']} (rho max {max(v['spectral_radius'] for v in dyn.values()):.3f})"
-              + f" | pass {sum(checks.values())}/{len(checks)}", flush=True)
+              + f" | latched {latched} | pass {sum(checks.values())}/{len(checks)}", flush=True)
     json.dump(res, open(OUT / ("check_fit.json" if a.fit else "check.json"), "w"), indent=1)
     return 0
 

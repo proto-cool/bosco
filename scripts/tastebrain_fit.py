@@ -37,7 +37,7 @@ def main() -> int:
             rs = float(m.settle(T.taste_input(m, {"sugar": 1.0}), max_steps=8000, tol=1e-7)[0][mn9].mean())
             err = np.log(max(rs - r0, 1e-4) / SUGAR) ** 2 + (10 * max(r0 - REST_MAX, 0)) ** 2
             grid.append({"G": G, "threshold": th, "mn9_rest": r0, "mn9_sugar_evoked": rs - r0, "error": float(err)})
-            print(f"G={G:3d} th={th:.2f}: MN9 rest {r0:.3f} sugar-evoked {rs - r0:+.3f} err {err:.3f}", flush=True)
+            print(f"G={G:5g} th={th:.2f}: MN9 rest {r0:.3f} sugar-evoked {rs - r0:+.3f} err {err:.3f}", flush=True)
     best = min(grid, key=lambda r: r["error"])
     json.dump({"targets": {"mn9_rest_max": REST_MAX, "mn9_sugar_evoked": SUGAR}, "best": best, "grid": grid},
               open(OUT / "fit.json", "w"), indent=1)

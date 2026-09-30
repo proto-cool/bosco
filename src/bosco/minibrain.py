@@ -11,6 +11,8 @@ outside the minimum brain stay in the total: they show as a deficit, not rescale
 dropped, except KC->MBON.
 
 Dynamics (as ratebrain3): r <- r + a (-r + f(g * (W r) + b + input)), f(x) = tanh(softplus(BETA x) / BETA), a = dt/tau.
+Optional adaptation and synaptic depression (Nick, 2026-09-29: the taste brain latched), at their steady state so the
+resting states and answers equal those of the slow dynamics: drive - ADAPT x r, and output r / (1 + DEPRESS x r).
 Deliberately small and explicit: no trained parameters, no hidden state beyond r.
 """
 
@@ -105,6 +107,8 @@ class MiniBrain:
     g: torch.Tensor = None  # input gain per neuron
     b: torch.Tensor = None  # bias (minus threshold) per neuron
     alpha: float = DT / TAU
+    adapt: float = 0.0  # spike-frequency adaptation: drive reduced by adapt x own rate (at steady state)
+    depress: float = 0.0  # synaptic depression: a neuron's output r / (1 + depress x r) (at steady state)
 
     # ---- dynamics ----
     @staticmethod
@@ -119,7 +123,10 @@ class MiniBrain:
         return u
 
     def step(self, r: torch.Tensor, u: torch.Tensor) -> torch.Tensor:
-        x = self.g[:, None] * (self.W @ r) + self.b[:, None] + u
+        out = r / (1 + self.depress * r) if self.depress else r
+        x = self.g[:, None] * (self.W @ out) + self.b[:, None] + u
+        if self.adapt:
+            x = x - self.adapt * r
         return r + self.alpha * (-r + self.f(x))
 
     def run(self, r0: torch.Tensor, u: torch.Tensor, steps: int, trace: bool = False):
@@ -215,9 +222,14 @@ def select(layers=("base",), floor: float = FLOOR, silence_ach_lns: bool = True,
     return keep
 
 
+RAW_SCALE = 0.01  # with normalize=False: weight = sign x synapses x RAW_SCALE (Shiu et al. 2024: count x constant)
+
+
 def build(floor: float = FLOOR, silence_ach_lns: bool = True, gain: float = 1.0, layers=("base",),
-          compartments: bool = COMPARTMENTS, keep: np.ndarray | None = None) -> MiniBrain:
-    """`keep`: an explicit neuron mask over the 50,140 (e.g. the taste circuit), instead of `layers`."""
+          compartments: bool = COMPARTMENTS, keep: np.ndarray | None = None, normalize: bool = True) -> MiniBrain:
+    """`keep`: an explicit neuron mask over the 50,140 (e.g. the taste circuit), instead of `layers`. `normalize`:
+    weight = synapses / the target's fast input total (default), or, if False, synapses x RAW_SCALE as in Shiu et al.
+    2024 (a strong connection is strong whatever else the target receives)."""
     b2 = M2.load_or_build()
     full = b2.brain
     a = data.annotations().reindex(pd.Index(full.ids))
@@ -239,7 +251,10 @@ def build(floor: float = FLOOR, silence_ach_lns: bool = True, gain: float = 1.0,
     mbon_m = (a["class"].to_numpy()[keep] == "MBON")
     kc_mbon = kc_m[np.maximum(pre, 0)] & mbon_m[np.maximum(post, 0)]
     inside &= (cnt >= MIN_SYN) | kc_mbon
-    val = sign_b[pi[inside]] * cnt[inside] / np.maximum(in_fast[post[inside]], 1.0)
+    if normalize:
+        val = sign_b[pi[inside]] * cnt[inside] / np.maximum(in_fast[post[inside]], 1.0)
+    else:
+        val = sign_b[pi[inside]] * cnt[inside] * RAW_SCALE
     W = torch.sparse_coo_tensor(
         torch.tensor(np.stack([post[inside], pre[inside]])), torch.tensor(val, dtype=torch.float32), (n, n)
     ).coalesce().to_sparse_csr()

@@ -27,6 +27,8 @@ from bosco import model2 as M2
 TASTES = {"sugar": ("LB3b", "LB3c"), "bitter": ("LB1a", "LB1b", "LB1c", "LB1d"), "water": ("LB3a",),
           "ir94e": ("LB1e",), "metal": ("LB3d",)}
 PATH_MAX = 4
+ADAPT, DEPRESS = 0.0, 0.0  # a steady-state adaptation/depression prototype (0.3, 2.0) made latching worse; off
+NORMALIZE = True  # a Shiu-style raw-weight prototype (synapses x constant) was unstable and latched more (339 cells)
 
 
 def circuit_mask(path_max: int = PATH_MAX) -> np.ndarray:
@@ -55,8 +57,10 @@ def circuit_mask(path_max: int = PATH_MAX) -> np.ndarray:
     return on | src | mn9
 
 
-def build(gain: float = 1.0, path_max: int = PATH_MAX):
-    m = MB.build(gain=gain, keep=circuit_mask(path_max))
+def build(gain: float = 1.0, path_max: int = PATH_MAX, adapt: float = ADAPT, depress: float = DEPRESS,
+          normalize: bool = NORMALIZE):
+    m = MB.build(gain=gain, keep=circuit_mask(path_max), normalize=normalize)
+    m.adapt, m.depress = adapt, depress
     m.g[:] = gain
     groups = {k: torch.tensor(np.nonzero(np.isin(m.typ, v))[0]) for k, v in TASTES.items()}
     for v in groups.values():
