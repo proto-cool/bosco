@@ -14,6 +14,13 @@ Changes from ratebrain2, each with its reason (docs/audit-2026-09-25/code.md):
   quantity the bars count, above the fly's range (KC_ACTIVE_MAX); ratebrain2's penalised the mean
   rate against 0.01 and never fired.
 - **Regions** are labelled for the preflight's liveness check and the trace.
+**Brain v3.1** (docs/BRAIN-SPEC.md amendment 4; docs/audit-2026-09-28/brain-deep-dive.md):
+- BETA 500: the rate at threshold is 0.0014, so a cell below threshold is silent (P1; it was 0.0139, and 59% of KC
+  output came from "inactive" KCs).
+- Only fast transmitters drive, normalised by fast input totals (wiring3; P2).
+- A fixed per-neuron input scale `s_in` (intrinsic excitability, set label-free per type) on the synaptic drive,
+  folded into the frozen matrix: operating points come from input gain, not from a threshold bias (P3).
+- MBON valence by transmitter (wiring3.mbon_valence; P6). Untyped cells are pooled per class and superclass.
 The read is pluggable: 'mbon' (approach minus avoid MBONs, as before) or 'dn' (set by `set_dn_read`,
 decision 4). Everything else (time step, steps, the wiring fixes) is as in ratebrain2, with its reasons.
 """
@@ -29,12 +36,12 @@ from bosco import model2 as M2
 from bosco import populations as pop
 from bosco import ratebrain2 as R2
 from bosco import senses as S
+from bosco import wiring3 as W3
 
 DT_MS = R2.DT_MS
 TAU0_MS = R2.TAU0_MS
 TAU_RANGE = R2.TAU_RANGE
-BETA = 50.0  # softplus sharpness: rate 0.014 at threshold, 0.0016 at 0.05 below it (resting, not "active"),
-# slope 0.08 there (Adam rescales small gradients, so a silent type still trains)
+BETA = 500.0  # softplus sharpness: rate 0.0014 at threshold, so below threshold is silent (amendment 4, P1)
 ACTIVE = 0.01  # a neuron counts as active above this rate (as in ratebrain2's probes)
 KC_ACTIVE_MAX = 0.10  # upper edge of the fly's KC range (2-10% active; Honegger et al. 2011)
 CHECKPOINT = 10  # steps per recomputed segment when training (memory for long runs and the optic lobes)
@@ -48,6 +55,18 @@ def own_in_total(b2: M2.Brain2, w) -> np.ndarray:
     real_in = np.bincount(b2.brain.indices, weights=b2.brain.count, minlength=n)
     own_in = np.bincount(w.indices, weights=w.count, minlength=n)
     return own_in + (b2.in_total - real_in)
+
+
+def type_of_neurons(b) -> np.ndarray:
+    """Cell type per neuron; untyped cells share one pseudo-type per class and superclass (amendment 4: the 898
+    'untyped:unclassified' cells had been one unit, mixing sensory and central cells)."""
+    a = data.annotations().reindex(b.ids)
+    t = a["type"].fillna("").to_numpy().astype(object)
+    cls = a["class"].fillna("unclassified").to_numpy()
+    sup = a["superclass"].fillna("unclassified").to_numpy()
+    u = t == ""
+    t[u] = np.array([f"untyped:{c}:{s}" for c, s in zip(cls[u], sup[u], strict=True)], dtype=object)
+    return t.astype(str)
 
 
 def regions(b) -> dict[str, np.ndarray]:
@@ -79,12 +98,13 @@ def regions(b) -> dict[str, np.ndarray]:
 class RateBrain3(torch.nn.Module):
     def __init__(self, b2: M2.Brain2, mode: str = "type", device: str | None = None, wiring=None, in_total=None):
         """`wiring`: a Brain with the same neurons (a control, possibly cut), else b2's own. `in_total`: that
-        wiring's own input totals (`own_in_total`, from the uncut wiring); default b2's (the real brain)."""
+        wiring's own fast input totals (`wiring3.own_in_fast`, from the uncut wiring); default the real brain's."""
         super().__init__()
         b = wiring if wiring is not None else b2.brain
         device = device or DV.default()
         self.n, self.device, self.mode = b.n, device, mode
-        post, pre, w = R2.wiring_values(b, in_total if in_total is not None else b2.in_total)
+        ft = W3.fast_tables(b2.brain.ids)
+        post, pre, w = W3.values(b, in_total if in_total is not None else ft["in_fast"], ft)
         kc = np.zeros(b.n, bool)
         kc[b.index_of_present(pop.kenyon_cells())] = True
         mb = np.zeros(b.n, bool)
@@ -104,7 +124,7 @@ class RateBrain3(torch.nn.Module):
         self.kp_pre = torch.tensor(pre[plastic], device=device)
         self.kp_w = torch.tensor(w[plastic], dtype=torch.float32, device=device)
         self.kp_logm = torch.nn.Parameter(torch.zeros(int(plastic.sum()), device=device))
-        types = R2.type_of_neurons(b2.brain)
+        types = type_of_neurons(b2.brain)
         if mode == "type":
             uniq, inv = np.unique(types, return_inverse=True)
             self.n_units = len(uniq)
@@ -125,7 +145,7 @@ class RateBrain3(torch.nn.Module):
         )
         self.vis_idx = torch.tensor(self.eyes.cells.astype(np.int64), device=device)
         self.vis_M = torch.tensor(self.eyes.M, device=device)
-        _, ap, av = M2.mbon_groups(b2.brain)
+        ap, av, _ = W3.mbon_valence(b2.brain)
         self.read_groups = {"mbon": (torch.tensor(ap, device=device), torch.tensor(av, device=device))}
         self.read = "mbon"
         self.kc = torch.tensor(np.nonzero(kc)[0], device=device)
@@ -134,6 +154,8 @@ class RateBrain3(torch.nn.Module):
         self.steps, self.read_steps = R2.STEPS, R2.READ_STEPS
         # label-free per-cell offsets (docs/BRAIN-SPEC.md: per-KC thresholds), zero unless set
         self.register_buffer("b_cell", torch.zeros(b.n, device=device))
+        # fixed per-neuron input scale on the synaptic drive (amendment 4, P3), one unless the start sets it
+        self.register_buffer("s_in", torch.ones(b.n, device=device))
         self.r_rest: torch.Tensor | None = None  # the resting state every sniff starts from, once `settle`d
 
     # ---- operating point (label-free starts set these) ----
@@ -176,9 +198,10 @@ class RateBrain3(torch.nn.Module):
             n = self.n
             g = torch.exp(self.log_g)[self.unit]
             W = self.W.coalesce()
-            idx, val = W.indices(), W.values() * g[W.indices()[1]]
+            idx = W.indices()
+            val = W.values() * g[idx[1]] * self.s_in[idx[0]]
             kidx = torch.stack([self.kp_post, self.kp_pre])
-            kval = self.kp_w * torch.exp(self.kp_logm) * g[self.kp_pre]
+            kval = self.kp_w * torch.exp(self.kp_logm) * g[self.kp_pre] * self.s_in[self.kp_post]
             A = torch.sparse_coo_tensor(torch.cat([idx, kidx], 1), torch.cat([val, kval]), (n, n)).coalesce()
             self._W_all = A.to_sparse_csr()
 
@@ -237,6 +260,7 @@ class RateBrain3(torch.nn.Module):
         win_len = -(-self.steps // n_win)
 
         W_all = getattr(self, "_W_all", None)
+        s_in = self.s_in[:, None]
 
         def step(r, bias):
             if W_all is not None and not torch.is_grad_enabled() and opt is None:
@@ -246,7 +270,7 @@ class RateBrain3(torch.nn.Module):
             else:
                 x = g * r
                 drive = torch.sparse.mm(self.W, x)
-                drive = drive.index_add(0, self.kp_post, x[self.kp_pre] * kp_w)
+                drive = drive.index_add(0, self.kp_post, x[self.kp_pre] * kp_w) * s_in
             return r + alpha * (-r + self.unit_fn(drive + bias))
 
         # training keeps only every CHECKPOINT-th state and recomputes the rest in the backward pass
@@ -292,20 +316,22 @@ class RateBrain3(torch.nn.Module):
     def settle(self, rest_smell: torch.Tensor, chunk: int = 40, max_chunks: int = 50, tol: float = 1e-5) -> dict:
         """Hold the resting smell (nose.n,) until the rates stop changing, and keep that state as the start of
         every sniff: the fly is alive before the odour. Continues from the current resting state, if any.
-        Converged when no rate moves more than `tol` per step over a `chunk`-step stretch."""
-        saved = self.steps
-        self.steps = chunk
+        Converged when, after a `chunk`-step stretch, no rate moves more than `tol` in one step. (Comparing states a
+        stretch apart, as before, passed a rhythm whose period divides the stretch: the deep dive's review found it.)"""
+        saved, saved_read = self.steps, self.read_steps
         r = self.r_rest if self.r_rest is not None else torch.zeros(self.n, device=self.device)
         delta, steps = float("inf"), 0
         try:
             with torch.no_grad():
                 while steps < max_chunks * chunk and delta >= tol:
-                    _, r_new, _ = self.run(rest_smell[None], r0=r)
-                    r_new = r_new[:, 0]
-                    delta = float((r_new - r).abs().max()) / chunk
-                    r, steps = r_new, steps + chunk
+                    self.steps, self.read_steps = chunk - 1, 1
+                    _, r, _ = self.run(rest_smell[None], r0=r)
+                    self.steps = 1
+                    _, r_new, _ = self.run(rest_smell[None], r0=r[:, 0])
+                    delta = float((r_new[:, 0] - r[:, 0]).abs().max())
+                    r, steps = r_new[:, 0], steps + chunk
         finally:
-            self.steps = saved
+            self.steps, self.read_steps = saved, saved_read
         self.r_rest = r
         return {"steps": steps, "max_step_change": delta, "converged": delta < tol}
 
@@ -316,6 +342,7 @@ class RateBrain3(torch.nn.Module):
             x = g * r
             drive = torch.sparse.mm(self.W, x)
             drive = drive.index_add(0, self.kp_post, x[self.kp_pre] * (self.kp_w * torch.exp(self.kp_logm))[:, None])
+            drive = drive * self.s_in[:, None]
             return drive[idx] + self.b[self.unit][idx, None] + self.b_cell[idx, None]
 
     @staticmethod

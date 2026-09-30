@@ -16,6 +16,7 @@ from bosco import controls as C
 from bosco import model2 as M2
 from bosco import populations as pop
 from bosco import ratebrain3 as R3
+from bosco import wiring3 as W3
 from bosco.model import Brain
 
 MIN_SYNAPSES = 5  # decision 4 (2026-09-24): edges under 5 synapses dropped, every KC -> MBON kept
@@ -47,7 +48,7 @@ def cut(b: Brain, min_syn: int = MIN_SYNAPSES) -> Brain:
 def build(arm: str, mode: str = "type", seed: int = 1, device: str | None = None, b2=None) -> R3.RateBrain3:
     b2 = b2 or M2.load_or_build()
     w = wiring(arm, b2.brain, seed)
-    in_total = R3.own_in_total(b2, w)
+    in_total = W3.own_in_fast(b2.brain, w, W3.fast_tables(b2.brain.ids))  # amendment 4: fast drive only
     return R3.RateBrain3(b2, mode=mode, device=device, wiring=cut(w, MIN_SYNAPSES), in_total=in_total)
 
 
@@ -260,3 +261,85 @@ def dn_groups_coupled(m: R3.RateBrain3, rest: torch.Tensor) -> tuple[np.ndarray,
         "avoid_types": {k: float(t[k]) for k in avo_t},
     }
     return df[df.type.isin(app_t)].idx.to_numpy(), df[df.type.isin(avo_t)].idx.to_numpy(), info
+
+
+# ---- brain v3.1: the label-free start by input gain (docs/BRAIN-SPEC.md amendment 4, P3) -----------------------
+TARGET, TARGET_MBON, TARGET_READ = 0.05, 0.2, 0.2  # mean sniff rate per type: general, MBONs, the DN read cells
+KC_ACTIVE_RATE = 0.3  # median rate of an active KC (R1.7: >= 0.2; Turner 2008: a burst from about zero)
+S_MIN, S_MAX = 0.1, 100.0
+START_ITERS, START_MIN_ITERS, START_ETA, START_TOL = 80, 10, 0.5, 0.05
+START_SCALE, START_STEP = 4.0, 0.2  # scales start at the old operating gain; one step moves a scale by at most e^0.2
+INHIBITED = 1e-3  # a type below this rate with its scale at S_MAX is net-inhibited: it cannot reach its target
+
+
+def _unit_mask(m, idx) -> torch.Tensor:
+    u = torch.zeros(m.n_units, dtype=torch.bool, device=m.b.device)
+    u[torch.unique(m.unit[idx])] = True
+    return u
+
+
+def rest_start31(m: R3.RateBrain3, s: torch.Tensor, rest: torch.Tensor, read_idx=None, warm: bool = False) -> dict:
+    """Amendment 4's label-free operating point. Gains 1 and thresholds 0 for every cell (ORNs rest on their rest
+    input); every non-sensory type's input scale s_in moves multiplicatively until its mean sniff rate is its
+    target (TARGET; MBONs TARGET_MBON; `read_idx` cells TARGET_READ); the KCs instead get per-cell offsets for 5%
+    active and one KC input scale for an active rate of KC_ACTIVE_RATE. Sensory cells (ORNs, other sensory, the
+    visual projection neurons: senses without input) keep s_in = 1. Runs to convergence. `warm` continues from the
+    current state."""
+    dev = m.b.device
+    if not warm:
+        with torch.no_grad():
+            m.log_g.zero_()
+            m.b.zero_()
+            m.b_cell.zero_()
+            m.s_in.fill_(1.0)
+        m.r_rest = None
+    sensory = _unit_mask(m, torch.cat([m.regions["orn"], m.regions["other_sensory"], m.regions["vpn"]]))
+    kc_u = _unit_mask(m, m.kc)
+    target = torch.full((m.n_units,), TARGET, device=dev)
+    target[_unit_mask(m, m.regions["mbon"])] = TARGET_MBON
+    if read_idx is not None:
+        target[_unit_mask(m, torch.as_tensor(read_idx, device=dev))] = TARGET_READ
+    tuned = ~sensory & ~kc_u
+    cnt = torch.bincount(m.unit, minlength=m.n_units).float().clamp(min=1)
+    log_s = torch.full((m.n_units,), float(np.log(START_SCALE)), device=dev)
+    log_s[sensory] = 0.0
+    if warm:  # recover the per-unit scales from s_in
+        log_s.index_reduce_(0, m.unit, torch.log(m.s_in), "mean", include_self=False)
+    x_act = float(np.log(np.expm1(R3.BETA * np.arctanh(R3.ACTIVE))) / R3.BETA)
+    hist = []
+    for it in range(START_ITERS):
+        with torch.no_grad():
+            m.s_in.copy_(torch.exp(log_s)[m.unit])
+            m.freeze()
+            m.settle(rest)
+            _, _, rr = m.run(s, record="read")
+            rate_u = torch.zeros(m.n_units, device=dev).index_add(0, m.unit, rr.mean(1)) / cnt
+            step = START_ETA * torch.log(target[tuned] / rate_u[tuned].clamp(min=1e-4))
+            log_s[tuned] += step.clamp(-START_STEP, START_STEP)
+            log_s[tuned] = log_s[tuned].clamp(float(np.log(S_MIN)), float(np.log(S_MAX)))
+            # KCs: sparse (per-cell offsets) and bursting (one input scale for every KC type)
+            kc_r = rr[m.kc]
+            act = kc_r > R3.ACTIVE
+            q = torch.quantile(m.preact(rr, m.kc), 1 - KC_TARGET, dim=1)
+            m.b_cell[m.kc] += KC_CELL_DAMP * (x_act - q)
+            med = float(kc_r[act].median()) if act.any() else 1e-4
+            log_s[kc_u] += float(np.clip(START_ETA * np.log(KC_ACTIVE_RATE / max(med, 1e-4)), -START_STEP, START_STEP))
+            log_s.clamp_(float(np.log(S_MIN)), float(np.log(S_MAX)))
+            reach = tuned & ~((rate_u < INHIBITED) & (log_s >= np.log(S_MAX) - 1e-6))
+            resid = float(((rate_u[reach] - target[reach]).abs() / target[reach]).mean())
+            kc_frac = float(act.float().mean())
+            hist.append({"iter": it, "resid": resid, "kc_active": kc_frac, "kc_active_rate": med,
+                         "inhibited_types": int((tuned & ~reach).sum())})
+        ok = (resid <= START_TOL and abs(kc_frac - KC_TARGET) <= 0.2 * KC_TARGET
+              and abs(med - KC_ACTIVE_RATE) <= 0.1 * KC_ACTIVE_RATE)
+        if it + 1 >= START_MIN_ITERS and ok:
+            break
+    with torch.no_grad():
+        m.s_in.copy_(torch.exp(log_s)[m.unit])
+    m.freeze()
+    m.r_rest = None
+    settle = m.settle(rest)
+    at_max = tuned & (log_s >= np.log(S_MAX) - 1e-6)
+    return {"iters": len(hist), "converged": bool(ok), "history": hist, "settle": settle,
+            "tuned_types": int(tuned.sum()), "types_at_max_scale": int(at_max.sum()),
+            "types_inhibited": hist[-1]["inhibited_types"], "kc_scale": float(torch.exp(log_s[kc_u]).mean())}

@@ -1,5 +1,9 @@
 # bosco v3
 
+> **CLOSED 2026-09-30 (tag `end-v3`).** Read `docs/END-v3.md` first. The fly's own learning cannot reach his
+> behaviour in this connectome model; the verified minimum smell and taste brains are in `src/bosco/minibrain.py` and
+> `src/bosco/tastebrain.py`. Do not resume without Nick.
+
 A computer model of a real male fruit fly's central brain, answering typed questions (yes/no, choose, rate) with
 calibrated probabilities, so that you can watch his real cell types decide. The front end is Ask Bosco, a separate
 repo (`~/projects/arclight/halteres`) that you do not edit.

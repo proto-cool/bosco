@@ -1,5 +1,9 @@
 # Handoff to the v3 session (written 2026-09-28, at the end of v2)
 
+> **CLOSED 2026-09-30 (tag `end-v3`).** Read `docs/END-v3.md` first. The fly's own learning cannot reach his
+> behaviour in this connectome model; the verified minimum smell and taste brains are in `src/bosco/minibrain.py` and
+> `src/bosco/tastebrain.py`. Do not resume without Nick.
+
 Read this first, then `CLAUDE.md`, `docs/BRAIN-SPEC.md` and `docs/audit-2026-09-28/`. Nick restarts here because
 v2 lost two weeks. Most of what went wrong was process, not difficulty. The requirements were clear.
 
